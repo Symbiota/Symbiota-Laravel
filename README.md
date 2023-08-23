@@ -11,5 +11,5 @@ WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.c
 1. Create a folder `./legacy/` in the root directory
 2. Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) or existing fork into `./legacy/` folder
 3. Remove/Comment all references to `symbini.php` in your legacy repo. The easiest way is to use ripgrep or grep to do something like this
-Mac: `rg '^.*(symbini).*$' -l | xargs sed -i '' '/^.*symbini.*$/ s/^/\/\//g'`
-Other: `rg '^.*(symbini).*$' -l | xargs sed -i '/^.*symbini.*$/ s/^/\/\//g'`
+Mac: `rg '^.*(symbini).*$' -l | xargs sed -i '' '/^.*symbini.*$/ s/^/\/\//g'` <br/>
+Other: `rg '^.*(symbini).*$' -l | xargs sed -i '/^.*symbini.*$/ s/^/\/\//g'` <br/>
