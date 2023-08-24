@@ -8,7 +8,7 @@ WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.c
 - Simply and Improve existing patterns
 
 ## Integrating with Current Symbiota
-1. Create folder in public with Portal name. Example seinet would have `./public/seinet/`
+1. Create folder in public with Portal name. If your portal is `seinet` then would have `./public/seinet/` as your directory path.
 2. Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) named portal folder
 3. Success!
 
