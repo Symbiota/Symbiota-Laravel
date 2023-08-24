@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LegacyController;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //include_once(base_path('legacy') . '/config/symbini.php');
+    $lang = Cookie::get('SymbiotaCrumb');
+
+    return view('Home', ['lang' => $lang]);
 });
 
-Route::any('{path}', LegacyController::class)->where('path', '.*');
+//Route::any('{path}', LegacyController::class)->where('path', '.*');
