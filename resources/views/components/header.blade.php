@@ -1,5 +1,5 @@
 @php
-include_once(base_path('legacy') . '/config/symbini.php');
+include_once(base_path('public/Portal') . '/config/symbini.php');
 @endphp
 
 <!-- /resources/views/components/header.blade.php -->
@@ -12,10 +12,10 @@ include_once(base_path('legacy') . '/config/symbini.php');
                         Welcome {{ $USER_DISPLAY_NAME }}!
                     </span>
 					<span class="button button-tertiary">
-						<a href="/profile/viewprofile.php">My Profile</a>
+						<a href="{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
 					</span>
 					<span class="button button-secondary">
-						<a href="/profile/index.php?submit=logout">Sign Out</a>
+						<a href="{{ config('portal.name') }}/profile/index.php?submit=logout">Sign Out</a>
 					</span>
                 @else
 					<span>
@@ -24,7 +24,7 @@ include_once(base_path('legacy') . '/config/symbini.php');
 						</a>
 					</span>
                     <span class="button button-secondary">
-                        <a href="/profile/index.php">
+                        <a href="{{ config('portal.name') }}/profile/index.php">
                             Login
                         </a>
                     </span>
@@ -32,7 +32,7 @@ include_once(base_path('legacy') . '/config/symbini.php');
 			</nav>
 			<div class="top-brand">
 				<a href="https://symbiota.org">
-					<img src="/images/layout/logo_symbiota.png" alt="Symbiota logo" width="100%">
+					<img src="{{ config('portal.name') }}/images/layout/logo_symbiota.png" alt="Symbiota logo" width="100%">
 				</a>
 				<div class="brand-name">
 					<h1>Symbiota Brand New Portal</h1>

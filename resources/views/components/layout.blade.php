@@ -1,13 +1,13 @@
 @php
 $navigations = [
     ["title" => __("header.home"), "link" => '/'],
-    ["title" => __("header.collections"), "link" => '/collections'],
-    ["title" => __("header.map_search"), "link" => '/collections/map'],
-    ["title" => __("header.species_checklists"), "link" => '/checklists'],
-    ["title" => __("header.images"), "link" => '/imagelib/search.php'],
-    ["title" => __("header.data_use"), "link" => '/imagelib/search.php'],
+    ["title" => __("header.collections"), "link" => config('portal.name') .' /collections'],
+    ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map'],
+    ["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists'],
+    ["title" => __("header.images"), "link" => config('portal.name') . '/imagelib/search.php'],
+    ["title" => __("header.data_use"), "link" => config('portal.name') . '/imagelib/search.php'],
     ["title" => __("header.symbiota_help"), "link" => 'https =>//biokic.github.io/symbiota-docs/'],
-    ["title" => __("header.sitemap"), "link" => 'sitemap.php'],
+    ["title" => __("header.sitemap"), "link" => config('portal.name') . 'sitemap.php'],
 ];
 @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\LegacyController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +20,3 @@ Route::get('/', function () {
 
     return view('Home', ['lang' => $lang]);
 });
-
-//Route::any('{path}', LegacyController::class)->where('path', '.*');
