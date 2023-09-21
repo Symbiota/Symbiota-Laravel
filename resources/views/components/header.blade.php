@@ -9,23 +9,26 @@ include_once(base_path('public/Portal') . '/config/symbini.php');
 			<nav class="top-login">
                 @if ($USER_DISPLAY_NAME)
                     <span style="">
-                        Welcome {{ $USER_DISPLAY_NAME }}!
+                        {!! __("header.welcome") !!}
+                        {{ $USER_DISPLAY_NAME }}!
                     </span>
 					<span class="button button-tertiary">
 						<a href="{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
 					</span>
 					<span class="button button-secondary">
-						<a href="{{ config('portal.name') }}/profile/index.php?submit=logout">Sign Out</a>
+						<a href="{{ config('portal.name') }}/profile/index.php?submit=logout">
+                            {!! __("header.sign_out") !!}
+</a>
 					</span>
                 @else
 					<span>
 						<a href="#">
-							Contact Us
+                            {!! __("header.contact_us") !!}
 						</a>
 					</span>
                     <span class="button button-secondary">
                         <a href="{{ config('portal.name') }}/profile/index.php">
-                            Login
+                            {!! __("header.sign_in") !!}
                         </a>
                     </span>
                 @endif
