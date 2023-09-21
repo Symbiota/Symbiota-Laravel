@@ -37,6 +37,7 @@ return [
     'about_project'=>'About Project',
     'partners'=>'Partners',
     'contacts'=>'Contacts',
+    'contact_us' => 'Contact Us',
     'symbiota_help'=>'Symbiota Help',
     'sitemap'=>'Sitemap',
     'data_use'=>'Data Use',

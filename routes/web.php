@@ -17,6 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     //include_once(base_path('legacy') . '/config/symbini.php');
     $lang = Cookie::get('SymbiotaCrumb');
-
     return view('Home', ['lang' => $lang]);
 });

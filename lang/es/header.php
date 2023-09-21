@@ -35,6 +35,7 @@ return [
     'plants'=>'Plantas',
     'reptiles'=>'Reptiles',
 
+    'contact_us' => 'Contacta con Nosotros',
     'more_information'=>'M&aacute;s Informaci&oacute;n',
     'about_project'=>'Información sobre el Proyecto',
     'partners'=>'Socios',
