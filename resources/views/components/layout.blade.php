@@ -15,6 +15,8 @@ $navigations = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     @vite(['resources/js/app.js', env('VITE_CSS_TARGET', 'resources/css/app.css')])
+    @stack('css-styles')
+    @stack('js-libs')
   </head>
   <body>
     <x-header>
@@ -22,5 +24,6 @@ $navigations = [
     </x-header>
     {{ $slot }}
     <x-footer/>
+    @stack('js-scripts')
   </body>
 </html>
