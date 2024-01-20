@@ -46,6 +46,46 @@ $siteData = new DatasetsMetadata();
     <script src="/{{ config('portal.name')}}/js/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     <script src="/{{ config('portal.name')}}/js/symb/api.taxonomy.taxasuggest.js" type="text/javascript"></script>
     <script src="/{{ config('portal.name')}}/js/symb/collections.index.js?ver=20171215" type="text/javascript"></script>
+    <script>
+        let alerts = [{
+            'alertMsg': 'Looking for the previous search form? You can still use it here: <a href="<?php echo $CLIENT_ROOT ?>/collections/harvestparams.php" alt="Traditional Sample Search Form">previous Sample Search Page</a>.'
+        }];
+        handleAlerts(alerts, 3000);
+
+        // resize the autocomplete window width to match the input width (from https://stackoverflow.com/questions/5643767/jquery-ui-autocomplete-width-not-set-correctly)
+        jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+            var ul = this.menu.element;
+            ul.outerWidth(this.element.outerWidth());
+        }
+
+        const collectionSource = {{ $collectionSource? 'true': 'false' }};
+
+        if(collectionSource){
+            // go through all collections and set them all to unchecked
+            const collectionCheckboxes = document.querySelectorAll('input[id^="coll"]');
+            collectionCheckboxes.forEach(collection => {
+                collection.checked = false;
+            });
+
+            //go through all collections and set the parent collections to unchecked
+            const parentCollectionCheckboxes = document.querySelectorAll('input[id^="cat-"]');
+            parentCollectionCheckboxes.forEach(collection => {
+                collection.checked = false;
+            });
+
+            // set the one with collectionSource as checked
+            const targetCheckbox = document.querySelectorAll('input[id^="coll-' + collectionSource + '"]');
+            targetCheckbox.forEach(collection => {
+                collection.checked = true;
+            });
+            //do the same for collections with slightly different format
+            const targetCheckboxAlt = document.querySelectorAll('input[id^="collection-' + collectionSource + '"]');
+            targetCheckboxAlt.forEach(collection => {
+                collection.checked = true;
+            });
+            updateChip();
+        }
+    </script>
 @endpush
 
 <x-layout>
@@ -56,19 +96,12 @@ $siteData = new DatasetsMetadata();
 			<!-- Criteria forms -->
 			<div class="accordions">
 				<!-- Taxonomy -->
-				<section>
-					<!-- Accordion selector -->
-					<input type="checkbox" id="taxonomy" class="accordion-selector" checked />
-
-					<!-- Accordion header -->
-					<label for="taxonomy" class="accordion-header">Taxonomy</label>
-
-					<!-- Taxonomy -->
-					<div id="search-form-taxonomy" class="content">
+                <x-accordian id="taxonomy" label="Taxonomy" >
+					<div id="search-form-taxonomy">
 						<div id="taxa-text" class="input-text-container">
 							<label for="taxa" class="input-text--outlined">
 								<span class="skip-link">Taxon</span>
-								<input type="text" name="taxa" id="taxa" data-chip="Taxa">
+								<input type="text" name="taxa" id="taxa" data-chip="Taxa"/>
 								<span data-label="Taxon"></span>
 							</label>
 							<span class="assistive-text">Type at least 4 characters for quick suggestions. Separate multiple with commas.</span>
@@ -91,142 +124,125 @@ $siteData = new DatasetsMetadata();
 							</label>
 						</div>
 					</div>
-				</section>
+                </x-accordian>
+
 				<!-- Collections -->
-				<section>
-					<!-- Accordion selector -->
-					<input type="checkbox" id="collections" class="accordion-selector" checked />
-					<!-- Accordion header -->
-					<label for="collections" class="accordion-header">Collections</label>
-					<!-- Accordion content -->
-					<div class="content">
-						<div id="search-form-colls">
-							<!-- Open Collections modal -->
-							<div id="specobsdiv">
-							<!-- TODO .collecitonContent.php
+                <x-accordian id="collections" label="Collections">
+                    <div id="search-form-colls">
+                    <!-- Open Collections modal -->
+                        <div id="specobsdiv">
 
-                            -->
-							</div>
+                            <x-checkbox
+                                id="dodoo"
+                                chip="Only with images"
+                                label="Limit to specimens with images" >
+                                >
+                            </x-checkbox>
+                            <!-- TODO .collecitonContent.php -->
+                        </div>
+                    </div>
+                </x-accordian>
 
-						</div>
-					</div>
-				</section>
 
 				<!-- Sample Properties -->
-				<section>
-					<!-- Accordion selector -->
-					<input type="checkbox" id="sample" class="accordion-selector" checked />
-					<!-- Accordion header -->
-					<label for="sample" class="accordion-header">Sample Properties</label>
-					<!-- Accordion content -->
-					<div class="content">
-						<div id="search-form-sample">
-							<div>
-								<div>
-									<input type="checkbox" name="includeothercatnum" id="includeothercatnum" value="1" data-chip="Include other IDs" checked>
-									<label for="includeothercatnum">Include other catalog numbers and GUIds</label>
-								</div>
-								<div class="input-text-container">
-									<label for="catnum" class="input-text--outlined">
-										<span class="skip-link">Catalog Number</span>
-										<input type="text" name="catnum" id="catnum" data-chip="Catalog Number">
-										<span data-label="Catalog Number"></span>
-									</label>
-									<span class="assistive-text">Separate multiple with commas.</span>
-								</div>
-							</div>
-							<div>
-								<div>
-									<input type='checkbox' name='typestatus' id='typestatus' value='1' data-chip="Only type specimens" />
-									<label for="typestatus">{{ isset($LANG['TYPE'])?$LANG['TYPE']:'Limit to Type Specimens Only' }}</label>
-								</div>
-								<div>
-									<input type="checkbox" name="hasimages" id="hasimages" value=1 data-chip="Only with images">
-									<label for="hasimages">Limit to specimens with images</label>
-								</div>
-								<div>
-									<input type="checkbox" name="hasgenetic" id="hasgenetic" value=1 data-chip="Only with genetic">
-									<label for="hasgenetic">Limit to specimens with genetic data</label>
-								</div>
-								<div>
-									<input type='checkbox' name='hascoords' id='hascoords' value='1' data-chip="Only with coordinates" />
-									<label for="hascoords">{{ isset($LANG['HAS_COORDS'])?$LANG['HAS_COORDS']:'Limit to Specimens with Geocoordinates Only' }}</label>
-								</div>
-								<div>
-									<input type='checkbox' name='includecult' id='includecult' value='1' data-chip="Include cultivated" {{ $SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT ? 'checked' : '' }} />
-									<label for="includecult">{{ isset($LANG['INCLUDE_CULTIVATED'])?$LANG['INCLUDE_CULTIVATED']:'Include cultivated/captive occurrences' }}</label>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
+                <x-accordian id="sample" label="Sample Properties">
+					<div id="search-form-sample">
+                        <div>
+                            <x-checkbox
+                                id="includeothercatnum"
+                                chip="Include other IDs"
+                                label="Include other catalog numbers and GUIds"
+                                checked >
+                            </x-checkbox>
+                            <div class="input-text-container">
+                                <label for="catnum" class="input-text--outlined">
+                                    <span class="skip-link">Catalog Number</span>
+                                    <input type="text" name="catnum" id="catnum" data-chip="Catalog Number">
+                                    <span data-label="Catalog Number"></span>
+                                </label>
+                                <span class="assistive-text">Separate multiple with commas.</span>
+                            </div>
+                        </div>
+                        <div>
+                            <x-checkbox
+                                id="typestatus"
+                                chip="Only type specimens"
+                                label="{{ isset($LANG['TYPE'])? $LANG['TYPE']:'Limit to Type Specimens Only' }}" >
+                            </x-checkbox>
+                            <x-checkbox
+                                id="hasimages"
+                                chip="Only with images"
+                                label="Limit to specimens with images" >
+                            </x-checkbox>
+                            <x-checkbox
+                                id="hasgenetic"
+                                chip="Only with gentic"
+                                label="Limit to specimens with genetic data" >
+                            </x-checkbox>
+                            <x-checkbox
+                                id="hascoords"
+                                chip="Only with coordinates"
+                                label="{{ isset($LANG['HAS_COORDS'])?$LANG['HAS_COORDS']:'Limit to Specimens with Geocoordinates Only' }}" >
+                            </x-checkbox>
+                            <x-checkbox
+                                id="includecult"
+                                chip="Include cultivated"
+                                label="{{ isset($LANG['INCLUDE_CULTIVATED'])?$LANG['INCLUDE_CULTIVATED']:'Include cultivated/captive occurrences' }}"
+                                :checked="$SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT">
+                            </x-checkbox>
+                        </div>
+                    </div>
+                </x-accordian>
 
 				<!-- Locality -->
-				<section>
-					<!-- Accordion selector -->
-					<input type="checkbox" id="locality" name="locality" class="accordion-selector" />
-					<!-- Accordion header -->
-					<label for="locality" class="accordion-header">Locality</label>
-					<!-- Accordion content -->
-					<div class="content">
-						<div id="search-form-locality">
-							<div>
-								<div>
-									<div class="input-text-container">
-										<label for="country" class="input-text--outlined">
-											<span class="skip-link">Country</span>
-											<input type="text" name="country" id="country" data-chip="Country">
-											<span data-label="Country"></span>
-										</label>
-										<span class="assistive-text">Separate multiple with commas.</span>
-									</div>
-									<div class="input-text-container">
-										<label for="state" class="input-text--outlined">
-											<span class="skip-link">State</span>
-											<input type="text" name="state" id="state" data-chip="State">
-											<span data-label="State"></span>
-										</label>
-										<span class="assistive-text">Separate multiple with commas.</span>
-									</div>
-									<div class="input-text-container">
-										<label for="county" class="input-text--outlined">
-											<span class="skip-link">County</span>
-											<input type="text" name="county" id="county" data-chip="County">
-											<span data-label="County"></span>
-										</label>
-										<span class="assistive-text">Separate multiple with commas.</span>
-									</div>
-									<div class="input-text-container">
-										<label for="local" class="input-text--outlined">
-											<span class="skip-link">Locality/Localities</span>
-											<input type="text" name="local" id="local" data-chip="Locality">
-											<span data-label="Locality/Localities"></span>
-										</label>
-										<span class="assistive-text" style="line-height:1.7em">Separate multiple with commas.</span>
-									</div>
-								</div>
-								<div class="grid grid--half">
-									<div class="input-text-container">
-										<label for="elevlow" class="input-text--outlined">
-											<span class="skip-link">Minimum Elevation</span>
-											<input type="number" step="any" name="elevlow" id="elevlow" data-chip="Min Elevation">
-											<span data-label="Minimum Elevation"></span>
-										</label>
-										<span class="assistive-text">Number in meters.</span>
-									</div>
-									<div class="input-text-container">
-										<label for="elevhigh" class="input-text--outlined">
-											<span class="skip-link">Maximum Elevation</span>
-											<input type="number" step="any" name="elevhigh" id="elevhigh" data-chip="Max Elevation">
-											<span data-label="Maximum Elevation"></span>
-										</label>
-										<span class="assistive-text">Number in meters.</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
+                <x-accordian id="locality" label="Locality">
+                    <div id="search-form-locality">
+                       <div>
+                            <div>
+                                <x-form-input
+                                    id="country"
+                                    label="Country"
+                                    chip="Country"
+                                    assistive_text="Separate multiple with commas." >
+                                </x-form-input>
+                                <x-form-input
+                                    id="state"
+                                    label="State"
+                                    chip="State"
+                                    assistive_text="Separate multiple with commas." >
+                                </x-form-input>
+                                <x-form-input
+                                    id="county"
+                                    label="County"
+                                    chip="County"
+                                    assistive_text="Separate multiple with commas." >
+                                </x-form-input>
+                                <x-form-input
+                                    id="local"
+                                    label="Locality/Localities"
+                                    chip="Locality"
+                                    assistive_text="Separate multiple with commas." >
+                                </x-form-input>
+                            </div>
+							<div class="grid grid--half">
+                                <x-form-input
+                                    id="elevlow"
+                                    label="Minimum Elevation"
+                                    chip="Min Elevation"
+                                    type="number"
+                                    assistive_text="Number in meters." >
+                                </x-form-input>
+                                <x-form-input
+                                    id="elevhigh"
+                                    label="Maximum Elevation"
+                                    chip="Max Elevation"
+                                    type="number"
+                                    assistive_text="Number in meters." >
+                                </x-form-input>
+                            </div>
+                       </div>
+                    </div>
+                </x-accordian>
 
 				<!-- Latitude & Longitude -->
 				<section>
@@ -373,52 +389,40 @@ $siteData = new DatasetsMetadata();
 						</div>
 					</div>
 				</section>
+
 				<!-- Collecting Event -->
-				<section>
-					<!-- Accordion selector -->
-					<input type="checkbox" id="coll-event" class="accordion-selector" />
-					<!-- Accordion header -->
-					<label for="coll-event" class="accordion-header">Collecting Event</label>
-					<!-- Accordion content -->
-					<div class="content">
-						<div id="search-form-coll-event">
-							<div class="input-text-container">
-								<label for="eventdate1" class="input-text--outlined">
-									<span class="skip-link">Collection Start Date</span>
-									<input type="text" name="eventdate1" id="eventdate1" data-chip="Event Date Start">
-									<span data-label="Collection Start Date"></span>
-								</label>
-								<span class="assistive-text">Single date or start date of range (ex: YYYY-MM-DD or similar format).</span>
-							</div>
-							<div class="input-text-container">
-								<label for="eventdate2" class="input-text--outlined">
-									<span class="skip-link">Collection End Date</span>
-									<input type="text" name="eventdate2" id="eventdate2" data-chip="Event Date End">
-									<span data-label="Collection End Date"></span>
-								</label>
-								<span class="assistive-text">Single date or end date of range (ex: YYYY-MM-DD or similar format).</span>
-							</div>
-							<div class="input-text-container">
-								<label for="collector" class="input-text--outlined">
-									<span class="skip-link">Collector Last Name</span>
-									<input type="text" id="collector" size="32" name="collector" value="" title="{{ $LANG['SEPARATE_MULTIPLE'] }}" data-chip="Collector last" />
-									<span data-label="{{ $LANG['COLLECTOR_LASTNAME'] }}:"></span>
-								</label>
-							</div>
-							<div class="input-text-container">
-								<label for="collnum" class="input-text--outlined">
-									<span class="skip-link">Collector Number</span>
-									<input type="text" id="collnum" size="31" name="collnum" value="" title="{{ $LANG['TITLE_TEXT_2'] }}" data-chip="Collector num" />
-									<span data-label="{{ $LANG['COLLECTOR_NUMBER'] }}:"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-				</section>
+                <x-accordian id="coll-event" label="Collecting Event">
+					<div id="search-form-coll-event">
+                        <x-form-input
+                            id="eventdate1"
+                            label="Collection Start Date"
+                            chip="Event Date Start"
+                            assistive_text="Single date or start date of range (ex: YYYY-MM-DD or similar format)." >
+                        </x-form-input>
+                        <x-form-input
+                            id="eventdate2"
+                            label="Collection End Date"
+                            chip="Event Date End"
+                            assistive_text="Single date or start date of range (ex: YYYY-MM-DD or similar format)." >
+                        </x-form-input>
+                        <x-form-input
+                            id="collector"
+                            :label="$LANG['COLLECTOR_LASTNAME']"
+                            chip="Collector last"
+                            size="32" >
+                        </x-form-input>
+                        <x-form-input
+                            id="collector"
+                            :label="$LANG['COLLECTOR_NUMBER']"
+                            chip="Collector num"
+                            size="32" >
+                        </x-form-input>
+                    </div>
+                </x-accordian>
             </div>
 
 			<!-- Criteria panel -->
-			<div id="criteria-panel" style="position: sticky; top: 0; height: 100vh">
+			<div id="criteria-panel" style="position: sticky; top: 0; height: fit-content">
 				<button id="search-btn" onclick="simpleSearch()">Search</button>
 				<button id="reset-btn">Reset</button>
 				<h2>Criteria</h2>
@@ -427,4 +431,3 @@ $siteData = new DatasetsMetadata();
 		</form>
     </div>
 </x-layout>
-
