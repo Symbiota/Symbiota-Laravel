@@ -96,7 +96,7 @@ $siteData = new DatasetsMetadata();
 			<!-- Criteria forms -->
 			<div class="accordions">
 				<!-- Taxonomy -->
-                <x-accordian id="taxonomy" label="Taxonomy" >
+                <x-accordian id="taxonomy" label="Taxonomy" open>
 					<div id="search-form-taxonomy">
 						<div id="taxa-text" class="input-text-container">
 							<label for="taxa" class="input-text--outlined">
@@ -127,7 +127,7 @@ $siteData = new DatasetsMetadata();
                 </x-accordian>
 
 				<!-- Collections -->
-                <x-accordian id="collections" label="Collections">
+                <x-accordian id="collections" label="Collections" open>
                     <div id="search-form-colls">
                     <!-- Open Collections modal -->
                         <div id="specobsdiv">
@@ -145,7 +145,7 @@ $siteData = new DatasetsMetadata();
 
 
 				<!-- Sample Properties -->
-                <x-accordian id="sample" label="Sample Properties">
+                <x-accordian id="sample" label="Sample Properties" open>
 					<div id="search-form-sample">
                         <div>
                             <x-checkbox

@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('home', ['lang' => $lang]);
 });
 
-Route::get('/collections', function () {
+Route::get('/collections/search', function () {
     //include_once(base_path('legacy') . '/config/symbini.php');
     $lang = Cookie::get('SymbiotaCrumb');
     return view('collections/Collections', ['lang' => $lang, 'specArr' => []]);
