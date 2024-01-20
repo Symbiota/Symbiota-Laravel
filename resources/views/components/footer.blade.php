@@ -1,13 +1,13 @@
 <footer>
     <div class="logo-gallery">
         <a href="https://www.nsf.gov" target="_blank">
-            <img src="{{ config('portal.name') }}/images/layout/logo_nsf.gif" />
+            <img src="/{{ config('portal.name') }}/images/layout/logo_nsf.gif" />
         </a>
         <a href="http://idigbio.org" target="_blank" title="iDigBio">
-            <img src="{{ config('portal.name') }}/images/layout/logo_idig.png" />
+            <img src="/{{ config('portal.name') }}/images/layout/logo_idig.png" />
         </a>
         <a href="https://biokic.asu.edu" target="_blank" title="Biodiversity Knowledge Integration Center">
-            <img src="{{ config('portal.name') }}/images/layout/logo-asu-biokic.png" />
+            <img src="/{{ config('portal.name') }}/images/layout/logo-asu-biokic.png" />
         </a>
     </div>
     <p>This project made possible by National Science Foundation Awards <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=" target="_blank">#------</a>.</p>
