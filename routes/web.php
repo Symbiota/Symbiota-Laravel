@@ -23,5 +23,5 @@ Route::get('/', function () {
 Route::get('/collections/search', function () {
     //include_once(base_path('legacy') . '/config/symbini.php');
     $lang = Cookie::get('SymbiotaCrumb');
-    return view('collections/Collections', ['lang' => $lang, 'specArr' => []]);
+    return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
 });
