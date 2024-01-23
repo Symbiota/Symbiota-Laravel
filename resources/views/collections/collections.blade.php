@@ -1,9 +1,4 @@
 @php
-/*
-    function formatCollection($collection) {
-        $abr = $collection['instcode'] . (('-' . $collection['collcode']) ?? '');
-        return $collection['collname'] . ' (' . $abr . ')';
-    }*/
 $LANG_TAG = App::currentLocale();
 $SERVER_ROOT = base_path('public/' . config('portal.name'));
 $CLIENT_ROOT = config('portal.name');
