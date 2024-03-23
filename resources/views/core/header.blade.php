@@ -18,7 +18,7 @@ include_once(base_path('public/Portal') . '/config/symbini.php');
 					<span class="button button-secondary">
 						<a href="/{{ config('portal.name') }}/profile/index.php?submit=logout">
                             {!! __("header.sign_out") !!}
-</a>
+                        </a>
 					</span>
                 @else
 					<span>

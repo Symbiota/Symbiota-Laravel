@@ -2,6 +2,7 @@
 $LANG_TAG = App::currentLocale();
 $SERVER_ROOT = base_path('public/' . config('portal.name'));
 $CLIENT_ROOT = config('portal.name');
+include_once(base_path('public/' . config('portal.name')) . '/config/symbini.php');
 
 //LANG_TAGS
 include_once(base_path('public/' . config('portal.name')) . '/content/lang/index.' . $LANG_TAG . '.php');
