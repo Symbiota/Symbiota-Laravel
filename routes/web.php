@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,14 @@ Route::get('/', function () {
 Route::get('/collections/search', function () {
     $lang = Cookie::get('SymbiotaCrumb');
     //return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
+    global $LANG_TAG;
+    global $SERVER_ROOT;
+    global $CLIENT_ROOT;
+    global $USER_DISPLAY_NAME;
+    $USER_DISPLAY_NAME = "why no work";
+    $LANG_TAG = App::currentLocale();
+    $SERVER_ROOT = base_path('public/' . config('portal.name'));
+    $CLIENT_ROOT = config('portal.name');
+
     return getPageView('collections', ['lang' => $lang]);
 });
