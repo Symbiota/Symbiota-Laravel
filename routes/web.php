@@ -14,14 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+function getPageView(string $page_name, array $view_options) {
+    if(file_exists(base_path('resources/views/custom/pages/') . $page_name .'.blade.php')) {
+        return view('custom/pages/' . $page_name, $view_options);
+    } else {
+        return view('core/pages/' . $page_name, $view_options);
+    }
+}
+
 Route::get('/', function () {
-    //include_once(base_path('legacy') . '/config/symbini.php');
     $lang = Cookie::get('SymbiotaCrumb');
-    return view('home', ['lang' => $lang]);
+    return getPageView('home', ['lang' => $lang]);
 });
 
 Route::get('/collections/search', function () {
-    //include_once(base_path('legacy') . '/config/symbini.php');
     $lang = Cookie::get('SymbiotaCrumb');
-    return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
+    //return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
+    return getPageView('collections', ['lang' => $lang]);
 });
