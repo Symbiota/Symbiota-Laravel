@@ -1,13 +1,20 @@
-@php
-include_once(base_path('public/Portal') . '/config/symbini.php');
-@endphp
-
 <!-- /resources/views/components/header.blade.php -->
-<div class="header-wrapper">
-	<header>
-		<div class="top-wrapper">
-			<nav class="top-login">
-                @if ($USER_DISPLAY_NAME)
+<header class="bg-center bg-cover h-28" style="background-image: url(/images/banner.jpg)">
+    <div class="flex bg-primary bg-opacity-75 w-full h-full py-4">
+        <div class="flex pl-12">
+            <div class="w-[7.5rem] h-fit">
+                <a href="https://symbiota.org">
+                    <img src="/icons/brand.svg" alt="Symbiota logo" width="100%">
+                </a>
+            </div>
+            <div class="ml-8 flex justify-center flex-col text-white">
+                <h1 class="text-2xl">Symbiota Brand New Portal</h1>
+                <h2 class="text-lg">Redesigned by the Symbiota Support Hub</h2>
+            </div>
+        </div>
+
+		<nav class="flex grow justify-end space-x-1 mr-4">
+                @if (false)
                     <span style="">
                         {!! __("header.welcome") !!}
                         {{ $USER_DISPLAY_NAME }}!
@@ -21,28 +28,17 @@ include_once(base_path('public/Portal') . '/config/symbini.php');
                         </a>
 					</span>
                 @else
-					<span>
+                    <x-button>
 						<a href="#">
                             {!! __("header.contact_us") !!}
 						</a>
-					</span>
-                    <span class="button button-secondary">
+                    </x-button>
+                    <x-button>
                         <a href="/{{ config('portal.name') }}/profile/index.php">
                             {!! __("header.sign_in") !!}
                         </a>
-                    </span>
+                    </x-button>
                 @endif
-			</nav>
-			<div class="top-brand">
-				<a href="https://symbiota.org">
-					<img src="/{{ config('portal.name') }}/images/layout/logo_symbiota.png" alt="Symbiota logo" width="100%">
-				</a>
-				<div class="brand-name">
-					<h1>Symbiota Brand New Portal</h1>
-					<h2>Redesigned by the Symbiota Support Hub</h2>
-				</div>
-			</div>
-        </div>
-        {{ $slot }}
-	</header>
-</div>
+		</nav>
+    </div>
+</header>
