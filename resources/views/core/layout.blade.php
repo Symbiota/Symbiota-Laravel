@@ -38,19 +38,25 @@ $grants= [
 @endphp
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     @vite(['resources/js/app.js','resources/css/app.css'])
     @stack('css-styles')
-    @stack('js-libs') </head>
-  <body>
-    <x-header/>
-    <x-navbar :navigations="$navigations"/>
-    {{ $slot }}
+    @stack('js-libs')
+</head>
+
+<body class="min-h-screen flex flex-col">
+    <x-header />
+    <x-navbar :navigations="$navigations" />
+    <div class="flex-grow">
+        {{ $slot }}
+    </div>
     <div class="bg-[#F2F0E9] p-8">
-        <x-footer :logos="$logos" :grants="$grants"/>
+        <x-footer :logos="$logos" :grants="$grants" />
     </div>
     @stack('js-scripts')
-  </body>
+</body>
+
 </html>

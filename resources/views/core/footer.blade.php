@@ -17,10 +17,10 @@
             <p>
                 This project made possible by National Science Foundation Awards
                 @for ($i = 0; $i < count($grants); $i++)
-                    <x-link href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
-                       {{$grants[$i]['label']}}
-                    </x-link>
-                    @if ($i < count($grants) - 1) , @endif
+                <x-link href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
+                   {{$grants[$i]['label']}}
+                </x-link>
+                @if ($i < count($grants) - 1) , @endif
                 @endfor
             </p>
             @endif
