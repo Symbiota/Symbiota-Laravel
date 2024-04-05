@@ -13,32 +13,32 @@
             </div>
         </div>
 
-		<nav class="flex grow justify-end space-x-1 mr-4">
-                @if (false)
-                    <span style="">
-                        {!! __("header.welcome") !!}
-                        {{ $USER_DISPLAY_NAME }}!
-                    </span>
-					<span class="button button-tertiary">
-						<a href="/{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
-					</span>
-					<span class="button button-secondary">
-						<a href="/{{ config('portal.name') }}/profile/index.php?submit=logout">
-                            {!! __("header.sign_out") !!}
-                        </a>
-					</span>
-                @else
-                    <x-button>
-						<a href="#">
-                            {!! __("header.contact_us") !!}
-						</a>
-                    </x-button>
-                    <x-button>
-                        <a href="/{{ config('portal.name') }}/profile/index.php">
-                            {!! __("header.sign_in") !!}
-                        </a>
-                    </x-button>
-                @endif
-		</nav>
+        <nav class="flex grow justify-end space-x-1 mr-4">
+            @if (false)
+            <span style="">
+                {!! __("header.welcome") !!}
+                {{ $USER_DISPLAY_NAME }}!
+            </span>
+            <span class="button button-tertiary">
+                <a href="/{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
+            </span>
+            <span class="button button-secondary">
+                <a href="/{{ config('portal.name') }}/profile/index.php?submit=logout">
+                    {!! __("header.sign_out") !!}
+                </a>
+            </span>
+            @else
+            <x-button>
+                <a href="#">
+                    {!! __("header.contact_us") !!}
+                </a>
+            </x-button>
+            <x-button>
+                <a href="/{{ config('portal.name') }}/profile/index.php">
+                    {!! __("header.sign_in") !!}
+                </a>
+            </x-button>
+            @endif
+        </nav>
     </div>
 </header>
