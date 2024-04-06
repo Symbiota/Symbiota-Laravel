@@ -2,7 +2,7 @@
 <footer class="text-center">
     <div class="flex flex-wrap justify-center">
         @foreach ($logos as $logo)
-        <div class="flex flex-grow justify-center my-auto">
+        <div class="flex basis-0 flex-grow justify-center my-auto">
             <div class="mx-auto w-fit h-fit">
                 <a href="{{ $logo['link'] }}" title="{{ $logo['title'] }}" target="_blank">
                     <img class="max-w-52 max-h-20" src="{{ $logo['img'] }}" />
