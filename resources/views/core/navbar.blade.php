@@ -1,5 +1,5 @@
 @props(['navigations'])
-<!-- resources/views/tasks.blade.php -->
+<!-- resources/views/core/navbar.blade.php -->
 <nav {{$attributes}} class="bg-primary text-white h-14">
     <ul class="flex flex-wrap gap-2 justify-center h-full">
         @foreach ($navigations as $nav)
