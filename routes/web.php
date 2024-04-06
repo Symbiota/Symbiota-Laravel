@@ -28,6 +28,11 @@ Route::get('/', function () {
     return getPageView('home', ['lang' => $lang]);
 });
 
+Route::get('/login', function () {
+    $lang = Cookie::get('SymbiotaCrumb');
+    return getPageView('login', ['lang' => $lang]);
+});
+
 Route::get('/collections/search', function () {
     $lang = Cookie::get('SymbiotaCrumb');
     //return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
