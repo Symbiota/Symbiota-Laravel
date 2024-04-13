@@ -33,6 +33,11 @@ Route::get('/login', function () {
     return getPageView('login', ['lang' => $lang]);
 });
 
+Route::get('/tw', function () {
+    $lang = Cookie::get('SymbiotaCrumb');
+    return view('tw-components', ['lang' => $lang]);
+});
+
 Route::get('/collections/search', function () {
     $lang = Cookie::get('SymbiotaCrumb');
     //return view('collections/collections', ['lang' => $lang, 'specArr' => []]);

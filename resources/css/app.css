@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn {
+    background-color: theme('colors.primary.DEFAULT');
+    color: theme('colors.primary.content');
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.6');
+    box-shadow: theme('boxShadow.xl');
+    font-size: theme('fontSize.sm');
+    height: fit-content;
+    padding: 0.25rem 0.75rem;
+  }
+  .btn:hover {
+    background-color: theme('colors.secondary.DEFAULT');
+    color: theme('colors.secondary.content');
+  }
+  /* ... */
+}
