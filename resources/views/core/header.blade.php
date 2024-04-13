@@ -4,7 +4,7 @@
         <div class="flex pl-12">
             <div class="w-[7.5rem] h-fit">
                 <a href="https://symbiota.org">
-                    <img src="/icons/brand.svg" alt="Symbiota logo" width="100%">
+                    <x-brand/>
                 </a>
             </div>
             <div class="ml-8 flex justify-center flex-col text-white">
