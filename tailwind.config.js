@@ -18,8 +18,10 @@ export default {
             base: {
                 100: "#FFFFFF",
                 200: "#F2F2F2",
-                300: "#F2F0E9",
-                content: "#2D2D2D"
+                //300: "#F2F0E9",
+                300: "#E0E0E0",
+                content: "#2D2D2D",
+                //content: "#494440"
             },
             primary: {
                 DEFAULT: "#1B3D2F",
@@ -50,7 +52,7 @@ export default {
                 content: "#FFF"
             },
             error: {
-                DEFAULT: colors.red[100],
+                DEFAULT: colors.red[500],
                 content: "#FFF"
             },
         },
