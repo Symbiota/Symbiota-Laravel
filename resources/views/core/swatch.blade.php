@@ -1,4 +1,4 @@
-<div class="flex flex-row w-fit h-fit border-black border rounded-md">
+<div class="flex flex-row w-fit h-fit border-black border rounded-md bg-base-100">
     <div class="flex flex-col w-12">
         <div class="rounded-tl-md flex items-center justify-center text-base-content bg-base-200 h-[60%]">B2</div>
         <div class="rounded-bl-md flex items-center justify-center text-base-content bg-base-300 h-[40%]">B3</div>
