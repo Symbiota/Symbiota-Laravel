@@ -1,5 +1,5 @@
 @props(['id', 'label', 'name', 'open' => false])
-<div class="w-full" x-data="{ open: false }">
+<div class="w-full" x-data="{ open: {{ $open? 'true': 'false'}}}">
     <!-- Accordion Title --->
     <button
         class="bg-primary mb-[-0.25rem] text-lg font-bold rounded-sm uppercase text-primary-content w-full py-2 focus:outline-none focus:ring-4 ring-secondary hover:ring-4"
