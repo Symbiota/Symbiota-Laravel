@@ -34,6 +34,10 @@
            Todo Nested Checkbox
         </h1>
         <x-checkbox :id="'checkbox'" :label="'Checkbox'" />
+        <x-nested-checkbox-group :id="'nested-checkbox'" :label="'Checkbox'">
+            <x-checkbox :id="'nested-1'" :label="'Nested 1'" />
+            <x-checkbox :id="'nested-2'" :label="'Nested 2'" />
+        </x-nested-checkbox-group>
         <x-accordion :id="'Taxonomy'" :label="'Accordian'">
             <x-input required :id="'input'" :label="'Text Input'" />
             <x-input required type="number" :id="'input'" :label="'Number Input'" />
