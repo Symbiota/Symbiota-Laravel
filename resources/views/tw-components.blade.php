@@ -27,12 +27,6 @@
         <h1 class="text-xl my-2 font-bold font-sans text-error">
            Todo Radio
         </h1>
-        <h1 class="text-xl my-2 font-bold font-sans text-error">
-           Todo Checkbox
-        </h1>
-        <h1 class="text-xl my-2 font-bold font-sans text-error">
-           Todo Nested Checkbox
-        </h1>
         <x-checkbox :id="'checkbox'" :label="'Checkbox'" />
         <x-nested-checkbox-group :id="'nested-checkbox'" :label="'Checkbox'">
             <x-checkbox :id="'nested-1'" :label="'Nested 1'" />
@@ -49,10 +43,8 @@
             <x-input required type="number" :id="'input'" :label="'Number Input'" />
             </x-accordion>
         </x-accordion>
+        <x-autocomplete-input :label="'search'" id="'test-search'"/>
 
-        <h1 class="text-xl my-2 font-bold font-sans text-error">
-           Todo Autocomplete Input
-        </h1>
         <h1 class="text-xl my-2 font-bold font-sans text-error">
            Todo Collection Result Card
         </h1>
