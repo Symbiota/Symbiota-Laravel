@@ -43,11 +43,8 @@
             <x-input required type="number" :id="'input'" :label="'Number Input'" />
             </x-accordion>
         </x-accordion>
-        <x-autocomplete-input :label="'search'" id="'test-search'"/>
+        <x-autocomplete-input :label="'Search Taxa'" id="'test-search'"/>
 
-        <h1 class="text-xl my-2 font-bold font-sans text-error">
-           Todo Collection Result Card
-        </h1>
         <h1 class="text-xl my-2 font-bold font-sans text-error">
            Todo Collection Result Card
         </h1>
