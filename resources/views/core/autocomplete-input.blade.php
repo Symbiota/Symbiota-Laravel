@@ -14,7 +14,7 @@
         const setIndex = (new_idx) => {
             const old_idx = getIndex();
 
-            if(menu.children[old_idx]) {
+            if (menu.children[old_idx]) {
                 menu.children[old_idx].classList.remove("bg-base-200")
             }
 
@@ -33,33 +33,43 @@
             return new_idx
         }
 
-        /*
-        input.addEventListener('input', (e) => {
-        });
+        function getLastValue(str_val) {
+            return str_val.slice(str_val.lastIndexOf(",") + 1).trim();
+        }
 
-        input.addEventListener('htmx:afterSettle', (e) => {
-            console.log('settle')
-        });
-
-        */
         menu.addEventListener('htmx:after-swap', (e) => {
             setIndex(0);
+            for (let i = 0; i < e.target.children.length; i++) {
+                //child.classList.add("hover:bg-base-200")
+                e.target.children[i].classList.add("cursor-pointer")
+                e.target.children[i].addEventListener('mouseover', () => setIndex(i))
+                e.target.children[i].addEventListener('mousedown', (event) => {
+                    event.preventDefault();
+                    const incoming_option = menu.children[i].innerHTML
+                    const prev_options = input.value.slice(0, input.value.lastIndexOf(",") + 1)
+                    input.value = (prev_options ? prev_options + " " : prev_options) + incoming_option;
+                })
+            }
         });
+
+        input.addEventListener('htmx:configRequest', (e) => {
+            e.detail.parameters.term = getLastValue(e.detail.parameters.term)
+        })
 
         input.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case "ArrowUp":
                     setIndex(getIndex() - 1)
-                    console.log(getIndex());
                     e.preventDefault();
                     break;
                 case "ArrowDown":
                     setIndex(getIndex() + 1)
-                    console.log(getIndex());
                     e.preventDefault();
                     break;
                 case "Enter":
-                    console.log(getIndex());
+                    const incoming_option = menu.children[getIndex()].innerHTML
+                    const prev_options = input.value.slice(0, input.value.lastIndexOf(",") + 1)
+                    input.value = (prev_options ? prev_options + " " : prev_options) + incoming_option;
                     break;
             }
         })
@@ -67,18 +77,21 @@
 </script>
 @endPushOnce
 <div x-data="{el: $el, open: false, results: false}" x-init="autoSearchInit($el)">
-    <div class="htmx-indicator">
-        ...Searching
-    </div>
-    <x-input type="search" placeholder="Begin Typing To Search Users..."
-        x-on:focus="open = true"
-        x-on:blur="open = false"
-        hx-get="Portal/rpc/taxasuggest.php" hx-trigger="input changed delay:500ms, search"
-        hx-indicator=".htmx-indicator" hx-target="#search-results" name='term' :id="$id" :label="$label" />
+    <x-input type="search" x-on:focus="open = true" hx-get="Portal/rpc/taxasuggest.php"
+        hx-trigger="input changed delay:500ms, search" x-on:blur="open = false" hx-indicator=".htmx-indicator"
+        hx-target="#search-results" name='term' :id="$id" :label="$label" />
     <div class="relative w-full">
-        <div x-on:htmx:after-swap="open = true; results = $el.children.length > 0" data-selected-index="0" x-cloak x-show="open && results" x-ref="menu"
-            class="mt-1 h-fit absolute bg-base-100 w-full border-base-300 border" id="search-results">
+        <div class="htmx-indicator absolute w-full mt-1 bg-base-100 border-base-300 border p-1">
+            <div class="flex items-center justify-center gap-1 text-base-content">
+                <div class="stroke-secondary w-8 h-8">
+                    <x-icons.loading/>
+                </div>
+                Searching
+            </div>
+        </div>
+        <div x-on:htmx:after-swap="open = true; results = $el.children.length > 0" data-selected-index="0" x-cloak
+            x-show="open && results" x-ref="menu" class="mt-1 h-fit absolute bg-base-100 w-full border-base-300 border"
+            id="search-results">
         </div>
     </div>
-
 </div>
