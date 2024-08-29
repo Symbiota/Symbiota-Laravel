@@ -34,6 +34,7 @@
         }
 
         function getLastValue(str_val) {
+            if(!str_val) return str_val;
             return str_val.slice(str_val.lastIndexOf(",") + 1).trim();
         }
 
@@ -53,7 +54,7 @@
         });
 
         input.addEventListener('htmx:configRequest', (e) => {
-            e.detail.parameters.term = getLastValue(e.detail.parameters.term)
+            e.detail.parameters.taxa = getLastValue(e.detail.parameters.taxa)
         })
 
         input.addEventListener('keydown', (e) => {
@@ -77,9 +78,20 @@
 </script>
 @endPushOnce
 <div x-data="{el: $el, open: false, results: false}" x-init="autoSearchInit($el)">
-    <x-input type="search" x-on:focus="open = true" hx-get="Portal/rpc/taxasuggest.php"
-        hx-trigger="input changed delay:500ms, search" x-on:blur="open = false" hx-indicator=".htmx-indicator"
-        hx-target="#search-results" name='term' :id="$id" :label="$label" />
+    <x-input
+        autocomplete="off"
+        type="search"
+        hx-get="/api/taxa/search"
+        hx-trigger="input changed delay:500ms, search"
+        hx-indicator=".htmx-indicator"
+        hx-target="#search-results"
+        x-on:blur="open = false"
+        x-on:keyup.enter="open = false"
+        x-on:focus="open = true"
+        x-on:click="open = true"
+        name='taxa'
+        :id="$id"
+        :label="$label" />
     <div class="relative w-full">
         <div class="htmx-indicator absolute w-full mt-1 bg-base-100 border-base-300 border p-1">
             <div class="flex items-center justify-center gap-1 text-base-content">
@@ -89,8 +101,14 @@
                 Searching
             </div>
         </div>
-        <div x-on:htmx:after-swap="open = true; results = $el.children.length > 0" data-selected-index="0" x-cloak
-            x-show="open && results" x-ref="menu" class="mt-1 h-fit absolute bg-base-100 w-full border-base-300 border"
+        <div
+            x-on:htmx:after-swap="open = true; results = $el.children.length > 0"
+            x-on:click="open = false"
+            data-selected-index="0"
+            x-cloak
+            x-show="open && results"
+            x-ref="menu"
+            class="mt-1 h-fit absolute bg-base-100 w-full border-base-300 border"
             id="search-results">
         </div>
     </div>
