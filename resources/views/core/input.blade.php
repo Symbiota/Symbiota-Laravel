@@ -8,7 +8,7 @@
         @endif
     </label>
     <input
-        class="p-1 bg-base-200 bg-opacity-50 focus:bg-base-100 border-base-300 border rounded-md focus:ring-secondary focus:ring-2 focus:outline-none w-full"
+        class="p-1 bg-base-200 bg-opacity-50 focus:bg-base-100 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full"
         {{ $attributes }} name="{{ $id }}" id="{{ $id }}" />
     <span data-label="{{ $label }}" />
     @if(isset($error_text))
