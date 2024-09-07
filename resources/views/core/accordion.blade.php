@@ -2,7 +2,7 @@
 <div class="w-full" x-data="{ open: {{ $open? 'true': 'false'}}}">
     <!-- Accordion Title --->
     <button
-        class="bg-primary mb-[-0.25rem] text-lg font-bold rounded-sm uppercase text-primary-content w-full py-2 focus:outline-none focus:ring-4 ring-secondary ring-offset-0 hover:ring-4"
+        class="bg-primary mb-[-0.25rem] text-lg font-bold rounded-sm uppercase text-primary-content w-full py-2 focus:outline-none focus:ring-4 ring-accent ring-offset-0 hover:ring-4"
         @@click="open = !open">
         <div class="flex">
             <div class="w-12"></div>

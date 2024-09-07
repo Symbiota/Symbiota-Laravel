@@ -1,6 +1,6 @@
 <!-- /resources/views/components/header.blade.php -->
 <header class="bg-center bg-cover h-28" style="background-image: url(/images/banner.jpg)">
-    <div class="flex bg-primary bg-opacity-75 w-full h-full py-4">
+    <div class="flex bg-primary-darker bg-opacity-80 w-full h-full py-4">
         <div class="flex pl-12">
             <div class="w-[7.5rem] h-fit">
                 <a href="https://symbiota.org">
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <nav class="flex grow justify-end space-x-1 mr-4">
+        <nav class="flex grow justify-end space-x-3 mr-4">
             @if (false)
             <span style="">
                 {!! __("header.welcome") !!}
@@ -28,12 +28,12 @@
                 </a>
             </span>
             @else
-            <x-button>
+            <x-button class="text-base" type="accent">
                 <a href="#">
                     {!! __("header.contact_us") !!}
                 </a>
             </x-button>
-            <x-button>
+            <x-button class="text-base" type="accent">
                 <a href="/{{ config('portal.name') }}/profile/index.php">
                     {!! __("header.sign_in") !!}
                 </a>
