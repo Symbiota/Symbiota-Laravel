@@ -7,7 +7,7 @@ $navigations = [
     ["title" => __("header.images"), "link" => config('portal.name') . '/imagelib/search.php'],
     ["title" => __("header.data_use"), "link" => config('portal.name') . '/imagelib/search.php'],
     ["title" => __("header.symbiota_help"), "link" => 'https =>//biokic.github.io/symbiota-docs/'],
-    ["title" => __("header.sitemap"), "link" => config('portal.name') . 'sitemap.php'],
+    ["title" => __("header.sitemap"), "link" => '/sitemap'],
 ];
 
 $logos = [
