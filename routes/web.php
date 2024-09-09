@@ -38,17 +38,18 @@ Route::get('/tw', function () {
     return view('tw-components', ['lang' => $lang]);
 });
 
+
 Route::get('/collections/search', function () {
     $lang = Cookie::get('SymbiotaCrumb');
-    //return view('collections/collections', ['lang' => $lang, 'specArr' => []]);
-    global $LANG_TAG;
-    global $SERVER_ROOT;
-    global $CLIENT_ROOT;
-    global $USER_DISPLAY_NAME;
-    $USER_DISPLAY_NAME = "why no work";
-    $LANG_TAG = App::currentLocale();
-    $SERVER_ROOT = base_path('public/' . config('portal.name'));
-    $CLIENT_ROOT = config('portal.name');
-
     return getPageView('collections', ['lang' => $lang]);
+});
+
+Route::get('/sitemap', function () {
+    $lang = Cookie::get('SymbiotaCrumb');
+    return getPageView('sitemap', ['lang' => $lang]);
+});
+
+Route::get('/usagepolicy', function () {
+    $lang = Cookie::get('SymbiotaCrumb');
+    return getPageView('usagepolicy', ['lang' => $lang]);
 });
