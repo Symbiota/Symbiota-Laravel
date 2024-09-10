@@ -17,11 +17,11 @@
             <x-swatch />
         </div>
         <div class="flex gap-x-4">
-            <x-button type="primary">Primary</x-button>
-            <x-button type="secondary">Secondary</x-button>
-            <x-button type="neutral">Neutral</x-button>
-            <x-button type="accent">Accent</x-button>
-            <x-button class="text-xl font-bold" type="neutral">
+            <x-button variant="primary">Primary</x-button>
+            <x-button variant="secondary">Secondary</x-button>
+            <x-button variant="neutral">Neutral</x-button>
+            <x-button variant="accent">Accent</x-button>
+            <x-button class="text-xl font-bold" variant="neutral">
                 <x-slot:icon>
                     <div class="stroke-accent w-7 h-7">
                         <x-icons.loading/>

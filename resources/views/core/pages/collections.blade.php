@@ -13,7 +13,7 @@
     <h1 class="text-5xl font-bold text-primary mb-8">Record Search</h1>
     <div class="grid grid-cols-4" x-data="{ show_all: false, toggle: () => show_all = true }">
         <div class="col-span-3 flex flex-col gap-4">
-            <x-button class="w-full justify-center" type="primary" onclick="toggle_all_accordions()" >
+            <x-button class="w-full justify-center" onclick="toggle_all_accordions()" >
                 Expand All Sections
             </x-button>
             <x-accordion label='Taxonomy'>
@@ -44,7 +44,7 @@
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <h3 class="text-xl text-primary font-bold">Bounding Box</h3>
-                        <x-button class="text-base w-full" type="primary">Map Bounding Box</x-button>
+                        <x-button class="text-base w-full">Map Bounding Box</x-button>
                         <x-input id="upperlat" label="Minimum Elevation"/>
                         select N/S
                         <x-input id="bottomlat" label="Southern Latitude"/>
@@ -56,12 +56,12 @@
                     </div>
                     <div>
                         <h3 class="text-xl text-primary font-bold">Polygon</h3>
-                        <x-button class="text-base w-full" type="primary">Map Polygon</x-button>
+                        <x-button class="text-base w-full">Map Polygon</x-button>
                         <x-input id="polygonwkt" label="Polygon"/>
                     </div>
                     <div>
                         <h3 class="text-xl text-primary font-bold">Point-Radius</h3>
-                        <x-button class="text-base w-full" type="primary">Map Point Radius</x-button>
+                        <x-button class="text-base w-full">Map Point Radius</x-button>
                         <x-input id="pointlat" label="Longitude"/>
                         select N/S
                         <x-input id="pointlong" label="Latitude"/>
@@ -106,8 +106,8 @@
                     ['label' => 'List', 'value' => 'list'],
                     ['label' => 'Table', 'value' => 'Table']
                 ]" />
-            <x-button class="w-full justify-center" type="primary">Search</x-button>
-            <x-button class="w-full justify-center" type="neutral">Reset</x-button>
+            <x-button class="w-full justify-center">Search</x-button>
+            <x-button class="w-full justify-center" variant="neutral">Reset</x-button>
             <h3 class="text-3xl font-bold text-primary">Criteria</h3>
         </div>
     </div>
