@@ -19,22 +19,22 @@
                 {!! __("header.welcome") !!}
                 {{ $USER_DISPLAY_NAME }}!
             </span>
-            <span class="button button-tertiary">
+            <x-button class="text-base" variant="accent">
                 <a href="/{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
-            </span>
-            <span class="button button-secondary">
+            </x-button>
+            <x-button class="text-base" variant="accent">
                 <a href="/{{ config('portal.name') }}/profile/index.php?submit=logout">
                     {!! __("header.sign_out") !!}
                 </a>
-            </span>
+            </x-button>
             @else
-            <x-button class="text-base" type="accent">
+            <x-button class="text-base" variant="accent">
                 <a href="#">
                     {!! __("header.contact_us") !!}
                 </a>
             </x-button>
-            <x-button class="text-base" type="accent">
-                <a href="/{{ config('portal.name') }}/profile/index.php">
+            <x-button class="text-base" variant="accent">
+                <a href="/login">
                     {!! __("header.sign_in") !!}
                 </a>
             </x-button>

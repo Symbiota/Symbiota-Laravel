@@ -1,14 +1,24 @@
 @props([
-'id' => 'checkbox',
+'id' => uniqid(),
 'label' => 'label',
 'name',
 'chip' => 'chip value',
 'checked' => false
 ])
-<div class="flex group">
+
+<div {{ $attributes->twMerge("flex group") }}>
     <div class="relative w-fit h-fit my-auto">
-        <input {{$attributes}} type="checkbox" name="{{$name?? $id}}" id="{{ $id }}" data-chip="{{ $chip }}"
-            class="z-10 w-6 h-6 peer/checkbox appearance-none before:content[''] border-2 border-accent rounded-full checked:bg-accent cursor-pointer outline-none">
+        <input
+            type="checkbox"
+            name="{{$name?? $id}}"
+            id="{{ $id }}"
+            data-chip="{{ $chip }}"
+            class="
+            z-10 w-6 h-6 peer/checkbox appearance-none before:content['']
+            border-2 border-accent rounded-full
+            checked:bg-accent cursor-pointer outline-none
+            "
+            >
         <i
             class="z-10 absolute peer-checked/checkbox:opacity-100 opacity-0 text-accent-content transition-opacity pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 fa-solid fa-check"></i>
 
