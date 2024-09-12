@@ -16,15 +16,16 @@ $variant_def = match($variant) {
                 console.log('load')
                 this.loading = true;
                 el.disabled = true;
-                await new Promise(resolve => setTimeout(resolve, 5000))
+                await new Promise(resolve => setTimeout(resolve, 1000))
                 el.disabled = false;
                 this.loading = false;
+                return true;
             }
         }));
     })
 </script>
 @endPushOnce
-<button x-data="loadingUtils" @click="() => load($el)" {{ $attributes->class($variant_def)->twMerge('rounded-lg shadow-xl focus:ring-4 hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-xl font-bold flex items-center gap-1 py-1 px-6 h-fit')}} >
+<button {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge('rounded-lg shadow-xl focus:ring-4 hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-xl font-bold flex items-center gap-1 py-1 px-6 h-fit')}} >
     {{ $slot }}
     @if(isset($icon) && !$icon->isEmpty())
     <div x-cloak x-show="loading" >

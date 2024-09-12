@@ -13,17 +13,17 @@
             </div>
         </div>
 
-        <nav class="flex grow justify-end space-x-3 mr-4">
-            @if (false)
-            <span style="">
+        <nav class="flex grow items-center justify-end space-x-3 mr-4">
+            @if (Auth::check())
+            <span class="text-primary-content text-lg">
                 {!! __("header.welcome") !!}
-                {{ $USER_DISPLAY_NAME }}!
+                {{ Auth::user()->name }}!
             </span>
             <x-button class="text-base" variant="accent">
                 <a href="/{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <a href="/{{ config('portal.name') }}/profile/index.php?submit=logout">
+                <a href="/logout">
                     {!! __("header.sign_out") !!}
                 </a>
             </x-button>

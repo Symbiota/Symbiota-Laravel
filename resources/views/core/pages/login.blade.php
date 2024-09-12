@@ -1,18 +1,18 @@
 <x-layout>
-    <form class="flex justify-center m-auto max-w-screen-sm text-center mt-5">
-        <fieldset class="w-full p-4">
+    @fragment('login-form')
+    <form action="/login" method="post" class="flex justify-center m-auto max-w-screen-sm mt-5">
+        @csrf
+        <fieldset class="w-full p-4 grid grid-cols-1 gap-4">
             <legend class="text-primary text-2xl font-bold">Portal Login</legend>
-            <x-input required :id="'username'" :label="'Username or Email'" />
+            <x-input required :id="'email'" :label="'Email'" />
             <x-input required type="password" :id="'password'" :label="'Password'" />
             <x-checkbox :id="'remember-me'" :label="'Remember me on this computer'" />
-            <div class="mt-4">
-                <x-button>Sign In</x-button>
-            </div>
-            <div class="mt-4">
+            <x-button class="w-fit" type="submit">Sign In</x-button>
+            <div>
                 <p>
                     Don't have an account?
                 </p>
-                <x-link>Create an Account</x-link>
+                <x-link href="/signup">Create an Account</x-link>
                 <p>
                     Can't remember your password?
                 </p>
@@ -24,4 +24,5 @@
             </div>
         </fieldset>
     </form>
+    @endfragment
 </x-layout>
