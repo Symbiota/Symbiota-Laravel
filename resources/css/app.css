@@ -1,0 +1,95 @@
+@import '@fortawesome/fontawesome-free/css/fontawesome.css';
+@import '@fortawesome/fontawesome-free/css/regular.css';
+@import '@fortawesome/fontawesome-free/css/solid.css';
+@import '@fortawesome/fontawesome-free/css/brands.css';
+
+/* Needed for x-cloak attribute alpine.js to work consistently */
+[x-cloak] {
+    display: none !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    /* Custom CSS for Single HTML Tag components goes here */
+
+    .markdown {
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: theme('fontWeight.bold');
+            color: theme('colors.primary.DEFAULT');
+            position: relative;
+        }
+
+        h1 {
+            font-size: theme('fontSize.4xl')
+        }
+
+        h2 {
+            font-size: theme('fontSize.2xl');
+        }
+
+        h3 {
+            font-size: theme('fontSize.xl');
+        }
+
+        h4 {
+            font-size: theme('fontSize.lg');
+        }
+
+        h5 {
+            font-size: theme('fontSize.base');
+        }
+
+        p,
+        pre {
+            margin-bottom: theme('padding.4')
+        }
+
+        :not(pre) code {
+            background-color: theme('colors.base.300');
+            color: theme('colors.base.content');
+            border-radius: theme('borderRadius.full');
+            padding: 0 theme('padding.2');
+        }
+
+        a {
+            color: theme('colors.accent.darker');
+            font-weight: theme('fontWeight.bold');
+
+            &:hover {
+                color: theme('colors.accent.DEFAULT');
+            }
+        }
+
+        ul ul {
+            margin-left: 1rem;
+        }
+
+        li p {
+            margin: 0;
+        }
+
+        li a:before {
+            content: '# - '
+        }
+
+        .heading-permalink {
+            transform: translate(-100%);
+            width: fit-content;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -0.5rem;
+            right: 0;
+        }
+    }
+}
