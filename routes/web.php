@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MarkdownController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -53,3 +54,5 @@ Route::get('/usagepolicy', function () {
     $lang = Cookie::get('SymbiotaCrumb');
     return getPageView('usagepolicy', ['lang' => $lang]);
 });
+Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
+//Route::any('{path}', LegacyController::class)->where('path', '.*');
