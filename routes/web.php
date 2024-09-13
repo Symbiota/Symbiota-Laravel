@@ -55,6 +55,25 @@ Route::post('/login', function (Request $request) {
         'password' => ['required'],
     ]);
 
+    $result = DB::select('
+        SELECT uid
+        FROM users
+        WHERE (old_password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?)))))) AND
+        email = ?',
+        [$credentials['password'], $credentials['email']]
+    );
+
+    //Check old password
+    if(count($result) > 0) {
+        //Update Hashing to use new has then clear the old password for security
+        DB::table('users')
+            ->update([
+                'password' => Hash::make($credentials['password']),
+                // TODO (Logan) offical verison should include this not doing currently so I don't mess up my login on my local db
+                //'old_password' => null,
+        ]);
+    }
+
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
         return redirect()->intended('/');
@@ -144,6 +163,8 @@ Route::post('/signup', function (Request $request) {
         'password' => ['required'],
     ]);
 
+    $user_data = $credentials;
+
     $credentials['password'] = Hash::make($credentials['password']);
 
     $errors = [];
@@ -160,7 +181,7 @@ Route::post('/signup', function (Request $request) {
     }
 
     //return getPageView('signup', array_merge(['errors' => $errors], $credentials));
-    return view('core/pages/signup', array_merge(['errors' => $errors], $credentials))->fragment('signup-form');
+    return view('core/pages/signup', array_merge(['errors' => $errors], $user_data))->fragment('signup-form');
 });
 
 Route::get('/signup', function () {
@@ -192,6 +213,7 @@ Route::get('/login', function () {
     $lang = Cookie::get('SymbiotaCrumb');
     return getPageView('login', ['lang' => $lang]);
 });
+
 
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
 //Route::any('{path}', LegacyController::class)->where('path', '.*');
