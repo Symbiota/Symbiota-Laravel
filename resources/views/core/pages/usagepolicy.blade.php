@@ -5,14 +5,14 @@
 		<p>Use one of the following formats to cite data retrieved from the  network:</p>
         <br/>
 		<h3 class="text-xl text-primary font-bold">General Citation</h3>
-		<blockquote>
-			Biodiversity occurrence data published by: Name of people or institutional reponsible for maintaining the portal (accessed through the Name of people or institutional reponsible for maintaining the portal Portal, http://127.0.0.1, 2024-09-08).		</blockquote>
+		<blockquote class="bg-base-300 rounded-md p-4">
+			Biodiversity occurrence data published by: Name of people or institutional reponsible for maintaining the portal (accessed through the Name of people or institutional reponsible for maintaining the portal Portal, {{url('')}}, 2024-09-08).		</blockquote>
         <br/>
 		<h3 class="text-xl text-primary font-bold">Usage of occurrence data from specific institutions</h3>
 		<p>Access each collection profile page to find the available citation formats.</p>
         <br/>
 		<h4 class="text-lg text-primary font-bold">Example</h4>
-		<blockquote>
+		<blockquote class="bg-base-300 rounded-md p-4">
 			Name of Institution or Collection. Occurrence dataset http://gh.local/Symbiota/portal/content/dwca/accessed via theFresh Symbiota InstallPortal, http://gh.local/Symbiota, 2022-07-25.		</blockquote>
         <br/>
 
@@ -44,7 +44,7 @@
 		<h2 class="text-2xl text-primary font-bold">Images</h2>
 		<p>Images within this website have been generously contributed by their owners to promote education and research. These contributors retain the full copyright for their images.
 		Unless stated otherwise, images are made available under the Creative Commons Attribution-ShareAlike
-		(<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA</a>).
+		(<x-link href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA</x-link>).
 		Users are allowed to copy, transmit, reuse, and/or adapt content, as long as attribution regarding the source of the content is made. If the content is altered, transformed,
 		or enhanced, it may be re-distributed only under the same or similar license by which it was acquired.
 		</p>
