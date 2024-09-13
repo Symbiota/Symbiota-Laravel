@@ -20,23 +20,25 @@
                 {{ Auth::user()->name }}!
             </span>
             <x-button class="text-base" variant="accent">
-                <a href="/{{ config('portal.name') }}/profile/viewprofile.php">My Profile</a>
+                <x-nav-link href="/profile/viewprofile.php">
+                    My Profile
+                </x-nav-link>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <a href="/logout">
+                <x-nav-link href="/logout">
                     {!! __("header.sign_out") !!}
-                </a>
+                </x-nav-link>
             </x-button>
             @else
             <x-button class="text-base" variant="accent">
-                <a href="#">
+                <x-nav-link href="#">
                     {!! __("header.contact_us") !!}
-                </a>
+                </x-nav-link>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <a href="/login">
+                <x-nav-link href="/login">
                     {!! __("header.sign_in") !!}
-                </a>
+                </x-nav-link>
             </x-button>
             @endif
         </nav>
