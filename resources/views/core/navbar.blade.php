@@ -4,9 +4,9 @@
     <ul class="flex flex-wrap gap-2 justify-center h-full font-bold">
         @foreach ($navigations as $nav)
         <x-navbar.item>
-            <a href="{{ $nav['link']}}">
-                {{$nav['title']}}
-            </a>
+            <x-nav-link :href="$nav['link']">
+                {{ $nav['title'] }}
+            </x-nav-link>
         </x-navbar.item>
         @endforeach
         <x-navbar.item>
