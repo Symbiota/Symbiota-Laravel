@@ -11,7 +11,7 @@
     <div class="relative w-fit h-fit my-auto">
         <input
             type="checkbox"
-            name="{{$name}}"
+            name="{{$name ?? $id}}"
             id="{{ $id }}"
             data-chip="{{ $chip }}"
             autocomplete="off"

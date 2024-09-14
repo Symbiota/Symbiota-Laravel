@@ -11,8 +11,8 @@
     <span data-label="{{ $label }}" />
     @endif
     <input
-        class="p-1 bg-base-200 bg-opacity-50 focus:bg-base-100 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full"
-        {{ $attributes }} name="{{ $id }}" id="{{ $id }}" />
+        {{ $attributes->twMerge('p-1 bg-base-200 bg-opacity-50 focus:bg-base-100 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full
+        ') }} name="{{ $id }}" id="{{ $id }}" />
     @if(isset($error_text))
     <p class="text-red-500 text-xs italic">{{ $error_text }}</p>
     @elseif(!empty($assistive_text))
