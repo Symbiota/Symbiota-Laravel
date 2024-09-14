@@ -102,7 +102,7 @@
         </div>
 
         <div class="col-span-1 px-4 flex flex-col gap-4">
-            <x-radio label='Results Display' name="result-type" :options="[
+            <x-radio label='Results Display' default_value="list" name="result-type" :options="[
                     ['label' => 'List', 'value' => 'list'],
                     ['label' => 'Table', 'value' => 'Table']
                 ]" />
