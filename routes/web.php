@@ -214,6 +214,13 @@ Route::get('/login', function () {
     return getPageView('login', ['lang' => $lang]);
 });
 
+Route::get('/media/search', function (Request $request) {
+    $form_data = $request->validate([
+        'usethes' => 'boolean'
+    ]);
+    $media = [];
+    return getPageView('media/search', ['media' => $media ]);
+});
 
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
 //Route::any('{path}', LegacyController::class)->where('path', '.*');

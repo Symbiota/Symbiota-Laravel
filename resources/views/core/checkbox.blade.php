@@ -2,6 +2,7 @@
 'id' => uniqid(),
 'label' => 'label',
 'name',
+'default_value' => 0,
 'chip' => 'chip value',
 'checked' => false
 ])
@@ -10,9 +11,12 @@
     <div class="relative w-fit h-fit my-auto">
         <input
             type="checkbox"
-            name="{{$name?? $id}}"
+            name="{{$name}}"
             id="{{ $id }}"
             data-chip="{{ $chip }}"
+            autocomplete="off"
+            value="1"
+            @checked($default_value === "1")
             class="
             z-10 w-6 h-6 peer/checkbox appearance-none before:content['']
             border-2 border-accent rounded-full

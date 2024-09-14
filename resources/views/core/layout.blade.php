@@ -4,7 +4,7 @@ $navigations = [
     ["title" => __("header.collections"), "link" => '/collections/search/'],
     ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map'],
     ["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists'],
-    ["title" => __("header.images"), "link" => config('portal.name') . '/imagelib/search.php'],
+    ["title" => __("header.images"), "link" => '/media/search'],
     ["title" => __("header.data_use"), "link" => '/usagepolicy'],
     ["title" => __("header.symbiota_help"), "link" => 'https://biokic.github.io/symbiota-docs/'],
     ["title" => __("header.sitemap"), "link" => '/sitemap'],
@@ -50,7 +50,7 @@ $grants= [
 <body id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <x-header />
     <x-navbar :navigations="$navigations" />
-    <div {{ $attributes->twMerge('flex-grow') }} >
+    <div {{ $attributes->twMerge('flex-grow p-10') }} >
         {{ $slot }}
     </div>
     <div class="bg-base-200 p-8">
