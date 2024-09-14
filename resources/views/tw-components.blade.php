@@ -59,5 +59,9 @@
         <h1 class="text-xl my-2 font-bold font-sans text-error">
            todo collection result card
         </h1>
+        <x-select>
+            <option value="value">test 1</option>
+            <option value="value">test 2</option>
+        </x-select>
     </div>
 </x-layout>

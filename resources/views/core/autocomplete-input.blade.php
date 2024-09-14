@@ -1,4 +1,4 @@
-@props(['id', 'label', 'error_text', 'assistive_text'])
+@props(['id', 'label' => false, 'error_text', 'assistive_text'])
 @pushOnce('js-scripts')
 <script type="text/javascript" defer>
     function autoSearchInit(el) {

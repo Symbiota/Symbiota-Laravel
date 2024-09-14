@@ -1,12 +1,12 @@
 @props(['options'=> [], 'default_value' => null, 'name', 'label' => '', 'required' => false])
-<fieldset>
+<fieldset class="flex flex-row gap-2">
     <legend class="text-xl text-bold">{{ $label }}</legend>
 
     @foreach ($options as $option)
     @php
        $id = $option['id']?? uniqid();
     @endphp
-    <div class="flex gap-2 items-start mb-1">
+    <div class="flex gap-2 items-start mb-1 items-center">
         <div class="grid place-items-center">
             <input
                 class="peer col-start-1 row-start-1 appearance-none shrink-0
@@ -17,7 +17,7 @@
                 id="{{ $id }}"
                 value="{{ $option['value'] }}"
                 data-value="{{old($id, $default_value === $option['value'])}}"
-                @checked(old($id, $default_value == $option['value']))
+                @checked($default_value == $option['value'])
             >
             <div class="
                 pointer-events-none
