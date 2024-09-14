@@ -17,7 +17,7 @@
             <p>
                 This project made possible by National Science Foundation Awards
                 @for ($i = 0; $i < count($grants); $i++)
-                <x-link href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
+                <x-link class="text-xs" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
                    {{$grants[$i]['label']}}
                 </x-link>
                 @if ($i < count($grants) - 1) , @endif
@@ -26,17 +26,17 @@
             @endif
             <p>
                 For more information about Symbiota,
-                <x-link href="https://symbiota.org/docs" target="_blank" rel="noreferrer">
+                <x-link class="text-xs" href="https://symbiota.org/docs" target="_blank" rel="noreferrer">
                     read the docs
                 </x-link>
                 or contact the
-                <x-link href="https://symbiota.org/contact-the-support-hub/" target="_blank" rel="noreferrer">
+                <x-link class="text-xs" href="https://symbiota.org/contact-the-support-hub/" target="_blank" rel="noreferrer">
                     Symbiota Support Hub
                 </x-link>
             </p>
-            <p class="text">
+            <p>
                 Powered by
-                <x-link href="https://symbiota.org/" target="_blank">
+                <x-link class="text-xs" href="https://symbiota.org/" target="_blank">
                     Symbiota
                 </x-link>
             </p>
