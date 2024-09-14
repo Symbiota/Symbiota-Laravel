@@ -17,15 +17,14 @@
         <br/>
 
 		<h2 class="text-2xl text-primary font-bold">Occurrence Record Use Policy</h2>
-		<div>
-			<ul>
+		<div class="ml-4">
 				<li>
-					While  will make every effort possible to control and document the quality
+					While {{ config('app.name') }} will make every effort possible to control and document the quality
 					of the data it publishes, the data are made available "as is". Any report of errors in the data should be
 					directed to the appropriate curators and/or collections managers.
 				</li>
 				<li>
-					 cannot assume responsibility for damages resulting from misuse or
+					{{ config('app.name') }} cannot assume responsibility for damages resulting from misuse or
 					misinterpretation of datasets or from errors or omissions that may exist in the data.
 				</li>
 				<li>
@@ -34,10 +33,9 @@
 					contact the original investigator responsible for the data that they are accessing.
 				</li>
 				<li>
-					 asks that users not redistribute data obtained from this site without permission for data owners.
+					{{ config('app.name') }} asks that users not redistribute data obtained from this site without permission for data owners.
 					However, links or references to this site may be freely posted.
 				</li>
-			</ul>
 		</div>
         <br/>
 
