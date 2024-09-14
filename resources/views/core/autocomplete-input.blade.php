@@ -1,9 +1,21 @@
-@props(['id', 'label' => false, 'error_text', 'assistive_text'])
+@props([
+    'id',
+    'label' => false,
+    'placeholder' => '',
+    'search' => '',
+    'error_text',
+    'assistive_text',
+    'menu' => new Illuminate\View\ComponentSlot(),
+    'input' => new Illuminate\View\ComponentSlot(),
+    'indicator' => new Illuminate\View\ComponentSlot(),
+    'result' => new Illuminate\View\ComponentSlot(),
+])
 @pushOnce('js-scripts')
 <script type="text/javascript" defer>
     function autoSearchInit(el) {
         const input = el.querySelector('input');
-        const menu = el.querySelector('#search-results');
+        const menu = el.querySelector(`#${input.id}-search-results`);
+        console.log(`#${input.id}-search-result`)
 
         const getMenuLength = () => {
             return menu.children.length;
@@ -77,29 +89,39 @@
     }
 </script>
 @endPushOnce
-<div x-data="{el: $el, open: false, results: false}" x-init="autoSearchInit($el)">
+<div x-data="{el: $el, open: false, results: {{!$result->isEmpty()? 'true' :'false'}}}" x-init="autoSearchInit($el)" class="w-full">
     <x-input
         autocomplete="off"
         type="search"
-        hx-get="/api/taxa/search"
-        hx-trigger="input changed delay:500ms, search"
+        hx-get="{{$search}}"
+        hx-trigger="input changed delay:700ms, search"
         hx-indicator=".htmx-indicator"
-        hx-target="#search-results"
+        hx-target="#{{$id}}-search-results"
+        x-on:htmx:before-send="results = false"
         x-on:blur="open = false"
         x-on:keyup.enter="open = false"
         x-on:focus="open = true"
         x-on:click="open = true"
+        :placeholder="$placeholder"
         name='taxa'
         :id="$id"
-        :label="$label" />
-    <div class="relative w-full">
-        <div class="htmx-indicator absolute w-full mt-1 bg-base-100 border-base-300 border p-1">
-            <div class="flex items-center justify-center gap-1 text-base-content">
-                <div class="stroke-secondary w-8 h-8">
-                    <x-icons.loading/>
+        :label="$label"
+        :class="$input->attributes->get('class')"
+    />
+    <div {{$menu->attributes->twMerge('relative w-full')}}>
+        <div class="htmx-indicator">
+        <div {{$indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1')}}>
+               @if ($indicator->isEmpty())
+                <div class="flex items-center justify-center gap-1 text-base-content">
+                    <div class="stroke-accent w-8 h-8">
+                        <x-icons.loading/>
+                    </div>
+                    Searching
                 </div>
-                Searching
-            </div>
+               @else
+                    {{ $indicator }}
+               @endif
+        </div>
         </div>
         <div
             x-on:htmx:after-swap="open = true; results = $el.children.length > 0"
@@ -108,8 +130,9 @@
             x-cloak
             x-show="open && results"
             x-ref="menu"
-            class="mt-1 h-fit absolute bg-base-100 w-full border-base-300 border"
-            id="search-results">
+            id="{{$id . '-search-results'}}"
+            {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 w-full border-base-300 border")}}>
+            {{ $result }}
         </div>
     </div>
 </div>
