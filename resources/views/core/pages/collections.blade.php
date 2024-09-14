@@ -16,7 +16,7 @@
             <x-button class="w-full justify-center" onclick="toggle_all_accordions()" >
                 Expand All Sections
             </x-button>
-            <x-accordion label='Taxonomy'>
+            <x-accordion label='Taxonomy' variant="clear-primary">
                 <div class="grid grid-cols-2">
                     <x-input class="grid-span-1" label="Taxon" id="taxon" />
                     <select class="grid-span-1">
@@ -28,7 +28,7 @@
                     <x-checkbox class="grid-span-2" id="usethes" label="Includes Synonyms" value="" />
                 </div>
             </x-accordion>
-            <x-accordion label='Locality'>
+            <x-accordion label='Locality' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <x-input label="Country" id="country" />
                     <x-input label="Locality/Localities" id="locality" />
@@ -40,7 +40,7 @@
                     <x-input label="County" id="county" />
                 </div>
             </x-accordion>
-            <x-accordion id="lat-long-accordion" label='Latitude & Longitude'>
+            <x-accordion id="lat-long-accordion" label='Latitude & Longitude' variant="clear-primary">
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <h3 class="text-xl text-primary font-bold">Bounding Box</h3>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </x-accordion>
-            <x-accordion label='Collection Event'>
+            <x-accordion label='Collection Event' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <x-input label="Collection Start Date" id="eventdate1" />
                     <x-input label="Collection End Date" id="eventdate2" />
@@ -79,7 +79,7 @@
                     <x-input label="Collector's Number" id="collnum" />
                 </div>
             </x-accordion>
-            <x-accordion label='Sample Properties'>
+            <x-accordion label='Sample Properties' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <x-checkbox label="Include other catalog numbers and GUIDs" checked id="includeothercatnum" />
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </x-accordion>
-            <x-accordion label='Collections'>
+            <x-accordion label='Collections' variant="clear-primary">
                 TODO Taxonomy Form
             </x-accordion>
         </div>
@@ -106,8 +106,8 @@
                     ['label' => 'List', 'value' => 'list'],
                     ['label' => 'Table', 'value' => 'Table']
                 ]" />
-            <x-button class="w-full justify-center">Search</x-button>
-            <x-button class="w-full justify-center" variant="neutral">Reset</x-button>
+            <x-button class="w-full justify-center text-base">Search</x-button>
+            <x-button class="w-full justify-center text-base" variant="neutral">Reset</x-button>
             <h3 class="text-3xl font-bold text-primary">Criteria</h3>
         </div>
     </div>

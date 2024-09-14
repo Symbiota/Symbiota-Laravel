@@ -1,10 +1,8 @@
-@props(['id', 'label', 'name', 'open' => false])
+@props(['id', 'label', 'name', 'open' => false, 'variant' => false])
 <div id={{$id ?? uniqid()}} data-blade-accordion x-data="{ open: {{ $open? 'true': 'false'}}}" {{ $attributes->twMerge('w-full')}}>
     <!-- Accordion Title --->
-    <button
-        class="bg-primary mb-[-0.25rem] text-lg font-bold rounded-sm uppercase text-primary-content w-full py-2 focus:outline-none focus:ring-4 ring-accent ring-offset-0 hover:ring-4"
-        @@click="open = !open">
-        <div class="flex">
+    <x-button x-on:click="open = !open" :variant="$variant" class="w-full rounded-sm px-0 text-xl mb-1 hover:ease-in duration-150">
+        <div class="flex w-full py-1 ">
             <div class="w-12"></div>
             <div class="m-auto">{{ $label }}</div>
             <div class="flex w-12 justify-end">
@@ -12,10 +10,15 @@
                 <i x-cloak x-show="open" class="text-2xl fa-solid fa-caret-down mr-5"></i>
             </div>
         </div>
-    </button>
+    </x-button>
 
     <!-- Accordion Body ---->
-    <div class="border-base-300 bg-base-100 border-b border-x p-4" x-cloak x-show="open">
+    <div class="border-base-300 bg-base-100 border-b border-x p-4"
+        x-cloak
+        x-transition:enter="transition ease-out duration-300 delay-50"
+        x-transition:enter-start="opacity-0 h-10 "
+        x-transition:enter-end="opacity-100 h-100"
+        x-show="open">
         {{$slot}}
     </div>
 </div>
