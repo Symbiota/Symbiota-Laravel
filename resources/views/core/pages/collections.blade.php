@@ -17,16 +17,7 @@
                 Expand All Sections
             </x-button>
             <x-accordion label='Taxonomy' variant="clear-primary">
-                <div class="grid grid-cols-2">
-                    <x-input class="grid-span-1" label="Taxon" id="taxon" />
-                    <select class="grid-span-1">
-                        <option id="taxontype-scientific" value="2">Scientific Name</option>
-                        <option id="taxontype-family" value="3">Family</option>
-                        <option id="taxontype-group" value="4">Taxanomic Group</option>
-                        <option id="taxontype-common" value="5">Common name</option>
-                    </select>
-                    <x-checkbox class="grid-span-2" id="usethes" label="Includes Synonyms" value="" />
-                </div>
+                <x-taxa-search/>
             </x-accordion>
             <x-accordion label='Locality' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
