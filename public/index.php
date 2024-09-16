@@ -1,15 +1,17 @@
 <?php
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\fileExists;
 
 // Routes that we want to fall through to laravel implementation
-// TODO (Logan) get from env instead
-$porta_prefix = 'Portal';
-$legacy_black_list = [
-    '/Portal/index.php' => '/',
+$legacy_routes = [
+    'index.php' => '/',
+    //'sitemap.php' => '/sitemap',
 ];
-
+$portalName = 'Portal';
+$legacy_black_list = [];
+foreach ($legacy_routes as $route => $redirect) {
+    $legacy_black_list['/' . $portalName . '/' . $route] = $redirect;
+}
 
 //Do Legacy Stuff First
 $query_pos = strpos($_SERVER['REQUEST_URI'], '?');
