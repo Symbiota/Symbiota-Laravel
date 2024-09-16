@@ -26,7 +26,7 @@ $variant_def = match($variant) {
     })
 </script>
 @endPushOnce
-<button {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge('rounded-lg shadow-xl focus:ring-4 hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-lg font-bold flex items-center gap-1 py-1 px-6 h-fit uppercase')}} >
+<button {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge('rounded-lg shadow-xl focus:ring-4 hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-base font-bold flex items-center gap-1 py-1 px-2.5 h-fit')}} >
     {{ $slot }}
     @if(isset($icon) && !$icon->isEmpty())
     <div x-cloak x-show="loading" >

@@ -8,14 +8,14 @@
                 </a>
             </div>
             <div class="ml-8 flex justify-center flex-col text-white">
-                <h1 class="text-2xl">Symbiota Brand New Portal</h1>
-                <h2 class="text-lg">Redesigned by the Symbiota Support Hub</h2>
+                <h1 class="text-2xl font-bold">Symbiota Brand New Portal</h1>
+                <h2 class="text-[1.05rem] font-bold">Redesigned by the Symbiota Support Hub</h2>
             </div>
         </div>
 
         <nav class="flex grow items-center justify-end space-x-3 mr-4">
             @if (Auth::check())
-            <span class="text-primary-content text-lg">
+            <span class="text-primary-content text-base">
                 {!! __("header.welcome") !!}
                 {{ Auth::user()->name }}!
             </span>
