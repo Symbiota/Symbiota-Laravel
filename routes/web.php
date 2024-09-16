@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 /* Simple View Routes */
 Route::view('/', 'pages/home');
+Route::view('Portal/', 'pages/home');
 Route::view('/tw', 'tw-components');
 Route::view('/collections/search', 'pages/collections');
 Route::view('/sitemap', 'pages/sitemap');
@@ -43,6 +45,3 @@ Route::get('/media/search', function (Request $request) {
 
 /* Documenation */
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
-
-/* Legacy Routes */
-//Route::any('{path}', LegacyController::class)->where('path', '.*');
