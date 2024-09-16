@@ -1,24 +1,90 @@
 <?php
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables as IlluminateLoadEnvironmentVariables;
 use Illuminate\Http\Request;
 
-// Routes that we want to fall through to laravel implementation
+define('LARAVEL_START', microtime(true));
+
+/*
+|--------------------------------------------------------------------------
+| Check If The Application Is Under Maintenance
+|--------------------------------------------------------------------------
+|
+| If the application is in maintenance / demo mode via the "down" command
+| we will load this file so that any pre-rendered content can be shown
+| instead of starting the framework, which could cause an exception.
+|
+*/
+
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| this application. We just need to utilize it! We'll simply require it
+| into the script here so we don't need to manually load our classes.
+|
+*/
+
+require __DIR__.'/../vendor/autoload.php';
+
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request using
+| the application's HTTP kernel. Then, we will send the response back
+| to this client's browser, allowing them to enjoy our application.
+|
+*/
+
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+//Manually Bootstrap env so that we can use the variables in legacy code
+(new IlluminateLoadEnvironmentVariables)->bootstrap($app);
+
+/*
+|--------------------------------------------------------------------------
+| Load Legacy Routing
+|--------------------------------------------------------------------------
+|
+| Not all the code is ported over to laravel so some extra code is needed
+| to handle the legacy routes. This is handled here at the entrypoint
+| because if use laravel routes would strip the legacy globals and porting
+| them would cause potential undefined behavior. Another option of running
+| the Legacy code via the public folder was considered but this had an
+| on conflicting routes and lack of fine grain route overrides.
+|
+*/
+
+/* Routes that we want to fall through to laravel implementation */
 $legacy_routes = [
     'index.php' => '/',
     //'sitemap.php' => '/sitemap',
 ];
-$portalName = 'Portal';
+
+/* Generate Legacy Redirects to Laravel */
 $legacy_black_list = [];
 foreach ($legacy_routes as $route => $redirect) {
-    $legacy_black_list['/' . $portalName . '/' . $route] = $redirect;
+    $legacy_black_list['/' . $_ENV['PORTAL_NAME'] . '/' . $route] = $redirect;
 }
 
-//Do Legacy Stuff First
+/* Parse URI */
 $query_pos = strpos($_SERVER['REQUEST_URI'], '?');
-
 $uri = $query_pos?
     substr($_SERVER['REQUEST_URI'], 0, $query_pos):
     $_SERVER['REQUEST_URI'];
+
+/* Clean out host url if present */
+$https = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
+$app_url = str_replace($https, '', $_ENV["APP_URL"]);
+$uri = str_replace($app_url, '', $uri);
 
 $mime_types = [
     'aac' => 'audio/aac',
@@ -99,70 +165,25 @@ $mime_types = [
     '3g2' => 'video/3gpp2',
     '7z' => 'application/x-7z-compressed'
 ];
+
 if($blacklist_redirect = $legacy_black_list[$uri]) {
     header('Location:' . $blacklist_redirect);
 } else if(preg_match("/^\/Portal.*\.(.*)/", $uri, $matches)) {
     try {
         [$path, $file_type] = $matches;
         if($file_type === "php"){
-            include_once('/var/www/html/Portal/config/symbini.php');
-            include_once('/var/www/html' . $uri);
+            include_once(__DIR__ . '/../' . $_ENV['PORTAL_NAME'] . '/config/symbini.php');
+            include_once(__DIR__ . '/..' . $uri);
         } else if($mime = $mime_types[$file_type]) {
             header("Content-Type: " . $mime);
             echo file_get_contents('/var/www/html' . $uri);
         }
-        //echo 'Matched on ' . $_SERVER['REQUEST_URI'];
-        //include('/var/www/html/public/Portal/index.php');
     } catch(Throwable $e) {
         echo $e->getMessage();
     }
 
 // Do Laravel stuff if legacy route doesn't exist or its black listed
 } else {
-
-define('LARAVEL_START', microtime(true));
-
-/*
-|--------------------------------------------------------------------------
-| Check If The Application Is Under Maintenance
-|--------------------------------------------------------------------------
-|
-| If the application is in maintenance / demo mode via the "down" command
-| we will load this file so that any pre-rendered content can be shown
-| instead of starting the framework, which could cause an exception.
-|
-*/
-
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
-}
-
-/*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
-*/
-
-require __DIR__.'/../vendor/autoload.php';
-
-/*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request using
-| the application's HTTP kernel. Then, we will send the response back
-| to this client's browser, allowing them to enjoy our application.
-|
-*/
-
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
 $kernel = $app->make(Kernel::class);
 
 $response = $kernel->handle(
