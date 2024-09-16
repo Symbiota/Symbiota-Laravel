@@ -2,7 +2,7 @@
     <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
-        <form method="get" action="/media/search" class="grid grid-col-1 gap-4">
+        <form method="get" action="{{ url('/media/search') }}" class="grid grid-col-1 gap-4">
 
             <x-taxa-search/>
 
