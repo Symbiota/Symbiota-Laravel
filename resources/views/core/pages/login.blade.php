@@ -1,6 +1,6 @@
 <x-layout>
     @fragment('login-form')
-    <form action="/login" method="post" class="flex justify-center m-auto max-w-screen-sm mt-5">
+    <form action="{{url('/login')}}" method="post" class="flex justify-center m-auto max-w-screen-sm mt-5">
         @csrf
         <fieldset class="w-full p-4 grid grid-cols-1 gap-4">
             <legend class="text-primary text-2xl font-bold">Portal Login</legend>
