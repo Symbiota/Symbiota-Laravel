@@ -72,7 +72,7 @@ $legacy_routes = [
 /* Generate Legacy Redirects to Laravel */
 $legacy_black_list = [];
 foreach ($legacy_routes as $route => $redirect) {
-    $legacy_black_list['/' . $_ENV['PORTAL_NAME'] . '/' . $route] = $redirect;
+    $legacy_black_list['/' . $_ENV['PORTAL_NAME'] . '/' . $route] = $_ENV["APP_URL"] . $redirect;
 }
 
 /* Parse URI */
