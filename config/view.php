@@ -14,6 +14,8 @@ return [
     */
 
     'paths' => [
+        resource_path('views/custom'),
+        resource_path('views/core'),
         resource_path('views'),
     ],
 
