@@ -83,8 +83,10 @@ $uri = $query_pos?
 
 /* Clean out host url if present */
 $https = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
-$app_url = str_replace($https, '', $_ENV["APP_URL"]);
-$uri = str_replace($app_url, '', $uri);
+$app_url = str_replace([$https, $_SERVER['HTTP_HOST']],'', $_ENV["APP_URL"]);
+if($app_url) {
+    $uri = str_replace($app_url, '', $uri);
+}
 
 $mime_types = [
     'aac' => 'audio/aac',
