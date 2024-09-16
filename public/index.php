@@ -178,7 +178,7 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
             include_once(__DIR__ . '/..' . $uri);
         } else if($mime = $mime_types[$file_type]) {
             header("Content-Type: " . $mime);
-            echo file_get_contents('/var/www/html' . $uri);
+            echo file_get_contents(__DIR__ . '/..' . $uri);
         }
     } catch(Throwable $e) {
         echo $e->getMessage();
