@@ -3,6 +3,7 @@
     'label' => false,
     'placeholder' => '',
     'search' => '',
+    'name' => 'search',
     'error_text',
     'assistive_text',
     'menu' => new Illuminate\View\ComponentSlot(),
@@ -14,8 +15,8 @@
 <script type="text/javascript" defer>
     function autoSearchInit(el) {
         const input = el.querySelector('input');
-        const menu = el.querySelector(`#${input.id}-search-results`);
-        console.log(`#${input.id}-search-result`)
+        const input_name = input.name;
+        const menu = el.querySelector(`#search-results-${input.id}`);
 
         const getMenuLength = () => {
             return menu.children.length;
@@ -66,7 +67,7 @@
         });
 
         input.addEventListener('htmx:configRequest', (e) => {
-            e.detail.parameters.taxa = getLastValue(e.detail.parameters.taxa)
+            e.detail.parameters[input_name] = getLastValue(e.detail.parameters[input_name])
         })
 
         input.addEventListener('keydown', (e) => {
@@ -96,14 +97,14 @@
         hx-get="{{$search}}"
         hx-trigger="input changed delay:700ms, search"
         hx-indicator=".htmx-indicator"
-        hx-target="#{{$id}}-search-results"
+        hx-target="#search-results-{{$id}}"
         x-on:htmx:before-send="results = false"
         x-on:blur="open = false"
         x-on:keyup.enter="open = false"
         x-on:focus="open = true"
         x-on:click="open = true"
         :placeholder="$placeholder"
-        name='taxa'
+        :name='$name'
         :id="$id"
         :label="$label"
         :class="$input->attributes->get('class')"
@@ -130,7 +131,7 @@
             x-cloak
             x-show="open && results"
             x-ref="menu"
-            id="{{$id . '-search-results'}}"
+            id="search-results-{{$id}}"
             {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 w-full border-base-300 border")}}>
             {{ $result }}
         </div>
