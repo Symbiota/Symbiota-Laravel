@@ -20,7 +20,7 @@
                 {{ Auth::user()->name }}!
             </span>
             <x-button class="text-base" variant="accent">
-                <x-nav-link href="/profile/viewprofile.php">
+                <x-nav-link href="{{config('portal.name') . '/profile/viewprofile.php'}}">
                     My Profile
                 </x-nav-link>
             </x-button>
