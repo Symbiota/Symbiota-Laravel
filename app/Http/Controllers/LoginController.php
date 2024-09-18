@@ -12,7 +12,7 @@ use Illuminate\Support\MessageBag;
 class LoginController extends Controller {
 
     function __invoke() {
-        return view('pages/login');
+        return response(view('pages/login'))->header('HX-Replace-URL', '/login');
     }
 
     public static function login(Request $request) {
@@ -70,6 +70,7 @@ class LoginController extends Controller {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return response(view('pages/home'))
+            ->header('HX-Replace-URL', '/');
     }
 }

@@ -25,7 +25,7 @@
                 </x-nav-link>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <x-nav-link href="/logout">
+                <x-nav-link hx-get="{{url('/logout')}}" hx-trigger="click" hx-boost="true" hx-target="body">
                     {!! __("header.sign_out") !!}
                 </x-nav-link>
             </x-button>
@@ -36,7 +36,7 @@
                 </x-nav-link>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <x-nav-link href="/login">
+                <x-nav-link hx-get="{{url('/login')}}" hx-trigger="click" hx-boost="true" hx-target="body" >
                     {!! __("header.sign_in") !!}
                 </x-nav-link>
             </x-button>
