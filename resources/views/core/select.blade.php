@@ -1,10 +1,10 @@
-@props(['label', 'id' => uniqid() ])
+@props(['label', 'id' => uniqid(), 'name' => 'select'])
 <div>
     @if($label ?? false)
     <label class="text-lg" for="{{ $id }}">{{$label}}</label>
     @endif
     <div class="grid">
-        <select id="{{ $id }}" {{ $attributes->twMerge("
+        <select name="{{$name}}" id="{{ $id }}" {{ $attributes->twMerge("
             focus:ring-accent
             focus:outline-none
             focus:ring-2
