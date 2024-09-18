@@ -4,6 +4,7 @@
     'placeholder' => '',
     'search' => '',
     'name' => 'search',
+    'include' => '',
     'error_text',
     'assistive_text',
     'menu' => new Illuminate\View\ComponentSlot(),
@@ -95,10 +96,12 @@
     <x-input
         autocomplete="off"
         type="search"
-        hx-get="{{$search}}"
+        hx-get="{{ $search }}"
+        hx-include="{{ $include }}"
         hx-trigger="input changed delay:700ms, search"
         hx-indicator=".htmx-indicator"
         hx-target="#search-results-{{$id}}"
+        hx-replace-url="false"
         x-on:htmx:before-send="results = false"
         x-on:blur="open = false"
         x-on:keyup.enter="open = false"

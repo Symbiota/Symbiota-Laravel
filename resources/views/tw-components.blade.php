@@ -52,7 +52,7 @@
             </x-accordion>
         </x-accordion>
 
-        <x-autocomplete-input :label="'Auto Complete Input'" id="test-search">
+        <x-autocomplete-input name="taxa" :label="'Auto Complete Input'" id="test-search" search="/api/taxa/search">
             <x-slot:input class="p-1 bg-base-200 w-full"></x-slot>
                 <x-slot:menu>Menu</x-slot>
         </x-autocomplete-input>
@@ -67,7 +67,11 @@
                     <option value="Taxonomy Group">Taxonomy Group</option>
                     <option value="Common">Common</option>
                 </x-select>
-                <x-autocomplete-input id="test-search-2" placeholder="Type to search..." search="/api/taxa/search">
+                <x-autocomplete-input
+                    id="test-search-2"
+                    placeholder="Type to search..."
+                    search="/api/taxa/search"
+                >
                     <x-slot:input class="peer-input p-1 z-10 bg-base-200 w-full rounded-l-none border-l-0"></x-slot>
                         <x-slot:menu>Menu</x-slot>
                 </x-autocomplete-input>
