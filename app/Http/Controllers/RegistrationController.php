@@ -4,20 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\View\View;
 
 class RegistrationController extends Controller {
     /**
      * @return View
      */
-    function __invoke(): View { return view('pages/signup'); }
+    function __invoke() { return view('pages/signup'); }
 
     /**
      * @return <missing>|Response
      */
-    public static function register(Request $request): Response {
+    public static function register(Request $request) {
 
         /* Email currently isn't unique in our db */
         $validator = Validator::make($request->all(), [
@@ -39,6 +37,7 @@ class RegistrationController extends Controller {
 
         if(count($name_parts) >= 1) $validated['firstName'] = $name_parts[0];
         if(count($name_parts) >= 2) $validated['lastName'] = $name_parts[1];
+        else $validated['lastName'] = $validated['name'];
 
         $user = new User;
         $user->fill($validated);
