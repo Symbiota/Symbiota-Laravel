@@ -1,7 +1,22 @@
 <?php
+use Illuminate\Auth\SessionGuard;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Cookie\CookieValuePrefix;
+use Illuminate\Encryption\Encrypter as IlluminateEncrypter;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables as IlluminateLoadEnvironmentVariables;
+use Illuminate\Foundation\Bootstrap\RegisterFacades;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\FileSessionHandler;
+use Illuminate\Session\Store;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use function GuzzleHttp\json_decode;
 
 define('LARAVEL_START', microtime(true));
 
@@ -48,6 +63,8 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 //Manually Bootstrap env so that we can use the variables in legacy code
 (new IlluminateLoadEnvironmentVariables)->bootstrap($app);
+//(new LoadConfiguration)->bootstrap($app);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -59,13 +76,19 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 | because if use laravel routes would strip the legacy globals and porting
 | them would cause potential undefined behavior. Another option of running
 | the Legacy code via the public folder was considered but this had an
-| on conflicting routes and lack of fine grain route overrides.
+| on conflicting routes and lack of fine grain route overrides. It would
 |
+| TLDR Don't change this unless you know what you are doing. Many ways have
+| May days have been spent trying to integrate the legacy code and this is
+| the unfortunately simplest way to ensure it runs the same.
 */
 
 /* Routes that we want to fall through to laravel implementation */
 $legacy_routes = [
     'index.php' => '/',
+    'profile/index.php' => isset($_REQUEST['submit']) && $_REQUEST['submit'] === 'logout'?
+    '/logout': '/login' ,
+    'profile/newprofile.php' => '/signup',
     //'sitemap.php' => '/sitemap',
 ];
 
@@ -173,8 +196,65 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
 } else if(preg_match("/^\/Portal.*\.(.*)/", $uri, $matches)) {
     try {
         [$path, $file_type] = $matches;
-        if($file_type === "php"){
+        if($file_type === "php") {
             include_once(__DIR__ . '/../' . $_ENV['PORTAL_NAME'] . '/config/symbini.php');
+
+            // This Class parses laravel file session auth into legacy user globals
+            // On the surface his might seem overkill but laravel locks down most of
+            // its facades behind within the kernal which will break the legacy application.
+            class LegacyProfile extends ProfileManager {
+                public function authenticate($pwd = '') {
+                    $session_name = 'symbiota_laravel_session';
+                    $session = $_COOKIE[$session_name];
+                    if(!$session) return;
+
+                    $key = base64_decode(Str::after($_ENV['APP_KEY'], 'base64:'));
+
+                    if(!$key) {
+                        error_log('No encryption key for legacy application');
+                        return;
+                    };
+                    $encrypter = new IlluminateEncrypter($key, 'AES-256-CBC');
+                    $decrypted_cookie = $encrypter->decrypt($session, false);
+                    $store_id = CookieValuePrefix::validate($session_name, $decrypted_cookie, $key);
+                    $session_handler = new FileSessionHandler(
+                        new Filesystem(),
+                        '/var/www/html/storage/framework/sessions',
+                        '120',
+                    );
+                    $store = new Store($session_name, $session_handler, $store_id, 'php');
+                    $store->start();
+
+                    // TODO (Logan) why is this web?
+                    $this->uid = $store->get('login_web_' . sha1(SessionGuard::class));
+                    if($this->uid) {
+                        global $PARAMS_ARR;
+                        global $USERNAME;
+                        global $USER_DISPLAY_NAME;
+                        global $SYMB_UID;
+                        global $IS_ADMIN;
+                        global $USER_RIGHTS;
+
+                        $PARAMS_ARR = [];
+                        $person = $this->getPerson();
+                        $this->setUserRights();
+
+                        $USER_DISPLAY_NAME = $person->getFirstName();
+                        $USERNAME = $person->getUserName();
+                        $SYMB_UID = $this->uid;
+                        $IS_ADMIN = (array_key_exists('SuperAdmin',$USER_RIGHTS)?1:0);
+                    }
+                }
+            }
+
+            try {
+                $profile = new LegacyProfile();
+                $profile->authenticate();
+            } catch(Throwable $e) {
+                echo $e->getMessage();
+                error_log('ERROR Failure to decrypt and load laravel use in legacy system: ' . $e->getMessage());
+            }
+
             include_once(__DIR__ . '/..' . $uri);
         } else if($mime = $mime_types[$file_type]) {
             header("Content-Type: " . $mime);
@@ -183,14 +263,13 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
     } catch(Throwable $e) {
         echo $e->getMessage();
     }
-
 // Do Laravel stuff if legacy route doesn't exist or its black listed
 } else {
-$kernel = $app->make(Kernel::class);
+    $kernel = $app->make(Kernel::class);
 
-$response = $kernel->handle(
-    $request = Request::capture()
-)->send();
+    $response = $kernel->handle(
+        $request = Request::capture()
+    )->send();
 
-$kernel->terminate($request, $response);
+    $kernel->terminate($request, $response);
 }

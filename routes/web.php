@@ -5,7 +5,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,10 +38,21 @@ Route::post('/signup', [RegistrationController::class, 'register']);
 Route::get('/signup', RegistrationController::class);
 
 Route::get('/media/search', function (Request $request) {
-    $form_data = $request->validate([
-        'usethes' => 'boolean'
-    ]);
+
     $media = [];
+    if($request->query('media_type')) {
+        $media = DB::select('Select * from media where tid = 58358 and media_type = "image" LIMIT 100');
+
+        return Blade::render('
+            @foreach ($media as $item)
+            <div>
+            <img class="max-h-72" src="{{$item->thumbnailUrl}}" alt="Image not found"/>
+            {{$item->tid}}
+            </div>
+            @endforeach
+            ', ['media' => $media ]);
+    }
+
     return view('pages/media/search', ['media' => $media ]);
 });
 
