@@ -1,10 +1,10 @@
-<x-layout>
+@props(['media' => []])
+<x-layout class="max-w-[70%] m-auto">
     <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
-        <form method="get" action="{{ url('/media/search') }}" class="grid grid-col-1 gap-4">
-
-            <x-taxa-search/>
+        <form hx-get="{{ url('/media/search') }}" hx-replace-url="true" hx-target="#photo-gallery" class="grid grid-col-1 gap-4">
+            <x-taxa-search />
 
             <x-select label="Creator">
                 <option value="1">Dummy Creator 1</option>
@@ -59,12 +59,13 @@
             </x-button>
         </form>
         <div id="photo-gallery" class="flex flex-wrap flex-row gap-3">
-            @for ($i = 0; $i < 30; $i++) <div id="{{ $i }}">
-                <img class="max-w-48"
-                    src="https://api.idigbio.org/v2/media/12102b9f6e3c7c28f182644921d7c96f?size=thumbnail" />
-        </div>
-        @endfor
-
+        @foreach ($media as $item)
+                <div>
+                <img class="max-h-72"
+                    src="{{$item->thumbnailUrl}}" />
+                    {{$item->tid}}
+                </div>
+        @endforeach
         </div>
     </fieldset>
 </x-layout>

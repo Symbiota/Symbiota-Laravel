@@ -17,10 +17,6 @@
                     Can't remember your password?
                 </p>
                 <x-link>Reset Password</x-link>
-                <p>
-                    Can't remember your login name?
-                </p>
-                <x-link>Retrieve Login</x-link>
             </div>
         </fieldset>
     </form>

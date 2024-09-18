@@ -29,7 +29,6 @@ class RegistrationController extends Controller {
                 ->header('HX-Replace-URL', '/')
                 ->header('HX-Retarget', '#app-body');
         } catch(UniqueConstraintViolationException $e) {
-
             array_push($errors, 'Email');
         } catch(\Throwable $e) {
             array_push($errors, $e->getMessage());
