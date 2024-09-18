@@ -23,7 +23,7 @@ class RegistrationController extends Controller {
 
         $errors = [];
         try {
-            DB::table('laravel_users')->insert($credentials);
+            DB::table('users')->insert($credentials);
             $content = view('pages/login');
             return response($content)
                 ->header('HX-Replace-URL', '/')
