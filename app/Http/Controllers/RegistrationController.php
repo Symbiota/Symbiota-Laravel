@@ -23,6 +23,11 @@ class RegistrationController extends Controller {
 
         $errors = [];
         try {
+            $name_parts = explode(" ", $credentials['name'], 2);
+
+            if(count($name_parts) >= 1) $credentials['firstName'] = $name_parts[0];
+            if(count($name_parts) >= 2) $credentials['lastName'] = $name_parts[1];
+
             DB::table('users')->insert($credentials);
             $content = view('pages/login');
             return response($content)
