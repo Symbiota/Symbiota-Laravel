@@ -204,7 +204,7 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
             // its facades behind within the kernal which will break the legacy application.
             class LegacyProfile extends ProfileManager {
                 public function authenticate($pwd = '') {
-                    $session_name = 'symbiota_laravel_session';
+                    $session_name = str_replace([" ", "-"], "_", strtolower($_ENV["APP_NAME"])) . '_session';
                     $session = $_COOKIE[$session_name];
                     if(!$session) return;
 
@@ -219,7 +219,7 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
                     $store_id = CookieValuePrefix::validate($session_name, $decrypted_cookie, $key);
                     $session_handler = new FileSessionHandler(
                         new Filesystem(),
-                        '/var/www/html/storage/framework/sessions',
+                        __DIR__ . '/../storage/framework/sessions',
                         '120',
                     );
                     $store = new Store($session_name, $session_handler, $store_id, 'php');
