@@ -1,7 +1,7 @@
 @props(['name' => '', 'email' => '', 'password' => ''])
 <x-layout>
     @fragment('signup-form')
-    <form hx-post="/signup" hx-swap="outerHTML" hx-target="this" class="flex flex-col justify-center m-auto max-w-screen-sm mt-5">
+    <form hx-post="{{ url('/signup') }}" hx-swap="outerHTML" hx-target="this" class="flex flex-col justify-center m-auto max-w-screen-sm mt-5">
         @csrf
         <fieldset class="w-full p-4 grid grid-cols-1 gap-4">
             <legend class="text-primary text-2xl font-bold">Signup</legend>
