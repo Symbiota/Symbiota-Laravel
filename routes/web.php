@@ -32,6 +32,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 /* In Progress Skeletons */
 Route::view('/collections/search', 'pages/collections');
 Route::view('/collections/list', 'pages/collections/list');
+Route::view('/occurrence', 'pages/occurrence/profile');
 
 /* Login/out routes */
 Route::get('/login', LoginController::class);
