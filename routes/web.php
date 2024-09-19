@@ -38,19 +38,25 @@ Route::post('/signup', [RegistrationController::class, 'register']);
 Route::get('/signup', RegistrationController::class);
 
 Route::get('/media/search', function (Request $request) {
-
     $media = [];
     if($request->query('media_type')) {
-        $media = DB::select('Select * from media where tid = 58358 and media_type = "image" LIMIT 100');
-
-        return Blade::render('
-            @foreach ($media as $item)
-            <div>
-            <img class="max-h-72" src="{{$item->thumbnailUrl}}" alt="Image not found"/>
-            {{$item->tid}}
-            </div>
-            @endforeach
-            ', ['media' => $media ]);
+        $media = DB::select('Select * from media where tid = 58358 and media_type = "image" LIMIT 30');
+        if($request->query('partial')) {
+            return response(Blade::render('
+                @foreach ($media as $item)
+                        <div class="bg-base-300">
+                        <img class="h-72 w-48 object-cover"
+                            alt="Image not found"
+                            loading="lazy"
+                            src="{{$item->thumbnailUrl}}" />
+                            {{$item->tid}}
+                        </div>
+                @endforeach
+                    <div hx-get="{{ url(\'/media/search?partial=1&media_type=audio\') }}" hx-swap="afterend" hx-indicator="#scroll-loader" hx-trigger="revealed" >
+                    </div>
+                ', ['media' => $media ]))
+                ->header('HX-Replace-URL', url()->current() . '?' . http_build_query($request->except('partial')));
+        }
     }
 
     return view('pages/media/search', ['media' => $media ]);
