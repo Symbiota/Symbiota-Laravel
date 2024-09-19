@@ -15,7 +15,7 @@ $query_params['partial'] = true;
 <a class="group" target="_blank"
     href="{{ url(config('portal.name')) . '/collections/individual/index.php?occid=' . $item->occid }}">
     <div class="relative bg-base-200">
-        <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl}}" />
+        <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl ?? $item->url}}" />
         <div
             class="group-hover:block group-focus:block hidden text-white absolute w-full bg-opacity-70 p-2 bg-black bottom-0">
             {{$item->sciName}}

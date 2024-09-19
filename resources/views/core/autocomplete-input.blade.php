@@ -5,6 +5,7 @@
     'search' => '',
     'name' => 'search',
     'include' => '',
+    'value' => '',
     'error_text',
     'assistive_text',
     'menu' => new Illuminate\View\ComponentSlot(),
@@ -94,15 +95,16 @@
 @endPushOnce
 <div x-data="{el: $el, open: false, results: {{!$result->isEmpty()? 'true' :'false'}}}" x-init="autoSearchInit($el)" class="w-full">
     <x-input
+        value="{{ $value }}"
         autocomplete="off"
         type="search"
         hx-get="{{ $search }}"
         hx-include="{{ $include }}"
         hx-trigger="input changed delay:700ms, search"
-        hx-indicator=".htmx-indicator"
+        hx-indicator="#menu-loader-{{$id}}"
         hx-target="#search-results-{{$id}}"
         hx-replace-url="false"
-        x-on:htmx:before-send="results = false"
+        x-on:htmx:before-send.stop="results = false"
         x-on:blur="open = false"
         x-on:keyup.enter="open = false"
         x-on:focus="open = true"
@@ -114,7 +116,7 @@
         :class="$input->attributes->get('class')"
     />
     <div {{$menu->attributes->twMerge('relative w-full')}}>
-        <div class="htmx-indicator">
+        <div id="menu-loader-{{$id}}" class="htmx-indicator">
         <div {{$indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1')}}>
                @if ($indicator->isEmpty())
                 <div class="flex items-center justify-center gap-1 text-base-content">

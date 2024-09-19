@@ -4,6 +4,7 @@ use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cookie;
@@ -41,14 +42,18 @@ Route::get('/media/search', function (Request $request) {
     $media = [];
     $start = $request->query('start') ?? 0;
     if($request->query('media_type')) {
-        sleep(2);
-        $media = DB::select('SELECT * from media
-            LEFT JOIN taxa on taxa.tid = media.tid
-            LEFT JOIN users on users.uid = media.creatoruid
-            WHERE media.tid = 58358 AND media_type = "image" LIMIT 30
-            OFFSET ?
-        ', [$start]);
-
+        $media = DB::table('media')
+            ->leftJoin('taxa', 'taxa.tid', '=', 'media.tid')
+            ->leftJoin('users', 'users.uid', '=', 'media.creatoruid')
+            ->when($request->query('media_type'), function(Builder $query, $type) {
+                $query->where('media.media_type', '=', $type);
+            })
+            ->when($request->query('taxa'), function(Builder $query, $taxa) {
+                $query->whereIn('taxa.sciName', array_map('trim', explode(',', $taxa)));
+            })
+            ->limit(30)
+            ->offset($start)
+            ->get();
         if($request->query('partial')) {
             $query_params = $request->except('partial');
             $query_params['start'] = $start;
