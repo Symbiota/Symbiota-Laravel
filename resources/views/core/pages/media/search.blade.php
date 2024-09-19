@@ -40,34 +40,26 @@
                 </div>
             </div>
 
-            <x-radio name="resource_counts" :default_value="request('resource_counts') ?? 'all_multimedia'" label="Multimedia Tags" :options="[
-                [ 'value' => 'all_multimedia', 'label' => 'All Multimedia' ],
+            <x-radio name="resource_counts" :default_value="request('resource_counts') ?? ''" label="Multimedia Tags" :options="[
+                [ 'value' => '', 'label' => 'All Multimedia' ],
                 [ 'value' => 'one_per_taxon', 'label' => 'One per taxon' ],
                 [ 'value' => 'one_per_spec', 'label' => 'One per specimen' ],
             ]">
             </x-radio>
 
-            <x-radio name="resource_type" :default_value="request('resource_type') ?? 'all_multimedia'" label="Resource Type" :options="[
-                [ 'value' => 'all_multimedia', 'label' => 'All Multimedia' ],
+            <x-radio name="resource_type" :default_value="request('resource_type') ?? ''" label="Resource Type" :options="[
+                [ 'value' => '', 'label' => 'All Multimedia' ],
                 [ 'value' => 'one_per_taxon', 'label' => 'Specimen/Vouchered Multimedia' ],
                 [ 'value' => 'one_per_spec', 'label' => 'Field Multimedia (lacking specific locality details)' ],
             ]">
             </x-radio>
 
-            <x-radio name="media_type" :default_value="request('media_type') ?? 'all'" label="Multimedia Type" :options="[
-                [ 'value' => 'all', 'label' => 'All' ],
+            <x-radio name="media_type" :default_value="request('media_type') ?? ''" label="Multimedia Type" :options="[
+                [ 'value' => '', 'label' => 'All' ],
                 [ 'value' => 'image', 'label' => 'Image' ],
                 [ 'value' => 'audio', 'label' => 'Audio' ],
             ]">
             </x-radio>
-
-            <x-select label="Page Count">
-                <option value="200">200</option>
-                <option value="400">400</option>
-                <option value="600">600</option>
-                <option value="800">800</option>
-                <option value="1000">1000</option>
-            </x-select>
             <x-button type="submit">
                 Load Multimedia
             </x-button>

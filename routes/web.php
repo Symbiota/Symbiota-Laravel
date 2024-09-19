@@ -41,7 +41,7 @@ Route::get('/signup', RegistrationController::class);
 Route::get('/media/search', function (Request $request) {
     $media = [];
     $start = $request->query('start') ?? 0;
-    if($request->query('media_type')) {
+    if(count($request->all()) > 0) {
         $media = DB::table('media as m')
             ->leftJoin('taxa as t', 't.tid', '=', 'm.tid')
             ->leftJoin('users as u', 'u.uid', '=', 'm.creatoruid')

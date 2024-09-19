@@ -24,9 +24,12 @@ $query_params['partial'] = true;
 </a>
 @endforeach
 
+{{-- Avoids call if there isn't anymore items --}}
+@if(count($media) >= 30)
 {{-- When the bottom is revealed then fetch more data --}}
 <div hx-get="{{ url()->current() . '?' . http_build_query($query_params) }}" hx-swap="afterend"
     hx-indicator="#scroll-loader" hx-trigger="revealed">
 </div>
+@endif
 
 @endif
