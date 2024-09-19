@@ -26,10 +26,12 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'pages/home');
 Route::view('Portal/', 'pages/home');
 Route::view('/tw', 'tw-components');
-Route::view('/collections/search', 'pages/collections');
-Route::view('/sitemap', 'pages/sitemap');
 Route::view('/sitemap', 'pages/sitemap');
 Route::view('/usagepolicy', 'pages/usagepolicy');
+
+/* In Progress Skeletons */
+Route::view('/collections/search', 'pages/collections');
+Route::view('/collections/list', 'pages/collections/list');
 
 /* Login/out routes */
 Route::get('/login', LoginController::class);
