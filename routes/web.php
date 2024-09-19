@@ -55,6 +55,11 @@ Route::get('/media/search', function (Request $request) {
             ->when($request->query('uid'), function(Builder $query, $uid) {
                 $query->where('u.uid', '=', $uid);
             })
+            ->when($request->query('tag'), function(Builder $query, $tag) {
+                $query->leftJoin('imagetag as tag', 'tag.imgid', '=', 'm.media_id')
+                    ->leftJoin('imagetagkey as imgkey', 'imgkey.tagkey', '=', 'tag.keyvalue')
+                    ->where('imgkey.tagkey', '=', $tag);
+            })
             /* Requires strict mode currently
             ->when($request->query('resource_counts'), function(Builder $query, $group) {
                 if($group === 'one_per_taxon') {

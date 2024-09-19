@@ -17,7 +17,7 @@
                 :use_thes_value="request('usethes')"
             />
             <x-select value="{{request('uid')}}" label="Creator" name="uid">
-                <option disabled selected value>-- select a tag --</option>
+                <option disabled selected value>-- Select a Creator --</option>
                 @foreach ($creators as $creator)
                     <option value="{{ $creator->uid }}">{{$creator->name}}</option>
                 @endforeach
@@ -31,7 +31,8 @@
                     </x-select>
                 </div>
                 <div class="align-bottom mt-auto">
-                    <x-select>
+                    <x-select name="tag">
+                        <option disabled selected value>-- Select a Tag --</option>
                         @foreach ($tags as $tag)
                             <option value="{{ $tag->tagkey}}">{{$tag->tagkey}}</option>
                         @endforeach
