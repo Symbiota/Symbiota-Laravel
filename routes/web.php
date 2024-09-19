@@ -42,15 +42,29 @@ Route::get('/media/search', function (Request $request) {
     $media = [];
     $start = $request->query('start') ?? 0;
     if($request->query('media_type')) {
-        $media = DB::table('media')
-            ->leftJoin('taxa', 'taxa.tid', '=', 'media.tid')
-            ->leftJoin('users', 'users.uid', '=', 'media.creatoruid')
+        $media = DB::table('media as m')
+            ->leftJoin('taxa as t', 't.tid', '=', 'm.tid')
+            ->leftJoin('users as u', 'u.uid', '=', 'm.creatoruid')
+            ->leftJoin('omoccurrences as o', 'o.occid', '=', 'm.occid')
             ->when($request->query('media_type'), function(Builder $query, $type) {
-                $query->where('media.media_type', '=', $type);
+                $query->where('m.media_type', '=', $type);
             })
             ->when($request->query('taxa'), function(Builder $query, $taxa) {
-                $query->whereIn('taxa.sciName', array_map('trim', explode(',', $taxa)));
+                $query->whereIn('t.sciName', array_map('trim', explode(',', $taxa)));
             })
+            ->when($request->query('uid'), function(Builder $query, $uid) {
+                $query->where('u.uid', '=', $uid);
+            })
+            /* Requires strict mode currently
+            ->when($request->query('resource_counts'), function(Builder $query, $group) {
+                if($group === 'one_per_taxon') {
+                    $query->groupBy('t.tid');
+                } else if($group = 'one_per_specimen') {
+                    $query->groupBy('o.occid');
+                }
+            })
+            */
+            ->select('m.url', 'm.thumbnailUrl', 't.sciName', 'o.occid')
             ->limit(30)
             ->offset($start)
             ->get();
@@ -65,7 +79,17 @@ Route::get('/media/search', function (Request $request) {
         }
     }
 
-    return view('pages/media/search', ['media' => $media ]);
+    $creators = DB::table('users as u')
+        ->join('media as m', 'm.creatoruid', '=', 'u.uid')
+        ->select('uid','name')
+        ->distinct()
+        ->get();
+
+    $tag_options = DB::table('imagetagkey as key')
+        ->select('tagkey')
+        ->get();
+
+    return view('pages/media/search', ['media' => $media, 'creators' => $creators, 'tags' => $tag_options]);
 });
 
 /* Documenation */

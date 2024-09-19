@@ -1,4 +1,4 @@
-@props(['media' => []])
+@props(['media' => [], 'creators' => []])
 <x-layout class="sm:w-[90%] lg:w-[70%] m-auto" x-data="{ loading: true }">
     <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
     <fieldset>
@@ -16,9 +16,11 @@
                 :taxa_type_value="request('taxa-type')"
                 :use_thes_value="request('usethes')"
             />
-            <x-select label="Creator">
-                <option value="1">Dummy Creator 1</option>
-                <option value="2">Dummy Creator 2</option>
+            <x-select value="{{request('uid')}}" label="Creator" name="uid">
+                <option disabled selected value>-- select a tag --</option>
+                @foreach ($creators as $creator)
+                    <option value="{{ $creator->uid }}">{{$creator->name}}</option>
+                @endforeach
             </x-select>
 
             <div class="grid grid-cols-2 grid-row-1">
@@ -30,8 +32,9 @@
                 </div>
                 <div class="align-bottom mt-auto">
                     <x-select>
-                        <option value="1">Tag 1</option>
-                        <option value="2">Tag 2</option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->tagkey}}">{{$tag->tagkey}}</option>
+                        @endforeach
                     </x-select>
                 </div>
             </div>
