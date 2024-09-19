@@ -1,14 +1,15 @@
 @props(['media' => []])
-<x-layout class="w-[70%] m-auto">
+<x-layout class="sm:w-[90%] lg:w-[70%] m-auto" x-data="{ loading: true }">
     <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
         <form
             hx-get="{{ url('/media/search') }}"
-            hx-indicator="#photo-gallery"
-            hx-vals='{"partial": true}'
+            hx-indicator="#scroll-loader"
+            hx-vals='{"partial": true, "start": 0}'
             hx-target="#photo-gallery"
             hx-indicator="#scroll-loader"
+            x-on:htmx:before-send="loading = true"
             class="grid grid-col-1 gap-4">
             <x-taxa-search />
             <x-select label="Creator">
@@ -63,20 +64,9 @@
                 Load Multimedia
             </x-button>
         </form>
-        <div id="photo-gallery" class="flex flex-wrap flex-row gap-3">
-        @foreach ($media as $item)
-                <div class="bg-base-300">
-                <img class="h-72 w-48 object-cover"
-                    alt="Image not found"
-                    loading="lazy"
-                    src="{{$item->thumbnailUrl}}" />
-                    {{$item->tid}}
-                </div>
-        @endforeach
-        <div hx-get="{{ url('/media/search?partial=1&media_type=audio') }}" hx-swap="afterend" hx-indicator="#scroll-loader" hx-trigger="revealed" >
+        <div x-show="!loading" x-on:htmx:after-swap="loading = false" id="photo-gallery" class="flex flex-wrap flex-row gap-3">
+            <x-media.item :media="$media" />
         </div>
-        </div>
-
         <div id="scroll-loader" class="htmx-indicator">
             <div class="stroke-accent w-full h-16 flex justify-center">
                 <x-icons.loading/>

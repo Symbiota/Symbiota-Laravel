@@ -39,23 +39,24 @@ Route::get('/signup', RegistrationController::class);
 
 Route::get('/media/search', function (Request $request) {
     $media = [];
+    $start = $request->query('start') ?? 0;
     if($request->query('media_type')) {
-        $media = DB::select('Select * from media where tid = 58358 and media_type = "image" LIMIT 30');
+        sleep(2);
+        $media = DB::select('SELECT * from media
+            LEFT JOIN taxa on taxa.tid = media.tid
+            LEFT JOIN users on users.uid = media.creatoruid
+            WHERE media.tid = 58358 AND media_type = "image" LIMIT 30
+            OFFSET ?
+        ', [$start]);
+
         if($request->query('partial')) {
-            return response(Blade::render('
-                @foreach ($media as $item)
-                        <div class="bg-base-300">
-                        <img class="h-72 w-48 object-cover"
-                            alt="Image not found"
-                            loading="lazy"
-                            src="{{$item->thumbnailUrl}}" />
-                            {{$item->tid}}
-                        </div>
-                @endforeach
-                    <div hx-get="{{ url(\'/media/search?partial=1&media_type=audio\') }}" hx-swap="afterend" hx-indicator="#scroll-loader" hx-trigger="revealed" >
-                    </div>
-                ', ['media' => $media ]))
-                ->header('HX-Replace-URL', url()->current() . '?' . http_build_query($request->except('partial')));
+            $query_params = $request->except('partial');
+            $query_params['start'] = $start;
+            $new_url = url()->current() .
+                '?' .
+                http_build_query($query_params);
+            return response(view('media/item', ['media' => $media ]))
+                ->header('HX-Replace-URL', $new_url);
         }
     }
 
