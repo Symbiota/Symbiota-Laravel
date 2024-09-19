@@ -11,7 +11,11 @@
             hx-indicator="#scroll-loader"
             x-on:htmx:before-send="loading = true"
             class="grid grid-col-1 gap-4">
-            <x-taxa-search />
+            <x-taxa-search
+                :taxa_value="request('taxa')"
+                :taxa_type_value="request('taxa-type')"
+                :use_thes_value="request('usethes')"
+            />
             <x-select label="Creator">
                 <option value="1">Dummy Creator 1</option>
                 <option value="2">Dummy Creator 2</option>
