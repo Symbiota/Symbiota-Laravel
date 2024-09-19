@@ -1,11 +1,16 @@
 @props(['media' => []])
-<x-layout class="max-w-[70%] m-auto">
+<x-layout class="w-[70%] m-auto">
     <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
-        <form hx-get="{{ url('/media/search') }}" hx-replace-url="true" hx-target="#photo-gallery" class="grid grid-col-1 gap-4">
+        <form
+            hx-get="{{ url('/media/search') }}"
+            hx-indicator="#photo-gallery"
+            hx-vals='{"partial": true}'
+            hx-target="#photo-gallery"
+            hx-indicator="#scroll-loader"
+            class="grid grid-col-1 gap-4">
             <x-taxa-search />
-
             <x-select label="Creator">
                 <option value="1">Dummy Creator 1</option>
                 <option value="2">Dummy Creator 2</option>
@@ -60,12 +65,22 @@
         </form>
         <div id="photo-gallery" class="flex flex-wrap flex-row gap-3">
         @foreach ($media as $item)
-                <div>
-                <img class="max-h-72"
+                <div class="bg-base-300">
+                <img class="h-72 w-48 object-cover"
+                    alt="Image not found"
+                    loading="lazy"
                     src="{{$item->thumbnailUrl}}" />
                     {{$item->tid}}
                 </div>
         @endforeach
+        <div hx-get="{{ url('/media/search?partial=1&media_type=audio') }}" hx-swap="afterend" hx-indicator="#scroll-loader" hx-trigger="revealed" >
+        </div>
+        </div>
+
+        <div id="scroll-loader" class="htmx-indicator">
+            <div class="stroke-accent w-full h-16 flex justify-center">
+                <x-icons.loading/>
+            </div>
         </div>
     </fieldset>
 </x-layout>
