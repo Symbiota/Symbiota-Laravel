@@ -2,7 +2,9 @@
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">Taxon Name (Author)</h1>
         <div class="flex-grow">
-            <i class="float-right fas fa-edit"></i>
+        <a href="{{url(config('portal.name'). '/taxa/profile/tpeditor.php?tid=' . request('tid') )}}">
+            <i class="float-right fas fa-edit cursor-pointer"></i>
+        </a>
         </div>
     </div>
     <div class="flex gap-4 min-h-0">
