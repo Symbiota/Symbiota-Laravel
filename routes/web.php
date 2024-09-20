@@ -33,6 +33,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 Route::view('/collections/search', 'pages/collections');
 Route::view('/collections/list', 'pages/collections/list');
 Route::view('/occurrence', 'pages/occurrence/profile');
+Route::view('/taxon', 'pages/taxon/profile');
 
 /* Login/out routes */
 Route::get('/login', LoginController::class);
@@ -51,6 +52,9 @@ Route::get('/media/search', function (Request $request) {
             ->leftJoin('omoccurrences as o', 'o.occid', '=', 'm.occid')
             ->when($request->query('media_type'), function(Builder $query, $type) {
                 $query->where('m.media_type', '=', $type);
+            })
+            ->when($request->query('tid'), function(Builder $query, $tid) {
+                $query->whereIn('t.tid', is_array($tid)? $tid: [$tid]);
             })
             ->when($request->query('taxa'), function(Builder $query, $taxa) {
                 $query->whereIn('t.sciName', array_map('trim', explode(',', $taxa)));
@@ -79,7 +83,11 @@ Route::get('/media/search', function (Request $request) {
         if($request->query('partial')) {
             $query_params = $request->except('partial');
             $query_params['start'] = $start;
-            $new_url = url()->current() .
+
+            $base_url = $request->header('referer') ?? url()->current();
+            $base_url = substr($base_url, 0, strpos('?', $base_url));
+
+            $new_url = $base_url .
                 '?' .
                 http_build_query($query_params);
             return response(view('media/item', ['media' => $media ]))

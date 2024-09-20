@@ -12,7 +12,7 @@
     }
 </script>
 @endPushOnce
-<div x-data="{el: $el, active: {{ $active }}}" x-init="wireTabs(el, {{ count($tabs) }})">
+<div {{$attributes->twMerge('w-full')}} x-data="{el: $el, active: {{ $active }}}" x-init="wireTabs(el, {{ count($tabs) }})">
     {{-- Tab Menu --}}
     <div class="flex gap-1">
         @for ($i = 0; $i < count($tabs); $i++)
