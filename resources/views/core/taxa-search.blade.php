@@ -24,7 +24,7 @@
             :id="$id"
             :value="$taxa_value"
             placeholder="Type to search..."
-            search="/api/taxa/search"
+            search="{{url('/api/taxa/search')}}"
             include="#usethes-{{$id}}, #taxa-type-{{$id}}"
         >
             <x-slot:input class="peer-input p-1 z-10 bg-base-200 rounded-l-none border-l-0"></x-slot>
