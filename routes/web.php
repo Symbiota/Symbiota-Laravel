@@ -36,7 +36,6 @@ Route::view('/occurrence', 'pages/occurrence/profile');
 Route::view('/taxon', 'pages/taxon/profile');
 
 Route::get('/checklists', function (Request $request){
-
     $checklists = DB::table('fmchecklists as c')
         ->select('proj.pid', 'c.clid', 'c.name', 'projname', 'mapChecklist')
         ->leftJoin('fmchklstprojlink as link', 'link.clid', '=', 'c.clid')
@@ -45,6 +44,23 @@ Route::get('/checklists', function (Request $request){
         ->get();
 
     return view('pages/checklists', ['checklists' => $checklists]);
+});
+
+Route::get('/project', function (Request $request){
+
+    $project = DB::table('fmprojects')
+        ->select('pid', 'projname', 'managers')
+        ->where('pid', '=', request('pid'))
+        ->first();
+
+    $checklists = DB::table('fmchecklists as c')
+        ->select('link.pid', 'c.clid', 'c.name', 'mapChecklist')
+        ->leftJoin('fmchklstprojlink as link', 'link.clid', '=', 'c.clid')
+        ->where('link.pid', '=', request('pid'))
+        ->orderByRaw('-link.pid DESC')
+        ->get();
+
+    return view('pages/project', ['project' => $project, 'checklists' => $checklists]);
 });
 
 /* Login/out routes */
