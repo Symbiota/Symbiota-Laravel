@@ -1,14 +1,18 @@
-@props(['media' => []])
+@props(['media' => [], 'allow_empty_trigger' => false, 'fixed_start' => false])
 @php
 $query_params = request()->all();
-$query_params['start'] = isset($query_params['start']) && $query_params['start'] >= 0 ?
-    $query_params['start'] + 30:
-    0;
+if(is_numeric($fixed_start) && $fixed_start >= 0) {
+    $query_params['start'] = $fixed_start;
+} else if(isset($query_params['start']) && $query_params['start'] >= 0) {
+    $query_params['start'] += 30;
+} else {
+    $query_params['start'] = 0;
+}
 $query_params['partial'] = true;
 @endphp
 
 {{-- This is Need so infinte requests don't spawn --}}
-@if(count($media) > 0)
+{{-- @if(count($media) > 0) -- }}
 
 {{-- Render Media Items --}}
 @foreach ($media as $item)
@@ -25,11 +29,11 @@ $query_params['partial'] = true;
 @endforeach
 
 {{-- Avoids call if there isn't anymore items --}}
-@if(count($media) >= 30)
+@if(count($media) >= 30 || $allow_empty_trigger)
 {{-- When the bottom is revealed then fetch more data --}}
-<div hx-get="{{ url()->current() . '?' . http_build_query($query_params) }}" hx-swap="afterend"
+<div class="m-[-0.3rem]" hx-get="{{ url('/media/search') . '?' . http_build_query($query_params) }}" hx-swap="{{$allow_empty_trigger ? 'outerHTML':'afterend'}}"
     hx-indicator="#scroll-loader" hx-trigger="revealed">
 </div>
 @endif
 
-@endif
+{{--@endif--}}
