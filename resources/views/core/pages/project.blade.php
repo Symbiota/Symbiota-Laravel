@@ -1,6 +1,7 @@
 @props(['project', 'checklists' => []])
 <x-layout>
     <h1 class="text-4xl font-boldt text-primary">{{$project->projname}}</h1>
+    {{-- Todo Add Edit and when to show mapping button logic --}}
     <div>
         <span class="font-bold">Projects Mangers:</span>
         {{$project->managers }}
