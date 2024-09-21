@@ -11,6 +11,12 @@ use Illuminate\Support\MessageBag;
 
 class LoginController extends Controller {
 
+    /**
+     * @OA\Get(
+     *     path="/login",
+     *     @OA\Response(response="200", description="An example endpoint")
+     * )
+     */
     function __invoke() {
         return response(view('pages/login'))->header('HX-Replace-URL', '/login');
     }
