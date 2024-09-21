@@ -35,6 +35,15 @@ Route::view('/collections/list', 'pages/collections/list');
 Route::view('/occurrence', 'pages/occurrence/profile');
 Route::view('/taxon', 'pages/taxon/profile');
 
+Route::get('/checklist/{clid}', function(int $clid) {
+    $checklist = DB::table('fmchecklists as c')
+        ->select('*')
+        ->where('c.clid', '=', $clid)
+        ->first();
+
+    return view('pages/checklist/profile', ['checklist' => $checklist]);
+});
+
 Route::get('/checklists', function (Request $request){
     $checklists = DB::table('fmchecklists as c')
         ->select('proj.pid', 'c.clid', 'c.name', 'projname', 'mapChecklist')
@@ -47,7 +56,6 @@ Route::get('/checklists', function (Request $request){
 });
 
 Route::get('/project', function (Request $request){
-
     $project = DB::table('fmprojects')
         ->select('pid', 'projname', 'managers')
         ->where('pid', '=', request('pid'))
