@@ -1,6 +1,13 @@
 <?php
 
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\InstallationController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MediaController;
+use App\Http\Controllers\InventoryPackageController;
+use App\Http\Controllers\TaxonomyController;
+use App\Http\Controllers\OccurrenceAnnotationController;
+use App\Http\Controllers\OccurrenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -45,43 +52,41 @@ Route::get('/v2', function () {
 });
 
 Route::group(['prefix' => 'v2'], function () {
-    Route::get('collection',  [ CollectionController::class, 'showAllCollections' ]);
-    Route::get('collection/{id}', [ CollectionController::class ,'showOneCollection' ]);
-/*
-	$router->get('collection/{id}', ['uses' => 'CollectionController@showOneCollection']);
+    Route::get('collection', [CollectionController::class, 'showAllCollections']);
+    Route::get('collection/{id}', [CollectionController::class ,'showOneCollection']);
 
-	$router->get('occurrence/search',  ['uses' => 'OccurrenceController@showAllOccurrences']);
+    Route::get('occurrence/search', [OccurrenceController::class, 'showAllOccurrences']);
+
 	//Temporarily keep following route until new documentation is created. The one above will be keep so that I follows GBIF API layout
-	$router->get('occurrence',  ['uses' => 'OccurrenceController@showAllOccurrences']);
-	$router->get('occurrence/{id}', ['uses' => 'OccurrenceController@showOneOccurrence']);
-	$router->get('occurrence/{id}/media', ['uses' => 'OccurrenceController@showOneOccurrenceMedia']);
-	$router->get('occurrence/{id}/identification', ['uses' => 'OccurrenceController@showOneOccurrenceIdentifications']);
-	$router->get('occurrence/{id}/annotation', ['uses' => 'OccurrenceAnnotationController@showOccurrenceAnnotations']);
-	$router->get('occurrence/{id}/reharvest', ['uses' => 'OccurrenceController@oneOccurrenceReharvest']);
-	$router->get('occurrence/annotation/search', ['uses' => 'OccurrenceAnnotationController@showAllAnnotations']);
-	$router->post('occurrence/skeletal', ['uses' => 'OccurrenceController@skeletalImport']);
+    Route::get('occurrence', [OccurrenceController::class, 'showAllOccurrences']);
+    Route::get('occurrence/{id}', [OccurrenceController::class, 'showOneOccurrence']);
+    Route::get('occurrence/{id}/media', [OccurrenceController::class, 'showOneOccurrenceMedia']);
+    Route::get('occurrence/{id}/identification', [OccurrenceController::class, 'showOneOccurrenceIdentifications']);
+    Route::get('occurrence/{id}/annotation', [OccurrenceAnnotationController::class, 'showOccurrenceAnnotations']);
+    Route::get('occurrence/{id}/reharvest', [OccurrenceController::class, 'oneOccurrenceReharvest']);
+    Route::get('occurrence/annotation/search', [OccurrenceAnnotationController::class, 'showAllAnnotations']);
+    Route::post('occurrence/skeletal', [OccurrenceController::class, 'skeletalImport']);
+    Route::get('installation',  [InstallationController::class, 'showAllPortals']);
+    Route::get('installation/ping', [InstallationController::class, 'pingPortal']);
+    Route::get('installation/{id}', [InstallationController::class, 'showOnePortal']);
+    Route::get('installation/{id}/touch',  [InstallationController::class, 'portalHandshake']);
+    Route::get('installation/{id}/occurrence',  [InstallationController::class, 'showOccurrences']);
+    Route::get('inventory',  [InventoryController::class, 'showAllInventories']);
+    Route::get('inventory/{id}', [InventoryController::class, 'showOneInventory']);
+    Route::get('inventory/{id}/taxa', [InventoryController::class, 'showOneInventoryTaxa']);
+    Route::get('inventory/{id}/package', [InventoryPackageController::class, 'oneInventoryDataPackage']);
+    Route::get('media',  [MediaController::class, 'showAllMedia']);
+	Route::get('media/{id}', [MediaController::class, 'showOneMedia']);
+    Route::get('media/{id}', [MediaController::class, 'showOneMedia']);
+    Route::post('media', [MediaController::class, 'insert']);
+    Route::patch('media/{id}', [MediaController::class, 'update']);
+    Route::patch('media/{id}', [MediaController::class, 'update']);
+    Route::delete('media/{id}', [MediaController::class, 'delete']);
+    Route::delete('media/{id}', [MediaController::class, 'delete']);
+    Route::get('taxonomy', [TaxonomyController::class, 'showAllTaxa']);
+    Route::get('taxonomy/search', [TaxonomyController::class, 'showAllTaxaSearch']);
+    Route::get('taxonomy/{id}', [TaxonomyController::class, 'showOneTaxon']);
 
-	$router->get('installation',  ['uses' => 'InstallationController@showAllPortals']);
-	$router->get('installation/ping', ['uses' => 'InstallationController@pingPortal']);
-	$router->get('installation/{id}', ['uses' => 'InstallationController@showOnePortal']);
-	$router->get('installation/{id}/touch',  ['uses' => 'InstallationController@portalHandshake']);
-	$router->get('installation/{id}/occurrence',  ['uses' => 'InstallationController@showOccurrences']);
-
-	$router->get('inventory',  ['uses' => 'InventoryController@showAllInventories']);
-	$router->get('inventory/{id}', ['uses' => 'InventoryController@showOneInventory']);
-	$router->get('inventory/{id}/taxa', ['uses' => 'InventoryController@showOneInventoryTaxa']);
-	$router->get('inventory/{id}/package', ['uses' => 'InventoryPackageController@oneInventoryDataPackage']);
-
-	$router->get('media',  ['uses' => 'MediaController@showAllMedia']);
-	$router->get('media/{id}', ['uses' => 'MediaController@showOneMedia']);
-	$router->post('media', ['uses' => 'MediaController@insert']);
-	$router->patch('media/{id}', ['uses' => 'MediaController@update']);
-	$router->delete('media/{id}', ['uses' => 'MediaController@delete']);
-
-	$router->get('taxonomy', ['uses' => 'TaxonomyController@showAllTaxa']);
-	$router->get('taxonomy/search', ['uses' => 'TaxonomyController@showAllTaxaSearch']);
-	$router->get('taxonomy/{id}', ['uses' => 'TaxonomyController@showOneTaxon']);
-	//$router->get('taxonomy/{id}/description',  ['uses' => 'TaxonomyController@showAllDescriptions']);
-	//$router->get('taxonomy/{id}/description/{id}',  ['uses' => 'TaxonomyDescriptionController@showOneDescription']);
-    */
+    //Route::get('taxonomy/{id}/description',  [TaxonomyController::class, 'showAllDescriptions']);
+    //Route::get('taxonomy/{id}/description/{id}',  [TaxonomyDescriptionController::class, 'showOneDescription']);
 });
