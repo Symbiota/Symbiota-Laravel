@@ -4,7 +4,8 @@
     </a>
 </p>
 
-![CI](https://github.com/BioKIC/Symbiota-Laravel/actions/workflows/laravel.yml/badge.svg)
+![testing workflow](https://github.com/BioKIC/Symbiota-Laravel/actions/workflows/laravel.yml/badge.svg)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.com/) to make use of its rich feature set.
 
