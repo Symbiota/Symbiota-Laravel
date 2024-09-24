@@ -1,5 +1,5 @@
 @props(['id', 'label', 'name', 'open' => false, 'variant' => false])
-<div id={{$id ?? uniqid()}} data-blade-accordion x-data="{ open: {{ $open? 'true': 'false'}}}" {{ $attributes->twMerge('w-full')}}>
+<div id="{{$id ?? uniqid()}}" data-blade-accordion x-data="{ open: {{ $open? 'true': 'false'}}}" {{ $attributes->twMerge('w-full')}}>
     <!-- Accordion Title --->
     <x-button x-on:click="open = !open" :variant="$variant" class="w-full rounded-sm px-0 text-xl mb-1 hover:ease-in duration-150">
         <div class="flex w-full py-1 ">
