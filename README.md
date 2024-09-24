@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://symbiota.org/" target="_blank">
-        <img src="https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9" />
+        <img width="500px" src="https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9" />
     </a>
 </p>
 
