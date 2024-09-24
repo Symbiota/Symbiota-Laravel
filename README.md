@@ -4,6 +4,8 @@
     </a>
 </p>
 
+![CI](https://github.com/BioKIC/Symbiota-Laravel/actions/workflows/laravel.yml/badge.svg)
+
 WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.com/) to make use of its rich feature set.
 
 ## Integrating with Current Symbiota
