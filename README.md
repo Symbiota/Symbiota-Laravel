@@ -1,4 +1,8 @@
-<p align="center"><a href="https://symbiota.org/" target="_blank"><img style="background-color: #1B3D2F"src="https://symbiota.org/wp-content/uploads/LogoSymbiotaPNG-1024x682.png" width="400" alt="Symbiota Logo"></a></p>
+<p align="center">
+    <a href="https://symbiota.org/" target="_blank">
+        ![Symbiota_white_trans](https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9)
+    </a>
+</p>
 
 WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.com/) to make use of its rich feature set.
 
