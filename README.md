@@ -1,9 +1,8 @@
 <p align="center">
     <a href="https://symbiota.org/" target="_blank">
-        ![Symbiota_white_trans](https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9)
+        <img src="https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9" />
     </a>
 </p>
-![Symbiota_white_trans](https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9)
 
 WIP Test Repo to port Symbiota over to the [Laravel Framework](https://laravel.com/) to make use of its rich feature set.
 
