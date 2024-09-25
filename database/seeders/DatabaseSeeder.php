@@ -8,14 +8,11 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder {
     /**
      * Seed the application's database.
+     * Note Only Universal Portal Data should be here
      */
     public function run(): void {
         $this->call(
-            UserSeeder::class,
             TaxonomySeeder::class,
-            CollectionSeeder::class,
-            OccurrenceSeeder::class,
-            ChecklistSeeder::class,
         );
     }
 }
