@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('guid', 45)->nullable();
             $table->string('username', 45)->nullable()->unique('uq_users_username');
             $table->string('password')->nullable();
+            $table->string('remember_token')->nullable();
             $table->dateTime('lastLoginDate')->nullable();
             $table->dateTime('loginModified')->nullable();
             $table->integer('validated')->default(0);
@@ -41,6 +42,7 @@ return new class extends Migration
             $table->timestamp('initialTimestamp')->useCurrent();
             $table->string('old_password', 45)->nullable();
             $table->string('name')->nullable();
+            $table->dateTime('email_verified_at')->nullable();
             $table->dateTime('updated_at')->nullable();
 
             $table->index(['lastName', 'email'], 'ix_users_email');
