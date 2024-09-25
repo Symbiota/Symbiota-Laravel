@@ -65,11 +65,9 @@ class LoginController extends Controller {
         }
 
         session()->flashInput($request->input());
-        return response(
-            view('pages/login', [
+        return view('pages/login', [
                 'errors' => new MessageBag(['Invalid email or password'])
-            ])->fragment('form')
-        )->setStatusCode(401);
+            ])->fragment('form');
     }
 
     public static function logout(Request $request) {
