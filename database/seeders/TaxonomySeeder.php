@@ -11,54 +11,54 @@ class TaxonomySeeder extends Seeder {
     // Note I (@Muchquak) am not a biologist as so this variable name is not correct
     // [rank_name, [rank_id, dir_parent_id, reqparentrankid]]
     private static $plants = [
-        ['Organism' => [1, 1, 1]],
-        ['Kingdom' => [10, 1, 1]],
-        ['Subkingdom' => [20, 10, 10]],
-        ['Division' => [30, 20, 10]],
-        ['Subdivision' => [40, 30, 30]],
-        ['Superclass' => [50, 40, 30]],
-        ['Class' => [60, 50, 30]],
-        ['Subclass' => [70, 60, 60]],
-        ['Order' => [100, 70, 60]],
-        ['Suborder' => [110,100, 100]],
-        ['Family' => [140, 110, 100]],
-        ['Subfamily' => [150, 140, 140]],
-        ['Tribe' => [160, 150, 140]],
-        ['Subtribe' => [170, 160, 140]],
-        ['Genus' => [180, 170, 140]],
-        ['Subgenus' => [190, 180, 180]],
-        ['Section' => [200, 190, 180]],
-        ['Subsection' => [210, 200, 180]],
-        ['Species' => [220, 210, 180]],
-        ['Subspecies' => [230,220, 180]],
-        ['Variety' => [240, 220, 180]],
-        ['Subvariety' => [250, 240, 180]],
-        ['Form' => [260, 220, 180]],
-        ['Subform' => [270, 260, 180]],
-        ['Cultivated' => [300, 220, 220]],
+        'Organism' => [1, 1, 1],
+        'Kingdom' => [10, 1, 1],
+        'Subkingdom' => [20, 10, 10],
+        'Division' => [30, 20, 10],
+        'Subdivision' => [40, 30, 30],
+        'Superclass' => [50, 40, 30],
+        'Class' => [60, 50, 30],
+        'Subclass' => [70, 60, 60],
+        'Order' => [100, 70, 60],
+        'Suborder' => [110,100, 100],
+        'Family' => [140, 110, 100],
+        'Subfamily' => [150, 140, 140],
+        'Tribe' => [160, 150, 140],
+        'Subtribe' => [170, 160, 140],
+        'Genus' => [180, 170, 140],
+        'Subgenus' => [190, 180, 180],
+        'Section' => [200, 190, 180],
+        'Subsection' => [210, 200, 180],
+        'Species' => [220, 210, 180],
+        'Subspecies' => [230,220, 180],
+        'Variety' => [240, 220, 180],
+        'Subvariety' => [250, 240, 180],
+        'Form' => [260, 220, 180],
+        'Subform' => [270, 260, 180],
+        'Cultivated' => [300, 220, 220],
     ];
 
     // Note I (@Muchquak) am not a biologist as so this variable name is not correct
     // [rank_name, [rank_id, dir_parent_id, reqparentrankid]]
     private static $animals = [
-        ['Organism' => [1, 1, 1]],
-        ['Kingdom' => [10, 1, 1]],
-        ['Subkingdom' => [20, 10, 10]],
-        ['Phylum' => [30, 20, 10]],
-        ['Subphylum' => [40, 30, 30]],
-        ['Class' => [60, 50, 30]],
-        ['Subclass' => [70, 60, 60]],
-        ['Order' => [100, 70, 60]],
-        ['Suborder' => [110, 100, 100]],
-        ['Family' => [140, 110, 100]],
-        ['Subfamily' => [150, 140, 140]],
-        ['Tribe' => [160, 150, 140]],
-        ['Subtribe' => [170, 160, 140]],
-        ['Genus' => [180, 170, 140]],
-        ['Subgenus' => [190, 180, 180]],
-        ['Species' => [220, 210, 180]],
-        ['Subspecies' => [230, 220, 180]],
-        ['Morph' => [240, 220, 180]],
+        'Organism' => [1, 1, 1],
+        'Kingdom' => [10, 1, 1],
+        'Subkingdom' => [20, 10, 10],
+        'Phylum' => [30, 20, 10],
+        'Subphylum' => [40, 30, 30],
+        'Class' => [60, 50, 30],
+        'Subclass' => [70, 60, 60],
+        'Order' => [100, 70, 60],
+        'Suborder' => [110, 100, 100],
+        'Family' => [140, 110, 100],
+        'Subfamily' => [150, 140, 140],
+        'Tribe' => [160, 150, 140],
+        'Subtribe' => [170, 160, 140],
+        'Genus' => [180, 170, 140],
+        'Subgenus' => [190, 180, 180],
+        'Species' => [220, 210, 180],
+        'Subspecies' => [230, 220, 180],
+        'Morph' => [240, 220, 180],
     ];
 
     /**
@@ -77,8 +77,8 @@ class TaxonomySeeder extends Seeder {
                 ]);
             }
         }
-
     }
+
     /**
      * Run the database seeds.
      */
@@ -97,9 +97,6 @@ class TaxonomySeeder extends Seeder {
         self::load_taxon_units(['Organism', 'Plantae', 'Fungi'], self::$plants);
         self::load_taxon_units(['Monera', 'Protista', 'Animalia'], self::$animals);
 
-
-        //Needs
-        //modifiedUid from users
         DB::table('taxa')->insert([
             'sciName' => 'Organism',
             'unitName1' => 'Organism',
