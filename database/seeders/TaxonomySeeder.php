@@ -97,11 +97,6 @@ class TaxonomySeeder extends Seeder {
         self::load_taxon_units(['Organism', 'Plantae', 'Fungi'], self::$plants);
         self::load_taxon_units(['Monera', 'Protista', 'Animalia'], self::$animals);
 
-        DB::table('taxa')->insert([
-            'sciName' => 'Organism',
-            'unitName1' => 'Organism',
-        ]);
-
         foreach (['Organism', 'Monera', 'Protista', 'Plantae', 'Fungi', 'Animalia'] as $kingdom) {
             $rank_id = $kingdom === 'Organism'? 1: 10;
             DB::table('taxa')->insert([
