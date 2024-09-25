@@ -216,7 +216,7 @@ if($blacklist_redirect = $legacy_black_list[$uri]) {
                     };
                     $encrypter = new IlluminateEncrypter($key, 'AES-256-CBC');
                     $decrypted_cookie = $encrypter->decrypt($session, false);
-                    $store_id = CookieValuePrefix::validate($session_name, $decrypted_cookie, $key);
+                    $store_id = CookieValuePrefix::validate($session_name, $decrypted_cookie, [$key]);
                     $session_handler = new FileSessionHandler(
                         new Filesystem(),
                         __DIR__ . '/../storage/framework/sessions',
