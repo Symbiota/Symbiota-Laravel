@@ -22,6 +22,9 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Install and build Js Dependencies
       run: npm ci && npm run build
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
@@ -35,3 +38,6 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
+
+    - name: Run Playwright tests
+      run: npx playwright test

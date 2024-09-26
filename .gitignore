@@ -20,3 +20,8 @@ yarn-error.log
 /public/**/
 /resources/views/custom
 /Portal
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
