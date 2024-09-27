@@ -104,6 +104,8 @@ class TaxonomySeeder extends Seeder {
                 'sciName' => $kingdom,
                 'unitName1' => $kingdom,
             ]);
+
+            DB::insert('INSERT INTO taxaenumtree (tid, taxauthid, parenttid) VALUES (LAST_INSERT_ID(), 1, 1)');
         }
     }
 }
