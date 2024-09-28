@@ -87,23 +87,58 @@ Which results in the migrations table being created the all the migrations in th
 ```
 I will go over the above tables in more detail below but for now they are just utility tables created for some out of the box features laravel. Something to note here is that `batch` value. Since we ran all of these migrations at once they all get the same batch number. 
 
-### Users Table
-Default users table that laravel ships with looks like this.
+## Seeders
+Seeders are classes that load the database tables with values for default values during portal setup or for automated testing.
+To run seeders in laravel you use the `php artisan db:seed` command which will run the `DatabaseSeeder` 
+class by default but can also specify individual seeders like `php artisan db:seed --class=UserSeeder`. The `DatabaseSeeder` should 
+only seed values that should be present in all portals. Seeders needed for testing should be labeled accordingly and kept small as possible to reduce CI run times.
 
-```sql
-CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `laravel_users_email_unique` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+# Database Usage
+When interacting with the database you have the option of using the [Eloquent ORM](https://laravel.com/docs/11.x/eloquent) or [Query Builder](https://laravel.com/docs/11.x/queries#main-content).
+
+## Eloquent
+In order to use eloquent you must have a [Model](https://laravel.com/docs/11.x/eloquent#eloquent-model-conventions) 
+defined in the `app/Models/` directory and is very useful for removing CRUD 
+boiler plate when dealing with simple parts of the database database structures.
+I would recommend giving their documentation a very throughout read since there is a lot of
+little details that can bite you.
+
+## Query Builder
+The query builder is a helpful tool that uses the [builder pattern](https://refactoring.guru/design-patterns/builder) 
+to write sql as php and is type safe to injection unless using the `raw` functionality. 
+It would be reccomend to use this functionality for more complex queries that have lots of conditional branches
+
+You can also use prepared statement like syntax with various actions like the following
+```php
+use Illuminate\Support\Facades\DB; 
+//Various Selects
+DB::scalar("select count(case when food = 'burger' then 1 end) as burgers from menu");
+DB::select('select * from users where id = :id', ['id' => 1]);
+
+// Basic CRUD
+DB::insert('insert into users (id, name) values (?, ?)', [1, 'Marc']);
+DB::update('update users set votes = 100 where name = ?',['Anita'])
+DB::delete('delete from users');
+DB::statement('drop table users');
+
+// Plain statements
+DB::unprepared('update users set votes = 100 where name = "Dries"');
+
+// Transaction Closure
+DB::transaction(function () {
+    DB::update('update users set votes = 1');
+    DB::delete('delete from posts');
+});
+ 
+// Manual Transaction
+DB::beginTransaction();
+DB::rollBack();
+DB::commit();
+
+//Query for database structure
+Schema::getTables();
+Schema::getViews();
+Schema::getColumns('users');
+Schema::getIndexes('users');
+Schema::getForeignKeys('users');
 ```
-Now this would be really helpful if the Symbiota was being written from scratch however there is already a users table in Symbiota and so things get a little bit more complicated. This is because the authentication system in laravel assumes that the user table looks like thisand has prebuilt functionality around it which would be nice to use.
-
-In order to do this we just need to port over the old user table to the new one in a migration and then use the old password to generate a new password hash when the user logins or over email recover when updating to the new system.
