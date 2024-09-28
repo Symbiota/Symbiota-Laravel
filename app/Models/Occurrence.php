@@ -2,9 +2,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Occurrence extends Model{
-
+    use HasFactory;
 	protected $table = 'omoccurrences';
 	protected $primaryKey = 'occid';
 	public $timestamps = false;
