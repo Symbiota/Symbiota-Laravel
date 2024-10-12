@@ -53,37 +53,59 @@
         </x-accordion>
 
         <x-autocomplete-input name="taxa" :label="'Auto Complete Input'" id="test-search" search="/api/taxa/search">
-            <x-slot:input class="p-1 bg-base-200 w-full"></x-slot>
+            <x-slot:input class="w-full"></x-slot>
                 <x-slot:menu>Menu</x-slot>
         </x-autocomplete-input>
+        <x-taxa-search/>
 
-        <div>
-            <label class="text-lg" for="test-search-2">Search Taxa 2</label>
-            <div class="flex items-center group">
-                <x-select class="rounded-r-none w-48">
-                    <option value="Any Name">Any Name</option>
-                    <option value="Scientific Name">Scientific Name</option>
-                    <option value="Family">Family</option>
-                    <option value="Taxonomy Group">Taxonomy Group</option>
-                    <option value="Common">Common</option>
-                </x-select>
-                <x-autocomplete-input
-                    id="test-search-2"
-                    placeholder="Type to search..."
-                    search="/api/taxa/search"
-                >
-                    <x-slot:input class="peer-input p-1 z-10 bg-base-200 w-full rounded-l-none border-l-0"></x-slot>
-                        <x-slot:menu>Menu</x-slot>
-                </x-autocomplete-input>
-            </div>
-        </div>
+        <x-collections.list.item />
 
-        <h1 class="text-xl my-2 font-bold font-sans text-error">
-            todo collection result card
-        </h1>
-        <x-select label="Select">
-            <option value="value">test 1</option>
-            <option value="value">test 2</option>
-        </x-select>
+        <x-select label="Groceries" :default="1" :items="[
+            [
+                'title' => 'Milk',
+                'value' => 'milk',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Eggs',
+                'value' => 'eggs',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Cheese',
+                'value' => 'cheese',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Bread',
+                'value' => 'bread',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Apples',
+                'value' => 'apple',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Bananas',
+                'value' => 'bananas',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Yogurt',
+                'value' => 'yogurt',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Sugar',
+                'value' => 'sugar',
+                'disabled' => false
+            ],
+            [
+                'title' => 'Salt',
+                'value' => 'salt',
+                'disabled' => false
+            ],
+        ]" />
     </div>
 </x-layout>

@@ -9,16 +9,16 @@
     <div class="flex items-center group">
         <x-select
             name="taxa-type"
-            value="{{ $taxa_type_value }}"
             id="taxa-type-{{$id}}"
-            class="rounded-r-none w-48"
-        >
-            <option value="Any Name">Any Name</option>
-            <option value="Scientific Name">Scientific Name</option>
-            <option value="Family">Family</option>
-            <option value="Taxonomy Group">Taxonomy Group</option>
-            <option value="Common">Common</option>
-        </x-select>
+            :default="0"
+            class="mr-1"
+            class:button="rounded-r-none"
+            :items="[
+            ['value' => 'Any Name', 'title' => 'Any Name', 'disabled' => false],
+            ['value' => 'Family', 'title' => 'Family', 'disabled' => false],
+            ['value' =>'Taxonomy Group', 'title' => 'Taxonomy Group', 'disabled' => false],
+        ]"/>
+
         <x-autocomplete-input
             name="taxa"
             :id="$id"
@@ -27,7 +27,7 @@
             search="{{url('/api/taxa/search')}}"
             include="#usethes-{{$id}}, #taxa-type-{{$id}}"
         >
-            <x-slot:input class="peer-input p-1 z-10 bg-base-200 rounded-l-none border-l-0"></x-slot>
+            <x-slot:input class="peer-input z-20 rounded-l-none"></x-slot>
                 <x-slot:menu></x-slot>
         </x-autocomplete-input>
     </div>
