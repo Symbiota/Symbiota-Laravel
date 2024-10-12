@@ -13,13 +13,13 @@
     <h1 class="text-5xl font-bold text-primary mb-8">Record Search</h1>
     <div class="grid grid-cols-4" x-data="{ show_all: false, toggle: () => show_all = true }">
         <div class="col-span-3 flex flex-col gap-4">
-            <x-button class="w-full justify-center" onclick="toggle_all_accordions()" >
+            <x-button class="w-full justify-center uppercase" onclick="toggle_all_accordions()" >
                 Expand All Sections
             </x-button>
-            <x-accordion label='Taxonomy' variant="clear-primary">
+            <x-accordion label='TAXONOMY' variant="clear-primary">
                 <x-taxa-search/>
             </x-accordion>
-            <x-accordion label='Locality' variant="clear-primary">
+            <x-accordion label='LOCALITY' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <x-input label="Country" id="country" />
                     <x-input label="Locality/Localities" id="locality" />
@@ -31,7 +31,7 @@
                     <x-input label="County" id="county" />
                 </div>
             </x-accordion>
-            <x-accordion id="lat-long-accordion" label='Latitude & Longitude' variant="clear-primary">
+            <x-accordion id="lat-long-accordion" label='LATITUDE & LONGITUDE' variant="clear-primary">
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <h3 class="text-xl text-primary font-bold">Bounding Box</h3>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </x-accordion>
-            <x-accordion label='Collection Event' variant="clear-primary">
+            <x-accordion label='COLLECTION EVENT' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <x-input label="Collection Start Date" id="eventdate1" />
                     <x-input label="Collection End Date" id="eventdate2" />
@@ -70,7 +70,7 @@
                     <x-input label="Collector's Number" id="collnum" />
                 </div>
             </x-accordion>
-            <x-accordion label='Sample Properties' variant="clear-primary">
+            <x-accordion label='SAMPLE PROPERTIES' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <x-checkbox label="Include other catalog numbers and GUIDs" checked id="includeothercatnum" />
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </x-accordion>
-            <x-accordion label='Collections' variant="clear-primary">
+            <x-accordion label='COLLECTIONS' variant="clear-primary">
                 TODO Taxonomy Form
             </x-accordion>
         </div>
