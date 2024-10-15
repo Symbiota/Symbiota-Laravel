@@ -56,7 +56,7 @@
             <x-slot:input class="w-full"></x-slot>
                 <x-slot:menu>Menu</x-slot>
         </x-autocomplete-input>
-        <x-taxa-search/>
+        <x-taxa-search />
 
         <x-collections.list.item />
 
@@ -65,12 +65,19 @@
                 <div class="flex flex-col gap-4">
 
                     <div class="text-xl">Title</div>
-                    <x-input label="Height" id="Something"/>
-                    <x-input label="Width" id="Other thing"/>
+                    <x-input label="Height" id="Something" />
+                    <x-input label="Width" id="Other thing" />
                 </div>
             </x-popover>
 
 
+        </div>
+        <div class="w-fit">
+            <x-breadcrumbs :items="[
+                ['title' => 'Home', 'href' => '#_'],
+                ['title' => 'Collections', 'href' => '#_'],
+                ['title' => 'Collection Profile', 'href' => '#_'],
+            ]"/>
         </div>
 
         <x-select label="Groceries" :default="1" :items="[
