@@ -80,6 +80,19 @@
             ]"/>
         </div>
 
+        <x-modal>
+            <x-slot:title class="text-2xl">
+                Title
+            </x-slot>
+            <x-slot name="body">
+                <form class="flex flex-col gap-2">
+                    <x-input name="testOne" label="Test 1"/>
+                    <x-input name="testTwo" label="Test 2"/>
+                    <x-button type="submit">Submit</x-button>
+                </form>
+            </x-slot>
+        </x-modal>
+
         <x-select label="Groceries" :default="1" :items="[
             [
                 'title' => 'Milk',
