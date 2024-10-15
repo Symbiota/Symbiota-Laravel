@@ -93,6 +93,10 @@
             </x-slot>
         </x-modal>
 
+        <x-tooltip text="Tooltip">
+            Tooltip
+        </x-tooltip>
+
         <x-select label="Groceries" :default="1" :items="[
             [
                 'title' => 'Milk',
