@@ -16,6 +16,8 @@
     <div class="absolute right-0 top-0 p-4 flex items-center gap-2">
         <i class="text-xl fas fa-camera"></i>
         <i class="text-xl fas fa-file-audio"></i>
-        <i class="text-xl fas fa-edit"></i>
+        <a href="#">
+            <i class="text-xl fas fa-edit hover:text-base-content/50 cursor-pointer"></i>
+        </a>
     </div>
 </div>
