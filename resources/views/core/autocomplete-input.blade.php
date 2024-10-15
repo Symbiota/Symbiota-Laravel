@@ -138,7 +138,7 @@
             x-show="open && results"
             x-ref="menu"
             id="search-results-{{$id}}"
-            {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 w-full border-base-300 border")}}>
+            {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 z-50 w-full border-base-300 border")}}>
             {{ $result }}
         </div>
     </div>

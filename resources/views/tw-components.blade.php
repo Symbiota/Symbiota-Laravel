@@ -80,7 +80,7 @@
             ]"/>
         </div>
 
-        <x-modal>
+        <x-modal label="Open Modal">
             <x-slot:title class="text-2xl">
                 Title
             </x-slot>

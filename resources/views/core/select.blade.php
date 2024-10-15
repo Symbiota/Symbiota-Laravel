@@ -116,8 +116,8 @@
     {{ $attributes->withoutTwMergeClasses()->twMerge("relative w-64")}}
     >
     <button id="{{ $id }}-toggle" aria-labeledBy={{ $labeledBy? $labeledBy: $id . '-label'}} x-ref="selectButton" @click="selectOpen=!selectOpen"
-        :class="{ 'focus:ring-2 focus:ring-offset-2 focus:ring-accent' : !selectOpen }"
-        {{ $attributes->twMergeFor('button', 'relative min-h-[38px] flex items-center justify-between w-full py-2 pl-3 pr-10 text-left bg-base-100 border rounded-md shadow-sm cursor-default border-base-300 focus:outline-none' )}}
+        :class="{ 'focus:ring-2 focus:ring-offset-2 focus:ring-accent hover:bg-base-200' : !selectOpen }"
+        {{ $attributes->twMergeFor('button', 'relative min-h-[38px] flex items-center justify-between w-full py-2 pl-3 pr-10 text-left bg-base-100 border rounded-md shadow-sm cursor-default border-base-300 focus:outline-none cursor-pointer' )}}
         >
 
         <span x-text="selectedItem ? selectedItem.title : 'Select Item'" class="truncate">Select Item</span>
