@@ -60,6 +60,19 @@
 
         <x-collections.list.item />
 
+        <div class="w-fit">
+            <x-popover>
+                <div class="flex flex-col gap-4">
+
+                    <div class="text-xl">Title</div>
+                    <x-input label="Height" id="Something"/>
+                    <x-input label="Width" id="Other thing"/>
+                </div>
+            </x-popover>
+
+
+        </div>
+
         <x-select label="Groceries" :default="1" :items="[
             [
                 'title' => 'Milk',
