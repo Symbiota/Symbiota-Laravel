@@ -17,7 +17,7 @@
                 </li>
             @else
                 @if(is_array($item) && isset($item['href']))
-                    <x-link class="hover:text-base-content text-base-content/50 no-underline text-base" href="{{ $item['href'] }}">
+                    <x-link class="outline-none rounded-md px-1 focus:ring-accent focus:ring hover:text-base-content text-base-content/50 no-underline text-base" href="{{ $item['href'] }}">
                         {{ $item['title'] }}
                     </x-link>
                 @else
