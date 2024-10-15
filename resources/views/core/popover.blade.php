@@ -1,5 +1,3 @@
-
-
 <div x-data="{
         popoverOpen: false,
         popoverArrow: true,
@@ -43,7 +41,6 @@
 
     <div x-ref="popover"
         x-show="popoverOpen"
-        x-init="setTimeout(function(){ popoverHeightCalculate(); }, 100);"
         x-trap.inert="popoverOpen"
         @click.away="popoverOpen=false;"
         @keydown.escape.window="popoverOpen=false"

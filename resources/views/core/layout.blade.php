@@ -47,7 +47,7 @@ $grants= [
     @stack('js-libs')
 </head>
 
-<body id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content">
+<body id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content" x-trap>
     <x-header />
     <x-navbar :navigations="$navigations" />
     <div {{ $attributes->twMerge('flex-grow p-10') }} >

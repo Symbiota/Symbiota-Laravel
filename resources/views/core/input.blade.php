@@ -1,4 +1,4 @@
-@props(['id', 'label' => false, 'error_text', 'assistive_text'])
+@props(['id'=> uniqid(), 'label' => false, 'error_text', 'assistive_text'])
 <!-- resources/views/core/input.blade.php -->
 <div class="group w-full text-base-content">
     @if($label)
