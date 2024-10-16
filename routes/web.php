@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cookie;
@@ -31,10 +32,30 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /* In Progress Skeletons */
 Route::view('/collections/search', 'pages/collections');
-Route::view('/collections/list', 'pages/collections/list');
 Route::view('/occurrence', 'pages/occurrence/profile');
 Route::view('/taxon', 'pages/taxon/profile');
 
+// Collection
+Route::get('/collections/list', function(Request $request) {
+    $params = $request->all();
+    $media_cnt = DB::table('media as m')->select(
+        'm.occid',
+        DB::raw('sum(if(media_type = "image", 1, 0)) as image_cnt'),
+        DB::raw('sum(if(media_type = "audio", 1, 0)) as audio_cnt')
+    )->groupBy('m.occid');
+
+    $occurrences = DB::table('omoccurrences as o')
+        ->select('o.*','image_cnt','audio_cnt')
+        ->leftJoinSub($media_cnt, 'media_cnt', function(JoinClause $join) {
+            $join->on('media_cnt.occid', '=', 'o.occid');
+        })
+        ->limit(30)
+        ->get();
+
+    return view('pages/collections/list', ['occurrences' => $occurrences]);
+});
+
+// Checklist
 Route::get('/checklist/{clid}', function(int $clid) {
     $checklist = DB::table('fmchecklists as c')
         ->select('*')
@@ -43,6 +64,7 @@ Route::get('/checklist/{clid}', function(int $clid) {
 
     return view('pages/checklist/profile', ['checklist' => $checklist]);
 });
+
 
 Route::get('/checklists', function (Request $request){
     $checklists = DB::table('fmchecklists as c')
