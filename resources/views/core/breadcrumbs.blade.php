@@ -1,5 +1,5 @@
 @props(['items' => []])
-<nav class="flex justify-between px-3.5 py-1 border border-base-300 rounded-md">
+<nav class="flex justify-between px-3.5 py-1 border border-base-300 rounded-md w-fit">
     <ol class="inline-flex items-center mb-3 space-x-1 text-xs text-base-content/50 sm:mb-0">
         @empty($slot)
             {{ $slot }}
