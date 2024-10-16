@@ -87,8 +87,9 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $legacy_routes = [
     'index.php' => '/',
     'profile/index.php' => isset($_REQUEST['submit']) && $_REQUEST['submit'] === 'logout'?
-    '/logout': '/login' ,
+    'logout': '/login' ,
     'profile/newprofile.php' => '/signup',
+    'collections/list.php' => '/collections/list',
     //'sitemap.php' => '/sitemap',
 ];
 
@@ -103,6 +104,10 @@ $query_pos = strpos($_SERVER['REQUEST_URI'], '?');
 $uri = $query_pos?
     substr($_SERVER['REQUEST_URI'], 0, $query_pos):
     $_SERVER['REQUEST_URI'];
+
+$query = $query_pos?
+    substr($_SERVER['REQUEST_URI'], $query_pos):
+    '';
 
 /* Clean out host url if present */
 $https = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
@@ -192,7 +197,7 @@ $mime_types = [
 ];
 
 if($blacklist_redirect = $legacy_black_list[$uri]) {
-    header('Location:' . $blacklist_redirect);
+    header('Location:' . $blacklist_redirect . $query);
 } else if(preg_match("/^\/Portal.*\.(.*)/", $uri, $matches)) {
     try {
         [$path, $file_type] = $matches;
