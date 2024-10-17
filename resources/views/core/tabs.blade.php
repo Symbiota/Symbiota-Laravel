@@ -14,7 +14,7 @@
 @endPushOnce
 <div {{$attributes->twMerge('w-full')}} x-data="{el: $el, active: {{ $active }}}" x-init="wireTabs(el, {{ count($tabs) }})">
     {{-- Tab Menu --}}
-    <div class="flex gap-1">
+    <div {{$attributes->twMergeFor('head', 'flex gap-1')}}>
         @for ($i = 0; $i < count($tabs); $i++)
         <div :class="active === {{ $i }}? 'bg-base-100': 'bg-opacity-50 bg-base-200'" class="relative bg-base-100 border-x border-t">
             <input class="appearance-none outline-none focus:ring ring-accent absolute cursor-pointer w-full h-full"
@@ -32,7 +32,7 @@
     </div>
 
     {{-- Tab Body --}}
-    <div id="tab-body" class="p-4 border">
+    <div id="tab-body" {{$attributes->twMergeFor('body', 'p-4 border')}}>
         {{ $slot }}
     </div>
 </div>
