@@ -2,12 +2,12 @@
     'items' => [],
     'name' => 'select',
     'label' => null,
-    'default' => null,
+    'default' => 0,
     'id' => uniqid(),
     'labeledBy' => null
 ])
 
-<div>
+<div {{ $attributes->withoutTwMergeClasses()->twMerge("w-fit h-fit")}}>
 @if($label ?? false)
 <label class="text-lg" id="{{ $id }}-label" for="{{ $id }}-toggle">{{ $label }}</label>
 @endif
@@ -113,9 +113,9 @@
     @keydown.up="if(selectOpen){ selectableItemActivePrevious(); } else { selectOpen=true; } event.preventDefault();"
     @keydown.enter="selectedItem=selectableItemActive; selectOpen=false;"
     @keydown="selectKeydown($event);"
-    {{ $attributes->withoutTwMergeClasses()->twMerge("relative w-64")}}
+    {{ $attributes->twMergeFor('select', 'relative')}}
     >
-    <button id="{{ $id }}-toggle" aria-labeledBy={{ $labeledBy? $labeledBy: $id . '-label'}} x-ref="selectButton" @click="selectOpen=!selectOpen"
+    <button type="button" id="{{ $id }}-toggle" aria-labeledBy={{ $labeledBy? $labeledBy: $id . '-label'}} x-ref="selectButton" @click="selectOpen=!selectOpen"
         :class="{ 'focus:ring-2 focus:ring-offset-2 focus:ring-accent hover:bg-base-200' : !selectOpen }"
         {{ $attributes->twMergeFor('button', 'relative min-h-[38px] flex items-center justify-between w-full py-2 pl-3 pr-10 text-left bg-base-100 border rounded-md shadow-sm cursor-default border-base-300 focus:outline-none cursor-pointer' )}}
         >

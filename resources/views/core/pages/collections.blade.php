@@ -3,21 +3,96 @@
 <script type="text/javascript" defer>
     function toggle_all_accordions() {
         const node_list = document.querySelectorAll('[data-blade-accordion]');
-        for(let accordion of node_list) {
+        for (let accordion of node_list) {
             accordion._x_dataStack[0].open = !accordion._x_dataStack[0].open;
         }
     }
+    function openWindow(link = "", title = "", options = "resizable=0,width=900,height=630,left=20,top=20") {
+        let mapWindow = open(link,
+            title,
+            options,
+        );
+        if (mapWindow.opener == null) mapWindow.opener = self;
+        mapWindow.focus();
+    }
+
+    function onFormChange(e) {
+        ;
+    }
 </script>
 @endPushOnce
+@php
+function getCoordAidLink($mode) {
+return url( config('portal.name') . '/collections/tools/mapcoordaid.php?mapmode=' . $mode .
+'&map_mode_strict=true&geoJson&wkt_input_id=footprintwkt');
+}
+$northSouth = [
+['title' => 'N', 'value' => 'N', 'disabled' => false],
+['title' => 'S', 'value' => 'S', 'disabled' => false]
+];
+
+$eastWest= [
+['title' => 'W', 'value' => 'W', 'disabled' => false],
+['title' => 'E', 'value' => 'E', 'disabled' => false]
+];
+@endphp
 <x-layout class="p-10">
     <h1 class="text-5xl font-bold text-primary mb-8">Record Search</h1>
-    <div class="grid grid-cols-4" x-data="{ show_all: false, toggle: () => show_all = true }">
+    <form
+        hx-get="/collections/list"
+        hx-target="body"
+        hx-push-url="true"
+        x-on:change="addChip(values, event)"
+        hx-boost
+        class="grid grid-cols-4"
+        x-data="{
+            show_all: false,
+            toggle: () => show_all = true,
+            values: [],
+            removeChip: (values, id) => {
+                const el = document.getElementById(id);
+                const idx = values.map(v => v.id).indexOf(id);
+                if(idx >= 0) {
+                    values = values.splice(idx, 1);
+                }
+
+                if(el) {
+                    if(el.type = 'checkbox') {
+                        el.checked = false;
+                    } else {
+                        el.value = ''
+                    }
+                }
+            },
+            addChip: (values, e) => {
+                const checkbox = e.target.checked;
+                const text = e.target.type !== 'checkbox' && e.target.value;
+
+                if(text || checkbox) {
+                    const value = {
+                        id: e.target.id,
+                        title: e.target.name,
+                        value: e.target.value
+                    };
+
+                    const idx = values.map(v => v.id).indexOf(value.id);
+                    if(idx >= 0) {
+                        values = values.splice(idx, 1, value);
+                    } else {
+                        values.push(value);
+                    }
+                } else {
+                    $data.removeChip(values, e.target.id);
+                }
+            }
+        }"
+    >
         <div class="col-span-3 flex flex-col gap-4">
-            <x-button class="w-full justify-center uppercase" onclick="toggle_all_accordions()" >
+            <x-button type="button" class="w-full justify-center uppercase" onclick="toggle_all_accordions()">
                 Expand All Sections
             </x-button>
             <x-accordion label='TAXONOMY' variant="clear-primary">
-                <x-taxa-search/>
+                <x-taxa-search />
             </x-accordion>
             <x-accordion label='LOCALITY' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
@@ -31,36 +106,62 @@
                     <x-input label="County" id="county" />
                 </div>
             </x-accordion>
-            <x-accordion id="lat-long-accordion" label='LATITUDE & LONGITUDE' variant="clear-primary">
-                <div class="grid grid-cols-3 gap-4">
+            <x-accordion id="lat-long-accordion" class:body="p-0" label='LATITUDE & LONGITUDE' variant="clear-primary">
+                <x-tabs :tabs="['Bounding Box', 'Polygon', 'Point Radius']" class:body="border-x-0 border-b-0">
                     <div>
-                        <h3 class="text-xl text-primary font-bold">Bounding Box</h3>
-                        <x-button class="text-base w-full">Map Bounding Box</x-button>
-                        <x-input id="upperlat" label="Minimum Elevation"/>
-                        select N/S
-                        <x-input id="bottomlat" label="Southern Latitude"/>
-                        select N/S
-                        <x-input id="leftlong" label="Western Longitude"/>
-                        select W/E
-                        <x-input id="rightlong" label="Eastern Longitude"/>
-                        select W/E
+                        <x-button type="button" class="text-base w-full"
+                            onclick="openWindow('{{ getCoordAidLink('rectangle') }}', 'Rectangle')">
+                            Map Bounding Box
+                        </x-button>
+                        <div class="flex items-end gap-1 pt-1">
+                            <x-input id="upperlat" label="Minimum Elevation" />
+                            <x-select :items="$northSouth" />
+                        </div>
+
+                        <div class="flex items-end gap-1">
+                            <x-input id="bottomlat" label="Southern Latitude" />
+                            <x-select :items="$northSouth" />
+                        </div>
+                        <div class="flex items-end gap-1">
+                            <x-input id="leftlong" label="Western Longitude" />
+                            <x-select :items="$eastWest" />
+                        </div>
+
+                        <div class="flex items-end gap-1">
+                            <x-input id="rightlong" label="Eastern Longitude" />
+                            <x-select :items="$eastWest" />
+                        </div>
                     </div>
                     <div>
-                        <h3 class="text-xl text-primary font-bold">Polygon</h3>
-                        <x-button class="text-base w-full">Map Polygon</x-button>
-                        <x-input id="polygonwkt" label="Polygon"/>
+                        <x-button type="button" class="text-base w-full"
+                            onclick="openWindow('{{ getCoordAidLink('polygon') }}', 'Polygon')">
+                            Map Polygon
+                        </x-button>
+                        {{-- id="polygonwkt" (May need to change with geojson changes)--}}
+                        <x-input id="footprintwkt" label="Polygon" :area="true" rows="4" />
                     </div>
                     <div>
-                        <h3 class="text-xl text-primary font-bold">Point-Radius</h3>
-                        <x-button class="text-base w-full">Map Point Radius</x-button>
-                        <x-input id="pointlat" label="Longitude"/>
-                        select N/S
-                        <x-input id="pointlong" label="Latitude"/>
-                        select W/E
-                        <x-input id="radius" label="Radius"/>
-                        select Units
+                        <x-button type="button" class="text-base w-full"
+                            onclick="openWindow('{{ getCoordAidLink('circle') }}', 'Circle')">
+                            Map Point Radius
+                        </x-button>
+                        <div class="flex items-end gap-1">
+                            <x-input id="pointlat" label="Longitude" />
+                            <x-select :items="$northSouth" />
+                        </div>
+                        <div class="flex items-end gap-1">
+                            <x-input id="pointlong" label="Latitude" />
+                            <x-select :items="$eastWest" />
+                        </div>
+                        <div class="flex items-end gap-1">
+                            <x-input id="radius" label="Radius" />
+                            <x-select :items="[
+                            ['title' => 'Kilometers', 'value' => 'km', 'disabled' => false],
+                            ['title' => 'Miles', 'value' => 'mi', 'disabled' => false]
+                        ]" />
+                        </div>
                     </div>
-                </div>
+                </x-tabs>
             </x-accordion>
             <x-accordion label='COLLECTION EVENT' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
@@ -97,9 +198,24 @@
                     ['label' => 'List', 'value' => 'list'],
                     ['label' => 'Table', 'value' => 'Table']
                 ]" />
-            <x-button class="w-full justify-center text-base">Search</x-button>
-            <x-button class="w-full justify-center text-base" variant="neutral">Reset</x-button>
+            <x-button type="submit" class="w-full justify-center text-base">Search</x-button>
+            <x-button type="button" class="w-full justify-center text-base" variant="neutral">Reset</x-button>
             <h3 class="text-3xl font-bold text-primary">Criteria</h3>
+            <div id="chips" class="grid grid-cols-1 gap-4">
+                <template x-for="value in values">
+                    <div class="bg-base-100 rounded-md border border-base-300">
+                        <div class="bg-base-300 px-2 py-1 rounded-t-md border-b border-base-300 rounded-b-0 font-bold flex items-center">
+                            <div x-text="value.title"></div>
+                            <div class="grow">
+                                <x-button @click="removeChip(values, value.id)" type="button" class="ml-auto rounded-full h-6 w-6 p-0" variant="neutral">
+                                    <i class="mx-auto cursor-pointer fa-solid fa-xmark"></i>
+                                </x-button>
+                            </div>
+                        </div>
+                        <div class="px-2 py-1" x-text="value.value"></div>
+                    </div>
+                </template>
+            </div>
         </div>
-    </div>
+    </form>
 </x-layout>

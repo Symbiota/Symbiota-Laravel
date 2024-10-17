@@ -104,6 +104,7 @@
         hx-indicator="#menu-loader-{{$id}}"
         hx-target="#search-results-{{$id}}"
         hx-replace-url="false"
+        hx-push-url="false"
         x-on:htmx:before-send.stop="results = false"
         x-on:blur="open = false"
         x-on:keyup.enter="open = false"

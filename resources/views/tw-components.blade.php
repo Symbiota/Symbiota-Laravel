@@ -58,7 +58,26 @@
         </x-autocomplete-input>
         <x-taxa-search />
 
-        <x-collections.list.item />
+@php
+   class OccurrenceStub {
+       public $sciname = "Pinus albicaulis";
+       public $scientificNameAuthorship= "Engelm.";
+       public $catalogNumber= "9973";
+       public $family= "Pinaceae";
+       public $recordedBy= "Lupin Praug";
+       public $recordNumber= "1";
+       public $eventDate = "1999/10/24";
+       public $locality= "United States, California";
+       public $decimalLatitude= 90;
+       public $decimalLongititude = 90;
+       public $minimumElevationInMeters = "3322m";
+       public $maximumElevationInMeters = "3383m";
+       public $occid = 1;
+       public $image_cnt = 1;
+       public $audio_cnt = 1;
+   }
+@endphp
+        <x-collections.list.item :occurrence="new OccurrenceStub"/>
 
         <div class="w-fit">
             <x-popover>
