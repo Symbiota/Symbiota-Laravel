@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -37,20 +38,29 @@ Route::view('/taxon', 'pages/taxon/profile');
 
 // Collection
 Route::get('/collections/list', function(Request $request) {
-    $params = $request->all();
-    $media_cnt = DB::table('media as m')->select(
-        'm.occid',
-        DB::raw('sum(if(media_type = "image", 1, 0)) as image_cnt'),
-        DB::raw('sum(if(media_type = "audio", 1, 0)) as audio_cnt')
-    )->groupBy('m.occid');
+    $params = $request->except(['page', '_token']);
 
-    $occurrences = DB::table('omoccurrences as o')
-        ->select('o.*','image_cnt','audio_cnt')
-        ->leftJoinSub($media_cnt, 'media_cnt', function(JoinClause $join) {
-            $join->on('media_cnt.occid', '=', 'o.occid');
-        })
-        ->limit(30)
-        ->get();
+    Cache::forget($request->fullUrl());
+    $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function() use ($params) {
+        if(count($params) === 0) {
+            return [];
+        }
+
+        $query = DB::table('omoccurrences as o')
+            ->select(
+                'o.*',
+                DB::raw('sum(if(media_type = "image", 1, 0)) as image_cnt'),
+                DB::raw('sum(if(media_type = "audio", 1, 0)) as audio_cnt'))
+            ->leftJoin('media as m', 'm.occid', '=', 'o.occid')
+            ->join('omcollections as c', 'c.collid', '=', 'o.collid')
+            ->groupBy('o.occid');
+
+        if(isset($params['taxa'])) {
+            $query->whereLike('o.sciname', $params['taxa']);
+        }
+
+        return $query->paginate(30)->appends($params);
+    });
 
     return view('pages/collections/list', ['occurrences' => $occurrences]);
 });
