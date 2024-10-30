@@ -196,7 +196,7 @@ $mime_types = [
     '7z' => 'application/x-7z-compressed'
 ];
 
-if($blacklist_redirect = $legacy_black_list[$uri]) {
+if(isset($legacy_black_list[$uri]) && $blacklist_redirect = $legacy_black_list[$uri]) {
     header('Location:' . $blacklist_redirect . $query);
 } else if(preg_match("/^\/Portal.*\.(.*)/", $uri, $matches)) {
     try {
