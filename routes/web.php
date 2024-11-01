@@ -33,7 +33,6 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /* In Progress Skeletons */
 Route::view('/collections/search', 'pages/collections');
-Route::view('/occurrence', 'pages/occurrence/profile');
 Route::view('/taxon', 'pages/taxon/profile');
 
 // Collection
@@ -101,6 +100,16 @@ Route::get('/project', function (Request $request){
         ->get();
 
     return view('pages/project', ['project' => $project, 'checklists' => $checklists]);
+});
+
+//occurrence
+Route::get('/occurrence/{clid}', function(int $occid) {
+    $occurrence = DB::table('omoccurrences as o')
+        ->select('*')
+        ->where('o.occid', '=', $occid)
+        ->first();
+
+    return view('pages/occurrence/profile', ['occurrence' => $occurrence]);
 });
 
 /* Login/out routes */
