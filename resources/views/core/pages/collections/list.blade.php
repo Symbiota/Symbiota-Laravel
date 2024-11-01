@@ -1,4 +1,15 @@
 @props(['occurrences' => []])
+@php
+   $dataset_str = request('db');
+   if(is_array($dataset_str)) {
+        $dataset_str = implode(',', $dataset_str);
+   }
+
+   $taxa_str = request('taxa');
+   if(is_array($taxa_str)) {
+        $taxa_str = implode(',', $taxa_str);
+   }
+@endphp
 <x-layout class="grid grid-col-1 gap-4 grow-0">
     <div>
         <x-breadcrumbs :items="[
@@ -29,12 +40,12 @@
         </div>
 
         {{-- Occurrence Records --}}
-        <div class="grid grid-col-1 gap-4">
+        <div id="occurrence_result" class="grid grid-col-1 gap-4">
             <div class="flex flex-wrap">
                 <div>
-                    <div>Dataset: All collections</div>
-                    <div>Taxa: (Taxa list)</div>
-                    <div>Search Criteria: ( Figure out what this is for )</div>
+                    <div>Dataset: {{ $dataset_str ?? 'All collections'}}</div>
+                    <div>Taxa: {{ $taxa_str ?? '' }}</div>
+                    <div>Search Criteria: ( TODO )</div>
                 </div>
                 <div class="flex items-center gap-4 grow justify-end">
                     <x-tooltip text="Display as Table">
@@ -65,7 +76,9 @@
 
         {{-- Maps --}}
         <div class="flex items-center gap-4 h-60">
-            <x-button class="w-fit">Display coordinates in Map</x-button>
+            <a href="{{ url(config('portal.name') . '/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
+                <x-button class="w-fit">Display coordinates in Map</x-button>
+            </a>
             <x-button class="w-fit">Create KML</x-button>
             {{-- Investigate but pretty sure this just adds info to download --}}
             <x-link>Add Extra Fields</x-link>
