@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
 const Color = require('color')
+
 const lighten = (clr, val) => Color(clr).lighten(val).rgb().string()
 const darken = (clr, val) => Color(clr).darken(val).rgb().string()
 const whatText = (clr) => Color(clr).isDark()? '#FFFFFF': '#2D2D2D';
