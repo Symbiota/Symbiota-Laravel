@@ -3,7 +3,7 @@ $LANG_TAG = App::currentLocale();
 @endphp
 
 @push('js-scripts')
-<script>
+<script type="text/javascript">
 function setLanguage(selObj){
     var langVal = selObj.value;
     var d = new Date();
