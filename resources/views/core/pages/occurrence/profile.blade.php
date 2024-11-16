@@ -116,6 +116,12 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
         <div class="text-2xl font-bold">
             BLMAR - BLM Arcata Field Office Herbarium (BLMAR)
         </div>
+
+        <div class="text-2xl font-bold">
+            <x-nav-link href="{{url()->current() . '/edit'}}">
+                <x-icons.edit></x-icons.edit>
+            </x-nav-link>
+        </div>
     </div>
 
     <x-tabs :tabs="['Details', 'Map', 'Commments', 'Linked Resources', 'Edit History']" :active="0">

@@ -12,7 +12,7 @@
         @endif
         <div>{{ $occurrence->catalogNumber . $occurrence->recordedBy .  $occurrence->recordedBy . $occurrence->recordNumber . $occurrence->eventDate}}</div>
         <div>{{ implode(' | ', array_filter([$occurrence->locality, $occurrence->decimalLatitude, $occurrence->minimumElevationInMeters], fn ($v) => $v != null)) }}</div>
-        <x-link href="{{url( config('portal.name') . '/collections/individual/index.php?occid=' . $occurrence->occid) }}" target="_blank">Full Record Details</x-link>
+        <x-link href="{{url('occurrence/' . $occurrence->occid ) }}" target="_blank">Full Record Details</x-link>
     </div>
     {{-- Icon Container --}}
     <div class="absolute right-0 top-0 p-4 flex items-center gap-2">
