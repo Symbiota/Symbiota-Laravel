@@ -103,13 +103,22 @@ Route::get('/project', function (Request $request){
 });
 
 //occurrence
-Route::get('/occurrence/{clid}', function(int $occid) {
+Route::get('/occurrence/{occid}', function(int $occid) {
     $occurrence = DB::table('omoccurrences as o')
         ->select('*')
         ->where('o.occid', '=', $occid)
         ->first();
 
     return view('pages/occurrence/profile', ['occurrence' => $occurrence]);
+});
+
+Route::get('/occurrence/{occid}/edit', function(int $occid) {
+    $occurrence = DB::table('omoccurrences as o')
+        ->select('*')
+        ->where('o.occid', '=', $occid)
+        ->first();
+
+    return view('pages/occurrence/editor', ['occurrence' => $occurrence]);
 });
 
 /* Login/out routes */
