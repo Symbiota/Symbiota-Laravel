@@ -4,6 +4,7 @@ $variant_def = match($variant) {
  "neutral" => ['bg-neutral', 'text-neutral-content', 'hover:bg-neutral-lighter', 'active:bg-neutral-darker'],
  "accent" => ['bg-accent','text-accent-content','hover:bg-accent-lighter','active:bg-accent-darker'],
  "secondary" => ['bg-secondary', 'text-secondary-content', 'hover:bg-secondary-lighter', 'active:bg-secondary-darker'],
+ "error" => ['bg-error', 'text-error-content', 'hover:bg-error-lighter', 'active:bg-error-darker'],
  "clear-primary" => ['bg-transparent', 'text-primary border-primary border-2'],
   Default => ['bg-primary','text-primary-content','hover:bg-primary-lighter', 'active:bg-primary-darker'],
 };
