@@ -22,7 +22,7 @@
                     </x-link>
                 @else
                     <li class="text-base text-base-content/50 font-bold">
-                        {{ $item }}
+                        {{ $item['title'] ?? $item }}
                     </li>
                 @endif
                 <x-icons.breadcrumb-seperator />
