@@ -13,7 +13,7 @@ class TaxonomyController extends Controller{
 	 * @return void
 	 */
 	public function __construct(){
-		parent::__construct();
+		//parent::__construct();
 	}
 
 	/**

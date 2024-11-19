@@ -35,6 +35,8 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 Route::view('/collections/search', 'pages/collections');
 Route::view('/taxon', 'pages/taxon/profile');
 
+Route::view('/user/profile', 'pages/user/profile');
+
 // Collection
 Route::get('/collections/list', function(Request $request) {
     $params = $request->except(['page', '_token']);
@@ -122,11 +124,14 @@ Route::get('/occurrence/{occid}/edit', function(int $occid) {
 });
 
 /* Login/out routes */
+/*
 Route::get('/login', LoginController::class);
 Route::post('/login', [LoginController::class, 'login']);
-Route::get('/logout', [LoginController::class, 'logout']);
 Route::post('/signup', [RegistrationController::class, 'register']);
 Route::get('/signup', RegistrationController::class);
+*/
+
+Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::get('/media/search', function (Request $request) {
     $media = [];

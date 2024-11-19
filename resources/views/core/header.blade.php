@@ -20,7 +20,13 @@
                 {{ Auth::user()->name }}!
             </span>
             <x-button class="text-base" variant="accent">
+                {{--
                 <x-nav-link href="{{config('portal.name') . '/profile/viewprofile.php'}}">
+                    My Profile
+                </x-nav-link>
+                --}}
+
+                <x-nav-link href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true">
                     My Profile
                 </x-nav-link>
             </x-button>
@@ -36,7 +42,7 @@
                 </x-nav-link>
             </x-button>
             <x-button class="text-base" variant="accent">
-                <x-nav-link hx-get="{{url('/login')}}" hx-trigger="click" hx-boost="true" hx-target="body" >
+                <x-nav-link href="{{url('/login')}}" hx-boost="true" hx-push-url="true">
                     {!! __("header.sign_in") !!}
                 </x-nav-link>
             </x-button>

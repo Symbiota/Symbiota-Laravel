@@ -5,6 +5,7 @@ import 'htmx.org';
 
 window.Alpine = Alpine;
 Alpine.plugin(focus);
+
 queueMicrotask(() => {
     Alpine.start()
 });

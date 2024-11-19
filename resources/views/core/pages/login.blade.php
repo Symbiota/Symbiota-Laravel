@@ -21,7 +21,7 @@
                 <p>
                     Don't have an account?
                 </p>
-                <x-link href="{{ url('/signup') }}">Create an Account</x-link>
+                <x-link href="{{ url('/register') }}">Create an Account</x-link>
                 <p>
                     Can't remember your password?
                 </p>

@@ -24,7 +24,7 @@ class MediaController extends Controller{
 	 * @return void
 	 */
 	public function __construct(){
-		parent::__construct();
+		//parent::__construct();
 		$this->rulesUpdate = $this->rulesInsert;
 		unset($this->rulesUpdate['originalUrl']);
 	}
