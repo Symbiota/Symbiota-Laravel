@@ -1,5 +1,5 @@
 <x-layout>
-    <form hx-post="/two-factor-challenge" hx-target="body" hx-swap="outerHTML">
+    <form hx-post="{{ url('/two-factor-challenge') }}" hx-target="body" hx-swap="outerHTML">
         @csrf
         <x-input label="Code" id="code" />
         @foreach ($errors->all() as $error)
