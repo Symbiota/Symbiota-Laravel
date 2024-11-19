@@ -29,7 +29,7 @@ class FortifyServiceProvider extends ServiceProvider {
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
             public function toResponse($request) {
                 return response(view('pages/home'))
-                    ->header('HX-Replace-URL', config('fortify.home'))
+                    ->header('HX-Replace-URL', url(config('fortify.home')))
                     ->header('HX-Retarget', 'body')
                     ->header('HX-Boosted', 'true');
             }
@@ -38,7 +38,7 @@ class FortifyServiceProvider extends ServiceProvider {
         $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
             public function toResponse($request) {
                 return response(view('pages/home'))
-                    ->header('HX-Replace-URL', config('fortify.home'))
+                    ->header('HX-Replace-URL', url(config('fortify.home')))
                     ->header('HX-Retarget', 'body')
                     ->header('HX-Boosted', 'true');
             }
@@ -87,7 +87,7 @@ class FortifyServiceProvider extends ServiceProvider {
                 return view('pages/login')->fragment('form');
             }
 
-            return response(view('pages/login'))->header('HX-Replace-URL', '/login');
+            return response(view('pages/login'))->header('HX-Replace-URL', url('/login'));
         });
 
         Fortify::registerView(function (Request $request) {
@@ -96,7 +96,7 @@ class FortifyServiceProvider extends ServiceProvider {
                 return view('pages/signup')->fragment('form');
             }
 
-            return response(view('pages/signup'))->header('HX-Replace-URL', '/register');
+            return response(view('pages/signup'))->header('HX-Replace-URL', url('/register'));
         });
 
         Fortify::confirmPasswordView(function () {
@@ -109,7 +109,7 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::twoFactorChallengeView(function () {
             return response(view('pages/auth/two-factor-challenge'))
                 ->header('HX-Request', 'true')
-                ->header('HX-Replace-URL', '/two-factor-challenge')
+                ->header('HX-Replace-URL', url('/two-factor-challenge'))
                 ->header('HX-Boosted', 'true')
                 ->header('HX-Retarget', 'body');
         });
