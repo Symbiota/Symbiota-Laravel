@@ -1,11 +1,11 @@
 @php
 $navigations = [
-    ["title" => __("header.home"), "link" => '/'],
+    ["title" => __("header.home"), "link" => '/', "htmx" => true],
     ["title" => __("header.collections"), "link" => config('portal.name') . '/collections/search/index.php'],
     ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map/index.php'],
     ["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists/index.php'],
-    ["title" => __("header.images"), "link" => '/media/search'],
-    ["title" => __("header.data_use"), "link" => '/usagepolicy'],
+    ["title" => __("header.images"), "link" => '/media/search', 'htmx' => true],
+    ["title" => __("header.data_use"), "link" => '/usagepolicy', 'htmx' => true],
     ["title" => __("header.symbiota_help"), "link" => 'https://biokic.github.io/symbiota-docs/'],
     ["title" => __("header.sitemap"), "link" => config('portal.name') . '/sitemap.php'],
 ];

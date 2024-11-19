@@ -4,7 +4,7 @@
     <ul class="flex flex-wrap gap-2 justify-center h-full font-bold">
         @foreach ($navigations as $nav)
         <x-navbar.item>
-            <x-nav-link :href="$nav['link']">
+            <x-nav-link :href="$nav['link']" hx-push-url="true" hx-boost="{{ ($nav['htmx'] ?? false)? 'true': 'false'}}">
                 {{ $nav['title'] }}
             </x-nav-link>
         </x-navbar.item>
