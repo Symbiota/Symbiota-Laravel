@@ -147,10 +147,10 @@
                 <x-context-menu-item type='divider' />
 
                 <x-context-menu-item>
-                    <a x-bind:href="'{{ url('occurrence') }}/' + occid">Open Occurrence</a>
+                    <a x-bind:href="'{{ url(config('portal.name') . '/collections/individual/index.php') }}?occid=' + occid">Open Occurrence</a>
                 </x-context-menu-item>
                 <x-context-menu-item>
-                    <a target="_blank" x-bind:href="'{{ url('occurrence') }}/' + occid">Open Occurrence in New
+                    <a target="_blank" x-bind:href="'{{ url(config('portal.name') . '/collections/individual/index.php') }}?occid=' + occid">Open Occurrence in New
                         Tab</a>
                 </x-context-menu-item>
 
