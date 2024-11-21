@@ -9,7 +9,7 @@
 
 <div {{ $attributes->withoutTwMergeClasses()->twMerge("w-fit h-fit")}}>
 @if($label ?? false)
-<label class="text-lg" id="{{ $id }}-label" for="{{ $id }}-toggle">{{ $label }}</label>
+<label class="text" id="{{ $id }}-label" for="{{ $id }}-toggle">{{ $label }}</label>
 @endif
 <div x-data="{
         selectOpen: false,

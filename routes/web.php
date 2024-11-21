@@ -66,6 +66,79 @@ Route::get('/collections/list', function(Request $request) {
     return view('pages/collections/list', ['occurrences' => $occurrences]);
 });
 
+Route::get('/collections/table', function (Request $request){
+    $collection = DB::table('omcollections')->where('collid', '=', $request->query('collid'))->select('*')->first();
+
+    $query = DB::table('omoccurrences as o')
+        ->join('omcollections as c', 'c.collid', '=', 'o.collid')
+        ->where('c.collid', '=', $request->query('collid'))
+       // ->where('o.family', '=', 'Apiaceae')
+        ->select('*')
+        ->limit(100);
+
+    $sortables = [
+        'occid',
+        'institutionCode',
+        'catalogNumber',
+        'otherCatalogNumbers',
+        'family',
+        'sciname',
+        'scientificNameAuthorship',
+        'recordedBy',
+        'associatedCollectors',
+        'eventDate',
+        'verbatimEventDate',
+        'identifiedBy',
+        'country',
+        'stateProvince',
+        'county',
+        'locality',
+        'latitudeDecimal',
+        'longitudeDecimal',
+        'coordinateUncertaintyInMeters',
+        'verbatimCoordinates',
+        'geodeticDatum',
+        'georeferencedBy',
+        'georeferenceSources',
+        'georeferenceVerificationStatus',
+        'georeferenceRemarks',
+        'minimumElevationInMeters',
+        'maximumElevationInMeters',
+        'verbatimElevation',
+        'habitat',
+        'substrate',
+        'occurrenceRemarks',
+        'associatedTaxa',
+        'lifeStage',
+        'dateLastModified',
+        'processingStatus',
+        'recordEnteredBy',
+        'basisOfRecord'
+    ];
+
+    foreach ($sortables as $property) {
+        if($request->query($property)) {
+            $query->where('o.' . $property, '=', $request->query($property));
+        }
+    }
+
+    if($request->query('sort')) {
+        if(($idx = array_search($request->query('sort'), $sortables)) > 0) {
+            $query->orderByRaw('ISNULL(o.'. $sortables[$idx].') ASC');
+        }
+        $query->orderBy(
+            $request->query('sort'),
+            $request->query('sortDirection') === 'DESC'? 'DESC' : 'ASC'
+        );
+    }
+
+    if($request->header('HX-Request')) {
+        return view('pages/collections/table', ['occurrences' => $query->get(), 'collection' => $collection])->fragment('table');
+    }
+
+    return view('pages/collections/table', ['occurrences' => $query->get(), 'collection' => $collection]);
+});
+
 // Checklist
 Route::get('/checklist/{clid}', function(int $clid) {
     $checklist = DB::table('fmchecklists as c')
