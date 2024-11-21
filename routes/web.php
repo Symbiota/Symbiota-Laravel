@@ -85,6 +85,7 @@ Route::get('/collections/table', function (Request $request){
         'sciname',
         'scientificNameAuthorship',
         'recordedBy',
+        'recordNumber',
         'associatedCollectors',
         'eventDate',
         'verbatimEventDate',
@@ -130,6 +131,18 @@ Route::get('/collections/table', function (Request $request){
             $request->query('sort'),
             $request->query('sortDirection') === 'DESC'? 'DESC' : 'ASC'
         );
+    }
+
+    if($request->query('hasImages')) {
+        if($request->query('hasImages') === 'with_images') {
+            $query->whereIn('o.occid', function(Builder $query) {
+                $query->select('i.occid')->from('images as i')->groupBy('i.occid');
+            });
+        } else if($request->query('hasImages') === 'without_images') {
+            $query->whereNotIn('o.occid', function(Builder $query) {
+                $query->select('i.occid')->from('images as i')->groupBy('i.occid');
+            });
+        }
     }
 
     if($request->header('HX-Request')) {
