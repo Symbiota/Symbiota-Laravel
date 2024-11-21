@@ -1,4 +1,5 @@
 <x-layout class="sm:w-[90%] lg:w-[70%] m-auto">
+    <h1 class="text-4xl font-bold">User Settings</h1>
     @if(session('status') == 'two-factor-authentication-confirmed')
     <div class="flex flex-col gap-4">
         <p class="font-medium">

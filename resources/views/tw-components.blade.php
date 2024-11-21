@@ -99,6 +99,10 @@
             ]"/>
         </div>
 
+        <x-context-menu>
+            Right Click Here
+        </x-context-menu>
+
         <x-modal label="Open Modal">
             <x-slot:title class="text-2xl">
                 Title

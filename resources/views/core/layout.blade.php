@@ -1,3 +1,4 @@
+@props(['hasHeader' => true, 'hasNavbar' => true, 'hasFooter' => true])
 @php
 $navigations = [
     ["title" => __("header.home"), "link" => '/', "htmx" => true],
@@ -48,14 +49,20 @@ $grants= [
 </head>
 
 <body id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content" x-trap>
+    @if($hasHeader)
     <x-header />
-    <x-navbar :navigations="$navigations" />
+    @endif
+    @if($hasNavbar)
+        <x-navbar :navigations="$navigations" />
+    @endif
     <div {{ $attributes->twMerge('flex-grow p-10') }} >
         {{ $slot }}
     </div>
+    @if($hasFooter)
     <div class="bg-base-200 p-8">
         <x-footer :logos="$logos" :grants="$grants" />
     </div>
+    @endif
     @stack('js-scripts')
 </body>
 
