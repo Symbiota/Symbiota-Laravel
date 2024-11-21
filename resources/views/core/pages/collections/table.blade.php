@@ -1,5 +1,5 @@
 @props(['collection', 'occurrences' => []])
-<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: true}" :hasFooter="false" :hasHeader="false"
+<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: false}" :hasFooter="false" :hasHeader="false"
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
         <x-breadcrumbs :items="[
@@ -21,59 +21,76 @@
         </button>
         <fieldset class="p-4 flex flex-col gap-4">
             <legend class="text-2xl font-bold">Record Search Form</legend>
-            <div class="text-2xl font-bold w-full py-10 text-center bg-base-200">
-               FYI FORM NOT FUNCTIONAL
-            </div>
-            <div class="flex gap-4 items-center">
-                <x-input label="Collector" id="collector" />
-                <x-input label="Number" id="number" />
-                <x-input label="Date" id="date" />
-            </div>
+            <form id="search_form" hx-get="{{ url('/collections/table') }}" hx-target="#table-container" x-on:after-swap="menu_open = false"
+                hx-swap="outerHTML" class="flex flex-col gap-4">
+                <input type="hidden" name="collid" value="{{ request('collid') }}">
+                <div class="flex gap-4 items-center">
+                    <x-input label="Collector" id="recordedBy" />
+                    <x-input label="Number" id="recordNumber" />
+                    <x-input label="Date" id="eventDate" />
+                </div>
 
-            <div class="flex gap-4 items-center">
-                <x-input label="Catalog Number" id="catalogNumber" />
-                <x-input label="Other Catalog Numbers" id="otherCatalogNumbers" />
-            </div>
+                <div class="flex gap-4 items-center">
+                    <x-input label="Catalog Number" id="catalogNumber" />
+                    <x-input label="Other Catalog Numbers" id="otherCatalogNumbers" />
+                </div>
 
-            <div class="flex gap-4 items-center">
-                <x-input label="Entered By" id="enteredBy" />
-                <x-input label="Date Entered" id="dateEntered" />
-                <x-input label="Date Modified" id="dateModified" />
-                <x-button class="mt-7">CU</x-button>
-            </div>
+                <div class="flex gap-4 items-center">
+                    <x-input label="Entered By" id="recordEnteredBy" />
+                    <x-input label="Date Entered" id="dateEntered" />
+                    <x-input label="Date Modified" id="dateLastModified" />
+                    <x-button class="mt-7">CU</x-button>
+                </div>
 
-            <div class="flex gap-4 items-center">
-                <x-select default="0" :items="[
-                ['title' => 'All Records', 'value' => null, 'disabled' => false ],
-            ]" />
-                <x-checkbox label="With Images" />
-                <x-checkbox label="Without Images" />
-            </div>
-            @if(true)
-            <x-select class="w-full" :items="[
+                <div class="flex gap-4 items-center">
+                <x-select class="w-60" name="processingStatus" default="0" :items="[
+                    ['title' => 'All Records', 'value' => '', 'disabled' => false],
+                    ['title' => 'Unprocessed', 'value'=> 'unprocessed', 'disabled' => false],
+                    ['title' => 'Unprocessed/NLP','value'=>'unprocessed/nlp', 'disabled' => false],
+                    ['title' => 'Stage 1', 'value'=>'stage 1', 'disabled' => false],
+                    ['title' => 'Stage 2', 'value'=>'stage 2', 'disabled' => false],
+                    ['title' => 'Stage 3', 'value'=>'stage 3', 'disabled' => false],
+                    ['title' => 'Pending Review-nfn', 'value'=>'pending review-nfn', 'disabled' => false],
+                    ['title' => 'Pending Review', 'value'=>'pending review', 'disabled' => false],
+                    ['title' => 'Expert Required', 'value'=>'expert required', 'disabled' => false],
+                    ['title' => 'Reviewed', 'value' =>'reviewed', 'disabled' => false],
+                    ['title' => 'Closed', 'value' =>'closed', 'disabled' => false],
+                    ['title' => 'No Set Status', 'value' => 'isnull', 'disabled' => false]
+                ]" />
+                    <x-radio id="hasImages"
+                        name="hasImages"
+                        :options="[ ['label' => 'All', 'value' => 0], ['label' => 'With Images', 'value' => 'with_images'], ['label' => 'Without Images', 'value' => 'without_images']]"
+                    />
+                </div>
+                @if(false)
+                <x-select class="w-full" :items="[
                     ['title' => 'Select Exsiccati', 'value' => null, 'disabled' => false]
                 ]" />
-            @endif
-            <div class="text-2xl font-bold w-full py-10 text-center bg-base-200">
-                TODO CUSTOM FILTERS
-            </div>
-            <div class="flex gap-4 items-center">
-                <x-select class="w-full" label="Sort By" :items="[
+                @endif
+                <div class="text-2xl font-bold w-full py-10 text-center bg-base-200">
+                    TODO CUSTOM FILTERS
+                </div>
+                @if(false)
+                <div class="flex gap-4 items-center">
+                    <x-select class="w-full" label="Sort By" :items="[
                     ['title' => '--------', 'value' => null, 'disabled' => false]
-                ]"/>
-                <x-select class="w-full" label="Order By" :items="[
+                ]" />
+                    <x-select class="w-full" label="Order By" :items="[
                     ['title' => '--------', 'value' => null, 'disabled' => false]
-                ]"/>
-                <x-select class="w-full" label="Record Output" :items="[
+                ]" />
+                    <x-select class="w-full" label="Record Output" :items="[
                     ['title' => '--------', 'value' => null, 'disabled' => false]
-                ]"/>
-            </div>
+                ]" />
+                </div>
+                @endif
 
-            <div class="flex gap-4 items-center">
-                <x-button>Display Editor</x-button>
-                <x-button>Display Table</x-button>
-                <x-button variant="neutral">Display Reset Form</x-button>
-            </div>
+                <div class="flex gap-4 items-center">
+                    {{-- <x-button>Display Editor</x-button> --}}
+                    <x-button type="submit">Display Table</x-button>
+                    <x-button variant="neutral" onclick="document.getElementById('search_form').reset()">Display Reset
+                        Form</x-button>
+                </div>
+            </form>
         </fieldset>
     </div>
     @php
@@ -86,8 +103,7 @@
     ['label' => 'Scientific Name', 'name' => 'sciname'],
     ['label' => 'Author', 'name' => 'scientificNameAuthorship'],
     ['label' => 'Collector', 'name' => 'recordedBy'],
-    ['label' => 'Number', 'name' => 'recordedBy'],
-    ['label' => 'Associated Collectors', 'name' => 'associatedCollectors'],
+    ['label' => 'Number', 'name' => 'recordNumber'],
     ['label' => 'Associated Collectors', 'name' => 'associatedCollectors'],
     ['label' => 'Event Date', 'name' => 'eventDate'],
     ['label' => 'Verbatim Date', 'name' => 'verbatimEventDate'],
@@ -197,7 +213,7 @@
                             'bg-base-300' => $loop->odd,
                             ])>
                             @foreach($property_display_map as $property)
-                            <td @contextmenu="column = '{{$property['label']}}'; column_property = '{{$property['name']}}'; column_value = '{{$occurrence->{$property['name']} ?? null}}'"
+                            <td @contextmenu="column = '{{$property['label']}}'; column_property = '{{$property['name']}}'; column_value = $el.innerHTML.trim()"
                                 @class([ 'p-2 text-nowrap border border-base-content' , 'pl-4'=> $loop->first,
                                 'pr-4' => $loop->last,
                                 'sticky left-0 text-neutral-content' => $property['name'] === 'occid',
