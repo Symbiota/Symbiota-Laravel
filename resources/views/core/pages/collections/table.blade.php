@@ -21,7 +21,7 @@
         </button>
         <fieldset class="p-4 flex flex-col gap-4">
             <legend class="text-2xl font-bold">Record Search Form</legend>
-            <form id="search_form" hx-get="{{ url('/collections/table') }}" hx-target="#table-container" x-on:after-swap="menu_open = false"
+            <form id="search_form" hx-get="{{ url('/collections/table') }}" hx-target="#table-container" x-on:htmx:after-request.window="menu_open = false;"
                 hx-swap="outerHTML" class="flex flex-col gap-4">
                 <input type="hidden" name="collid" value="{{ request('collid') }}">
                 <div class="flex gap-4 items-center">
@@ -188,9 +188,6 @@
                     hx-trigger="click" hx-target='#table-container' hx-swap="outerHTML">
                     Clear Filters
                 </x-context-menu-item>
-
-                <x-context-menu-item type='divider' />
-
             </x-slot:menu>
             @fragment('table')
             <div id="table-container"
