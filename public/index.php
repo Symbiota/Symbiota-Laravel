@@ -87,7 +87,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $legacy_routes = [
     'index.php' => '/',
     'profile/index.php' => isset($_REQUEST['submit']) && $_REQUEST['submit'] === 'logout'?
-    'logout': '/login' ,
+    '/logout': '/login' ,
     'profile/newprofile.php' => '/signup',
     'collections/list.php' => '/collections/list',
     //'sitemap.php' => '/sitemap',
