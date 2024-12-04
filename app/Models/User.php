@@ -29,6 +29,8 @@ class User extends Authenticatable {
         //Note this is really a orcid
         'oauth_provider',
         'guid',
+        'access_token',
+        'refresh_token'
     ];
 
     /**
