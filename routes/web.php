@@ -31,13 +31,11 @@ use Laravel\Socialite\Facades\Socialite;
 /* Oauth Redirect */
 Route::get('/oauth/orcid', function() {
     $orcid_user = Socialite::driver('orcid')->user();
-    /*
-    $client = new \GuzzleHttp\Client();
-    $response = $client->get('https://pub.orcid.org/v3.0/0009-0005-7813-6586/record', ['headers' => ['Accept' => 'application/json']]);
-*/
-    dd($orcid_user);
+
     $user = User::updateOrCreate([
         'name' => $orcid_user->name,
+        'firstName' => $orcid_user->firstName,
+        'lastName' => $orcid_user->lastName,
         'email' => $orcid_user->email ?? 'none',
     ]);
 
