@@ -54,7 +54,7 @@ class Provider extends AbstractProvider {
             ]),
             'firstName' => $user['person']['name']['given-name']['value'] ?? null,
             'lastName' => $user['person']['name']['given-name']['value'] ?? null,
-            'email'    => $user['person']['emails']['email']['value'] ?? '',
+            'email'    => $user['person']['emails']['email'][0]['email'] ?? '',
             //'avatar'   => $user['avatar_url'],
         ]);
     }
