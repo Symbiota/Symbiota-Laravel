@@ -28,7 +28,7 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-/* Oauth Redirect */
+/* Orcid Oauth */
 Route::get('/oauth/orcid', function() {
     $orcid_user = Socialite::driver('orcid')->user();
 
@@ -36,7 +36,9 @@ Route::get('/oauth/orcid', function() {
         'name' => $orcid_user->name,
         'firstName' => $orcid_user->user['person']['name']['given-names']['value'],
         'lastName' => $orcid_user->user['person']['name']['family-name']['value'],
-        'email' => $orcid_user->email ?? 'none',
+        'email' => $orcid_user->email ?? null,
+        'guid' => $orcid_user->user['orcid-identifier']['path'] ?? null,
+        'oauth_provider' => 'orcid'
     ]);
 
     Auth::login($user);
