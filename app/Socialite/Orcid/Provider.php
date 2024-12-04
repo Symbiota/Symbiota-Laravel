@@ -32,7 +32,7 @@ class Provider extends AbstractProvider {
      * {@inheritdoc}
      */
     protected function getUserByToken($token) {
-        $response = $this->getHttpClient()->get($this->api_uri . '/v3.0/' . $this->orcid . '/record', [
+        $response = $this->getHttpClient()->get($this->api_uri . 'v3.0/' . $this->orcid . '/record', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$token,
             ],
