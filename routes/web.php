@@ -34,7 +34,7 @@ Route::get('/oauth/orcid', function() {
 
     $user = User::updateOrCreate([
         'name' => $orcid_user->name,
-        'firstName' => $orcid_user->user['person']['name']['given-name']['value'],
+        'firstName' => $orcid_user->user['person']['name']['given-names']['value'],
         'lastName' => $orcid_user->user['person']['name']['family-name']['value'],
         'email' => $orcid_user->email ?? 'none',
     ]);
