@@ -35,8 +35,8 @@ class Provider extends AbstractProvider {
         $response = $this->getHttpClient()->get($this->api_uri . 'v3.0/' . $this->orcid . '/record', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer ' . $token,
-                'Content-Type' => 'application/json',
-            ],
+                'Accept' => 'application/json',
+            ]
         ]);
 
         return json_decode((string) $response->getBody(), true);

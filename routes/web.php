@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -30,8 +31,11 @@ use Laravel\Socialite\Facades\Socialite;
 /* Oauth Redirect */
 Route::get('/oauth/orcid', function() {
     $orcid_user = Socialite::driver('orcid')->user();
+    /*
+    $client = new \GuzzleHttp\Client();
+    $response = $client->get('https://pub.orcid.org/v3.0/0009-0005-7813-6586/record', ['headers' => ['Accept' => 'application/json']]);
+*/
     dd($orcid_user);
-/*
     $user = User::updateOrCreate([
         'name' => $orcid_user->name,
         'email' => $orcid_user->email ?? 'none',
@@ -40,7 +44,6 @@ Route::get('/oauth/orcid', function() {
     Auth::login($user);
 
     return redirect('/');
-*/
 });
 
 Route::get('/auth/redirect', function(Request $request) {
