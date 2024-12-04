@@ -16,7 +16,7 @@ class Provider extends AbstractProvider {
     protected $scopeSeparator = ' ';
 
     protected $base_uri = 'https://orcid.org/';
-    protected $api_uri = 'https://api.orcid.org/';
+    protected $api_uri = 'https://pub.orcid.org/';
     protected $orcid;
 
     protected function getAuthUrl($state): string {
@@ -35,6 +35,7 @@ class Provider extends AbstractProvider {
         $response = $this->getHttpClient()->get($this->api_uri . 'v3.0/' . $this->orcid . '/record', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/json',
             ],
         ]);
 
@@ -46,10 +47,14 @@ class Provider extends AbstractProvider {
      */
     protected function mapUserToObject(array $user) {
         return (new User)->setRaw($user)->map([
-            'uid'       => $user['id'],
             //'nickname' => $user['username'],
-            'name'     => $user['name'],
-            'email'    => $user['email'],
+            'name'     => implode(' ', [
+                $user['person']['name']['given-name']['value'] ?? '',
+                $user['person']['name']['family-name']['value'] ?? ''
+            ]),
+            'firstName' => $user['person']['name']['given-name']['value'] ?? null,
+            'lastName' => $user['person']['name']['given-name']['value'] ?? null,
+            'email'    => $user['person']['emails']['email']['value'] ?? '',
             //'avatar'   => $user['avatar_url'],
         ]);
     }
@@ -57,8 +62,7 @@ class Provider extends AbstractProvider {
     /**
      * {@inheritdoc}
      */
-    public function user()
-    {
+    public function user() {
         if ($this->user) {
             return $this->user;
         }
@@ -68,8 +72,6 @@ class Provider extends AbstractProvider {
         }
 
         $response = $this->getAccessTokenResponse($this->getCode());
-
-        return $response;
 
         $this->orcid = Arr::get($response, 'orcid');
 
