@@ -34,7 +34,7 @@ class Provider extends AbstractProvider {
     protected function getUserByToken($token) {
         $response = $this->getHttpClient()->get($this->api_uri . 'v3.0/' . $this->orcid . '/record', [
             RequestOptions::HEADERS => [
-                'Authorization' => 'Bearer '.$token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ]);
 
@@ -68,6 +68,9 @@ class Provider extends AbstractProvider {
         }
 
         $response = $this->getAccessTokenResponse($this->getCode());
+
+        return $response;
+
         $this->orcid = Arr::get($response, 'orcid');
 
         $user = $this->getUserByToken(Arr::get($response, 'access_token'));

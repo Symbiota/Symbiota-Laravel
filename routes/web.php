@@ -30,7 +30,8 @@ use Laravel\Socialite\Facades\Socialite;
 /* Oauth Redirect */
 Route::get('/oauth/orcid', function() {
     $orcid_user = Socialite::driver('orcid')->user();
-
+    dd($orcid_user);
+/*
     $user = User::updateOrCreate([
         'name' => $orcid_user->name,
         'email' => $orcid_user->email ?? 'none',
@@ -39,6 +40,7 @@ Route::get('/oauth/orcid', function() {
     Auth::login($user);
 
     return redirect('/');
+*/
 });
 
 Route::get('/auth/redirect', function(Request $request) {
