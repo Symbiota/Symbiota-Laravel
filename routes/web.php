@@ -4,14 +4,17 @@ use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
+use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +26,24 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/* Oauth Redirect */
+Route::get('/oauth/orcid', function() {
+    $orcid_user = Socialite::driver('orcid')->user();
+
+    $user = User::updateOrCreate([
+        'name' => $orcid_user->name,
+        'email' => $orcid_user->email ?? 'none',
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/');
+});
+
+Route::get('/auth/redirect', function(Request $request) {
+    return Socialite::driver('orcid')->redirect();
+});
 
 /* Simple View Routes */
 Route::view('/', 'pages/home');
