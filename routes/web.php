@@ -33,12 +33,17 @@ Route::get('/oauth/orcid', function() {
     $orcid_user = Socialite::driver('orcid')->user();
 
     $user = User::updateOrCreate([
-        'name' => $orcid_user->name,
-        'firstName' => $orcid_user->user['person']['name']['given-names']['value'],
-        'lastName' => $orcid_user->user['person']['name']['family-name']['value'],
-        'email' => $orcid_user->email ?? null,
-        'guid' => $orcid_user->user['orcid-identifier']['path'] ?? null,
+        'guid' => $orcid_user->id,
         'oauth_provider' => 'orcid'
+    ],
+    [
+        'name' => $orcid_user->name,
+        'firstName' => $orcid_user->attributes['firstName'],
+        'lastName' => $orcid_user->attributes['lastName'],
+        'email' => $orcid_user->email ?? null,
+        //'guid' => $orcid_user->id,
+        'access_token' => $orcid_user->token,
+        'refresh_token' => $orcid_user->refreshToken,
     ]);
 
     Auth::login($user);
