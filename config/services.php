@@ -33,6 +33,6 @@ return [
     'orcid' => [
         'client_id' => env('ORCID_CLIENT_ID'),
         'client_secret' => env('ORCID_CLIENT_SECRET'),
-        'redirect' => 'https://dev004.symbiota.org/Symbiota-Laravel/public/',
+        'redirect' => 'https://dev004.symbiota.org/Symbiota-Laravel/public/oauth/orcid',
     ],
 ];
