@@ -52,7 +52,7 @@ class Provider extends AbstractProvider {
                 ($user['person']['name']['given-names']['value'] ?? '') . ' ' .
                 ($user['person']['name']['family-name']['value'] ?? '')
             ),
-            'firstName' => $user['person']['name']['given-name']['value'] ?? null,
+            'firstName' => $user['person']['name']['given-names']['value'] ?? null,
             'lastName' => $user['person']['name']['family-name']['value'] ?? null,
             'email'    => $user['person']['emails']['email'][0]['email'] ?? '',
             //'avatar'   => $user['avatar_url'],
