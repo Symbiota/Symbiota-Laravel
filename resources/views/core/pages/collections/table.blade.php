@@ -44,23 +44,50 @@
         return $base_url . $query;
     }
 
+     $custom_fields = [];
+     for($i = 1; $i < 10; $i++) {
+         $type = request('q_customtype' . $i);
+         $field = request('q_customfield' . $i);
+         $value = request('q_customvalue' . $i);
+
+        if($type && $field && $value) {
+            array_push($custom_fields,[
+                [
+                'id' => $i,
+                'type' => $type,
+                'field' => $value,
+                'value' => $field,
+                ]
+            ]);
+        }
+    }
+
+    if(count($custom_fields) === 0) {
+        $custom_fields = [
+            [
+            'id' => 1,
+            'type' => 'EQUALS',
+            'field' => NULL,
+            'value' => "",
+            ]
+        ];
+    }
 @endphp
-<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: false}" :hasFooter="false" :hasHeader="false"
+<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: true }" :hasFooter="false" :hasHeader="false"
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
         <x-breadcrumbs :items="[
-['title' => 'Home'],
-['title' => 'Collection Management', 'href' => url(config('portal.name') . '/collections/misc/collprofiles.php?emode=1&collid='. request('collid'))],
-['title' => 'Occurrence Table view'],
-]" />
+            ['title' => 'Home'],
+            ['title' => 'Collection Management', 'href' => url(config('portal.name') . '/collections/misc/collprofiles.php?emode=1&collid='. request('collid'))],
+            ['title' => 'Occurrence Table view'],
+        ]" />
         <div class="text-2xl text-primary font-bold">
             {{$collection->collectionName}} ({{$collection->institutionCode}})
         </div>
-
         <x-button x-on:click="menu_open = true" class="w-fit absolute right-4">Adjust Search</x-button>
     </div>
 
-    <div class="absolute h-screen w-1/2 min-w-[40rem] bg-base-100 z-[100] top-0 left-0" x-cloak x-show="menu_open">
+    <div class="absolute h-screen w-full min-w-[40rem] bg-base-100 z-[100] top-0 left-0" x-cloak x-show="menu_open">
         <button x-on:click="menu_open = false"
             class="float-right mr-2 mt-2 hover:ring-4 focus:outline-none focus:ring-4 rounded-md w-6 h-6 ring-accent">
             <i class="cursor-pointer fa fas fa-close"></i>
@@ -114,9 +141,56 @@
                     ['title' => 'Select Exsiccati', 'value' => null, 'disabled' => false]
                 ]" />
                 @endif
-                <div class="text-2xl font-bold w-full py-10 text-center bg-base-200">
-                    TODO CUSTOM FILTERS
+
+                <div x-data="{ data: {{ json_encode($custom_fields) }} }" class="flex flex-col gap-4">
+                <template x-for="(d, index) of data" :key="'custom-form-' + index">
+                <div>
+                    <div>
+                    Custom Field <span x-text="index + 1"></span>
+                    </div>
+                    <div class="flex flex-row gap-4 items-center">
+                        {{--
+                        <x-select x-bind:name="'q_customopenparen' + (index + 1)" :default="0" :items="[
+                            ['title' => '---', 'value' => null, 'disabled' => false],
+                            ['title' => '(', 'value' => '(', 'disabled' => false],
+                            ['title' => '((', 'value' => '((', 'disabled' => false],
+                            ['title' => '(((', 'value' => '(((', 'disabled' => false],
+                        ]"/>
+                        --}}
+                        <x-occurrence-attribute-select x-bind:name="'q_customfield' + (index + 1)" class="min-w-72" :select_text="'Select Field Name'" />
+                        <x-select class="min-w-72" x-bind:value="data && data[index]? data[index].type:'EQUALS'" x-on:change='data[index].type = $event.target.type;' x-bind:name="'q_customtype' + (index + 1)" :items="[
+                            ['title'=> 'EQUALS', 'value' => 'EQUALS', 'disabled' => false ],
+                            ['title'=> 'NOT EQUALS', 'value' => 'NOT_EQUALS', 'disabled' => false ],
+                            ['title'=> 'STARTS WITH', 'value' => 'STARTS_WITH', 'disabled' => false ],
+                            ['title'=> 'CONTAINS', 'value' => 'LIKE', 'disabled' => false ],
+                            ['title'=> 'DOES NOT CONTAIN', 'value' => 'NOT_LIKE', 'disabled' => false ],
+                            ['title'=> 'GREATER THAN', 'value' => 'GREATER_THAN', 'disabled' => false ],
+                            ['title'=> 'LESS THAN', 'value' => 'LESS_THAN', 'disabled' => false ],
+                            ['title'=> 'IS NULL', 'value' => 'IS_NULL', 'disabled' => false ],
+                            ['title'=> 'IS NOT NULL', 'value' => 'NOT_NULL', 'disabled' => false ],
+                        ]"/>
+                        <x-input x-bind:name="'q_customvalue' + (index + 1)" x-bind:value="data && data[index]? data[index].value: ''" x-on:change='data[index].value = $event.target.value;'/>
+
+                        {{--
+                        <x-select x-bind:name="'q_customclosedparen' + (index + 1)" :default="0" :items="[
+                            ['title' => '---', 'value' => null, 'disabled' => false],
+                            ['title' => ')', 'value' => ')', 'disabled' => false],
+                            ['title' => '))', 'value' => '))', 'disabled' => false],
+                            ['title' => ')))', 'value' => ')))', 'disabled' => false],
+                        ]"/>
+                        --}}
+
+                        <x-button type="button" @click="data.splice(index, 1)">
+                            <i class="fa fa-minus"></i>
+                        </x-button>
+                    </div>
                 </div>
+                </template>
+                    <x-button type="button" @click="if(data.length < 10) data.push([{type: 'EQUALS', field: null, value: ''}])">
+                        <i class="fa fa-plus"></i> Add Custom Field
+                    </x-button>
+                </div>
+
                 @if(false)
                 <div class="flex gap-4 items-center">
                     <x-select id="sort" class="w-full" label="Sort By" :items="[

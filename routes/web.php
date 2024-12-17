@@ -147,6 +147,57 @@ Route::get('/collections/table', function (Request $request) {
         }
     }
 
+    for ($i=1; $i < 10; $i++) {
+        $custom_field = $request->query('q_customfield' . $i);
+        $type = $request->query('q_customtype' . $i);
+        $value= $request->query('q_customvalue' . $i);
+
+        if(!$custom_field) continue;
+
+        if (($idx = array_search($custom_field, $sortables)) > 0) {
+            switch ($type) {
+                case 'EQUALS':
+                    $query->where('o.' . $sortables[$idx], '=', $value);
+                    break;
+                case 'NOT_EQUALS':
+                    $query->where('o.' . $sortables[$idx], '!=', $value);
+                    break;
+
+                case 'START_WITH':
+                    $query->whereLike('o.' . $sortables[$idx], '%' . $value);
+                    break;
+
+                case 'CONTAINS':
+                    $query->whereLike('o.' . $sortables[$idx], '%' . $value . '%');
+                    break;
+
+                case 'DOES_NOT_CONTAIN':
+                    $query->whereNotLike('o.' . $sortables[$idx], '%' . $value . '%');
+                    break;
+
+                case 'GREATER_THAN':
+                    $query->where('o.' . $sortables[$idx], '>', $value);
+                    break;
+
+                case 'LESS_THAN':
+                    $query->where('o.' . $sortables[$idx], '<', $value);
+                    break;
+
+                case 'IS_NULL':
+                    $query->whereNull('o.' . $sortables[$idx]);
+                    break;
+
+                case 'NOT_NULL':
+                    $query->whereNotNull('o.');
+                    break;
+
+                default:
+                    break;
+            }
+            $query->orderByRaw('ISNULL(o.' . $sortables[$idx] . ') ASC');
+        }
+    }
+
     if ($request->query('sort')) {
         if (($idx = array_search($request->query('sort'), $sortables)) > 0) {
             $query->orderByRaw('ISNULL(o.' . $sortables[$idx] . ') ASC');
