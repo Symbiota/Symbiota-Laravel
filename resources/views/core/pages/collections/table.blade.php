@@ -84,10 +84,29 @@
         <div class="text-2xl text-primary font-bold">
             {{$collection->collectionName}} ({{$collection->institutionCode}})
         </div>
-        <x-button x-on:click="menu_open = true" class="w-fit absolute right-4">Adjust Search</x-button>
+        <div class="flex gap-4 absolute right-4">
+            <x-button x-on:click="menu_open = 'search'">Adjust Search</x-button>
+            <x-button x-on:click="menu_open = 'batch_update'">Batch Update</x-button>
+        </div>
     </div>
 
-    <div class="absolute h-screen w-full min-w-[40rem] bg-base-100 z-[100] top-0 left-0" x-cloak x-show="menu_open">
+    <div class="absolute h-screen w-[50%vw ]min-w-[40rem] bg-base-100 z-[100] top-0 left-0" x-cloak x-show="menu_open === 'batch_update'">
+        <button x-on:click="menu_open = false"
+            class="float-right mr-2 mt-2 hover:ring-4 focus:outline-none focus:ring-4 rounded-md w-6 h-6 ring-accent">
+            <i class="cursor-pointer fa fas fa-close"></i>
+        </button>
+        <fieldset class="p-4 flex flex-col gap-4">
+            <legend class="text-2xl font-bold">Record Search Form</legend>
+            <form id="search_form" hx-get="{{ url('/collections/table') . '?' }}" hx-target="#table-container" x-on:htmx:after-request.window="menu_open = false;" hx-swap="outerHTML" class="flex flex-col gap-4" hx-include="#search_form input">
+                <x-occurrence-attribute-select name="field_name" class="min-w-72" :select_text="'Select Field Name'" />
+                <x-input label="Current Value" id="current_value" />
+                <x-input label="New Value" id="new_value" />
+                <x-button type="submit">Batch Update Field</x-button>
+            </form>
+        </fieldset>
+    </div>
+
+    <div class="absolute h-screen w-[50%vw ]min-w-[40rem] bg-base-100 z-[100] top-0 left-0" x-cloak x-show="menu_open === 'search'">
         <button x-on:click="menu_open = false"
             class="float-right mr-2 mt-2 hover:ring-4 focus:outline-none focus:ring-4 rounded-md w-6 h-6 ring-accent">
             <i class="cursor-pointer fa fas fa-close"></i>

@@ -95,11 +95,6 @@ Route::get('/collections/list', function (Request $request) {
 Route::get('/collections/table', function (Request $request) {
     $collection = DB::table('omcollections')->where('collid', '=', $request->query('collid'))->select('*')->first();
 
-    $query = DB::table('omoccurrences as o')
-        ->join('omcollections as c', 'c.collid', '=', 'o.collid')
-        ->where('c.collid', '=', $request->query('collid'))
-        ->select('*');
-
     $sortables = [
         'occid',
         'institutionCode',
@@ -140,6 +135,20 @@ Route::get('/collections/table', function (Request $request) {
         'recordEnteredBy',
         'basisOfRecord',
     ];
+
+    if(in_array($request->query('field_name'), $sortables) && $request->query('current_value') && $request->query('new_value')) {
+        DB::table('omoccurrences')
+            ->where('collid', '=', $request->query('collid'))
+            ->where($request->query('field_name'), '=', $request->query('current_value'))
+            ->update([
+                $request->query('field_name') => $request->query('new_value'),
+            ]);
+    }
+
+    $query = DB::table('omoccurrences as o')
+        ->join('omcollections as c', 'c.collid', '=', 'o.collid')
+        ->where('c.collid', '=', $request->query('collid'))
+        ->select('*');
 
     foreach ($sortables as $property) {
         if ($request->query($property)) {
