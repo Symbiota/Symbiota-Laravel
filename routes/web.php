@@ -136,7 +136,7 @@ Route::get('/collections/table', function (Request $request) {
         'basisOfRecord',
     ];
 
-    if(in_array($request->query('field_name'), $sortables) && $request->query('current_value') && $request->query('new_value')) {
+    if (in_array($request->query('field_name'), $sortables) && $request->query('current_value') && $request->query('new_value')) {
         DB::table('omoccurrences')
             ->where('collid', '=', $request->query('collid'))
             ->where($request->query('field_name'), '=', $request->query('current_value'))
