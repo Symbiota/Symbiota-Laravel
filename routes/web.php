@@ -147,12 +147,14 @@ Route::get('/collections/table', function (Request $request) {
         }
     }
 
-    for ($i=1; $i < 10; $i++) {
+    for ($i = 1; $i < 10; $i++) {
         $custom_field = $request->query('q_customfield' . $i);
         $type = $request->query('q_customtype' . $i);
-        $value= $request->query('q_customvalue' . $i);
+        $value = $request->query('q_customvalue' . $i);
 
-        if(!$custom_field) continue;
+        if (! $custom_field) {
+            continue;
+        }
 
         if (($idx = array_search($custom_field, $sortables)) > 0) {
             switch ($type) {

@@ -3,6 +3,7 @@
     'name' => null,
     'label' => null,
     'default' => null,
+    'onChange' => null,
     'defaultValue' => null,
     'id' => uniqid(),
     'bind_id' => false,
@@ -17,7 +18,6 @@
                 $default = $i;
                 break;
             }
-            echo $item['value'];
         }
     }
 @endphp
@@ -31,6 +31,7 @@
         selectedItem: {{ ($default !== null && $default >= 0 && $items && $items[$default])? json_encode($items[$default]) : "''"}},
         selectableItems: {{ json_encode($items) }},
         selectableItemActive: null,
+        defaultValue: {{ $defaultValue && !$default? $defaultValue: 'null'}},
         selectId: $id('select'),
         selectKeydownValue: '',
         selectKeydownTimeout: 1000,
@@ -122,6 +123,15 @@
             selectPositionUpdate();
             window.addEventListener('resize', (event) => { selectPositionUpdate(); });
         });
+
+        $watch('selectedItem', function() {
+            if(selectedItem) {
+                let input = $el.querySelector('input');
+
+                input.value = selectedItem.value;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
     "
     @keydown.escape="if(selectOpen){ selectOpen=false; }"
     @keydown.down="if(selectOpen){ selectableItemActiveNext(); } else { selectOpen=true; } event.preventDefault();"
@@ -139,7 +149,7 @@
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-base-content/50"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd"></path></svg>
         </span>
-        <input id="{{ $id }}" type="hidden" name="{{ $name ?? $id }}" x-bind:value="selectedItem ? selectedItem.value: null" @bind(id) @bind(name) x-on:change=""/>
+        <input id="{{ $id }}" type="hidden" name="{{ $name ?? $id }}" x-on:change="{{$onChange ?? ''}}" @bind(id) @bind(name)/>
     </button>
 
     <ul x-show="selectOpen"

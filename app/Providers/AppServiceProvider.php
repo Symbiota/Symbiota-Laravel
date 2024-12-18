@@ -41,8 +41,8 @@ class AppServiceProvider extends ServiceProvider {
         }
 
         // Helper Macro to Progate Apline binds from parent component to subcomponent within blade. This May be required if you have dynamic names from generated input fields.
-        Blade::directive('bind', function($expression) {
-            return '<?php echo $attributes["x-bind:" . "'. $expression.'"] ? \'x-bind:\'. "' . $expression . '" . \'="\' . $attributes["x-bind:" . "'. $expression.'"] . \'"\': "" ?>';
+        Blade::directive('bind', function ($expression) {
+            return '<?php echo $attributes["x-bind:" . "' . $expression . '"] ? \'x-bind:\'. "' . $expression . '" . \'="\' . $attributes["x-bind:" . "' . $expression . '"] . \'"\': "" ?>';
         });
 
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {

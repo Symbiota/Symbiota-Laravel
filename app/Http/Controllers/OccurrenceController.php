@@ -442,6 +442,7 @@ class OccurrenceController extends Controller {
      *	 operationId="skeletalImport",
      *	 description="If an existing record can be located within target collection based on matching the input identifier, empty (null) target fields will be updated with Skeletal Data.
      *	 tags={""},
+     *
      *	 @OA\Parameter(
      *		name="apiToken",
      *		in="query",

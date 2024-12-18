@@ -158,7 +158,7 @@
                         ]"/>
                         --}}
                         <x-occurrence-attribute-select x-bind:name="'q_customfield' + (index + 1)" class="min-w-72" :select_text="'Select Field Name'" />
-                        <x-select class="min-w-72" x-bind:value="data && data[index]? data[index].type:'EQUALS'" x-on:change='data[index].type = $event.target.type;' x-bind:name="'q_customtype' + (index + 1)" :items="[
+                        <x-select class="min-w-72" defaultValue='d.type' x-on:change='data[index].value = $event.target.value' onChange="console.log($event); data[index].type = $event.target.value" x-bind:name="'q_customtype' + (index + 1)" x-bind:id="'q_customtype' + (index + 1)" :items="[
                             ['title'=> 'EQUALS', 'value' => 'EQUALS', 'disabled' => false ],
                             ['title'=> 'NOT EQUALS', 'value' => 'NOT_EQUALS', 'disabled' => false ],
                             ['title'=> 'STARTS WITH', 'value' => 'STARTS_WITH', 'disabled' => false ],
@@ -170,7 +170,6 @@
                             ['title'=> 'IS NOT NULL', 'value' => 'NOT_NULL', 'disabled' => false ],
                         ]"/>
                         <x-input x-bind:name="'q_customvalue' + (index + 1)" x-bind:value="data && data[index]? data[index].value: ''" x-on:change='data[index].value = $event.target.value;'/>
-
                         {{--
                         <x-select x-bind:name="'q_customclosedparen' + (index + 1)" :default="0" :items="[
                             ['title' => '---', 'value' => null, 'disabled' => false],
@@ -186,7 +185,7 @@
                     </div>
                 </div>
                 </template>
-                    <x-button type="button" @click="if(data.length < 10) data.push([{type: 'EQUALS', field: null, value: ''}])">
+                    <x-button type="button" @click="if(data.length < 10) data.push({type: 'EQUALS', field: null, value: 'sdfsdfs'})">
                         <i class="fa fa-plus"></i> Add Custom Field
                     </x-button>
                 </div>
