@@ -73,7 +73,7 @@
         ];
     }
 @endphp
-<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: true }" :hasFooter="false" :hasHeader="false"
+<x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: false}" :hasFooter="false" :hasHeader="false"
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
         <x-breadcrumbs :items="[
