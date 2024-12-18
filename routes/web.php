@@ -178,11 +178,11 @@ Route::get('/collections/table', function (Request $request) {
                     $query->whereLike('o.' . $sortables[$idx], '%' . $value);
                     break;
 
-                case 'CONTAINS':
+                case 'LIKE':
                     $query->whereLike('o.' . $sortables[$idx], '%' . $value . '%');
                     break;
 
-                case 'DOES_NOT_CONTAIN':
+                case 'NOT_LIKE':
                     $query->whereNotLike('o.' . $sortables[$idx], '%' . $value . '%');
                     break;
 
