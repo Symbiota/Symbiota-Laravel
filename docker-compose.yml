@@ -1,8 +1,7 @@
 services:
     web:
         build:
-            context: './docker/8.3'
-            dockerfile: Dockerfile
+            dockerfile: './docker/8.3/Dockerfile'
             args:
                 WWWGROUP: '${WWWGROUP}'
                 MYSQL_CLIENT: mariadb-client
