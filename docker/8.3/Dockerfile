@@ -59,6 +59,8 @@ RUN chmod +x /usr/local/bin/start-container
 
 COPY ./ .
 
+RUN chown -R $WWWGROUP:root storage/
+
 RUN composer install --ignore-platform-reqs --no-scripts
 
 RUN npm install && npm run build
