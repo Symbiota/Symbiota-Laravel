@@ -17,7 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/public/**/
+/public/build/
 /resources/views/custom
 /Portal
 node_modules/
