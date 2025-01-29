@@ -57,7 +57,7 @@ $eastWest= [
                 }
 
                 if(el) {
-                    if(el.type = 'checkbox') {
+                    if(el.type === 'checkbox') {
                         el.checked = false;
                     } else {
                         el.value = ''
