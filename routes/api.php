@@ -42,6 +42,47 @@ Route::get('/taxa/search', function (Request $request) {
     }
 });
 
+Route::get('/geographic/search', function (Request $request) {
+    $geo_term = $request->query('geoterm');
+    $geo_level = $request->query('geolevel');
+
+    $parent = $request->query('parent');
+    $distinct = $request->query('distinct');
+    $format = strtolower($request->query('format', 'html'));
+
+    $query = DB::table('geographicthesaurus as g')
+        ->leftJoin('geographicthesaurus as parent', 'parent.geoThesID', 'g.parentID')
+        ->whereLike('g.geoterm', '%' . $geo_term . '%');
+
+    if($geo_level) {
+        $query->where('g.geolevel', '=', $geo_level);
+    }
+
+    if($parent) {
+        $query->whereLike('parent.geoterm', '%' . $parent . '%');
+    }
+
+    if($distinct) {
+        $query->groupBy('g.geoterm');
+    }
+
+    $result = $query
+        ->orderByRaw('g.geoterm = ? DESC, g.geoterm LIKE ? DESC, g.geoterm, CHAR_LENGTH(g.geoterm)', [$geo_term, $geo_term . '%'])
+        ->select([
+        'g.geoThesID', 'g.geoterm', 'g.geoLevel', 'g.parentID',
+        'parent.geoterm AS parentterm', 'parent.geoLevel AS parentlevel',
+    ])->take(30)->get();
+
+    if ($format === 'json') {
+        return $result;
+    } else {
+        return view(
+            'core/autocomplete/result',
+            ['data' => $result, 'label' => 'geoterm', 'value' => 'geoterm']
+        );
+    }
+});
+
 Route::get('/', function () {
     return app()->version();
 });

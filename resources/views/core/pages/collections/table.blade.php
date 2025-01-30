@@ -77,7 +77,7 @@
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
         <x-breadcrumbs :items="[
-            ['title' => 'Home'],
+            ['title' => 'Home', 'href' => url('')],
             ['title' => 'Collection Management', 'href' => url(config('portal.name') . '/collections/misc/collprofiles.php?emode=1&collid='. request('collid'))],
             ['title' => 'Occurrence Table view'],
         ]" />

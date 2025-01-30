@@ -96,14 +96,38 @@ $eastWest= [
             </x-accordion>
             <x-accordion label='LOCALITY' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
-                    <x-input label="Country" id="country" />
+                    <x-autocomplete-input
+                        request_config='{"alias": { "country": "geoterm" }}'
+                        name="country"
+                        vals='{"geolevel": 50}'
+                        include=""
+                        label="Country"
+                        id="country"
+                        search="/api/geographic/search">
+                    </x-autocomplete-input>
                     <x-input label="Locality/Localities" id="locality" />
 
                     <x-input label="Minimum Elevation" id="elevhigh" />
                     <x-input label="Maximum Elevation" id="elevlow" />
 
-                    <x-input label="State" id="state" />
-                    <x-input label="County" id="county" />
+                    <x-autocomplete-input
+                        request_config='{"alias": {"state": "geoterm", "country": "parent"}}'
+                        vals='{"geolevel": 60}'
+                        include='#country'
+                        name="state"
+                        label="State"
+                        id="state"
+                        search="/api/geographic/search">
+                    </x-autocomplete-input>
+                    <x-autocomplete-input
+                        request_config='{"alias": {"county": "geoterm", "state": "parent"}}'
+                        vals='{"geolevel": 70}'
+                        include='#state'
+                        name="county"
+                        label="County"
+                        id="county"
+                        search="/api/geographic/search">
+                    </x-autocomplete-input>
                 </div>
             </x-accordion>
             <x-accordion id="lat-long-accordion" class:body="p-0" label='LATITUDE & LONGITUDE' variant="clear-primary">
@@ -178,7 +202,6 @@ $eastWest= [
                         <x-input label="Catalog Nubmer" id="catnum" />
                     </div>
                     <div class="flex flex-col gap-2">
-
                         <x-checkbox label="Limit to Type Specimens" id="typestatus" />
                         <x-checkbox label="Limit to specimens with images" id="hasimages" />
                         <x-checkbox label="Limit to specimens with audio" id="hasaudio" />

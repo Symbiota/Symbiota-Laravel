@@ -4,6 +4,8 @@
     'placeholder' => '',
     'search' => '',
     'name' => 'search',
+    'request_config' => '{}',
+    'vals' => '',
     'include' => '',
     'value' => '',
     'error_text',
@@ -17,7 +19,10 @@
 <script type="text/javascript" defer>
     function autoSearchInit(el) {
         const input = el.querySelector('input');
+
         const input_name = input.name;
+        const request_settings = JSON.parse(input.getAttribute('data-request-config'));
+
         const menu = el.querySelector(`#search-results-${input.id}`);
 
         const getMenuLength = () => {
@@ -70,6 +75,18 @@
 
         input.addEventListener('htmx:configRequest', (e) => {
             e.detail.parameters[input_name] = getLastValue(e.detail.parameters[input_name])
+
+            if(request_settings) {
+                if(request_settings.alias) {
+                    for(let alias in request_settings.alias) {
+                        if(e.detail.parameters[alias]) {
+                            const aliased_value = e.detail.parameters[alias];
+                            delete e.detail.parameters[alias];
+                            e.detail.parameters[request_settings.alias[alias]] = aliased_value;
+                        }
+                    }
+                }
+            }
         })
 
         input.addEventListener('keydown', (e) => {
@@ -100,6 +117,8 @@
         type="search"
         hx-get="{{ $search }}"
         hx-include="{{ $include }}"
+        hx-vals="{{ $vals }}"
+        data-request-config="{{ $request_config }}"
         hx-trigger="input changed delay:700ms, search"
         hx-indicator="#menu-loader-{{$id}}"
         hx-target="#search-results-{{$id}}"
