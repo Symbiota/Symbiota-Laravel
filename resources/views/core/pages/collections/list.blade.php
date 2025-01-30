@@ -66,7 +66,9 @@
                 </div>
 
             </div>
+
             <x-pagination :lengthAwarePaginator="$occurrences"/>
+
             <div class="grid grid-col-1 gap-4">
                 @foreach ($occurrences as $occurrence)
                 <x-collections.list.item :occurrence="$occurrence" />

@@ -3,8 +3,10 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\RegistrationController;
+use App\Models\Occurrence;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -68,171 +70,45 @@ Route::get('/collections/list', function (Request $request) {
     $params = $request->except(['page', '_token']);
 
     Cache::forget($request->fullUrl());
-    $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function () use ($params) {
-        if (count($params) === 0) {
-            return [];
-        }
+    $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function () use ($params, $request) {
 
-        $query = DB::table('omoccurrences as o')
+        /* Also Works but pagination would need to be manual because of subquery stuff
+         * Fix would be to save the img_cnt and audio_cnt when their values are created
+        $sub = Occurrence::buildSelectQuery($request)
+            ->select('o.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
+            ->take(30);
+
+        $query = DB::query()->fromSub($sub, 'o')
+            ->leftJoin('media as m', 'm.occid', '=', 'o.occid')
             ->select(
                 'o.*',
-                DB::raw('sum(if(media_type = "image", 1, 0)) as image_cnt'),
-                DB::raw('sum(if(media_type = "audio", 1, 0)) as audio_cnt'))
-            ->leftJoin('media as m', 'm.occid', '=', 'o.occid')
-            ->join('omcollections as c', 'c.collid', '=', 'o.collid')
+                DB::raw('sum(if(mediaType = "image", 1, 0)) as image_cnt'),
+                DB::raw('sum(if(mediaType = "audio", 1, 0)) as audio_cnt')
+            )
             ->groupBy('o.occid');
 
-        if (isset($params['taxa'])) {
-            $query->whereLike('o.sciname', $params['taxa']);
-        }
+        return $query->get();
+        */
 
-        return $query->paginate(30)->appends($params);
+        /* Works but can be slow */
+        return Occurrence::buildSelectQuery($request)
+            ->select('o.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
+            ->paginate(30)->appends($params);
     });
 
     return view('pages/collections/list', ['occurrences' => $occurrences]);
 });
 
 Route::get('/collections/table', function (Request $request) {
-    $collection = DB::table('omcollections')->where('collid', '=', $request->query('collid'))->select('*')->first();
+    $collection = DB::table('omcollections')
+        ->where('collid', '=', $request->query('collid'))
+        ->select('*')
+        ->first();
 
-    $sortables = [
-        'occid',
-        'institutionCode',
-        'catalogNumber',
-        'otherCatalogNumbers',
-        'family',
-        'sciname',
-        'scientificNameAuthorship',
-        'recordedBy',
-        'recordNumber',
-        'associatedCollectors',
-        'eventDate',
-        'verbatimEventDate',
-        'identifiedBy',
-        'country',
-        'stateProvince',
-        'county',
-        'locality',
-        'latitudeDecimal',
-        'longitudeDecimal',
-        'coordinateUncertaintyInMeters',
-        'verbatimCoordinates',
-        'geodeticDatum',
-        'georeferencedBy',
-        'georeferenceSources',
-        'georeferenceVerificationStatus',
-        'georeferenceRemarks',
-        'minimumElevationInMeters',
-        'maximumElevationInMeters',
-        'verbatimElevation',
-        'habitat',
-        'substrate',
-        'occurrenceRemarks',
-        'associatedTaxa',
-        'lifeStage',
-        'dateLastModified',
-        'processingStatus',
-        'recordEnteredBy',
-        'basisOfRecord',
-    ];
-
-    if (in_array($request->query('field_name'), $sortables) && $request->query('current_value') && $request->query('new_value')) {
-        DB::table('omoccurrences')
-            ->where('collid', '=', $request->query('collid'))
-            ->where($request->query('field_name'), '=', $request->query('current_value'))
-            ->update([
-                $request->query('field_name') => $request->query('new_value'),
-            ]);
-    }
-
-    $query = DB::table('omoccurrences as o')
-        ->join('omcollections as c', 'c.collid', '=', 'o.collid')
-        ->where('c.collid', '=', $request->query('collid'))
-        ->select('*');
-
-    foreach ($sortables as $property) {
-        if ($request->query($property)) {
-            $query->where('o.' . $property, '=', $request->query($property));
-        }
-    }
-
-    for ($i = 1; $i < 10; $i++) {
-        $custom_field = $request->query('q_customfield' . $i);
-        $type = $request->query('q_customtype' . $i);
-        $value = $request->query('q_customvalue' . $i);
-
-        if (! $custom_field) {
-            continue;
-        }
-
-        if (($idx = array_search($custom_field, $sortables)) > 0) {
-            switch ($type) {
-                case 'EQUALS':
-                    $query->where('o.' . $sortables[$idx], '=', $value);
-                    break;
-                case 'NOT_EQUALS':
-                    $query->where('o.' . $sortables[$idx], '!=', $value);
-                    break;
-
-                case 'START_WITH':
-                    $query->whereLike('o.' . $sortables[$idx], '%' . $value);
-                    break;
-
-                case 'LIKE':
-                    $query->whereLike('o.' . $sortables[$idx], '%' . $value . '%');
-                    break;
-
-                case 'NOT_LIKE':
-                    $query->whereNotLike('o.' . $sortables[$idx], '%' . $value . '%');
-                    break;
-
-                case 'GREATER_THAN':
-                    $query->where('o.' . $sortables[$idx], '>', $value);
-                    break;
-
-                case 'LESS_THAN':
-                    $query->where('o.' . $sortables[$idx], '<', $value);
-                    break;
-
-                case 'IS_NULL':
-                    $query->whereNull('o.' . $sortables[$idx]);
-                    break;
-
-                case 'NOT_NULL':
-                    $query->whereNotNull('o.');
-                    break;
-
-                default:
-                    break;
-            }
-            $query->orderByRaw('ISNULL(o.' . $sortables[$idx] . ') ASC');
-        }
-    }
-
-    if ($request->query('sort')) {
-        if (($idx = array_search($request->query('sort'), $sortables)) > 0) {
-            $query->orderByRaw('ISNULL(o.' . $sortables[$idx] . ') ASC');
-        }
-        $query->orderBy(
-            $request->query('sort'),
-            $request->query('sortDirection') === 'DESC' ? 'DESC' : 'ASC'
-        );
-    }
-
-    if ($request->query('hasImages')) {
-        if ($request->query('hasImages') === 'with_images') {
-            $query->whereIn('o.occid', function (Builder $query) {
-                $query->select('i.occid')->from('images as i')->groupBy('i.occid');
-            });
-        } elseif ($request->query('hasImages') === 'without_images') {
-            $query->whereNotIn('o.occid', function (Builder $query) {
-                $query->select('i.occid')->from('images as i')->whereNotNull('i.occid')->groupBy('i.occid');
-            });
-        }
-    }
+    $query = Occurrence::buildSelectQuery($request);
 
     $view = view('pages/collections/table', [
-        'occurrences' => $query->paginate(100),
+        'occurrences' => $query->select('*')->paginate(100),
         'collection' => $collection,
         'page' => $request->query('page') ?? 0,
     ]);

@@ -3,9 +3,17 @@
 @php
 $start = ($lengthAwarePaginator->currentPage() - 1 ) * $lengthAwarePaginator->perPage();
 $end = $start + $lengthAwarePaginator->perPage();
+$start += 1;
+
+$start_page = $lengthAwarePaginator->currentPage() < 6? 1: $lengthAwarePaginator->currentPage() - 4;
+$end_page = $lengthAwarePaginator->currentPage() < 6? 9: $lengthAwarePaginator->currentPage() + 4;
+$max_page = ceil($lengthAwarePaginator->total() / $lengthAwarePaginator->perPage());
 
 if($end > $lengthAwarePaginator->total()) {
     $end = $lengthAwarePaginator->total();
+}
+if($end_page > $max_page) {
+    $end_page = $max_page;
 }
 @endphp
 
@@ -19,7 +27,7 @@ if($end > $lengthAwarePaginator->total()) {
                     <span class="box-content absolute bottom-0 w-0 h-px -mx-px duration-200 ease-out translate-y-px border-transparent bg-base-content group-hover:border-l group-hover:border-r group-hover:border-base-300 left-1/2 group-hover:left-0 group-hover:w-full"></span>
                 </a>
             </li>
-            @for ($i = 1; $i <= ceil($lengthAwarePaginator->total() / $lengthAwarePaginator->perPage()); $i++)
+            @for ($i = $start_page; $i <= $end_page; $i++)
             @php $isCurrent = $lengthAwarePaginator->currentPage() === $i; @endphp
                 <li class="hidden h-full md:block">
                     <a hx-push-url="true" hx-target="{{$hx_target}}" hx-get="{{ $lengthAwarePaginator->url($i) }}" @class([

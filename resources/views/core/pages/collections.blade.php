@@ -111,18 +111,18 @@ $eastWest= [
                     <x-input label="Maximum Elevation" id="elevlow" />
 
                     <x-autocomplete-input
-                        request_config='{"alias": {"state": "geoterm", "country": "parent"}}'
+                        request_config='{"alias": {"stateProvince": "geoterm", "country": "parent"}}'
                         vals='{"geolevel": 60}'
                         include='#country'
-                        name="state"
-                        label="State"
-                        id="state"
+                        name="stateProvince"
+                        label="State/Province"
+                        id="stateProvince"
                         search="/api/geographic/search">
                     </x-autocomplete-input>
                     <x-autocomplete-input
-                        request_config='{"alias": {"county": "geoterm", "state": "parent"}}'
+                        request_config='{"alias": {"county": "geoterm", "stateProvince": "parent"}}'
                         vals='{"geolevel": 70}'
-                        include='#state'
+                        include='#stateProvince'
                         name="county"
                         label="County"
                         id="county"
@@ -189,8 +189,8 @@ $eastWest= [
             </x-accordion>
             <x-accordion label='COLLECTION EVENT' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
-                    <x-input label="Collection Start Date" id="eventdate1" />
-                    <x-input label="Collection End Date" id="eventdate2" />
+                    <x-input label="Collection Start Date" id="eventDate1" />
+                    <x-input label="Collection End Date" id="eventDate2" />
                     <x-input label="Collector's Last Name" id="collector" />
                     <x-input label="Collector's Number" id="collnum" />
                 </div>
