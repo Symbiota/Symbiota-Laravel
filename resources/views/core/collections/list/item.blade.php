@@ -1,17 +1,17 @@
 @props(['occurrence' => null])
 <div class="flex items-center gap-4 p-4 rounded-md border border-base-300 relative">
     <div class="grid grid-cols-1 gap-2">
-        <img class="w-16 mx-auto" src="https://cch2.org/portal/content/collicon/blmar.jpg">
-        <div class="mx-auto">
-            BLMAR
+        <img class="w-16 mx-auto" src="{{ $occurrence->icon ?? 'https://cch2.org/portal/content/collicon/blmar.jpg'}}">
+        <div class="mx-auto text-sm">
+            {{ $occurrence->institutionCode . ($occurrence->collectionCode? ':' . $occurrence->collectionCode: '') }}
         </div>
     </div>
     <div class="grid grid-cols-1">
         @if($occurrence->sciname && $occurrence->scientificNameAuthorship)
-        <div>{{ $occurrence->sciname . '(' . $occurrence->scientificNameAuthorship . ')'}}</div>
+        <div><x-link href="{{ url('taxon/') }}"><i>{{ $occurrence->sciname }}</i> {{ $occurrence->scientificNameAuthorship }}</x-link></div>
         @endif
-        <div>{{ $occurrence->catalogNumber . $occurrence->recordedBy .  $occurrence->recordedBy . $occurrence->recordNumber . $occurrence->eventDate}}</div>
-        <div>{{ implode(' | ', array_filter([$occurrence->locality, $occurrence->decimalLatitude, $occurrence->minimumElevationInMeters], fn ($v) => $v != null)) }}</div>
+        <div>{{ $occurrence->catalogNumber . ' ' . $occurrence->recordedBy . ' ' . $occurrence->recordNumber . ' ' . ' ' . $occurrence->eventDate}}</div>
+        <div>{{ implode(' | ', array_filter([substr($occurrence->locality, 0, 30), $occurrence->decimalLatitude, $occurrence->minimumElevationInMeters], fn ($v) => $v != null)) }}</div>
         <x-link href="{{url('occurrence/' . $occurrence->occid ) }}" target="_blank">Full Record Details</x-link>
     </div>
     {{-- Icon Container --}}

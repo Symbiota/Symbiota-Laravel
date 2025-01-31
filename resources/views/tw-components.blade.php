@@ -68,6 +68,8 @@
        public $recordNumber= "1";
        public $eventDate = "1999/10/24";
        public $locality= "United States, California";
+       public $institutionCode = "BLMAR";
+       public $collectionCode = "";
        public $decimalLatitude= 90;
        public $decimalLongititude = 90;
        public $minimumElevationInMeters = "3322m";
