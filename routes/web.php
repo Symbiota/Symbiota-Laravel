@@ -98,7 +98,7 @@ Route::get('/collections/list', function (Request $request) {
 
         /* Works but can be slow */
         return Occurrence::buildSelectQuery($request)
-            ->select('o.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
+            ->select('o.*', 'c.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
             ->paginate(30)->appends($params);
     });
 
