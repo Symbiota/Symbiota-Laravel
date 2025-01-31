@@ -14,7 +14,7 @@
     <div>
         <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
-        ['title' => 'Search Criteria', 'href' => url(config('portal.name') . '/collections/search/index.php') ],
+        ['title' => 'Search Criteria', 'href' => url('/collections/search/') ],
         'Specimen Records'
     ]" />
     </div>
