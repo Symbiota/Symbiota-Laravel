@@ -1,3 +1,15 @@
+{{--
+This is a big of crazy file here are a list of gotchas
+
+HTMX saves dom history and Apline Js modifies the dom.
+This causes odd issues that are in this github post
+
+https://github.com/bigskysoftware/htmx/issues/1015
+
+TLDR We need to delete the dom state htmx's before-history-save
+event fires.
+
+--}}
 @props([
     'items' => [],
     'name' => null,
@@ -65,6 +77,9 @@
                 }
             }
         },
+        innerHTML: null,
+        init: () => innerHTML = $el.innerHTML,
+        destroy: () => $el.innerHTML = innerHTML,
         selectKeydown(event){
             if (event.keyCode >= 65 && event.keyCode <= 90) {
 
@@ -149,6 +164,7 @@
     @keydown.up="if(selectOpen){ selectableItemActivePrevious(); } else { selectOpen=true; } event.preventDefault();"
     @keydown.enter="selectedItem=selectableItemActive; selectOpen=false;"
     @keydown="selectKeydown($event);"
+    x-on:htmx:before-history-save.window.camel="destroy()"
     {{ $attributes->twMergeFor('select', 'relative')}}
     >
     <button type="button" id="{{ $id }}-toggle" aria-labeledBy={{ $labeledBy? $labeledBy: $id . '-label'}} x-ref="selectButton" @click="selectOpen=!selectOpen"

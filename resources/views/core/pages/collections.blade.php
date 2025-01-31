@@ -1,4 +1,4 @@
-@props(['lang'])
+@props(['lang', 'collections'])
 @pushOnce('js-scripts')
 <script type="text/javascript" defer>
     function toggle_all_accordions() {
@@ -212,7 +212,13 @@ $eastWest= [
                 </div>
             </x-accordion>
             <x-accordion label='COLLECTIONS' variant="clear-primary">
-                TODO Taxonomy Form
+                <div class="flex flex-col gap-4">
+                <x-nested-checkbox-group id="collections-group" label="All Collections">
+                @foreach ($collections as $collection)
+                    <x-checkbox name="collid[]" :value="$collection->collID" :label="$collection->collectionName"/>
+                @endforeach
+                </x-nested-checkbox-group>
+                </div>
             </x-accordion>
         </div>
 

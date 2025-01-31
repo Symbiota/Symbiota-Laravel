@@ -208,7 +208,11 @@ class Occurrence extends Model {
 
         // Maybe Can Remove
         if($request->query('collid')) {
-            $query->where('c.collid', '=', $request->query('collid'));
+            if(is_array($request->query('collid')) && !empty($request->query('collid'))) {
+                $query->whereIn('c.collid', $request->query('collid'));
+            } else {
+                $query->where('c.collid', '=', $request->query('collid'));
+            }
         }
 
         foreach($request->all() as $name => $value) {

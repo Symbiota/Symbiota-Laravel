@@ -16,7 +16,7 @@
             :items="[
             ['value' => 'Any Name', 'title' => 'Any Name', 'disabled' => false],
             ['value' => 'Family', 'title' => 'Family', 'disabled' => false],
-            ['value' =>'Taxonomy Group', 'title' => 'Taxonomy Group', 'disabled' => false],
+            ['value' =>'Taxonomy Group', 'title' => 'Taxonomy Group', 'disabled' => false]
         ]"/>
 
         <x-autocomplete-input

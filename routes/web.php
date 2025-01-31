@@ -60,7 +60,13 @@ Route::view('/sitemap', 'pages/sitemap');
 Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /* In Progress Skeletons */
-Route::view('/collections/search', 'pages/collections');
+/*Route::view('/collections/search', 'pages/collections');*/
+Route::get('/collections/search', function (Request $request) {
+    $collections = DB::table('omcollections')->select('*')->get();
+
+    return view('pages/collections', ['collections' => $collections]);
+});
+
 Route::view('/taxon', 'pages/taxon/profile');
 
 Route::view('/user/profile', 'pages/user/profile');

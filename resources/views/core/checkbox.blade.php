@@ -3,6 +3,7 @@
 'label' => 'label',
 'name',
 'default_value' => 0,
+'value' => 1,
 'chip' => 'chip value',
 'checked' => false
 ])
@@ -15,7 +16,7 @@
             id="{{ $id }}"
             data-chip="{{ $chip }}"
             autocomplete="off"
-            value="1"
+            value="{{ $value }}"
             @checked($default_value === "1")
             class="
             z-10 w-6 h-6 peer/checkbox appearance-none before:content['']

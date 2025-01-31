@@ -2,7 +2,8 @@
 @php
 $navigations = [
     ["title" => __("header.home"), "link" => '/', "htmx" => true],
-    ["title" => __("header.collections"), "link" => config('portal.name') . '/collections/search/index.php'],
+    //["title" => __("header.collections"), "link" => config('portal.name') . '/collections/search/index.php'],
+    ["title" => __("header.collections"), "link" => '/collections/search', 'htmx' => true ],
     ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map/index.php'],
     ["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists/index.php'],
     ["title" => __("header.images"), "link" => '/media/search', 'htmx' => true],

@@ -6,15 +6,10 @@
         //event.preventDefault()
         const master = document.querySelector(`#${id}`);
 
-        console.log("fire")
-        console.log(master.checked)
         const checkboxes = document.querySelectorAll(`#${id}-body input[type='checkbox']`);
         for (let checkbox of checkboxes) {
             checkbox.checked = master.checked;
         }
-    }
-
-    function toggleNested(event, id) {
     }
 </script>
 @endPushOnce
@@ -28,7 +23,7 @@
         </div>
     </button>
     <!-- Nested Checkbox Body --->
-    <div x-cloak x-show="menu_open" onclick="console.log('click')" id="{{$id}}-body" class="flex flex-col gap-3 ml-7 mt-2">
+    <div x-cloak x-show="menu_open" x-on:change="if(checked && !event.target.checked) { document.querySelector('#{{ $id }}').checked = false }" id="{{$id}}-body" class="flex flex-col gap-3 ml-7 mt-2">
         {{ $slot }}
     </div>
 </div>
