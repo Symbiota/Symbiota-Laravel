@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/taxa/search', function (Request $request) {
     $sciname = $request->query('taxa');
     $format = strtolower($request->query('format', 'html'));
-    $result = DB::select('SELECT sciname, tid FROM taxa WHERE sciname LIKE ? LIMIT 20', ['%' . $sciname . '%']);
+    $result = DB::select('SELECT sciname, tid FROM taxa WHERE sciname LIKE ? ORDER BY sciname = ? DESC, sciname LIKE ? DESC, sciname LIMIT 20', ['%' . $sciname . '%', $sciname, $sciname . '%']);
 
     if ($format === 'json') {
         return $result;
