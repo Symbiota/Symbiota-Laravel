@@ -65,6 +65,8 @@ RUN composer install --ignore-platform-reqs --no-scripts
 
 RUN npm install && npm run build
 
+RUN php artisan key:generate
+
 EXPOSE 80/tcp
 
 ENTRYPOINT ["start-container"]
