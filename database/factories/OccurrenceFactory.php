@@ -17,8 +17,8 @@ class OccurrenceFactory extends Factory {
      * @return array<string, mixed>
      */
     public function definition(): array {
+
         return [
-            //This is required and must be passed in
             'collid' => null,
             'locality' => fake()->country(),
         ];

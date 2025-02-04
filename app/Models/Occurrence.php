@@ -202,26 +202,30 @@ class Occurrence extends Model {
     /* Produces DB query builder object based on a request for general purpose use
      * This Function's only depedency on eloquent is the protected variables
      */
-    public static function buildSelectQuery(Request $request) {
+    public static function buildSelectQuery(Array $params) {
+
+        function param(string $param) {
+            return $params[$param] ?? null;
+        }
+
         $query = DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collid', '=', 'o.collid');
 
-        // Maybe Can Remove
-        if ($request->query('collid')) {
-            if (is_array($request->query('collid')) && ! empty($request->query('collid'))) {
-                $query->whereIn('c.collid', $request->query('collid'));
-            } else {
-                $query->where('c.collid', '=', $request->query('collid'));
-            }
-        }
+        $ALLOW_ARRAY_SEARCH = [ 'collid' => true ];
 
-        foreach ($request->all() as $name => $value) {
+        foreach ($params as $name => $value) {
             if ((in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) && $value) {
-                /* Some Values Like with end operator makes more sense */
-                if ($name === 'county') {
-                    $query->whereLike('o.' . $name, $value . '%');
+                if(is_array($value)) {
+                    if(!empty($value) && array_key_exists($name, $ALLOW_ARRAY_SEARCH)) {
+                        $query->whereIn('c.collid', $value);
+                    }
                 } else {
-                    $query->where('o.' . $name, '=', $value);
+                    /* Some Values Like with end operator makes more sense */
+                    if ($name === 'county') {
+                        $query->whereLike('o.' . $name, $value . '%');
+                    } else {
+                        $query->where('o.' . $name, '=', $value);
+                    }
                 }
             }
         }
@@ -230,9 +234,9 @@ class Occurrence extends Model {
         // Add Custom Values
         for ($i = 1; $i < 11; $i++) {
             // Create Constant for this somewhere
-            $name = $request->query('q_customfield' . $i);
-            $type = $request->query('q_customtype' . $i);
-            $value = $request->query('q_customvalue' . $i);
+            $name = param('q_customfield' . $i);
+            $type = param('q_customtype' . $i);
+            $value = param('q_customvalue' . $i);
 
             if (in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) {
                 match ($type) {
@@ -252,26 +256,26 @@ class Occurrence extends Model {
         }
 
         // Decide How Values should be sorted
-        if ($request->query('sort')) {
-            if (($idx = array_search($request->query('sort'), self::$public_fields)) > 0) {
+        if ($sort = param('sort')) {
+            if (($idx = array_search($sort, self::$public_fields)) > 0) {
                 $query->orderByRaw('ISNULL(o.' . self::$public_fields[$idx] . ') ASC');
             }
             $query->orderBy(
-                $request->query('sort'),
-                $request->query('sortDirection') === 'DESC' ? 'DESC' : 'ASC'
+                $sort,
+                param('sortDirection') === 'DESC' ? 'DESC' : 'ASC'
             );
         }
 
         // Additional Filters from other tables
         // TODO (Logan) Need to add consts for string literals
-        if ($request->query('hasImages')) {
-            if ($request->query('hasImages') === 'with_images') {
+        if ($hasImages = param('hasImages')) {
+            if ($hasImages === 'with_images') {
                 $query->whereIn('o.occid', function (Builder $query) {
-                    $query->select('i.occid')->from('images as i')->groupBy('i.occid');
+                    $query->select('m.occid')->from('media as m')->groupBy('m.occid')->where('mediaType', '=', 'image');
                 });
-            } elseif ($request->query('hasImages') === 'without_images') {
+            } elseif ($hasImages === 'without_images') {
                 $query->whereNotIn('o.occid', function (Builder $query) {
-                    $query->select('i.occid')->from('images as i')->whereNotNull('i.occid')->groupBy('i.occid');
+                    $query->select('i.occid')->from('media as m')->whereNotNull('i.occid')->where('mediaType', '!=', 'image')->groupBy('i.occid');
                 });
             }
         }
@@ -293,26 +297,23 @@ class Occurrence extends Model {
         //footprintGeoJson Searching
         //Boundary Searching
         //Radius Searching
-
-        if ($request->query('taxa')) {
-            $taxa = $request->query('taxa');
-
+        if ($taxa = param('taxa')) {
             //TODO (Logan) Enum this default constants
-            $use_thes = $request->query('usethes') ?? 1;
-            $use_thes_associations = $request->query('usethes-associations') ?? 2;
+            $use_thes = param('usethes') ?? 1;
+            $use_thes_associations = param('usethes-associations') ?? 2;
             //TODO (Logan) Figure out when this is needed
-            $tax_auth_id = $request->query('taxauthid') ?? 2;
+            $tax_auth_id = param('taxauthid') ?? 2;
 
             //Todo figure out Occurence Taxa Manager
-            $taxon_input = explode(',', $request->query('taxa'));
+            $taxon_input = explode(',', param('taxa'));
             $query->whereIn('o.sciName', $taxon_input);
         }
 
-        if ($request->query('elevhigh') && $request->query('elevlow')) {
+        if (param('elevhigh') && param('elevlow')) {
             $query->where(function (Builder $where) {
                 $where
-                    ->where('maximumDepthInMeters', '<=', $request->query('elevhigh'))
-                    ->where('minimumDepthInMeters', '>=', $request->query('elevlow'));
+                    ->where('maximumDepthInMeters', '<=', param('elevhigh'))
+                    ->where('minimumDepthInMeters', '>=', param('elevlow'));
             });
         }
 

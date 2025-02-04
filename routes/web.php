@@ -96,7 +96,7 @@ Route::get('/collections/list', function (Request $request) {
         */
 
         /* Works but can be slow */
-        return Occurrence::buildSelectQuery($request)
+        return Occurrence::buildSelectQuery($request->all())
             ->select('o.*', 'c.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
             ->paginate(30)->appends($params);
     });
@@ -110,7 +110,7 @@ Route::get('/collections/table', function (Request $request) {
         ->select('*')
         ->first();
 
-    $query = Occurrence::buildSelectQuery($request);
+    $query = Occurrence::buildSelectQuery($request->all());
 
     $view = view('pages/collections/table', [
         'occurrences' => $query->select('*')->paginate(100),
