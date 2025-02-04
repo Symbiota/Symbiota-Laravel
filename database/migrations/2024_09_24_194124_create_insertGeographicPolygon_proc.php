@@ -8,10 +8,7 @@ return new class() extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        DB::unprepared('CREATE PROCEDURE `insertGeographicPolygon`(IN geo_id int, IN geo_json longtext)
-BEGIN
-    INSERT INTO geographicpolygon (geoThesID, footprintPolygon, geoJSON) VALUES (geo_id, ST_GeomFromGeoJSON(geo_json), geo_json);
-  END');
+        DB::unprepared('CREATE OR REPLACE PROCEDURE `insertGeographicPolygon`(IN geo_id int, IN geo_json longtext) BEGIN INSERT INTO geographicpolygon (geoThesID, footprintPolygon, geoJSON) VALUES (geo_id, ST_GeomFromGeoJSON(geo_json), geo_json); END');
     }
 
     /**
