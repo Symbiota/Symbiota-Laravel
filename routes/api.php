@@ -54,15 +54,15 @@ Route::get('/geographic/search', function (Request $request) {
         ->leftJoin('geographicthesaurus as parent', 'parent.geoThesID', 'g.parentID')
         ->whereLike('g.geoterm', '%' . $geo_term . '%');
 
-    if($geo_level) {
+    if ($geo_level) {
         $query->where('g.geolevel', '=', $geo_level);
     }
 
-    if($parent) {
+    if ($parent) {
         $query->whereLike('parent.geoterm', '%' . $parent . '%');
     }
 
-    if($distinct) {
+    if ($distinct) {
         $query->groupBy('g.geoterm');
     }
 

@@ -16,8 +16,7 @@ class Occurrence extends Model {
 
     public $timestamps = false;
 
-
-    static $public_fields = [
+    public static $public_fields = [
         'collid',
         'dbpk',
         'basisOfRecord',
@@ -114,10 +113,10 @@ class Occurrence extends Model {
         'duplicateQuantity',
         'labelProject',
         'recordID',
-        'dateEntered'
+        'dateEntered',
     ];
 
-    static protected $hidden_fields = [
+    protected static $hidden_fields = [
         'collection',
         'scientificName',
         'recordedbyid',
@@ -133,16 +132,17 @@ class Occurrence extends Model {
         'institutionID',
         'collectionID',
         'genericColumn1',
-        'genericColumn2'
+        'genericColumn2',
     ];
 
     protected $fillable = [];
+
     protected $hidden = [];
 
-    function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->fillable = self::$public_fields;
-        $this->hidden= self::$hidden_fields;
+        $this->hidden = self::$hidden_fields;
     }
 
     public static $snakeAttributes = false;
@@ -207,18 +207,18 @@ class Occurrence extends Model {
             ->join('omcollections as c', 'c.collid', '=', 'o.collid');
 
         // Maybe Can Remove
-        if($request->query('collid')) {
-            if(is_array($request->query('collid')) && !empty($request->query('collid'))) {
+        if ($request->query('collid')) {
+            if (is_array($request->query('collid')) && ! empty($request->query('collid'))) {
                 $query->whereIn('c.collid', $request->query('collid'));
             } else {
                 $query->where('c.collid', '=', $request->query('collid'));
             }
         }
 
-        foreach($request->all() as $name => $value) {
-            if((in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) && $value) {
+        foreach ($request->all() as $name => $value) {
+            if ((in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) && $value) {
                 /* Some Values Like with end operator makes more sense */
-                if($name === 'county') {
+                if ($name === 'county') {
                     $query->whereLike('o.' . $name, $value . '%');
                 } else {
                     $query->where('o.' . $name, '=', $value);
@@ -228,14 +228,14 @@ class Occurrence extends Model {
 
         // TODO create enum for this
         // Add Custom Values
-        for ($i=1; $i < 11 ; $i++) {
+        for ($i = 1; $i < 11; $i++) {
             // Create Constant for this somewhere
             $name = $request->query('q_customfield' . $i);
             $type = $request->query('q_customtype' . $i);
             $value = $request->query('q_customvalue' . $i);
 
             if (in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) {
-                match($type) {
+                match ($type) {
                     'EQUALS' => $query->where($name, '=', $value),
                     'NOT_EQUALS' => $query->where($name, '!=', $value),
                     'STARTS_WITH' => $query->whereLike($name, $value . '%'),
@@ -294,7 +294,7 @@ class Occurrence extends Model {
         //Boundary Searching
         //Radius Searching
 
-        if($request->query('taxa')) {
+        if ($request->query('taxa')) {
             $taxa = $request->query('taxa');
 
             //TODO (Logan) Enum this default constants
@@ -303,14 +303,13 @@ class Occurrence extends Model {
             //TODO (Logan) Figure out when this is needed
             $tax_auth_id = $request->query('taxauthid') ?? 2;
 
-
             //Todo figure out Occurence Taxa Manager
             $taxon_input = explode(',', $request->query('taxa'));
             $query->whereIn('o.sciName', $taxon_input);
         }
 
-        if($request->query('elevhigh') && $request->query('elevlow')) {
-            $query->where(function(Builder $where) {
+        if ($request->query('elevhigh') && $request->query('elevlow')) {
+            $query->where(function (Builder $where) {
                 $where
                     ->where('maximumDepthInMeters', '<=', $request->query('elevhigh'))
                     ->where('minimumDepthInMeters', '>=', $request->query('elevlow'));

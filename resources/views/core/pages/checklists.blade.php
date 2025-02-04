@@ -31,7 +31,7 @@
                 @endif
             </div>
             @endif
-            <li>
+            <li class="text-sm">
                 <x-link href="{{ url(config('portal.name') . '/checklists/checklist.php?clid=' . $checklist->clid . ($checklist->pid? '&pid=' . $checklist->pid: ''))}}">
                     {{ $checklist->name }}
                 </x-link>

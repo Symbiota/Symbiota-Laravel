@@ -6,7 +6,6 @@ use App\Http\Controllers\RegistrationController;
 use App\Models\Occurrence;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
