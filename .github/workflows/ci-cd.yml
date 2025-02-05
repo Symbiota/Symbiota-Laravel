@@ -27,9 +27,13 @@ jobs:
     - name: 'Build Docker Resources'
       run : |
         echo --- Building and Starting up docker ---
-        docker compose up -d
+        docker compose pull
+        docker compose up -d --no-build
         sleep 30
         echo --- Containers Up ---
+
+    - name: Check Containers
+      run: docker ps
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: docker exec symbiota-laravel-web-1 php artisan test
