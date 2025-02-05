@@ -29,7 +29,7 @@ jobs:
         echo --- Building and Starting up docker ---
         docker compose pull
         docker compose up -d --no-build
-        sleep 30
+        sleep 100
         echo --- Containers Up ---
 
     - name: Check Containers
