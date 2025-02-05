@@ -16,7 +16,7 @@ class Occurrence extends Model {
 
     public $timestamps = false;
 
-    public static $public_fields = [
+    public static $searchable_fields = [
         'collid',
         'dbpk',
         'basisOfRecord',
@@ -116,7 +116,107 @@ class Occurrence extends Model {
         'dateEntered',
     ];
 
-    protected static $hidden_fields = [
+    protected $fillable = [
+        'collid',
+        'dbpk',
+        'basisOfRecord',
+        'occurrenceID',
+        'catalogNumber',
+        'otherCatalogNumbers',
+        'family',
+        'scientificName',
+        'sciname',
+        'genus',
+        'specificEpithet',
+        'datasetID',
+        'organismID',
+        'taxonRank',
+        'infraspecificEpithet',
+        'institutionCode',
+        'collectionCode',
+        'scientificNameAuthorship',
+        'taxonRemarks',
+        'identifiedBy',
+        'dateIdentified',
+        'identificationReferences',
+        'identificationRemarks',
+        'identificationQualifier',
+        'typeStatus',
+        'recordedBy',
+        'recordNumber',
+        'associatedCollectors',
+        'eventDate',
+        'eventDate2',
+        'verbatimEventDate',
+        'eventTime',
+        'habitat',
+        'substrate',
+        'fieldNotes',
+        'fieldNumber',
+        'eventID',
+        'occurrenceRemarks',
+        'informationWithheld',
+        'dataGeneralizations',
+        'associatedTaxa',
+        'dynamicProperties',
+        'verbatimAttributes',
+        'behavior',
+        'reproductiveCondition',
+        'cultivationStatus',
+        'establishmentMeans',
+        'lifeStage',
+        'sex',
+        'individualCount',
+        'samplingProtocol',
+        'samplingEffort',
+        'preparations',
+        'locationID',
+        'continent',
+        'parentLocationID',
+        'country',
+        'stateProvince',
+        'county',
+        'municipality',
+        'waterBody',
+        'islandGroup',
+        'island',
+        'countryCode',
+        'locality',
+        'localitySecurity',
+        'localitySecurityReason',
+        'decimalLatitude',
+        'decimalLongitude',
+        'geodeticDatum',
+        'coordinateUncertaintyInMeters',
+        'footprintWKT',
+        'locationRemarks',
+        'verbatimCoordinates',
+        'georeferencedBy',
+        'georeferencedDate',
+        'georeferenceProtocol',
+        'georeferenceSources',
+        'georeferenceVerificationStatus',
+        'georeferenceRemarks',
+        'minimumElevationInMeters',
+        'maximumElevationInMeters',
+        'verbatimElevation',
+        'minimumDepthInMeters',
+        'maximumDepthInMeters',
+        'verbatimDepth',
+        'availability',
+        'disposition',
+        'storageLocation',
+        'modified',
+        'language',
+        'processingStatus',
+        'recordEnteredBy',
+        'duplicateQuantity',
+        'labelProject',
+        'recordID',
+        'dateEntered',
+    ];
+
+    protected $hidden = [
         'collection',
         'scientificName',
         'recordedbyid',
@@ -134,16 +234,6 @@ class Occurrence extends Model {
         'genericColumn1',
         'genericColumn2',
     ];
-
-    protected $fillable = [];
-
-    protected $hidden = [];
-
-    public function __construct() {
-        parent::__construct();
-        $this->fillable = self::$public_fields;
-        $this->hidden = self::$hidden_fields;
-    }
 
     public static $snakeAttributes = false;
 
@@ -214,7 +304,7 @@ class Occurrence extends Model {
         $ALLOW_ARRAY_SEARCH = ['collid' => true];
 
         foreach ($params as $name => $value) {
-            if ((in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) && $value) {
+            if (in_array($name, self::$searchable_fields) && $value) {
                 if (is_array($value)) {
                     if (! empty($value) && array_key_exists($name, $ALLOW_ARRAY_SEARCH)) {
                         $query->whereIn('c.collid', $value);
@@ -238,7 +328,7 @@ class Occurrence extends Model {
             $type = param('q_customtype' . $i);
             $value = param('q_customvalue' . $i);
 
-            if (in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) {
+            if (in_array($name, self::$searchable_fields)) {
                 match ($type) {
                     'EQUALS' => $query->where($name, '=', $value),
                     'NOT_EQUALS' => $query->where($name, '!=', $value),
@@ -257,8 +347,8 @@ class Occurrence extends Model {
 
         // Decide How Values should be sorted
         if ($sort = param('sort')) {
-            if (($idx = array_search($sort, self::$public_fields)) > 0) {
-                $query->orderByRaw('ISNULL(o.' . self::$public_fields[$idx] . ') ASC');
+            if (($idx = array_search($sort, self::$searchable_fields)) > 0) {
+                $query->orderByRaw('ISNULL(o.' . self::$searchable_fields[$idx] . ') ASC');
             }
             $query->orderBy(
                 $sort,
