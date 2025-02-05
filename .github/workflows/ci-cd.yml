@@ -31,7 +31,8 @@ jobs:
         docker compose up -d --no-build
         echo --- Containers Up ---
 
-    - name: Check Containers
+    - name: Debugging Container Failure
+      if: failure()
       run: |
         docker ps
         docker logs symbiota-laravel-mariadb-1
