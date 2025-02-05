@@ -27,8 +27,8 @@ jobs:
     - name: 'Build Docker Resources'
       run : |
         echo --- Building and Starting up docker ---
-        WWWUSER="1000" WWWGROUP="1000" DB_CONNECTION="mariadb" DB_HOST="mariadb" DB_PORT="3306" DB_DATABASE="symbdb" DB_USERNAME="root" DB_PASSWORD="buildpassword" FORWARD_DB_PORT=3306 docker compose up -d
-        sleep 15
+        WWWUSER="1000" WWWGROUP="1000" DB_CONNECTION="mariadb" DB_HOST="mariadb" DB_PORT="3306" DB_DATABASE="symbdb" DB_USERNAME="symbiota-user" DB_PASSWORD="buildpassword" FORWARD_DB_PORT=3306 docker compose up -d
+        sleep 30
         echo --- Containers Up ---
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
