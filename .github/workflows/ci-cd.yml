@@ -32,7 +32,6 @@ jobs:
         echo --- Containers Up ---
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      run: php artisan test
-
+      run: docker exec symbiota-laravel-web-1 php artisan test
         #- name: Run Playwright tests
         #run: npx playwright test
