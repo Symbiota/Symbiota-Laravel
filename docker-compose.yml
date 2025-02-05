@@ -55,7 +55,9 @@ services:
                 - '--connect'
                 - '--innodb_initialized'
             retries: 3
-            timeout: 5s
+            interval: 10s
+            start_period: 30s
+            timeout: 10s
     memcached:
         image: 'memcached:alpine'
         ports:
