@@ -33,7 +33,12 @@ jobs:
         echo --- Containers Up ---
 
     - name: Check Containers
-      run: docker ps
+      run: |
+        docker ps
+        docker logs symbiota-laravel-mariadb-1
+
+    - name: Generate Application Key
+      run: docker exec symbiota-laravel-web-1 php artisan key:generate
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: docker exec symbiota-laravel-web-1 php artisan test
