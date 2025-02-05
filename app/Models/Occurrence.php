@@ -202,7 +202,7 @@ class Occurrence extends Model {
     /* Produces DB query builder object based on a request for general purpose use
      * This Function's only depedency on eloquent is the protected variables
      */
-    public static function buildSelectQuery(Array $params) {
+    public static function buildSelectQuery(array $params) {
 
         function param(string $param) {
             return $params[$param] ?? null;
@@ -211,12 +211,12 @@ class Occurrence extends Model {
         $query = DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collid', '=', 'o.collid');
 
-        $ALLOW_ARRAY_SEARCH = [ 'collid' => true ];
+        $ALLOW_ARRAY_SEARCH = ['collid' => true];
 
         foreach ($params as $name => $value) {
             if ((in_array($name, self::$public_fields) || in_array($name, self::$hidden_fields)) && $value) {
-                if(is_array($value)) {
-                    if(!empty($value) && array_key_exists($name, $ALLOW_ARRAY_SEARCH)) {
+                if (is_array($value)) {
+                    if (! empty($value) && array_key_exists($name, $ALLOW_ARRAY_SEARCH)) {
                         $query->whereIn('c.collid', $value);
                     }
                 } else {

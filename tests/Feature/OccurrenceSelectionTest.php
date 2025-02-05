@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Institution;
 use App\Models\Collection;
+use App\Models\Institution;
 use App\Models\Occurrence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
@@ -33,10 +34,10 @@ class OccurrenceSelectionTest extends TestCase {
         assertTrue($inserted);
 
         $occurrence = Occurrence::buildSelectQuery([
-            'collid' => $collection->collid
+            'collid' => $collection->collid,
         ])
-        ->select('*')
-        ->first();
+            ->select('*')
+            ->first();
 
         assertEquals($occurrence->collid, $params['collid']);
         assertEquals($occurrence->locality, $params['locality']);
