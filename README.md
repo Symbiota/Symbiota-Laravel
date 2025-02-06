@@ -4,7 +4,7 @@
     </a>
 </p>
 
-![testing workflow](https://github.com/BioKIC/Symbiota-Laravel/actions/workflows/laravel.yml/badge.svg)
+![testing workflow](https://github.com/BioKIC/Symbiota-Laravel/actions/workflows/ci-cd.yml/badge.svg)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 ## Notice
