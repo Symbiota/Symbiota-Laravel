@@ -102,7 +102,7 @@ return [
         ],
 
         'scanOptions' => [
-            /**
+            /**l5
              * Configuration for default processors. Allows to pass processors configuration to swagger-php.
              *
              * @link https://zircote.github.io/swagger-php/reference/processors.html
@@ -156,7 +156,7 @@ return [
              * @note This option overwrites `paths.excludes`
              * @see \OpenApi\scan
              */
-            'exclude' => [],
+            'exclude' => [base_path('app/Http/OldControllers')],
 
             /*
              * Allows to generate specs either for OpenAPI 3.0.0 or OpenAPI 3.1.0.

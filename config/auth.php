@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        /* Currently not using sanctum tokens but would be needed if a mobile or SPA support
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ]
+        */
     ],
 
     /*

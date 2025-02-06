@@ -68,7 +68,11 @@ Route::get('/collections/search', function (Request $request) {
 
 Route::view('/taxon', 'pages/taxon/profile');
 
-Route::view('/user/profile', 'pages/user/profile');
+Route::get('/user/profile', function (Request $request) {
+    $tokens = $request->user()->tokens;
+
+    return view('pages/user/profile', ['user_tokens' => $tokens]);
+});
 
 // Collection
 Route::get('/collections/list', function (Request $request) {
@@ -194,6 +198,27 @@ Route::get('/signup', RegistrationController::class);
 */
 
 Route::get('/logout', [LoginController::class, 'logout']);
+
+Route::post('/token/create', function (Request $request) {
+    $user = $request->user();
+
+    $token = $user->createToken($request->token_name);
+
+    return view(
+        'pages/user/profile',
+        ['user_tokens' => $user->tokens ?? [], 'created_token' => $token->plainTextToken])
+        ->fragment('tokens');
+});
+
+Route::delete('/token/delete/{id}', function (int $token_id) {
+    $user = request()->user();
+    $token = $user->tokens()->where('id', $token_id)->delete();
+
+    return view(
+        'pages/user/profile',
+        ['user_tokens' => $user->tokens ?? []])
+        ->fragment('tokens');
+});
 
 Route::get('/media/search', function (Request $request) {
     $media = [];

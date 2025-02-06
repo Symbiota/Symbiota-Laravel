@@ -12,7 +12,7 @@
         <div>
             @foreach (request()->user()->recoveryCodes() as $code)
             <div>
-            {{ $code }}
+                {{ $code }}
             </div>
             @endforeach
         </div>
@@ -55,4 +55,50 @@
         @endforeach
     </div>
     @endif
+    <div>
+        @fragment('tokens')
+        <div id="tokens-container" class="border border-base-300">
+            <div class="p-2 flex items-center gap-2">
+                <div class="text-xl font-bold flex-grow">Personal access tokens </div>
+                <form class="m-0" hx-swap="outerHTML" hx-target="#tokens-container" hx-post="{{ url('token/create') }}">
+                    <input type="hidden" name="token_name" value="new_token">
+                    @csrf
+                    <x-button>Generate new token</x-button>
+                </form>
+            </div>
+            @isset($created_token)
+            <div class="mt-4 p-4 border-t border-base-300">
+                Generated api key:
+                <span class="bg-base-300 py-1 px-2 rounded-md"> {{ $created_token }}</span>
+                <div class="mt-1 text-warning font-bold">
+                    This key cannot be viewed again make sure to keep it somewhere safe
+                </div>
+            </div>
+            @endisset
+            @foreach ($user_tokens as $token)
+            <div class="p-4 border-t border-base-300">
+                <div class="flex items-center gap-4">
+                    <div class="font-bold flex-grow">
+                        <span>{{ $token->name }}</span>
+                        @if($token->abilities)
+                        <i class="text-base opacity-50">- {{ implode(',', $token->abilities) }}</i>
+                        @endif
+                    </div>
+                    @if($token->last_used_at)
+                    <div>Last used {{ $token->last_used_at }}</div>
+                    @endif
+                    <x-button variant="error" hx-swap="outerHTML" hx-include="input[name='_token']"
+                        hx-target="#tokens-container"
+                        hx-delete="{{url('token/delete/' . $token->id)}}">Delete</x-button>
+                </div>
+                @if($token->expires_at)
+                <div>Expires {{ $token->expires_at }}</div>
+                @else
+                <div class="text-warning font-bold underline">This token has no expiration date.</div>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        @endfragment
+    </div>
 </x-layout>
