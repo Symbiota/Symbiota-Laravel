@@ -66,6 +66,15 @@
                     <x-button>Generate new token</x-button>
                 </form>
             </div>
+            @isset($created_token)
+            <div class="mt-4 p-4 border-t border-base-300">
+                Generated api key:
+                <span class="bg-base-300 py-1 px-2 rounded-md"> {{ $created_token }}</span>
+                <div class="mt-1 text-warning font-bold">
+                    This key cannot be viewed again make sure to keep it somewhere safe
+                </div>
+            </div>
+            @endisset
             @foreach ($user_tokens as $token)
             <div class="p-4 border-t border-base-300">
                 <div class="flex items-center gap-4">
@@ -78,7 +87,9 @@
                     @if($token->last_used_at)
                     <div>Last used {{ $token->last_used_at }}</div>
                     @endif
-                    <x-button variant="error" hx-swap="outerHTML" hx-include="input[name='_token']" hx-target="#tokens-container" hx-delete="{{url('token/delete/' . $token->id)}}">Delete</x-button>
+                    <x-button variant="error" hx-swap="outerHTML" hx-include="input[name='_token']"
+                        hx-target="#tokens-container"
+                        hx-delete="{{url('token/delete/' . $token->id)}}">Delete</x-button>
                 </div>
                 @if($token->expires_at)
                 <div>Expires {{ $token->expires_at }}</div>

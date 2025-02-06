@@ -208,7 +208,7 @@ Route::post('/token/create', function (Request $request) {
 
     return view(
         'pages/user/profile',
-        ['user_tokens' => $user->tokens ?? []])
+        ['user_tokens' => $user->tokens ?? [], 'created_token' => $token->plainTextToken])
     ->fragment('tokens');
 });
 
