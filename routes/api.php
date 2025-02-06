@@ -99,13 +99,15 @@ Route::group(['prefix' => 'v3'], function () {
     */
     Route::group(['prefix' => 'occurrence'], function () {
         Route::get('search', function (Request $request) {
-            $record_limit = $request->query('limit') > 1000? 1000: $request->query('limit');
+            $record_limit = $request->query('limit') > 1000 ? 1000 : $request->query('limit');
 
             $query = Occurrence::buildSelectQuery($request->all());
+
             return $query->select('*')->limit(100)->get();
         });
         Route::get('{id}', function (int $occid) {
             $query = Occurrence::buildSelectQuery(['occid' => $occid]);
+
             return $query->select('*')->first();
         });
     });
@@ -128,54 +130,42 @@ Route::group(['prefix' => 'v3'], function () {
     | Collections API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'collection'], function () {
-
-    });
+    Route::group(['prefix' => 'collection'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Checklist API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'checklist'], function () {
-
-    });
+    Route::group(['prefix' => 'checklist'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Inventory API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'inventory'], function () {
-
-    });
+    Route::group(['prefix' => 'inventory'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Installation API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'installation'], function () {
-
-    });
+    Route::group(['prefix' => 'installation'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Media API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'media'], function () {
-
-    });
+    Route::group(['prefix' => 'media'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Taxonomy API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'taxonomy'], function () {
-
-    });
+    Route::group(['prefix' => 'taxonomy'], function () {});
 });
 
 /*

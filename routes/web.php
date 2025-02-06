@@ -8,12 +8,10 @@ use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-use PHPUnit\Event\Code\Throwable;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +68,7 @@ Route::get('/collections/search', function (Request $request) {
 
 Route::view('/taxon', 'pages/taxon/profile');
 
-Route::get('/user/profile', function(Request $request){
+Route::get('/user/profile', function (Request $request) {
     $tokens = $request->user()->tokens;
 
     return view('pages/user/profile', ['user_tokens' => $tokens]);
@@ -202,24 +200,24 @@ Route::get('/signup', RegistrationController::class);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::post('/token/create', function (Request $request) {
-    $user =  $request->user();
+    $user = $request->user();
 
     $token = $user->createToken($request->token_name);
 
     return view(
         'pages/user/profile',
         ['user_tokens' => $user->tokens ?? [], 'created_token' => $token->plainTextToken])
-    ->fragment('tokens');
+        ->fragment('tokens');
 });
 
 Route::delete('/token/delete/{id}', function (int $token_id) {
-    $user =  request()->user();
+    $user = request()->user();
     $token = $user->tokens()->where('id', $token_id)->delete();
 
     return view(
         'pages/user/profile',
         ['user_tokens' => $user->tokens ?? []])
-    ->fragment('tokens');
+        ->fragment('tokens');
 });
 
 Route::get('/media/search', function (Request $request) {
