@@ -24,9 +24,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/**
+ * @OA\Info(title="My First API", version="0.1")
+ */
+Route::get('/user', function (Request $request) {
     return $request->user();
-});
+})->middleware('auth:api');
 
 Route::get('/taxa/search', function (Request $request) {
     $sciname = $request->query('taxa');
@@ -88,11 +91,6 @@ Route::get('/', function () {
     return app()->version();
 });
 
-Route::get('/v2', function () {
-    //return redirect('/v2/documentation');
-    return view('/vendor/l5-swagger/index');
-});
-
 Route::group(['prefix' => 'v3'], function () {
     /*
     |--------------------------------------------------------------------------
@@ -109,6 +107,19 @@ Route::group(['prefix' => 'v3'], function () {
         Route::get('{id}', function (int $occid) {
             $query = Occurrence::buildSelectQuery(['occid' => $occid]);
             return $query->select('*')->first();
+        });
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Token API
+    |--------------------------------------------------------------------------
+    */
+    Route::group(['prefix' => 'tokens'], function () {
+        Route::post('create', function (Request $request) {
+            $token = $request->user()->createToken($request->token_name);
+
+            return ['token' => $token->plainTextToken];
         });
     });
 
@@ -167,6 +178,7 @@ Route::group(['prefix' => 'v3'], function () {
     });
 });
 
+/*
 Route::group(['prefix' => 'v2'], function () {
     Route::get('collection', [CollectionController::class, 'showAllCollections']);
     Route::get('collection/{id}', [CollectionController::class, 'showOneCollection']);
@@ -206,3 +218,4 @@ Route::group(['prefix' => 'v2'], function () {
     //Route::get('taxonomy/{id}/description',  [TaxonomyController::class, 'showAllDescriptions']);
     //Route::get('taxonomy/{id}/description/{id}',  [TaxonomyDescriptionController::class, 'showOneDescription']);
 });
+*/
