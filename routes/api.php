@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\InstallationController;
 use App\Http\Controllers\InventoryController;
@@ -137,7 +138,10 @@ Route::group(['prefix' => 'v3'], function () {
     | Checklist API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'checklist'], function () {});
+    Route::group(['prefix' => 'checklists'], function () {
+        Route::get('/', [ChecklistController::class, 'getChecklistsData']);
+        Route::get('/{clid}', [ChecklistController::class, 'getChecklistData']);
+    });
 
     /*
     |--------------------------------------------------------------------------
