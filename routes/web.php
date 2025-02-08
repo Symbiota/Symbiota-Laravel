@@ -38,7 +38,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /*
 |--------------------------------------------------------------------------
-| Checklist Routes
+| Taxon Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
@@ -47,7 +47,7 @@ Route::group(['prefix' => 'taxon'], function () {
 
 /*
 |--------------------------------------------------------------------------
-| Checklist Routes
+| Checklists Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'checklists'], function () {

@@ -27,6 +27,8 @@
             </p>
         </div>
     </x-accordion>
+            {{-- TODO (Logan) scope to clid --}}
+        <x-taxa-search />
     <div class="grid grid-cols-2">
         <div>
             <div>Families: [Count]</div>
@@ -35,29 +37,27 @@
             <div>Total Taxa: [Count]</div>
 
             <div>
-                <div class="text-lg font-bold">[Family 1]</div>
+            @php $previous @endphp
+            @foreach ($taxons as $taxon)
+                @if($loop->first || $taxons[$loop->index - 1]->family !== $taxon->family)
+                    <div class="text-lg font-bold">{{ $taxon->family }}</div>
+                @endif
                 <div class="pl-4">
-                    <div>
-                        <x-link href="#">[Taxa 1]</x-link>
-                        <i class="ml-4 fa-solid fa-list"></i>
-                    </div>
-                    <div>
-                        <x-link href="#">[Taxa 2]</x-link>
-                        <i class="ml-4 fa-solid fa-list"></i>
-                    </div>
+                    <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">{{ $taxon->sciname }}</x-link>
+                    <i class="ml-4 fa-solid fa-list"></i>
                 </div>
+
+            @endforeach
             </div>
         </div>
         <fieldset class="flex flex-col gap-2">
             <legend class="text-lg font-bold">Options</legend>
             <x-link href="">Open Symbiota Key</x-link>
             <x-link href="">Games</x-link>
-            {{-- TODO (Logan) scope to clid --}}
-            <x-taxa-search />
-            <x-select>
-                <option>Original Checklist</option>
-                <option>Central Thesaurus</option>
-            </x-select>
+            <x-select class="w-64" default="0" :items="[
+                ['title' => 'Original Checklist', 'value' => 'Original Checklist', 'disabled' => false],
+                ['title' => 'Central Thesaurus', 'value' => 'Central Thesaurus', 'disabled' => false]
+            ]"/>
             <div class="text-lg font-bold">Taxonmic Filter</div>
             <x-checkbox label="Display Synonyms" />
             <x-checkbox label="Common Names" />
