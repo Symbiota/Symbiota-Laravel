@@ -1,5 +1,10 @@
 @props(['' => $checklist])
 <x-layout class="grid grid-cols-1 gap-4">
+    <x-breadcrumbs :items="[
+        ['title' => 'Home', 'href' => url('') ],
+        ['title' => $checklist->projname, 'href' => url( config('portal.name') . '/projects/index.php?pid='. $checklist->pid) ],
+        $checklist->name
+    ]"/>
     <div class="flex items-center">
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
         <div class="flex flex-grow justify-end gap-4">
