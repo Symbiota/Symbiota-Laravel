@@ -80,10 +80,10 @@ Route::group(['prefix' => '/occurrence'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/collections'], function () {
-    Route::get('/{collid}', [CollectionController::class, 'collection']);
     Route::get('/search', [CollectionController::class, 'searchPage']);
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
+    Route::get('/{collid}', [CollectionController::class, 'collection']);
 });
 
 /*
