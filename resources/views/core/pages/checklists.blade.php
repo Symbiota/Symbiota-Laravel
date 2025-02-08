@@ -1,5 +1,9 @@
 @props(['checklists' => []])
 <x-layout class="grid grid-cols-1 gap-4">
+    <x-breadcrumbs :items="[
+        ['title' => 'Home', 'href' => url('') ],
+        'Species Inventories'
+    ]"/>
     <h1 class="text-4xl font-bold text-primary">Species Inventories</h1>
 
     @php
@@ -11,7 +15,8 @@
         <div>
             @if ($prev_pid !== $checklist->pid)
             @php $prev_pid = $checklist->pid; @endphp
-            <br>
+
+            @if(!$loop->first) <br> @endif
             <div class="flex items-center gap-4">
                 @if($checklist->projname)
                 <x-link
