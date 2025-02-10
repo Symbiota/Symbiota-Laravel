@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller {
@@ -23,6 +22,6 @@ class ProjectController extends Controller {
     }
 
     public static function project(int $pid) {
-        view('pages/project',self::getProjectData($pid));
+        view('pages/project', self::getProjectData($pid));
     }
 }

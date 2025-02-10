@@ -14,6 +14,7 @@ class CollectionController extends Controller {
 
     public static function searchPage(Request $request) {
         $collections = DB::table('omcollections')->select('*')->get();
+
         return view('pages/collections', ['collections' => $collections]);
     }
 
