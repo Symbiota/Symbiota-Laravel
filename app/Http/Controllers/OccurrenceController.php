@@ -15,7 +15,6 @@ class OccurrenceController extends Controller {
         return view('pages/occurrence/profile', ['occurrence' => $occurrence]);
     }
 
-
     public static function editPage(Request $request) {
         $occurrence = DB::table('omoccurrences as o')
             ->select('*')
