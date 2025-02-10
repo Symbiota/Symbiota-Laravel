@@ -1,4 +1,5 @@
 {
+  "name": "Symbiota-Laravel",
   "private": true,
   "type": "module",
   "scripts": {
