@@ -38,8 +38,17 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: docker exec symbiota-laravel-web-1 php artisan test
 
+    - name: Install Playwright Npm Package
+      run: docker exec symbiota-laravel-web-1 npm install -D
+
     - name: Install Playwright Browsers
-      run: docker exec symbiota-laravel-web-1 npx playwright install
+      run: docker exec symbiota-laravel-web-1 npx playwright install --with-deps
 
     - name: Run Playwright Tests
       run: docker exec symbiota-laravel-web-1 npx playwright test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
