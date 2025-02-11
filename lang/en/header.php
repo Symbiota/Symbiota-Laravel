@@ -18,7 +18,7 @@ return [
     'map' => 'Map',
     'map_search' => 'Map Search',
     'taxonomic_explorer' => 'Taxonomic Explorer',
-    'images' => 'Images',
+    'media' => 'Media',
     'image_browser' => 'Image Browser',
     'image_search' => 'Image Search',
     'species_checklists' => 'Species Checklists',

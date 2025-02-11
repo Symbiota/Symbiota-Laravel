@@ -19,7 +19,7 @@ return [
     'map' => 'Mapa',
     'map_search' => 'Búsqueda Mapa',
     'taxonomic_explorer' => 'Explorador Taxon&oacute;mico',
-    'images' => 'Im&aacute;genes',
+    'media' => 'Multimedia',
     'image_browser' => 'Navegador de Im&aacute;genes',
     'image_search' => 'Búsqueda de Im&aacute;genes',
     'species_checklists' => 'Lista de Especies',
