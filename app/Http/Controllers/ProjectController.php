@@ -22,6 +22,10 @@ class ProjectController extends Controller {
     }
 
     public static function project(int $pid) {
-        view('pages/project', self::getProjectData($pid));
+        return view('pages/project', self::getProjectData($pid));
+    }
+
+    public static function EditProject(int $pid) {
+        return view('pages/projects/edit', self::getProjectData($pid));
     }
 }

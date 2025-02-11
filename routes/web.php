@@ -59,8 +59,9 @@ Route::group(['prefix' => 'checklists'], function () {
 | Project Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => '/project'], function () {
-    Route::get('/{clid}', [ProjectController::class, 'project']);
+Route::group(['prefix' => '/projects'], function () {
+    Route::get('/{pid}', [ProjectController::class, 'project']);
+    Route::get('/{pid}/edit', [ProjectController::class, 'editProject']);
 });
 
 /*

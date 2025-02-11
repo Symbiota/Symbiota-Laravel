@@ -20,7 +20,7 @@
             <div class="flex items-center gap-4">
                 @if($checklist->projname)
                 <x-link
-                    href="{{url(config('portal.name') . '/projects/index.php?pid='.$checklist->pid)}}"
+                    href="{{url('/projects/' . $checklist->pid)}}"
                     class="text-2xl font-bold text-primary">
                     {{$checklist->projname ?? 'Misc'}}
                 </x-link>
