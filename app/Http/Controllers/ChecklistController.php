@@ -31,7 +31,7 @@ class ChecklistController extends Controller {
         $sub_query = DB::table('fmchklsttaxalink')->where('clid', $clid)->select('tid');
 
         // Optionally grabs
-        if($checklist->type != 'rarespp') {
+        if ($checklist->type != 'rarespp') {
             $parent_query = DB::table('fmchklsttaxalink as ctl')
                 ->join('taxstatus as ts', 'ts.tid', 'ctl.tid')
                 ->join('taxa as t', 't.tid', 'ts.tid')
