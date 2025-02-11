@@ -46,7 +46,7 @@ class ChecklistController extends Controller {
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
             ->orderBy('family')
             ->orderBy('sciname')
-            ->select('t.tid', 'family', 'sciname')
+            ->select('t.tid', 'family', 'sciname', 'unitName1', 'unitName2', 'rankId')
             ->get();
 
         return view('pages/checklist/profile', ['checklist' => $checklist, 'taxons' => $taxons]);
