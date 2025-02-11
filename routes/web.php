@@ -41,7 +41,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
-    Route::view('/', 'pages/taxon/profile');
+    Route::view('/{tid}', 'pages/taxon/profile');
 });
 
 /*
