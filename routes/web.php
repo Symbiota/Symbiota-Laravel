@@ -37,16 +37,16 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /*
 |--------------------------------------------------------------------------
-| Checklist Routes
+| Taxon Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
-    Route::view('/', 'pages/taxon/profile');
+    Route::view('/{tid}', 'pages/taxon/profile');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Checklist Routes
+| Checklists Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'checklists'], function () {
@@ -59,8 +59,9 @@ Route::group(['prefix' => 'checklists'], function () {
 | Project Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => '/project'], function () {
-    Route::get('/{clid}', [ProjectController::class, 'project']);
+Route::group(['prefix' => '/projects'], function () {
+    Route::get('/{pid}', [ProjectController::class, 'project']);
+    Route::get('/{pid}/edit', [ProjectController::class, 'editProject']);
 });
 
 /*
@@ -79,10 +80,10 @@ Route::group(['prefix' => '/occurrence'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/collections'], function () {
-    Route::get('/{collid}', [CollectionController::class, 'collection']);
     Route::get('/search', [CollectionController::class, 'searchPage']);
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
+    Route::get('/{collid}', [CollectionController::class, 'collection']);
 });
 
 /*

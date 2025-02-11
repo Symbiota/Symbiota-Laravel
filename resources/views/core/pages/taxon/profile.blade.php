@@ -1,3 +1,4 @@
+@props(['taxon'])
 <x-layout class="grid grid-col-1 gap-4">
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">Taxon Name (Author)</h1>

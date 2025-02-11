@@ -2,6 +2,7 @@
         popoverOpen: false,
         popoverArrow: true,
         popoverPosition: 'bottom',
+        popoverDirection: 'center',
         popoverHeight: 0,
         popoverOffset: 8,
         popoverHeightCalculate() {
@@ -16,7 +17,23 @@
                 that.popoverPositionCalculate();
             });
         },
+        popoverDirectionCalculate() {
+            const inner_bounds = this.$refs.popoverInner.getBoundingClientRect()
+            if(inner_bounds.right >= window.innerWidth || inner_bounds.left < 0) {
+                if(inner_bounds.left < 0) {
+                    this.popoverDirection = 'right';
+                } else if(inner_bounds.right >= window.innerWidth) {
+                    this.popoverDirection = 'left';
+                } else {
+                    this.popoverDirection = 'center';
+                }
+            }
+
+            console.log(this.popoverDirection);
+        },
         popoverPositionCalculate(){
+            setTimeout(this.popoverDirectionCalculate.bind(this), 10)
+
             if(window.innerHeight < (this.$refs.popoverButton.getBoundingClientRect().top + this.$refs.popoverButton.offsetHeight + this.popoverOffset + this.popoverHeight)){
                 this.popoverPosition = 'top';
             } else {
@@ -29,8 +46,11 @@
         window.addEventListener('resize', function(){
             popoverPositionCalculate();
         });
+
         $watch('popoverOpen', function(value){
-            if(value){ popoverPositionCalculate(); document.getElementById('width').focus();  }
+            if(value) {
+                popoverPositionCalculate();
+            }
         });
     "
     class="relative">
@@ -45,10 +65,27 @@
         @click.away="popoverOpen=false;"
         @keydown.escape.window="popoverOpen=false"
         :class="{ 'top-0 mt-12' : popoverPosition == 'bottom', 'bottom-0 mb-12' : popoverPosition == 'top' }"
-        class="absolute w-[300px] max-w-lg -translate-x-1/2 left-1/2 z-10" x-cloak>
-        <div x-ref="popoverInner" x-show="popoverOpen" class="w-full p-4 bg-white border rounded-md shadow-sm border-base-300">
-            <div x-show="popoverArrow && popoverPosition == 'bottom'" class="absolute top-0 inline-block w-5 mt-px overflow-hidden -translate-x-2 -translate-y-2.5 left-1/2"><div class="w-2.5 h-2.5 origin-bottom-left transform rotate-45 bg-white border-t border-l rounded-sm"></div></div>
-            <div x-show="popoverArrow  && popoverPosition == 'top'" class="absolute bottom-0 inline-block w-5 mb-px overflow-hidden -translate-x-2 translate-y-2.5 left-1/2"><div class="w-2.5 h-2.5 origin-top-left transform -rotate-45 bg-white border-b border-l rounded-sm"></div></div>
+        x-cloak
+        {{ $attributes->twMerge("absolute w-[300px] max-w-lg -translate-x-1/2 left-1/2 z-10") }}
+        >
+        <div x-ref="popoverInner" x-show="popoverOpen && popoverDirection" class="w-full p-4 bg-white border rounded-md shadow-sm border-base-300" :class="{'translate-x-1/2 -ml-4' : popoverDirection == 'right', '-translate-x-1/2 ml-4' : popoverDirection == 'left'}">
+            <div x-show="popoverArrow" :class="{
+                'left-0' : popoverDirection == 'right',
+                'right-0' : popoverDirection == 'left',
+                '-translate-x-2 left-1/2' : popoverDirection == 'center',
+                'top-0 mt-px -translate-y-2.5' : popoverPosition == 'bottom',
+                'bottom-0 mb-px translate-y-2.5' : popoverPosition == 'top'
+                }"
+                class="absolute inline-block w-fit overflow-hidden"
+                >
+                <div class="w-2.5 h-2.5 bg-white rounded-sm" :class="{
+                    'origin-top-left -rotate-45 border-b border-l': popoverPosition == 'top',
+                    'origin-bottom-left rotate-45 border-t border-l': popoverPosition == 'bottom',
+                    'mr-3.5': popoverDirection == 'left',
+                    'ml-2': popoverDirection == 'right'
+                }"
+                ></div>
+            </div>
             {{ $slot }}
         </div>
     </div>
