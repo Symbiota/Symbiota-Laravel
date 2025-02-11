@@ -1,4 +1,4 @@
-@props(['project', 'checklists' => []])
+@props(['project'])
 <x-layout>
     <div class="mb-4">
         <x-breadcrumbs :items="[
@@ -11,12 +11,26 @@
     <div class="flex items-center mb-4">
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
         <div class="flex flex-grow justify-end gap-4">
-            <a href="{{ url('projects/' . $project->pid . '/edit') }}">
+            <a href="{{ url('projects/' . $project->pid) }}">
                 <i class="flex-end fas fa-edit"></i>
-                Edit
+                Public View
             </a>
         </div>
     </div>
+
+    <x-tabs :tabs="['Metadata', 'Inventory Managers', 'Checklist Management']">
+        <div>
+            TODO metadata
+        </div>
+        <div>
+            TODO Inventory Managers
+        </div>
+        <div>
+           Checklist Management
+        </div>
+    </x-tabs>
+
+
     {{-- Todo Add Edit and when to show mapping button logic --}}
     <div>
         @if(isset($project->managers) && $project->managers)
