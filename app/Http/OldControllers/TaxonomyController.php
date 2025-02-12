@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\OldControllers;
 
 use App\Models\Taxonomy;
 use Illuminate\Http\Request;
