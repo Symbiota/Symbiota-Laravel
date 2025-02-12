@@ -7,9 +7,11 @@ use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaxonomyController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -41,7 +43,8 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
-    Route::view('/{tid}', 'pages/taxon/profile');
+    Route::get('/{tid}', [TaxonomyController::class, 'taxon']);
+    Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
 });
 
 /*
