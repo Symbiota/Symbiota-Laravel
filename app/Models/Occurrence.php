@@ -320,7 +320,7 @@ class Occurrence extends Model {
         for ($i = 1; $i < 11; $i++) {
             // Create Constant for this somewhere
             $name = $params['q_customfield' . $i] ?? null;
-            $type = $params['q_customtype' . $i] ?? null ;
+            $type = $params['q_customtype' . $i] ?? null;
             $value = $params['q_customvalue' . $i] ?? null;
 
             if (in_array($name, self::$searchable_fields)) {
@@ -389,7 +389,7 @@ class Occurrence extends Model {
             //TODO (Logan) Figure out when this is needed
             $tax_auth_id = $params['taxauthid'] ?? 2;
 
-            if(is_numeric($taxa)) {
+            if (is_numeric($taxa)) {
                 $query->where('tidInterpreted', $taxa);
             } else {
                 //Todo figure out Occurence Taxa Manager
@@ -398,7 +398,7 @@ class Occurrence extends Model {
             }
         }
 
-        if (($elev_high = $params['elevhigh'] ?? false) && ($elev_low = $elev['elevlow'] ?? false) ) {
+        if (($elev_high = $params['elevhigh'] ?? false) && ($elev_low = $elev['elevlow'] ?? false)) {
             $query->where(function (Builder $where) {
                 $where
                     ->where('maximumDepthInMeters', '<=', $elev_high)
