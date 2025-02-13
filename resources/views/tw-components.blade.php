@@ -169,5 +169,6 @@
                 'disabled' => false
             ],
         ]" />
+        <x-image-card src="https://collections.nmnh.si.edu/media/?i=10333969&width=300" title="Pinus albicaulis Engelm."/>
     </div>
 </x-layout>
