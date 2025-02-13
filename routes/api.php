@@ -169,7 +169,9 @@ Route::group(['prefix' => 'v3'], function () {
     | Taxonomy API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'taxonomy'], function () {});
+    Route::group(['prefix' => 'taxonomy'], function () {
+        Route::get('{tid}/children', [TaxonomyController::class, 'getDirectChildren']);
+    });
 });
 
 /*

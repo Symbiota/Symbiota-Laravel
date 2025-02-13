@@ -1,4 +1,4 @@
-@props(['taxon', 'parents', 'common_names'])
+@props(['taxon', 'parents', 'common_names', 'children' => []])
 @php
 $breadcrumbs = [['title' => 'Home', 'href' => url('')]];
 foreach($parents as $parent) {
@@ -26,6 +26,10 @@ array_push($breadcrumbs, ['title' => $parent->sciName, 'href' => url('taxon/' . 
             </x-nav-link>
             <a href="{{url(config('portal.name'). '/taxa/profile/tpeditor.php?tid=' . $taxon->tid )}}">
                 <i class="text-xl float-right fas fa-edit cursor-pointer"></i>
+            </a>
+
+            <a href="{{url('media/search?tid=' . $taxon->tid )}}">
+               See More
             </a>
         </div>
     </div>
@@ -73,28 +77,16 @@ array_push($breadcrumbs, ['title' => $parent->sciName, 'href' => url('taxon/' . 
         </x-tabs>
     </div>
 
-    <div class="flex gap-4">
-        <div>
-            <img src="https://s3.msi.umn.edu/mbaenrms3fs/images/MIN_JFBM_PLANTS/01003/1003938_tn.jpg" alt="">
-        </div>
 
-        <div>
-            <img src="https://s3.msi.umn.edu/mbaenrms3fs/images/MIN_JFBM_PLANTS/01003/1003938_tn.jpg" alt="">
-        </div>
-
-        <div>
-            <img src="https://s3.msi.umn.edu/mbaenrms3fs/images/MIN_JFBM_PLANTS/01003/1003938_tn.jpg" alt="">
-        </div>
-
-        <div>
-            <img src="https://s3.msi.umn.edu/mbaenrms3fs/images/MIN_JFBM_PLANTS/01003/1003938_tn.jpg" alt="">
-        </div>
-    </div>
-
-    {{-- Todo Ignore the Hero Taxa Image --}}
-    @if($taxon->tid)
+    @if(!empty($children))
     <div class="flex flex-wrap flex-row gap-3">
-        <x-media.item :allow_empty_trigger="true" :fixed_start="0" />
+    @foreach ($children as $child)
+        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName" />
+    @endforeach
+    </div>
+    @else
+    <div class="flex flex-wrap flex-row gap-3">
+        <x-media.item :allow_empty_trigger="true" :fixed_start="0" :params="['tid' => $taxon->tid, 'taxon_sort_order' => true]"/>
         <div id="scroll-loader" class="htmx-indicator">
             <div class="stroke-accent w-full h-16 flex justify-center">
                 <x-icons.loading />
