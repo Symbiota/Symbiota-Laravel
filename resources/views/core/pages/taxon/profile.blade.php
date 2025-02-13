@@ -78,7 +78,7 @@ array_push($breadcrumbs, ['title' => $parent->sciName, 'href' => url('taxon/' . 
     </div>
 
 
-    @if(!empty($children))
+    @if(count($children))
     <div class="flex flex-wrap flex-row gap-3">
     @foreach ($children as $child)
         <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName" />
