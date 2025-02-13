@@ -17,24 +17,25 @@ class TaxonomyController extends Controller {
         return $taxon;
     }
 
-    public static function getParents(int $tid) : array {
+    public static function getParents(int $tid): array {
         $parent_tree = DB::select('with RECURSIVE parents as (
 	SELECT * from taxstatus where tid = ?
 	UNION ALL
 	SELECT ts.* from taxstatus as ts, parents as p where ts.tid = p.parenttid and ts.taxauthid = 1 and ts.tid != 1
 ) SELECT taxa.tid, sciName, parents.family, parenttid, taxa.rankID, rankname
             from parents join taxa on taxa.tid = parents.tid join taxonunits on taxonunits.rankid = taxa.rankID and taxa.kingdomName = taxonunits.kingdomName order by taxa.rankID', [$tid]);
+
         return $parent_tree;
     }
 
     public static function getDirectChildren(int $tid) {
         $query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid')
-            ->leftJoin('media as m', function(JoinClause $query) {
+            ->leftJoin('media as m', function (JoinClause $query) {
                 $query->on('m.tid', 't.tid')
                     ->where('m.mediaType', 'image');
             })
-            ->join('taxonunits as tu', function(JoinClause $query) {
+            ->join('taxonunits as tu', function (JoinClause $query) {
                 $query->on('tu.rankid', 't.rankID')
                     ->whereRaw('tu.kingdomName = t.kingdomName');
             })->where('ts.taxauthid', 1)
@@ -45,7 +46,7 @@ class TaxonomyController extends Controller {
         $direct_children = $query->get();
 
         foreach ($direct_children as $child) {
-            if(!$child->thumbnailUrl) {
+            if (! $child->thumbnailUrl) {
                 DB::table('media')->where($child->tid);
             }
         }
@@ -54,7 +55,7 @@ class TaxonomyController extends Controller {
     }
 
     // Be very Careful when calling this function can be very slow depending on the tid
-    public static function getAllChildren(int $tid) : array {
+    public static function getAllChildren(int $tid): array {
         $child_tree = DB::select('with RECURSIVE children as (
 	SELECT * from taxstatus where parenttid = ?
 	UNION ALL
@@ -81,6 +82,7 @@ class TaxonomyController extends Controller {
         $external_links_query = DB::table('taxaresourcelinks as trl')
             ->where('trl.tid', $tid)
             ->select('*');
+
         return $external_links_query
             ->get();
     }
@@ -94,13 +96,13 @@ class TaxonomyController extends Controller {
         $taxa_descriptions = [];
 
         foreach ($statements as $statement) {
-            if($taxa_descriptions[$statement->tdProfileID] ?? false) {
+            if ($taxa_descriptions[$statement->tdProfileID] ?? false) {
                 $taxa_descriptions[$statement->tdProfileID]['statements'][$statement->heading] = $statement->statement;
             } else {
                 $taxa_descriptions[$statement->tdProfileID] = [
                     'source' => $statement->source,
                     'sourceUrl' => $statement->sourceUrl,
-                    'statements' => []
+                    'statements' => [],
                 ];
             }
         }

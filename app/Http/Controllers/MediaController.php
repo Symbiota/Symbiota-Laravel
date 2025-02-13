@@ -50,6 +50,7 @@ class MediaController extends Controller {
             ->offset($start);
 
         $media = $media_query->get();
+
         return $media;
     }
 
