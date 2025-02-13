@@ -77,6 +77,37 @@ class TaxonomyController extends Controller {
         return $occurrence_count;
     }
 
+    public static function getExternalLinks(int $tid) {
+        $external_links_query = DB::table('taxaresourcelinks as trl')
+            ->where('trl.tid', $tid)
+            ->select('*');
+        return $external_links_query
+            ->get();
+    }
+
+    public static function getTaxaDescriptions(int $tid) {
+        $statements = DB::table('taxadescrblock as tdb')->join('taxadescrstmts as tds', 'tds.tdbid', 'tdb.tdbid')
+            ->where('tdb.tid', $tid)
+            ->select('tdProfileID', 'source', 'sourceUrl', 'heading', 'statement')
+            ->get();
+
+        $taxa_descriptions = [];
+
+        foreach ($statements as $statement) {
+            if($taxa_descriptions[$statement->tdProfileID] ?? false) {
+                $taxa_descriptions[$statement->tdProfileID]['statements'][$statement->heading] = $statement->statement;
+            } else {
+                $taxa_descriptions[$statement->tdProfileID] = [
+                    'source' => $statement->source,
+                    'sourceUrl' => $statement->sourceUrl,
+                    'statements' => []
+                ];
+            }
+        }
+
+        return $taxa_descriptions;
+    }
+
     public static function taxon(int $tid) {
         $taxon = self::taxonData($tid);
 
@@ -86,6 +117,8 @@ class TaxonomyController extends Controller {
         $children = self::getDirectChildren($tid);
 
         $occurrence_count = self::getTaxonOccurrenceStats($tid);
+        $taxa_descriptions = self::getTaxaDescriptions($tid);
+        $external_links = self::getExternalLinks($tid);
 
         return view('pages/taxon/profile', [
             'taxon' => $taxon,
@@ -93,6 +126,8 @@ class TaxonomyController extends Controller {
             'common_names' => $common_names,
             'occurrence_count' => $occurrence_count,
             'children' => $children,
+            'taxa_descriptions' => $taxa_descriptions,
+            'external_links' => $external_links,
         ]);
     }
 

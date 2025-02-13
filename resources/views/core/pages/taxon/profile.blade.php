@@ -1,4 +1,4 @@
-@props(['taxon', 'parents', 'common_names', 'children' => []])
+@props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links'])
 <x-layout class="grid grid-col-1 gap-4">
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">
@@ -16,15 +16,10 @@
             <a href="{{url(config('portal.name'). '/taxa/profile/tpeditor.php?tid=' . $taxon->tid )}}">
                 <i class="text-xl float-right fas fa-edit cursor-pointer"></i>
             </a>
-
-            <a href="{{url('media/search?tid=' . $taxon->tid )}}">
-               See More
-            </a>
         </div>
     </div>
     <div class="flex-grow">
-        <x-tabs :tabs="['Taxonomy', 'Synonyms/Vernaculars', 'Traits']">
-
+        <x-tabs :tabs="['Taxonomy', 'Synonyms/Vernaculars', 'Traits', 'About', 'Resources']" >
             {{-- Taxonomy Information --}}
             <div class="min-h-72">
                 <div class="flex items-center gap-2">
@@ -50,7 +45,7 @@
                 </div>
 
                 {{-- Synonyms and Comon Names --}}
-                <div>
+                <div class="min-h-72">
 
                     @isset($common_names)
                     @foreach($common_names as $common_name) {{$common_name->VernacularName}} @endforeach
@@ -61,8 +56,38 @@
                 </div>
 
                 {{-- Trait Plots --}}
-                <div>
+                <div class="min-h-72">
                     Todo Traits
+                </div>
+
+                {{-- About --}}
+                <div class="flex flex-col gap-4 min-h-72">
+                    @foreach ($taxa_descriptions as $description)
+                    <div class="flex flex-col gap-2">
+                        <div class="flex gap-2 item-center">
+                            <span class="text-xl font-bold">{{ $description['source'] }}</span>
+                            <x-link href="{{$description['sourceUrl']}}" target="_blank">See more</x-link>
+                        </div>
+                        @foreach ($description['statements'] as $heading => $statement)
+                        <div>
+                            <span class="font-bold">{{ $heading }}</span>: {{$statement}}
+                        </div>
+                        @endforeach
+                    </div>
+                    @endforeach
+                </div>
+
+                {{-- Resources --}}
+                <div class="min-h-72">
+                    @if(count($external_links))
+                    <div class="text-xl font-bold">External Resources</div>
+                    @foreach ($external_links as $link)
+                        <li>
+                            <x-link href="{{ $link->url }}" target="_blank">
+                                {{ $link->sourcename }}
+                            </x-link>
+                        </li>
+                    @endforeach @endif
                 </div>
         </x-tabs>
     </div>
