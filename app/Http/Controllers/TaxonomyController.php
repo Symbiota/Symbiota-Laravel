@@ -50,30 +50,6 @@ class TaxonomyController extends Controller {
             }
         }
 
-/*
-        $children = self::getAllChildren($tid);
-
-        if(empty($children)) return [];
-
-        $direct_children = [];
-        $url_remap = [];
-
-        foreach ($children as $child) {
-            if($child->parenttid === $tid) {
-                $direct_children[$child->tid] = $child;
-            } else {
-                if($child->parenttid && isset($url_remap[$child->parenttid])) {
-                    $url_remap[$child->tid] = $url_remap[$child->parenttid];
-                } else {
-                    $url_remap[$child->tid] = $child->parenttid;
-                }
-                if($child->thumbnailUrl && !$direct_children[$url_remap[$child->tid]]->thumbnailUrl) {
-                    $direct_children[$url_remap[$child->tid]]->thumbnailUrl = $child->thumbnailUrl;
-                }
-            }
-        }
-*/
-
         return $direct_children;
     }
 
