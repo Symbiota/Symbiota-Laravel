@@ -1,16 +1,18 @@
 @props(['taxon', 'parents', 'common_names', 'children' => []])
 @php
-$breadcrumbs = [['title' => 'Home', 'href' => url('')]];
+$breadcrumbs = [
+    ['title' => 'Home', 'href' => url('')]
+];
 foreach($parents as $parent) {
-if($taxon->tid === $parent->tid) {
-array_push($breadcrumbs, ['title' => $taxon->sciName ]);
-} else {
-array_push($breadcrumbs, ['title' => $parent->sciName, 'href' => url('taxon/' . $parent->tid)]);
-}
+    if($taxon->tid === $parent->tid) {
+        array_push($breadcrumbs, ['title' => $taxon->sciName ]);
+    } else if($taxon->parenttid == $parent->tid) {
+        array_push($breadcrumbs, ['title' => $parent->sciName, 'href' => url('taxon/' . $parent->tid)]);
+    }
 }
 @endphp
 <x-layout class="grid grid-col-1 gap-4">
-    <!-- <x-breadcrumbs :items="$breadcrumbs" /> -->
+    <x-breadcrumbs :items="$breadcrumbs" />
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">
             <i>{{ $taxon->sciName }}</i>
