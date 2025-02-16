@@ -13,8 +13,8 @@
                     {{ $occurrence_count }} Records
                 </x-button>
             </x-nav-link>
-            <a href="{{url(config('portal.name'). '/taxa/profile/tpeditor.php?tid=' . $taxon->tid )}}">
-                <i class="text-xl float-right fas fa-edit cursor-pointer"></i>
+            <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
+                <x-icons.edit class="text-xl"/>
             </a>
         </div>
     </div>
