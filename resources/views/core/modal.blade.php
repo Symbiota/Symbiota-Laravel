@@ -1,10 +1,13 @@
 @props(['label' => 'Open'])
-<div x-data="{ modalOpen: false }"
+<span x-data="{ modalOpen: false }"
     @keydown.escape.window="modalOpen = false"
     class="relative"
     :class="{'z-50 w-auto h-auto':modalOpen === true}"
     >
-    <button @click="modalOpen=true" class="inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors bg-base-100 border rounded-md hover:bg-base-200 active:bg-base-100 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none">{{ $label }}</button>
+    <button @click="modalOpen=true" {{ $label->attributes->twMerge('inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors bg-base-100 border rounded-md hover:bg-base-200 active:bg-base-100 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none') }}>
+        {{ $label }}
+    </button>
+
     <template x-teleport="body">
         <div x-show="modalOpen" class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen" x-cloak>
             <div x-show="modalOpen"
@@ -23,7 +26,7 @@
                 x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                class="relative w-full py-6 bg-white px-7 sm:max-w-lg sm:rounded-lg">
+                class="relative w-fit py-6 bg-white px-7 sm:rounded-lg">
                 <div class="flex items-center justify-between pb-2">
                     @isset($title)
                         <div {{ $title->attributes->twMerge('font-bold') }}>{{ $title }}</div>
@@ -33,9 +36,9 @@
                     </button>
                 </div>
                 @isset($body)
-                    <div {{ $body->attributes->twMerge('relative w-auto') }}>{{ $body }}</div>
+                    <div {{ $body->attributes->twMerge('relative w-[50rem] max-w-[75vw]') }}>{{ $body }}</div>
                 @endisset
             </div>
         </div>
     </template>
-</div>
+</span>

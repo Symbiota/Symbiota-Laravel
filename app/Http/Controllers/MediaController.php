@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MediaController extends Controller {
     public static function search(Request $request) {
         $start = $request->query('start') ?? 0;
-        $media = DB::table('media as m')
+        $media_query = DB::table('media as m')
             ->leftJoin('taxa as t', 't.tid', '=', 'm.tid')
             ->leftJoin('users as u', 'u.uid', '=', 'm.creatoruid')
             ->leftJoin('omoccurrences as o', 'o.occid', '=', 'm.occid')
             ->when($request->query('media_type'), function (Builder $query, $type) {
-                $query->where('m.media_type', '=', $type);
+                $query->where('m.mediaType', '=', $type);
             })
             ->when($request->query('tid'), function (Builder $query, $tid) {
-                $query->whereIn('t.tid', is_array($tid) ? $tid : [$tid]);
+                $query->leftJoin('taxstatus as ts', 'ts.tid', '=', 'm.tid');
+                $query->whereIn('ts.tidaccepted', is_array($tid) ? $tid : [$tid]);
+                $query->where('ts.taxauthid', 1);
+            })
+            ->when($request->query('taxon_sort_order'), function (Builder $query) {
+                $query->orderBy('m.sortsequence', 'ASC');
+                $query->orderBy('m.sortOccurrence', 'ASC');
             })
             ->when($request->query('taxa'), function (Builder $query, $taxa) {
                 $query->whereIn('t.sciName', array_map('trim', explode(',', $taxa)));
@@ -40,8 +47,11 @@ class MediaController extends Controller {
             */
             ->select('m.url', 'm.thumbnailUrl', 't.sciName', 'o.occid')
             ->limit(30)
-            ->offset($start)
-            ->get();
+            ->offset($start);
+
+        $media = $media_query->get();
+
+        return $media;
     }
 
     public static function searchPage(Request $request) {
@@ -51,7 +61,7 @@ class MediaController extends Controller {
 
             if ($request->query('partial')) {
                 $query_params = $request->except('partial');
-                $query_params['start'] = $start;
+                $query_params['start'] = $request->query('start') ?? 0;
 
                 $base_url = $request->header('referer') ?? url()->current();
                 $base_url = substr($base_url, 0, strpos('?', $base_url));

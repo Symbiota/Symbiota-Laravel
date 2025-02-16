@@ -1,4 +1,4 @@
-@props(['media' => [], 'allow_empty_trigger' => false, 'fixed_start' => false])
+@props(['media' => [], 'allow_empty_trigger' => false, 'fixed_start' => false, 'params' => []])
 @php
 $query_params = request()->all();
 if(is_numeric($fixed_start) && $fixed_start >= 0) {
@@ -9,6 +9,10 @@ if(is_numeric($fixed_start) && $fixed_start >= 0) {
     $query_params['start'] = 0;
 }
 $query_params['partial'] = true;
+
+foreach($params as $key => $value) {
+    $query_params[$key] = $value;
+}
 @endphp
 
 {{-- This is Need so infinte requests don't spawn --}}

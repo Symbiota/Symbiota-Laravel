@@ -105,7 +105,10 @@
             Right Click Here
         </x-context-menu>
 
-        <x-modal label="Open Modal">
+        <x-modal>
+            <x-slot:label>
+                Open Modal
+            </x-slot>
             <x-slot:title class="text-2xl">
                 Title
             </x-slot>
@@ -169,5 +172,6 @@
                 'disabled' => false
             ],
         ]" />
+        <x-image-card src="https://collections.nmnh.si.edu/media/?i=10333969&width=300" title="Pinus albicaulis Engelm."/>
     </div>
 </x-layout>

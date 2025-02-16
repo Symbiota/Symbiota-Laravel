@@ -293,11 +293,6 @@ class Occurrence extends Model {
      * This Function's only depedency on eloquent is the protected variables
      */
     public static function buildSelectQuery(array $params) {
-
-        function param(string $param) {
-            return $params[$param] ?? null;
-        }
-
         $query = DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collid', '=', 'o.collid');
 
@@ -324,9 +319,9 @@ class Occurrence extends Model {
         // Add Custom Values
         for ($i = 1; $i < 11; $i++) {
             // Create Constant for this somewhere
-            $name = param('q_customfield' . $i);
-            $type = param('q_customtype' . $i);
-            $value = param('q_customvalue' . $i);
+            $name = $params['q_customfield' . $i] ?? null;
+            $type = $params['q_customtype' . $i] ?? null;
+            $value = $params['q_customvalue' . $i] ?? null;
 
             if (in_array($name, self::$searchable_fields)) {
                 match ($type) {
@@ -346,19 +341,19 @@ class Occurrence extends Model {
         }
 
         // Decide How Values should be sorted
-        if ($sort = param('sort')) {
+        if ($sort = $params['sort'] ?? false) {
             if (($idx = array_search($sort, self::$searchable_fields)) > 0) {
                 $query->orderByRaw('ISNULL(o.' . self::$searchable_fields[$idx] . ') ASC');
             }
             $query->orderBy(
                 $sort,
-                param('sortDirection') === 'DESC' ? 'DESC' : 'ASC'
+                $params['sortDirection'] === 'DESC' ? 'DESC' : 'ASC'
             );
         }
 
         // Additional Filters from other tables
         // TODO (Logan) Need to add consts for string literals
-        if ($hasImages = param('hasImages')) {
+        if ($hasImages = $params['hasImages'] ?? false) {
             if ($hasImages === 'with_images') {
                 $query->whereIn('o.occid', function (Builder $query) {
                     $query->select('m.occid')->from('media as m')->groupBy('m.occid')->where('mediaType', '=', 'image');
@@ -387,23 +382,27 @@ class Occurrence extends Model {
         //footprintGeoJson Searching
         //Boundary Searching
         //Radius Searching
-        if ($taxa = param('taxa')) {
+        if ($taxa = $params['taxa'] ?? false) {
             //TODO (Logan) Enum this default constants
-            $use_thes = param('usethes') ?? 1;
-            $use_thes_associations = param('usethes-associations') ?? 2;
+            $use_thes = $params['usethes'] ?? 1;
+            $use_thes_associations = $params['usethes-associations'] ?? 2;
             //TODO (Logan) Figure out when this is needed
-            $tax_auth_id = param('taxauthid') ?? 2;
+            $tax_auth_id = $params['taxauthid'] ?? 2;
 
-            //Todo figure out Occurence Taxa Manager
-            $taxon_input = explode(',', param('taxa'));
-            $query->whereIn('o.sciName', $taxon_input);
+            if (is_numeric($taxa)) {
+                $query->where('tidInterpreted', $taxa);
+            } else {
+                //Todo figure out Occurence Taxa Manager
+                $taxon_input = explode(',', $taxa);
+                $query->whereIn('o.sciName', $taxon_input);
+            }
         }
 
-        if (param('elevhigh') && param('elevlow')) {
+        if (($elev_high = $params['elevhigh'] ?? false) && ($elev_low = $elev['elevlow'] ?? false)) {
             $query->where(function (Builder $where) {
                 $where
-                    ->where('maximumDepthInMeters', '<=', param('elevhigh'))
-                    ->where('minimumDepthInMeters', '>=', param('elevlow'));
+                    ->where('maximumDepthInMeters', '<=', $elev_high)
+                    ->where('minimumDepthInMeters', '>=', $elev_low);
             });
         }
 

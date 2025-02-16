@@ -15,11 +15,9 @@
     <textarea
         name="{{ $id }}" id="{{ $id }}"
         {{ $attributes->twMerge('px-3 py-2 bg-opacity-50 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full') }}
-    >
-        {{ $attributes->value ?? '' }}
-    </textarea>
-
+    >{{ $slot }}</textarea>
     @else
+
     <input
         {{ $attributes->twMerge('px-3 py-2 bg-opacity-50 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full
         ') }} name="{{ $id }}" id="{{ $id }}" />
