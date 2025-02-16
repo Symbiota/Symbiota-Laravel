@@ -76,4 +76,11 @@ class CollectionController extends Controller {
         return view('pages/collections/list', ['occurrences' => $occurrences]);
 
     }
+
+    public static function downloadPage(Request $request) {
+        $params = $request->except(['page', '_token']);
+
+        return view('pages/collections/download');
+
+    }
 }
