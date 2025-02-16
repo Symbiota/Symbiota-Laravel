@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller {
-    public static function collection(Request $request) {
-        return 'Todo';
+    public static function collection(int $collid) {
+        $collection = DB::table('omcollections')->where('collid', $collid)->select('*')->first();
+        return view('pages/collections/profile', ['collection' => $collection]);
     }
 
     public static function searchPage(Request $request) {
