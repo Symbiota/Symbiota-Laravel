@@ -136,8 +136,30 @@ class TaxonomyController extends Controller {
     public static function taxonEdit(int $tid) {
         $taxon = self::taxonData($tid);
 
+        $parents = self::getParents($tid);
+
+        $common_names = self::getCommonNames($tid);
+        $children = self::getDirectChildren($tid);
+
+        $occurrence_count = self::getTaxonOccurrenceStats($tid);
+        $taxa_descriptions = self::getTaxaDescriptions($tid);
+        $external_links = self::getExternalLinks($tid);
+
+        $taxa_media = DB::table('media')
+            ->where('tid', $tid)
+            ->select('*')
+            ->orderBy('sortSequence')
+            ->get();
+
         return view('pages/taxon/edit', [
             'taxon' => $taxon,
+            'parents' => $parents,
+            'common_names' => $common_names,
+            'occurrence_count' => $occurrence_count,
+            'children' => $children,
+            'taxa_descriptions' => $taxa_descriptions,
+            'external_links' => $external_links,
+            'media' => $taxa_media,
         ]);
     }
 }
