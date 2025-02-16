@@ -105,7 +105,10 @@
             Right Click Here
         </x-context-menu>
 
-        <x-modal label="Open Modal">
+        <x-modal>
+            <x-slot:label>
+                Open Modal
+            </x-slot>
             <x-slot:title class="text-2xl">
                 Title
             </x-slot>
