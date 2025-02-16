@@ -4,7 +4,7 @@
     <div class="mb-4">
         <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => url('') ],
-            ['title' => 'Taxon Profile Public Display', 'href' => url('/taxon/' . $taxon->tid . '/edit') ],
+            ['title' => 'Taxon Profile Public Display', 'href' => url('/taxon/' . $taxon->tid ) ],
             'Taxon Profile Editor'
         ]" />
     </div>
