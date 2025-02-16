@@ -8,7 +8,7 @@
     </div>
     <div class="grid grid-cols-1">
         @if($occurrence->sciname && $occurrence->scientificNameAuthorship)
-        <div><x-link href="{{ url('taxon/') }}"><i>{{ $occurrence->sciname }}</i> {{ $occurrence->scientificNameAuthorship }}</x-link></div>
+        <div><x-link href="{{ url('taxon/' . $occurrence->tidInterpreted) }}"><i>{{ $occurrence->sciname }}</i> {{ $occurrence->scientificNameAuthorship }}</x-link></div>
         @endif
         <div>{{ $occurrence->catalogNumber . ' ' . $occurrence->recordedBy . ' ' . $occurrence->recordNumber . ' ' . ' ' . $occurrence->eventDate}}</div>
         <div>{{ implode(' | ', array_filter([substr($occurrence->locality, 0, 30), $occurrence->decimalLatitude, $occurrence->minimumElevationInMeters], fn ($v) => $v != null)) }}</div>
