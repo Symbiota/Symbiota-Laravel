@@ -215,7 +215,10 @@ $eastWest= [
                 <div class="flex flex-col gap-4">
                 <x-nested-checkbox-group id="collections-group" label="All Collections">
                 @foreach ($collections as $collection)
-                    <x-checkbox name="collid[]" :value="$collection->collID" :label="$collection->collectionName"/>
+                    <span class="inline-flex items-center gap-2">
+                        <x-checkbox name="collid[]" :value="$collection->collID" :label="$collection->collectionName"/>
+                        <x-link class="text-sm" href="{{ url('collections/' . $collection->collID) }}">See More</x-link>
+                    </span>
                 @endforeach
                 </x-nested-checkbox-group>
                 </div>
