@@ -11,7 +11,9 @@ class CollectionController extends Controller {
     public static function collection(int $collid) {
         $collection = DB::table('omcollections')->where('collid', $collid)->select('*')->first();
 
-        return view('pages/collections/profile', ['collection' => $collection]);
+        $collection_stats = DB::table('omcollectionstats')->where('collid', $collid)->select('*')->first();
+
+        return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection_stats]);
     }
 
     public static function searchPage(Request $request) {

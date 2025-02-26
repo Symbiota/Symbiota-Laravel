@@ -1,4 +1,4 @@
-@props(['collection'])
+@props(['collection', 'stats'])
 @php
 function colUrl($url, $extra_query = '') {
     return url(config('portal.name') . '/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
@@ -77,21 +77,56 @@ function colUrl($url, $extra_query = '') {
     </x-accordion>
 
     <div>
-        <div class="text-2xl font-bold">Contacts</div>
-        TODO contacts
+        @php
+            $contacts = json_decode($collection->contactJson, true);
+        @endphp
+        @if(is_array($contacts) && count($contacts))
+            <div class="text-2xl font-bold">Contacts</div>
+            @foreach($contacts as $contact)
+                @if(isset($contact['firstName']) && isset($contact['lastName']) && isset($contact['email']))
+                    <div>
+                        <span class="font-bold">{{ $contact['role'] ?? 'Contact' }}:</span>
+                        {{ $contact['firstName'] . ' ' . $contact['lastName'] . ' ' . $contact['email'] }}
+                    </div>
+                @endif
+            @endforeach
+        @endif
     </div>
 
+
+    @php
+        $dynamic_stats = $stats->dynamicProperties? json_decode($stats->dynamicProperties, true): [];
+    @endphp
     <div>
         <div class="text-2xl font-bold">Collection Statistics</div>
-        TODO collections stats
+        <li>{{ $stats->recordcnt ?? 0 }} specimen records</li>
+        <li>{{ $stats->georefcnt ?? 0 }} ({{ floor( ($stats->georefcnt / $stats->recordcnt) * 100) }}%) georeferenced</li>
+        @isset($dynamic_stats['SpecimensCountID'])
+            <li>{{ $dynamic_stats['SpecimensCountID'] }} ({{ floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) }}%) identified to species</li>
+        @endisset
+        <li>{{ $stats->familycnt ?? 0 }} families</li>
+        <li>{{ $stats->genuscnt ?? 0 }} genera</li>
+        <li>{{ $stats->speciescnt ?? 0 }} identified to species</li>
+
+        @isset($dynamic_stats['TotalTaxaCount'])
+            <li>{{ $dynamic_stats['TotalTaxaCount'] }} total taxa (including subsp. and var.)</li>
+        @endisset
     </div>
 
     <div>
         <div class="text-2xl font-bold">Extra Statistics</div>
         TODO collections extra stats
+        @isset($dynamic_stats['families'])
+        {{-- TODO (Logan) Create Family Distibution Chart --}}
+        @endisset
+
+        @isset($dynamic_stats['countries'])
+            {{-- TODO (Logan) Create Country Distibution Chart --}}
+        @endisset
     </div>
+
     <x-accordion label="More Information">
-        <div><span class="font-bold">Collection Type:</span> TODO</div>
+        <div><span class="font-bold">Collection Type:</span> </div>
         <div><span class="font-bold">Management:</span> TODO</div>
 
         <div><span class="font-bold">Last Update:</span> TODO</div>
