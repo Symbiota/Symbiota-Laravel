@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller {
     public static function collection(int $collid) {
-        $collection = DB::table('omcollections')->where('collid', $collid)->select('*')->first();
+        $collection = DB::table('omcollections as c')->leftJoin('uploadspecparameters as usp', 'usp.collid', 'c.collid')->where('c.collid', $collid)->select('*')->first();
 
         $collection_stats = DB::table('omcollectionstats')->where('collid', $collid)->select('*')->first();
 
