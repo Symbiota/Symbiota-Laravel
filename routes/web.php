@@ -83,6 +83,7 @@ Route::group(['prefix' => '/occurrence'], function () {
 */
 Route::group(['prefix' => '/collections'], function () {
     Route::get('/search', [CollectionController::class, 'searchPage']);
+    Route::get('/download/file', [CollectionController::class, 'downloadFile']);
     Route::get('/download', [CollectionController::class, 'downloadPage']);
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
