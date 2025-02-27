@@ -11,10 +11,14 @@ function colUrl($url, $extra_query = '') {
         ['title' => 'Collection Profile']
         ]" />
 
-    <div class="text-4xl font-bold">{{ $collection->collectionName}}</div>
+    <div class="flex items-center gap-4">
+        @isset($collection->icon)
+            <img class="h-20"src="{{ $collection->icon }}"/>
+        @endisset
+        <span class="text-4xl font-bold">{{ $collection->collectionName}}</span>
+    </div>
 
     <div class="flex items-center gap-2">
-        <x-button>Toggle Manager Control Panel</x-button>
         <x-button>Search Collection</x-button>
         <x-button>Search Media</x-button>
     </div>
