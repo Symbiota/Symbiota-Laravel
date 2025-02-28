@@ -215,8 +215,12 @@ $eastWest= [
                 <div class="flex flex-col gap-4">
                 <x-nested-checkbox-group id="collections-group" label="All Collections">
                 @foreach ($collections as $collection)
+                    @php
+                        $collIds = request('collId');
+                        if(!is_array($collIds)) $collIds = [ $collIds ];
+                    @endphp
                     <span class="inline-flex items-center gap-2">
-                        <x-checkbox name="collid[]" :value="$collection->collID" :label="$collection->collectionName"/>
+                        <x-checkbox name="collid[]" :value="$collection->collID" :checked="in_array($collection->collID, $collIds)" :label="$collection->collectionName"/>
                         <x-link class="text-sm" href="{{ url('collections/' . $collection->collID) }}">See More</x-link>
                     </span>
                 @endforeach

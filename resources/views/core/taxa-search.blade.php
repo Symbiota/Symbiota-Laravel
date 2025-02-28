@@ -33,7 +33,7 @@
     </div>
     <x-checkbox
         :id="'usethes-' . $id"
-        :default_value="$use_thes_value"
+        :checked="$use_thes_value === 1"
         class="mt-2"
         name="usethes"
         label="Include Synonyms"

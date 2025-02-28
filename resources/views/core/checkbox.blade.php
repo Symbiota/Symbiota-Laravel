@@ -2,12 +2,10 @@
 'id' => uniqid(),
 'label' => 'label',
 'name',
-'default_value' => 0,
+'checked' => false,
 'value' => 1,
 'chip' => 'chip value',
-'checked' => false
 ])
-
 <div {{ $attributes->twMerge("flex group") }}>
     <div class="relative w-fit h-fit my-auto">
         <input
@@ -17,7 +15,7 @@
             data-chip="{{ $chip }}"
             autocomplete="off"
             value="{{ $value }}"
-            @checked($default_value === "1")
+            @checked($checked)
             class="
             z-10 w-6 h-6 peer/checkbox appearance-none before:content['']
             border-2 border-accent rounded-full

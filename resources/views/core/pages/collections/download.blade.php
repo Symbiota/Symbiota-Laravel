@@ -40,10 +40,10 @@
 
         <fieldset class="flex flex-col gap-2">
             <legend class="text-xl">Data Extensions</legend>
-            <x-checkbox label="Include Determinations History" default_value="1" name="include_determination_history" />
-            <x-checkbox label="Include Media Records" default_value="1" name="include_media" />
-            <x-checkbox label="Include Occurence Trait Attributes" default_value="1" name="include_occurrence_trait_attributes" />
-            <x-checkbox label="Include Alternative Identifiers" default_value="1" name="include_alternative_identifers" />
+            <x-checkbox label="Include Determinations History" :checked="true" name="include_determination_history" />
+            <x-checkbox label="Include Media Records" :checked="true" name="include_media" />
+            <x-checkbox label="Include Occurence Trait Attributes" :checked="true" name="include_occurrence_trait_attributes" />
+            <x-checkbox label="Include Alternative Identifiers" :checked="true" name="include_alternative_identifers" />
             * Output must be a compressed archive
         </fieldset>
 
@@ -55,7 +55,7 @@
 
         <fieldset class="flex flex-col gap-2">
             <legend class="text-xl">Compression</legend>
-            <x-checkbox label="Compressed ZIP file" default_value="1" name="compressed" />
+            <x-checkbox label="Compressed ZIP file" :checked="true" name="compressed" />
         </fieldset>
 
         <x-button>Download Data</x-button>
