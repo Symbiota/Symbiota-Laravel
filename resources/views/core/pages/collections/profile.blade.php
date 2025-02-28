@@ -19,8 +19,13 @@ function colUrl($url, $extra_query = '') {
     </div>
 
     <div class="flex items-center gap-2">
-        <x-button>Search Collection</x-button>
-        <x-button>Search Media</x-button>
+        <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
+            <x-button>Search Collection</x-button>
+        </x-nav-link>
+
+        <x-nav-link hx-boost="true" href="{{ url('media/search?collId=' . $collection->collID) }}">
+            <x-button>Search Media</x-button>
+        </x-nav-link>
     </div>
     <p>{{ $collection->fullDescription }}</p>
 
