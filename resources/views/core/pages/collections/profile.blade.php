@@ -25,9 +25,9 @@ function colUrl($url, $extra_query = '') {
     <p>{{ $collection->fullDescription }}</p>
 
     <x-accordion label="Manager Control Panel" open="true">
-        <div>
+        <div class="flex gap-2">
             {{-- Data Editor Control Panel --}}
-            <div>
+            <div class="flex-grow">
                 <div class="font-bold text-xl">Data Editor</div>
                 @php
                 $data_links = [
@@ -55,6 +55,18 @@ function colUrl($url, $extra_query = '') {
                     colUrl('editor/editreviewer.php') => 'Review/Verify Occurrence Edits',
                     colUrl('datasets/duplicatemanager.php') => 'Duplicate Clustering',
                 ];
+
+                $upload_links = [
+                    colUrl('admin/specupload.php', '&uploadtype=7') => 'Skeletal Text File Import',
+                    colUrl('admin/specupload.php', '&uploadtype=3') => 'Full Text File Import',
+                    colUrl('admin/specupload.php', '&uploadtype=6') => 'DwC-Archive Import',
+                    colUrl('admin/specupload.php', '&uploadtype=8') => 'IPT Import',
+                    colUrl('admin/importextended.php') => 'Extended Data Import',
+                    colUrl('admin/specupload.php', '&uploadtype=9') => 'Notes from Nature Import',
+                    colUrl('admin/specuploadmanagement.php') => 'Saved Import Profiles',
+                    colUrl('admin/specuploadmanagement.php', '&action=addprofile') => 'Create a new Import Profile',
+                ];
+
                 @endphp
                 <div>
                     @foreach ($data_links as $link => $title)
@@ -69,10 +81,15 @@ function colUrl($url, $extra_query = '') {
             </div>
 
             {{-- Administration Conrol Panel--}}
-            <div>
+            <div class="flex-grow">
                 <div class="font-bold text-xl">Administration</div>
                 <div>
                     @foreach ($admin_links as $link => $title)
+                    <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                    @endforeach
+
+                    <div class="font-bold text-lg">Import/Update Specimen Records</div>
+                    @foreach ($upload_links as $link => $title)
                     <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
                 </div>
