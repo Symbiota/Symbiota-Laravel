@@ -31,6 +31,9 @@ class MediaController extends Controller {
             ->when($request->query('uid'), function (Builder $query, $uid) {
                 $query->where('u.uid', '=', $uid);
             })
+            ->when($request->query('collId'), function (Builder $query, $collId) {
+                $query->where('o.collId', '=', $collId);
+            })
             ->when($request->query('tag'), function (Builder $query, $tag) {
                 $query->leftJoin('imagetag as tag', 'tag.imgid', '=', 'm.media_id')
                     ->leftJoin('imagetagkey as imgkey', 'imgkey.tagkey', '=', 'tag.keyvalue')
