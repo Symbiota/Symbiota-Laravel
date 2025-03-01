@@ -2,6 +2,7 @@
 @import '@fortawesome/fontawesome-free/css/regular.css';
 @import '@fortawesome/fontawesome-free/css/solid.css';
 @import '@fortawesome/fontawesome-free/css/brands.css';
+@import "leaflet/dist/leaflet.css";
 
 /* Needed for x-cloak attribute alpine.js to work consistently */
 [x-cloak] {
