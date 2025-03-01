@@ -89,13 +89,15 @@ class CollectionController extends Controller {
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
-        if(empty($params)) return [];
+        if (empty($params)) {
+            return [];
+        }
 
         $query = Occurrence::buildSelectQuery($request->all());
         $csvFileName = 'symbiota_download.csv';
 
         $schema = [
-            'occid'
+            'occid',
         ];
 
         $csvFile = fopen($csvFileName, 'w');
