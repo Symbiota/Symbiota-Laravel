@@ -112,4 +112,8 @@ class CollectionController extends Controller {
 
         return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
     }
+
+    public static function mapSearchPage() {
+        return view('map');
+    }
 }
