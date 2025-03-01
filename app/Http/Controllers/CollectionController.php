@@ -114,6 +114,6 @@ class CollectionController extends Controller {
     }
 
     public static function mapSearchPage() {
-        return view('map');
+        return view('pages/collections/map-search');
     }
 }
