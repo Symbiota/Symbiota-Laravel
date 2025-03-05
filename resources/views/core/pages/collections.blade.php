@@ -39,7 +39,7 @@ $eastWest= [
 <x-layout class="p-10">
     <h1 class="text-5xl font-bold text-primary mb-8">Record Search</h1>
     <form
-        hx-get="/collections/list"
+        hx-get="{{ url('/collections/list') }}"
         hx-target="body"
         hx-push-url="true"
         x-on:change="addChip(values, event)"
