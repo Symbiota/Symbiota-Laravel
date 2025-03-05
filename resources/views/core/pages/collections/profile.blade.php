@@ -43,7 +43,7 @@ function colUrl($url, $extra_query = '') {
                     colUrl('editor/batchdeterminations.php') => 'Add Batch Determinations/Nomenclatural Adjustments',
                     colUrl('reports/labelmanager.php') => 'Print specimen Labels',
                     colUrl('reports/annotationmanager.php') => 'Print Annotation Labels',
-                    colUrl('georef/georeftool.php') => 'Batch Georeference Specimens',
+                    colUrl('georef/batchgeoreftool.php') => 'Batch Georeference Specimens',
                     colUrl('loans/index.php') => 'Loan Management',
                 ];
 
