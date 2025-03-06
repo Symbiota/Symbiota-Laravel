@@ -302,6 +302,7 @@ class Occurrence extends Model {
             if (in_array($name, self::$searchable_fields) && $value) {
                 if (is_array($value)) {
                     if (! empty($value) && array_key_exists($name, $ALLOW_ARRAY_SEARCH)) {
+                        //TODO (Logan) fix this to be general to param
                         $query->whereIn('c.collid', $value);
                     }
                 } else {
