@@ -154,8 +154,9 @@ function colUrl($url, $extra_query = '') {
     <x-accordion label="More Information">
         <div><span class="font-bold">Collection Type:</span> {{ $collection->collType }}</div>
         <div><span class="font-bold">Management:</span> {{ $collection->managementType }}</div>
-
-        <div><span class="font-bold">Last Update:</span> TODO</div>
+        @if($collection->managementType != 'Live Data')
+        <div><span class="font-bold">Last Update:</span> {{ $stats->uploaddate }}</div>
+        @endif
         <div><span class="font-bold">Digital Metadata:</span> <x-link href="{{colUrl('datasets/emlhandler.php')}}">EML File</x-link></div>
         <div><span class="font-bold">IPT / DwC-A Source:</span> <x-link href="{{ $collection->path }} ">{{ $collection->title }}</x-link></div>
         <div><span class="font-bold">Usage Rights:</span>
