@@ -139,16 +139,33 @@ function colUrl($url, $extra_query = '') {
         @endisset
     </div>
 
+    @php
+        $fam_georef_stats = [];
+        foreach($dynamic_stats['families'] as $key => $item) {
+            if(is_numeric($item['SpecimensPerFamily'])) {
+                $fam_georef_stats[$key] = intval($item['SpecimensPerFamily']);
+            }
+        }
+
+        $country_georef_stats = [];
+        foreach($dynamic_stats['countries'] as $key => $item) {
+            if(is_numeric($item['CountryCount'])) {
+                $country_georef_stats[$key] = intval($item['CountryCount']);
+            }
+        }
+    @endphp
+
     <div>
         <div class="text-2xl font-bold">Extra Statistics</div>
-        TODO collections extra stats
-        @isset($dynamic_stats['families'])
-        {{-- TODO (Logan) Create Family Distibution Chart --}}
-        @endisset
+        <div class="flex items-center gap-4">
+            @isset($dynamic_stats['families'])
+                <x-pie-chart class="w-64" :values="$fam_georef_stats" />
+            @endisset
 
-        @isset($dynamic_stats['countries'])
-            {{-- TODO (Logan) Create Country Distibution Chart --}}
-        @endisset
+            @isset($dynamic_stats['countries'])
+                <x-pie-chart class="w-64" :values="$country_georef_stats"/>
+            @endisset
+        </div>
     </div>
 
     <x-accordion label="More Information">
