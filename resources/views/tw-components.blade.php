@@ -74,6 +74,7 @@
        public $decimalLongititude = 90;
        public $minimumElevationInMeters = "3322m";
        public $maximumElevationInMeters = "3383m";
+       public $tidInterpreted= 1;
        public $occid = 1;
        public $image_cnt = 1;
        public $audio_cnt = 1;
