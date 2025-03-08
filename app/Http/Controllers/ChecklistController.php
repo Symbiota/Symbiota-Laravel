@@ -82,4 +82,9 @@ class ChecklistController extends Controller {
 
         return view('pages/checklists', ['checklists' => $checklists]);
     }
+
+    public static function dynamicMapPage(Request $request) {
+
+        return view('pages/checklist/dynamic-builder');
+    }
 }
