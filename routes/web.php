@@ -88,6 +88,7 @@ Route::group(['prefix' => '/collections'], function () {
     Route::get('/download', [CollectionController::class, 'downloadPage']);
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
+    Route::get('/{collid}/import', [CollectionController::class, 'importPage']);
     Route::get('/{collid}', [CollectionController::class, 'collection']);
 });
 

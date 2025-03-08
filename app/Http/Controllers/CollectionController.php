@@ -90,6 +90,19 @@ class CollectionController extends Controller {
         return view('pages/collections/download');
     }
 
+    public static function importPage(int $collId) {
+        $params = request()->except(['page', '_token']);
+        $collection = self::collection($collId);
+        $uploadProfiles= DB::table('uploadspecparameters')
+            ->select(['uspid', 'uploadtype', 'title'])
+            ->where('collid', $collId)
+            ->orderByRaw('uploadtype, title')
+            ->get();
+        var_dump($uploadProfiles);
+
+        return view('pages/collections/import', ['collection' => $collection, 'uploadProfiles' => $uploadProfiles]);
+    }
+
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
@@ -120,4 +133,16 @@ class CollectionController extends Controller {
     public static function mapSearchPage() {
         return view('pages/collections/map-search');
     }
+}
+
+enum UploadTypes {
+    case DIRECTUPLOAD; //1
+    case FILEUPLOAD; // 3
+    case STOREDPROCEDURE; // 4
+    case SCRIPTUPLOAD; //5
+    case DWCAUPLOAD; // 6
+    case IPTUPLOAD; // 8
+    case NFNUPLOAD;// 9
+    case RESTOREBACKUP; // 10
+    case SYMBIOTA;// 13
 }
