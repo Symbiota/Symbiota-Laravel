@@ -20,6 +20,12 @@ class CollectionController extends Controller {
         return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection_stats]);
     }
 
+    public static function profileList() {
+        $collections = DB::table('omcollections as c')->select('*')->get();
+
+        return view('pages/collections/profile-list', ['collections' => $collections ]);
+    }
+
     public static function searchPage(Request $request) {
         $collections = DB::table('omcollections')->select('*')->get();
 
