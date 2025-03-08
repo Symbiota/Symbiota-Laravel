@@ -136,6 +136,10 @@ class CollectionController extends Controller {
         return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
     }
 
+    public static function publisherPage() {
+        return view('pages/collections/publisher');
+    }
+
     public static function mapSearchPage() {
         return view('pages/collections/map-search');
     }
