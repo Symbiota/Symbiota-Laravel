@@ -60,7 +60,7 @@
 
 @if($hasNavbar)
     {{-- TODO (Logan) figure out how to make this value always reflect nav bar height--}}
-    <div id="map" class="w-full h-[calc(100vh_-_56px)]"></div>
+    <div id="{{ $id }}" class="w-full h-[calc(100vh_-_56px)]"></div>
 @else
-    <div id="map" class="w-full h-[100vh]"></div>
+    <div id="{{ $id }}" class="w-full h-[100vh]"></div>
 @endif
