@@ -23,7 +23,7 @@ class CollectionController extends Controller {
     public static function profileList() {
         $collections = DB::table('omcollections as c')->select('*')->get();
 
-        return view('pages/collections/profile-list', ['collections' => $collections ]);
+        return view('pages/collections/profile-list', ['collections' => $collections]);
     }
 
     public static function searchPage(Request $request) {
@@ -99,7 +99,7 @@ class CollectionController extends Controller {
     public static function importPage(int $collId) {
         $params = request()->except(['page', '_token']);
         $collection = self::collection($collId);
-        $uploadProfiles= DB::table('uploadspecparameters')
+        $uploadProfiles = DB::table('uploadspecparameters')
             ->select(['uspid', 'uploadtype', 'title'])
             ->where('collid', $collId)
             ->orderByRaw('uploadtype, title')
@@ -152,7 +152,7 @@ enum UploadTypes {
     case SCRIPTUPLOAD; //5
     case DWCAUPLOAD; // 6
     case IPTUPLOAD; // 8
-    case NFNUPLOAD;// 9
+    case NFNUPLOAD; // 9
     case RESTOREBACKUP; // 10
-    case SYMBIOTA;// 13
+    case SYMBIOTA; // 13
 }
