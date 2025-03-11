@@ -66,6 +66,14 @@ event fires.
                 this.selectScrollToActiveItem();
             }
         },
+        updateInputValue() {
+            if(this.selectedItem) {
+                let input = $el.querySelector('input');
+
+                input.value = this.selectedItem.value;
+                input.dispatchEvent(new Event('change'));
+            }
+        },
         selectScrollToActiveItem(){
             if(this.selectableItemActive){
                 activeElement = document.getElementById(this.selectableItemActive.value + '-' + this.selectId)
@@ -150,19 +158,21 @@ event fires.
 
         }
 
-        $watch('selectedItem', function() {
-            if(selectedItem) {
-                let input = $el.querySelector('input');
+        $el.querySelector('input').addEventListener('change', function(e) {
+            let updatedItem = selectableItems.find(v => v.value == e.target.value);
 
+            if(updatedItem) {
+                selectedItem = updatedItem;
+
+                let input = $el.querySelector('input');
                 input.value = selectedItem.value;
-                input.dispatchEvent(new Event('change'));
             }
-        });
+        })
     "
     @keydown.escape="if(selectOpen){ selectOpen=false; }"
     @keydown.down="if(selectOpen){ selectableItemActiveNext(); } else { selectOpen=true; } event.preventDefault();"
     @keydown.up="if(selectOpen){ selectableItemActivePrevious(); } else { selectOpen=true; } event.preventDefault();"
-    @keydown.enter="selectedItem=selectableItemActive; selectOpen=false;"
+    @keydown.enter="selectedItem=selectableItemActive; updateInputValue(); selectOpen=false;"
     @keydown="selectKeydown($event);"
     x-on:htmx:before-history-save.window.camel="destroy()"
     {{ $attributes->twMergeFor('select', 'relative')}}
@@ -191,7 +201,7 @@ event fires.
 
         <template x-for="(item, index) in selectableItems" :key="index + '-' + item.value">
             <li
-                @click="selectedItem=item; selectOpen=false; $refs.selectButton.focus();"
+                @click="selectedItem=item; updateInputValue(); selectOpen=false; $refs.selectButton.focus();"
                 :id="item.value + '-' + selectId"
                 :data-disabled="item.disabled"
                 :class="{ 'bg-base-200 text-base-content' : selectableItemIsActive(item), '' : !selectableItemIsActive(item) }"
