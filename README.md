@@ -36,5 +36,55 @@ This is a heavlity WIP Progress Repo and not ready for Production uses yet.
 #### Note: Moving portal into Laravel's public folder will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
 
 ## Pages Running Laravel
-- [x] Media Search
-- [x] Login | Registration
+### Occurrence
+ - [x] Profile
+ - [ ] Editor
+ - [x] List Results
+ - [ ] Table Results
+       
+### Collections
+- [x] Profile
+- [ ] Editor
+- [ ] Table Editor
+      
+### Upload
+- [ ] Base Page
+- [ ] Full Text File
+- [ ] Skeletal File
+- [ ] Darwin Core Archive Manual
+- [ ] IPT Resource / Darwin Core Archive Provider
+- [ ] NfN File
+- [ ] Direct Database Mapping
+
+### Download
+- [x] Base Page UI
+- [ ] Symbiota Schema
+- [ ] Darwin Core Schema 
+
+### Media
+- [ ] Profile
+- [ ] Edit
+- [x] Search
+- [ ] Creator Lookup
+      
+### Taxonomy
+- [x] Profile
+- [ ] Editor
+- [ ] Tree Explorer
+
+### User
+- [x] Login
+- [x] Registration
+- [x] 2auth
+- [x] Oauth (Orcid)
+
+### Checklist
+- [ ] Profile
+- [ ] Admin Editor
+- [ ] Voucher Editor
+      
+### Maps
+- [x] Coordinate Aid
+- [ ] Point Aid
+- [ ] Occurrence | checklist Search
+- [ ] Checklist/Profject map
