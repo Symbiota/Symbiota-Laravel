@@ -44,8 +44,29 @@ This is a WIP Progress Repo and not ready for Production uses yet.
        
 ### Collections
 - [x] Profile
+- [ ] Permissions
+- [ ] comments
+- [ ] loans
+- [ ] Specimen Labels
+- [ ] Annotation Labels
+- [ ] Batch Georef Tool
+- [ ] Batch Determinations
+- [ ] Darwin Core Archive Publishing
+- [ ] Duplicate Manager
+- [ ] Cleaning Tools
+- [ ] Backup Download
+- [ ] Resore Backup
+- [ ] Thumbnail Maintenance
+- [ ] Update Stats
 - [ ] Editor
 - [ ] Table Editor
+- [ ] Specprocessor
+  - [ ] Image Loading
+  - [ ] Crowdsourcing
+  - [ ] OCR
+  - [ ] Reports
+  - [ ] Exporter
+  - [ ] GeoLocate
       
 ### Upload
 - [ ] Base Page
@@ -79,7 +100,7 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 - [x] Oauth (Orcid)
 
 ### Checklist
-- [ ] Profile
+- [x] Profile
 - [ ] Admin Editor
 - [ ] Voucher Editor
       
@@ -88,3 +109,9 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 - [ ] Point Aid
 - [ ] Occurrence | checklist Search
 - [ ] Checklist/Profject map
+- [ ] Taxon Thumbnail Generator
+
+### Misc
+- [x] Sitemap
+- [x] Datausage
+- [ ] 
