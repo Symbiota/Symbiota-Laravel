@@ -12,6 +12,8 @@ window.Chart = Chart;
 
 window.L = L;
 window.type = true;
+// See Github https://github.com/Leaflet/Leaflet.draw/issues/1013 for context
+window.radius = undefined;
 
 window.Alpine = Alpine;
 Alpine.plugin(focus);

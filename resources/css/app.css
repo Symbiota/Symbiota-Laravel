@@ -12,6 +12,10 @@
     display: none !important;
 }
 
+.leaflet-editing-icon {
+    border-radius: 50%;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -143,5 +147,4 @@
         vertical-align: middle;
         font-size: 1rem;
     }
-
 }
