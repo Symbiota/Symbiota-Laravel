@@ -1,23 +1,26 @@
 @props(['hasNavbar' => false, 'id' => 'map'])
 @pushOnce('js-scripts')
 <script type="text/javascript">
-    function addDrawControls(map, options) {
+    function addDrawControls(map, options, onDrawChange = () => {}) {
         const draw_options = {...DEFAULT_DRAW_OPTIONS, ...options};
 
         var drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems)
+        map.symb_draw_items = drawnItems;
 
         const shape_options = ['polyline', 'polygon', 'rectangle', 'circle'];
 
+        if(draw_options.drawColor) {
+            L.Path.mergeOptions(draw_options.drawColor);
 
-        for (let shape of shape_options) {
-            if (draw_options[shape]) {
-                draw_options[shape] = {
-                    shapeOptions: draw_options.drawColor
+            for (let shape of shape_options) {
+                if (draw_options[shape]) {
+                    draw_options[shape] = {
+                        shapeOptions: draw_options.drawColor
+                    }
                 }
             }
         }
-        console.log(draw_options)
 
         var drawControl = new L.Control.Draw({
             position: 'topright',
@@ -28,22 +31,28 @@
         });
 
         map.on(L.Draw.Event.CREATED, function (e) {
-            let radius;
             var type = e.layerType,
                 layer = e.layer;
-
-            if (type === 'marker') {
-                // Do marker specific actions
-            }
-            // Do whatever else you need to. (save to db; add to map etc)
+            layer.layerType = type;
+            drawnItems.clearLayers();
             drawnItems.addLayer(layer);
+
+            onDrawChange()
+        });
+
+        map.on(L.Draw.Event.DELETED, function (e) {
+            onDrawChange();
+        });
+
+        map.on(L.Draw.Event.EDITSTOP, function (e) {
+            onDrawChange();
         });
 
         map.addControl(drawControl);
     }
 
     const DEFAULT_SHAPE_OPTIONS = {
-        color: '#000',
+        color: '#000000',
         opacity: 0.85,
         fillOpacity: 0.55
     };

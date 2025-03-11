@@ -23,8 +23,10 @@
 @endPushOnce
 @php
 function getCoordAidLink($mode) {
-return url( config('portal.name') . '/collections/tools/mapcoordaid.php?mapmode=' . $mode .
-'&map_mode_strict=true&geoJson&wkt_input_id=footprintwkt');
+    /*return url( config('portal.name') . '/collections/tools/mapcoordaid.php?mapmode=' . $mode .
+    '&map_mode_strict=true&geoJson&wkt_input_id=footprintwkt');*/
+
+    return url('/tools/map/coordaid') . '?mode=' . $mode .'&strict=true';
 }
 $northSouth = [
 ['title' => 'N', 'value' => 'N', 'disabled' => false],
