@@ -139,21 +139,21 @@ $eastWest= [
                         </x-button>
                         <div class="flex items-end gap-1 pt-1">
                             <x-input id="upperlat" label="Minimum Elevation" />
-                            <x-select :items="$northSouth" />
+                            <x-select :items="$northSouth" id="upperlat_NS"/>
                         </div>
 
                         <div class="flex items-end gap-1">
                             <x-input id="bottomlat" label="Southern Latitude" />
-                            <x-select :items="$northSouth" />
+                            <x-select :items="$northSouth" id="bottomlat_NS"/>
                         </div>
                         <div class="flex items-end gap-1">
                             <x-input id="leftlong" label="Western Longitude" />
-                            <x-select :items="$eastWest" />
+                            <x-select :items="$eastWest" id="leftlong_EW"/>
                         </div>
 
                         <div class="flex items-end gap-1">
                             <x-input id="rightlong" label="Eastern Longitude" />
-                            <x-select :items="$eastWest" />
+                            <x-select :items="$eastWest" id="rightlong_EW"/>
                         </div>
                     </div>
                     <div>
@@ -171,15 +171,15 @@ $eastWest= [
                         </x-button>
                         <div class="flex items-end gap-1">
                             <x-input id="pointlat" label="Longitude" />
-                            <x-select :items="$northSouth" />
+                            <x-select :items="$northSouth" id="pointlat_NS"/>
                         </div>
                         <div class="flex items-end gap-1">
                             <x-input id="pointlong" label="Latitude" />
-                            <x-select :items="$eastWest" />
+                            <x-select :items="$eastWest" id="pointlong_EW"/>
                         </div>
                         <div class="flex items-end gap-1">
                             <x-input id="radius" label="Radius" />
-                            <x-select :items="[
+                            <x-select id="radiusunits" :items="[
                             ['title' => 'Kilometers', 'value' => 'km', 'disabled' => false],
                             ['title' => 'Miles', 'value' => 'mi', 'disabled' => false]
                         ]" />
