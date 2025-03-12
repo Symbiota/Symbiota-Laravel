@@ -1,18 +1,16 @@
 @props(['tabs' => ['Tab 1', 'Tab 2'], 'active' => 0])
-@pushOnce('js-scripts')
-<script type="text/javascript" defer>
-    function wireTabs(tab_group, tab_count) {
-        const tab_bodies = tab_group.querySelector('#tab-body');
+<div x-data="{
+        el: $el, active: {{ $active }},
+        wireTabs: (tab_group, tab_count) => {
+            const tab_bodies = tab_group.querySelector('#tab-body');
 
-        if(tab_bodies && tab_bodies.children) {
-            for(let i = 0; i < tab_bodies.children.length; i++) {
-                const body = tab_bodies.children[i].setAttribute('x-show', "active === " + i);
+            if(tab_bodies && tab_bodies.children) {
+                for(let i = 0; i < tab_bodies.children.length; i++) {
+                    const body = tab_bodies.children[i].setAttribute('x-show', 'active === ' + i);
+                }
             }
         }
-    }
-</script>
-@endPushOnce
-<div {{$attributes->twMerge('w-full')}} x-data="{el: $el, active: {{ $active }}}" x-init="wireTabs(el, {{ count($tabs) }})">
+    }" x-init="wireTabs(el, {{ count($tabs) }})" {{$attributes->twMerge('w-full')}} >
     {{-- Tab Menu --}}
     <div {{$attributes->twMergeFor('head', 'flex gap-1')}}>
         @for ($i = 0; $i < count($tabs); $i++)
