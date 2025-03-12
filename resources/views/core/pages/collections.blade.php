@@ -86,7 +86,7 @@ $eastWest= [
             <x-button type="button" class="w-full justify-center uppercase" onclick="toggle_all_accordions()">
                 Expand All Sections
             </x-button>
-            <x-accordion label='TAXONOMY' variant="clear-primary">
+            <x-accordion label='TAXONOMY' variant="clear-primary" :open="true">
                 <x-taxa-search />
             </x-accordion>
             <x-accordion label='LOCALITY' variant="clear-primary">
