@@ -5,6 +5,7 @@ import 'htmx.org';
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.markercluster';
+import './components/autocomplete-input';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
