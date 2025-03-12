@@ -30,24 +30,6 @@
             }
         });
 
-        map.on(L.Draw.Event.CREATED, function (e) {
-            var type = e.layerType,
-                layer = e.layer;
-            layer.layerType = type;
-            drawnItems.clearLayers();
-            drawnItems.addLayer(layer);
-
-            onDrawChange()
-        });
-
-        map.on(L.Draw.Event.DELETED, function (e) {
-            onDrawChange();
-        });
-
-        map.on(L.Draw.Event.EDITSTOP, function (e) {
-            onDrawChange();
-        });
-
         map.addControl(drawControl);
     }
 

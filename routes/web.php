@@ -86,6 +86,7 @@ Route::group(['prefix' => '/tools'], function () {
 
     Route::group(['prefix' => '/map'], function () {
         Route::view('/coordaid', 'pages/tools/map/coordaid');
+        Route::view('/pointaid', 'pages/tools/map/pointaid');
     });
 });
 

@@ -16,7 +16,7 @@
                 document.querySelector(".leaflet-draw-draw-circle").click();
                 break;
             default:
-                console.warn(mode + ' Is not a support coordinate helper mode choose(rectangle, circle, polygon, or marker)')
+                console.warn(mode + ' Is not a support coordinate helper mode choose(rectangle, circle, or polygon')
                 break;
         }
     }
@@ -77,8 +77,6 @@
                     pointlong_EW: center_lng > 0 ? "E" : "W",
                     pointlong: Math.abs(center_lng).toFixed(SIG_FIGS),
                 }
-            case "marker":
-                return false;
         }
     }
 
@@ -196,6 +194,13 @@
         }
 
         addDrawControls(map, draw_options);
+        map.on(L.Draw.Event.CREATED, function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+            layer.layerType = type;
+            map.symb_draw_items.clearLayers();
+            map.symb_draw_items.addLayer(layer);
+        });
 
         loadShape(map, mode);
 
