@@ -47,6 +47,7 @@ $grants= [
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     @vite(['resources/js/app.js','resources/css/app.css'])
     @stack('css-styles')
+    {{-- Note This stack should only be used if navigating without partial load. Currently only dev documentation --}}
     @stack('js-libs')
 </head>
 
