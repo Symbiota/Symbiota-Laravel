@@ -106,7 +106,7 @@ This is a WIP Progress Repo and not ready for Production uses yet.
       
 ### Maps
 - [x] Coordinate Aid
-- [ ] Point Aid
+- [x] Point Aid
 - [ ] Occurrence | checklist Search
 - [ ] Checklist/Profject map
 - [ ] Taxon Thumbnail Generator
