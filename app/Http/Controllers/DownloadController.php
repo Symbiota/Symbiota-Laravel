@@ -8,33 +8,6 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DownloadController extends Controller {
-    const DARWIN_CORE = [
-        Collection::class => [
-            'collectionID',
-            'rights',
-            'accessRights',
-            'rightsHolder',
-        ],
-
-        /* Removes from SYMBIOTA_NATIVE
-         * tradeName
-         * associatedCollectors
-         * recordNumber
-         * eventDate2
-         * verbatimAttributes
-         * substrate
-         * localitySecurity
-         * localitySecurityReason
-         * sourcePrimaryKey-dbpk
-         * collID
-         */
-        Occurrence::class => [
-            'collectionID',
-            'rights',
-            'accessRights',
-            'rightsHolder',
-        ],
-    ];
     public static function getHigherClassification($tid) {
         $higherClassification = DB::select("
             SELECT e.tid, t.unitind3, cultivarEpithet, tradeName, group_concat(CONCAT(t.sciName, ':', t.rankid) ORDER BY t.rankid) as taxa_enums FROM taxaenumtree e
@@ -92,8 +65,10 @@ class DownloadController extends Controller {
         }
 
         $query = Occurrence::buildSelectQuery($request->all());
+        //$SCHEMA = SymbiotaNative::class;
+        $SCHEMA = DarwinCore::class;
 
-        if(array_key_exists('associatedSequences', self::SYMBIOTA_NATIVE['FIELDS'])) {
+        if(array_key_exists('associatedSequences', $SCHEMA::$fields)) {
             $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
                 "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
             )->groupBy('occid');
@@ -110,12 +85,13 @@ class DownloadController extends Controller {
         $csvFile = null;
         if($OUTPUT_CSV) {
             $csvFile = fopen($csvFileName, 'w');
-            fputcsv($csvFile, array_keys(SymbiotaNative::$fields));
+            fputcsv($csvFile, array_keys($SCHEMA::$fields));
         }
 
-        $query->select('*')->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use ($csvFile, &$taxa, &$results, $OUTPUT_CSV) {
+        //This order matters when dealing with conflicting attribute names
+        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use ($csvFile, &$taxa, &$results, $OUTPUT_CSV, $SCHEMA) {
             foreach ($occurrences as $occurrence) {
-                $row = SymbiotaNative::$fields;
+                $row = $SCHEMA::$fields;
 
                 if($occurrence->tidInterpreted) {
                     if(!array_key_exists($occurrence->tidInterpreted, $taxa)) {
@@ -128,10 +104,12 @@ class DownloadController extends Controller {
                     $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa)? $taxa[$occurrence->tidInterpreted]: []
                 );
                 foreach($unmapped_row as $key => $value) {
+                    if(array_key_exists($key, $SCHEMA::$ignores)) continue;
+
                     // Map Casted Values
-                    if(array_key_exists($key, SymbiotaNative::$casts)) {
-                        if(array_key_exists(SymbiotaNative::$casts[$key], $row)) {
-                            $row[SymbiotaNative::$casts[$key]] = $value;
+                    if(array_key_exists($key, $SCHEMA::$casts)) {
+                        if(array_key_exists($SCHEMA::$casts[$key], $row)) {
+                            $row[$SCHEMA::$casts[$key]] = $value;
                         }
                     }
                     // Map DB Values
@@ -140,9 +118,9 @@ class DownloadController extends Controller {
                     }
 
                     // Generate Row Dervied Values
-                    foreach(SymbiotaNative::$derived as $key => $fn) {
-                        if(array_key_exists($key, $row)) {
-                            $row[$key] = SymbiotaNative::callDerived($key, $unmapped_row);
+                    foreach($SCHEMA::$derived as $key => $fn) {
+                        if(array_key_exists($key, $row) && !$row[$key]) {
+                            $row[$key] = $SCHEMA::callDerived($key, $unmapped_row);
                         }
                     }
                 }
@@ -153,6 +131,8 @@ class DownloadController extends Controller {
                     array_push($results, $row);
                 }
             }
+
+                dd($taxa);
         });
 
         if($OUTPUT_CSV) {
@@ -164,12 +144,56 @@ class DownloadController extends Controller {
     }
 }
 
+trait DeriveOccurrenceReference {
+    private static function derive_references($row) {
+        if(array_key_exists('occid', $row)) {
+            return url('occurrence/' . $row['occid']);
+        } else {
+            return null;
+        }
+    }
+}
+
+trait DeriveCombineOccurrenceRecordID {
+    private static function derive_combine_occurrence_record_id($row) {
+        if(array_key_exists('recordID', $row) && array_key_exists('occurrenceID', $row)) {
+            $hasRecordID = $row['recordID'];
+            $hasOccurrenceID = $row['occurrenceID'];
+
+            if(!$hasRecordID && $hasOccurrenceID) {
+                return $row['occurrenceID'];
+            } else if($hasRecordID && !$hasOccurrenceID) {
+                return $row['recordID'];
+            }
+        }
+    }
+}
+
+trait CalledDerived {
+    public static function callDerived($key, $arg) {
+        if(array_key_exists($key, self::$derived)) {
+            return forward_static_call(array(self::class, self::$derived[$key]), $arg);
+        }
+    }
+}
+
 class SymbiotaNative {
+    use DeriveOccurrenceReference;
+    use DeriveCombineOccurrenceRecordID;
+    use CalledDerived;
+
+    static $select = [''];
+
     static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',
         'unitind3' => 'verbatimTaxonRank',
         'sourcePrimaryKey-dbpk' => 'dbpk',
+        'dateLastModified' => 'modified'
+    ];
+
+    static $ignores = [
+        'taxonRank'
     ];
 
     static $fields = [
@@ -278,22 +302,136 @@ class SymbiotaNative {
         'references' => '',
     ];
 
-    private static function derive_references($row) {
-        if(array_key_exists('occid', $row)) {
-            return url('occurrence/' . $row['occid']);
-        } else {
-            return null;
-        }
-    }
-
     static $derived = [
-        'references' => 'derive_references'
+        'references' => 'derive_references',
+        'recordID' => 'derive_combine_occurrence_record_id',
+        'occurrenceID' => 'derive_combine_occurrence_record_id'
     ];
-
-    public static function callDerived($key, $arg) {
-        if(array_key_exists($key, self::$derived)) {
-            return forward_static_call(array(self::class, self::$derived[$key]), $arg);
-        }
-    }
 }
 
+class DarwinCore {
+    use DeriveOccurrenceReference;
+    use DeriveCombineOccurrenceRecordID;
+    use CalledDerived;
+
+    static $casts = [
+        'occid' => 'id',
+        'tidInterpreted' => 'taxonID',
+        'unitind3' => 'verbatimTaxonRank',
+        'collectionGuid' => 'collectionID',
+        'dateLastModified' => 'modified'
+    ];
+
+    //Only what comes out of db
+    static $ignores = [
+        'taxonRank'
+    ];
+
+    static $fields = [
+        'id' => '',
+        'institutionCode' => '',
+        'collectionCode' => '',
+        'ownerInstitutionCode' => '',
+        'collectionID' => '',
+        'basisOfRecord' => '',
+        'occurrenceID' => '',
+        'catalogNumber' => '',
+        'otherCatalogNumbers' => '',
+        'higherClassification' => '',
+        'kingdom' => '',
+        'phylum' => '',
+        'class' => '',
+        'order' => '',
+        'family' => '',
+        'scientificName' => '',
+        'taxonID' => '',
+        'scientificNameAuthorship' => '',
+        'genus' => '',
+        'subgenus' => '',
+        'specificEpithet' => '',
+        //not Casting Correctly
+        'verbatimTaxonRank' => '',
+        'infraspecificEpithet' => '',
+        'cultivarEpithet' => '',
+        //Using verbatimTaxonRank which it shouldn't
+        'taxonRank' => '',
+        'identifiedBy' => '',
+        'dateIdentified' => '',
+        'identificationReferences' => '',
+        'identificationRemarks' => '',
+        'taxonRemarks' => '',
+        'identificationQualifier' => '',
+        'typeStatus' => '',
+        'recordedBy' => '',
+        'recordNumber' => '',
+        'eventDate' => '',
+        'year' => '',
+        'month' => '',
+        'day' => '',
+        'startDayOfYear' => '',
+        'endDayOfYear' => '',
+        'verbatimEventDate' => '',
+        'occurrenceRemarks' => '',
+        'habitat' => '',
+        'behavior' => '',
+        'vitality' => '',
+        'fieldNumber' => '',
+        'eventID' => '',
+        'informationWithheld' => '',
+        'dataGeneralizations' => '',
+        'dynamicProperties' => '',
+        'associatedOccurrences' => '',
+        'associatedSequences' => '',
+        'associatedTaxa' => '',
+        'reproductiveCondition' => '',
+        'establishmentMeans' => '',
+        'lifeStage' => '',
+        'sex' => '',
+        'individualCount' => '',
+        'samplingProtocol' => '',
+        'preparations' => '',
+        'locationID' => '',
+        'continent' => '',
+        'waterBody' => '',
+        'islandGroup' => '',
+        'island' => '',
+        'country' => '',
+        'countryCode' => '',
+        'stateProvince' => '',
+        'county' => '',
+        'municipality' => '',
+        'locality' => '',
+        'locationRemarks' => '',
+        'decimalLatitude' => '',
+        'decimalLongitude' => '',
+        'geodeticDatum' => '',
+        'coordinateUncertaintyInMeters' => '',
+        'verbatimCoordinates' => '',
+        'georeferencedBy' => '',
+        'georeferenceProtocol' => '',
+        'georeferenceSources' => '',
+        'georeferenceVerificationStatus' => '',
+        'georeferenceRemarks' => '',
+        'minimumElevationInMeters' => '',
+        'maximumElevationInMeters' => '',
+        'minimumDepthInMeters' => '',
+        'maximumDepthInMeters' => '',
+        'verbatimDepth' => '',
+        'verbatimElevation' => '',
+        'disposition' => '',
+        'language' => '',
+        'recordEnteredBy' => '',
+        'modified' => '',
+        'rights' => '',
+        'rightsHolder' => '',
+        'accessRights' => '',
+        'recordID' => '',
+        'references' => '',
+    ];
+
+    static $derived = [
+        'references' => 'derive_references',
+        'recordID' => 'derive_combine_occurrence_record_id',
+        'occurrenceID' => 'derive_combine_occurrence_record_id'
+    ];
+}
