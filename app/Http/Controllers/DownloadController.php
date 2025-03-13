@@ -8,126 +8,6 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DownloadController extends Controller {
-    const SYMBIOTA_NATIVE = [
-        'CASTS' => [
-            'occid' => 'id',
-            'tidInterpreted' => 'taxonID',
-            'unitind3' => 'verbatimTaxonRank',
-            'sourcePrimaryKey-dbpk' => 'dbpk',
-        ],
-        'DERIVED' => [
-            'references' => [
-                'requires' => ['occid'],
-                //'func' => fn($obj) => url('occurrence/' . $obj->occid)
-            ]
-        ],
-        'FIELDS' => [
-            'id' => '',
-            'institutionCode' => '',
-            'collectionCode' => '',
-            'ownerInstitutionCode' => '',
-            'basisOfRecord' => '',
-            'occurrenceID' => '',
-            'catalogNumber' => '',
-            'otherCatalogNumbers' => '',
-            'higherClassification' => '',
-            'kingdom' => '',
-            'phylum' => '',
-            'class' => '',
-            'order' => '',
-            'subgenus' => '',
-            'family' => '',
-            'scientificName' => '',
-            'taxonID' => '',
-            'scientificNameAuthorship' => '',
-            'genus' => '',
-            'specificEpithet' => '',
-            'verbatimTaxonRank' => '',
-            'infraspecificEpithet' => '',
-            'cultivarEpithet' => '',
-            'tradeName' => '',
-            'taxonRank' => '',
-            'identifiedBy' => '',
-            'dateIdentified' => '',
-            'identificationReferences' => '',
-            'identificationRemarks' => '',
-            'taxonRemarks' => '',
-            'identificationQualifier' => '',
-            'typeStatus' => '',
-            'recordedBy' => '',
-            'associatedCollectors' => '',
-            'recordNumber' => '',
-            'eventDate' => '',
-            'eventDate2' => '',
-            'year' => '',
-            'month' => '',
-            'day' => '',
-            'startDayOfYear' => '',
-            'endDayOfYear' => '',
-            'verbatimEventDate' => '',
-            'occurrenceRemarks' => '',
-            'habitat' => '',
-            'substrate' => '',
-            'verbatimAttributes' => '',
-            'behavior' => '',
-            'vitality' => '',
-            'fieldNumber' => '',
-            'eventID' => '',
-            'informationWithheld' => '',
-            'dataGeneralizations' => '',
-            'dynamicProperties' => '',
-            'associatedOccurrences' => '',
-            'associatedSequences' => '',
-            'associatedTaxa' => '',
-            'reproductiveCondition' => '',
-            'establishmentMeans' => '',
-            'cultivationStatus' => '',
-            'lifeStage' => '',
-            'sex' => '',
-            'individualCount' => '',
-            'samplingProtocol' => '',
-            'preparations' => '',
-            'locationID' => '',
-            'continent' => '',
-            'waterBody' => '',
-            'islandGroup' => '',
-            'island' => '',
-            'country' => '',
-            'countryCode' => '',
-            'stateProvince' => '',
-            'county' => '',
-            'municipality' => '',
-            'locality' => '',
-            'locationRemarks' => '',
-            'localitySecurity' => '',
-            'localitySecurityReason' => '',
-            'decimalLatitude' => '',
-            'decimalLongitude' => '',
-            'geodeticDatum' => '',
-            'coordinateUncertaintyInMeters' => '',
-            'verbatimCoordinates' => '',
-            'georeferencedBy' => '',
-            'georeferenceProtocol' => '',
-            'georeferenceSources' => '',
-            'georeferenceVerificationStatus' => '',
-            'georeferenceRemarks' => '',
-            'minimumElevationInMeters' => '',
-            'maximumElevationInMeters' => '',
-            'minimumDepthInMeters' => '',
-            'maximumDepthInMeters' => '',
-            'verbatimDepth' => '',
-            'verbatimElevation' => '',
-            'disposition' => '',
-            'language' => '',
-            'recordEnteredBy' => '',
-            'modified' => '',
-            'sourcePrimaryKey-dbpk' => '',
-            'collid' => '',
-            'recordID' => '',
-            'references' => '',
-        ]
-    ];
-
     const DARWIN_CORE = [
         Collection::class => [
             'collectionID',
@@ -225,59 +105,47 @@ class DownloadController extends Controller {
         $results = [];
         $taxa = [];
 
-        $OUTPUT_CSV = true;
+        $OUTPUT_CSV = false;
 
         $csvFile = null;
         if($OUTPUT_CSV) {
             $csvFile = fopen($csvFileName, 'w');
-            fputcsv($csvFile, array_keys(self::SYMBIOTA_NATIVE['FIELDS']));
+            fputcsv($csvFile, array_keys(SymbiotaNative::$fields));
         }
 
         $query->select('*')->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use ($csvFile, &$taxa, &$results, $OUTPUT_CSV) {
             foreach ($occurrences as $occurrence) {
-                $row = self::SYMBIOTA_NATIVE['FIELDS'];
+                $row = SymbiotaNative::$fields;
 
-                foreach($occurrence as $key => $value) {
-                    if(array_key_exists($key, self::SYMBIOTA_NATIVE['CASTS'])) {
-                        if(array_key_exists(self::SYMBIOTA_NATIVE['CASTS'][$key], $row)) {
-                            $row[self::SYMBIOTA_NATIVE['CASTS'][$key]] = $value;
-                        }
-                    } else if(array_key_exists($key, $row)) {
-                        $row[$key] = $value;
-                    } else if(array_key_exists('references', $row)) {
-                        $row['references'] = url('occurrence/' . $occurrence->occid);
-                    }
-                }
-
-                // Handel Exteneral Data Fetching
-                // TODO (Logan) Figure out how to make this part more modular
                 if($occurrence->tidInterpreted) {
                     if(!array_key_exists($occurrence->tidInterpreted, $taxa)) {
                         $taxa[$occurrence->tidInterpreted] = self::getHigherClassification($occurrence->tidInterpreted)[$occurrence->tidInterpreted];
                     }
-                    foreach ($taxa[$occurrence->tidInterpreted] as $key => $value) {
-                        if(array_key_exists($key, self::SYMBIOTA_NATIVE['CASTS'])) {
-                            if(array_key_exists(self::SYMBIOTA_NATIVE['CASTS'][$key], $row)) {
-                                $row[self::SYMBIOTA_NATIVE['CASTS'][$key]] = $value;
-                            }
-                        } else if(array_key_exists($key, $row)) {
-                            $row[$key] = $value;
+                }
+
+                $unmapped_row = array_merge(
+                    (array) $occurrence,
+                    $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa)? $taxa[$occurrence->tidInterpreted]: []
+                );
+                foreach($unmapped_row as $key => $value) {
+                    // Map Casted Values
+                    if(array_key_exists($key, SymbiotaNative::$casts)) {
+                        if(array_key_exists(SymbiotaNative::$casts[$key], $row)) {
+                            $row[SymbiotaNative::$casts[$key]] = $value;
+                        }
+                    }
+                    // Map DB Values
+                    else if(array_key_exists($key, $row)) {
+                        $row[$key] = $value;
+                    }
+
+                    // Generate Row Dervied Values
+                    foreach(SymbiotaNative::$derived as $key => $fn) {
+                        if(array_key_exists($key, $row)) {
+                            $row[$key] = SymbiotaNative::callDerived($key, $unmapped_row);
                         }
                     }
                 }
-
-            //      Revist this idea
-            // foreach(self::SYMBIOTA_NATIVE['DERIVED'] as $key => $instructions) {
-            //     if(array_key_exists($key, $row)) {
-            //         if(count($instructions['requires']) > 0) {
-            //             foreach ($instructions as $key => $value) {
-            //                 # code...
-            //             }
-            //         } else {
-            //             $instructions['func']();
-            //         }
-            //     }
-            // }
 
                 if($OUTPUT_CSV) {
                     fputcsv($csvFile, (array) $row);
@@ -295,3 +163,137 @@ class DownloadController extends Controller {
         }
     }
 }
+
+class SymbiotaNative {
+    static $casts = [
+        'occid' => 'id',
+        'tidInterpreted' => 'taxonID',
+        'unitind3' => 'verbatimTaxonRank',
+        'sourcePrimaryKey-dbpk' => 'dbpk',
+    ];
+
+    static $fields = [
+        'id' => '',
+        'institutionCode' => '',
+        'collectionCode' => '',
+        'ownerInstitutionCode' => '',
+        'basisOfRecord' => '',
+        'occurrenceID' => '',
+        'catalogNumber' => '',
+        'otherCatalogNumbers' => '',
+        'higherClassification' => '',
+        'kingdom' => '',
+        'phylum' => '',
+        'class' => '',
+        'order' => '',
+        'subgenus' => '',
+        'family' => '',
+        'scientificName' => '',
+        'taxonID' => '',
+        'scientificNameAuthorship' => '',
+        'genus' => '',
+        'specificEpithet' => '',
+        'verbatimTaxonRank' => '',
+        'infraspecificEpithet' => '',
+        'cultivarEpithet' => '',
+        'tradeName' => '',
+        'taxonRank' => '',
+        'identifiedBy' => '',
+        'dateIdentified' => '',
+        'identificationReferences' => '',
+        'identificationRemarks' => '',
+        'taxonRemarks' => '',
+        'identificationQualifier' => '',
+        'typeStatus' => '',
+        'recordedBy' => '',
+        'associatedCollectors' => '',
+        'recordNumber' => '',
+        'eventDate' => '',
+        'eventDate2' => '',
+        'year' => '',
+        'month' => '',
+        'day' => '',
+        'startDayOfYear' => '',
+        'endDayOfYear' => '',
+        'verbatimEventDate' => '',
+        'occurrenceRemarks' => '',
+        'habitat' => '',
+        'substrate' => '',
+        'verbatimAttributes' => '',
+        'behavior' => '',
+        'vitality' => '',
+        'fieldNumber' => '',
+        'eventID' => '',
+        'informationWithheld' => '',
+        'dataGeneralizations' => '',
+        'dynamicProperties' => '',
+        'associatedOccurrences' => '',
+        'associatedSequences' => '',
+        'associatedTaxa' => '',
+        'reproductiveCondition' => '',
+        'establishmentMeans' => '',
+        'cultivationStatus' => '',
+        'lifeStage' => '',
+        'sex' => '',
+        'individualCount' => '',
+        'samplingProtocol' => '',
+        'preparations' => '',
+        'locationID' => '',
+        'continent' => '',
+        'waterBody' => '',
+        'islandGroup' => '',
+        'island' => '',
+        'country' => '',
+        'countryCode' => '',
+        'stateProvince' => '',
+        'county' => '',
+        'municipality' => '',
+        'locality' => '',
+        'locationRemarks' => '',
+        'localitySecurity' => '',
+        'localitySecurityReason' => '',
+        'decimalLatitude' => '',
+        'decimalLongitude' => '',
+        'geodeticDatum' => '',
+        'coordinateUncertaintyInMeters' => '',
+        'verbatimCoordinates' => '',
+        'georeferencedBy' => '',
+        'georeferenceProtocol' => '',
+        'georeferenceSources' => '',
+        'georeferenceVerificationStatus' => '',
+        'georeferenceRemarks' => '',
+        'minimumElevationInMeters' => '',
+        'maximumElevationInMeters' => '',
+        'minimumDepthInMeters' => '',
+        'maximumDepthInMeters' => '',
+        'verbatimDepth' => '',
+        'verbatimElevation' => '',
+        'disposition' => '',
+        'language' => '',
+        'recordEnteredBy' => '',
+        'modified' => '',
+        'sourcePrimaryKey-dbpk' => '',
+        'collid' => '',
+        'recordID' => '',
+        'references' => '',
+    ];
+
+    private static function derive_references($row) {
+        if(array_key_exists('occid', $row)) {
+            return url('occurrence/' . $row['occid']);
+        } else {
+            return null;
+        }
+    }
+
+    static $derived = [
+        'references' => 'derive_references'
+    ];
+
+    public static function callDerived($key, $arg) {
+        if(array_key_exists($key, self::$derived)) {
+            return forward_static_call(array(self::class, self::$derived[$key]), $arg);
+        }
+    }
+}
+
