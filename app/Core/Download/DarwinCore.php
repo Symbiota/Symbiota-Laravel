@@ -1,0 +1,128 @@
+<?php
+namespace App\Core\Download;
+
+class DarwinCore {
+    use RowMap;
+    use DeriveOccurrenceReference;
+    use DeriveCombineOccurrenceRecordID;
+    use DeriveTaxonRank;
+
+    static $casts = [
+        'occid' => 'id',
+        'tidInterpreted' => 'taxonID',
+        'taxonRank' => 'verbatimTaxonRank',
+        'collectionGuid' => 'collectionID',
+        'dateLastModified' => 'modified'
+    ];
+
+    static $ignores = [];
+
+    static $fields = [
+        'id' => '',
+        'institutionCode' => '',
+        'collectionCode' => '',
+        'ownerInstitutionCode' => '',
+        'collectionID' => '',
+        'basisOfRecord' => '',
+        'occurrenceID' => '',
+        'catalogNumber' => '',
+        'otherCatalogNumbers' => '',
+        'higherClassification' => '',
+        'kingdom' => '',
+        'phylum' => '',
+        'class' => '',
+        'order' => '',
+        'family' => '',
+        'scientificName' => '',
+        'taxonID' => '',
+        'scientificNameAuthorship' => '',
+        'genus' => '',
+        'subgenus' => '',
+        'specificEpithet' => '',
+        //not Casting Correctly
+        'verbatimTaxonRank' => '',
+        'infraspecificEpithet' => '',
+        'cultivarEpithet' => '',
+        //Using verbatimTaxonRank which it shouldn't
+        'taxonRank' => '',
+        'identifiedBy' => '',
+        'dateIdentified' => '',
+        'identificationReferences' => '',
+        'identificationRemarks' => '',
+        'taxonRemarks' => '',
+        'identificationQualifier' => '',
+        'typeStatus' => '',
+        'recordedBy' => '',
+        'recordNumber' => '',
+        'eventDate' => '',
+        'year' => '',
+        'month' => '',
+        'day' => '',
+        'startDayOfYear' => '',
+        'endDayOfYear' => '',
+        'verbatimEventDate' => '',
+        'occurrenceRemarks' => '',
+        'habitat' => '',
+        'behavior' => '',
+        'vitality' => '',
+        'fieldNumber' => '',
+        'eventID' => '',
+        'informationWithheld' => '',
+        'dataGeneralizations' => '',
+        'dynamicProperties' => '',
+        'associatedOccurrences' => '',
+        'associatedSequences' => '',
+        'associatedTaxa' => '',
+        'reproductiveCondition' => '',
+        'establishmentMeans' => '',
+        'lifeStage' => '',
+        'sex' => '',
+        'individualCount' => '',
+        'samplingProtocol' => '',
+        'preparations' => '',
+        'locationID' => '',
+        'continent' => '',
+        'waterBody' => '',
+        'islandGroup' => '',
+        'island' => '',
+        'country' => '',
+        'countryCode' => '',
+        'stateProvince' => '',
+        'county' => '',
+        'municipality' => '',
+        'locality' => '',
+        'locationRemarks' => '',
+        'decimalLatitude' => '',
+        'decimalLongitude' => '',
+        'geodeticDatum' => '',
+        'coordinateUncertaintyInMeters' => '',
+        'verbatimCoordinates' => '',
+        'georeferencedBy' => '',
+        'georeferenceProtocol' => '',
+        'georeferenceSources' => '',
+        'georeferenceVerificationStatus' => '',
+        'georeferenceRemarks' => '',
+        'minimumElevationInMeters' => '',
+        'maximumElevationInMeters' => '',
+        'minimumDepthInMeters' => '',
+        'maximumDepthInMeters' => '',
+        'verbatimDepth' => '',
+        'verbatimElevation' => '',
+        'disposition' => '',
+        'language' => '',
+        'recordEnteredBy' => '',
+        'modified' => '',
+        'rights' => '',
+        'rightsHolder' => '',
+        'accessRights' => '',
+        'recordID' => '',
+        'references' => '',
+    ];
+
+    static $derived = [
+        'references' => 'derive_references',
+        'recordID' => 'derive_combine_occurrence_record_id',
+        'occurrenceID' => 'derive_combine_occurrence_record_id',
+        'taxonRank' => 'derive_taxon_rank'
+    ];
+}

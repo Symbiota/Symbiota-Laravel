@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Download\DarwinCore;
+use App\Core\Download\SymbiotaNative;
 use Illuminate\Http\Request;
 use App\Models\Occurrence;
 use App\Models\Collection;
@@ -61,6 +63,59 @@ class DownloadController extends Controller {
         return view('pages/collections/download');
     }
 
+    public static function process_occurrence_row($unmapped_row, $SCHEMA) {
+        $row = $SCHEMA::$fields;
+        foreach($unmapped_row as $key => $value) {
+            if(array_key_exists($key, $SCHEMA::$ignores)) continue;
+
+            // Map Casted Values
+            if(array_key_exists($key, $SCHEMA::$casts)) {
+                if(array_key_exists($SCHEMA::$casts[$key], $row)) {
+                    $row[$SCHEMA::$casts[$key]] = $value;
+                }
+            }
+            // Map DB Values
+            else if(array_key_exists($key, $row)) {
+                $row[$key] = $value;
+            }
+
+            // Generate Row Dervied Values
+            foreach($SCHEMA::$derived as $key => $fn) {
+                if(array_key_exists($key, $row) && !$row[$key]) {
+                    $row[$key] = $SCHEMA::callDerived($key, $unmapped_row);
+                }
+            }
+        }
+
+        return $row;
+    }
+
+    public static function check_schema(Request $request) {
+        // Pick schema
+        $SCHEMA = DarwinCore::class;
+
+        // Build Query
+        $query = Occurrence::buildSelectQuery($request->all());
+
+        if(array_key_exists('associatedSequences', $SCHEMA::$fields)) {
+            $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
+                "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
+            )->groupBy('occid');
+            $query->leftJoinSub($geneticsQuery, 'gen', 'gen.gen_occid', 'o.occid');
+        }
+
+        //Get Occurrence Data
+        $occurrences = $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->limit(100)->get();
+
+        //Get Associated Media Records
+        $occ_media = DB::table('media')->select('*')->whereIn('occid', $occurrences->map(fn($v) => $v->occid))->get();
+
+        return [
+            'occurrences' => $occurrences->map(fn($row) => $SCHEMA::map_row((array) $row)),
+            'multimedia' => $occ_media
+        ];
+    }
+
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
@@ -81,7 +136,6 @@ class DownloadController extends Controller {
 
         $csvFileName = 'symbiota_download.csv';
 
-        $results = [];
         $taxa = [];
 
         $OUTPUT_CSV = false;
@@ -92,10 +146,14 @@ class DownloadController extends Controller {
             fputcsv($csvFile, array_keys($SCHEMA::$fields));
         }
 
+        $store = [];
+
         //This order matters when dealing with conflicting attribute names
-        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use ($csvFile, &$taxa, &$results, $OUTPUT_CSV, $SCHEMA) {
+        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use (&$store, $csvFile, &$taxa, $OUTPUT_CSV, $SCHEMA) {
+            // Process Occurrence Data
+            $occids = [];
             foreach ($occurrences as $occurrence) {
-                $row = $SCHEMA::$fields;
+                array_push($occids, $occurrence->occid);
 
                 if($occurrence->tidInterpreted) {
                     if(!array_key_exists($occurrence->tidInterpreted, $taxa)) {
@@ -107,32 +165,50 @@ class DownloadController extends Controller {
                     (array) $occurrence,
                     $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa)? $taxa[$occurrence->tidInterpreted]: []
                 );
-                foreach($unmapped_row as $key => $value) {
-                    if(array_key_exists($key, $SCHEMA::$ignores)) continue;
 
-                    // Map Casted Values
-                    if(array_key_exists($key, $SCHEMA::$casts)) {
-                        if(array_key_exists($SCHEMA::$casts[$key], $row)) {
-                            $row[$SCHEMA::$casts[$key]] = $value;
-                        }
-                    }
-                    // Map DB Values
-                    else if(array_key_exists($key, $row)) {
-                        $row[$key] = $value;
-                    }
-
-                    // Generate Row Dervied Values
-                    foreach($SCHEMA::$derived as $key => $fn) {
-                        if(array_key_exists($key, $row) && !$row[$key]) {
-                            $row[$key] = $SCHEMA::callDerived($key, $unmapped_row);
-                        }
-                    }
-                }
+                $row = $SCHEMA::map_row($unmapped_row);
 
                 if($OUTPUT_CSV) {
                     fputcsv($csvFile, (array) $row);
                 } else {
-                    array_push($results, $row);
+                    if(array_key_exists('occurrences', $store) && is_array($store)) {
+                        array_push($store['occurrences'], $row);
+                    } else {
+                        $store['occurrences'] = [$row];
+                    }
+                }
+            }
+
+            $media_select = [
+                'mediaID as coreid',
+                'originalUrl as identifier',
+                'originalUrl as accessURI',
+                'thumbnailUrl as thumbnailAccessURI',
+                'url as goodQualityAccessURI',
+                'format',
+                DB::raw('CASE WHEN mediaType = "image" THEN "StillImage" WHEN mediaType = "audio" THEN "Sound" ELSE null as type'),
+                DB::raw('CASE WHEN mediaType = "image" THEN "Photograph" WHEN mediaType = "audio" THEN "Recorded "Organisim" as subtype'),
+                //Top down from collection if no present
+                'rights',
+                'owner',
+                'creator',
+                '"" as WebStatement',
+                'caption',
+                'caption as comments',
+                'recordID as providerManagedID',
+                'intialtimestamp as MetadataDate',
+                //TODO (Logan) Derived value with server knowlege
+                //'associatedSpecimenReference',
+                //TODO (Logan) figure out how to make this reflect record language
+                '"en" as metadataLanguage',
+            ];
+            //Process Media
+            $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
+            if(count($occ_media) > 0 ) {
+                if(array_key_exists('multimedia', $store) && is_array($store)) {
+                    array_push($store['multimedia'], ...$occ_media);
+                } else {
+                    $store['multimedia'] = [$row];
                 }
             }
         });
@@ -141,309 +217,7 @@ class DownloadController extends Controller {
             fclose($csvFile);
             return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
         } else {
-            return $results;
+            return $store;
         }
     }
-}
-
-trait DeriveOccurrenceReference {
-    private static function derive_references($row) {
-        if(array_key_exists('occid', $row)) {
-            return url('occurrence/' . $row['occid']);
-        } else {
-            return null;
-        }
-    }
-}
-
-trait DeriveCombineOccurrenceRecordID {
-    private static function derive_combine_occurrence_record_id($row) {
-        if(array_key_exists('recordID', $row) && array_key_exists('occurrenceID', $row)) {
-            $hasRecordID = $row['recordID'];
-            $hasOccurrenceID = $row['occurrenceID'];
-
-            if(!$hasRecordID && $hasOccurrenceID) {
-                return $row['occurrenceID'];
-            } else if($hasRecordID && !$hasOccurrenceID) {
-                return $row['recordID'];
-            }
-        }
-    }
-}
-
-trait DeriveTaxonRank{
-    private static function derive_taxon_rank($row) {
-        //TODO (Logan) get better logic for this
-        if(array_key_exists('infraspecificEpithet', $row) && $row['infraspecificEpithet']) {
-            return 'Subspecies';
-        } else if (array_key_exists('specificEpithet', $row) && $row['specificEpithet']) {
-            return 'Species';
-        } else if (array_key_exists('genus', $row) && $row['genus']) {
-            return 'Genus';
-        }
-    }
-}
-
-trait CalledDerived {
-    public static function callDerived($key, $arg) {
-        if(array_key_exists($key, self::$derived)) {
-            return forward_static_call(array(self::class, self::$derived[$key]), $arg);
-        }
-    }
-}
-
-class SymbiotaNative {
-    use DeriveOccurrenceReference;
-    use DeriveCombineOccurrenceRecordID;
-    use CalledDerived;
-
-    static $select = [''];
-
-    static $casts = [
-        'occid' => 'id',
-        'tidInterpreted' => 'taxonID',
-        'taxonRank' => 'verbatimTaxonRank',
-        'sourcePrimaryKey-dbpk' => 'dbpk',
-        'dateLastModified' => 'modified'
-    ];
-
-    static $ignores = [];
-
-    static $fields = [
-        'id' => '',
-        'institutionCode' => '',
-        'collectionCode' => '',
-        'ownerInstitutionCode' => '',
-        'basisOfRecord' => '',
-        'occurrenceID' => '',
-        'catalogNumber' => '',
-        'otherCatalogNumbers' => '',
-        'higherClassification' => '',
-        'kingdom' => '',
-        'phylum' => '',
-        'class' => '',
-        'order' => '',
-        'subgenus' => '',
-        'family' => '',
-        'scientificName' => '',
-        'taxonID' => '',
-        'scientificNameAuthorship' => '',
-        'genus' => '',
-        'specificEpithet' => '',
-        'verbatimTaxonRank' => '',
-        'infraspecificEpithet' => '',
-        'cultivarEpithet' => '',
-        'tradeName' => '',
-        'taxonRank' => '',
-        'identifiedBy' => '',
-        'dateIdentified' => '',
-        'identificationReferences' => '',
-        'identificationRemarks' => '',
-        'taxonRemarks' => '',
-        'identificationQualifier' => '',
-        'typeStatus' => '',
-        'recordedBy' => '',
-        'associatedCollectors' => '',
-        'recordNumber' => '',
-        'eventDate' => '',
-        'eventDate2' => '',
-        'year' => '',
-        'month' => '',
-        'day' => '',
-        'startDayOfYear' => '',
-        'endDayOfYear' => '',
-        'verbatimEventDate' => '',
-        'occurrenceRemarks' => '',
-        'habitat' => '',
-        'substrate' => '',
-        'verbatimAttributes' => '',
-        'behavior' => '',
-        'vitality' => '',
-        'fieldNumber' => '',
-        'eventID' => '',
-        'informationWithheld' => '',
-        'dataGeneralizations' => '',
-        'dynamicProperties' => '',
-        'associatedOccurrences' => '',
-        'associatedSequences' => '',
-        'associatedTaxa' => '',
-        'reproductiveCondition' => '',
-        'establishmentMeans' => '',
-        'cultivationStatus' => '',
-        'lifeStage' => '',
-        'sex' => '',
-        'individualCount' => '',
-        'samplingProtocol' => '',
-        'preparations' => '',
-        'locationID' => '',
-        'continent' => '',
-        'waterBody' => '',
-        'islandGroup' => '',
-        'island' => '',
-        'country' => '',
-        'countryCode' => '',
-        'stateProvince' => '',
-        'county' => '',
-        'municipality' => '',
-        'locality' => '',
-        'locationRemarks' => '',
-        'localitySecurity' => '',
-        'localitySecurityReason' => '',
-        'decimalLatitude' => '',
-        'decimalLongitude' => '',
-        'geodeticDatum' => '',
-        'coordinateUncertaintyInMeters' => '',
-        'verbatimCoordinates' => '',
-        'georeferencedBy' => '',
-        'georeferenceProtocol' => '',
-        'georeferenceSources' => '',
-        'georeferenceVerificationStatus' => '',
-        'georeferenceRemarks' => '',
-        'minimumElevationInMeters' => '',
-        'maximumElevationInMeters' => '',
-        'minimumDepthInMeters' => '',
-        'maximumDepthInMeters' => '',
-        'verbatimDepth' => '',
-        'verbatimElevation' => '',
-        'disposition' => '',
-        'language' => '',
-        'recordEnteredBy' => '',
-        'modified' => '',
-        'sourcePrimaryKey-dbpk' => '',
-        'collid' => '',
-        'recordID' => '',
-        'references' => '',
-    ];
-
-    static $derived = [
-        'references' => 'derive_references',
-        'recordID' => 'derive_combine_occurrence_record_id',
-        'occurrenceID' => 'derive_combine_occurrence_record_id'
-    ];
-}
-
-class DarwinCore {
-    use DeriveOccurrenceReference;
-    use DeriveCombineOccurrenceRecordID;
-    use DeriveTaxonRank;
-    use CalledDerived;
-
-    static $casts = [
-        'occid' => 'id',
-        'tidInterpreted' => 'taxonID',
-        'taxonRank' => 'verbatimTaxonRank',
-        'collectionGuid' => 'collectionID',
-        'dateLastModified' => 'modified'
-    ];
-
-    static $ignores = [];
-
-    static $fields = [
-        'id' => '',
-        'institutionCode' => '',
-        'collectionCode' => '',
-        'ownerInstitutionCode' => '',
-        'collectionID' => '',
-        'basisOfRecord' => '',
-        'occurrenceID' => '',
-        'catalogNumber' => '',
-        'otherCatalogNumbers' => '',
-        'higherClassification' => '',
-        'kingdom' => '',
-        'phylum' => '',
-        'class' => '',
-        'order' => '',
-        'family' => '',
-        'scientificName' => '',
-        'taxonID' => '',
-        'scientificNameAuthorship' => '',
-        'genus' => '',
-        'subgenus' => '',
-        'specificEpithet' => '',
-        //not Casting Correctly
-        'verbatimTaxonRank' => '',
-        'infraspecificEpithet' => '',
-        'cultivarEpithet' => '',
-        //Using verbatimTaxonRank which it shouldn't
-        'taxonRank' => '',
-        'identifiedBy' => '',
-        'dateIdentified' => '',
-        'identificationReferences' => '',
-        'identificationRemarks' => '',
-        'taxonRemarks' => '',
-        'identificationQualifier' => '',
-        'typeStatus' => '',
-        'recordedBy' => '',
-        'recordNumber' => '',
-        'eventDate' => '',
-        'year' => '',
-        'month' => '',
-        'day' => '',
-        'startDayOfYear' => '',
-        'endDayOfYear' => '',
-        'verbatimEventDate' => '',
-        'occurrenceRemarks' => '',
-        'habitat' => '',
-        'behavior' => '',
-        'vitality' => '',
-        'fieldNumber' => '',
-        'eventID' => '',
-        'informationWithheld' => '',
-        'dataGeneralizations' => '',
-        'dynamicProperties' => '',
-        'associatedOccurrences' => '',
-        'associatedSequences' => '',
-        'associatedTaxa' => '',
-        'reproductiveCondition' => '',
-        'establishmentMeans' => '',
-        'lifeStage' => '',
-        'sex' => '',
-        'individualCount' => '',
-        'samplingProtocol' => '',
-        'preparations' => '',
-        'locationID' => '',
-        'continent' => '',
-        'waterBody' => '',
-        'islandGroup' => '',
-        'island' => '',
-        'country' => '',
-        'countryCode' => '',
-        'stateProvince' => '',
-        'county' => '',
-        'municipality' => '',
-        'locality' => '',
-        'locationRemarks' => '',
-        'decimalLatitude' => '',
-        'decimalLongitude' => '',
-        'geodeticDatum' => '',
-        'coordinateUncertaintyInMeters' => '',
-        'verbatimCoordinates' => '',
-        'georeferencedBy' => '',
-        'georeferenceProtocol' => '',
-        'georeferenceSources' => '',
-        'georeferenceVerificationStatus' => '',
-        'georeferenceRemarks' => '',
-        'minimumElevationInMeters' => '',
-        'maximumElevationInMeters' => '',
-        'minimumDepthInMeters' => '',
-        'maximumDepthInMeters' => '',
-        'verbatimDepth' => '',
-        'verbatimElevation' => '',
-        'disposition' => '',
-        'language' => '',
-        'recordEnteredBy' => '',
-        'modified' => '',
-        'rights' => '',
-        'rightsHolder' => '',
-        'accessRights' => '',
-        'recordID' => '',
-        'references' => '',
-    ];
-
-    static $derived = [
-        'references' => 'derive_references',
-        'recordID' => 'derive_combine_occurrence_record_id',
-        'occurrenceID' => 'derive_combine_occurrence_record_id',
-        'taxonRank' => 'derive_taxon_rank'
-    ];
 }
