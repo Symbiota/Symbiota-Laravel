@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class DownloadController extends Controller {
     public static function getHigherClassification($tid) {
-        $higherClassification = DB::select("
-            SELECT e.tid, t.unitind3, cultivarEpithet, tradeName, group_concat(CONCAT(t.sciName, ':', t.rankid) ORDER BY t.rankid) as taxa_enums FROM taxaenumtree e
-            INNER JOIN taxa t ON e.parentTid = t.tid
-            INNER JOIN taxstatus ts ON e.parentTid = ts.tid
-            WHERE e.taxauthid = 1
-            AND e.tid in (?)
-            group by e.tid
-            ", [$tid]);
+        $taxa_info = DB::select("
+            select t.*, flat_enum_tree.taxa_enums from taxa as t INNER JOIN taxstatus ts ON t.tid = ts.tid
+            JOIN (
+                SELECT e.tid ,group_concat(CONCAT(t.sciName, ':', t.rankid) ORDER BY t.rankid) as taxa_enums
+                    FROM taxaenumtree e
+                    INNER JOIN taxa t ON e.parentTid = t.tid
+                    WHERE e.taxauthid = 1
+                    AND e.tid in (?)
+                group by e.tid
+            ) as flat_enum_tree on flat_enum_tree.tid = t.tid
+            where t.tid in (?) and ts.taxauthid = 1
+            ", [$tid, $tid]);
 
         $result = [];
 
-        foreach ($higherClassification as $key => $value) {
+        foreach ($taxa_info as $key => $value) {
             $ident_tree = [];
             foreach (explode(',', $value->taxa_enums) as $idx => $ident) {
                 [$rankName, $rankID] = explode(':', $ident);
@@ -43,7 +47,7 @@ class DownloadController extends Controller {
             }
 
             $result[$value->tid]['higherClassification'] = implode("|", $ident_tree);
-            $result[$value->tid]['unitind3'] = $value->unitind3;
+            //$result[$value->tid]['unitInd3'] = $value->unitInd3;
             $result[$value->tid]['cultivarEpithet'] = $value->cultivarEpithet;
             $result[$value->tid]['tradeName'] = $value->tradeName;
         }
@@ -131,8 +135,6 @@ class DownloadController extends Controller {
                     array_push($results, $row);
                 }
             }
-
-                dd($taxa);
         });
 
         if($OUTPUT_CSV) {
@@ -169,6 +171,19 @@ trait DeriveCombineOccurrenceRecordID {
     }
 }
 
+trait DeriveTaxonRank{
+    private static function derive_taxon_rank($row) {
+        //TODO (Logan) get better logic for this
+        if(array_key_exists('infraspecificEpithet', $row) && $row['infraspecificEpithet']) {
+            return 'Subspecies';
+        } else if (array_key_exists('specificEpithet', $row) && $row['specificEpithet']) {
+            return 'Species';
+        } else if (array_key_exists('genus', $row) && $row['genus']) {
+            return 'Genus';
+        }
+    }
+}
+
 trait CalledDerived {
     public static function callDerived($key, $arg) {
         if(array_key_exists($key, self::$derived)) {
@@ -187,7 +202,7 @@ class SymbiotaNative {
     static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',
-        'unitind3' => 'verbatimTaxonRank',
+        'taxonRank' => 'verbatimTaxonRank',
         'sourcePrimaryKey-dbpk' => 'dbpk',
         'dateLastModified' => 'modified'
     ];
@@ -312,12 +327,13 @@ class SymbiotaNative {
 class DarwinCore {
     use DeriveOccurrenceReference;
     use DeriveCombineOccurrenceRecordID;
+    use DeriveTaxonRank;
     use CalledDerived;
 
     static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',
-        'unitind3' => 'verbatimTaxonRank',
+        'taxonRank' => 'verbatimTaxonRank',
         'collectionGuid' => 'collectionID',
         'dateLastModified' => 'modified'
     ];
@@ -432,6 +448,7 @@ class DarwinCore {
     static $derived = [
         'references' => 'derive_references',
         'recordID' => 'derive_combine_occurrence_record_id',
-        'occurrenceID' => 'derive_combine_occurrence_record_id'
+        'occurrenceID' => 'derive_combine_occurrence_record_id',
+        'taxonRank' => 'derive_taxon_rank'
     ];
 }
