@@ -207,9 +207,7 @@ class SymbiotaNative {
         'dateLastModified' => 'modified'
     ];
 
-    static $ignores = [
-        'taxonRank'
-    ];
+    static $ignores = [];
 
     static $fields = [
         'id' => '',
@@ -338,10 +336,7 @@ class DarwinCore {
         'dateLastModified' => 'modified'
     ];
 
-    //Only what comes out of db
-    static $ignores = [
-        'taxonRank'
-    ];
+    static $ignores = [];
 
     static $fields = [
         'id' => '',
