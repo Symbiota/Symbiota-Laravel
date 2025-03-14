@@ -28,12 +28,12 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 4. If you want to use base docker then you will need to setup your own docker compose file as of now a supported configuration is in the works.
 
 ## Integrating with Current Symbiota
-1. Copy or Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) into repo
+1. Copy or Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) into this in a new directory with the name of your choice (e.g., "Portal")
 2. Add `PORTAL_NAME=` to your `.env` file and give it the name of the folder you just created
 3. Setup the rest of the `.env` to connect `DB` secrets to match your symbiota config
 4. Test by Navigating to a no laravel page like `sitemap` on the navbar
 
-#### Note: Moving portal into Laravel's public folder will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
+#### Note: The files referenced in the current [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) that are placed into the new folder described above will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
 
 ## Pages Running Laravel
 ### Occurrence
