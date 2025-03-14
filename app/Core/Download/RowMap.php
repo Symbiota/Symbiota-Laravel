@@ -39,7 +39,12 @@ trait RowMap {
 trait DeriveOccurrenceReference {
     private static function derive_references($row) {
         if(array_key_exists('occid', $row)) {
-            return url('occurrence/' . $row['occid']);
+            $path = '/occurrence/' . $row['occid'];
+            try {
+                return url($path);
+            } catch (\Throwable $th) {
+                return $path;
+            }
         } else {
             return null;
         }
