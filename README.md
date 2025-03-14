@@ -18,7 +18,7 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 4. Run `composer install`
 5. Install npm
 6. Run `npm install && npm run build` to install the necessary packages and prepare the javascript and css
-7. Setup the require `.env` variables following [Laravel Installation Documenation](https://laravel.com/docs/11.x/installation#environment-based-configuration)
+7. Setup the required `.env` variables following [Laravel Installation Documenation](https://laravel.com/docs/11.x/installation#environment-based-configuration). It will be helpful to use the provided .env.example as a template.
 8. To run locally for development use `php artisan serve`
 
 ### Docker / Sail
