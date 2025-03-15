@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Download\AttributeTraits;
 use App\Core\Download\DarwinCore;
 use App\Core\Download\Determinations;
 use App\Core\Download\Identifers;
@@ -207,6 +208,11 @@ class DownloadController extends Controller {
             }
 
             //Process measurementOrFact
+            $occ_attribute_traits = [];
+            foreach ($occ_attribute_traits as $attribute_trait_row) {
+                $row = AttributeTraits::map_row((array) $attribute_trait_row);
+                fputcsv($files['measurementOrFact'], (array) $row);
+            }
         });
 
         //Close all working files
