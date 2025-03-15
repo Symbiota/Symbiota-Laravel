@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Download\DarwinCore;
+use App\Core\Download\Multimedia;
 use App\Core\Download\SymbiotaNative;
 use Illuminate\Http\Request;
 use App\Models\Occurrence;
@@ -156,6 +157,7 @@ class DownloadController extends Controller {
 
         //Write CSV Headers
         fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
+        fputcsv($files['multimedia'], array_keys(Multimedia::$fields));
 
         //This order matters when dealing with conflicting attribute names
         $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA) {
@@ -180,35 +182,18 @@ class DownloadController extends Controller {
                 fputcsv($files['occurrence'], (array) $row);
             }
 
-            // Process Occurrence Data
-            $media_select = [
-                'mediaID as coreid',
-                'originalUrl as identifier',
-                'originalUrl as accessURI',
-                'thumbnailUrl as thumbnailAccessURI',
-                'url as goodQualityAccessURI',
-                'format',
-                DB::raw('CASE WHEN mediaType = "image" THEN "StillImage" WHEN mediaType = "audio" THEN "Sound" ELSE null as type'),
-                DB::raw('CASE WHEN mediaType = "image" THEN "Photograph" WHEN mediaType = "audio" THEN "Recorded "Organisim" as subtype'),
-                //Top down from collection if no present
-                'rights',
-                'owner',
-                'creator',
-                '"" as WebStatement',
-                'caption',
-                'caption as comments',
-                'recordID as providerManagedID',
-                'intialtimestamp as MetadataDate',
-                //TODO (Logan) Derived value with server knowlege
-                //'associatedSpecimenReference',
-                //TODO (Logan) figure out how to make this reflect record language
-                '"en" as metadataLanguage',
-            ];
             //Process Media
             $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
-            if(count($occ_media) > 0 ) {
-                //fputcsv($files['multimedia'], (array) $occ_media);
+            foreach ($occ_media as $media_row) {
+                $row = Multimedia::map_row((array) $media_row);
+                fputcsv($files['multimedia'], (array) $row);
             }
+
+            //Process identifiers
+
+            //Process identifications
+
+            //Process measurementOrFact
         });
 
         //Close all working files
