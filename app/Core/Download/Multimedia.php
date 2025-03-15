@@ -6,7 +6,7 @@ class Multimedia {
     use DeriveOccurrenceReference;
 
     static $casts = [
-        'mediaID' => 'coreid',
+        'occid' => 'coreid',
         'originalUrl' => 'identifier',
         //'originalUrl' => 'accessURI',
         'thumbnailUrl' => 'thumbnailAccessURI',
