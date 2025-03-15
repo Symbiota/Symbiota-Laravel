@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Occurrence;
 use App\Models\Collection;
 use Illuminate\Support\Facades\DB;
+use ZipArchive;
 
 class DownloadController extends Controller {
     public static function getHigherClassification($tid) {
@@ -119,14 +120,27 @@ class DownloadController extends Controller {
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
-        if (empty($params)) {
-            return [];
+        if (empty($params)) return [];
+
+        $SCHEMA = SymbiotaNative::class;
+        if(request('schema') === 'dwc') {
+            $SCHEMA = DarwinCore::class;
         }
 
-        $query = Occurrence::buildSelectQuery($request->all());
-        //$SCHEMA = SymbiotaNative::class;
-        $SCHEMA = DarwinCore::class;
+        //Setup File Names
+        $fileNames = [
+            'occurrence' => 'occurrence.csv',
+            'multimedia' => 'multimedia.csv',
+            'identifiers' => 'identifiers.csv',
+            'measurementOrFact' => 'measurementOrFact.csv',
+            'identifications' => 'identifications.csv',
+            'eml' => 'eml.xml',
+            'meta' => 'meta.xml',
+            'CITEME' => 'CITEME.txt'
+        ];
 
+        //Build Occurrence Query
+        $query = Occurrence::buildSelectQuery($request->all());
         if(array_key_exists('associatedSequences', $SCHEMA::$fields)) {
             $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
                 "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
@@ -134,22 +148,17 @@ class DownloadController extends Controller {
             $query->leftJoinSub($geneticsQuery, 'gen', 'gen.gen_occid', 'o.occid');
         }
 
-        $csvFileName = 'symbiota_download.csv';
-
         $taxa = [];
+        $files = [];
+        foreach ($fileNames as $key => $fileName) {
+            $files[$key] = fopen($fileName, 'w');
+        };
 
-        $OUTPUT_CSV = false;
-
-        $csvFile = null;
-        if($OUTPUT_CSV) {
-            $csvFile = fopen($csvFileName, 'w');
-            fputcsv($csvFile, array_keys($SCHEMA::$fields));
-        }
-
-        $store = [];
+        //Write CSV Headers
+        fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
 
         //This order matters when dealing with conflicting attribute names
-        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use (&$store, $csvFile, &$taxa, $OUTPUT_CSV, $SCHEMA) {
+        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA) {
             // Process Occurrence Data
             $occids = [];
             foreach ($occurrences as $occurrence) {
@@ -168,17 +177,10 @@ class DownloadController extends Controller {
 
                 $row = $SCHEMA::map_row($unmapped_row);
 
-                if($OUTPUT_CSV) {
-                    fputcsv($csvFile, (array) $row);
-                } else {
-                    if(array_key_exists('occurrences', $store) && is_array($store)) {
-                        array_push($store['occurrences'], $row);
-                    } else {
-                        $store['occurrences'] = [$row];
-                    }
-                }
+                fputcsv($files['occurrence'], (array) $row);
             }
 
+            // Process Occurrence Data
             $media_select = [
                 'mediaID as coreid',
                 'originalUrl as identifier',
@@ -205,19 +207,33 @@ class DownloadController extends Controller {
             //Process Media
             $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
             if(count($occ_media) > 0 ) {
-                if(array_key_exists('multimedia', $store) && is_array($store)) {
-                    array_push($store['multimedia'], ...$occ_media);
-                } else {
-                    $store['multimedia'] = [$row];
-                }
+                //fputcsv($files['multimedia'], (array) $occ_media);
             }
         });
 
-        if($OUTPUT_CSV) {
-            fclose($csvFile);
-            return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
-        } else {
-            return $store;
+        //Close all working files
+        foreach ($files as $key => $file) {
+            fclose($file);
+        };
+
+        $zipArchive = new ZipArchive;
+        //. date('Y-m-d_His')
+        $archiveFileName = 'SymbOuput_date_DwC-A.zip' ;
+        if(!($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
+            exit('FATAL ERROR: unable to create archive file: ' . $status);
         }
+
+        foreach ($fileNames as $key => $file) {
+            $zipArchive->addFile($file);
+        };
+
+        $zipArchive->close();
+
+        //Delete All working files
+        foreach ($fileNames as $key => $file) {
+            unlink($file);
+        };
+
+        return response()->download(public_path($archiveFileName))->deleteFileAfterSend(true);
     }
 }
