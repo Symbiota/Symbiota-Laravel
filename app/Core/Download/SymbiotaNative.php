@@ -1,24 +1,25 @@
 <?php
+
 namespace App\Core\Download;
 
 class SymbiotaNative {
-    use RowMap;
-    use DeriveOccurrenceReference;
     use DeriveCombineOccurrenceRecordID;
+    use DeriveOccurrenceReference;
+    use RowMap;
 
-    static $select = [''];
+    public static $select = [''];
 
-    static $casts = [
+    public static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',
         'taxonRank' => 'verbatimTaxonRank',
         'sourcePrimaryKey-dbpk' => 'dbpk',
-        'dateLastModified' => 'modified'
+        'dateLastModified' => 'modified',
     ];
 
-    static $ignores = [];
+    public static $ignores = [];
 
-    static $fields = [
+    public static $fields = [
         'id' => '',
         'institutionCode' => '',
         'collectionCode' => '',
@@ -124,9 +125,9 @@ class SymbiotaNative {
         'references' => '',
     ];
 
-    static $derived = [
+    public static $derived = [
         'references' => 'derive_references',
         'recordID' => 'derive_combine_occurrence_record_id',
-        'occurrenceID' => 'derive_combine_occurrence_record_id'
+        'occurrenceID' => 'derive_combine_occurrence_record_id',
     ];
 }

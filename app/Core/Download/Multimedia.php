@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Core\Download;
 
 class Multimedia {
-    use RowMap;
     use DeriveOccurrenceReference;
+    use RowMap;
 
-    static $casts = [
+    public static $casts = [
         'occid' => 'coreid',
         'originalUrl' => 'identifier',
         //'originalUrl' => 'accessURI',
@@ -15,12 +16,13 @@ class Multimedia {
         'intialtimestamp' => 'metadataDate',
     ];
 
-    static $ignores = [];
-    static $derived = [
-        'associatedSpecimenReference' => 'derive_references'
+    public static $ignores = [];
+
+    public static $derived = [
+        'associatedSpecimenReference' => 'derive_references',
     ];
 
-    static $fields = [
+    public static $fields = [
         'coreid' => null,
         'identifier' => null,
         'accessURI' => null,
@@ -38,6 +40,6 @@ class Multimedia {
         //TODO (Logan) Derived value with server knowlege
         'associatedSpecimenReference' => null,
         //TODO (Logan) figure out how to make this reflect record language
-        'metadataLanguage' => "en",
+        'metadataLanguage' => 'en',
     ];
 }

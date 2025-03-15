@@ -1,19 +1,21 @@
 <?php
+
 namespace App\Core\Download;
 
 class Identifers {
     use RowMap;
 
-    static $casts = [
+    public static $casts = [
         'occid' => 'coreid',
         'identifierValue' => 'identifier',
         'identifierName' => 'title',
     ];
 
-    static $ignores = [];
-    static $derived = [];
+    public static $ignores = [];
 
-    static $fields = [
+    public static $derived = [];
+
+    public static $fields = [
         'coreid' => null,
         'identifier' => null,
         'title' => null,

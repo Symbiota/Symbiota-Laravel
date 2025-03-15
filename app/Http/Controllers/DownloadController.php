@@ -8,9 +8,8 @@ use App\Core\Download\Determinations;
 use App\Core\Download\Identifers;
 use App\Core\Download\Multimedia;
 use App\Core\Download\SymbiotaNative;
-use Illuminate\Http\Request;
 use App\Models\Occurrence;
-use App\Models\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
 
@@ -38,7 +37,7 @@ class DownloadController extends Controller {
 
                 $ident_tree[] = $rankName;
 
-                $order_name = match(intval($rankID)) {
+                $order_name = match (intval($rankID)) {
                     10 => 'kingdom',
                     30 => 'phylum',
                     60 => 'class',
@@ -48,12 +47,12 @@ class DownloadController extends Controller {
                     default => false,
                 };
 
-                if($order_name) {
+                if ($order_name) {
                     $result[$value->tid][$order_name] = $rankName;
                 }
             }
 
-            $result[$value->tid]['higherClassification'] = implode("|", $ident_tree);
+            $result[$value->tid]['higherClassification'] = implode('|', $ident_tree);
             //$result[$value->tid]['unitInd3'] = $value->unitInd3;
             $result[$value->tid]['cultivarEpithet'] = $value->cultivarEpithet;
             $result[$value->tid]['tradeName'] = $value->tradeName;
@@ -70,23 +69,25 @@ class DownloadController extends Controller {
 
     public static function process_occurrence_row($unmapped_row, $SCHEMA) {
         $row = $SCHEMA::$fields;
-        foreach($unmapped_row as $key => $value) {
-            if(array_key_exists($key, $SCHEMA::$ignores)) continue;
+        foreach ($unmapped_row as $key => $value) {
+            if (array_key_exists($key, $SCHEMA::$ignores)) {
+                continue;
+            }
 
             // Map Casted Values
-            if(array_key_exists($key, $SCHEMA::$casts)) {
-                if(array_key_exists($SCHEMA::$casts[$key], $row)) {
+            if (array_key_exists($key, $SCHEMA::$casts)) {
+                if (array_key_exists($SCHEMA::$casts[$key], $row)) {
                     $row[$SCHEMA::$casts[$key]] = $value;
                 }
             }
             // Map DB Values
-            else if(array_key_exists($key, $row)) {
+            elseif (array_key_exists($key, $row)) {
                 $row[$key] = $value;
             }
 
             // Generate Row Dervied Values
-            foreach($SCHEMA::$derived as $key => $fn) {
-                if(array_key_exists($key, $row) && !$row[$key]) {
+            foreach ($SCHEMA::$derived as $key => $fn) {
+                if (array_key_exists($key, $row) && ! $row[$key]) {
                     $row[$key] = $SCHEMA::callDerived($key, $unmapped_row);
                 }
             }
@@ -102,7 +103,7 @@ class DownloadController extends Controller {
         // Build Query
         $query = Occurrence::buildSelectQuery($request->all());
 
-        if(array_key_exists('associatedSequences', $SCHEMA::$fields)) {
+        if (array_key_exists('associatedSequences', $SCHEMA::$fields)) {
             $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
                 "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
             )->groupBy('occid');
@@ -113,21 +114,23 @@ class DownloadController extends Controller {
         $occurrences = $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->limit(100)->get();
 
         //Get Associated Media Records
-        $occ_media = DB::table('media')->select('*')->whereIn('occid', $occurrences->map(fn($v) => $v->occid))->get();
+        $occ_media = DB::table('media')->select('*')->whereIn('occid', $occurrences->map(fn ($v) => $v->occid))->get();
 
         return [
-            'occurrences' => $occurrences->map(fn($row) => $SCHEMA::map_row((array) $row)),
-            'multimedia' => $occ_media
+            'occurrences' => $occurrences->map(fn ($row) => $SCHEMA::map_row((array) $row)),
+            'multimedia' => $occ_media,
         ];
     }
 
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
-        if (empty($params)) return [];
+        if (empty($params)) {
+            return [];
+        }
 
         $SCHEMA = SymbiotaNative::class;
-        if(request('schema') === 'dwc') {
+        if (request('schema') === 'dwc') {
             $SCHEMA = DarwinCore::class;
         }
 
@@ -140,12 +143,12 @@ class DownloadController extends Controller {
             'identifications' => 'identifications.csv',
             'eml' => 'eml.xml',
             'meta' => 'meta.xml',
-            'CITEME' => 'CITEME.txt'
+            'CITEME' => 'CITEME.txt',
         ];
 
         //Build Occurrence Query
         $query = Occurrence::buildSelectQuery($request->all());
-        if(array_key_exists('associatedSequences', $SCHEMA::$fields)) {
+        if (array_key_exists('associatedSequences', $SCHEMA::$fields)) {
             $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
                 "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
             )->groupBy('occid');
@@ -156,7 +159,7 @@ class DownloadController extends Controller {
         $files = [];
         foreach ($fileNames as $key => $fileName) {
             $files[$key] = fopen($fileName, 'w');
-        };
+        }
 
         //Write CSV Headers
         fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
@@ -170,15 +173,15 @@ class DownloadController extends Controller {
             foreach ($occurrences as $occurrence) {
                 array_push($occids, $occurrence->occid);
 
-                if($occurrence->tidInterpreted) {
-                    if(!array_key_exists($occurrence->tidInterpreted, $taxa)) {
+                if ($occurrence->tidInterpreted) {
+                    if (! array_key_exists($occurrence->tidInterpreted, $taxa)) {
                         $taxa[$occurrence->tidInterpreted] = self::getHigherClassification($occurrence->tidInterpreted)[$occurrence->tidInterpreted];
                     }
                 }
 
                 $unmapped_row = array_merge(
                     (array) $occurrence,
-                    $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa)? $taxa[$occurrence->tidInterpreted]: []
+                    $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa) ? $taxa[$occurrence->tidInterpreted] : []
                 );
 
                 $row = $SCHEMA::map_row($unmapped_row);
@@ -218,25 +221,25 @@ class DownloadController extends Controller {
         //Close all working files
         foreach ($files as $key => $file) {
             fclose($file);
-        };
+        }
 
-        $zipArchive = new ZipArchive;
+        $zipArchive = new ZipArchive();
         //. date('Y-m-d_His')
-        $archiveFileName = 'SymbOuput_date_DwC-A.zip' ;
-        if(!($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
+        $archiveFileName = 'SymbOuput_date_DwC-A.zip';
+        if (! ($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
             exit('FATAL ERROR: unable to create archive file: ' . $status);
         }
 
         foreach ($fileNames as $key => $file) {
             $zipArchive->addFile($file);
-        };
+        }
 
         $zipArchive->close();
 
         //Delete All working files
         foreach ($fileNames as $key => $file) {
             unlink($file);
-        };
+        }
 
         return response()->download(public_path($archiveFileName))->deleteFileAfterSend(true);
     }

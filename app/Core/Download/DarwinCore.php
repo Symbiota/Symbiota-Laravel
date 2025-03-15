@@ -1,23 +1,24 @@
 <?php
+
 namespace App\Core\Download;
 
 class DarwinCore {
-    use RowMap;
-    use DeriveOccurrenceReference;
     use DeriveCombineOccurrenceRecordID;
+    use DeriveOccurrenceReference;
     use DeriveTaxonRank;
+    use RowMap;
 
-    static $casts = [
+    public static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',
         'taxonRank' => 'verbatimTaxonRank',
         'collectionGuid' => 'collectionID',
-        'dateLastModified' => 'modified'
+        'dateLastModified' => 'modified',
     ];
 
-    static $ignores = [];
+    public static $ignores = [];
 
-    static $fields = [
+    public static $fields = [
         'id' => '',
         'institutionCode' => '',
         'collectionCode' => '',
@@ -117,10 +118,10 @@ class DarwinCore {
         'references' => '',
     ];
 
-    static $derived = [
+    public static $derived = [
         'references' => 'derive_references',
         'recordID' => 'derive_combine_occurrence_record_id',
         'occurrenceID' => 'derive_combine_occurrence_record_id',
-        'taxonRank' => 'derive_taxon_rank'
+        'taxonRank' => 'derive_taxon_rank',
     ];
 }

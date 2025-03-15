@@ -1,20 +1,22 @@
 <?php
+
 namespace App\Core\Download;
 
 class Determinations {
     use RowMap;
 
-    static $casts = [
+    public static $casts = [
         'occid' => 'coreid',
         'sciname' => 'scientificName',
         'dateLastModified' => 'modified',
         'taxonRank' => 'verbatimTaxonRank',
     ];
 
-    static $ignores = [];
-    static $derived = [];
+    public static $ignores = [];
 
-    static $fields = [
+    public static $derived = [];
+
+    public static $fields = [
         'coreid' => null,
         'identifiedBy' => null,
         'dateIdentified' => null,
