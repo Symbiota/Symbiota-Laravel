@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Download\DarwinCore;
+use App\Core\Download\Determinations;
 use App\Core\Download\Identifers;
 use App\Core\Download\Multimedia;
 use App\Core\Download\SymbiotaNative;
@@ -192,13 +193,18 @@ class DownloadController extends Controller {
             }
 
             //Process identifiers
-            $occ_identifers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
-            foreach ($occ_identifers as $identifier_row) {
+            $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
+            foreach ($occ_identifiers as $identifier_row) {
                 $row = Identifers::map_row((array) $identifier_row);
                 fputcsv($files['identifiers'], (array) $row);
             }
 
             //Process identifications
+            $occ_determinations = DB::table('omoccurdeterminations')->select('*')->whereIn('occid', $occids)->get();
+            foreach ($occ_determinations as $determination_row) {
+                $row = Determinations::map_row((array) $determination_row);
+                fputcsv($files['identifications'], (array) $row);
+            }
 
             //Process measurementOrFact
         });
