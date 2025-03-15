@@ -39,11 +39,9 @@ class DarwinCore {
         'genus' => '',
         'subgenus' => '',
         'specificEpithet' => '',
-        //not Casting Correctly
         'verbatimTaxonRank' => '',
         'infraspecificEpithet' => '',
         'cultivarEpithet' => '',
-        //Using verbatimTaxonRank which it shouldn't
         'taxonRank' => '',
         'identifiedBy' => '',
         'dateIdentified' => '',
