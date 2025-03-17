@@ -88,7 +88,7 @@ foreach($taxons as $taxon) {
 
                     <div class="text-lg font-bold">Taxonmic Filter</div>
                     <x-checkbox label="Display Synonyms" name="show_synonyms"/>
-                    <x-checkbox label="Common Names" name="show_commmon"/>
+                    <x-checkbox label="Common Names" name="show_common"/>
                     <x-checkbox label="Notes & Vouchers" name="show_notes_vouchers"/>
                     <x-checkbox label="Taxon Authors" name="show_taxa_authors"/>
                     <x-checkbox label="Show Taxa Alphabetically" name="sort_alphabetically"/>
@@ -125,6 +125,19 @@ foreach($taxons as $taxon) {
                 @endif
             </x-link>
             <i class="ml-4 fa-solid fa-list"></i>
+            @if(request('show_common') && isset($taxon->vernacularNames))
+            <div class="pl-2">
+                <span class="font-bold">Vernacular Names:</span>
+                {{ $taxon->vernacularNames }}
+            </div>
+            @endif
+
+            @if(request('show_synonyms') && isset($taxon->synonyms))
+            <div class="pl-2">
+                <span class="font-bold">Synonyms:</span>
+                {{ $taxon->synonyms }}
+            </div>
+            @endif
         </div>
         @endforeach
     </div>

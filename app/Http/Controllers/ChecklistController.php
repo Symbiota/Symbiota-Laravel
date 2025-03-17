@@ -42,11 +42,15 @@ class ChecklistController extends Controller {
             $sub_query->union($parent_query);
         }
 
+        $common_sub = DB::table('taxavernaculars')->groupBy('tid')
+            ->selectRaw('tid, GROUP_CONCAT(VernacularName) as vernacularNames');
+
         $taxons = $taxon_query
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
+            ->leftJoinSub($common_sub, 'commons', 'commons.tid', 't.tid')
             ->orderBy('family')
             ->orderBy('sciname')
-            ->select('t.tid', 'family', 'sciname', 'author', 'unitName1', 'unitName2', 'rankId')
+            ->select('t.tid', 'family', 'sciname', 'author', 'vernacularNames', 'unitName1', 'unitName2', 'rankId')
             ->get();
 
         $page_data = [
