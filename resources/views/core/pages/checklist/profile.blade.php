@@ -4,6 +4,8 @@ $families = [];
 $genera = [];
 $species = [];
 
+$defaultSettings = json_decode($checklist->defaultSettings);
+
 foreach($taxons as $taxon) {
     if($taxon->family) {
         if(isset($families[$taxon->family])) {
@@ -87,11 +89,36 @@ foreach($taxons as $taxon) {
                     ]" />
 
                     <div class="text-lg font-bold">Taxonmic Filter</div>
-                    <x-checkbox label="Display Synonyms" name="show_synonyms"/>
-                    <x-checkbox label="Common Names" name="show_common"/>
-                    <x-checkbox label="Notes & Vouchers" name="show_notes_vouchers"/>
-                    <x-checkbox label="Taxon Authors" name="show_taxa_authors"/>
-                    <x-checkbox label="Show Taxa Alphabetically" name="sort_alphabetically"/>
+                    <x-checkbox
+                        label="Display Synonyms"
+                        :checked="$defaultSettings->dsynonyms ?? false"
+                        name="show_synonyms"
+                    />
+                    <x-checkbox
+                        label="Common Names"
+                        :checked="$defaultSettings->dcommon ?? false"
+                        name="show_common"
+                    />
+                    <x-checkbox
+                        label="Display as Images"
+                        :checked="$defaultSettings->dimages ?? false"
+                        name="show_as_images"
+                    />
+                    <x-checkbox
+                        label="Notes & Vouchers"
+                        :checked="$defaultSettings->dvouchers ?? false"
+                        name="show_notes_vouchers"
+                    />
+                    <x-checkbox
+                        label="Taxon Authors"
+                        :checked="$defaultSettings->dauthors ?? false"
+                        name="show_taxa_authors"
+                    />
+                    <x-checkbox
+                        label="Show Taxa Alphabetically"
+                        :checked="$defaultSettings->dalpha ?? false"
+                        name="sort_alphabetically"
+                    />
                     <div class="flex items-center">
                         <x-button x-on:click="popoverOpen=false">Build List</x-button>
                         <div class="flex flex-grow justify-end gap-4 text-xl">
