@@ -110,9 +110,11 @@ foreach($taxons as $taxon) {
             <div><span class="font-bold">Total Taxa:</span>{{ count($taxons) }}</div>
 
             <div class="flex-grow">
-                    <x-button class="ml-auto" href="{{ url(config('portal.name') . '/collections/map/index.php')}}?db=all&type=1&reset=1&taxonfilter&cltype=vouchers&clid={{$checklist->clid}}">
-                            <i class="fas fa-earth-americas"></i> Map
-                    </x-button>
+                <x-button
+                    class="ml-auto"
+                    href="{{ url(config('portal.name') . '/collections/map/index.php')}}?db=all&type=1&reset=1&taxonfilter&cltype=vouchers&clid={{$checklist->clid}}">
+                        <i class="fas fa-earth-americas"></i> Map
+                </x-button>
             </div>
         </div>
     </div>
@@ -130,7 +132,11 @@ foreach($taxons as $taxon) {
                 {{ $taxon->author }}
                 @endif
             </x-link>
+
+            <x-nav-link href="{{url('collections/list')}}?usethes=1&clid={{$checklist->clid}}&taxa={{$taxon->tid}}">
             <i class="ml-4 fa-solid fa-list"></i>
+            </x-nav-link>
+
             @if(request('show_common') && isset($taxon->vernacularNames))
             <div class="pl-2">
                 <span class="font-bold">Vernacular Names:</span>
