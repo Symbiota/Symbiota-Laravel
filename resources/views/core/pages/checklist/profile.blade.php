@@ -103,11 +103,17 @@ foreach($taxons as $taxon) {
                 </form>
             </x-popover>
         </div>
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2 w-full">
             <div><span class="font-bold">Families:</span> {{ count($families) }}</div>
             <div><span class="font-bold">Genera:</span> {{ count($genera) }}</div>
             <div><span class="font-bold">Species:</span> {{ count($species) }}</div>
             <div><span class="font-bold">Total Taxa:</span>{{ count($taxons) }}</div>
+
+            <div class="flex-grow">
+                    <x-button class="ml-auto" href="{{ url(config('portal.name') . '/collections/map/index.php')}}?db=all&type=1&reset=1&taxonfilter&cltype=vouchers&clid={{$checklist->clid}}">
+                            <i class="fas fa-earth-americas"></i> Map
+                    </x-button>
+            </div>
         </div>
     </div>
     @fragment('taxa-list')
