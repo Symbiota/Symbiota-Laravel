@@ -59,7 +59,7 @@ foreach($taxons as $taxon) {
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             @isset($checklist->abstract)
-                <div><span class="font-bold">Abstract:</span> {{ $checklist->abstract }} </div>
+                <div><span class="font-bold">Abstract:</span> {{ $checklist->abstract }}</div>
             @endisset
 
             @isset($checklist->authors)
@@ -134,7 +134,7 @@ foreach($taxons as $taxon) {
             <div><span class="font-bold">Families:</span> {{ count($families) }}</div>
             <div><span class="font-bold">Genera:</span> {{ count($genera) }}</div>
             <div><span class="font-bold">Species:</span> {{ count($species) }}</div>
-            <div><span class="font-bold">Total Taxa:</span>{{ count($taxons) }}</div>
+            <div><span class="font-bold">Total Taxa:</span> {{ count($taxons) }}</div>
 
             <div class="flex-grow">
                 <x-button
