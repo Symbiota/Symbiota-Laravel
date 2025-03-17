@@ -46,10 +46,19 @@ class ChecklistController extends Controller {
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
             ->orderBy('family')
             ->orderBy('sciname')
-            ->select('t.tid', 'family', 'sciname', 'unitName1', 'unitName2', 'rankId')
+            ->select('t.tid', 'family', 'sciname', 'author', 'unitName1', 'unitName2', 'rankId')
             ->get();
 
-        return view('pages/checklist/profile', ['checklist' => $checklist, 'taxons' => $taxons]);
+        $page_data = [
+            'checklist' => $checklist,
+            'taxons' => $taxons
+        ];
+
+        if(request()->query('partial') === 'taxa-list') {
+            return view('pages/checklist/profile', $page_data)->fragment('taxa-list');
+        }
+
+        return view('pages/checklist/profile', $page_data);
     }
 
     public static function getChecklistsData(Request $request) {

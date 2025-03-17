@@ -30,6 +30,7 @@ foreach($taxons as $taxon) {
         }
     }
 }
+
 @endphp
 <x-layout class="grid grid-cols-1 gap-4">
     <x-breadcrumbs :items="[
@@ -74,22 +75,23 @@ foreach($taxons as $taxon) {
     <div class="flex items-center gap-2">
         <div class="flex w-fit">
             <x-popover class="w-[500px]">
-                <div class="flex flex-col gap-2">
+                <form hx-get="{{ url()->current() }}" class="flex flex-col gap-2" hx-target="#taxa-list">
+                    <input type="hidden" name="partial" value="taxa-list">
                     <x-taxa-search />
                     <x-link href="">Open Symbiota Key</x-link>
                     <x-link href="">Games</x-link>
 
                     <x-select class="w-64" default="0" :items="[
-            ['title' => 'Original Checklist', 'value' => 'Original Checklist', 'disabled' => false],
-            ['title' => 'Central Thesaurus', 'value' => 'Central Thesaurus', 'disabled' => false]
-        ]" />
+                        ['title' => 'Original Checklist', 'value' => 'Original Checklist', 'disabled' => false],
+                        ['title' => 'Central Thesaurus', 'value' => 'Central Thesaurus', 'disabled' => false]
+                    ]" />
 
                     <div class="text-lg font-bold">Taxonmic Filter</div>
-                    <x-checkbox label="Display Synonyms" />
-                    <x-checkbox label="Common Names" />
-                    <x-checkbox label="Notes & Vouchers" />
-                    <x-checkbox label="Taxon Authors" />
-                    <x-checkbox label="Show Taxa Alphabetically" />
+                    <x-checkbox label="Display Synonyms" name="show_synonyms"/>
+                    <x-checkbox label="Common Names" name="show_commmon"/>
+                    <x-checkbox label="Notes & Vouchers" name="show_notes_vouchers"/>
+                    <x-checkbox label="Taxon Authors" name="show_taxa_authors"/>
+                    <x-checkbox label="Show Taxa Alphabetically" name="sort_alphabetically"/>
                     <div class="flex items-center">
                         <x-button x-on:click="popoverOpen=false">Build List</x-button>
                         <div class="flex flex-grow justify-end gap-4 text-xl">
@@ -98,7 +100,7 @@ foreach($taxons as $taxon) {
                             <i class="fa-regular fa-file-word"></i>
                         </div>
                     </div>
-                </div>
+                </form>
             </x-popover>
         </div>
         <div class="flex gap-2">
@@ -108,16 +110,23 @@ foreach($taxons as $taxon) {
             <div><span class="font-bold">Total Taxa:</span>{{ count($taxons) }}</div>
         </div>
     </div>
-    <div>
+    @fragment('taxa-list')
+    <div id="taxa-list">
         @php $previous @endphp
         @foreach ($taxons as $taxon)
         @if($loop->first || $taxons[$loop->index - 1]->family !== $taxon->family)
         <div class="text-lg font-bold">{{ $taxon->family }}</div>
         @endif
         <div class="pl-4">
-            <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">{{ $taxon->sciname }}</x-link>
+            <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">
+                {{ $taxon->sciname }}
+                @if(request('show_taxa_authors') && isset($taxon->author))
+                {{ $taxon->author }}
+                @endif
+            </x-link>
             <i class="ml-4 fa-solid fa-list"></i>
         </div>
         @endforeach
     </div>
+    @endfragment
 </x-layout>
