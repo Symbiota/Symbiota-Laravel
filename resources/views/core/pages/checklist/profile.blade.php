@@ -59,7 +59,7 @@ foreach($taxons as $taxon) {
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             @isset($checklist->abstract)
-                <div><span class="font-bold">Abstract:</span><p>{{ $checklist->abstract }}</p></div>
+                <div><span class="font-bold">Abstract:</span> {{ $checklist->abstract }} </div>
             @endisset
 
             @isset($checklist->authors)
