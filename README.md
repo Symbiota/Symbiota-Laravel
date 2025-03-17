@@ -18,7 +18,7 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 4. Run `composer install`
 5. Install npm
 6. Run `npm install && npm run build` to install the necessary packages and prepare the javascript and css
-7. Setup the require `.env` variables following [Laravel Installation Documenation](https://laravel.com/docs/11.x/installation#environment-based-configuration)
+7. Setup the required `.env` variables following [Laravel Installation Documenation](https://laravel.com/docs/11.x/installation#environment-based-configuration). It will be helpful to use the provided .env.example as a template.
 8. To run locally for development use `php artisan serve`
 
 ### Docker / Sail
@@ -28,12 +28,13 @@ This is a WIP Progress Repo and not ready for Production uses yet.
 4. If you want to use base docker then you will need to setup your own docker compose file as of now a supported configuration is in the works.
 
 ## Integrating with Current Symbiota
-1. Copy or Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) into repo
+1. Copy or Clone [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) into this repo. in a new directory with the name of your choice (e.g., "Portal")
 2. Add `PORTAL_NAME=` to your `.env` file and give it the name of the folder you just created
 3. Setup the rest of the `.env` to connect `DB` secrets to match your symbiota config
 4. Test by Navigating to a no laravel page like `sitemap` on the navbar
+5. Note that, for some pages, the relative path of symbini.php may need to be changed. They can now reference the `$SERVER_ROOT` variable. For example, collections/search/index.php might need the line `include_once('../../config/symbini.php');` changed to `include_once($SERVER_ROOT . '/config/symbini.php');`
 
-#### Note: Moving portal into Laravel's public folder will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
+#### Note: The files referenced in the current [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) that are placed into the new folder described above will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
 
 ## Pages Running Laravel
 ### Occurrence
