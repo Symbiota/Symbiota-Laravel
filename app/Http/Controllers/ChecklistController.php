@@ -53,11 +53,19 @@ class ChecklistController extends Controller {
 
         $taxons = $taxon_query
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
+            ->when(request()->query('taxa'), function(Builder $query, $taxa) {
+                $taxa_search = DB::table('taxa as t')
+                    ->join('taxaenumtree as e', 't.tid', 'e.parenttid')
+                    ->whereLike('t.sciname', $taxa . '%')
+                    ->select('e.tid');
+                $query->joinSub($taxa_search, 'taxa_search', 'taxa_search.tid', 't.tid');
+            })
             ->leftJoinSub($common_sub, 'commons', 'commons.tid', 't.tid')
             ->leftJoinSub($synonyms_sub, 'other_taxa', 'other_taxa.tidaccepted', 't.tid')
             ->orderBy('family')
             ->orderBy('sciname')
             ->select('t.tid', 'family', 'sciname', 'author', 'vernacularNames', 'synonyms', 'unitName1', 'unitName2', 'rankId')
+            ->distinct()
             ->get();
 
         $page_data = [
