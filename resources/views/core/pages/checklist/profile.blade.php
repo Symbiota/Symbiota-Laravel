@@ -57,7 +57,7 @@ if(request('partial') === 'taxa-list') {
     <div class="flex items-center">
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
         <div class="flex flex-grow justify-end gap-4">
-            @can('SUPER_ADMIN')
+            @can('CL_ADMIN', $checklist->clid)
             <a href="{{url(config('portal.name') . '/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> A
             </a>

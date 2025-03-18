@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -60,11 +61,24 @@ class User extends Authenticatable {
         return $this->hasMany(UserRole::class, 'uid');
     }
 
-    public function hasRole($role) {
-        return UserRole::query()
-            ->where('role', $role)
+    public function hasOneRoles(array $roles) {
+        $query = UserRole::query()
             ->where('uid', $this->uid)
-            ->select('role', 'tablePK')
-            ->first() ? true : false;
+            ->select('uid', 'role', 'tablePK');
+
+        $query->where(function($query) use ($roles) {
+            foreach ($roles as $key => $value) {
+                if(is_numeric($key)) {
+                    $query->orWhere('role', $value);
+                } else {
+                    $query->orWhere(function(Builder $q) use($key, $value) {
+                        $q->where('role', $key)
+                            ->where('tablePK', $value);
+                    });
+                }
+            }
+        });
+
+        return $query->first() ? true : false;
     }
 }
