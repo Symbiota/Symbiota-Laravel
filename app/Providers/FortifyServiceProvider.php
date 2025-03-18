@@ -28,9 +28,10 @@ class FortifyServiceProvider extends ServiceProvider {
     public function register(): void {
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
-                return response(view('pages/home'))
-                    ->header('HX-Replace-URL', url(config('fortify.home')))
+                $url = session()->get('link') ?? url('');
+                return response(redirect($url))
                     ->header('HX-Retarget', 'body')
+                    ->header('HX-Location', $url)
                     ->header('HX-Boosted', 'true');
             }
         });
@@ -82,6 +83,10 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::loginView(function (Request $request) {
             //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
             //
+            if(!session()->has('link')){
+                session(['link' => url()->previous()]);
+            }
+
             // If its on current page ignore target
             if ($request->headers->get('hx-request') && ! $request->headers->get('hx-target')) {
                 return view('pages/login')->fragment('form');
