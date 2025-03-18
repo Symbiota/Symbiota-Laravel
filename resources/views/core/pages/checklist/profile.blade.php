@@ -116,11 +116,13 @@ foreach($taxons as $taxon) {
                         :checked="$defaultSettings->dauthors ?? false"
                         name="show_taxa_authors"
                     />
+                    {{-- They currently show Alphabetically already
                     <x-checkbox
                         label="Show Taxa Alphabetically"
                         :checked="$defaultSettings->dalpha ?? false"
                         name="sort_alphabetically"
                     />
+                    --}}
                     <div class="flex items-center">
                         <x-button x-on:click="popoverOpen=false">Build List</x-button>
                         <div class="flex flex-grow justify-end gap-4 text-xl">
