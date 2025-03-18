@@ -59,4 +59,12 @@ class User extends Authenticatable {
     public function roles() {
         return $this->hasMany(UserRole::class, 'uid');
     }
+
+    public function hasRole($role) {
+        return UserRole::query()
+            ->where('role', $role)
+            ->where('uid', $this->uid)
+            ->select('role', 'tablePK')
+            ->first() ? true : false;
+    }
 }
