@@ -65,6 +65,6 @@ class User extends Authenticatable {
             ->where('role', $role)
             ->where('uid', $this->uid)
             ->select('role', 'tablePK')
-            ->first()? true: false;
+            ->first() ? true : false;
     }
 }
