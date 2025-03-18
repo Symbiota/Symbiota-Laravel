@@ -64,10 +64,11 @@ if(request('partial') === 'taxa-list') {
             <a href="{{url(config('portal.name') . '/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> V
             </a>
-            {{-- TODO (Logan) Toggle Spp controls --}}
+            {{-- TODO (Logan) Figure out what this is. It is a js toggle but can we just provide options? if authorized?
             <a href="">
                 <i class="flex-end fas fa-edit"></i> Spp
             </a>
+            --}}
             @endcan
         </div>
     </div>
