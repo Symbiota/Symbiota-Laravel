@@ -4,8 +4,7 @@ $families = [];
 $genera = [];
 $species = [];
 
-$defaultSettings = json_decode($checklist->defaultSettings);
-
+//Construct Family Tree
 foreach($taxons as $taxon) {
     if($taxon->family) {
         if(isset($families[$taxon->family])) {
@@ -31,6 +30,21 @@ foreach($taxons as $taxon) {
             $species[$taxon->unitName2] = 1;
         }
     }
+}
+
+//Set Display Settings
+$defaultSettings = json_decode($checklist->defaultSettings);
+$show_synonyms = $defaultSettings->dsynonyms ;
+$show_common = $defaultSettings->dcommon ;
+$show_notes_vouchers = $defaultSettings->dvouchers;
+$show_taxa_authors = $defaultSettings->dauthors;
+
+//Override defaults if using the search form
+if(request('partial') === 'taxa-list') {
+    $show_synonyms = request('show_synonyms');
+    $show_common = request('show_common');
+    $show_notes_vouchers = request('show_notes_vouchers');
+    $show_taxa_authors = request('show_taxa_authors');
 }
 
 @endphp
@@ -91,12 +105,12 @@ foreach($taxons as $taxon) {
                     <div class="text-lg font-bold">Taxonmic Filter</div>
                     <x-checkbox
                         label="Display Synonyms"
-                        :checked="$defaultSettings->dsynonyms ?? false"
+                        :checked="$show_synonyms"
                         name="show_synonyms"
                     />
                     <x-checkbox
                         label="Common Names"
-                        :checked="$defaultSettings->dcommon ?? false"
+                        :checked="$show_common"
                         name="show_common"
                     />
 
@@ -108,12 +122,12 @@ foreach($taxons as $taxon) {
 
                     <x-checkbox
                         label="Notes & Vouchers"
-                        :checked="$defaultSettings->dvouchers ?? false"
+                        :checked="$show_notes_vouchers"
                         name="show_notes_vouchers"
                     />
                     <x-checkbox
                         label="Taxon Authors"
-                        :checked="$defaultSettings->dauthors ?? false"
+                        :checked="$show_taxa_authors"
                         name="show_taxa_authors"
                     />
                     {{-- They currently show Alphabetically already
@@ -159,7 +173,7 @@ foreach($taxons as $taxon) {
         <div class="pl-4">
             <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">
                 {{ $taxon->sciname }}
-                @if(request('show_taxa_authors') && isset($taxon->author))
+                @if($show_taxa_authors && isset($taxon->author))
                 {{ $taxon->author }}
                 @endif
             </x-link>
@@ -168,14 +182,14 @@ foreach($taxons as $taxon) {
             <i class="ml-4 fa-solid fa-list"></i>
             </x-nav-link>
 
-            @if(request('show_common') && isset($taxon->vernacularNames))
+            @if($show_common && isset($taxon->vernacularNames))
             <div class="pl-2">
                 <span class="font-bold">Vernacular Names:</span>
                 {{ $taxon->vernacularNames }}
             </div>
             @endif
 
-            @if(request('show_synonyms') && isset($taxon->synonyms))
+            @if($show_synonyms && isset($taxon->synonyms))
             <div class="pl-2">
                 <span class="font-bold">Synonyms:</span>
                 {{ $taxon->synonyms }}
