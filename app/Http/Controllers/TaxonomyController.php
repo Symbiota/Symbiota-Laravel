@@ -22,7 +22,7 @@ class TaxonomyController extends Controller {
 	SELECT * from taxstatus where tid = ?
 	UNION ALL
 	SELECT ts.* from taxstatus as ts, parents as p where ts.tid = p.parenttid and ts.taxauthid = 1 and ts.tid != 1
-) SELECT taxa.tid, sciName, parents.family, parenttid, taxa.rankID, rankname
+) SELECT DISTINCT taxa.tid, sciName, parents.family, parenttid, taxa.rankID, rankname
             from parents join taxa on taxa.tid = parents.tid join taxonunits on taxonunits.rankid = taxa.rankID and taxa.kingdomName = taxonunits.kingdomName order by taxa.rankID', [$tid]);
 
         return $parent_tree;
