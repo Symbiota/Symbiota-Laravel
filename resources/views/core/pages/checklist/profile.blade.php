@@ -99,11 +99,13 @@ foreach($taxons as $taxon) {
                         :checked="$defaultSettings->dcommon ?? false"
                         name="show_common"
                     />
-                    <x-checkbox
+
+                    {{-- <x-checkbox
                         label="Display as Images"
                         :checked="$defaultSettings->dimages ?? false"
                         name="show_as_images"
-                    />
+                    /> --}}
+
                     <x-checkbox
                         label="Notes & Vouchers"
                         :checked="$defaultSettings->dvouchers ?? false"
