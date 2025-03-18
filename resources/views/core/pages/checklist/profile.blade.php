@@ -72,6 +72,7 @@ if(request('partial') === 'taxa-list') {
         </div>
     </div>
     {{-- TODO (Logan) figure out alternatives to this --}}
+    @if(isset($checklist->abstract) || isset($checklist->authors) || isset($checklist->locality))
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             @isset($checklist->abstract)
@@ -87,6 +88,7 @@ if(request('partial') === 'taxa-list') {
             @endisset
         </div>
     </x-accordion>
+    @endif
     {{-- TODO (Logan) scope to clid --}}
 
 
