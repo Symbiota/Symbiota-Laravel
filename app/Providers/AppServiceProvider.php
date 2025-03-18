@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider {
             Gate::define($gate_name, function (User $user) use ($database_value) {
                 return $user->hasOneRoles([
                     UserRole::SUPER_ADMIN,
-                    $database_value
+                    $database_value,
                 ]);
             });
         }
@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider {
         Gate::define('CL_ADMIN', function (User $user, $clid) {
             return $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,
-                UserRole::CL_ADMIN => $clid
+                UserRole::CL_ADMIN => $clid,
             ]);
         });
 

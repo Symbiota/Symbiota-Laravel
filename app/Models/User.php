@@ -3,8 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -66,12 +66,12 @@ class User extends Authenticatable {
             ->where('uid', $this->uid)
             ->select('uid', 'role', 'tablePK');
 
-        $query->where(function($query) use ($roles) {
+        $query->where(function ($query) use ($roles) {
             foreach ($roles as $key => $value) {
-                if(is_numeric($key)) {
+                if (is_numeric($key)) {
                     $query->orWhere('role', $value);
                 } else {
-                    $query->orWhere(function(Builder $q) use($key, $value) {
+                    $query->orWhere(function (Builder $q) use ($key, $value) {
                         $q->where('role', $key)
                             ->where('tablePK', $value);
                     });
