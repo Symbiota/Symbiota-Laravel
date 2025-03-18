@@ -53,7 +53,7 @@ class ChecklistController extends Controller {
 
         $taxons = $taxon_query
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
-            ->when(request()->query('taxa'), function(Builder $query, $taxa) {
+            ->when(request()->query('taxa'), function (Builder $query, $taxa) {
                 $taxa_search = DB::table('taxa as t')
                     ->join('taxaenumtree as e', 't.tid', 'e.parenttid')
                     ->whereLike('t.sciname', $taxa . '%')
@@ -70,10 +70,10 @@ class ChecklistController extends Controller {
 
         $page_data = [
             'checklist' => $checklist,
-            'taxons' => $taxons
+            'taxons' => $taxons,
         ];
 
-        if(request()->query('partial') === 'taxa-list') {
+        if (request()->query('partial') === 'taxa-list') {
             return view('pages/checklist/profile', $page_data)->fragment('taxa-list');
         }
 
