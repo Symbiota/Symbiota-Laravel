@@ -48,7 +48,7 @@ if(request('partial') === 'taxa-list') {
 }
 
 @endphp
-<x-layout class="grid grid-cols-1 gap-4">
+<x-layout class="grid grid-cols-1 gap-4 lg:w-3/4 md:w-full mx-auto">
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
         ['title' => $checklist->projname, 'href' => url( config('portal.name') . '/projects/index.php?pid='. $checklist->pid) ],
