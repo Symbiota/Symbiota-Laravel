@@ -47,9 +47,9 @@ class ChecklistController extends Controller {
 
         $synonyms_sub = DB::table('taxstatus as ts')
             ->join('taxa as t', 't.tid', 'ts.tid')
-            ->where('ts.tid', '!=', 'tidaccepted')
+            ->whereRaw('ts.tid != tidaccepted')
             ->groupBy('tidaccepted')
-            ->selectRaw('tidaccepted, GROUP_CONCAT(sciname) as synonyms');
+            ->selectRaw('tidaccepted, GROUP_CONCAT(t.sciname) as synonyms');
 
         $taxons = $taxon_query
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
