@@ -1,4 +1,5 @@
 <x-layout>
+    {{ request()->headers->get('referer') }}
     @fragment('form')
     <form hx-post="{{url('/login')}}" hx-swap="outerHTML" class="flex justify-center m-auto max-w-screen-sm mt-5">
         @csrf
