@@ -7,14 +7,6 @@
             accordion._x_dataStack[0].open = !accordion._x_dataStack[0].open;
         }
     }
-    function openWindow(link = "", title = "", options = "resizable=0,width=900,height=630,left=20,top=20") {
-        let mapWindow = open(link,
-            title,
-            options,
-        );
-        if (mapWindow.opener == null) mapWindow.opener = self;
-        mapWindow.focus();
-    }
 </script>
 @endPushOnce
 @php

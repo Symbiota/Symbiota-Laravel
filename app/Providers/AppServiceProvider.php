@@ -25,10 +25,12 @@ class AppServiceProvider extends ServiceProvider {
         /**
          * Define Authorization Gates
          */
+        Gate::define('SUPER_ADMIN', function (User $user) {
+            return $user->hasOneRoles([UserRole::SUPER_ADMIN]);
+        });
 
         // Roles Not Scoped under table keys
         foreach ([
-            'SUPER_ADMIN' => UserRole::SUPER_ADMIN,
             'RARE_SPP_ADMIN' => UserRole::RARE_SPP_ADMIN,
             'RARE_SPP_READER_ALL' => UserRole::RARE_SPP_READER_ALL,
             'CL_CREATE' => UserRole::CL_CREATE,
@@ -39,7 +41,10 @@ class AppServiceProvider extends ServiceProvider {
             'GLOSSARY_EDITOR' => UserRole::GLOSSARY_EDITOR,
         ] as $gate_name => $database_value) {
             Gate::define($gate_name, function (User $user) use ($database_value) {
-                return $user->hasRole($database_value);
+                return $user->hasOneRoles([
+                    UserRole::SUPER_ADMIN,
+                    $database_value,
+                ]);
             });
         }
 
@@ -50,7 +55,12 @@ class AppServiceProvider extends ServiceProvider {
         // 'DATASET_ADMIN'
         // 'DATASET_EDITOR'
         // 'PROJ_ADMIN'
-        // 'CL_ADMIN'
+        Gate::define('CL_ADMIN', function (User $user, $clid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::CL_ADMIN => $clid,
+            ]);
+        });
 
         /**
          * Setup Blade Component Folders and Directives

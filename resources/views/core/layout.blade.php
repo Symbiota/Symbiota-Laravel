@@ -6,7 +6,7 @@ $navigations = [
     ["title" => __("header.collections"), "link" => '/collections/search', 'htmx' => true ],
     ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map/index.php'],
     //["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists/index.php'],
-    ["title" => __("header.species_checklists"), "link" => '/checklists'],
+    ["title" => __("header.species_checklists"), "link" => '/checklists', 'htmx' => true],
     ["title" => __("header.media"), "link" => '/media/search', 'htmx' => true],
     ["title" => __("header.data_use"), "link" => '/usagepolicy', 'htmx' => true],
     ["title" => __("header.symbiota_help"), "link" => 'https://biokic.github.io/symbiota-docs/'],

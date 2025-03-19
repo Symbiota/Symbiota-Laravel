@@ -399,6 +399,11 @@ class Occurrence extends Model {
             }
         }
 
+        if ($clid = $params['clid'] ?? false) {
+            $query->join('fmvouchers as fmv', 'fmv.occid', 'o.occid')
+                ->where('clid', $clid);
+        }
+
         if (($elev_high = $params['elevhigh'] ?? false) && ($elev_low = $elev['elevlow'] ?? false)) {
             $query->where(function (Builder $where) {
                 $where

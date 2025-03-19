@@ -19,6 +19,18 @@ window.radius = undefined;
 window.Alpine = Alpine;
 Alpine.plugin(focus);
 
+//Custom Functions
+function openWindow(link = "", title = "", options = "resizable=0,width=900,height=630,left=20,top=20") {
+    let mapWindow = open(link,
+        title,
+        options,
+    );
+    if (mapWindow.opener == null) mapWindow.opener = self;
+    mapWindow.focus();
+}
+
+window.openWindow = openWindow;
+
 queueMicrotask(() => {
     Alpine.start()
 });

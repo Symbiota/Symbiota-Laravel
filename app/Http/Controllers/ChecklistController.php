@@ -42,14 +42,54 @@ class ChecklistController extends Controller {
             $sub_query->union($parent_query);
         }
 
+        $common_sub = DB::table('taxavernaculars')->groupBy('tid')
+            ->selectRaw('tid, GROUP_CONCAT(VernacularName) as vernacularNames');
+
+        $synonyms_sub = DB::table('taxstatus as ts')
+            ->join('taxa as t', 't.tid', 'ts.tid')
+            ->whereRaw('ts.tid != tidaccepted')
+            ->groupBy('tidaccepted')
+            ->selectRaw('tidaccepted, GROUP_CONCAT(t.sciname) as synonyms');
+
         $taxons = $taxon_query
             ->joinSub($sub_query, 'checklist_taxa', 'checklist_taxa.tid', 't.tid')
+            ->when(request()->query('taxa'), function (Builder $query, $taxa) {
+                $taxa_search = DB::table('taxa as t')
+                    ->join('taxaenumtree as e', 't.tid', 'e.parenttid')
+                    ->whereLike('t.sciname', $taxa . '%')
+                    ->select('e.tid');
+                $query->joinSub($taxa_search, 'taxa_search', 'taxa_search.tid', 't.tid');
+            })
+            ->leftJoinSub($common_sub, 'commons', 'commons.tid', 't.tid')
+            ->leftJoinSub($synonyms_sub, 'other_taxa', 'other_taxa.tidaccepted', 't.tid')
             ->orderBy('family')
             ->orderBy('sciname')
-            ->select('t.tid', 'family', 'sciname', 'unitName1', 'unitName2', 'rankId')
+            ->select('t.tid', 'family', 'sciname', 'author', 'vernacularNames', 'synonyms', 'unitName1', 'unitName2', 'rankId')
+            ->distinct()
             ->get();
 
-        return view('pages/checklist/profile', ['checklist' => $checklist, 'taxons' => $taxons]);
+        $vouchers = DB::table('fmvouchers as fm')
+            ->select('fmt.tid', 'fm.occid', 'fm.tid', 'fm.notes', 'fm.editornotes', 'o.recordedBy', 'o.recordNumber', 'c.institutionCode')
+            ->join('fmchklsttaxalink as fmt', 'fmt.clTaxaID', 'fm.clTaxaID')
+            ->join('omoccurrences as o', 'o.occid', 'fm.occid')
+            ->join('omcollections as c', 'o.collid', 'c.collid')
+            ->where('fm.clid', $clid)
+            ->orderBy('c.collid')
+            ->whereIn('fmt.tid', $taxons->map(fn ($t) => $t->tid))
+            ->distinct()
+            ->get();
+
+        $page_data = [
+            'checklist' => $checklist,
+            'vouchers' => $vouchers,
+            'taxons' => $taxons,
+        ];
+
+        if (request()->query('partial') === 'taxa-list') {
+            return view('pages/checklist/profile', $page_data)->fragment('taxa-list');
+        }
+
+        return view('pages/checklist/profile', $page_data);
     }
 
     public static function getChecklistsData(Request $request) {

@@ -1,5 +1,5 @@
 @props(['checklists' => []])
-<x-layout class="grid grid-cols-1 gap-4">
+<x-layout class="grid grid-cols-1 gap-4 lg:w-3/4 md:w-full mx-auto">
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
         'Species Inventories'
@@ -38,8 +38,8 @@
                 @endif
             </div>
             @endif
-            <li class="text-sm">
-                <x-link href="{{ url('checklists/' . $checklist->clid) }}" >
+            <li class="text-base">
+                <x-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid) }}" >
                     {{ $checklist->name }}
                 </x-link>
             </li>
