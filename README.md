@@ -8,7 +8,7 @@
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 ## Notice
-This is a WIP Progress Repo and not ready for Production uses yet.
+This is a work in progress Repo and not ready for Production uses yet.
 
 ## Intial Setup
 ### Native 
