@@ -1,8 +1,9 @@
-@props(['' => $checklist, 'taxons' => []])
+@props(['' => $checklist, 'taxons' => [], 'vouchers' => []])
 @php
 $families = [];
 $genera = [];
 $species = [];
+$taxa_vouchers = [];
 
 //Construct Family Tree
 foreach($taxons as $taxon) {
@@ -29,6 +30,15 @@ foreach($taxons as $taxon) {
         } else {
             $species[$taxon->unitName2] = 1;
         }
+    }
+}
+
+//Construct Voucher Lookup
+foreach($vouchers as $voucher) {
+    if(array_key_exists($voucher->tid, $taxa_vouchers)) {
+        array_push($taxa_vouchers[$voucher->tid], $voucher);
+    } else {
+        $taxa_vouchers[$voucher->tid] = [$voucher];
     }
 }
 
@@ -198,6 +208,18 @@ if(request('partial') === 'taxa-list') {
             <div class="pl-2">
                 <span class="font-bold">Synonyms:</span>
                 {{ $taxon->synonyms }}
+            </div>
+            @endif
+
+            @if($show_notes_vouchers && array_key_exists($taxon->tid, $taxa_vouchers))
+            <div class="pl-2">
+                <span class="font-bold">Vouchers:</span>
+                @foreach ($taxa_vouchers[$taxon->tid] as $voucher)
+                <span>
+                <x-link target="_blank" href="{{ url('occurrence/' . $voucher->occid) }}">{{ $voucher->recordedBy }} {{ $voucher->recordNumber }} [{{ $voucher->institutionCode }}]</x-link>
+                @if (!$loop->last) | @endif
+                @endforeach
+                </span>
             </div>
             @endif
         </div>

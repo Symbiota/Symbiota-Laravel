@@ -68,8 +68,20 @@ class ChecklistController extends Controller {
             ->distinct()
             ->get();
 
+        $vouchers = DB::table('fmvouchers as fm')
+            ->select('fmt.tid', 'fm.occid', 'fm.tid', 'fm.notes', 'fm.editornotes', 'o.recordedBy', 'o.recordNumber', 'c.institutionCode')
+            ->join('fmchklsttaxalink as fmt', 'fmt.clTaxaID', 'fm.clTaxaID')
+            ->join('omoccurrences as o', 'o.occid', 'fm.occid')
+            ->join('omcollections as c', 'o.collid', 'c.collid')
+            ->where('fm.clid', $clid)
+            ->orderBy('c.collid')
+            ->whereIn('fmt.tid', $taxons->map(fn ($t) => $t->tid))
+            ->distinct()
+            ->get();
+
         $page_data = [
             'checklist' => $checklist,
+            'vouchers' => $vouchers,
             'taxons' => $taxons,
         ];
 
