@@ -109,8 +109,9 @@ if(request('partial') === 'taxa-list') {
                 <form hx-get="{{ url()->current() }}" class="flex flex-col gap-2" hx-target="#taxa-list">
                     <input type="hidden" name="partial" value="taxa-list">
                     <x-taxa-search />
-                    <x-link href="">Open Symbiota Key</x-link>
-                    <x-link href="">Games</x-link>
+                    <x-link href="{{ url(config('portal.name')) }}/ident/key.php?dynclid={{ 0 }}&clid={{ $checklist->clid }}">Open Symbiota Key</x-link>
+                    <x-link href="{{ url(config('portal.name')) }}/games/flashcards.php?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Flash Cards</x-link>
+                    <x-link href="{{ url(config('portal.name')) }}/games/namegame.php?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Name Game</x-link>
 
                     <x-select class="w-64" default="0" :items="[
                         ['title' => 'Original Checklist', 'value' => 'Original Checklist', 'disabled' => false],
