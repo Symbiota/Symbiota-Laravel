@@ -139,37 +139,37 @@ class DownloadController extends Controller {
         //Setup File Names
         $fileNames = [];
 
-        [$file_delimiter, $file_extension]= match(request('file_format')) {
-            'tsv' => ["\t", "tsv"],
-            default => [",", "csv"]
+        [$file_delimiter, $file_extension] = match (request('file_format')) {
+            'tsv' => ["\t", 'tsv'],
+            default => [',', 'csv']
         };
 
-        $file_charset = match(request('charset')) {
+        $file_charset = match (request('charset')) {
             'ISO-8859-1' => 'ISO-8859-1',
             default => 'UTF-8'
         };
 
         $encodeArr = fn ($v) => mb_convert_encoding($v, $file_charset);
 
-        if(request('compressed')) {
+        if (request('compressed')) {
             $fileNames['occurrence'] = 'occurrence.csv';
             $fileNames['eml'] = 'eml.xml';
             $fileNames['meta'] = 'meta.xml';
             $fileNames['CITEME'] = 'CITEME.txt';
 
-            if(request('include_determination_history')) {
+            if (request('include_determination_history')) {
                 $fileNames['identifications'] = 'identifications.' . $file_extension;
             }
 
-            if(request('include_media')) {
+            if (request('include_media')) {
                 $fileNames['multimedia'] = 'multimedia.' . $file_extension;
             }
 
-            if(request('include_alternative_identifers')) {
+            if (request('include_alternative_identifers')) {
                 $fileNames['identifiers'] = 'identifiers.' . $file_extension;
             }
 
-            if(request('include_occurrence_trait_attributes')) {
+            if (request('include_occurrence_trait_attributes')) {
                 $fileNames['measurementOrFact'] = 'measurementOrFact.' . $file_extension;
             }
         } else {
@@ -193,15 +193,15 @@ class DownloadController extends Controller {
         }
 
         //Write CSV Headers
-        if(array_key_exists('occurrence', $files)) {
+        if (array_key_exists('occurrence', $files)) {
             fputcsv(
                 $files['occurrence'],
                 array_map($encodeArr, array_keys($SCHEMA::$fields)),
                 $file_delimiter
             );
         }
-        if(array_key_exists('multimedia', $files)) {
-            if($file_charset != 'UTF-8') {
+        if (array_key_exists('multimedia', $files)) {
+            if ($file_charset != 'UTF-8') {
                 fputcsv(
                     $files['multimedia'],
                     array_map($encodeArr, array_keys(Multimedia::$fields)),
@@ -209,7 +209,7 @@ class DownloadController extends Controller {
                 );
             }
         }
-        if(array_key_exists('identifiers', $files)) {
+        if (array_key_exists('identifiers', $files)) {
             fputcsv(
                 $files['identifiers'],
                 array_map($encodeArr, array_keys(Identifiers::$fields)),
@@ -217,9 +217,9 @@ class DownloadController extends Controller {
         }
 
         //Write Meta data
-        if(array_key_exists('meta', $files)) {
+        if (array_key_exists('meta', $files)) {
             fwrite($files['meta'], view('xml/download/meta', [
-                'encoding' => $file_charset
+                'encoding' => $file_charset,
             ])->render());
         }
 
@@ -227,76 +227,75 @@ class DownloadController extends Controller {
         $query
             ->select(['c.*', 'gen.*', 'o.*'])
             ->orderBy('o.occid')
-            ->chunk(1000, function (\Illuminate\Support\Collection $occurrences)
-                use (&$files, &$taxa, $SCHEMA, &$collids, $file_delimiter, &$encodeArr) {
-            // Process Occurrence Data
-            $occids = [];
-            foreach ($occurrences as $occurrence) {
-                array_push($occids, $occurrence->occid);
+            ->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA, &$collids, $file_delimiter, &$encodeArr) {
+                // Process Occurrence Data
+                $occids = [];
+                foreach ($occurrences as $occurrence) {
+                    array_push($occids, $occurrence->occid);
 
-                if ($occurrence->tidInterpreted) {
-                    if (! array_key_exists($occurrence->tidInterpreted, $taxa)) {
-                        $taxa[$occurrence->tidInterpreted] = self::getHigherClassification($occurrence->tidInterpreted)[$occurrence->tidInterpreted];
+                    if ($occurrence->tidInterpreted) {
+                        if (! array_key_exists($occurrence->tidInterpreted, $taxa)) {
+                            $taxa[$occurrence->tidInterpreted] = self::getHigherClassification($occurrence->tidInterpreted)[$occurrence->tidInterpreted];
+                        }
+                    }
+
+                    if ($occurrence->collid && ! array_key_exists($occurrence->collid, $collids)) {
+                        array_push($collids, $occurrence->collid);
+                    }
+
+                    $unmapped_row = array_merge(
+                        (array) $occurrence,
+                        $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa) ? $taxa[$occurrence->tidInterpreted] : []
+                    );
+
+                    $row = $SCHEMA::map_row($unmapped_row);
+
+                    fputcsv($files['occurrence'], array_map($encodeArr, (array) $row), $file_delimiter);
+                }
+
+                //Process Media
+                if (array_key_exists('multimedia', $files)) {
+                    $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
+                    foreach ($occ_media as $media_row) {
+                        $row = Multimedia::map_row((array) $media_row);
+                        fputcsv($files['multimedia'], array_map($encodeArr, (array) $row), $file_delimiter);
                     }
                 }
 
-                if($occurrence->collid && !array_key_exists($occurrence->collid, $collids)) {
-                    array_push($collids, $occurrence->collid);
+                //Process identifiers
+                if (array_key_exists('identifiers', $files)) {
+                    $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
+                    foreach ($occ_identifiers as $identifier_row) {
+                        $row = Identifiers::map_row((array) $identifier_row);
+                        fputcsv($files['identifiers'], array_map($encodeArr, (array) $row), $file_delimiter);
+                    }
                 }
 
-                $unmapped_row = array_merge(
-                    (array) $occurrence,
-                    $occurrence->tidInterpreted && array_key_exists($occurrence->tidInterpreted, $taxa) ? $taxa[$occurrence->tidInterpreted] : []
-                );
-
-                $row = $SCHEMA::map_row($unmapped_row);
-
-                fputcsv($files['occurrence'], array_map($encodeArr, (array) $row), $file_delimiter);
-            }
-
-            //Process Media
-            if(array_key_exists('multimedia', $files)) {
-                $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
-                foreach ($occ_media as $media_row) {
-                    $row = Multimedia::map_row((array) $media_row);
-                    fputcsv($files['multimedia'], array_map($encodeArr, (array) $row), $file_delimiter);
+                //Process identifications
+                if (array_key_exists('identifications', $files)) {
+                    $occ_determinations = DB::table('omoccurdeterminations')->select('*')->whereIn('occid', $occids)->get();
+                    foreach ($occ_determinations as $determination_row) {
+                        $row = Determinations::map_row((array) $determination_row);
+                        fputcsv($files['identifications'], array_map($encodeArr, (array) $row), $file_delimiter);
+                    }
                 }
-            }
 
-            //Process identifiers
-            if(array_key_exists('identifiers', $files)) {
-                $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
-                foreach ($occ_identifiers as $identifier_row) {
-                    $row = Identifiers::map_row((array) $identifier_row);
-                    fputcsv($files['identifiers'],  array_map($encodeArr, (array) $row), $file_delimiter);
+                //Process measurementOrFact
+                if (array_key_exists('measurementOrFact', $files)) {
+                    $occ_attribute_traits = [];
+                    foreach ($occ_attribute_traits as $attribute_trait_row) {
+                        $row = AttributeTraits::map_row((array) $attribute_trait_row);
+                        fputcsv($files['measurementOrFact'], array_map($encodeArr, (array) $row), $file_delimiter);
+                    }
                 }
-            }
-
-            //Process identifications
-            if(array_key_exists('identifications', $files)) {
-                $occ_determinations = DB::table('omoccurdeterminations')->select('*')->whereIn('occid', $occids)->get();
-                foreach ($occ_determinations as $determination_row) {
-                    $row = Determinations::map_row((array) $determination_row);
-                    fputcsv($files['identifications'], array_map($encodeArr, (array) $row), $file_delimiter);
-                }
-            }
-
-            //Process measurementOrFact
-            if(array_key_exists('measurementOrFact', $files)) {
-                $occ_attribute_traits = [];
-                foreach ($occ_attribute_traits as $attribute_trait_row) {
-                    $row = AttributeTraits::map_row((array) $attribute_trait_row);
-                    fputcsv($files['measurementOrFact'], array_map($encodeArr, (array) $row), $file_delimiter);
-                }
-            }
-        });
+            });
 
         //Write EML data
-        if(array_key_exists('eml', $files)) {
+        if (array_key_exists('eml', $files)) {
             fwrite($files['eml'], view('xml/download/eml', [
                 'encoding' => $file_charset,
                 'lang' => 'eng',
-                'collections' => Collection::query()->whereIn('collid', $collids)->select('*')->get()
+                'collections' => Collection::query()->whereIn('collid', $collids)->select('*')->get(),
             ])->render());
         }
 
@@ -305,7 +304,7 @@ class DownloadController extends Controller {
             fclose($file);
         }
 
-        if(request('compressed')) {
+        if (request('compressed')) {
             $zipArchive = new ZipArchive();
             //. date('Y-m-d_His')
             $archiveFileName = 'SymbOuput_date_DwC-A.zip';

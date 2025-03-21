@@ -61,13 +61,11 @@ class Associations {
         'conditionOfAssociate' => Terms::SYMBIOTA,
         'imageMapJSON' => Terms::SYMBIOTA,
         'dynamicProperties' => Terms::SYMBIOTA,
-        'sourceIdentifier' =>Terms::SYMBIOTA,
+        'sourceIdentifier' => Terms::SYMBIOTA,
         'recordID' => Terms::SYMBIOTA,
         'createdUid' => Terms::SYMBIOTA,
         'modifiedTimestamp' => Terms::SYMBIOTA,
         'modifiedUid' => Terms::SYMBIOTA,
-        'initialtimestamp' => Terms::SYMBIOTA
+        'initialtimestamp' => Terms::SYMBIOTA,
     ];
-
 }
-
