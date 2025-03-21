@@ -15,6 +15,8 @@
             data-chip="{{ $chip }}"
             autocomplete="off"
             value="{{ $value }}"
+            @bind(checked)
+            @bind(disabled)
             @checked($checked)
             class="
             z-10 w-6 h-6 peer/checkbox appearance-none before:content['']
