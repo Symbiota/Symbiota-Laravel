@@ -126,6 +126,7 @@ class DownloadController extends Controller {
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
+        // TODO (Logan) Add Manditory params to prevent huge query
         if (empty($params)) {
             return [];
         }
@@ -136,16 +137,32 @@ class DownloadController extends Controller {
         }
 
         //Setup File Names
-        $fileNames = [
-            'occurrence' => 'occurrence.csv',
-            'multimedia' => 'multimedia.csv',
-            'identifiers' => 'identifiers.csv',
-            'measurementOrFact' => 'measurementOrFact.csv',
-            'identifications' => 'identifications.csv',
-            'eml' => 'eml.xml',
-            'meta' => 'meta.xml',
-            'CITEME' => 'CITEME.txt',
-        ];
+        $fileNames = [];
+
+        if(request('compressed')) {
+            $fileNames['occurrence'] = 'occurrence.csv';
+            $fileNames['eml'] = 'eml.xml';
+            $fileNames['meta'] = 'meta.xml';
+            $fileNames['CITEME'] = 'CITEME.txt';
+
+            if(request('include_determination_history')) {
+                $fileNames['identifications'] = 'identifications.csv';
+            }
+
+            if(request('include_media')) {
+                $fileNames['multimedia'] = 'multimedia.csv';
+            }
+
+            if(request('include_alternative_identifers')) {
+                $fileNames['identifiers'] = 'identifiers.csv';
+            }
+
+            if(request('include_occurrence_trait_attributes')) {
+                $fileNames['measurementOrFact'] = 'measurementOrFact.csv';
+            }
+        } else {
+            $fileNames['occurrence'] = time() . '-occurrence.csv';
+        }
 
         //Build Occurrence Query
         $query = Occurrence::buildSelectQuery($request->all());
@@ -164,12 +181,20 @@ class DownloadController extends Controller {
         }
 
         //Write CSV Headers
-        fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
-        fputcsv($files['multimedia'], array_keys(Multimedia::$fields));
-        fputcsv($files['identifiers'], array_keys(Identifiers::$fields));
+        if(array_key_exists('occurrence', $files)) {
+            fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
+        }
+        if(array_key_exists('multimedia', $files)) {
+            fputcsv($files['multimedia'], array_keys(Multimedia::$fields));
+        }
+        if(array_key_exists('identifiers', $files)) {
+            fputcsv($files['identifiers'], array_keys(Identifiers::$fields));
+        }
 
         //Write Meta data
-        fwrite($files['meta'], view('xml/download/meta')->render());
+        if(array_key_exists('meta', $files)) {
+            fwrite($files['meta'], view('xml/download/meta')->render());
+        }
 
         //This order matters when dealing with conflicting attribute names
         $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA, &$collids) {
@@ -199,62 +224,76 @@ class DownloadController extends Controller {
             }
 
             //Process Media
-            $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
-            foreach ($occ_media as $media_row) {
-                $row = Multimedia::map_row((array) $media_row);
-                fputcsv($files['multimedia'], (array) $row);
+            if(array_key_exists('multimedia', $files)) {
+                $occ_media = DB::table('media')->select('*')->whereIn('occid', $occids)->get();
+                foreach ($occ_media as $media_row) {
+                    $row = Multimedia::map_row((array) $media_row);
+                    fputcsv($files['multimedia'], (array) $row);
+                }
             }
 
             //Process identifiers
-            $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
-            foreach ($occ_identifiers as $identifier_row) {
-                $row = Identifiers::map_row((array) $identifier_row);
-                fputcsv($files['identifiers'], (array) $row);
+            if(array_key_exists('identifiers', $files)) {
+                $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
+                foreach ($occ_identifiers as $identifier_row) {
+                    $row = Identifiers::map_row((array) $identifier_row);
+                    fputcsv($files['identifiers'], (array) $row);
+                }
             }
 
             //Process identifications
-            $occ_determinations = DB::table('omoccurdeterminations')->select('*')->whereIn('occid', $occids)->get();
-            foreach ($occ_determinations as $determination_row) {
-                $row = Determinations::map_row((array) $determination_row);
-                fputcsv($files['identifications'], (array) $row);
+            if(array_key_exists('identifications', $files)) {
+                $occ_determinations = DB::table('omoccurdeterminations')->select('*')->whereIn('occid', $occids)->get();
+                foreach ($occ_determinations as $determination_row) {
+                    $row = Determinations::map_row((array) $determination_row);
+                    fputcsv($files['identifications'], (array) $row);
+                }
             }
 
             //Process measurementOrFact
-            $occ_attribute_traits = [];
-            foreach ($occ_attribute_traits as $attribute_trait_row) {
-                $row = AttributeTraits::map_row((array) $attribute_trait_row);
-                fputcsv($files['measurementOrFact'], (array) $row);
+            if(array_key_exists('measurementOrFact', $files)) {
+                $occ_attribute_traits = [];
+                foreach ($occ_attribute_traits as $attribute_trait_row) {
+                    $row = AttributeTraits::map_row((array) $attribute_trait_row);
+                    fputcsv($files['measurementOrFact'], (array) $row);
+                }
             }
         });
 
         //Write EML data
-        fwrite($files['eml'], view('xml/download/eml', [
-            'collections' => Collection::query()->whereIn('collid', $collids)->select('*')->get()
-        ])->render());
+        if(array_key_exists('eml', $files)) {
+            fwrite($files['eml'], view('xml/download/eml', [
+                'collections' => Collection::query()->whereIn('collid', $collids)->select('*')->get()
+            ])->render());
+        }
 
         //Close all working files
         foreach ($files as $key => $file) {
             fclose($file);
         }
 
-        $zipArchive = new ZipArchive();
-        //. date('Y-m-d_His')
-        $archiveFileName = 'SymbOuput_date_DwC-A.zip';
-        if (! ($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
-            exit('FATAL ERROR: unable to create archive file: ' . $status);
+        if(request('compressed')) {
+            $zipArchive = new ZipArchive();
+            //. date('Y-m-d_His')
+            $archiveFileName = 'SymbOuput_date_DwC-A.zip';
+            if (! ($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
+                exit('FATAL ERROR: unable to create archive file: ' . $status);
+            }
+
+            foreach ($fileNames as $key => $file) {
+                $zipArchive->addFile($file);
+            }
+
+            $zipArchive->close();
+
+            //Delete All working files
+            foreach ($fileNames as $key => $file) {
+                unlink($file);
+            }
+
+            return response()->download(public_path($archiveFileName))->deleteFileAfterSend(true);
+        } else {
+            return response()->download(public_path($fileNames['occurrence']))->deleteFileAfterSend(true);
         }
-
-        foreach ($fileNames as $key => $file) {
-            $zipArchive->addFile($file);
-        }
-
-        $zipArchive->close();
-
-        //Delete All working files
-        foreach ($fileNames as $key => $file) {
-            unlink($file);
-        }
-
-        return response()->download(public_path($archiveFileName))->deleteFileAfterSend(true);
     }
 }
