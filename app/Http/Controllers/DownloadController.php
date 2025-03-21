@@ -306,8 +306,7 @@ class DownloadController extends Controller {
 
         if (request('compressed')) {
             $zipArchive = new ZipArchive();
-            //. date('Y-m-d_His')
-            $archiveFileName = 'SymbOuput_date_DwC-A.zip';
+            $archiveFileName = 'SymbOuput_' . date('Y-m-d_His') . '_DwC-A.zip';
             if (! ($status = $zipArchive->open($archiveFileName, ZipArchive::CREATE))) {
                 exit('FATAL ERROR: unable to create archive file: ' . $status);
             }
