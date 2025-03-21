@@ -8,6 +8,10 @@ class DarwinCore {
     use DeriveTaxonRank;
     use RowMap;
 
+    public static $metaType = 'core';
+
+    public static $metaRowType = 'http://rs.tdwg.org/dwc/terms/Occurrence';
+
     public static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',

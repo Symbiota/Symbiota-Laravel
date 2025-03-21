@@ -16,34 +16,24 @@ use App\Core\Download\Identifiers;
 
 $sections = [
     [
-        'terms' => DarwinCore::$terms,
+        'schema' => DarwinCore::class,
         'file' => 'occurrences.csv',
-        'rowtype' => 'http://rs.tdwg.org/dwc/terms/Occurrence',
-        'type' => 'core',
     ],
     [
-        'terms' => Determinations::$terms,
+        'schema' => Determinations::class,
         'file' => 'identifications.csv',
-        'rowtype' => 'http://rs.tdwg.org/dwc/terms/Identification',
-        'type' => 'extension',
     ],
     [
-        'terms' => Multimedia::$terms,
+        'schema' => Multimedia::class,
         'file' => 'multimedia.csv',
-        'rowtype' => 'http://rs.tdwg.org/ac/terms/Multimedia',
-        'type' => 'extension',
     ],
     [
-        'terms' => AttributeTraits::$terms,
+        'schema' => AttributeTraits::class,
         'file' => 'measurementOrFact.csv',
-        'rowtype' => 'http://rs.iobis.org/obis/terms/ExtendedMeasurementOrFact',
-        'type' => 'extension',
     ],
     [
-        'terms' => Identifiers::$terms,
+        'schema' => Identifiers::class,
         'file' => 'identifiers.csv',
-        'rowtype' => 'http://rs.gbif.org/terms/1.0/Identifier',
-        'type' => 'extension',
     ]
 ];
 @endphp
@@ -52,25 +42,25 @@ $sections = [
 <archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://rs.tdwg.org/dwc/text/   http://rs.tdwg.org/dwc/text/tdwg_dwc_text.xsd">
     @foreach ($sections as $section)
-        <{{ $section['type'] }}
+        <{{ $section['schema']::$metaType }}
             dateFormat="{{ $dateFormat }}"
             encoding="{{ $encoding }}"
             fieldsTerminatedBy="{{ $fieldsTerminatedBy }}"
             linesTerminatedBy="{{ $linesTerminatedBy }}"
             fieldsEnclosedBy="{{ $fieldsEnclosedBy }}"
             ignoreHeaderLines="1"
-            rowType="{{$section['rowtype']}}"
+            rowType="{{ $section['schema']::$metaRowType }}"
         >
             <files>
                 <location>{{ $section['file'] }}</location>
             </files>
-            @foreach (DarwinCore::$terms as $term => $base_url)
+            @foreach ($section['schema']::$terms as $term => $base_url)
                 @empty($base_url)
                 <{{ $term }} index="{{ $loop->index }}" />
                 @else
                 <field index="{{ $loop->index }}" term="{{ $base_url . $term }}" />
                 @endempty
             @endforeach
-        </{{ $section['type'] }}>
+        </{{ $section['schema']::$metaType }}>
     @endforeach
 </archive>

@@ -6,6 +6,10 @@ class Multimedia {
     use DeriveOccurrenceReference;
     use RowMap;
 
+    public static $metaType = 'extension';
+
+    public static $metaRowType = 'http://rs.tdwg.org/ac/terms/Multimedia';
+
     public static $casts = [
         'occid' => 'coreid',
         'originalUrl' => 'identifier',

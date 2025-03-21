@@ -7,6 +7,11 @@ class SymbiotaNative {
     use DeriveOccurrenceReference;
     use RowMap;
 
+    public static $metaType = 'core';
+
+    //TODO (Logan) double check if this is correct
+    public static $metaRowType = 'http://rs.tdwg.org/dwc/terms/Occurrence';
+
     public static $casts = [
         'occid' => 'id',
         'tidInterpreted' => 'taxonID',

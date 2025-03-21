@@ -5,6 +5,10 @@ namespace App\Core\Download;
 class AttributeTraits {
     use RowMap;
 
+    public static $metaType = 'extension';
+
+    public static $metaRowType = 'http://rs.iobis.org/obis/terms/ExtendedMeasurementOrFact';
+
     public static $casts = [
         'occid' => 'coreid',
         'traitname' => 'measurementType',

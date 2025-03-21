@@ -5,6 +5,10 @@ namespace App\Core\Download;
 class Identifiers {
     use RowMap;
 
+    public static $metaType = 'extension';
+
+    public static $metaRowType = 'http://rs.gbif.org/terms/1.0/Identifier';
+
     public static $casts = [
         'occid' => 'coreid',
         'identifierValue' => 'identifier',

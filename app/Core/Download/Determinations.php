@@ -5,6 +5,10 @@ namespace App\Core\Download;
 class Determinations {
     use RowMap;
 
+    public static $metaType = 'extension';
+
+    public static $metaRowType = 'http://rs.tdwg.org/dwc/terms/Identification';
+
     public static $casts = [
         'occid' => 'coreid',
         'sciname' => 'scientificName',
