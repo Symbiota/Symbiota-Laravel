@@ -2,7 +2,7 @@
 
 namespace App\Core\Download;
 
-class Identifers {
+class Identifiers {
     use RowMap;
 
     public static $casts = [
@@ -21,7 +21,15 @@ class Identifers {
         'title' => null,
         'format' => null,
         'recordID' => null,
-        'format' => null,
         'initialTimestamp' => null,
+    ];
+
+    public static $terms = [
+        'coreid' => null,
+        'identifier' => Terms::DUBLIN_CORE,
+        'title' => Terms::DUBLIN_CORE,
+        'format' => Terms::DUBLIN_CORE,
+        'recordID' => Terms::SYMBIOTA,
+        'initialTimestamp' => Terms::SYMBIOTA,
     ];
 }

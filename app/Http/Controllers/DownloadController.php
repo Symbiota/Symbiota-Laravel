@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Download\AttributeTraits;
 use App\Core\Download\DarwinCore;
 use App\Core\Download\Determinations;
-use App\Core\Download\Identifers;
+use App\Core\Download\Identifiers;
 use App\Core\Download\Multimedia;
 use App\Core\Download\SymbiotaNative;
 use App\Models\Occurrence;
@@ -164,7 +164,10 @@ class DownloadController extends Controller {
         //Write CSV Headers
         fputcsv($files['occurrence'], array_keys($SCHEMA::$fields));
         fputcsv($files['multimedia'], array_keys(Multimedia::$fields));
-        fputcsv($files['identifiers'], array_keys(Identifers::$fields));
+        fputcsv($files['identifiers'], array_keys(Identifiers::$fields));
+
+        //Write CSV Headers
+        fwrite($files['meta'], view('xml/download/meta')->render());
 
         //This order matters when dealing with conflicting attribute names
         $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA) {
@@ -199,7 +202,7 @@ class DownloadController extends Controller {
             //Process identifiers
             $occ_identifiers = DB::table('omoccuridentifiers')->select('*')->whereIn('occid', $occids)->get();
             foreach ($occ_identifiers as $identifier_row) {
-                $row = Identifers::map_row((array) $identifier_row);
+                $row = Identifiers::map_row((array) $identifier_row);
                 fputcsv($files['identifiers'], (array) $row);
             }
 

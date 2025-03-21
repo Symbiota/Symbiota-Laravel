@@ -21,14 +21,27 @@ class AttributeTraits {
     ];
 
     public static $fields = [
-        'coreid',
-        'measurementType',
-        'measurementTypeID',
-        'measurementValue',
-        'measurementUnit',
-        'measurementDeterminedDate',
-        'measurementDeterminedBy',
-        'measurementRemarks',
+        'coreid' => null,
+        'measurementType' => null,
+        'measurementTypeID' => null,
+        'measurementValue' => null,
+        'measurementValueID' => null,
+        'measurementUnit' => null,
+        'measurementDeterminedDate' => null,
+        'measurementDeterminedBy' => null,
+        'measurementRemarks' => null,
+    ];
+
+    public static $terms = [
+        'coreid' => null,
+        'measurementType' => Terms::DARWIN_CORE,
+        'measurementTypeID' => Terms::OBIS,
+        'measurementValue' => Terms::DARWIN_CORE,
+        'measurementValueID' => Terms::OBIS,
+        'measurementUnit' => Terms::DARWIN_CORE,
+        'measurementDeterminedDate' => Terms::DARWIN_CORE,
+        'measurementDeterminedBy' => Terms::DARWIN_CORE,
+        'measurementRemarks' => Terms::DARWIN_CORE,
     ];
 
     public function derive_measurement_value($row) {

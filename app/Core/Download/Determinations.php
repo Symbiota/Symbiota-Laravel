@@ -32,4 +32,21 @@ class Determinations {
         'recordID' => null,
         'modified' => null,
     ];
+
+    public static $terms = [
+        'coreid' => null,
+        'identifiedBy' => Terms::DARWIN_CORE,
+        'dateIdentified' => Terms::DARWIN_CORE,
+        'identificationQualifier' => Terms::DARWIN_CORE,
+        'scientificName' => Terms::DARWIN_CORE,
+        'scientificNameAuthorship' => Terms::DARWIN_CORE,
+        'genus' => Terms::DARWIN_CORE,
+        'specificEpithet' => Terms::DARWIN_CORE,
+        'taxonRank' => Terms::DARWIN_CORE,
+        'infraspecificEpithet' => Terms::DARWIN_CORE,
+        'identificationReferences' => Terms::DARWIN_CORE,
+        'identificationRemarks' => Terms::DARWIN_CORE,
+        'recordID' => Terms::IDIGBIO,
+        'modified' => Terms::DUBLIN_CORE,
+    ];
 }
