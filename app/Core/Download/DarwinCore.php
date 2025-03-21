@@ -130,6 +130,7 @@ class DarwinCore {
     ];
 
     public static $terms = [
+        'id' => null,
         'institutionCode' => Terms::DARWIN_CORE,
         'collectionCode' => Terms::DARWIN_CORE,
         'ownerInstitutionCode' => Terms::DARWIN_CORE,
