@@ -8,6 +8,7 @@ use App\Core\Download\Determinations;
 use App\Core\Download\Identifiers;
 use App\Core\Download\Multimedia;
 use App\Core\Download\SymbiotaNative;
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -156,6 +157,7 @@ class DownloadController extends Controller {
         }
 
         $taxa = [];
+        $collids = [];
         $files = [];
         foreach ($fileNames as $key => $fileName) {
             $files[$key] = fopen($fileName, 'w');
@@ -166,11 +168,11 @@ class DownloadController extends Controller {
         fputcsv($files['multimedia'], array_keys(Multimedia::$fields));
         fputcsv($files['identifiers'], array_keys(Identifiers::$fields));
 
-        //Write CSV Headers
+        //Write Meta data
         fwrite($files['meta'], view('xml/download/meta')->render());
 
         //This order matters when dealing with conflicting attribute names
-        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA) {
+        $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA, &$collids) {
             // Process Occurrence Data
             $occids = [];
             foreach ($occurrences as $occurrence) {
@@ -180,6 +182,10 @@ class DownloadController extends Controller {
                     if (! array_key_exists($occurrence->tidInterpreted, $taxa)) {
                         $taxa[$occurrence->tidInterpreted] = self::getHigherClassification($occurrence->tidInterpreted)[$occurrence->tidInterpreted];
                     }
+                }
+
+                if($occurrence->collid && !array_key_exists($occurrence->collid, $collids)) {
+                    array_push($collids, $occurrence->collid);
                 }
 
                 $unmapped_row = array_merge(
@@ -220,6 +226,11 @@ class DownloadController extends Controller {
                 fputcsv($files['measurementOrFact'], (array) $row);
             }
         });
+
+        //Write EML data
+        fwrite($files['eml'], view('xml/download/eml', [
+            'collections' => Collection::query()->whereIn('collid', $collids)->select('*')->get()
+        ])->render());
 
         //Close all working files
         foreach ($files as $key => $file) {
