@@ -42,7 +42,7 @@ $datasets = DB::table('omoccurdatasets')
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Datasets' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Profile' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([ 'Profile', 'Projects and checklists', 'Collections', 'Datasets', 'Passwords and authentication',
@@ -68,6 +68,18 @@ $datasets = DB::table('omoccurdatasets')
                 <form class="flex flex-col gap-4">
                     <x-input label="Name" id="name" value="{{ $user->name }}" />
                     <x-input label="Email" id="email" value="{{ $user->email }}" />
+                    <x-checkbox label="Accessibility Preference" id="accessibility_preference" />
+                    <x-input label="ORCID or other GUID" value="{{ $user->guid }}" />
+                    <x-input label="Title" value="{{ $user->title }}" />
+                    <x-input label="Institution" value="{{ $user->institution }}" />
+                    <x-input label="City" value="{{ $user->city }}" />
+                    <x-input label="State" value="{{ $user->state }}" />
+                    <x-input label="Zip Code" value="{{ $user->zip }}" />
+                    <x-input label="Country" value="{{ $user->country}}" />
+
+                    <x-button>Update Profile</x-button>
+                    <x-button variant="error">Delete Profile</x-button>
+                    {{-- TODO (Logan) taxonomic relationships. Not sure how this is tied to user profiles --}}
                 </form>
             </div>
             {{-- Projects and checklists --}}
