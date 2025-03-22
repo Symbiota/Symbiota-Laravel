@@ -1,5 +1,7 @@
 @php
 use App\Models\UserRole;
+use Illuminate\Support\Facades\DB;
+
 $user = request()->user();
 $collections = App\Models\Collection::query()
 ->join('userroles', 'tablePK', 'collid')
@@ -8,6 +10,14 @@ $collections = App\Models\Collection::query()
 ->groupBy('collid')
 ->where('uid', $user->uid)
 ->get();
+
+$checklists = DB::table('fmchecklists')
+->join('userroles as ur', 'tablePK', 'clid')
+->whereIn('role', [UserRole::CL_ADMIN])
+->where('ur.uid', $user->uid)
+->get();
+
+$datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
 
 @endphp
 <x-layout class="sm:w-[95%] lg:w-[75%] m-auto flex flex-col gap-4 p-0">
@@ -30,7 +40,7 @@ $collections = App\Models\Collection::query()
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Collections' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Projects and checklists' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([ 'Profile', 'Projects and checklists', 'Collections', 'Datasets', 'Passwords and authentication',
@@ -59,8 +69,47 @@ $collections = App\Models\Collection::query()
                 </form>
             </div>
             {{-- Projects and checklists --}}
-            <div x-show="active_tab === 'Projects and checklists'" x-cloak>
-                Todo projects and checklist
+            <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold">Checklists</div>
+                    <div class="flex flex-grow justify-end">
+                        @can('CL_CREATE')
+                        <x-button href="">
+                            Create Checklist
+                        </x-button>
+                        @endcan
+                    </div>
+                </div>
+                <hr class="mb-4" />
+
+                @if(count($checklists) <= 0)
+                <div>
+                    You have no permissions for any checklists.
+                </div>
+                @endif
+
+                @foreach ($checklists as $checklist)
+                <div class="p-2 border border-base-300 rounded-md">
+                    <div class="font-bold text-xl">
+                        {{ $checklist->name }}
+                        <x-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid)}}">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </x-link>
+                    </div>
+                    @if(!empty($checklist->locality))
+                    <div>
+                        {{ $checklist->locality }}
+                    </div>
+                    @endif
+
+                    @if(!empty($checklist->abstract))
+                    <div>
+                        {{ $checklist->abstract}}
+                    </div>
+                    @endif
+                </div>
+                @endforeach
+
             </div>
 
             {{-- Collections --}}
@@ -68,20 +117,19 @@ $collections = App\Models\Collection::query()
                 <div class="flex items-center">
                     <div class="text-2xl font-bold">Collections</div>
                     <div class="flex flex-grow justify-end">
-                    @can('SUPER_ADMIN')
-                        {{-- TODO (Logan) create collections --}}
+                        @can('SUPER_ADMIN')
                         <x-button href="{{ url(config('portal.name') . '/collections/misc/collmetadata.php') }}">
                             Create Collection
                         </x-button>
-                    @endcan
+                        @endcan
                     </div>
                 </div>
                 <hr class="mb-4" />
 
                 @if(count($collections) <= 0)
-                    <div class="w-full h-full">
-                        You have no permissions for any collections.
-                    </div>
+                <div>
+                    You have no permissions for any collections.
+                </div>
                 @endif
 
                 @foreach ($collections as $collection)
@@ -111,148 +159,149 @@ $collections = App\Models\Collection::query()
                     </div>
                 </div>
                 @endforeach
-            </div>
+        </div>
 
-            {{-- Datasets --}}
-            <div x-show="active_tab === 'Datasets'" x-cloak>
-                Todo datasets
-            </div>
+        {{-- Datasets --}}
+        <div x-show="active_tab === 'Datasets'" x-cloak>
+            <div class="text-2xl font-bold">Datasets</div>
+            <hr class="mb-4" />
+        </div>
 
-            {{-- Passwords and authentication --}}
-            <div x-show="active_tab === 'Passwords and authentication'" x-cloak>
-                <div class="text-2xl font-bold">Password</div>
-                <hr class="mb-4" />
-                <form class="flex flex-col gap-4">
-                    <x-input type="password" label="Old password" id="old_password" />
-                    <x-input type="password" label="New password" id="new_password" />
-                    <x-input type="password" label="Confirm password" id="confirm_password" />
-                    <x-button type="submit">Update Password</x-button>
-                    <x-link href="#todo">I forgot my password</x-link>
-                </form>
+        {{-- Passwords and authentication --}}
+        <div x-show="active_tab === 'Passwords and authentication'" x-cloak>
+            <div class="text-2xl font-bold">Password</div>
+            <hr class="mb-4" />
+            <form class="flex flex-col gap-4">
+                <x-input type="password" label="Old password" id="old_password" />
+                <x-input type="password" label="New password" id="new_password" />
+                <x-input type="password" label="Confirm password" id="confirm_password" />
+                <x-button type="submit">Update Password</x-button>
+                <x-link href="#todo">I forgot my password</x-link>
+            </form>
 
-                <div class="text-2xl font-bold">Two-factor authentication</div>
-                <hr class="mb-4" />
-                @if(session('status') == 'two-factor-authentication-confirmed')
-                <div class="flex flex-col gap-4">
-                    <p class="font-medium">
-                        Two factor authentication confirmed and enabled successfully.
-                    </p>
-                    <p>
-                        These are the recovery codes needed to get back into the account. Keep these in a safe place
-                        losing them may
-                        lead to losing access to your account.
-                    </p>
+            <div class="text-2xl font-bold">Two-factor authentication</div>
+            <hr class="mb-4" />
+            @if(session('status') == 'two-factor-authentication-confirmed')
+            <div class="flex flex-col gap-4">
+                <p class="font-medium">
+                    Two factor authentication confirmed and enabled successfully.
+                </p>
+                <p>
+                    These are the recovery codes needed to get back into the account. Keep these in a safe place
+                    losing them may
+                    lead to losing access to your account.
+                </p>
+                <div>
+                    @foreach (request()->user()->recoveryCodes() as $code)
                     <div>
-                        @foreach (request()->user()->recoveryCodes() as $code)
-                        <div>
-                            {{ $code }}
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @elseif(auth()->user()->two_factor_confirmed_at)
-                <form hx-delete="{{ url('/user/two-factor-authentication') }}">
-                    @csrf
-                    <x-button type="submit">Disable 2FA</x-button>
-                </form>
-                @elseif (session('status') == 'two-factor-authentication-enabled')
-                <div class="flex flex-col gap-4 justify-center w-80">
-                    <div class="font-medium">
-                        Please finish configuring two factor authentication below.
-                    </div>
-
-                    <div>
-                        {!! request()->user()->twoFactorQrCodeSvg(); !!}
-                    </div>
-
-                    <form hx-post="{{url('/user/confirmed-two-factor-authentication')}}" hx-swap="outerHTML"
-                        hx-target="body" class="flex flex-col gap-4">
-                        @csrf
-                        <x-input label="Enter your verification code" id="code" />
-                        <x-button class="w-fit" type="submit">Confirm 2FA</x-button>
-                    </form>
-                </div>
-                @else
-                <form hx-post="{{url('/user/two-factor-authentication')}}" hx-swap="outerHTML" hx-target="body">
-                    @csrf
-                    <x-button class="w-fit" type="submit">Enable Two Factor Auth</x-button>
-                </form>
-                @endif
-
-                @if(count($errors) > 0)
-                <div class="mb-4">
-                    @foreach ($errors->all() as $error)
-                    <div class="bg-error text-error-content rounded-md p-4">
-                        {{ $error }}
+                        {{ $code }}
                     </div>
                     @endforeach
                 </div>
-                @endif
             </div>
+            @elseif(auth()->user()->two_factor_confirmed_at)
+            <form hx-delete="{{ url('/user/two-factor-authentication') }}">
+                @csrf
+                <x-button type="submit">Disable 2FA</x-button>
+            </form>
+            @elseif (session('status') == 'two-factor-authentication-enabled')
+            <div class="flex flex-col gap-4 justify-center w-80">
+                <div class="font-medium">
+                    Please finish configuring two factor authentication below.
+                </div>
 
-            {{-- Developer --}}
-            <div x-show="active_tab === 'Developer'">
-                @fragment('tokens')
-                <div id="tokens-container" class="flex flex-col gap-4">
-                    <div>
-                        <div class="p-2 flex items-center gap-2">
-                            <div class="text-xl font-bold flex-grow">Personal access tokens </div>
-                            <form class="m-0" hx-swap="outerHTML" hx-target="#tokens-container"
-                                hx-post="{{ url('token/create') }}">
-                                <input type="hidden" name="token_name" value="new_token">
-                                @csrf
-                                <x-button>Generate new token</x-button>
-                            </form>
-                        </div>
-                        <hr>
+                <div>
+                    {!! request()->user()->twoFactorQrCodeSvg(); !!}
+                </div>
+
+                <form hx-post="{{url('/user/confirmed-two-factor-authentication')}}" hx-swap="outerHTML"
+                    hx-target="body" class="flex flex-col gap-4">
+                    @csrf
+                    <x-input label="Enter your verification code" id="code" />
+                    <x-button class="w-fit" type="submit">Confirm 2FA</x-button>
+                </form>
+            </div>
+            @else
+            <form hx-post="{{url('/user/two-factor-authentication')}}" hx-swap="outerHTML" hx-target="body">
+                @csrf
+                <x-button class="w-fit" type="submit">Enable Two Factor Auth</x-button>
+            </form>
+            @endif
+
+            @if(count($errors) > 0)
+            <div class="mb-4">
+                @foreach ($errors->all() as $error)
+                <div class="bg-error text-error-content rounded-md p-4">
+                    {{ $error }}
+                </div>
+                @endforeach
+            </div>
+            @endif
+        </div>
+
+        {{-- Developer --}}
+        <div x-show="active_tab === 'Developer'">
+            @fragment('tokens')
+            <div id="tokens-container" class="flex flex-col gap-4">
+                <div>
+                    <div class="p-2 flex items-center gap-2">
+                        <div class="text-xl font-bold flex-grow">Personal access tokens </div>
+                        <form class="m-0" hx-swap="outerHTML" hx-target="#tokens-container"
+                            hx-post="{{ url('token/create') }}">
+                            <input type="hidden" name="token_name" value="new_token">
+                            @csrf
+                            <x-button>Generate new token</x-button>
+                        </form>
                     </div>
+                    <hr>
+                </div>
 
-                    <span>
-                        Tokens you have generate that can be used to access the <x-link target="_blank"
-                            href="{{ url('api/documentation') }}">Symbiota API</x-link>
-                    </span>
+                <span>
+                    Tokens you have generate that can be used to access the <x-link target="_blank"
+                        href="{{ url('api/documentation') }}">Symbiota API</x-link>
+                </span>
 
-                    @isset($created_token)
-                    <div class="mt-4 p-4 border-t border-base-300">
-                        Generated api key:
-                        <span class="bg-base-300 py-1 px-2 rounded-md">{{ $created_token }}</span>
-                        <div class="mt-1 text-warning font-bold">
-                            This key cannot be viewed again make sure to keep it somewhere safe
-                        </div>
-                    </div>
-                    @endisset
-                    <div class="border border-base-300">
-                        @foreach ($user_tokens as $token)
-                        <div class="p-4">
-                            <div class="flex items-center gap-4">
-                                <div class="font-bold flex-grow">
-                                    <span>{{ $token->name }}</span>
-                                    @if($token->abilities)
-                                    <i class="text-base opacity-50">- {{ implode(',', $token->abilities) }}</i>
-                                    @endif
-                                </div>
-                                @if($token->last_used_at)
-                                <div>Last used {{ $token->last_used_at }}</div>
-                                @endif
-                                <x-button variant="error" hx-swap="outerHTML" hx-include="input[name='_token']"
-                                    hx-target="#tokens-container"
-                                    hx-delete="{{url('token/delete/' . $token->id)}}">Delete</x-button>
-                            </div>
-                            @if($token->expires_at)
-                            <div>Expires {{ $token->expires_at }}</div>
-                            @else
-                            <div class="text-warning font-bold underline">This token has no expiration date.</div>
-                            @endif
-                        </div>
-                        @if(!$loop->last && count($user_tokens) > 1)
-                        <hr />
-                        @endif
-                        @endforeach
+                @isset($created_token)
+                <div class="mt-4 p-4 border-t border-base-300">
+                    Generated api key:
+                    <span class="bg-base-300 py-1 px-2 rounded-md">{{ $created_token }}</span>
+                    <div class="mt-1 text-warning font-bold">
+                        This key cannot be viewed again make sure to keep it somewhere safe
                     </div>
                 </div>
-                @endfragment
+                @endisset
+                <div class="border border-base-300">
+                    @foreach ($user_tokens as $token)
+                    <div class="p-4">
+                        <div class="flex items-center gap-4">
+                            <div class="font-bold flex-grow">
+                                <span>{{ $token->name }}</span>
+                                @if($token->abilities)
+                                <i class="text-base opacity-50">- {{ implode(',', $token->abilities) }}</i>
+                                @endif
+                            </div>
+                            @if($token->last_used_at)
+                            <div>Last used {{ $token->last_used_at }}</div>
+                            @endif
+                            <x-button variant="error" hx-swap="outerHTML" hx-include="input[name='_token']"
+                                hx-target="#tokens-container"
+                                hx-delete="{{url('token/delete/' . $token->id)}}">Delete</x-button>
+                        </div>
+                        @if($token->expires_at)
+                        <div>Expires {{ $token->expires_at }}</div>
+                        @else
+                        <div class="text-warning font-bold underline">This token has no expiration date.</div>
+                        @endif
+                    </div>
+                    @if(!$loop->last && count($user_tokens) > 1)
+                    <hr />
+                    @endif
+                    @endforeach
+                </div>
             </div>
-            {{-- Navigation Content End --}}
+            @endfragment
         </div>
+        {{-- Navigation Content End --}}
+    </div>
     </div>
 </x-layout>
