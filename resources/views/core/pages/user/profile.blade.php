@@ -45,15 +45,23 @@ $datasets = DB::table('omoccurdatasets')
     <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Profile' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
-            @foreach ([ 'Profile', 'Projects and checklists', 'Collections', 'Datasets', 'Passwords and authentication',
-            'Developer' ] as $item)
-            <button :class="active_tab === '{{ $item }}'? 'bg-base-200': 'bg-base-100' "
-                @click="active_tab = '{{ $item }}'"
-                class="flex items-center gap-4 hover:bg-base-300 px-2 p-1 rounded-md relative cursor-pointer w-full">
-                <div x-show="active_tab === '{{ $item }}'" x-cloak
+            @foreach ([
+                ['label' => 'Profile', 'icon' => 'fa-solid fa-user'],
+                ['label' => 'Projects and checklists', 'icon' => 'fa-solid fa-list'],
+                ['label' => 'Collections', 'icon' => 'fa-solid fa-jar'],
+                ['label' => 'Datasets', 'icon' => 'fa-solid fa-database'],
+                ['label' => 'Passwords and authentication', 'icon' => 'fa-solid fa-lock'],
+                ['label' => 'Developer', 'icon' => 'fa-solid fa-code'],
+            ] as $item)
+            <button :class="active_tab === '{{ $item['label'] }}'? 'bg-base-200': 'bg-base-100' "
+                @click="active_tab = '{{ $item['label'] }}'"
+                class="flex items-center gap-4 hover:bg-base-300 px-3 p-1 rounded-md relative cursor-pointer w-full">
+                <div x-show="active_tab === '{{ $item['label'] }}'" x-cloak
                     class="bg-accent w-1 h-5 absolute -left-2 rounded-md"></div>
-                <x-icons.edit />
-                {{$item}}
+                <span class="w-3 flex items-center justify-center">
+                    <i class="{{ $item['icon'] }}"></i>
+                </span>
+                {{ $item['label'] }}
             </button>
             @endforeach
         </div>
