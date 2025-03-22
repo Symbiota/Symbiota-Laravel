@@ -17,7 +17,9 @@ $checklists = DB::table('fmchecklists')
 ->where('ur.uid', $user->uid)
 ->get();
 
-$datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
+$datasets = DB::table('omoccurdatasets')
+    ->where('uid', $user->uid)
+    ->get();
 
 @endphp
 <x-layout class="sm:w-[95%] lg:w-[75%] m-auto flex flex-col gap-4 p-0">
@@ -40,7 +42,7 @@ $datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Projects and checklists' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Datasets' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([ 'Profile', 'Projects and checklists', 'Collections', 'Datasets', 'Passwords and authentication',
@@ -71,11 +73,11 @@ $datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
             {{-- Projects and checklists --}}
             <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4">
                 <div class="flex items-center">
-                    <div class="text-2xl font-bold">Checklists</div>
+                    <div class="text-2xl font-bold">checklists</div>
                     <div class="flex flex-grow justify-end">
-                        @can('CL_CREATE')
+                        @can('cl_create')
                         <x-button href="">
-                            Create Checklist
+                            create checklist
                         </x-button>
                         @endcan
                     </div>
@@ -84,7 +86,7 @@ $datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
 
                 @if(count($checklists) <= 0)
                 <div>
-                    You have no permissions for any checklists.
+                    you have no permissions for any checklists.
                 </div>
                 @endif
 
@@ -159,13 +161,49 @@ $datasets = DB::table('omoccurdatasets')->where('uid', $user->uid)->get();
                     </div>
                 </div>
                 @endforeach
-        </div>
+            </div>
 
-        {{-- Datasets --}}
-        <div x-show="active_tab === 'Datasets'" x-cloak>
-            <div class="text-2xl font-bold">Datasets</div>
-            <hr class="mb-4" />
-        </div>
+            {{-- Datasets --}}
+            <div x-show="active_tab === 'Datasets'" x-cloak class="flex flex-col gap-4">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold">Datasets</div>
+                    <div class="flex flex-grow justify-end">
+                        <x-button href="{{url(config('portal.name'))}}/collections/datasets/index.php">
+                            Create dataset
+                        </x-button>
+                    </div>
+                </div>
+                <hr class="mb-4" />
+
+                @if(count($datasets) <= 0)
+                <div>
+                    You have no permissions for any datasets.
+                </div>
+                @endif
+
+                @foreach ($datasets as $dataset)
+                <div>
+                    <div class="border border-base-300 rounded-md p-2">
+                        <div class="text-xl font-bold">
+                            {{ empty($dataset->name) ?'[ Empty Name ]' : $dataset->name}}
+                            <x-link href="{{ url(config('portal.name'))}}/datasets/public.php?datasetid={{$dataset->datasetID}}">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </x-link>
+                        </div>
+                        @if(!empty($dataset->notes))
+                            <div>
+                            <span class="font-bold">Notes:</span>
+                            {{ $dataset->notes }}
+                            </div>
+                        @endif
+                        <div>
+                            <span class="font-bold">Created:</span>
+                            {{ $dataset->initialTimestamp }}
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
 
         {{-- Passwords and authentication --}}
         <div x-show="active_tab === 'Passwords and authentication'" x-cloak>
