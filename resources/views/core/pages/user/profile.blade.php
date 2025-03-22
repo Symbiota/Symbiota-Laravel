@@ -1,6 +1,14 @@
 @php
+use App\Models\UserRole;
 $user = request()->user();
-$collections = App\Models\Collection->query()->get();
+$collections = App\Models\Collection::query()
+->join('userroles', 'tablePK', 'collid')
+->whereIn('role', [UserRole::COLL_ADMIN, UserRole::COLL_EDITOR])
+->selectRaw('omcollections.*, GROUP_CONCAT(DISTINCT role) as roles')
+->groupBy('collid')
+->where('uid', $user->uid)
+->get();
+
 @endphp
 <x-layout class="sm:w-[95%] lg:w-[75%] m-auto flex flex-col gap-4 p-0">
     {{--<div class="mt-4">
@@ -22,7 +30,7 @@ $collections = App\Models\Collection->query()->get();
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Developer' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Collections' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([ 'Profile', 'Projects and checklists', 'Collections', 'Datasets', 'Passwords and authentication',
@@ -56,8 +64,53 @@ $collections = App\Models\Collection->query()->get();
             </div>
 
             {{-- Collections --}}
-            <div x-show="active_tab === 'Collections'" x-cloak>
-                Todo Collections
+            <div x-show="active_tab === 'Collections'" x-cloak class="flex flex-col gap-4">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold">Collections</div>
+                    <div class="flex flex-grow justify-end">
+                    @can('SUPER_ADMIN')
+                        {{-- TODO (Logan) create collections --}}
+                        <x-button href="{{ url(config('portal.name') . '/collections/misc/collmetadata.php') }}">
+                            Create Collection
+                        </x-button>
+                    @endcan
+                    </div>
+                </div>
+                <hr class="mb-4" />
+
+                @if(count($collections) <= 0)
+                    <div class="w-full h-full">
+                        You have no permissions for any collections.
+                    </div>
+                @endif
+
+                @foreach ($collections as $collection)
+                <div class="flex items-center gap-4 p-4 rounded-md border border-base-300 relative">
+                    <img class="w-16 mx-auto flex-shrink" src="{{ $collection->icon }}">
+                    <div class="flex-grow">
+                        <div class="text-xl font-bold">
+                            {{ $collection->collectionName }}
+                            <x-link hx-boost="true" href="{{ url('collections/' . $collection->collID)}}">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </x-link>
+                        </div>
+                        @php
+                        $roles = explode(',', $collection->roles);
+                        @endphp
+                        <div class="flex gap-2">
+                            @foreach ($roles as $role)
+                            <div class="bg-base-300 w-fit px-2 rounded-full">
+                                @if($role === UserRole::COLL_ADMIN)
+                                Admin
+                                @elseif($role === UserRole::COLL_EDITOR)
+                                Editor
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
 
             {{-- Datasets --}}
@@ -155,7 +208,8 @@ $collections = App\Models\Collection->query()->get();
                     </div>
 
                     <span>
-                        Tokens you have generate that can be used to access the <x-link target="_blank" href="{{ url('api/documentation') }}">Symbiota API</x-link>
+                        Tokens you have generate that can be used to access the <x-link target="_blank"
+                            href="{{ url('api/documentation') }}">Symbiota API</x-link>
                     </span>
 
                     @isset($created_token)
@@ -191,7 +245,7 @@ $collections = App\Models\Collection->query()->get();
                             @endif
                         </div>
                         @if(!$loop->last && count($user_tokens) > 1)
-                            <hr/>
+                        <hr />
                         @endif
                         @endforeach
                     </div>
