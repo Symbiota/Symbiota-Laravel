@@ -93,11 +93,11 @@ $datasets = DB::table('omoccurdatasets')
             {{-- Projects and checklists --}}
             <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4">
                 <div class="flex items-center">
-                    <div class="text-2xl font-bold">checklists</div>
+                    <div class="text-2xl font-bold">Checklists</div>
                     <div class="flex flex-grow justify-end">
-                        @can('cl_create')
+                        @can('CL_CREATE')
                         <x-button href="">
-                            create checklist
+                            Create checklist
                         </x-button>
                         @endcan
                     </div>
