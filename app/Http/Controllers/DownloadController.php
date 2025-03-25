@@ -68,35 +68,6 @@ class DownloadController extends Controller {
         return view('pages/collections/download');
     }
 
-    public static function process_occurrence_row($unmapped_row, $SCHEMA) {
-        $row = $SCHEMA::$fields;
-        foreach ($unmapped_row as $key => $value) {
-            if (array_key_exists($key, $SCHEMA::$ignores)) {
-                continue;
-            }
-
-            // Map Casted Values
-            if (array_key_exists($key, $SCHEMA::$casts)) {
-                if (array_key_exists($SCHEMA::$casts[$key], $row)) {
-                    $row[$SCHEMA::$casts[$key]] = $value;
-                }
-            }
-            // Map DB Values
-            elseif (array_key_exists($key, $row)) {
-                $row[$key] = $value;
-            }
-
-            // Generate Row Dervied Values
-            foreach ($SCHEMA::$derived as $key => $fn) {
-                if (array_key_exists($key, $row) && ! $row[$key]) {
-                    $row[$key] = $SCHEMA::callDerived($key, $unmapped_row);
-                }
-            }
-        }
-
-        return $row;
-    }
-
     public static function check_schema(Request $request) {
         // Pick schema
         $SCHEMA = DarwinCore::class;
