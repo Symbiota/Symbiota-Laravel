@@ -68,32 +68,6 @@ class DownloadController extends Controller {
         return view('pages/collections/download');
     }
 
-    public static function check_schema(Request $request) {
-        // Pick schema
-        $SCHEMA = DarwinCore::class;
-
-        // Build Query
-        $query = Occurrence::buildSelectQuery($request->all());
-
-        if (array_key_exists('associatedSequences', $SCHEMA::$fields)) {
-            $geneticsQuery = DB::table('omoccurgenetic')->selectRaw(
-                "occid as gen_occid, group_concat(CONCAT_WS(', ', resourcename, title, identifier, locus, resourceUrl) SEPARATOR ' | ') as associatedSequences"
-            )->groupBy('occid');
-            $query->leftJoinSub($geneticsQuery, 'gen', 'gen.gen_occid', 'o.occid');
-        }
-
-        //Get Occurrence Data
-        $occurrences = $query->select(['c.*', 'gen.*', 'o.*'])->orderBy('o.occid')->limit(100)->get();
-
-        //Get Associated Media Records
-        $occ_media = DB::table('media')->select('*')->whereIn('occid', $occurrences->map(fn ($v) => $v->occid))->get();
-
-        return [
-            'occurrences' => $occurrences->map(fn ($row) => $SCHEMA::map_row((array) $row)),
-            'multimedia' => $occ_media,
-        ];
-    }
-
     public static function downloadFile(Request $request) {
         $params = $request->except(['page', '_token']);
 
