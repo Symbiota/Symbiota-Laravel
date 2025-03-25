@@ -168,8 +168,8 @@ class DownloadController extends Controller {
             ])->render());
         }
 
-        //This order matters when dealing with conflicting attribute names
         $query
+            //This select order matters when dealing with conflicting attribute names
             ->select(['c.*', 'gen.*', 'o.*'])
             ->orderBy('o.occid')
             ->chunk(1000, function (\Illuminate\Support\Collection $occurrences) use (&$files, &$taxa, $SCHEMA, &$collids, $file_delimiter, &$encodeArr) {
