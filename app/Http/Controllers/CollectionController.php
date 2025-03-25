@@ -60,7 +60,6 @@ class CollectionController extends Controller {
     public static function listPage(Request $request) {
         $params = $request->except(['page', '_token']);
 
-        Cache::forget($request->fullUrl());
         $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function () use ($params, $request) {
 
             /* Also Works but pagination would need to be manual because of subquery stuff
