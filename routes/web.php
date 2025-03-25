@@ -125,6 +125,7 @@ Route::group(['prefix' => '/media'], function () {
 */
 Route::group(['prefix' => '/user'], function () {
     Route::get('/profile', [UserProfileController::class, 'getProfile']);
+    Route::put('/profile/metadata', [UserProfileController::class, 'updateProfileMetadata']);
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
 });
 
@@ -143,7 +144,7 @@ Route::group(['prefix' => '/token'], function () {
             'pages/user/profile',
             [
                 'user_tokens' => $user->tokens ?? [],
-                'created_token' => $token->plainTextToken
+                'created_token' => $token->plainTextToken,
             ])
             ->fragment('tokens');
     });

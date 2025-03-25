@@ -1,9 +1,8 @@
-@props(['user_tokens' => []])
+@props(['user_tokens' => [], 'user' => request()->user()])
 @php
 use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
 
-$user = request()->user();
 $collections = App\Models\Collection::query()
 ->join('userroles', 'tablePK', 'collid')
 ->whereIn('role', [UserRole::COLL_ADMIN, UserRole::COLL_EDITOR])
@@ -69,28 +68,29 @@ $datasets = DB::table('omoccurdatasets')
 
         {{-- Navigation Content --}}
         <div class="pl-10 flex-grow">
-
             {{-- User Profile --}}
             <div x-show="active_tab === 'Profile'" x-cloak>
                 <div class="text-2xl font-bold">Profile</div>
                 <hr class="mb-4" />
-                <form hx-put="{{ url('user/profile-information') }}" class="flex flex-col gap-4">
+                @fragment('profile')
+                <form hx-put="{{ url('user/profile/metadata') }}" class="flex flex-col gap-4" hx-swap="outerHTML">
                     @csrf
                     <x-input label="Name" id="name" value="{{ $user->name }}" />
                     <x-input label="Email" id="email" value="{{ $user->email }}" />
-                    <x-checkbox label="Accessibility Preference" id="accessibility_preference" />
+                    <x-checkbox label="Accessibility Preference" id="accessibilityPref" :checked="$user->dynamicProperties['accessibilityPref'] ?? false"/>
                     <x-input label="ORCID or other GUID" value="{{ $user->guid }}" />
-                    <x-input label="Title" value="{{ $user->title }}" />
-                    <x-input label="Institution" value="{{ $user->institution }}" />
-                    <x-input label="City" value="{{ $user->city }}" />
-                    <x-input label="State" value="{{ $user->state }}" />
-                    <x-input label="Zip Code" value="{{ $user->zip }}" />
-                    <x-input label="Country" value="{{ $user->country}}" />
+                    <x-input label="Title" id="title" value="{{ $user->title }}" />
+                    <x-input label="Institution" id="institution" value="{{ $user->institution }}" />
+                    <x-input label="City" id="city" value="{{ $user->city }}" />
+                    <x-input label="State" id="state" value="{{ $user->state }}" />
+                    <x-input label="Zip Code" id="zip" value="{{ $user->zip }}" />
+                    <x-input label="Country" id="country" value="{{ $user->country}}" />
 
-                    <x-button>Update Profile</x-button>
+                    <x-button type="submit">Update Profile</x-button>
                     <x-button hx-delete="{{ url('user/profile') }}" variant="error" hx-confirm="Are you sure you wish to delete your account?">Delete Profile</x-button>
                     {{-- TODO (Logan) taxonomic relationships. Not sure how this is tied to user profiles --}}
                 </form>
+                @endfragment
             </div>
             {{-- Projects and checklists --}}
             <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4">
