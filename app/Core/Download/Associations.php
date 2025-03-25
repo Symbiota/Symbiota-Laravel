@@ -5,6 +5,10 @@ namespace App\Core\Download;
 class Associations {
     use RowMap;
 
+    public static $metaType = 'extension';
+
+    public static $metaRowType = '';
+
     public static $casts = [];
 
     public static $ignores = [];
