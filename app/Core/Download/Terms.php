@@ -16,8 +16,4 @@ class Terms {
     const IDIGBIO = 'http://portal.idigbio.org/terms/';
 
     const OBIS = 'http://rs.iobis.org/obis/terms/';
-
-    public static function genTerm(string $base_url, string $term_name): string {
-        return $base_url . $term_name;
-    }
 }
