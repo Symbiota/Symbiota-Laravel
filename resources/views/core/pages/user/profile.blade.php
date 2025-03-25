@@ -1,3 +1,4 @@
+@props(['user_tokens' => []])
 @php
 use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
@@ -73,7 +74,8 @@ $datasets = DB::table('omoccurdatasets')
             <div x-show="active_tab === 'Profile'" x-cloak>
                 <div class="text-2xl font-bold">Profile</div>
                 <hr class="mb-4" />
-                <form class="flex flex-col gap-4">
+                <form hx-put="{{ url('user/profile-information') }}" class="flex flex-col gap-4">
+                    @csrf
                     <x-input label="Name" id="name" value="{{ $user->name }}" />
                     <x-input label="Email" id="email" value="{{ $user->email }}" />
                     <x-checkbox label="Accessibility Preference" id="accessibility_preference" />
@@ -86,7 +88,7 @@ $datasets = DB::table('omoccurdatasets')
                     <x-input label="Country" value="{{ $user->country}}" />
 
                     <x-button>Update Profile</x-button>
-                    <x-button variant="error">Delete Profile</x-button>
+                    <x-button hx-delete="{{ url('user/profile') }}" variant="error" hx-confirm="Are you sure you wish to delete your account?">Delete Profile</x-button>
                     {{-- TODO (Logan) taxonomic relationships. Not sure how this is tied to user profiles --}}
                 </form>
             </div>
