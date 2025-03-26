@@ -13,6 +13,7 @@ use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
+use function Laravel\Prompts\form;
 
 class DownloadController extends Controller {
     public static function getHigherClassification($tid) {
@@ -133,32 +134,29 @@ class DownloadController extends Controller {
         $taxa = [];
         $collids = [];
         $files = [];
+
         foreach ($fileNames as $key => $fileName) {
             $files[$key] = fopen($fileName, 'w');
         }
 
+        // Define File Schemas
+        $file_schemas = [
+            'occurrence' => $SCHEMA,
+            'multimedia' => Multimedia::class,
+            'identifiers' => Identifiers::class,
+        ];
+
         //Write CSV Headers
-        if (array_key_exists('occurrence', $files)) {
-            fputcsv(
-                $files['occurrence'],
-                array_map($encodeArr, array_keys($SCHEMA::$fields)),
-                $file_delimiter
-            );
-        }
-        if (array_key_exists('multimedia', $files)) {
-            if ($file_charset != 'UTF-8') {
-                fputcsv(
-                    $files['multimedia'],
-                    array_map($encodeArr, array_keys(Multimedia::$fields)),
-                    $file_delimiter
-                );
+        foreach ($file_schemas as $file_name => $file_schema) {
+            if (array_key_exists($file_name, $files)) {
+                if ($file_charset != 'UTF-8') {
+                    fputcsv(
+                        $files[$file_name],
+                        array_map($encodeArr, array_keys($file_schema::$fields)),
+                        $file_delimiter
+                    );
+                }
             }
-        }
-        if (array_key_exists('identifiers', $files)) {
-            fputcsv(
-                $files['identifiers'],
-                array_map($encodeArr, array_keys(Identifiers::$fields)),
-                $file_delimiter);
         }
 
         //Write Meta data
@@ -225,7 +223,7 @@ class DownloadController extends Controller {
                     }
                 }
 
-                //Process measurementOrFact
+                //Process measurementOrFact Not being used currently
                 if (array_key_exists('measurementOrFact', $files)) {
                     $occ_attribute_traits = [];
                     foreach ($occ_attribute_traits as $attribute_trait_row) {
