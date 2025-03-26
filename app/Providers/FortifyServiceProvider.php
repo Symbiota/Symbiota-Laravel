@@ -8,7 +8,9 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\MessageBag;
@@ -123,22 +125,16 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
+            //Check Old Password
+            $old_check = User::query()
+                ->whereRaw('(password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?))))))', [$request->password])
+                ->where('email', $request->email)
+                ->select('uid')
+                ->first();
+
+            if($user && $old_check) {
                 return $user;
             }
-
-            /*
-            //Check Old Password
-            $result = DB::select('
-                SELECT uid
-                FROM users
-                WHERE (old_password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?)))))) AND
-                email = ?',
-                [$request->password, $request->email]
-            );
-            */
-
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
