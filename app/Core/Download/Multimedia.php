@@ -13,7 +13,6 @@ class Multimedia {
     public static $casts = [
         'occid' => 'coreid',
         'originalUrl' => 'identifier',
-        //'originalUrl' => 'accessURI',
         'thumbnailUrl' => 'thumbnailAccessURI',
         'url' => 'goodQualityAccessURI',
         'recordID' => 'providerManagedID',
