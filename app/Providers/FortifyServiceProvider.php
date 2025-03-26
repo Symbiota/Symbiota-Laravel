@@ -8,9 +8,7 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\MessageBag;
@@ -137,7 +135,7 @@ class FortifyServiceProvider extends ServiceProvider {
                 ->select('uid')
                 ->first();
 
-            if($user && $old_check) {
+            if ($user && $old_check) {
                 return $user;
             }
         });
