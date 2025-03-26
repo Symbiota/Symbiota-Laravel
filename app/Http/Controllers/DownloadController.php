@@ -13,7 +13,6 @@ use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
-use function Laravel\Prompts\form;
 
 class DownloadController extends Controller {
     public static function getHigherClassification($tid) {
