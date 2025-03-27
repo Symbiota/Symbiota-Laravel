@@ -58,6 +58,7 @@ $grants= [
     @if($hasNavbar)
         <x-navbar :navigations="$navigations" />
     @endif
+    <x-toaster />
     <div {{ $attributes->twMerge('flex-grow p-10') }} >
         {{ $slot }}
     </div>

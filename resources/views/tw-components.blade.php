@@ -179,8 +179,8 @@
             <div class="font-bold text-lg">
                 Toast Notifications
             </div>
-            {{-- Only one needs to be present on the page ideally the layout --}}
-            <x-toaster />
+            {{-- These use <x-toaster /> component in the layout --}}
+
             <div class="flex gap-2">
                 <x-button onclick="toast('Success Notification', {
                     type: 'default',
