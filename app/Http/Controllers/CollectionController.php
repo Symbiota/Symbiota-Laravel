@@ -60,7 +60,6 @@ class CollectionController extends Controller {
     public static function listPage(Request $request) {
         $params = $request->except(['page', '_token']);
 
-        Cache::forget($request->fullUrl());
         $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function () use ($params, $request) {
 
             /* Also Works but pagination would need to be manual because of subquery stuff
@@ -90,12 +89,6 @@ class CollectionController extends Controller {
         return view('pages/collections/list', ['occurrences' => $occurrences]);
     }
 
-    public static function downloadPage(Request $request) {
-        $params = $request->except(['page', '_token']);
-
-        return view('pages/collections/download');
-    }
-
     public static function importPage(int $collId) {
         $params = request()->except(['page', '_token']);
         $collection = self::collection($collId);
@@ -107,33 +100,6 @@ class CollectionController extends Controller {
         var_dump($uploadProfiles);
 
         return view('pages/collections/import', ['collection' => $collection, 'uploadProfiles' => $uploadProfiles]);
-    }
-
-    public static function downloadFile(Request $request) {
-        $params = $request->except(['page', '_token']);
-
-        if (empty($params)) {
-            return [];
-        }
-
-        $query = Occurrence::buildSelectQuery($request->all());
-        $csvFileName = 'symbiota_download.csv';
-
-        $schema = [
-            'occid',
-        ];
-
-        $csvFile = fopen($csvFileName, 'w');
-        fputcsv($csvFile, $schema);
-
-        $query->select($schema)->orderBy('o.occid')->chunk(100, function (\Illuminate\Support\Collection $occurrences) use ($csvFile) {
-            foreach ($occurrences as $occurrence) {
-                fputcsv($csvFile, (array) $occurrence);
-            }
-        });
-        fclose($csvFile);
-
-        return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
     }
 
     public static function publisherPage() {

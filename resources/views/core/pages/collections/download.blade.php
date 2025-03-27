@@ -29,7 +29,7 @@
 
     <form
         hx-get="{{ url('collections/download/file') }}"
-        x-data="{}"
+        x-data="{ allow_extensions: true }"
         x-on:htmx:before-request="downloadHtmxRequest(event)"
         hx-vals="{{ json_encode(request()->all()) }}"
         class="flex flex-col gap-4"
@@ -40,11 +40,39 @@
 
         <fieldset class="flex flex-col gap-2">
             <legend class="text-xl">Data Extensions</legend>
-            <x-checkbox label="Include Determinations History" :checked="true" name="include_determination_history" />
-            <x-checkbox label="Include Media Records" :checked="true" name="include_media" />
-            <x-checkbox label="Include Occurence Trait Attributes" :checked="true" name="include_occurrence_trait_attributes" />
-            <x-checkbox label="Include Alternative Identifiers" :checked="true" name="include_alternative_identifers" />
-            * Output must be a compressed archive
+            <div class="flex flex-col gap-2">
+                <x-checkbox
+                    label="Include Determinations History"
+                    x-bind:checked="allow_extensions"
+                    x-bind:disabled="!allow_extensions"
+                    :checked="true"
+                    name="include_determination_history"
+                />
+                <x-checkbox
+                    label="Include Media Records"
+                    x-bind:checked="allow_extensions"
+                    x-bind:disabled="!allow_extensions"
+                    :checked="true"
+                    name="include_media"
+                />
+                <x-checkbox
+                    label="Include Occurence Trait Attributes"
+                    x-bind:checked="allow_extensions"
+                    x-bind:disabled="!allow_extensions"
+                    :checked="true"
+                    name="include_occurrence_trait_attributes"
+                />
+                <x-checkbox
+                    label="Include Alternative Identifiers"
+                    x-bind:checked="allow_extensions"
+                    x-bind:disabled="!allow_extensions"
+                    :checked="true"
+                    name="include_alternative_identifers"
+                />
+            </div>
+            <div class="bg-error text-error-content p-2 w-fit rounded-md" x-show="!allow_extensions" x-cloak>
+                Extensions require output to be compressed
+            </div>
         </fieldset>
 
         <x-radio label="File Format" name="file_format" :default_value="'csv'"
@@ -55,10 +83,20 @@
 
         <fieldset class="flex flex-col gap-2">
             <legend class="text-xl">Compression</legend>
-            <x-checkbox label="Compressed ZIP file" :checked="true" name="compressed" />
+            <x-checkbox label="Compressed ZIP file" :checked="true" name="compressed" x-on:change="allow_extensions = !allow_extensions"/>
         </fieldset>
 
         <x-button>Download Data</x-button>
+
+        @if(count($errors) > 0)
+        <div class="mb-4">
+            @foreach ($errors->all() as $error)
+            <div class="bg-error text-error-content rounded-md p-4">
+                {{ $error }}
+            </div>
+            @endforeach
+        </div>
+        @endif
         * * There is a 1,000,000 record limit to occurrence downloads
     </form>
 </x-layout>
