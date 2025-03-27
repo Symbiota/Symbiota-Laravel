@@ -26,6 +26,18 @@ class Taxonomy extends Model {
     }
 
     public function media() {
-        return $this->hasMany(media::class, 'tid', 'tid');
+        return $this->hasMany(Media::class, 'tid', 'tid');
     }
+
+    public function search(string $search, int $thesaurus_id, TaxaSearchType $search_type = TaxaSearchType::Anyname) {
+        $search = str_replace(';',',', $search);
+
+    }
+}
+
+enum TaxaSearchType: string {
+    case Anyname = 'anyname';
+    case ScientificName = 'sciname';
+    case Family = 'family';
+    case TaxonomicGroup = 'TaxonomicGroup';
 }
