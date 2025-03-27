@@ -54,7 +54,7 @@
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Download Specimen Data">
-                        <x-button class="w-fit">
+                        <x-button class="w-fit" onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)">
                             <i class="text-xl fa-solid fa-download"></i>
                         </x-button>
                     </x-tooltip>
