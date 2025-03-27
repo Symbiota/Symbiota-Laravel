@@ -84,8 +84,11 @@ This is a work in progress Repo and not ready for Production uses yet.
 
 ### Download
 - [x] Base Page UI
-- [ ] Symbiota Schema
-- [ ] Darwin Core Schema 
+- [x] Symbiota Schema
+- [x] Darwin Core Schema
+- [x] Multimedia extension
+- [x] Identifiers extension
+- [ ] MeasurementOrFact extension
 
 ### Media
 - [ ] Profile
