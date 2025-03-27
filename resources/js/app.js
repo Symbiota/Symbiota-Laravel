@@ -31,6 +31,19 @@ function openWindow(link = "", title = "", options = "resizable=0,width=900,heig
 
 window.openWindow = openWindow;
 
+function copyUrl(urlOverride) {
+    const url = urlOverride ? urlOverride: window.location;
+    const type = "text/plain";
+
+    const clipboardItemData = {
+        [type]: url,
+    };
+
+    const clipboardItem = new ClipboardItem(clipboardItemData);
+    navigator.clipboard.write([clipboardItem]).then(res => console.log('success'), error => console.log(error));
+}
+window.copyUrl = copyUrl;
+
 queueMicrotask(() => {
     Alpine.start()
 });

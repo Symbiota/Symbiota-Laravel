@@ -59,7 +59,7 @@
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Copy Search Url to clipboard">
-                        <x-button class="w-fit">
+                        <x-button class="w-fit" onclick="copyUrl()">
                             <i class="text-xl fa-regular fa-copy"></i>
                         </x-button>
                     </x-tooltip>
