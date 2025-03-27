@@ -40,7 +40,12 @@ function copyUrl(urlOverride) {
     };
 
     const clipboardItem = new ClipboardItem(clipboardItemData);
-    navigator.clipboard.write([clipboardItem]).then(res => console.log('success'), error => console.log(error));
+
+    //Assumes toaster is setup
+    navigator.clipboard.write([clipboardItem]).then(
+        res => window.toast('Url Copied!', {type: 'success'}),
+        error => window.toast('Failed to Copy Url!', {type: 'danger'})
+    );
 }
 window.copyUrl = copyUrl;
 
