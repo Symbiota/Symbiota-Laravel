@@ -174,5 +174,49 @@
             ],
         ]" />
         <x-image-card src="https://collections.nmnh.si.edu/media/?i=10333969&width=300" title="Pinus albicaulis Engelm."/>
+
+        <div>
+            <div class="font-bold text-lg">
+                Toast Notifications
+            </div>
+            {{-- Only one needs to be present on the page ideally the layout --}}
+            <x-toaster />
+            <div class="flex gap-2">
+                <x-button onclick="toast('Success Notification', {
+                    type: 'default',
+                    description: 'This is an example toast notification'
+                })">
+                    Default Notification
+                </x-button>
+
+                <x-button onclick="toast('Success Notification', {
+                    type: 'success',
+                    description: 'This is an example toast notification'
+                })">
+                    Success Notification
+                </x-button>
+
+                <x-button onclick="toast('Info Notification', {
+                    type: 'info',
+                    description: 'This is an example toast notification'
+                })">
+                    Info Notification
+                </x-button>
+
+                <x-button onclick="toast('Warning Notification', {
+                    type: 'warning',
+                    description: 'This is an example toast notification'
+                })">
+                    Warning Notification
+                </x-button>
+
+                <x-button onclick="toast('Error Notification', {
+                    type: 'danger',
+                    description: 'This is an example toast notification'
+                })">
+                    Error Notification
+                </x-button>
+            </div>
+        </div>
     </div>
 </x-layout>
