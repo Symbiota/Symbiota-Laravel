@@ -108,6 +108,8 @@
                 <x-collections.list.item :occurrence="$occurrence" />
                 @endforeach
             </div>
+
+            <x-pagination :lengthAwarePaginator="$occurrences" jumpId="#tab-body" />
         </div>
 
         {{-- Maps --}}

@@ -1,5 +1,5 @@
 {{-- See Laravel Paginator Docs For LengthAwarePaginator properties and methods --}}
-@props(['lengthAwarePaginator', 'hx_target' => 'body'])
+@props(['lengthAwarePaginator', 'hx_target' => 'body', 'jumpId' => false])
 @php
 $start = ($lengthAwarePaginator->currentPage() - 1 ) * $lengthAwarePaginator->perPage();
 $end = $start + $lengthAwarePaginator->perPage();
@@ -30,7 +30,7 @@ if($end_page > $max_page) {
             @for ($i = $start_page; $i <= $end_page; $i++)
             @php $isCurrent = $lengthAwarePaginator->currentPage() === $i; @endphp
                 <li class="hidden h-full md:block">
-                    <a hx-push-url="true" hx-target="{{$hx_target}}" hx-get="{{ $lengthAwarePaginator->url($i) }}" @class([
+                    <a hx-push-url="true" hx-target="{{$hx_target}}" hx-get="{{ $lengthAwarePaginator->url($i) }}" {{$jumpId? 'href='. $jumpId: '' }} @class([
                         'relative inline-flex items-center h-full px-3 outline-none ring-inset focus:ring focus:ring-accent cursor-pointer',
                         'text-base-content group bg-base-300/50' => $isCurrent,
                         'group hover:text-base-content outline-none focus:ring ring-inset focus:ring-accent' => !$isCurrent,
