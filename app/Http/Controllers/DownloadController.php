@@ -72,8 +72,8 @@ class DownloadController extends Controller {
         $params = $request->except(['page', '_token']);
 
         // TODO (Logan) Add Manditory params to prevent huge query
-        if (empty($params)) {
-            return [];
+        if (empty($params['collid'])) {
+            return back()->withErrors(['Missing required parameter: collid']);
         }
 
         $SCHEMA = SymbiotaNative::class;
