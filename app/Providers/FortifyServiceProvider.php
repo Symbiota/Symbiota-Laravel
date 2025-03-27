@@ -128,17 +128,16 @@ class FortifyServiceProvider extends ServiceProvider {
                 return $user;
             }
 
-            /*
             //Check Old Password
-            $result = DB::select('
-                SELECT uid
-                FROM users
-                WHERE (old_password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?)))))) AND
-                email = ?',
-                [$request->password, $request->email]
-            );
-            */
+            $old_check = User::query()
+                ->whereRaw('(password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?))))))', [$request->password])
+                ->where('email', $request->email)
+                ->select('uid')
+                ->first();
 
+            if ($user && $old_check) {
+                return $user;
+            }
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
