@@ -43,6 +43,7 @@ event fires.
         selectedItem: {{ ($default !== null && $default >= 0 && $items && $items[$default])? json_encode($items[$default]) : "''" }},
         selectableItems: {{ json_encode($items) }},
         selectableItemActive: null,
+        {{-- Note strings need quotes so defaultValue="'string'" because variables could be bound --}}
         defaultValue: {{ $defaultValue && !$default? $defaultValue: 'null'}},
         selectId: $id('select'),
         selectKeydownValue: '',
