@@ -129,6 +129,7 @@ Route::group(['prefix' => '/media'], function () {
 Route::group(['prefix' => '/user'], function () {
     Route::get('/profile', [UserProfileController::class, 'getProfile']);
     Route::put('/profile/metadata', [UserProfileController::class, 'updateProfileMetadata']);
+    Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
 });
 

@@ -231,13 +231,18 @@ $datasets = DB::table('omoccurdatasets')
         <div x-show="active_tab === 'Passwords and authentication'" x-cloak>
             <div class="text-2xl font-bold">Password</div>
             <hr class="mb-4" />
-            <form class="flex flex-col gap-4">
+            @fragment('password')
+            <form hx-post="{{ url('user/profile/password') }}" class="flex flex-col gap-4" hx-swap="outerHTML">
+                @csrf
+                <input type="hidden" value="{{ $user->email }}" name="email" />
                 <x-input type="password" label="Old password" id="old_password" />
-                <x-input type="password" label="New password" id="new_password" />
-                <x-input type="password" label="Confirm password" id="confirm_password" />
+                <x-input type="password" label="New password" id="new_password" value="{{ old('new_password') }}" />
+                <x-input type="password" label="Confirm password" id="confirm_password" value="{{ old('confirm_password') }}" />
                 <x-button type="submit">Update Password</x-button>
                 <x-link href="#todo">I forgot my password</x-link>
+                <x-errors :errors="$errors" />
             </form>
+            @endfragment
 
             <div class="text-2xl font-bold">Two-factor authentication</div>
             <hr class="mb-4" />
@@ -288,15 +293,7 @@ $datasets = DB::table('omoccurdatasets')
             </form>
             @endif
 
-            @if(count($errors) > 0)
-            <div class="mb-4">
-                @foreach ($errors->all() as $error)
-                <div class="bg-error text-error-content rounded-md p-4">
-                    {{ $error }}
-                </div>
-                @endforeach
-            </div>
-            @endif
+            <x-errors :errors="$errors" />
         </div>
 
         {{-- Developer --}}
