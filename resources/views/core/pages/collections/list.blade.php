@@ -43,9 +43,9 @@
         <div id="occurrence_result" class="grid grid-col-1 gap-4">
             <div class="flex flex-wrap">
                 <div>
-                    <div>Dataset: {{ $dataset_str ?? 'All collections'}}</div>
-                    <div>Taxa: {{ $taxa_str ?? '' }}</div>
-                    <div>Search Criteria: ( TODO )</div>
+                    <div><span class="font-bold">Dataset: </span>{{ $dataset_str ?? 'All collections'}}</div>
+                    <div><span class="font-bold">Taxa: </span>{{ $taxa_str ?? '' }}</div>
+                    <div><span class="font-bold">Search Criteria: </span>( TODO )</div>
                 </div>
                 <div class="flex items-center gap-4 grow justify-end">
                     <x-tooltip text="Display as Table">

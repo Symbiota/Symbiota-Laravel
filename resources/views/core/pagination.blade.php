@@ -17,7 +17,7 @@ if($end_page > $max_page) {
 }
 @endphp
 
-<div class="flex items-center justify-between w-full h-16">
+<div class="flex items-center justify-between w-full">
     <p class="text-sm text-base-content">Showing <span class="font-medium">{{ $start }}</span> to <span class="font-medium">{{ $end }}</span> of <span class="font-medium">{{ $lengthAwarePaginator->total() }}</span> results</p>
     <nav>
         <ul class="flex items-center text-sm leading-tight bg-base-100 border divide-x rounded h-9 text-base-content/75 divide-base-300 border-base-300">
