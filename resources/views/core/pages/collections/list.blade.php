@@ -48,6 +48,41 @@
                     <div><span class="font-bold">Search Criteria: </span>( TODO )</div>
                 </div>
                 <div class="flex items-center gap-4 grow justify-end">
+                    {{-- Todo make this the popover icon?
+                    <x-tooltip text="Sort Results">
+                        <x-button class="w-fit">
+                            <i class="text-xl fa-solid fa-arrow-up-wide-short"></i>
+                        </x-button>
+                    </x-tooltip>
+                    --}}
+                    <x-popover>
+                        <form hx-get="{{ url()->current() }}"
+                              hx-vals="{{ json_encode(request()->except(['sort', 'sortDirection'])) }}"
+                              hx-target="body" hx-push-url="true"
+                              class="flex flex-col gap-4"
+                              >
+                            <input type="hidden" name="sortDirection" value="ASC" />
+                            <x-select label="Sort By" class="w-full" defaultValue="'{{ request('sort') }}'" name="sort" :items="[
+                                ['title' => 'Collection', 'value' => 'collid', 'disabled' => false],
+                                ['title' => 'Catalog Number', 'value' => 'catalogNumber', 'disabled' => false],
+                                ['title' => 'Family', 'value' => 'family', 'disabled' => false],
+                                ['title' => 'Scientific Name', 'value' => 'sciname', 'disabled' => false],
+                                ['title' => 'Collector', 'value' => 'recordedBy', 'disabled' => false],
+                                ['title' => 'Collector Number', 'value' => 'recordNumber', 'disabled' => false],
+                                ['title' => 'Date', 'value' => 'eventDate', 'disabled' => false],
+                                ['title' => 'Country', 'value' => 'country', 'disabled' => false],
+                                ['title' => 'State/Province', 'value' => 'stateProvince', 'disabled' => false],
+                                ['title' => 'County', 'value' => 'county', 'disabled' => false],
+                                ['title' => 'Elevation', 'value' => 'minimumElevationInMeters', 'disabled' => false],
+                            ]"/>
+                            <x-select label="Sort Direction" name="sortDirection" default="0" :items="[
+                                ['title' => 'Ascending', 'value' => 'ASC', 'disabled' => false],
+                                ['title' => 'Descending', 'value' => 'DESC', 'disabled' => false],
+                            ]"/>
+                            <x-button type="submit">Sort Results</x-button>
+                        </form>
+                    </x-popover>
+
                     <x-tooltip text="Display as Table">
                         <x-button class="w-fit">
                             <i class="text-xl fa-solid fa-table-list"></i>
@@ -64,7 +99,6 @@
                         </x-button>
                     </x-tooltip>
                 </div>
-
             </div>
 
             <x-pagination :lengthAwarePaginator="$occurrences"/>
