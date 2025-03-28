@@ -18,7 +18,7 @@
         'Specimen Records'
     ]" />
     </div>
-    <x-tabs :tabs="['Species List', 'Occurrence Records', 'Maps']" active="1">
+    <x-tabs :tabs="['Species List', 'Occurrence Records']" active="1">
         {{-- Species --}}
         <div class="flex items-center gap-4 h-60">
             <x-button class="w-fit">
@@ -47,7 +47,7 @@
                     <div><span class="font-bold">Taxa: </span>{{ $taxa_str ?? '' }}</div>
                     <div><span class="font-bold">Search Criteria: </span>( TODO )</div>
                 </div>
-                <div class="flex items-center gap-4 grow justify-end">
+                <div class="flex items-center gap-2 grow justify-end">
                     {{-- Todo make this the popover icon?
                     <x-tooltip text="Sort Results">
                         <x-button class="w-fit">
@@ -83,6 +83,18 @@
                         </form>
                     </x-popover>
 
+                    <x-tooltip text="Display as Map">
+                        <x-button class="w-fit" href="{{ url(config('portal.name') . '/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
+                            <i class="text-xl fa-solid fa-earth-americas"></i>
+                        </x-button>
+                    </x-tooltip>
+
+                    <x-tooltip text="Create KML">
+                        <x-button class="text-xl w-fit">
+                            KML
+                        </x-button>
+                    </x-tooltip>
+
                     <x-tooltip text="Display as Table">
                         <x-button class="w-fit">
                             <i class="text-xl fa-solid fa-table-list"></i>
@@ -110,16 +122,6 @@
             </div>
 
             <x-pagination :lengthAwarePaginator="$occurrences" jumpId="#tab-body" />
-        </div>
-
-        {{-- Maps --}}
-        <div class="flex items-center gap-4 h-60">
-            <a href="{{ url(config('portal.name') . '/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
-                <x-button class="w-fit">Display coordinates in Map</x-button>
-            </a>
-            <x-button class="w-fit">Create KML</x-button>
-            {{-- Investigate but pretty sure this just adds info to download --}}
-            <x-link>Add Extra Fields</x-link>
         </div>
     </x-tabs>
 
