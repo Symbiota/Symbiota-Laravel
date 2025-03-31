@@ -86,9 +86,6 @@ event fires.
                 }
             }
         },
-        innerHTML: null,
-        init: () => innerHTML = $el.innerHTML,
-        destroy: () => $el.innerHTML = innerHTML,
         selectKeydown(event){
             if (event.keyCode >= 65 && event.keyCode <= 90) {
 
@@ -175,7 +172,6 @@ event fires.
     @keydown.up="if(selectOpen){ selectableItemActivePrevious(); } else { selectOpen=true; } event.preventDefault();"
     @keydown.enter="selectedItem=selectableItemActive; updateInputValue(); selectOpen=false;"
     @keydown="selectKeydown($event);"
-    x-on:htmx:before-history-save.window.camel="destroy()"
     {{ $attributes->twMergeFor('select', 'relative')}}
     >
     <button type="button" id="{{ $id }}-toggle" aria-labeledBy={{ $labeledBy? $labeledBy: $id . '-label'}} x-ref="selectButton" @click="selectOpen=!selectOpen"
