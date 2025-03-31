@@ -7,6 +7,16 @@
             accordion._x_dataStack[0].open = !accordion._x_dataStack[0].open;
         }
     }
+
+    function saveSearchToSession(form) {
+        const formData = new FormData(event.target);
+        let searchJson = {};
+
+        for(let data of formData.entries()) {
+            searchJson[data[0]] = data[1];
+        }
+        window.sessionStorage.collectionSearch = JSON.stringify(searchJson);
+    }
 </script>
 @endPushOnce
 @php
@@ -30,8 +40,20 @@ $eastWest= [
         hx-target="body"
         hx-push-url="true"
         x-on:change="addChip(values, event)"
+        onsubmit="saveSearchToSession()"
         hx-boost
         class="grid grid-cols-4"
+        x-init="
+            const session = JSON.parse(window.sessionStorage.collectionSearch)
+            console.log(session)
+            for(let id of Object.keys(session)) {
+                const elem = document.getElementById(id);
+                if(elem) {
+                    elem.value = session[id];
+                    addChip(values, { target: elem });
+                };
+            }
+        "
         x-data="{
             show_all: false,
             toggle: () => show_all = true,
@@ -79,7 +101,7 @@ $eastWest= [
                 Expand All Sections
             </x-button>
             <x-accordion label='TAXONOMY' variant="clear-primary" :open="true">
-                <x-taxa-search />
+                <x-taxa-search id="taxa" />
             </x-accordion>
             <x-accordion label='LOCALITY' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
