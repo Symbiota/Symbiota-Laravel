@@ -42,7 +42,7 @@ $datasets = DB::table('omoccurdatasets')
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Profile' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Passwords and authentication' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([
@@ -235,9 +235,9 @@ $datasets = DB::table('omoccurdatasets')
             <form hx-post="{{ url('user/profile/password') }}" class="flex flex-col gap-4" hx-swap="outerHTML">
                 @csrf
                 <input type="hidden" value="{{ $user->email }}" name="email" />
-                <x-input type="password" label="Old password" id="old_password" />
-                <x-input type="password" label="New password" id="new_password" value="{{ old('new_password') }}" />
-                <x-input type="password" label="Confirm password" id="confirm_password" value="{{ old('confirm_password') }}" />
+                <x-input type="password" label="Password" id="current_password" value="{{ old('new_password') }}"/>
+                <x-input type="password" label="New password" id="password" value="{{ old('new_password') }}" />
+                <x-input type="password" label="Confirm password" id="password_confirmation" value="{{ old('password_confirmation') }}" />
                 <x-button type="submit">Update Password</x-button>
                 <x-link href="#todo">I forgot my password</x-link>
                 <x-errors :errors="$errors" />

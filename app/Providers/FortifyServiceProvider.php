@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -26,6 +25,8 @@ class FortifyServiceProvider extends ServiceProvider {
      * Register any application services.
      */
     public function register(): void {
+        //Fortify::ignoreRoutes();
+
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
@@ -46,6 +47,7 @@ class FortifyServiceProvider extends ServiceProvider {
             }
         });
 
+
         $this->app->instance(TwoFactorDisabledResponse::class, new class() implements TwoFactorDisabledResponse {
             public function toResponse($request) {
                 return response(view('pages/user/profile'))
@@ -55,6 +57,7 @@ class FortifyServiceProvider extends ServiceProvider {
         });
 
         $this->app->instance(PasswordConfirmedResponse::class, new class() implements PasswordConfirmedResponse {
+
             public function toResponse($request) {
                 return response(view('/pages/user/profile'))
                     ->header('HX-Retarget', 'body')
@@ -147,9 +150,11 @@ class FortifyServiceProvider extends ServiceProvider {
             }
         });
 
+
+
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        // Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {

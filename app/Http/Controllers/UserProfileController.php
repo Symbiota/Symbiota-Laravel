@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Fortify\PasswordValidationRules;
-use App\Http\Responses\ProfileInformationUpdatedResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
