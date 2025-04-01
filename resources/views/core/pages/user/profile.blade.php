@@ -327,6 +327,7 @@ $datasets = DB::table('omoccurdatasets')
                     </div>
                 </div>
                 @endisset
+                @if(count($user_tokens) > 0)
                 <div class="border border-base-300">
                     @foreach ($user_tokens as $token)
                     <div class="p-4">
@@ -355,6 +356,7 @@ $datasets = DB::table('omoccurdatasets')
                     @endif
                     @endforeach
                 </div>
+                @endif
             </div>
             @endfragment
         </div>
