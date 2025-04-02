@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Taxonomy;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
@@ -161,5 +162,11 @@ class TaxonomyController extends Controller {
             'external_links' => $external_links,
             'media' => $taxa_media,
         ]);
+    }
+
+    public static function getTreePage() {
+        $taxa = Taxonomy::getDirectChildren(1);
+
+        return view('pages/taxon/tree', ['taxa' => $taxa]);
     }
 }

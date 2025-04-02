@@ -10,6 +10,7 @@ use App\Http\Controllers\OccurrenceAnnotationController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\TaxonomyController;
 use App\Models\Occurrence;
+use App\Models\Taxonomy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,10 @@ Route::get('/taxa/search', function (Request $request) {
             ['data' => $result, 'label' => 'sciname', 'value' => 'tid']
         );
     }
+});
+
+Route::get('/taxa/tree/{tid}', function (int $tid) {
+    return Taxonomy::getDirectChildren($tid);
 });
 
 Route::get('/geographic/search', function (Request $request) {

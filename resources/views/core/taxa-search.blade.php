@@ -2,7 +2,8 @@
     'id' => uniqid(),
     'taxa_value' => '' ,
     'use_thes_value' => false,
-    'taxa_type_value' => ''
+    'taxa_type_value' => '',
+    'include' => ''
 ])
 <div>
     <label class="text-lg" for="{{ $id }}">Search Taxa</label>
@@ -25,7 +26,7 @@
             :value="$taxa_value"
             placeholder="Type to search..."
             search="{{url('/api/taxa/search')}}"
-            include="#usethes-{{$id}}, #taxa-type-{{$id}}"
+            include="#usethes-{{$id}}, #taxa-type-{{$id}} {{$include ? ', ' . $include: ''}}"
         >
             <x-slot:input class="peer-input z-20 rounded-l-none"></x-slot>
                 <x-slot:menu></x-slot>

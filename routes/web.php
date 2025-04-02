@@ -43,6 +43,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
+    Route::get('/tree', [TaxonomyController::class, 'getTreePage']);
     Route::get('/{tid}', [TaxonomyController::class, 'taxon']);
     Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
 });
