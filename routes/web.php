@@ -142,7 +142,7 @@ Route::group(['prefix' => '/token'], function () {
     Route::post('/create', function (Request $request) {
         $user = $request->user();
 
-        $token = $user->createToken($request->token_name);
+        $token = $user->createToken($request->token_name, ['*'], $request->expiration_date? new DateTime($request->expiration_date): null);
 
         return view(
             'pages/user/profile',

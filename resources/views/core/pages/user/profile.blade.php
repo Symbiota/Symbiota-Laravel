@@ -319,6 +319,7 @@ $datasets = DB::table('omoccurdatasets')
                         <legend class="font-bold text-lg">Create New Access Token</legend>
                         <hr/>
                         <x-input required label="Token Name" id="token_name"/>
+                        <x-input type="date" label="Expiration Date" id="expiration_date"/>
                         {{-- <x-checkbox id=""/>
                         <x-checkbox />--}}
                         <div class="flex gap-4">
