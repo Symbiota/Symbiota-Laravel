@@ -1,4 +1,4 @@
-<x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" class="flex flex-col center bg-base-100">
+<x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" class="flex flex-col bg-base-100">
     <div class="border border-base-300 rounded-md w-[32rem] mx-auto my-auto h-fit">
         <div class="bg-primary rounded-t-md">
             <img src="{{ url('icons/brand.svg') }}" class="w-64 mx-auto" />
@@ -14,6 +14,7 @@
 
             <div class="flex flex-col gap-4" x-show="!recovery_code_mode">
                 <x-input
+                    required
                     x-bind:required="!recovery_code_mode"
                     label="Verification Code"
                     id="code"
@@ -22,7 +23,7 @@
                 <x-link @click="recovery_code_mode = true" href="#code">Use Recovery Code</x-link>
             </div>
             <div class="flex flex-col gap-4" x-show="recovery_code_mode" x-cloak >
-                <x-input x-bind:required="recovery_code_mode" label="Recovery Code" id="recovery_code"
+                <x-input required x-bind:required="recovery_code_mode" label="Recovery Code" id="recovery_code"
                     autocomplete="off"
                 />
                 <x-link @click="recovery_code_mode = false" href="#recovery_code">Use Verification Code</x-link>
