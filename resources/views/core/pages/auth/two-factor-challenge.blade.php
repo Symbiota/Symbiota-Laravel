@@ -13,13 +13,19 @@
             @csrf
 
             <div class="flex flex-col gap-4" x-show="!recovery_code_mode">
-                <x-input required label="Verification Code" id="code"
+                <x-input
+                    x-bind:required="!recovery_code_mode"
+                    label="Verification Code"
+                    id="code"
+                    autocomplete="off"
                     x-on:input="six_digits = $el.value && $el.value.length >= 6" />
-                <x-link @click="recovery_code_mode = true" href="#verification_code">Use Recovery Code</x-link>
+                <x-link @click="recovery_code_mode = true" href="#code">Use Recovery Code</x-link>
             </div>
             <div class="flex flex-col gap-4" x-show="recovery_code_mode" x-cloak >
-                <x-input required label="Recovery Code" id="recovery_code" />
-                <x-link @click="recovery_code_mode = false" href="#verification_code">Use Verification Code</x-link>
+                <x-input x-bind:required="recovery_code_mode" label="Recovery Code" id="recovery_code"
+                    autocomplete="off"
+                />
+                <x-link @click="recovery_code_mode = false" href="#recovery_code">Use Verification Code</x-link>
             </div>
 
             <x-checkbox id="remember-me" label="Trust Device" />
