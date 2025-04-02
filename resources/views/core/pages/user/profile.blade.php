@@ -42,7 +42,7 @@ $datasets = DB::table('omoccurdatasets')
         <div class="text-2xl font-bold">{{$user->name}}</div>
     </div>
 
-    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Passwords and authentication' }">
+    <div class="flex flex-cols-2 mb-4" x-data="{ active_tab: 'Developer' }">
         {{-- Navigation Menu --}}
         <div class="flex-shrink">
             @foreach ([
@@ -299,16 +299,11 @@ $datasets = DB::table('omoccurdatasets')
         {{-- Developer --}}
         <div x-show="active_tab === 'Developer'">
             @fragment('tokens')
-            <div id="tokens-container" class="flex flex-col gap-4">
+            <div id="tokens-container" class="flex flex-col gap-4" x-data="{ show_token_form: false}">
                 <div>
-                    <div class="p-2 flex items-center gap-2">
-                        <div class="text-xl font-bold flex-grow">Personal access tokens </div>
-                        <form class="m-0" hx-swap="outerHTML" hx-target="#tokens-container"
-                            hx-post="{{ url('token/create') }}">
-                            <input type="hidden" name="token_name" value="new_token">
-                            @csrf
-                            <x-button>Generate new token</x-button>
-                        </form>
+                    <div class="py-2 flex items-center gap-2">
+                        <div class="text-2xl font-bold flex-grow">Personal access tokens </div>
+                        <x-button @click="show_token_form = true" type="button">Generate new token</x-button>
                     </div>
                     <hr>
                 </div>
@@ -317,6 +312,21 @@ $datasets = DB::table('omoccurdatasets')
                     Tokens you have generate that can be used to access the <x-link target="_blank"
                         href="{{ url('api/documentation') }}">Symbiota API</x-link>
                 </span>
+
+                <form x-show="show_token_form" class="m-0" hx-post="{{ url('token/create') }}" hx-swap="outerHTML" hx-target="#tokens-container">
+                    @csrf
+                    <fieldset class="flex flex-col gap-4">
+                        <legend class="font-bold text-lg">Create New Access Token</legend>
+                        <hr/>
+                        <x-input required label="Token Name" id="token_name"/>
+                        {{-- <x-checkbox id=""/>
+                        <x-checkbox />--}}
+                        <div class="flex gap-4">
+                            <x-button>Create</x-button>
+                            <x-button type="button" variant="error" @click="show_token_form = false">Cancel</x-button>
+                        </div>
+                    </fieldset>
+                </form>
 
                 @isset($created_token)
                 <div class="mt-4 p-4 border-t border-base-300">
