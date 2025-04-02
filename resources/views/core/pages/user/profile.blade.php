@@ -12,9 +12,13 @@ $collections = App\Models\Collection::query()
 ->get();
 
 $checklists = DB::table('fmchecklists')
-->join('userroles as ur', 'tablePK', 'clid')
-->whereIn('role', [UserRole::CL_ADMIN])
-->where('ur.uid', $user->uid)
+->leftJoin('userroles as ur', 'tablePK', 'clid')
+->where(function ($query) use($user) {
+    $query
+    ->whereIn('role', [UserRole::CL_ADMIN])
+    ->where('ur.uid', $user->uid);
+})
+->orWhere('fmchecklists.uid', $user->uid)
 ->get();
 
 $datasets = DB::table('omoccurdatasets')
@@ -95,12 +99,12 @@ $datasets = DB::table('omoccurdatasets')
                 @endfragment
             </div>
             {{-- Projects and checklists --}}
-            <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4">
+            <div x-show="active_tab === 'Projects and checklists'" x-cloak class="flex flex-col gap-4" x-data="{ show_create_form: false }">
                 <div class="flex items-center">
                     <div class="text-2xl font-bold">Checklists</div>
                     <div class="flex flex-grow justify-end">
                         @can('CL_CREATE')
-                        <x-button href="">
+                        <x-button @click="show_create_form = true">
                             Create checklist
                         </x-button>
                         @endcan
@@ -108,22 +112,23 @@ $datasets = DB::table('omoccurdatasets')
                 </div>
                 <hr class="mb-4" />
 
-                <form>
+                <form hx-post="{{ url('checklists/create') }}" hx-target="#user_checklists" hx-swap="outerHTML" x-show="show_create_form">
+                    @csrf
                     <fieldset class="flex flex-col gap-4">
                         <legend class="font-bold text-lg">Create New Checklist</legend>
                         <hr />
                         <x-input label="Checklist Name" id="checklist_name" />
+
+                        {{--
                         <x-input label="Authors" id="checklist_authors" />
 
                         <x-input label="External Project ID" id="external_project_id" />
                         <x-input label="Locality" id="checklist_locality" />
                         <x-input label="Citation" id="checklist_citation" />
-                        {{-- Todo some kind of html or markdown editor --}}
                         <x-input area label="Abstract" id="Abstract" />
 
                         <x-input label="Notes" id="checklist_notes" />
 
-                        {{-- TODO (Logan) these items --}}
                         <x-select label="More Inclusive Reference Checklist" />
 
                         <x-input label="Latitude" id="checklist_latitude" />
@@ -157,20 +162,22 @@ $datasets = DB::table('omoccurdatasets')
                             [ 'title' => 'Can view with link', 'value' => 'view_with_link', 'disabled' => false],
                             [ 'title' => 'Public', 'value' => 'public', 'disabled' => false],
                         ]"/>
+                        --}}
 
                         <div class="flex gap-2">
                             <x-button type="submit">Create</x-button>
-                            <x-button type="button" variant="error">Cancel</x-button>
+                            <x-button type="button" variant="error" @click="show_create_form = false">Cancel</x-button>
                         </div>
 
                     </fieldset>
                 </form>
-
-                @if(count($checklists) <= 0) <div>
-                    you have no permissions for any checklists.
+            @fragment('checklists')
+            <div id="user_checklists">
+            @if(count($checklists) <= 0)
+            <div>
+                you have no permissions for any checklists.
             </div>
             @endif
-
             @foreach ($checklists as $checklist)
             <div class="p-2 border border-base-300 rounded-md">
                 <div class="font-bold text-xl">
@@ -192,7 +199,8 @@ $datasets = DB::table('omoccurdatasets')
                 @endif
             </div>
             @endforeach
-
+            </div>
+            @endfragment
         </div>
 
         {{-- Collections --}}
