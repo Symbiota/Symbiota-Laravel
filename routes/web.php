@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
+use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaxonomyController;
 use App\Http\Controllers\UserProfileController;
@@ -139,29 +140,8 @@ Route::group(['prefix' => '/user'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/token'], function () {
-    Route::post('/create', function (Request $request) {
-        $user = $request->user();
-
-        $token = $user->createToken($request->token_name, ['*'], $request->expiration_date? new DateTime($request->expiration_date): null);
-
-        return view(
-            'pages/user/profile',
-            [
-                'user_tokens' => $user->tokens ?? [],
-                'created_token' => $token->plainTextToken,
-            ])
-            ->fragment('tokens');
-    });
-
-    Route::delete('/delete/{id}', function (int $token_id) {
-        $user = request()->user();
-        $token = $user->tokens()->where('id', $token_id)->delete();
-
-        return view(
-            'pages/user/profile',
-            ['user_tokens' => $user->tokens ?? []])
-            ->fragment('tokens');
-    });
+    Route::post('/create', [PersonalAccessTokenController::class, 'create']);
+    Route::delete('/delete/{id}', [PersonalAccessTokenController::class, 'delete']);
 });
 
 /*
