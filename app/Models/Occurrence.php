@@ -347,8 +347,8 @@ class Occurrence extends Model {
                 $query->orderByRaw('ISNULL(o.' . self::$searchable_fields[$idx] . ') ASC');
             }
             $query->orderBy(
-                $sort,
-                $params['sortDirection'] === 'DESC' ? 'DESC' : 'ASC'
+                'o.' . $sort,
+                empty($params['sortDirection']) || $params['sortDirection'] === 'DESC' ? 'DESC' : 'ASC'
             );
         }
 
