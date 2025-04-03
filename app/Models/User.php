@@ -25,10 +25,19 @@ class User extends Authenticatable {
     protected $fillable = [
         'name',
         'firstName',
+        'title',
         'lastName',
         'email',
+        'institution',
+        'department',
+        'address',
+        'state',
+        'city',
+        'zip',
+        'country',
         'password',
         //Note this is really a orcid
+        'dynamicProperties',
         'oauth_provider',
         'guid',
         'access_token',
@@ -54,6 +63,7 @@ class User extends Authenticatable {
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'dynamicProperties' => 'array',
         'password' => 'hashed',
     ];
 
@@ -78,6 +88,29 @@ class User extends Authenticatable {
                 }
             }
         });
+
+        return $query->first() ? true : false;
+    }
+
+    public function canViewChecklist(int $clid) {
+        $select = ['userroles.uid', 'role', 'tablePK'];
+        $super_admin_query = UserRole::query()
+            ->where('role', UserRole::SUPER_ADMIN)
+            ->where('uid', $this->uid)
+            ->select($select);
+
+        $query = UserRole::query()
+            ->join('fmchecklists as fmc', function ($join) {
+                $join->on('fmc.clid', 'userroles.tablePK')
+                    ->whereRaw('userroles.tableName = "fmchecklists"');
+            })
+            ->where('userroles.uid', $this->uid)
+            ->where(function ($builder) {
+                $builder->where('role', UserRole::CL_ADMIN)
+                    ->orWhereRaw('fmc.access = "public"');
+            })
+            ->union($super_admin_query)
+            ->select($select);
 
         return $query->first() ? true : false;
     }
