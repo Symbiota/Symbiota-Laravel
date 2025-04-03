@@ -46,12 +46,12 @@ class UserProfileController extends Controller {
     public static function updatePassword(Request $request) {
         $user = $request->user();
         $input = $request->input();
-/*
-        [
-            'current_password' => request('current_password'),
-            'password' => request('password'),
-        ];
-*/
+        /*
+                [
+                    'current_password' => request('current_password'),
+                    'password' => request('password'),
+                ];
+        */
 
         $error = null;
 
@@ -62,12 +62,12 @@ class UserProfileController extends Controller {
             'current_password.current_password' => __('The provided password does not match your current password.'),
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             session()->flashInput($request->input());
 
             return response(
                 view('pages/user/profile', ['errors' => $validator->errors()])
-                ->fragment('password')
+                    ->fragment('password')
             );
         }
 
@@ -86,7 +86,7 @@ class UserProfileController extends Controller {
 
         return response(
             view('pages/user/profile')
-            ->fragment('password')
+                ->fragment('password')
         );
     }
 }

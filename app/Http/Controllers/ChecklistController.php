@@ -6,7 +6,6 @@ use App\Models\UserRole;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use function Laravel\Prompts\table;
 
 class ChecklistController extends Controller {
     public static function getChecklistData(int $clid) {
@@ -20,7 +19,7 @@ class ChecklistController extends Controller {
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
             ->select('c.*', 'p.*');
 
-        if(!$user || !$user->canViewChecklist($clid)) {
+        if (! $user || ! $user->canViewChecklist($clid)) {
             $checklists_query
                 ->where('c.type', '!=', 'excludespp')
                 ->whereLike('c.access', 'public%')
@@ -33,7 +32,7 @@ class ChecklistController extends Controller {
     public static function checklist(int $clid) {
         $checklist = self::getChecklistData($clid);
 
-        if(empty($checklist)) {
+        if (empty($checklist)) {
             return view('pages/checklist/not-found');
         }
 
@@ -147,7 +146,7 @@ class ChecklistController extends Controller {
         DB::transaction(function () use ($user, $request) {
             $clid = DB::table('fmchecklists')->insertGetId([
                 'name' => $request->get('checklist_name'),
-                'uid' => $user->uid
+                'uid' => $user->uid,
             ]);
 
             $userRole = new UserRole();
@@ -160,7 +159,7 @@ class ChecklistController extends Controller {
         });
 
         return view('pages/user/profile', [
-            'user' => $user
+            'user' => $user,
         ])->fragment('checklists');
     }
 
@@ -168,10 +167,10 @@ class ChecklistController extends Controller {
         $user = $request->user();
 
         $checklists = DB::table('fmchecklists')
-        ->join('userroles as ur', 'tablePK', 'clid')
-        ->whereIn('role', [UserRole::CL_ADMIN])
-        ->where('ur.uid', $user->uid)
-        ->get();
+            ->join('userroles as ur', 'tablePK', 'clid')
+            ->whereIn('role', [UserRole::CL_ADMIN])
+            ->where('ur.uid', $user->uid)
+            ->get();
 
         return $checklists;
     }

@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 
 class PersonalAccessTokenController extends Controller {
-    function create (Request $request): String {
+    public function create(Request $request): string {
         $user = $request->user();
 
-        $token = $user->createToken($request->token_name, ['*'], $request->expiration_date? new DateTime($request->expiration_date): null);
+        $token = $user->createToken($request->token_name, ['*'], $request->expiration_date ? new DateTime($request->expiration_date) : null);
 
         return view(
             'pages/user/profile',
@@ -20,7 +20,7 @@ class PersonalAccessTokenController extends Controller {
             ->fragment('tokens');
     }
 
-    function delete (int $token_id): String {
+    public function delete(int $token_id): string {
         $user = request()->user();
         $token = $user->tokens()->where('id', $token_id)->delete();
 

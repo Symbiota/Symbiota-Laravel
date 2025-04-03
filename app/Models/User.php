@@ -100,14 +100,14 @@ class User extends Authenticatable {
             ->select($select);
 
         $query = UserRole::query()
-            ->join('fmchecklists as fmc', function($join) {
+            ->join('fmchecklists as fmc', function ($join) {
                 $join->on('fmc.clid', 'userroles.tablePK')
-                     ->whereRaw('userroles.tableName = "fmchecklists"');
+                    ->whereRaw('userroles.tableName = "fmchecklists"');
             })
             ->where('userroles.uid', $this->uid)
-            ->where(function($builder) {
+            ->where(function ($builder) {
                 $builder->where('role', UserRole::CL_ADMIN)
-                        ->orWhereRaw('fmc.access = "public"');
+                    ->orWhereRaw('fmc.access = "public"');
             })
             ->union($super_admin_query)
             ->select($select);

@@ -47,7 +47,6 @@ class FortifyServiceProvider extends ServiceProvider {
             }
         });
 
-
         $this->app->instance(TwoFactorDisabledResponse::class, new class() implements TwoFactorDisabledResponse {
             public function toResponse($request) {
                 return response(view('pages/user/profile'))
@@ -57,7 +56,6 @@ class FortifyServiceProvider extends ServiceProvider {
         });
 
         $this->app->instance(PasswordConfirmedResponse::class, new class() implements PasswordConfirmedResponse {
-
             public function toResponse($request) {
                 return response(view('/pages/user/profile'))
                     ->header('HX-Retarget', 'body')
@@ -149,8 +147,6 @@ class FortifyServiceProvider extends ServiceProvider {
                 return $user;
             }
         });
-
-
 
         Fortify::createUsersUsing(CreateNewUser::class);
         // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
