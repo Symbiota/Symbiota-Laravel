@@ -158,6 +158,15 @@
 
         {{-- ADD IMAGE VOUCHER START--}}
         <x-horizontal-nav.tab name="Add Image Voucher">
+            <div class="font-bold text-2xl">
+              Add Image Voucher and Link to Checklist
+            </div>
+            <hr/>
+            <p>This form will allow you to add an image voucher linked to this checklist. If not already present, Scientific name will be added to checklist.</p>
+            <form>
+                <x-select label="Voucher Project" :items="[]" />
+                <x-button>Add Image Voucher and Link to Checklist</x-button>
+            </form>
         </x-horizontal-nav.tab>
         {{-- ADD IMAGE VOUCHER END --}}
 
