@@ -1,5 +1,5 @@
 <x-layout>
-    <x-horizontal-nav.container default_active_tab="Non-Vouchered Taxa" :items="[
+    <x-horizontal-nav.container default_active_tab="Missing Taxa" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -173,7 +173,7 @@
         {{-- NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="Non-Vouchered Taxa">
             <div class="font-bold text-2xl">
-              Taxa without Vouchers: 0 <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+              Taxa without Vouchers: # <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
             </div>
             <hr/>
             <p> Listed below are species from the checklist that do not have linked specimen vouchers. Click on name to use the search statement above to dynamically query the occurrence dataset for possible voucher specimens. Use the pulldown to the right to display the specimens in a table format. </p>
@@ -187,6 +187,29 @@
 
         {{-- MISSING TAXA START--}}
         <x-horizontal-nav.tab name="Missing Taxa">
+            <div class="font-bold text-2xl">
+              Possible Missing Taxa: # <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+            </div>
+            <hr/>
+
+            <x-select label="Display Mode"/>
+            <p>
+            Listed below are taxon names not found in the checklist but are represented by one or more specimens that have a locality matching the above search term.
+            </p>
+
+            <div>
+                @foreach ([
+                'Somelong taxanomic (syn: Synonym)',
+                'Somelong taxanomic var. someother taxonomic (syn: Synonym)'
+                ] as $item)
+                    <div class="flex items-center gap-2">
+                        <x-link href="#">
+                            {{$item}}
+                        </x-link>
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                @endforeach
+            </div>
         </x-horizontal-nav.tab>
         {{-- MISSING TAXA END --}}
 
