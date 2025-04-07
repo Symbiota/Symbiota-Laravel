@@ -126,7 +126,9 @@ $datasets = DB::table('omoccurdatasets')
                             </x-nav-link>
 
                             <x-nav-link
-                                href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}">
+                                {{-- href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}" --}}
+                                href="{{ url('checklists')}}/{{$checklist->clid}}/admin"
+                                >
                                 <x-icons.edit x-on:click="console.log('click')" />
                                 Admin
                             </x-nav-link>

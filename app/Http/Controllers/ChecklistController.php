@@ -174,4 +174,9 @@ class ChecklistController extends Controller {
 
         return $checklists;
     }
+
+    public static function getAdminPage(int $clid) {
+        $checklist = self::getChecklistData($clid);
+        return view('pages/checklist/admin', [ 'checklist' => $checklist ]);
+    }
 }
