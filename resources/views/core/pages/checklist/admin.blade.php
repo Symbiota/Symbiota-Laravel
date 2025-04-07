@@ -1,11 +1,11 @@
 <x-layout>
-    <x-horizontal-nav.container default_active_tab="Related Checklists" :items="[
+    <x-horizontal-nav.container default_active_tab="Non-Vouchered Taxa" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
         ['label' => 'Add Image Voucher', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
+        ['label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Reports', 'icon' => 'fa-solid fa-database'],
     ]">
         {{-- ADMIN START--}}
@@ -170,15 +170,25 @@
         </x-horizontal-nav.tab>
         {{-- ADD IMAGE VOUCHER END --}}
 
+        {{-- NON-VOUCHERED TAXA START--}}
+        <x-horizontal-nav.tab name="Non-Vouchered Taxa">
+            <div class="font-bold text-2xl">
+              Taxa without Vouchers: 0 <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+            </div>
+            <hr/>
+            <p> Listed below are species from the checklist that do not have linked specimen vouchers. Click on name to use the search statement above to dynamically query the occurrence dataset for possible voucher specimens. Use the pulldown to the right to display the specimens in a table format. </p>
+            <x-select label="Display Mode"/>
+
+            <div class="font-bold text-xl">
+                All Taxa Contain Voucher Links
+            </div>
+        </x-horizontal-nav.tab>
+        {{-- NON-VOUCHERED TAXA END --}}
+
         {{-- MISSING TAXA START--}}
         <x-horizontal-nav.tab name="Missing Taxa">
         </x-horizontal-nav.tab>
         {{-- MISSING TAXA END --}}
-
-        {{-- NON-VOUCHERED TAXA START--}}
-        <x-horizontal-nav.tab name="Non-Vouchered Taxa">
-        </x-horizontal-nav.tab>
-        {{-- NON-VOUCHERED TAXA END --}}
 
         {{-- REPORTS START--}}
         <x-horizontal-nav.tab name="Reports">
