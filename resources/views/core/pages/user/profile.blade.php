@@ -27,15 +27,6 @@ $datasets = DB::table('omoccurdatasets')
 
 @endphp
 <x-layout class="sm:w-[95%] lg:w-[75%] m-auto flex flex-col gap-4 p-0">
-    {{--<div class="mt-4">
-        <x-breadcrumbs :items="[
-            ['title' => 'Home', 'href' => url('') ],
-            ['title' => 'Previous', 'href' => url('') ],
-            'User Settings'
-        ]" />
-    </div>
-    --}}
-
     <h1 class="text-4xl font-bold sr-only">User Settings</h1>
 
     <div class="mt-4 flex gap-2 items-center">
