@@ -180,11 +180,25 @@ $datasets = DB::table('omoccurdatasets')
             @endif
             @foreach ($checklists as $checklist)
             <div class="p-2 border border-base-300 rounded-md">
-                <div class="font-bold text-xl">
-                    {{ $checklist->name }}
-                    <x-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid)}}">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </x-link>
+                <div class="flex items-center">
+                    <span class="font-bold text-xl">
+                        {{ $checklist->name }}
+                    </span>
+
+                    <span class="flex flex-grow justify-end items-center gap-4">
+                        <x-nav-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid)}}">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </x-nav-link>
+                        <x-nav-link href="{{ url(config('portal.name') . '/checklists/checklistadmin.php') }}?clid={{ $checklist->clid }}">
+                            <x-icons.edit x-on:click="console.log('click')" />
+                            Voucher Admin
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}">
+                            <x-icons.edit x-on:click="console.log('click')" />
+                            Admin
+                        </x-nav-link>
+                    </span>
                 </div>
                 @if(!empty($checklist->locality))
                 <div>
