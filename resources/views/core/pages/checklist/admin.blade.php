@@ -1,5 +1,5 @@
 <x-layout>
-    <x-horizontal-nav.container default_active_tab="Missing Taxa" :items="[
+    <x-horizontal-nav.container default_active_tab="Reports" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -215,6 +215,24 @@
 
         {{-- REPORTS START--}}
         <x-horizontal-nav.tab name="Reports">
+            <div class="font-bold text-2xl">
+              Reports
+            </div>
+            <hr/>
+
+            <p>
+                See the Option Panel on the central page for more versatile export and print options that dynamically incorporate option selections.
+            </p>
+
+            <div class="flex flex-col gap-1">
+                <x-link href="#">Full species list (CSV)</x-link>
+                <x-link href="#">Full species lis with linked vouchers (CSV)</x-link>
+                <x-link href="#">Linked occurrence vouchers only (DwC-A, CSV, Tab-delmited)</x-link>
+                <x-link href="#">Full species list with all occurrences matching search terms (CSV)</x-link>
+                <x-link href="#">Pensoft Excel Export (CSV)</x-link>
+                <x-link href="#">Specimens of taxa missing from checklist (CSV)</x-link>
+                <x-link href="#">Specimens with misspelled, illegal, and problematic scientific Names (CSV)</x-link>
+            </div>
         </x-horizontal-nav.tab>
         {{-- REPORTS END --}}
     </x-horizontal-nav.container>
