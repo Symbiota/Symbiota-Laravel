@@ -1,5 +1,5 @@
 <x-layout>
-    <x-horizontal-nav.container default_active_tab="Reports" :items="[
+    <x-horizontal-nav.container default_active_tab="Description" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -67,7 +67,9 @@
                 <x-input label="External Project ID" id="external_project_id" />
                 <x-input label="Locality" id="checklist_locality" />
                 <x-input label="Citation" id="checklist_citation" />
-                <x-input area label="Abstract" id="Abstract" />
+                <x-rich-editor label="Abstract" id="Abstract">
+                    {!! Purify::clean($checklist->abstract) !!}
+                </x-rich-editor>
 
                 <x-input label="Notes" id="checklist_notes" />
 
