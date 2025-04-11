@@ -224,7 +224,7 @@ $datasets = DB::table('omoccurdatasets')
                     <x-input label="Name" name="name"/>
                     <x-checkbox label="Publicly Visible" name="isPublic"/>
                     <x-input label="Notes (Not Displayed Publicly)"  name="notes"/>
-                    {{-- TODO (Logan) Implement Rich Text Editor<x-input area label="Description (Displayed Publicly)" name="description" /> --}}
+                    <x-rich-editor label="Description (Displayed Publicly)" name="description"></x-rich-editor>
 
                     <div class="flex gap-2">
                         <x-button type="submit">Create</x-button>
