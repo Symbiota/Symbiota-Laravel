@@ -99,7 +99,7 @@ $breadcrumbs[] = $checklist->name;
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             @isset($checklist->abstract)
-                <div><span class="font-bold">Abstract:</span> {{ $checklist->abstract }}</div>
+                <div><span class="font-bold">Abstract:</span> {!! Purify::clean($checklist->abstract) !!}</div>
             @endisset
 
             @isset($checklist->authors)

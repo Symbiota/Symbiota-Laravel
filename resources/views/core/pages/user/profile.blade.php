@@ -142,7 +142,7 @@ $datasets = DB::table('omoccurdatasets')
 
                     @if(!empty($checklist->abstract))
                     <div>
-                        {{ $checklist->abstract}}
+                        {!! Purify::clean($checklist->abstract) !!}
                     </div>
                 @endif
                 </div>
