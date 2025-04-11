@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class DatasetModel extends Model {
     use HasFactory;
 
     protected $table = 'omoccurdatasets';
+
     protected $primaryKey = 'datasetID';
 
     public $timestamps = false;
@@ -28,7 +29,7 @@ class DatasetModel extends Model {
         'dynamicProperties',
         'sortSequence',
         'uid',
-        'collid'
+        'collid',
     ];
 
     /**
