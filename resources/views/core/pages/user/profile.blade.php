@@ -287,7 +287,7 @@ $datasets = DB::table('omoccurdatasets')
                 <x-input type="password" label="Confirm password" id="password_confirmation"
                     value="{{ old('password_confirmation') }}" />
                 <x-button type="submit">Update Password</x-button>
-                <x-link href="#todo">I forgot my password</x-link>
+                {{-- TODO (Logan) password resets <x-link hx-boost="true" href="{{ url('forgot-password') }}">I forgot my password</x-link> --}}
                 <x-errors :errors="$errors" />
             </form>
             @endfragment
