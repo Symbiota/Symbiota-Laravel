@@ -188,5 +188,8 @@
                 Tab 3
             </x-slide-tab>
         </x-slide-tab-container>
+        <x-rich-editor>
+            {!! Purify::clean('<p><em>Hello</em>, <span style="text-decoration: underline;"><strong>World!</strong></span><script>alert("bad")</script></p>') !!}
+        </x-rich-editor>
     </div>
 </x-layout>

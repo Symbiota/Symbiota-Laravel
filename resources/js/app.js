@@ -5,11 +5,17 @@ import 'htmx.org';
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.markercluster';
+import * as editor from './editor';
+import 'tinymce/icons/default/icons.min.js';
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
 import './components/autocomplete-input';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 window.Chart = Chart;
+
+window.tinymce_editor = editor;
 
 window.L = L;
 window.type = true;
