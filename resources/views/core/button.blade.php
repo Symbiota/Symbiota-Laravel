@@ -6,7 +6,7 @@ $variant_def = match($variant) {
  "secondary" => ['bg-secondary', 'text-secondary-content', 'hover:bg-secondary-lighter', 'active:bg-secondary-darker'],
  "error" => ['bg-error', 'text-error-content', 'hover:bg-error-lighter', 'active:bg-error-darker'],
  "clear-primary" => ['bg-transparent', 'text-primary border-primary border-2'],
-  Default => ['bg-primary','text-primary-content','hover:bg-primary-lighter', 'active:bg-primary-darker'],
+  Default => ['bg-primary','text-primary-content','hover:bg-primary-lighter', 'active:bg-primary-darker', 'disabled:grayscale'],
 };
 
 $base = 'rounded-lg shadow-xl focus:ring hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-base font-bold flex items-center gap-1 py-1 px-2.5 h-fit w-fit';

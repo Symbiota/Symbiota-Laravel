@@ -11,7 +11,12 @@ class UserRole extends Model {
 
     public $timestamps = false;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'tableName',
+        'tablePK',
+        'uid',
+        'role',
+    ];
 
     protected $hidden = [];
 

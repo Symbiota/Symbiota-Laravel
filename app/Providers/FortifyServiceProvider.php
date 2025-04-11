@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -26,6 +25,8 @@ class FortifyServiceProvider extends ServiceProvider {
      * Register any application services.
      */
     public function register(): void {
+        //Fortify::ignoreRoutes();
+
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
@@ -105,6 +106,13 @@ class FortifyServiceProvider extends ServiceProvider {
             return response(view('pages/signup'))->header('HX-Replace-URL', url('/register'));
         });
 
+        Fortify::requestPasswordResetLinkView(function (Request $request) {
+            //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
+
+            return response(view('pages/auth/forgot-password')
+            )->header('HX-Replace-URL', url('/forgot-password'));
+        });
+
         Fortify::confirmPasswordView(function () {
             return response(view('pages/auth/confirm-password'))
                 //->header('HX-Replace-URL', '/auth/confirm-password')
@@ -141,8 +149,8 @@ class FortifyServiceProvider extends ServiceProvider {
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        // Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {

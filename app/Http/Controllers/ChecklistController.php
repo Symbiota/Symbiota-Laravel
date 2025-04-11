@@ -2,27 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserRole;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ChecklistController extends Controller {
     public static function getChecklistData(int $clid) {
+
+        $user = request()->user();
+
         $checklists_query = DB::table('fmchecklists as c')
             ->leftJoin('fmchklstprojlink as cpl', 'cpl.clid', 'c.clid')
             ->leftJoin('fmprojects as p', 'p.pid', 'cpl.pid')
-            ->where('c.type', '!=', 'excludespp')
-            ->whereLike('c.access', 'public%')
-            ->where('p.ispublic', 1)
             ->where('c.clid', $clid)
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
-            ->select('*');
+            ->select('c.*', 'p.*');
+
+        if (! $user || ! $user->canViewChecklist($clid)) {
+            $checklists_query
+                ->where('c.type', '!=', 'excludespp')
+                ->whereLike('c.access', 'public%')
+                ->where('p.ispublic', 1);
+        }
 
         return $checklists_query->first();
     }
 
     public static function checklist(int $clid) {
         $checklist = self::getChecklistData($clid);
+
+        if (empty($checklist)) {
+            return view('pages/checklist/not-found');
+        }
 
         $taxon_query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid');
@@ -126,5 +138,46 @@ class ChecklistController extends Controller {
     public static function dynamicMapPage(Request $request) {
 
         return view('pages/checklist/dynamic-builder');
+    }
+
+    public static function createChecklist(Request $request) {
+        $user = $request->user();
+
+        DB::transaction(function () use ($user, $request) {
+            $clid = DB::table('fmchecklists')->insertGetId([
+                'name' => $request->get('checklist_name'),
+                'uid' => $user->uid,
+            ]);
+
+            $userRole = new UserRole();
+
+            $userRole->role = UserRole::CL_ADMIN;
+            $userRole->tableName = 'fmchecklists';
+            $userRole->uid = $user->uid;
+            $userRole->tablePK = $clid;
+            $userRole->save();
+        });
+
+        return view('pages/user/profile', [
+            'user' => $user,
+        ])->fragment('checklists');
+    }
+
+    private static function getUserChecklists(Request $request) {
+        $user = $request->user();
+
+        $checklists = DB::table('fmchecklists')
+            ->join('userroles as ur', 'tablePK', 'clid')
+            ->whereIn('role', [UserRole::CL_ADMIN])
+            ->where('ur.uid', $user->uid)
+            ->get();
+
+        return $checklists;
+    }
+
+    public static function getAdminPage(int $clid) {
+        $checklist = self::getChecklistData($clid);
+
+        return view('pages/checklist/admin', ['checklist' => $checklist]);
     }
 }

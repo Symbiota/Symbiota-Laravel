@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
+use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaxonomyController;
+use App\Http\Controllers\UserProfileController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +34,7 @@ use Laravel\Socialite\Facades\Socialite;
 | General Routes
 |--------------------------------------------------------------------------
 */
-Route::view('/', 'pages/home');
+Route::view('/', 'pages/home')->name('home');
 Route::view('Portal/', 'pages/home');
 Route::view('/tw', 'tw-components');
 Route::view('/sitemap', 'pages/sitemap');
@@ -55,6 +58,8 @@ Route::group(['prefix' => 'taxon'], function () {
 Route::group(['prefix' => 'checklists'], function () {
     Route::get('/', [ChecklistController::class, 'checklists']);
     Route::get('/dynamicmap', [ChecklistController::class, 'dynamicMapPage']);
+    Route::post('/create', [ChecklistController::class, 'createChecklist']);
+    Route::get('/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
     Route::get('/{clid}', [ChecklistController::class, 'checklist']);
 });
 
@@ -125,30 +130,22 @@ Route::group(['prefix' => '/media'], function () {
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/user/profile', function (Request $request) {
-    $tokens = $request->user()->tokens;
-
-    return view('pages/user/profile', ['user_tokens' => $tokens]);
+Route::group(['prefix' => '/user'], function () {
+    Route::get('/profile', [UserProfileController::class, 'getProfile']);
+    Route::put('/profile/metadata', [UserProfileController::class, 'updateProfileMetadata']);
+    Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
+    Route::post('/profile/dataset', [DatasetController::class, 'createDataset']);
+    Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
 });
 
-Route::post('/token/create', function (Request $request) {
-    $user = $request->user();
-
-    $token = $user->createToken($request->token_name);
-
-    return view(
-        'pages/user/profile',
-        ['user_tokens' => $user->tokens ?? [], 'created_token' => $token->plainTextToken])
-        ->fragment('tokens');
-});
-Route::delete('/token/delete/{id}', function (int $token_id) {
-    $user = request()->user();
-    $token = $user->tokens()->where('id', $token_id)->delete();
-
-    return view(
-        'pages/user/profile',
-        ['user_tokens' => $user->tokens ?? []])
-        ->fragment('tokens');
+/*
+|--------------------------------------------------------------------------
+| User Token Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => '/token'], function () {
+    Route::post('/create', [PersonalAccessTokenController::class, 'create']);
+    Route::delete('/delete/{id}', [PersonalAccessTokenController::class, 'delete']);
 });
 
 /*

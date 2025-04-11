@@ -27,7 +27,7 @@ function colUrl($url, $extra_query = '') {
             <x-button>Search Media</x-button>
         </x-nav-link>
     </div>
-    <p>{{ $collection->fullDescription }}</p>
+    <p>{!! Purify::clean($collection->fullDescription) !!}</p>
 
     <x-accordion label="Manager Control Panel" open="true">
         <div class="flex gap-2">
