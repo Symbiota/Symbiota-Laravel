@@ -103,50 +103,51 @@ $datasets = DB::table('omoccurdatasets')
             </form>
             @fragment('checklists')
             <div id="user_checklists">
-                @if(count($checklists) <= 0)
-                <div>
+                @if(count($checklists) <= 0) <div>
                     you have no permissions for any checklists.
+            </div>
+            @endif
+            @foreach ($checklists as $checklist)
+            <div class="p-2 border border-base-300 rounded-md">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl">
+                        {{ $checklist->name }}
+                    </span>
+
+                    <span class="flex flex-grow justify-end items-center gap-4">
+                        <x-nav-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid)}}">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            Public View
+                        </x-nav-link>
+
+                        <x-nav-link
+                            href="{{ url(config('portal.name') . '/checklists/checklistadmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}">
+                            <x-icons.edit x-on:click="console.log('click')" />
+                            Admin
+                        </x-nav-link>
+
+                        <x-nav-link
+                            href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}"
+                            {{-- TODO Logan for checklist admin pr
+                            href="{{ url('checklists')}}/{{$checklist->clid}}/admin" --}}>
+                            <x-icons.edit />
+                            Voucher Admin
+                        </x-nav-link>
+                    </span>
+                </div>
+                @if(!empty($checklist->locality))
+                <div>
+                    {{ $checklist->locality }}
                 </div>
                 @endif
-                @foreach ($checklists as $checklist)
-                <div class="p-2 border border-base-300 rounded-md">
-                    <div class="flex items-center">
-                        <span class="font-bold text-xl">
-                            {{ $checklist->name }}
-                        </span>
 
-                        <span class="flex flex-grow justify-end items-center gap-4">
-                            <x-nav-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid)}}">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </x-nav-link>
-                            <x-nav-link
-                                href="{{ url(config('portal.name') . '/checklists/checklistadmin.php') }}?clid={{ $checklist->clid }}">
-                                <x-icons.edit x-on:click="console.log('click')" />
-                                Voucher Admin
-                            </x-nav-link>
-
-                            <x-nav-link
-                                {{-- href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}" --}}
-                                href="{{ url('checklists')}}/{{$checklist->clid}}/admin"
-                                >
-                                <x-icons.edit x-on:click="console.log('click')" />
-                                Admin
-                            </x-nav-link>
-                        </span>
-                    </div>
-                    @if(!empty($checklist->locality))
-                    <div>
-                        {{ $checklist->locality }}
-                    </div>
-                    @endif
-
-                    @if(!empty($checklist->abstract))
-                    <div>
-                        {!! Purify::clean($checklist->abstract) !!}
-                    </div>
-                @endif
+                @if(!empty($checklist->abstract))
+                <div>
+                    {!! Purify::clean($checklist->abstract) !!}
                 </div>
-                @endforeach
+                @endif
+            </div>
+            @endforeach
             </div>
             @endfragment
         </x-horizontal-nav.tab>
@@ -166,39 +167,38 @@ $datasets = DB::table('omoccurdatasets')
             </div>
             <hr class="mb-4" />
 
-            @if(count($collections) <= 0)
-            <div>
+            @if(count($collections) <= 0) <div>
                 You have no permissions for any collections.
-            </div>
-            @endif
+                </div>
+                @endif
 
-            @foreach ($collections as $collection)
-            <div class="flex items-center gap-4 p-4 rounded-md border border-base-300 relative">
-                <img class="w-16 mx-auto flex-shrink" src="{{ $collection->icon }}">
-                <div class="flex-grow">
-                    <div class="text-xl font-bold">
-                        {{ $collection->collectionName }}
-                        <x-link hx-boost="true" href="{{ url('collections/' . $collection->collID)}}">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </x-link>
-                    </div>
-                    @php
-                    $roles = explode(',', $collection->roles);
-                    @endphp
-                    <div class="flex gap-2">
-                        @foreach ($roles as $role)
-                        <div class="bg-base-300 w-fit px-2 rounded-full">
-                            @if($role === UserRole::COLL_ADMIN)
-                            Admin
-                            @elseif($role === UserRole::COLL_EDITOR)
-                            Editor
-                            @endif
+                @foreach ($collections as $collection)
+                <div class="flex items-center gap-4 p-4 rounded-md border border-base-300 relative">
+                    <img class="w-16 mx-auto flex-shrink" src="{{ $collection->icon }}">
+                    <div class="flex-grow">
+                        <div class="text-xl font-bold">
+                            {{ $collection->collectionName }}
+                            <x-link hx-boost="true" href="{{ url('collections/' . $collection->collID)}}">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </x-link>
                         </div>
-                        @endforeach
+                        @php
+                        $roles = explode(',', $collection->roles);
+                        @endphp
+                        <div class="flex gap-2">
+                            @foreach ($roles as $role)
+                            <div class="bg-base-300 w-fit px-2 rounded-full">
+                                @if($role === UserRole::COLL_ADMIN)
+                                Admin
+                                @elseif($role === UserRole::COLL_EDITOR)
+                                Editor
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
         </x-horizontal-nav.tab>
         {{-- COLLECTIONS END --}}
 
@@ -207,8 +207,7 @@ $datasets = DB::table('omoccurdatasets')
             <div class="flex items-center">
                 <div class="text-2xl font-bold">Datasets</div>
                 <div class="flex flex-grow justify-end">
-                    <x-button
-                        {{-- href="{{url(config('portal.name'))}}/collections/datasets/index.php"--}}
+                    <x-button {{-- href="{{url(config('portal.name'))}}/collections/datasets/index.php" --}}
                         @click="show_create_form = true">
                         Create Dataset
                     </x-button>
@@ -221,9 +220,9 @@ $datasets = DB::table('omoccurdatasets')
                 <fieldset class="flex flex-col gap-4">
                     <legend class="font-bold text-lg">Create New Dataset</legend>
                     <hr />
-                    <x-input label="Name" name="name"/>
-                    <x-checkbox label="Publicly Visible" name="isPublic"/>
-                    <x-input label="Notes (Not Displayed Publicly)"  name="notes"/>
+                    <x-input label="Name" name="name" />
+                    <x-checkbox label="Publicly Visible" name="isPublic" />
+                    <x-input label="Notes (Not Displayed Publicly)" name="notes" />
                     <x-rich-editor label="Description (Displayed Publicly)" name="description"></x-rich-editor>
 
                     <div class="flex gap-2">
@@ -237,36 +236,41 @@ $datasets = DB::table('omoccurdatasets')
             </form>
 
             @fragment('datasets')
-            @if(count($datasets) <= 0)
-            <div>
+            @if(count($datasets) <= 0) <div>
                 You have no permissions for any datasets.
-            </div>
-            @endif
+                </div>
+                @endif
 
-            @foreach ($datasets as $dataset)
-            <div>
-                <div class="border border-base-300 rounded-md p-2">
-                    <div class="text-xl font-bold">
-                        {{ empty($dataset->name) ?'[ Empty Name ]' : $dataset->name }}
-                        <x-link
-                            href="{{ url(config('portal.name'))}}/collections/datasets/datasetmanager.php?datasetid={{$dataset->datasetID}}">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </x-link>
-                    </div>
-                    @if(!empty($dataset->notes))
-                    <div>
-                        <span class="font-bold">Notes:</span>
-                        {{ $dataset->notes }}
-                    </div>
-                    @endif
-                    <div>
-                        <span class="font-bold">Created:</span>
-                        {{ $dataset->initialTimestamp }}
+                @foreach ($datasets as $dataset)
+                <div>
+                    <div class="border border-base-300 rounded-md p-2">
+                        <div class="flex">
+                            <span class="text-xl font-bold">
+                            {{ empty($dataset->name) ?'[ Empty Name ]' : $dataset->name }}
+                            </span>
+
+                            <span class="flex flex-grow justify-end items-center gap-4">
+                                <x-nav-link
+                                    href="{{ url(config('portal.name'))}}/collections/datasets/datasetmanager.php?datasetid={{$dataset->datasetID}}">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    Dataset Managment
+                                </x-nav-link>
+                            </span>
+                        </div>
+                        @if(!empty($dataset->notes))
+                        <div>
+                            <span class="font-bold">Notes:</span>
+                            {{ $dataset->notes }}
+                        </div>
+                        @endif
+                        <div>
+                            <span class="font-bold">Created:</span>
+                            {{ $dataset->initialTimestamp }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            @endforeach
-            @endfragment
+                @endforeach
+                @endfragment
         </x-horizontal-nav.tab>
         {{-- DATASETS END --}}
 
