@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
@@ -133,6 +134,7 @@ Route::group(['prefix' => '/user'], function () {
     Route::get('/profile', [UserProfileController::class, 'getProfile']);
     Route::put('/profile/metadata', [UserProfileController::class, 'updateProfileMetadata']);
     Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
+    Route::post('/profile/dataset', [DatasetController::class, 'createDataset']);
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
 });
 

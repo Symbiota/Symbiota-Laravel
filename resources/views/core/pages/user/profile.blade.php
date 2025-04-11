@@ -203,17 +203,40 @@ $datasets = DB::table('omoccurdatasets')
         {{-- COLLECTIONS END --}}
 
         {{-- DATASETS START --}}
-        <x-horizontal-nav.tab name="Datasets" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="Datasets" class="flex flex-col gap-4" x-data="{ show_create_form: false }">
             <div class="flex items-center">
                 <div class="text-2xl font-bold">Datasets</div>
                 <div class="flex flex-grow justify-end">
-                    <x-button href="{{url(config('portal.name'))}}/collections/datasets/index.php">
-                        Create dataset
+                    <x-button
+                        {{-- href="{{url(config('portal.name'))}}/collections/datasets/index.php"--}}
+                        @click="show_create_form = true">
+                        Create Dataset
                     </x-button>
                 </div>
             </div>
             <hr class="mb-4" />
 
+            <form x-show="show_create_form" hx-post="{{ url('user/profile/dataset') }}">
+                @csrf
+                <fieldset class="flex flex-col gap-4">
+                    <legend class="font-bold text-lg">Create New Dataset</legend>
+                    <hr />
+                    <x-input label="Name" name="name"/>
+                    <x-checkbox label="Publicly Visible" name="isPublic"/>
+                    <x-input label="Notes (Not Displayed Publicly)"  name="notes"/>
+                    {{-- TODO (Logan) Implement Rich Text Editor<x-input area label="Description (Displayed Publicly)" name="description" /> --}}
+
+                    <div class="flex gap-2">
+                        <x-button type="submit">Create</x-button>
+                        <x-button type="button" variant="error" @click="show_create_form = false">Cancel</x-button>
+                    </div>
+                </fieldset>
+
+                <div class="flex gap-2">
+                </div>
+            </form>
+
+            @fragment('datasets')
             @if(count($datasets) <= 0)
             <div>
                 You have no permissions for any datasets.
@@ -224,9 +247,9 @@ $datasets = DB::table('omoccurdatasets')
             <div>
                 <div class="border border-base-300 rounded-md p-2">
                     <div class="text-xl font-bold">
-                        {{ empty($dataset->name) ?'[ Empty Name ]' : $dataset->name}}
+                        {{ empty($dataset->name) ?'[ Empty Name ]' : $dataset->name }}
                         <x-link
-                            href="{{ url(config('portal.name'))}}/datasets/public.php?datasetid={{$dataset->datasetID}}">
+                            href="{{ url(config('portal.name'))}}/collections/datasets/datasetmanager.php?datasetid={{$dataset->datasetID}}">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </x-link>
                     </div>
@@ -243,6 +266,7 @@ $datasets = DB::table('omoccurdatasets')
                 </div>
             </div>
             @endforeach
+            @endfragment
         </x-horizontal-nav.tab>
         {{-- DATASETS END --}}
 
