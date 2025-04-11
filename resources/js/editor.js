@@ -34,7 +34,7 @@ import 'tinymce/skins/content/default/content.js';
 /* Initialize TinyMCE */
 export function render () {
   tinymce.init({
-    selector: 'textarea#editor',
+    selector: 'textarea[data-mce-editor="true"]',
     plugins: 'advlist code emoticons link lists table',
     toolbar: 'bold italic | bullist numlist | link emoticons',
     skin_url: 'default',

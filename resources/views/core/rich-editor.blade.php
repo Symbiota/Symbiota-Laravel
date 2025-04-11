@@ -1,3 +1,4 @@
+@props(['id' => uniqid()])
 @pushOnce('js-scripts')
 <script type="text/javascript">
     window.document.addEventListener('DOMContentLoaded', function () {
@@ -9,6 +10,6 @@
     });
 </script>
 @endPushOnce
-<textarea id="editor" autocomplete="off">
+<x-input {{ $attributes }} autocomplete="off" area data-mce-editor="true">
   {{ $slot }}
-</textarea>
+</x-input>
