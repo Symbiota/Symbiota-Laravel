@@ -1,5 +1,5 @@
 {{-- TODO (Logan) add options to have layout without header, footer --}}
-@props(['occurrence'])
+@props(['occurrence', 'images' => [], 'audio' => []])
 @php
 function getLocalityStr($occur) {
 /*
@@ -26,11 +26,63 @@ $locality_attributes['protection typically due to rare or threatened status'] = 
 
 return $locality_attributes;
 }
+function format_notes($occurrence) {
+$arr = [];
+if($occurrence->occurrenceRemarks) {
+array_push($arr, $occurrence->occurrenceRemarks);
+}
+
+if($occurrence->establishmentMeans) {
+array_push($arr, $occurrence->establishmentMeans);
+}
+
+if($occurrence->cultivationStatus) {
+array_push($arr, 'Cultivated or Captive');
+}
+
+return $arr;
+}
+
+function format_range($min, $max, $units = null) {
+$range_str = null;
+if($min && $max) {
+$range_str = $min . ' - ' . $max;
+} else if($min) {
+$range_str = $min;
+} else if($max) {
+$range_str = $max;
+}
+
+if($range_str && $units) {
+$range_str .= ' ' . $units;
+}
+
+return $range_str;
+}
+
+function format_latlong_err($occurrence) {
+$arr = [
+$occurrence->decimalLatitude,
+$occurrence->decimalLongitude
+];
+
+if($occurrence->coordinateUncertaintyInMeters) {
+
+$arr[] = '+-' . $occurrence->coordinateUncertaintyInMeters . 'm.';
+}
+if($occurrence->geodeticDatum) {
+$arr[] = $occurrence->geodeticDatum;
+}
+
+return implode(' ', $arr);
+}
+
 //echo '<pre>' . var_export($occurrence, true) . '</pre>';
 $attributes = [
 //'On Loan To' => $occurrence->loan,
 //'Related Occurreces' => $occurrence->relation,
 'Catalog #' => $occurrence->catalogNumber,
+'Occurrence ID' => $occurrence->occurrenceID? $occurrence->occurrenceID: $occurrence->recordID,
 //'Occurrence ID' => $occurrence->occurrenceid,
 'Secondary Catalog #' => $occurrence->otherCatalogNumbers,
 'Taxon' => $occurrence->sciname,
@@ -46,19 +98,17 @@ $attributes = [
 'Event ID' => $occurrence->eventID,
 'Observer' => 'Collector' . $occurrence->recordedBy,
 'Number' => $occurrence->recordNumber,
-'Date' => implode(' - ', [$occurrence->eventDate, $occurrence->eventDate2, /*$occurrence->eventDateEnd*/]),
+'Date' => format_range($occurrence->eventDate, $occurrence->eventDate2),
 'Verbatim Date' => $occurrence->verbatimEventDate,
 'Additional Collectors' => $occurrence->associatedCollectors,
 'Locality' => getLocalityStr($occurrence),
-'Latiude/Longitude' => $occurrence->decimalLatitude .' '. $occurrence->decimalLongitude . ' ' .
-$occurrence->coordinateUncertaintyInMeters . $occurrence->geodeticDatum,
+'Latiude/Longitude' => format_latlong_err($occurrence),
 'Verbatim Coordinates' => $occurrence->verbatimCoordinates,
 'Location Remarks' => $occurrence->locationRemarks,
 'Georeference Remarks' => $occurrence->georeferenceRemarks,
-'Elevation' => $occurrence->minimumElevationInMeters . ' - ' .$occurrence->maximumElevationInMeters . ' Meters' . ' ' .
-$occurrence->verbatimElevation,
+'Elevation' => format_range($occurrence->minimumElevationInMeters, $occurrence->maximumElevationInMeters, 'Meters'),
 'Verbatim Elevation' => $occurrence->verbatimElevation,
-'Depth' => $occurrence->minimumDepthInMeters . ' - ' . $occurrence->maximumDepthInMeters . ' Meters',
+'Depth' => format_range($occurrence->minimumDepthInMeters, $occurrence->maximumDepthInMeters, 'Meters'),
 'Verbatim Depth' => $occurrence->verbatimDepth,
 'Information withheld' => $occurrence->informationWithheld,
 'Habitat' => $occurrence->habitat,
@@ -72,14 +122,11 @@ $occurrence->verbatimElevation,
 'Individual Count' => $occurrence->individualCount,
 'Sampling Protocol' => $occurrence->samplingProtocol,
 'Preparations' => $occurrence->preparations,
-'Notes' => implode('; ', [$occurrence->occurrenceRemarks, $occurrence->establishmentMeans,
-$occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
+'Notes' => format_notes($occurrence),
 'Disposition' => $occurrence->disposition,
-'Paleontology Terms' => 'TODO',
-'Exsiccati series' => 'TODO',
-'Material Samples' => 'TODO',
-'Images' => 'TODO',
-'Audio' => 'TODO',
+'Paleontology Terms' => null,
+'Exsiccati series' => null,
+'Material Samples' => null,
 //'Collector' => $occurrence->,
 //'Number' => $occurrence->,
 //'Date' => $occurrence->,
@@ -89,9 +136,24 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 //'Creative Commons' => $occurrence->,
 //'Record ID' => $occurrence->,
 ];
+
+// NOTES
+if($occurrence->occurrenceRemarks) {
+array_push($attributes['Notes'], $occurrence->occurrenceRemarks);
+}
+
+if($occurrence->establishmentMeans) {
+array_push($attributes['Notes'], $occurrence->establishmentMeans);
+}
+
+if($occurrence->cultivationStatus) {
+array_push($attributes['Notes'], 'Cultivated or Captive');
+}
+
 @endphp
 <x-layout>
     {{-- JS for Facebook and Twitter --}}
+    <div id="fb-root"></div>
     <script type="text/javascript">
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -112,9 +174,11 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
     </script>
 
     <div class="flex items-center gap-4 mb-4">
-        <img class="w-16" src="https://cch2.org/portal/content/collicon/blmar.jpg">
+        @if($occurrence->icon)
+        <img class="w-16" src="{{ $occurrence->icon }}">
+        @endif
         <div class="text-2xl font-bold">
-            BLMAR - BLM Arcata Field Office Herbarium (BLMAR)
+            {{ $occurrence->collectionName }} ({{ $occurrence->institutionCode }})
         </div>
 
         <div class="text-2xl font-bold">
@@ -126,25 +190,67 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 
     <x-tabs :tabs="['Details', 'Map', 'Commments', 'Linked Resources', 'Edit History']" :active="0">
         {{-- Occurrence Details --}}
-        <div class="relative">
-            <div class="absolute right-3 top-0 flex gap-2">
-                <div
-                    class="fb-share-button"
-                    data-href="{{ url('') }}"
-                    data-layout="button_count">
+        <div class="relative flex flex-col gap-4">
+            <div class="absolute right-3 top-0 h-fit">
+                <div class="flex items-center gap-2">
+                    <div class="fb-share-button p-0 m-0" data-href="{{ url('') }}" data-size="large"
+                        data-layout="button_count">
+                    </div>
+                    <a class="twitter-share-button" data-size="large" href="https://twitter.com/share"
+                        data-url="{{ url('') }}">
+                    </a>
                 </div>
-                <a
-                    class="twitter-share-button"
-                    href="https://twitter.com/share"
-                    data-url="{{ url('') }}">
-                </a>
             </div>
 
-            @foreach ($attributes as $title => $value)
+            <div>
+                @foreach ($attributes as $title => $value)
                 @if($value)
-                <div>{{$title}}: {{$value}}</div>
+                <div><span class="font-bold">{{$title}}:</span> {{$value}}</div>
                 @endif
-            @endforeach
+                @endforeach
+            </div>
+
+            @if(count($images))
+            <div>
+                <div class="font-bold text-lg">Images</div>
+                <hr />
+            </div>
+            <div class="w-fit">
+                @foreach ($images as $item)
+                <x-media.image :image="$item">
+                    <div class="flex flex-col gap-2">
+                        @if($item->thumbnailUrl)
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->thumbnailUrl }}">Low Resolution</x-link>
+                        @endif
+
+                        @if($item->url && $item->originalUrl != $item->url)
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->url }}">Normal Resolution</x-link>
+                        @endif
+
+                        @if($item->originalUrl)
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->originalUrl }}">High Resolution</x-link>
+                        @endif
+
+                        @if($item->sourceUrl)
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->sourceUrl}}">Source</x-link>
+                        @endif
+                    </div>
+                </x-media>
+                @endforeach
+            </div>
+            @endif
+
+            @if(count($audio))
+            <div>
+                <div class="font-bold text-lg">Audio</div>
+                <hr />
+            </div>
+            <div class="w-fit">
+                @foreach ($audio as $item)
+                {{-- TODO (Logan) audio player --}}
+                @endforeach
+            </div>
+            @endif
 
             <div>For additional information about his specimen, please contact: [Content]</div>
 
