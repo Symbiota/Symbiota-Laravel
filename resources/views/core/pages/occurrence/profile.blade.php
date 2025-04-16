@@ -190,7 +190,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         </div>
     </div>
 
-    <x-tabs id="occurrence-tab" :tabs="['Details', 'Map', 'Commments', 'Linked Resources', 'Edit History']" :active="0">
+    <x-tabs id="occurrence-tab" :tabs="['Details', 'Map', 'Comments', 'Linked Resources', 'Edit History']" :active="0">
         {{-- Occurrence Details --}}
         <div class="relative flex flex-col gap-4">
             <div class="absolute right-3 top-0 h-fit">
