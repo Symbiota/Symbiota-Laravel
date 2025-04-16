@@ -1,5 +1,5 @@
 {{-- TODO (Logan) add options to have layout without header, footer --}}
-@props(['occurrence', 'images' => [], 'audio' => []])
+@props(['occurrence', 'images' => [], 'audio' => [], 'collection_contacts' => []])
 @php
 function getLocalityStr($occur) {
 /*
@@ -182,9 +182,11 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         </div>
 
         <div class="text-2xl font-bold">
-            <x-nav-link href="{{url()->current() . '/edit'}}">
+            @can('COLL_EDIT', $occurrence->collid)
+            <x-nav-link hx-boost="true" href="{{url()->current() . '/edit'}}">
                 <x-icons.edit></x-icons.edit>
             </x-nav-link>
+            @endcan
         </div>
     </div>
 
@@ -252,14 +254,61 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
             </div>
             @endif
 
-            <div>For additional information about his specimen, please contact: [Content]</div>
+            <div>
+                <span>
+                For additional information about his specimen, please contact:
+                </span>
+                <span>
+                @foreach ($collection_contacts as $contact)
+                    @if($contact->firstName && $contact->firstName)
+                        {{ $contact->firstName . ' ' .  $contact->lastName}}
+                    @elseif($contact->firstName)
+                        {{ $contact->firstName }}
+                    @elseif($contact->lastName)
+                        {{ $contact->lastName }}
+                    @endif
 
-            <div>Do you see an error? If so, errors can be fixed using the [Occurrence Editor link]</div>
+                    @if($contact->role)
+                        ({{ $contact->role }})
+                    @endif
+
+                    @if($contact->email)
+                        <x-link href="mailto:{{ $contact->email }}">
+                            {{ $contact->email }}
+                        </x-link>
+                    @endif
+                @endforeach
+                </span>
+            </div>
         </div>
 
         {{-- Map (Only render if lat long data present)--}}
         <div>
-            TODO laravel leaflet
+            <div id="occurrence-map-data" data-lat="{{ $occurrence->decimalLatitude }}" data-lng="{{ $occurrence->decimalLongitude }}" data-error="{{ $occurrence->coordinateUncertaintyInMeters}}"></div>
+            <script>
+                document.addEventListener('mapIntialized', function (e) {
+                    let map = window.maps['map'];
+                    const map_data_elem = document.getElementById('occurrence-map-data');
+                    let lat, lng, error;
+
+                    try {
+                        lat = parseFloat(map_data_elem.getAttribute('data-lat'));
+                        lng = parseFloat(map_data_elem.getAttribute('data-lng'));
+                        error = parseFloat(map_data_elem.getAttribute('data-error'));
+                    } catch(error) {
+                        console.error('Failed to load occurrence map data');
+                    }
+
+                    if(lat <= 90 && lat >= -90 && lng <= 180 && lng >= -180) {
+                        map.setView([lat,lng], 8)
+                        L.marker([lat, lng]).addTo(map);
+                        if(error > 0) {
+                            L.circle([lat, lng]).addTo(map);
+                        }
+                    }
+                })
+            </script>
+            <x-map />
         </div>
 
         {{-- Comments --}}

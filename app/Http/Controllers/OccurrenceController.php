@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use App\Models\MediaType;
+use App\Models\Occurrence;
+use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
 
 class OccurrenceController extends Controller {
@@ -11,13 +13,16 @@ class OccurrenceController extends Controller {
         $occurrence = DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collID', 'o.collid')
             ->where('o.occid', '=', $occid)
-            ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode')
+            ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode', 'c.contactJson')
             ->first();
 
-        $media = Media::query()
-            ->select('*')
-            ->where('occid', $occid)
-            ->get();
+        $media = Media::where('occid', $occid)->get();
+        $identification = OccurrenceIdentification::where('occid', $occid)->get();
+
+        $collection_contacts = false;
+        try {
+            $collection_contacts = json_decode($occurrence->contactJson);
+        } finally {}
 
         $images = [];
         $audio = [];
@@ -31,7 +36,13 @@ class OccurrenceController extends Controller {
                 $audio[] = $item;
             }
         }
-        return view('pages/occurrence/profile', ['occurrence' => $occurrence, 'images' => $images, 'audio' => $audio]);
+
+        return view('pages/occurrence/profile', [
+            'occurrence' => $occurrence,
+            'images' => $images,
+            'audio' => $audio,
+            'collection_contacts' => $collection_contacts
+        ]);
     }
 
     public static function editPage(int $occid) {
