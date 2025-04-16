@@ -1,4 +1,3 @@
-{{-- TODO (Logan) add options to have layout without header, footer --}}
 @props(['occurrence', 'images' => [], 'audio' => [], 'collection_contacts' => []])
 @php
 function getLocalityStr($occur) {
@@ -151,7 +150,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
 }
 
 @endphp
-<x-layout>
+<x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     {{-- JS for Facebook and Twitter --}}
     <div id="fb-root"></div>
     <script type="text/javascript">
@@ -177,9 +176,9 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         @if($occurrence->icon)
         <img class="w-16" src="{{ $occurrence->icon }}">
         @endif
-        <div class="text-2xl font-bold">
+        <x-link href="{{ url('collections/' . $occurrence->collid) }}" class="text-2xl font-bold text-base-content hover:text-base-content/50">
             {{ $occurrence->collectionName }} ({{ $occurrence->institutionCode }})
-        </div>
+        </x-link>
 
         <div class="text-2xl font-bold">
             @can('COLL_EDIT', $occurrence->collid)
