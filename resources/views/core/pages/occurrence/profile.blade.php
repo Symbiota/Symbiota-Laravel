@@ -190,7 +190,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         </div>
     </div>
 
-    <x-tabs :tabs="['Details', 'Map', 'Commments', 'Linked Resources', 'Edit History']" :active="0">
+    <x-tabs id="occurrence-tab" :tabs="['Details', 'Map', 'Commments', 'Linked Resources', 'Edit History']" :active="0">
         {{-- Occurrence Details --}}
         <div class="relative flex flex-col gap-4">
             <div class="absolute right-3 top-0 h-fit">
@@ -288,6 +288,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
             <script>
                 document.addEventListener('mapIntialized', function (e) {
                     let map = window.maps['map'];
+
                     const map_data_elem = document.getElementById('occurrence-map-data');
                     let lat, lng, error;
 
@@ -306,6 +307,11 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
                             L.circle([lat, lng]).addTo(map);
                         }
                     }
+
+                    // Needed for tiles to render because of dom controlled tab
+                    document.getElementById('occurrence-tab').addEventListener('tabChanged', function() {
+                        map._onResize();
+                    }, { once: true });
                 })
             </script>
             <x-map />
