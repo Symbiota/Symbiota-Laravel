@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use App\Models\MediaType;
+use App\Models\OccurrenceComment;
 use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,7 @@ class OccurrenceController extends Controller {
         $media = Media::where('occid', $occid)->get();
         $determinations = OccurrenceIdentification::where('occid', $occid)->get();
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
+        $comments = OccurrenceComment::getCommentsWithUsername($occid);
 
         $collection_contacts = false;
         try {
@@ -45,6 +47,7 @@ class OccurrenceController extends Controller {
             'identifiers' => $identifiers,
             'collection_contacts' => $collection_contacts,
             'determinations' => $determinations,
+            'comments' => $comments,
         ]);
     }
 

@@ -115,9 +115,15 @@ function format_latlong_err($occurrence) {
             $tabs[] = 'Map';
         }
 
+        $comment_tab_name = 'Comments';
+
+        if($count = count($comments)) {
+            $comment_tab_name = $count . ' ' . $comment_tab_name;
+        }
+
         $tabs = [
             ...$tabs,
-            'Comments',
+            $comment_tab_name,
             'Linked Resources'
         ];
 
@@ -455,12 +461,44 @@ function format_latlong_err($occurrence) {
 
         {{-- Comments --}}
         <div class="grid grid-cols-1 gap-2">
-            <div class="text-lg font-bold">No Comments have been submitted</div>
+            {{-- TODO (Logan) Comment Posting System
+            @if (Auth::check())
             <form class="grid grid-cols-1 gap-2">
                 <x-input area label="New Comment" id="comment-input" name="comment" rows="8"/>
                 <x-button class="w-fit">Submit Comment</x-button>
+                <p>Messages over 500 words long may be automatically truncated. All comments are moderated</p>
             </form>
-            <p>Messages over 500 words long may be automatically truncated. All comments are moderated</p>
+            @endif
+            --}}
+            @if(count($comments))
+            <div class="flex flex-col gap-4">
+            @foreach ($comments as $comment)
+                <div class="p-4 border border-base-300 flex flex-col gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ $comment->username}}</span>
+                        <span class="text-base-content/50">posted {{ $comment->initialtimestamp }}</span>
+                        <span class="flex-grow flex justify-end gap-2">
+                            {{-- TODO (Logan) report functionality --}}
+                            <x-button variant="error">
+                                Report
+                            </x-button>
+
+                            @php $user = request()->user(); @endphp
+                            @if ($user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
+                                {{-- TODO (Logan) delete functionality --}}
+                                <x-button variant="error">Delete</x-button>
+                            @endif
+                        </span>
+                    </div>
+                    <div>
+                        {{ $comment->comment }}
+                    </div>
+                </div>
+            @endforeach
+            </div>
+            @else
+            <div class="text-lg font-bold">No Comments have been submitted</div>
+            @endif
         </div>
 
         {{-- Linked Resources --}}
