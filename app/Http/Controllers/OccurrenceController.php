@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use App\Models\MediaType;
-use App\Models\Occurrence;
 use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +22,8 @@ class OccurrenceController extends Controller {
         $collection_contacts = false;
         try {
             $collection_contacts = json_decode($occurrence->contactJson);
-        } finally {}
+        } finally {
+        }
 
         $images = [];
         $audio = [];
@@ -31,9 +31,9 @@ class OccurrenceController extends Controller {
         foreach ($media as $item) {
             $type = MediaType::tryFrom($item->mediaType);
 
-            if($type == MediaType::Image) {
+            if ($type == MediaType::Image) {
                 $images[] = $item;
-            } else if($type == MediaType::Audio) {
+            } elseif ($type == MediaType::Audio) {
                 $audio[] = $item;
             }
         }
@@ -44,7 +44,7 @@ class OccurrenceController extends Controller {
             'audio' => $audio,
             'identifiers' => $identifiers,
             'collection_contacts' => $collection_contacts,
-            'determinations' => $determinations
+            'determinations' => $determinations,
         ]);
     }
 
