@@ -1,4 +1,14 @@
-@props(['occurrence', 'images' => [], 'audio' => [], 'collection_contacts' => [], 'identifiers' => [], 'determinations' => [], 'editHistory' => []])
+@props([
+    'occurrence',
+    'images' => [],
+    'audio' => [],
+    'collection_contacts' => [],
+    'identifiers' => [],
+    'determinations' => [],
+    'editHistory' => [],
+    'linked_checklists' => [],
+    'linked_datasets' => [],
+])
 @php
 function getLocalityStr($occur) {
     $localityArr = [
@@ -502,17 +512,49 @@ function format_latlong_err($occurrence) {
         </div>
 
         {{-- Linked Resources --}}
-        <div>
-            <fieldset class="relative border border-base-300 p-4">
-                <legend>Species Checklist Relationship</legend>
-                <p>This Occurrence has not been designated as a voucher for a species</p>
-                <i class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i>
-            </fieldset>
-            <fieldset class="relative border border-base-300 p-4">
-                <legend>Dataset Linkages</legend>
-                <p>Occurrence is not linked to any datasets</p>
-                <i class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i>
-            </fieldset>
+        <div class="flex flex-col gap-4">
+            <div class="relative flex flex-col gap-2">
+                <div>
+                    <span class="font-bold text-xl">
+                        Species Checklist Relationship
+                    </span>
+                    <hr/>
+                </div>
+
+                {{-- TODO (Logan) Add linked checklist <i class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i> --}}
+                <div>
+                    @if(count($linked_checklists))
+                        <ul>
+                        @foreach ($linked_checklists as $checklist)
+                            <li><x-link href="{{url('checklists') . $checklist->clid }}">{{ $checklist->name }}</x-link></li>
+                        @endforeach
+                        </ul>
+                    @else
+                        <p>This Occurrence has not been designated as a voucher for a species</p>
+                    @endif
+                </div>
+            </div>
+
+            <div class="relative">
+                <div>
+                    <span class="font-bold text-xl">
+                        Dataset Linkages
+                    </span>
+                    <hr/>
+                </div>
+                {{-- TODO (Logan) Add linked datasets <i class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i>--}}
+                <div>
+                    @if(count($linked_datasets))
+                        <ul>
+                        @foreach ($linked_datasets as $dataset)
+                            <li><x-link href="{{ url(config('portal.name'))}}/collections/datasets/public.php?datasetid={{$dataset->datasetID}}">{{ $dataset->name }}</x-link></li>
+                        @endforeach
+                        </ul>
+                    @else
+                        <p>Occurrence is not linked to any datasets</p>
+                    @endif
+                </div>
+            </div>
         </div>
 
         {{-- Edit History --}}

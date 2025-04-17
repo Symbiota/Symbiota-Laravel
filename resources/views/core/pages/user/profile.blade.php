@@ -251,7 +251,7 @@ $datasets = DB::table('omoccurdatasets')
 
                             <span class="flex flex-grow justify-end items-center gap-4">
                                 <x-nav-link
-                                    href="{{ url(config('portal.name'))}}/collections/datasets/datasetmanager.php?datasetid={{$dataset->datasetID}}">
+                                    href="{{ url(config('portal.name'))}}/collections/datasets/public.php?datasetid={{$dataset->datasetID}}">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                     Dataset Managment
                                 </x-nav-link>

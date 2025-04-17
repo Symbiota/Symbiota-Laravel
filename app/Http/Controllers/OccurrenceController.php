@@ -21,6 +21,21 @@ class OccurrenceController extends Controller {
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
         $comments = OccurrenceComment::getCommentsWithUsername($occid);
 
+        $linked_checklists = DB::table('fmvouchers as v')
+            ->join('fmchecklists as c', 'c.clid', 'v.clid')
+            ->where('v.occid', $occid)
+            ->distinct()
+            ->select('c.*')
+            ->get();
+
+        $linked_datasets = DB::table('omoccurdatasetlink as l')
+            ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
+            ->where('l.occid', $occid)
+            ->distinct()
+            ->where('isPublic', 1)
+            ->select('d.*')
+            ->get();
+
         $collection_contacts = false;
         try {
             $collection_contacts = json_decode($occurrence->contactJson);
@@ -48,6 +63,8 @@ class OccurrenceController extends Controller {
             'collection_contacts' => $collection_contacts,
             'determinations' => $determinations,
             'comments' => $comments,
+            'linked_checklists' => $linked_checklists,
+            'linked_datasets' => $linked_datasets,
         ]);
     }
 
