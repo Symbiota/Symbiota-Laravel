@@ -146,7 +146,7 @@ function format_latlong_err($occurrence) {
 
                 @if($identifiers)
                     @foreach ($identifiers as $identifier)
-                        <x-text-label :label="$identifier->identifierName">{{ $identifier->identifierValue }}</x-text-label>
+                        <x-text-label :label="$identifier->identifierName? $identifier->identifierName: 'Secondary Catalog #'">{{ $identifier->identifierValue }}</x-text-label>
                     @endforeach
                 @elseif($occurrence->otherCatalogNumbers)
                     <x-text-label label="Secondary Catalog #">{{ $occurrence->otherCatalogNumbers }}</x-text-label>
