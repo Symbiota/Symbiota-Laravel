@@ -13,11 +13,12 @@ class OccurrenceController extends Controller {
         $occurrence = DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collID', 'o.collid')
             ->where('o.occid', '=', $occid)
-            ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode', 'c.contactJson')
+            ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode', 'c.contactJson', 'c.rights')
             ->first();
 
         $media = Media::where('occid', $occid)->get();
-        $identification = OccurrenceIdentification::where('occid', $occid)->get();
+        $determinations = OccurrenceIdentification::where('occid', $occid)->get();
+        $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
 
         $collection_contacts = false;
         try {
@@ -41,7 +42,9 @@ class OccurrenceController extends Controller {
             'occurrence' => $occurrence,
             'images' => $images,
             'audio' => $audio,
-            'collection_contacts' => $collection_contacts
+            'identifiers' => $identifiers,
+            'collection_contacts' => $collection_contacts,
+            'determinations' => $determinations
         ]);
     }
 

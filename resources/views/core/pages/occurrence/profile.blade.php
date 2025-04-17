@@ -1,154 +1,74 @@
-@props(['occurrence', 'images' => [], 'audio' => [], 'collection_contacts' => []])
+@props(['occurrence', 'images' => [], 'audio' => [], 'collection_contacts' => [], 'identifiers' => [], 'determinations' => [], 'editHistory' => []])
 @php
 function getLocalityStr($occur) {
-/*
-if($occur->localSecure) {
-}
-*/
+    $localityArr = [
+        $occur->country,
+        $occur->stateProvince,
+        $occur->county,
+        $occur->municipality,
+    ];
 
-$localityArr = [
-$occur->country,
-$occur->stateProvince,
-$occur->county,
-$occur->municipality,
-];
+    $locality_attributes = ['Locality' => implode(', ', $localityArr)];
+    return implode(', ', $localityArr);
+    if($occur->localitySecurity == 1) {
+        // notice Locality details protected
+        // Locality details protected
+        $locality_attributes['protection typically due to rare or threatened status'] = $occurrence->localitySecurityReason;
+        //Current user has been granted access if $occur->localSecure
+    }
 
-$locality_attributes = ['Locality' => implode(', ', $localityArr)];
-return implode(', ', $localityArr);
-
-if($occur->localitySecurity == 1) {
-// notice Locality details protected
-// Locality details protected
-$locality_attributes['protection typically due to rare or threatened status'] = $occurrence->localitySecurityReason;
-//Current user has been granted access if $occur->localSecure
+    return $locality_attributes;
 }
 
-return $locality_attributes;
-}
 function format_notes($occurrence) {
-$arr = [];
-if($occurrence->occurrenceRemarks) {
-array_push($arr, $occurrence->occurrenceRemarks);
-}
+    $arr = [];
+    if($occurrence->occurrenceRemarks) {
+        array_push($arr, $occurrence->occurrenceRemarks);
+    }
 
-if($occurrence->establishmentMeans) {
-array_push($arr, $occurrence->establishmentMeans);
-}
+    if($occurrence->establishmentMeans) {
+        array_push($arr, $occurrence->establishmentMeans);
+    }
 
-if($occurrence->cultivationStatus) {
-array_push($arr, 'Cultivated or Captive');
-}
+    if($occurrence->cultivationStatus) {
+        array_push($arr, 'Cultivated or Captive');
+    }
 
-return $arr;
+    return $arr;
 }
 
 function format_range($min, $max, $units = null) {
-$range_str = null;
-if($min && $max) {
-$range_str = $min . ' - ' . $max;
-} else if($min) {
-$range_str = $min;
-} else if($max) {
-$range_str = $max;
-}
+    $range_str = null;
+    if($min && $max) {
+        $range_str = $min . ' - ' . $max;
+    } else if($min) {
+        $range_str = $min;
+    } else if($max) {
+        $range_str = $max;
+    }
 
-if($range_str && $units) {
-$range_str .= ' ' . $units;
-}
+    if($range_str && $units) {
+        $range_str .= ' ' . $units;
+    }
 
-return $range_str;
+    return $range_str;
 }
 
 function format_latlong_err($occurrence) {
-$arr = [
-$occurrence->decimalLatitude,
-$occurrence->decimalLongitude
-];
+    $arr = [
+        $occurrence->decimalLatitude,
+        $occurrence->decimalLongitude
+    ];
 
-if($occurrence->coordinateUncertaintyInMeters) {
+    if($occurrence->coordinateUncertaintyInMeters) {
+        $arr[] = '+-' . $occurrence->coordinateUncertaintyInMeters . 'm.';
+    }
+    if($occurrence->geodeticDatum) {
+        $arr[] = $occurrence->geodeticDatum;
+    }
 
-$arr[] = '+-' . $occurrence->coordinateUncertaintyInMeters . 'm.';
+    return implode(' ', $arr);
 }
-if($occurrence->geodeticDatum) {
-$arr[] = $occurrence->geodeticDatum;
-}
-
-return implode(' ', $arr);
-}
-
-//echo '<pre>' . var_export($occurrence, true) . '</pre>';
-$attributes = [
-//'On Loan To' => $occurrence->loan,
-//'Related Occurreces' => $occurrence->relation,
-'Catalog #' => $occurrence->catalogNumber,
-'Occurrence ID' => $occurrence->occurrenceID? $occurrence->occurrenceID: $occurrence->recordID,
-//'Occurrence ID' => $occurrence->occurrenceid,
-'Secondary Catalog #' => $occurrence->otherCatalogNumbers,
-'Taxon' => $occurrence->sciname,
-'Identification Qualifier' => $occurrence->identificationQualifier,
-'Family' => $occurrence->family,
-'Determiner' => $occurrence->identifiedBy . ($occurrence->dateIdentified ? '(' . $occurrence->dateIdentified .')': ''),
-'Taxon Remarks' => $occurrence->taxonRemarks,
-
-'ID References' => $occurrence->identificationReferences,
-'ID Remarks' => $occurrence->identificationRemarks,
-//'Determinations' => $occurrence->dets,
-'Type Status' => $occurrence->typeStatus,
-'Event ID' => $occurrence->eventID,
-'Observer' => 'Collector' . $occurrence->recordedBy,
-'Number' => $occurrence->recordNumber,
-'Date' => format_range($occurrence->eventDate, $occurrence->eventDate2),
-'Verbatim Date' => $occurrence->verbatimEventDate,
-'Additional Collectors' => $occurrence->associatedCollectors,
-'Locality' => getLocalityStr($occurrence),
-'Latiude/Longitude' => format_latlong_err($occurrence),
-'Verbatim Coordinates' => $occurrence->verbatimCoordinates,
-'Location Remarks' => $occurrence->locationRemarks,
-'Georeference Remarks' => $occurrence->georeferenceRemarks,
-'Elevation' => format_range($occurrence->minimumElevationInMeters, $occurrence->maximumElevationInMeters, 'Meters'),
-'Verbatim Elevation' => $occurrence->verbatimElevation,
-'Depth' => format_range($occurrence->minimumDepthInMeters, $occurrence->maximumDepthInMeters, 'Meters'),
-'Verbatim Depth' => $occurrence->verbatimDepth,
-'Information withheld' => $occurrence->informationWithheld,
-'Habitat' => $occurrence->habitat,
-'substrate' => $occurrence->substrate,
-'Associated Taxa' => $occurrence->associatedTaxa,
-'Description' => $occurrence->verbatimAttributes,
-'Dynamic Properties' => $occurrence->dynamicProperties,
-'Reproductive Condition' => $occurrence->reproductiveCondition,
-'Life Stage' => $occurrence->lifeStage,
-'Sex' => $occurrence->sex,
-'Individual Count' => $occurrence->individualCount,
-'Sampling Protocol' => $occurrence->samplingProtocol,
-'Preparations' => $occurrence->preparations,
-'Notes' => format_notes($occurrence),
-'Disposition' => $occurrence->disposition,
-'Paleontology Terms' => null,
-'Exsiccati series' => null,
-'Material Samples' => null,
-//'Collector' => $occurrence->,
-//'Number' => $occurrence->,
-//'Date' => $occurrence->,
-//'Verbatim Date' => $occurrence->,
-//'Verbatim Locality' => $occurrence->,
-//'Latiude/Longitude' => $occurrence->,
-//'Creative Commons' => $occurrence->,
-//'Record ID' => $occurrence->,
-];
-
-// NOTES
-if($occurrence->occurrenceRemarks) {
-array_push($attributes['Notes'], $occurrence->occurrenceRemarks);
-}
-
-if($occurrence->establishmentMeans) {
-array_push($attributes['Notes'], $occurrence->establishmentMeans);
-}
-
-if($occurrence->cultivationStatus) {
-array_push($attributes['Notes'], 'Cultivated or Captive');
-}
-
 @endphp
 <x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     {{-- JS for Facebook and Twitter --}}
@@ -189,7 +109,23 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         </div>
     </div>
 
-    <x-tabs id="occurrence-tab" :tabs="['Details', 'Map', 'Comments', 'Linked Resources', 'Edit History']" :active="0">
+    @php
+        $tabs = ['Details'];
+        if($occurrence->decimalLatitude && $occurrence->decimalLongitude) {
+            $tabs[] = 'Map';
+        }
+
+        $tabs = [
+            ...$tabs,
+            'Comments',
+            'Linked Resources'
+        ];
+
+        if($editHistory) {
+            $tabs[] = 'Edit History';
+        }
+    @endphp
+    <x-tabs id="occurrence-tab" :tabs="$tabs" :active="0">
         {{-- Occurrence Details --}}
         <div class="relative flex flex-col gap-4">
             <div class="absolute right-3 top-0 h-fit">
@@ -203,13 +139,212 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
                 </div>
             </div>
 
+            {{-- OCCURRENCE INFORMATION START--}}
             <div>
-                @foreach ($attributes as $title => $value)
-                @if($value)
-                <div><span class="font-bold">{{$title}}:</span> {{$value}}</div>
+                <x-text-label label="Catalog #">{{ $occurrence->catalogNumber }}</x-text-label>
+                <x-text-label label="Occurrence ID">{{ $occurrence->occurrenceID}}</x-text-label>
+
+                @if($identifiers)
+                    @foreach ($identifiers as $identifier)
+                        <x-text-label :label="$identifier->identifierName">{{ $identifier->identifierValue }}</x-text-label>
+                    @endforeach
+                @elseif($occurrence->otherCatalogNumbers)
+                    <x-text-label label="Secondary Catalog #">{{ $occurrence->otherCatalogNumbers }}</x-text-label>
                 @endif
-                @endforeach
+
+                <x-text-label label="Taxon">
+                    <i class="font-italic">{{ $occurrence->sciname }}</i>
+                    @if($occurrence->scientificNameAuthorship)
+                        ({{$occurrence->scientificNameAuthorship}})
+                    @endif
+                </x-text-label>
+
+                <x-text-label label="Identification Qualifier">{{ $occurrence->identificationQualifier }}</x-text-label>
+                <x-text-label label="Family">{{ $occurrence->family}}</x-text-label>
+                <x-text-label label="Determiner">
+                    {{ $occurrence->identifiedBy }}
+                </x-text-label>
+                <x-text-label label="Date Determined">
+                    {{ $occurrence->dateIdentified }}
+                </x-text-label>
+
+                <x-text-label label="taxonRemarks">
+                    {{ $occurrence->taxonRemarks }}
+                </x-text-label>
+
+                <x-text-label label="ID References">
+                    {{ $occurrence->identificationReferences}}
+                </x-text-label>
+
+                <x-text-label label="ID Remarks">
+                    {{ $occurrence->identificationRemarks}}
+                </x-text-label>
+
+                <x-text-label label="Type STatus">
+                    {{ $occurrence->typeStatus}}
+                </x-text-label>
+
+                <x-text-label label="Type STatus">
+                    {{ $occurrence->typeStatus}}
+                </x-text-label>
+
+                <x-text-label label="Event ID">
+                    {{ $occurrence->eventID }}
+                </x-text-label>
+
+                <x-text-label label="Observer">
+                    {{ $occurrence->recordedBy }}
+                </x-text-label>
+
+                <x-text-label label="Number">
+                    {{ $occurrence->recordNumber}}
+                </x-text-label>
+
+                <x-text-label label="Date">
+                    {{ format_range($occurrence->eventDate, $occurrence->eventDate2) }}
+                </x-text-label>
+
+                <x-text-label label="Verbatim Date">
+                    {{ $occurrence->verbatimEventDate }}
+                </x-text-label>
+
+                <x-text-label label="Additional Collectors">
+                    {{ $occurrence->associatedCollectors }}
+                </x-text-label>
+
+                <x-text-label label="Locality">
+                    {{ getLocalityStr($occurrence) }}
+                </x-text-label>
+
+                <x-text-label label="Latiude/Longitude">
+                    {{ format_latlong_err($occurrence) }}
+                </x-text-label>
+
+                <x-text-label label="Verbatim Coordinates">
+                    {{ $occurrence->verbatimCoordinates }}
+                </x-text-label>
+
+                <x-text-label label="Location Remarks">
+                    {{ $occurrence->locationRemarks}}
+                </x-text-label>
+
+                <x-text-label label="Georeference Remarks">
+                    {{ $occurrence->georeferenceRemarks}}
+                </x-text-label>
+
+                <x-text-label label="Elevation">
+                    {{ format_range($occurrence->minimumElevationInMeters, $occurrence->maximumElevationInMeters, 'Meters') }}
+                </x-text-label>
+
+                <x-text-label label="Verbatim Elevation">
+                    {{ $occurrence->verbatimElevation }}
+                </x-text-label>
+
+                <x-text-label label="Depth">
+                    {{ format_range($occurrence->minimumDepthInMeters, $occurrence->maximumDepthInMeters, 'Meters') }}
+                </x-text-label>
+
+                <x-text-label label="Verbatim Depth">
+                    {{ $occurrence->verbatimDepth }}
+                </x-text-label>
+
+                <x-text-label label="Information withheld">
+                    {{ $occurrence->informationWithheld }}
+                </x-text-label>
+
+                <x-text-label label="Habitat">
+                    {{ $occurrence->habitat }}
+                </x-text-label>
+
+                <x-text-label label="Substrate">
+                    {{ $occurrence->substrate }}
+                </x-text-label>
+
+                <x-text-label label="Associated Taxa">
+                    {{ $occurrence->associatedTaxa }}
+                </x-text-label>
+
+                <x-text-label label="Description">
+                    {{ $occurrence->verbatimAttributes }}
+                </x-text-label>
+
+                <x-text-label label="Dynamic Properties">
+                    {{ $occurrence->dynamicProperties }}
+                </x-text-label>
+
+                <x-text-label label="Reproductive Condition">
+                    {{ $occurrence->reproductiveCondition }}
+                </x-text-label>
+
+                <x-text-label label="Life Stage">
+                    {{ $occurrence->lifeStage}}
+                </x-text-label>
+
+                <x-text-label label="Sex">
+                    {{ $occurrence->sex}}
+                </x-text-label>
+
+                <x-text-label label="Individual Count">
+                    {{ $occurrence->individualCount }}
+                </x-text-label>
+
+                <x-text-label label="Sampling Protocol">
+                    {{ $occurrence->samplingProtocol }}
+                </x-text-label>
+
+                <x-text-label label="Preparations">
+                    {{ $occurrence->preparations }}
+                </x-text-label>
+
+                <x-text-label label="Notes">
+                    {{ implode(', ', format_notes($occurrence)) }}
+                </x-text-label>
+
+                <x-text-label label="Disposition">
+                    {{ $occurrence->disposition }}
+                </x-text-label>
+
+                <x-text-label label="Paleontology Terms">
+                </x-text-label>
+
+                <x-text-label label="Exsiccati series">
+                </x-text-label>
+
+                <x-text-label label="Material Samples">
+                </x-text-label>
+
+                <x-text-label label="License">
+                    {{ $occurrence->rights }}
+                </x-text-label>
             </div>
+            {{-- OCCURRENCE INFORMATION END --}}
+
+            @if(count($determinations))
+                <div>
+                    <div class="font-bold text-lg">Determination History:</div>
+                    <hr />
+                </div>
+                <div class="flex flex-col gap-2">
+                    @foreach ($determinations as $det)
+                        <div>
+                            <span class="font-bold font-italic">{{ $det->sciname }}</span>
+                            @if($det->scientificNameAuthorship)
+                                ({{$det->scientificNameAuthorship}})
+                            @endif
+                            <x-text-label label="Determiner">
+                                {{ $det->identifiedBy }}
+                            </x-text-label>
+                            <x-text-label label="Date">
+                                {{ $det->dateIdentified }}
+                            </x-text-label>
+                        </div>
+
+                        @if(count($determinations) > 0 && !$loop->last)
+                        <hr/>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
 
             @if(count($images))
             <div>
@@ -267,7 +402,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
                         {{ $contact->lastName }}
                     @endif
 
-                    @if($contact->role)
+                    @if($contact->role ?? false)
                         ({{ $contact->role }})
                     @endif
 
@@ -282,6 +417,7 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
         </div>
 
         {{-- Map (Only render if lat long data present)--}}
+        @if($occurrence->decimalLatitude && $occurrence->decimalLongitude)
         <div>
             <div id="occurrence-map-data" data-lat="{{ $occurrence->decimalLatitude }}" data-lng="{{ $occurrence->decimalLongitude }}" data-error="{{ $occurrence->coordinateUncertaintyInMeters}}"></div>
             <script>
@@ -315,12 +451,13 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
             </script>
             <x-map />
         </div>
+        @endif
 
         {{-- Comments --}}
         <div class="grid grid-cols-1 gap-2">
             <div class="text-lg font-bold">No Comments have been submitted</div>
             <form class="grid grid-cols-1 gap-2">
-                <x-input label="New Comment" id="comment-input" name="comment" />
+                <x-input area label="New Comment" id="comment-input" name="comment" rows="8"/>
                 <x-button class="w-fit">Submit Comment</x-button>
             </form>
             <p>Messages over 500 words long may be automatically truncated. All comments are moderated</p>
@@ -361,6 +498,5 @@ array_push($attributes['Notes'], 'Cultivated or Captive');
                 Note: Edits are only viewable by collection administrators and editors [Empty Case]
             </div>
         </div>
-
     </x-tabs>
 </x-layout>
