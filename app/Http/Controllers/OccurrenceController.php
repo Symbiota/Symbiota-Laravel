@@ -7,17 +7,21 @@ use App\Models\MediaType;
 use App\Models\OccurrenceComment;
 use App\Models\OccurrenceEdit;
 use App\Models\OccurrenceIdentification;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class OccurrenceController extends Controller {
-    public static function profilePage(int $occid) {
-        $occurrence = DB::table('omoccurrences as o')
+    private static function occurrenceProfileData(int $occid) {
+        return DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collID', 'o.collid')
             ->where('o.occid', '=', $occid)
             ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode', 'c.contactJson', 'c.rights')
             ->first();
+    }
 
+    public static function profilePage(int $occid) {
+        $occurrence = self::occurrenceProfileData($occid);
         $media = Media::where('occid', $occid)->get();
         $determinations = OccurrenceIdentification::where('occid', $occid)->get();
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
@@ -85,5 +89,46 @@ class OccurrenceController extends Controller {
 
         return view('pages/occurrence/editor', ['occurrence' => $occurrence]);
 
+    }
+
+    public static function postComment(int $occid) {
+        $user = request()->user();
+        $input = request()->input();
+        $errors = [];
+
+        $validator = Validator::make($input, [
+            'comment' => ['required', 'string'],
+        ]);
+
+        if($validator->fails()) {
+            $errors = $validator->errors();
+        } else {
+            $new_comment = new OccurrenceComment();
+            $new_comment->fill($input);
+            $new_comment->uid = $user->uid;
+            $new_comment->occid = $occid;
+            $new_comment->save();
+        }
+
+        return view('pages/occurrence/profile', [
+            'occurrence' => self::occurrenceProfileData($occid),
+            'comments' => OccurrenceComment::getCommentsWithUsername($occid),
+            'comment_errors' => $errors,
+        ])->fragment('comments');
+    }
+
+    public static function deleteComment(int $occid, int $comid) {
+        $occurrence =self::occurrenceProfileData($occid);
+        $comment = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->first();
+        $user = request()->user();
+
+        if($user && $comment->uid === $user->uid || Gate::check('COLL_EDIT', $occurrence->collid)) {
+            $comment->delete();
+        }
+
+        return view('pages/occurrence/profile', [
+            'occurrence' => $occurrence,
+            'comments' => OccurrenceComment::getCommentsWithUsername($occid),
+        ])->fragment('comments');
     }
 }

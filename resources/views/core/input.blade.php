@@ -1,4 +1,4 @@
-@props(['id'=> uniqid(), 'label' => false, 'error_text', 'assistive_text', 'area' => false])
+@props(['id'=> uniqid(), 'name', 'label' => false, 'error_text', 'assistive_text', 'area' => false])
 <!-- resources/views/core/input.blade.php -->
 <div class="group w-full text-base-content">
     @if($label)
@@ -13,14 +13,14 @@
 
     @if($area)
     <textarea
-        name="{{ $id }}" id="{{ $id }}"
+        name="{{ $name?? $id }}" id="{{ $id }}"
         {{ $attributes->twMerge('px-3 py-2 bg-opacity-50 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full') }}
     >{{ $slot }}</textarea>
     @else
 
     <input
         {{ $attributes->twMerge('px-3 py-2 bg-opacity-50 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full
-        ') }} name="{{ $id }}" id="{{ $id }}" />
+        ') }} name="{{ $name ?? $id }}" id="{{ $id }}" />
     @endif
 
     @if(isset($error_text))

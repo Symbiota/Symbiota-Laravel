@@ -438,16 +438,19 @@ function format_latlong_err($occurrence) {
         @endif
 
         {{-- Comments --}}
-        <div class="grid grid-cols-1 gap-2">
-            {{-- TODO (Logan) Comment Posting System
+        <div id="comment-tab" class="grid grid-cols-1 gap-2">
+            @fragment('comments')
             @if (Auth::check())
-            <form class="grid grid-cols-1 gap-2">
+            <form hx-post="{{ url('occurrence/' . $occurrence->occid . '/comment') }}" hx-target="#comment-tab" hx-swap="innerHTML" class="grid grid-cols-1 gap-2">
+                @csrf
                 <x-input area label="New Comment" id="comment-input" name="comment" rows="8"/>
-                <x-button class="w-fit">Submit Comment</x-button>
+                <x-button type="submit" class="w-fit">Submit Comment</x-button>
                 <p>Messages over 500 words long may be automatically truncated. All comments are moderated</p>
             </form>
             @endif
-            --}}
+
+            <x-errors :errors="$comment_errors ?? []"/>
+
             @if(count($comments))
             <div class="flex flex-col gap-4">
             @foreach ($comments as $comment)
@@ -465,7 +468,13 @@ function format_latlong_err($occurrence) {
                             @if($user)
                                 @if ($user && $user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
                                     {{-- TODO (Logan) delete functionality --}}
-                                    <x-button variant="error">Delete</x-button>
+                                    <form hx-delete="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid) }}"
+                                        hx-target="#comment-tab"
+                                        hx-swap="innerHTML"
+                                        hx-confirm="Are you sure you wish to delete this comment?">
+                                    @csrf
+                                        <x-button variant="error">Delete</x-button>
+                                    </form>
                                 @endif
                             @endif
                         </span>
@@ -479,6 +488,7 @@ function format_latlong_err($occurrence) {
             @else
             <div class="text-lg font-bold">No Comments have been submitted</div>
             @endif
+            @endfragment
         </div>
 
         {{-- Linked Resources --}}

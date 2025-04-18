@@ -80,6 +80,8 @@ Route::group(['prefix' => '/projects'], function () {
 */
 Route::group(['prefix' => '/occurrence'], function () {
     Route::get('/{occid}', [OccurrenceController::class, 'profilePage']);
+    Route::post('/{occid}/comment', [OccurrenceController::class, 'postComment']);
+    Route::delete('/{occid}/comment/{comid}', [OccurrenceController::class, 'deleteComment']);
     Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
 });
 

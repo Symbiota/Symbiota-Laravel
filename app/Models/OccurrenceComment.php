@@ -9,6 +9,8 @@ class OccurrenceComment extends Model {
 
     protected $primaryKey = 'comid';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'occid',
         'comment',
