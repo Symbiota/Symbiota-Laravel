@@ -81,27 +81,6 @@ function format_latlong_err($occurrence) {
 }
 @endphp
 <x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
-    {{-- JS for Facebook and Twitter --}}
-    <div id="fb-root"></div>
-    <script type="text/javascript">
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        window.twttr = (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
-            if (d.getElementById(id)) return; js = d.createElement(s);
-            js.id = id; js.src = "https://platform.twitter.com/widgets.js";
-            fjs.parentNode.insertBefore(js, fjs); t._e = [];
-            t.ready = function (f) {t._e.push(f);};
-            return t;
-        }(document, "script", "twitter-wjs"));
-    </script>
-
     <div class="flex items-center gap-4 mb-4">
         @if($occurrence->icon)
         <img class="w-16" src="{{ $occurrence->icon }}">
@@ -141,20 +120,9 @@ function format_latlong_err($occurrence) {
             $tabs[] = 'Edit History';
         }
     @endphp
-    <x-tabs id="occurrence-tab" :tabs="$tabs" :active="4">
+    <x-tabs id="occurrence-tab" :tabs="$tabs" :active="0">
         {{-- Occurrence Details --}}
         <div class="relative flex flex-col gap-4">
-            <div class="absolute right-3 top-0 h-fit">
-                <div class="flex items-center gap-2">
-                    <div class="fb-share-button p-0 m-0" data-href="{{ url('') }}" data-size="large"
-                        data-layout="button_count">
-                    </div>
-                    <a class="twitter-share-button" data-size="large" href="https://twitter.com/share"
-                        data-url="{{ url('') }}">
-                    </a>
-                </div>
-            </div>
-
             {{-- OCCURRENCE INFORMATION START--}}
             <div>
                 <x-text-label label="Catalog #">{{ $occurrence->catalogNumber }}</x-text-label>
@@ -560,6 +528,7 @@ function format_latlong_err($occurrence) {
         </div>
 
         {{-- Edit History --}}
+        @if($editHistory)
         <div>
             <x-text-label label="Entered By">{{ $occurrence->recordEnteredBy ?? 'Not Recorded' }}</x-text-label>
             <x-text-label label="Date Entered">{{ $occurrence->dateEntered }}</x-text-label>
@@ -605,5 +574,6 @@ function format_latlong_err($occurrence) {
                 Note: Edits are only viewable by collection administrators and editors
             </div>
         </div>
+        @endif
     </x-tabs>
 </x-layout>
