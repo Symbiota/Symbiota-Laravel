@@ -141,7 +141,7 @@ function format_latlong_err($occurrence) {
             $tabs[] = 'Edit History';
         }
     @endphp
-    <x-tabs id="occurrence-tab" :tabs="$tabs" :active="0">
+    <x-tabs id="occurrence-tab" :tabs="$tabs" :active="4">
         {{-- Occurrence Details --}}
         <div class="relative flex flex-col gap-4">
             <div class="absolute right-3 top-0 h-fit">
@@ -494,9 +494,11 @@ function format_latlong_err($occurrence) {
                             </x-button>
 
                             @php $user = request()->user(); @endphp
-                            @if ($user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
-                                {{-- TODO (Logan) delete functionality --}}
-                                <x-button variant="error">Delete</x-button>
+                            @if($user)
+                                @if ($user && $user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
+                                    {{-- TODO (Logan) delete functionality --}}
+                                    <x-button variant="error">Delete</x-button>
+                                @endif
                             @endif
                         </span>
                     </div>
@@ -559,23 +561,48 @@ function format_latlong_err($occurrence) {
 
         {{-- Edit History --}}
         <div>
-            <div>
-                Entered By: [Content]
+            <x-text-label label="Entered By">{{ $occurrence->recordEnteredBy ?? 'Not Recorded' }}</x-text-label>
+            <x-text-label label="Date Entered">{{ $occurrence->dateEntered }}</x-text-label>
+            <x-text-label label="Date Modified">{{ $occurrence->dateLastModified }}</x-text-label>
+            <div class="font-bold text-xl mt-4">
+                Internal Edits
             </div>
-            <div>
-                Date Entered: [Content]
-            </div>
-            <div>
-                Date Modified: [Content]
-            </div>
-            <div>
-                Source Date Modified: [Content]
-            </div>
-            <div class="my-4">
-                Record has not been edited since being entered [Empty Case]
-            </div>
-            <div>
-                Note: Edits are only viewable by collection administrators and editors [Empty Case]
+            <hr/>
+            @foreach ($editHistory as $editGroup)
+                <div class="border-b border-base-300 py-2 flex flex-col gap-2">
+                    <div>
+                        <x-text-label label="Editor">{{ $editGroup['name'] }}</x-text-label>
+                        <x-text-label label="Date">{{ $editGroup['initialTimestamp'] }}</x-text-label>
+                        <x-text-label label="Applied Status"> {{ $editGroup['appliedStatus'] ? 'Applied' : 'Not Applied' }}</x-text-label>
+                    </div>
+
+                    <div class="ml-4 flex flex-col gap-2">
+                        @foreach ($editGroup['edits'] as $edit)
+                            {{--
+                            <x-text-label label="Field">{{ $edit->fieldName }}</x-text-label>
+                            <x-text-label allow_empty="true" label="Old Value">{{ $edit->fieldValueOld }}</x-text-label>
+                            <x-text-label label="New Value">{{ $edit->fieldValueNew }}</x-text-label>
+                            --}}
+                            <div class="flex gap-2">
+                                <span class="bg-base-300 px-2 rounded-full">
+                                    {{ (!$edit->fieldValueOld? 'Added': 'Updated') }}
+                                </span>
+                                <x-text-label :label="$edit->fieldName">
+                                    @if(!$edit->fieldValueOld)
+                                        {{ $edit->fieldValueNew }}
+                                    @else
+                                        <span>{{ $edit->fieldValueOld }}</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                        <span>{{ $edit->fieldValueNew }}</span>
+                                    @endif
+                                </x-text-label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+            <div class="mt-2">
+                Note: Edits are only viewable by collection administrators and editors
             </div>
         </div>
     </x-tabs>

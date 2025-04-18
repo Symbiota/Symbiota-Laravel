@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Media;
 use App\Models\MediaType;
 use App\Models\OccurrenceComment;
+use App\Models\OccurrenceEdit;
 use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class OccurrenceController extends Controller {
     public static function profilePage(int $occid) {
@@ -36,6 +38,12 @@ class OccurrenceController extends Controller {
             ->select('d.*')
             ->get();
 
+        $editHistory = [];
+
+        if(Gate::check('COLL_EDIT', $occurrence->collid)) {
+            $editHistory = OccurrenceEdit::getGroupedByEdit($occid);
+        }
+
         $collection_contacts = false;
         try {
             $collection_contacts = json_decode($occurrence->contactJson);
@@ -63,6 +71,7 @@ class OccurrenceController extends Controller {
             'collection_contacts' => $collection_contacts,
             'determinations' => $determinations,
             'comments' => $comments,
+            'editHistory' => $editHistory,
             'linked_checklists' => $linked_checklists,
             'linked_datasets' => $linked_datasets,
         ]);
