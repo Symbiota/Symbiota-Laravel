@@ -82,6 +82,8 @@ Route::group(['prefix' => '/occurrence'], function () {
     Route::get('/{occid}', [OccurrenceController::class, 'profilePage']);
     Route::post('/{occid}/comment', [OccurrenceController::class, 'postComment']);
     Route::delete('/{occid}/comment/{comid}', [OccurrenceController::class, 'deleteComment']);
+    Route::patch('/{occid}/comment/{comid}/report', [OccurrenceController::class, 'reportComment']);
+    Route::patch('/{occid}/comment/{comid}/public', [OccurrenceController::class, 'publicComment']);
     Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
 });
 

@@ -460,19 +460,39 @@ function format_latlong_err($occurrence) {
                         <span class="text-base-content/50">posted {{ $comment->initialtimestamp }}</span>
                         <span class="flex-grow flex justify-end gap-2">
                             {{-- TODO (Logan) report functionality --}}
-                            <x-button variant="error">
-                                Report
-                            </x-button>
+
+                            @if($comment->reviewstatus != 2)
+                            <form hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/report') }}"
+                                hx-target="#comment-tab"
+                                hx-swap="innerHTML"
+                                hx-confirm="Are you sure you wish to report this comment?">
+                                @csrf
+                                <x-button variant="error">
+                                    Report
+                                </x-button>
+                            </form>
+                            @endif
 
                             @php $user = request()->user(); @endphp
                             @if($user)
                                 @if ($user && $user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
-                                    {{-- TODO (Logan) delete functionality --}}
+
+                                    @if($comment->reviewstatus == 2)
+                                    <form hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/public') }}"
+                                        hx-target="#comment-tab"
+                                        hx-swap="innerHTML">
+                                        @csrf
+                                        <x-button>
+                                            Make Public
+                                        </x-button>
+                                    </form>
+                                    @endif
+
                                     <form hx-delete="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid) }}"
                                         hx-target="#comment-tab"
                                         hx-swap="innerHTML"
                                         hx-confirm="Are you sure you wish to delete this comment?">
-                                    @csrf
+                                        @csrf
                                         <x-button variant="error">Delete</x-button>
                                     </form>
                                 @endif
@@ -482,6 +502,11 @@ function format_latlong_err($occurrence) {
                     <div>
                         {{ $comment->comment }}
                     </div>
+                    @if($comment->reviewstatus == 2)
+                        <div class="p-2 bg-error text-error-content rounded-md w-fit">
+                            Comment not public due to pending abuse report (viewable to administrators only)
+                        </div>
+                    @endif
                 </div>
             @endforeach
             </div>

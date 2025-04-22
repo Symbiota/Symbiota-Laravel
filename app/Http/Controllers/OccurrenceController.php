@@ -25,7 +25,7 @@ class OccurrenceController extends Controller {
         $media = Media::where('occid', $occid)->get();
         $determinations = OccurrenceIdentification::where('occid', $occid)->get();
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
-        $comments = OccurrenceComment::getCommentsWithUsername($occid);
+        $comments = OccurrenceComment::getCommentsWithUsername($occurrence);
 
         $linked_checklists = DB::table('fmvouchers as v')
             ->join('fmchecklists as c', 'c.clid', 'v.clid')
@@ -109,10 +109,10 @@ class OccurrenceController extends Controller {
             $new_comment->occid = $occid;
             $new_comment->save();
         }
-
+        $occurrence = self::occurrenceProfileData($occid);
         return view('pages/occurrence/profile', [
-            'occurrence' => self::occurrenceProfileData($occid),
-            'comments' => OccurrenceComment::getCommentsWithUsername($occid),
+            'occurrence' => $occurrence,
+            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
             'comment_errors' => $errors,
         ])->fragment('comments');
     }
@@ -128,7 +128,26 @@ class OccurrenceController extends Controller {
 
         return view('pages/occurrence/profile', [
             'occurrence' => $occurrence,
-            'comments' => OccurrenceComment::getCommentsWithUsername($occid),
+            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
         ])->fragment('comments');
+    }
+
+    private static function updateComment(int $occid, int $comid, array $fields) {
+        $updated = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->update($fields);
+
+        $occurrence = self::occurrenceProfileData($occid);
+
+        return view('pages/occurrence/profile', [
+            'occurrence' => $occurrence,
+            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
+        ])->fragment('comments');
+    }
+
+    public static function reportComment(int $occid, int $comid) {
+        return self::updateComment($occid, $comid, ['reviewstatus' => 2]);
+    }
+
+    public static function publicComment(int $occid, int $comid) {
+        return self::updateComment($occid, $comid, ['reviewstatus' => 1]);
     }
 }
