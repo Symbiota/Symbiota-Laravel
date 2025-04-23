@@ -11,19 +11,8 @@ $collections = App\Models\Collection::query()
 ->where('uid', $user->uid)
 ->get();
 
-$checklists = DB::table('fmchecklists')
-->leftJoin('userroles as ur', 'tablePK', 'clid')
-->where(function ($query) use($user) {
-$query
-->whereIn('role', [UserRole::CL_ADMIN])
-->where('ur.uid', $user->uid);
-})
-->orWhere('fmchecklists.uid', $user->uid)
-->get();
-
-$datasets = DB::table('omoccurdatasets')
-->where('uid', $user->uid)
-->get();
+$checklists = $user->checklists();
+$datasets = $user->datasets();
 
 @endphp
 <x-layout class="sm:w-[95%] lg:w-[75%] m-auto flex flex-col gap-4 p-0">

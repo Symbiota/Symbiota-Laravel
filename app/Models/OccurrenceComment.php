@@ -27,7 +27,7 @@ class OccurrenceComment extends Model {
             ->join('users', 'users.uid', 'omoccurcomments.uid')
             ->selectRaw('omoccurcomments.*, username');
 
-        if(Gate::check('COLL_EDIT', $occurrence->collid)) {
+        if (Gate::check('COLL_EDIT', $occurrence->collid)) {
             return $query->get();
         } else {
             return $query

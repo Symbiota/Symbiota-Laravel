@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -113,5 +114,23 @@ class User extends Authenticatable {
             ->select($select);
 
         return $query->first() ? true : false;
+    }
+
+    public function checklists() {
+        return DB::table('fmchecklists')
+            ->leftJoin('userroles as ur', 'tablePK', 'clid')
+            ->where(function ($query) {
+                $query
+                    ->whereIn('role', [UserRole::CL_ADMIN])
+                    ->where('ur.uid', $this->uid);
+            })
+            ->orWhere('fmchecklists.uid', $this->uid)
+            ->get();
+    }
+
+    public function datasets() {
+        return DB::table('omoccurdatasets')
+            ->where('uid', $this->uid)
+            ->get();
     }
 }

@@ -35,15 +35,15 @@ class OccurrenceEdit extends Model {
 
         $edits = [];
         $prevEdit = null;
-        foreach($editsRaw as $edit) {
-            if(!$prevEdit || $prevEdit->initialTimestamp != $edit->initialTimestamp) {
+        foreach ($editsRaw as $edit) {
+            if (! $prevEdit || $prevEdit->initialTimestamp != $edit->initialTimestamp) {
                 $prevEdit = $edit;
                 array_push($edits, [
                     'uid' => $edit->uid,
                     'name' => $edit->name,
                     'appliedStatus' => $edit->appliedStatus,
                     'initialTimestamp' => $edit->initialTimestamp,
-                    'edits' => [ $edit ],
+                    'edits' => [$edit],
                 ]);
             } else {
                 $activeIdx = count($edits) - 1;
