@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class TaxonomyController extends Controller {
     public static function taxonData(int $tid) {
@@ -161,5 +162,11 @@ class TaxonomyController extends Controller {
             'external_links' => $external_links,
             'media' => $taxa_media,
         ]);
+    }
+
+    public static function creationPage(Request $request) {
+        // $collections = DB::table('omcollections')->select('*')->get();
+
+        return view('pages/taxonomy/taxonomycreator', []);
     }
 }
