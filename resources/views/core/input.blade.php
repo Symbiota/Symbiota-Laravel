@@ -2,7 +2,7 @@
 <!-- resources/views/core/input.blade.php -->
 <div class="group w-full text-base-content">
     @if($label)
-    <label class="text-base-content text-base text-bold mb-1">
+    <label for="{{ $name?? $id }}" class="text-base-content text-base text-bold mb-1">
         {{ $label }}
         @if($attributes['aria-required'] || $attributes['required'])
         <span class="vertical-align text-error italic pr-1">*</span>
