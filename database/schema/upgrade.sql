@@ -1,4 +1,17 @@
 -- This SCRIPT is for migrating existing SYMBIOTA schemas to the laravel platform
+
+-- CREATE Migrations table
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Populate migrations
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2024_09_24_194122_create_actionrequest_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2024_09_24_194122_create_actionrequesttype_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2024_09_24_194122_create_adminconfig_table',1);
