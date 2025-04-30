@@ -38,7 +38,9 @@ Other extensions that need enabling are
 
 Before Running anything
 
-Once everything is installed you can run the server by using `php artisan serve` and you can run the javascript build system with `npm run dev` for hot reloading or `npm run build`
+Once all extensions are installed, run `composer install` to download php vendor files and `npm run build` to get the javascript and css builds.
+
+You can run the server by using `php artisan serve` and you can run page hot reloading with `npm run dev`.
 
 Note: If you have an existing php setup for Symbiota you only need to make sure the laravel requirements are met.
 
