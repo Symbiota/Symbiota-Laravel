@@ -65,6 +65,6 @@ To integrate an instance of [Symbiota](https://github.com/Symbiota/Symbiota) req
 
 First create an empty folder in the root directory called `Portal`. This folder be named anything as long as it doesn't conflict with an existing folder in the root directory and matches the `PORTAL_NAME` variable found in the `.env`. `PORTAL_NAME` is set to `Portal` by default so if you changed it make sure the names match.
 
-Then copy the source code of the Symbiota instance into that folder and set the branch to `laravel-integration-fixes`. This branch fixes some issues with relative imports that break when running as a subportal.
+There are some problem currently with relative file paths `include`, javascript imports, and style sheet imports. If you run into any open a pr in [Symbiota](https://github.com/Symbiota/Symbiota) going into `development` branch.
 
 After than setup portal as normal and make sure the enviroment variables for the database are configured to be the same in the parent and child portal.
