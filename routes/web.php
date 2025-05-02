@@ -48,6 +48,16 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 Route::group(['prefix' => 'taxon'], function () {
     Route::get('/{tid}', [TaxonomyController::class, 'taxon']);
     Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
+    Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Taxa Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'taxa'], function () {
+    Route::get('/taxonomy/taxonomyloader', [TaxonomyController::class, 'creationPage']);
 });
 
 /*
