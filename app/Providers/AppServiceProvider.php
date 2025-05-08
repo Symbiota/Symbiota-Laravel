@@ -62,6 +62,13 @@ class AppServiceProvider extends ServiceProvider {
             ]);
         });
 
+        Gate::define('PROJ_ADMIN', function (User $user, $pid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::PROJ_ADMIN => $pid,
+            ]);
+        });
+
         Gate::define('COLL_EDIT', function (User $user, $collid) {
             return $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,

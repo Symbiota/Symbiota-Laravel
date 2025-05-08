@@ -17,10 +17,12 @@
                 Map
             </x-button>
 
+            @can('PROJ_ADMIN', $project->pid)
             <x-button href="{{ url('projects/' . $project->pid . '/edit') }}">
                 <i class="flex-end fas fa-edit"></i>
                 Edit
             </x-button>
+            @endcan
         </div>
     </div>
     {{-- Todo Add Edit and when to show mapping button logic --}}
