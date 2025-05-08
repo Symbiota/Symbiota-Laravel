@@ -32,7 +32,7 @@
 
                 {{-- Todo needs to check actually point data --}}
                 @if ($checklist->mapChecklist)
-                <x-nav-link href="{{ url(config('portal.name') . '/checklists/clgmap.php') .'?pid=' . $checklist->pid }}">
+                <x-nav-link href="{{ url('/checklists/map') }}?pid={{ $checklist->pid }}">
                     <x-button>Map <i class="fa-solid fa-earth-americas"></i></x-button>
                 </x-nav-link>
                 @endif
