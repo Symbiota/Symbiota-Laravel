@@ -140,6 +140,10 @@ class ChecklistController extends Controller {
         return view('pages/checklist/dynamic-builder');
     }
 
+    public static function mapPage(Request $request) {
+        return view('pages/checklist/map');
+    }
+
     public static function createChecklist(Request $request) {
         $user = $request->user();
 

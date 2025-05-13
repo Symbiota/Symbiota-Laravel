@@ -68,6 +68,7 @@ Route::group(['prefix' => 'taxa'], function () {
 Route::group(['prefix' => 'checklists'], function () {
     Route::get('/', [ChecklistController::class, 'checklists']);
     Route::get('/dynamicmap', [ChecklistController::class, 'dynamicMapPage']);
+    Route::get('/map', [ChecklistController::class, 'mapPage']);
     Route::post('/create', [ChecklistController::class, 'createChecklist']);
     Route::get('/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
     Route::get('/{clid}', [ChecklistController::class, 'checklist']);
