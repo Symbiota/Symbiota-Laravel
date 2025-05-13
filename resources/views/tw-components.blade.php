@@ -33,7 +33,7 @@
         <x-input required :id="'input'" :label="'Text Input'" />
         <x-input required type="number" :id="'input'" :label="'Number Input'" />
         <x-radio :default_value="2"
-            :options="[ ['label' => 'Option 1', 'value' => '2'], ['label' => 'Option 2', 'value' => 1]]"
+            :options="[ ['label' => 'Option 1', 'value' => 2], ['label' => 'Option 2', 'value' => 1]]"
             label="Symb Radio" name="radio_options" />
         <x-checkbox :id="'checkbox'" :label="'Checkbox'" />
         <x-nested-checkbox-group :id="'nested-checkbox'" :label="'All Options'">
