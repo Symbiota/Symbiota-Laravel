@@ -32,6 +32,11 @@ const symb_colors = {
     error: {
         DEFAULT:colors.red[500],
     },
+    link: {
+        DEFAULT: '#126c00',
+        // Used for on hover
+        lighter: darken('#BFD246', 0.2)
+    },
     base: {
         100: "#FFFFFF",
         200: "#F2F2F2",
@@ -44,8 +49,14 @@ const symb_colors = {
 
 for(let color in symb_colors) {
     if(color === "base") continue;
-    symb_colors[color]['lighter'] = lighten(symb_colors[color].DEFAULT, 0.2);
-    symb_colors[color]['darker'] = darken(symb_colors[color].DEFAULT, 0.2);
+
+    if(!symb_colors[color]['lighter']) {
+        symb_colors[color]['lighter'] = lighten(symb_colors[color].DEFAULT, 0.2);
+    }
+
+    if(!symb_colors[color]['darker']) {
+        symb_colors[color]['darker'] = darken(symb_colors[color].DEFAULT, 0.2);
+    }
 
     if(!symb_colors[color]['content']) {
         symb_colors[color]['content'] = whatText(symb_colors[color].DEFAULT);
