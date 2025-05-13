@@ -77,6 +77,13 @@ class AppServiceProvider extends ServiceProvider {
             ]);
         });
 
+        Gate::define('COLL_ADMIN', function (User $user, $collid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::COLL_ADMIN => $collid,
+            ]);
+        });
+
         /**
          * Setup Blade Component Folders and Directives
          */

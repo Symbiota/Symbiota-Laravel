@@ -29,78 +29,86 @@ function colUrl($url, $extra_query = '') {
     </div>
     <p>{!! Purify::clean($collection->fullDescription) !!}</p>
 
+    @can('COLL_EDIT', $collection->collid)
     <x-accordion label="Manager Control Panel" open="true">
         <div class="flex gap-2">
+            @php
+            $data_links = [
+                colUrl('editor/occurrenceeditor.php', '&gotomode=1') => 'Add New Occurrence Record',
+                colUrl('editor/imageoccursubmit.php') => 'Add Skeletal Records',
+                colUrl('editor/skeletalsubmit.php') => 'Add New Occurrence Record',
+                colUrl('editor/occurrencetabledisplay.php', '&displayquery=1') => 'Edit Existing Occurrence Records',
+                colUrl('editor/batchdeterminations.php') => 'Add Batch Determinations/Nomenclatural Adjustments',
+                colUrl('reports/labelmanager.php') => 'Print specimen Labels',
+                colUrl('reports/annotationmanager.php') => 'Print Annotation Labels',
+                colUrl('georef/batchgeoreftool.php') => 'Batch Georeference Specimens',
+                colUrl('loans/index.php') => 'Loan Management',
+            ];
+
+            $trait_links = [
+                colUrl('traitattr/occurattributes.php') => 'Trait Coding from Images',
+                colUrl('traitattr/attributemining.php') => 'Trait Mining from Verbatim Text',
+            ];
+            $admin_links = [
+                colUrl('misc/commentlist.php') => 'View Posted Comments',
+                colUrl('misc/collmetadata.php') => 'Edit Meta Data',
+                colUrl('misc/collpermissions.php') => 'Import/Update Specimen Records',
+                colUrl('misc/commentlist.php') => 'Processing Toolbox',
+                colUrl('datasets/datapublisher.php') => 'Darwin Core Archive Publishing',
+                colUrl('editor/editreviewer.php') => 'Review/Verify Occurrence Edits',
+                colUrl('datasets/duplicatemanager.php') => 'Duplicate Clustering',
+            ];
+
+            $upload_links = [
+                colUrl('admin/specupload.php', '&uploadtype=7') => 'Skeletal Text File Import',
+                colUrl('admin/specupload.php', '&uploadtype=3') => 'Full Text File Import',
+                colUrl('admin/specupload.php', '&uploadtype=6') => 'DwC-Archive Import',
+                colUrl('admin/specupload.php', '&uploadtype=8') => 'IPT Import',
+                colUrl('admin/importextended.php') => 'Extended Data Import',
+                colUrl('admin/specupload.php', '&uploadtype=9') => 'Notes from Nature Import',
+                colUrl('admin/specuploadmanagement.php') => 'Saved Import Profiles',
+                colUrl('admin/specuploadmanagement.php', '&action=addprofile') => 'Create a new Import Profile',
+            ];
+
+            @endphp
+
             {{-- Data Editor Control Panel --}}
             <div class="flex-grow">
                 <div class="font-bold text-xl">Data Editor</div>
-                @php
-                $data_links = [
-                    colUrl('editor/occurrenceeditor.php', '&gotomode=1') => 'Add New Occurrence Record',
-                    colUrl('editor/imageoccursubmit.php') => 'Add Skeletal Records',
-                    colUrl('editor/skeletalsubmit.php') => 'Add New Occurrence Record',
-                    colUrl('editor/occurrencetabledisplay.php', '&displayquery=1') => 'Edit Existing Occurrence Records',
-                    colUrl('editor/batchdeterminations.php') => 'Add Batch Determinations/Nomenclatural Adjustments',
-                    colUrl('reports/labelmanager.php') => 'Print specimen Labels',
-                    colUrl('reports/annotationmanager.php') => 'Print Annotation Labels',
-                    colUrl('georef/batchgeoreftool.php') => 'Batch Georeference Specimens',
-                    colUrl('loans/index.php') => 'Loan Management',
-                ];
-
-                $trait_links = [
-                    colUrl('traitattr/occurattributes.php') => 'Trait Coding from Images',
-                    colUrl('traitattr/attributemining.php') => 'Trait Mining from Verbatim Text',
-                ];
-                $admin_links = [
-                    colUrl('misc/commentlist.php') => 'View Posted Comments',
-                    colUrl('misc/collmetadata.php') => 'Edit Meta Data',
-                    colUrl('misc/collpermissions.php') => 'Import/Update Specimen Records',
-                    colUrl('misc/commentlist.php') => 'Processing Toolbox',
-                    colUrl('datasets/datapublisher.php') => 'Darwin Core Archive Publishing',
-                    colUrl('editor/editreviewer.php') => 'Review/Verify Occurrence Edits',
-                    colUrl('datasets/duplicatemanager.php') => 'Duplicate Clustering',
-                ];
-
-                $upload_links = [
-                    colUrl('admin/specupload.php', '&uploadtype=7') => 'Skeletal Text File Import',
-                    colUrl('admin/specupload.php', '&uploadtype=3') => 'Full Text File Import',
-                    colUrl('admin/specupload.php', '&uploadtype=6') => 'DwC-Archive Import',
-                    colUrl('admin/specupload.php', '&uploadtype=8') => 'IPT Import',
-                    colUrl('admin/importextended.php') => 'Extended Data Import',
-                    colUrl('admin/specupload.php', '&uploadtype=9') => 'Notes from Nature Import',
-                    colUrl('admin/specuploadmanagement.php') => 'Saved Import Profiles',
-                    colUrl('admin/specuploadmanagement.php', '&action=addprofile') => 'Create a new Import Profile',
-                ];
-
-                @endphp
-                <div>
+                <ul class="pl-4">
                     @foreach ($data_links as $link => $title)
-                    <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                        <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
-
-                    <div class="font-bold text-lg">Occurrence Trait Coding Tools</div>
+                </ul>
+                <div class="font-bold text-lg">Occurrence Trait Coding Tools</div>
+                <ul class="pl-4">
                     @foreach ($trait_links as $link => $title)
-                    <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
-                </div>
+                </ul>
             </div>
 
+            @can('COLL_ADMIN', $collection->collid)
             {{-- Administration Conrol Panel--}}
             <div class="flex-grow">
                 <div class="font-bold text-xl">Administration</div>
-                <div>
+                <ul class="pl-4">
                     @foreach ($admin_links as $link => $title)
-                    <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
 
-                    <div class="font-bold text-lg">Import/Update Specimen Records</div>
+                </ul>
+                <div class="font-bold text-lg">Import/Update Specimen Records</div>
+                <ul class="pl-4">
                     @foreach ($upload_links as $link => $title)
-                    <li><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
-                </div>
+                </ul>
             </div>
+            @endcan
         </div>
     </x-accordion>
+    @endcan
 
     <div>
         @php
