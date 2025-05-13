@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TaxonomyController extends Controller {
     public static function taxonData(int $tid) {
