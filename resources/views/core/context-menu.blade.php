@@ -55,7 +55,8 @@
 
     <span class="cursor-default">{{ $slot }}</span>
 
-    <template x-teleport="body">
+    {{-- Note this target must be in something with x-data for history to work correctly --}}
+    <template x-teleport="#app-body">
         <div x-show="contextMenuOpen" @click.away="contextMenuOpen=false" x-ref="contextmenu"
             class="z-50 min-w-[8rem] text-base-content rounded-md border border-base-300 bg-base-100 text-sm fixed p-1 shadow-md w-64"
             x-cloak>

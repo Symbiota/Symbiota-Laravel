@@ -51,11 +51,11 @@ $grants= [
     @stack('js-libs')
 </head>
 
-<body id="app-body" x-trap>
+<body x-trap>
     {{-- This div with the snapshots is to prevent alpine from try to render dom state using the html history,
          dom history will need to be handled in a different way
     --}}
-    <div class="min-h-screen flex flex-col bg-base-100 text-base-content" x-data="{
+    <div id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content" x-data="{
         innerHTMLSnapshot: null,
         init: () => {
             innerHTMLSnapshot = $el.innerHTML
