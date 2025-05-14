@@ -18,6 +18,7 @@ use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\TwoFactorDisabledResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider {
@@ -28,6 +29,17 @@ class FortifyServiceProvider extends ServiceProvider {
         //Fortify::ignoreRoutes();
 
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
+            public function toResponse($request) {
+                $url = session()->get('link') ?? url('');
+
+                return response(redirect($url))
+                    ->header('HX-Retarget', 'body')
+                    ->header('HX-Location', $url)
+                    ->header('HX-Boosted', 'true');
+            }
+        });
+
+        $this->app->instance(TwoFactorLoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
 
