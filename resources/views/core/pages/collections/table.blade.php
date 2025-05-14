@@ -78,7 +78,7 @@
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
         <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => url('')],
-            ['title' => 'Collection Management', 'href' => url(config('portal.name') . '/collections/misc/collprofiles.php?emode=1&collid='. request('collid'))],
+            ['title' => 'Collection Management', 'href' => url('/collections/'. request('collid'))],
             ['title' => 'Occurrence Table view'],
         ]" />
         <div class="text-2xl text-primary font-bold">
@@ -277,7 +277,7 @@
     @endphp
 
     <div x-data="{ occid: null, column: null, column_property: null, column_value: null }">
-        <x-context-menu>
+       <x-context-menu>
             <x-slot:menu>
             </div>
                 <x-context-menu-item x-on:click="menu_open = true">
@@ -329,6 +329,7 @@
                     Clear Filters
                 </x-context-menu-item>
             </x-slot:menu>
+
             @fragment('table')
             <div id="table-container"
                 class="overflow-x-scroll overflow-y-scroll w-screen h-[calc(100vh-7rem)] relative">
