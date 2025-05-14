@@ -133,47 +133,19 @@ function colUrl($url, $extra_query = '') {
     @endphp
     <div>
         <div class="text-2xl font-bold">Collection Statistics</div>
-        <li>{{ $stats->recordcnt ?? 0 }} specimen records</li>
-        <li>{{ $stats->georefcnt ?? 0 }} ({{ floor( ($stats->georefcnt / $stats->recordcnt) * 100) }}%) georeferenced</li>
-        @isset($dynamic_stats['SpecimensCountID'])
-            <li>{{ $dynamic_stats['SpecimensCountID'] }} ({{ floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) }}%) identified to species</li>
-        @endisset
-        <li>{{ $stats->familycnt ?? 0 }} families</li>
-        <li>{{ $stats->genuscnt ?? 0 }} genera</li>
-        <li>{{ $stats->speciescnt ?? 0 }} identified to species</li>
-
-        @isset($dynamic_stats['TotalTaxaCount'])
-            <li>{{ $dynamic_stats['TotalTaxaCount'] }} total taxa (including subsp. and var.)</li>
-        @endisset
-    </div>
-
-    @php
-        $fam_georef_stats = [];
-        foreach($dynamic_stats['families'] as $key => $item) {
-            if(is_numeric($item['SpecimensPerFamily'])) {
-                $fam_georef_stats[$key] = intval($item['SpecimensPerFamily']);
-            }
-        }
-
-        $country_georef_stats = [];
-        foreach($dynamic_stats['countries'] as $key => $item) {
-            if(is_numeric($item['CountryCount'])) {
-                $country_georef_stats[$key] = intval($item['CountryCount']);
-            }
-        }
-    @endphp
-
-    <div>
-        <div class="text-2xl font-bold">Extra Statistics</div>
-        <div class="flex items-center gap-4">
-            @isset($dynamic_stats['families'])
-                <x-pie-chart class="w-64" :values="$fam_georef_stats" />
+        <ul class="pl-4">
+            <li class="list-disc">{{ $stats->recordcnt ?? 0 }} specimen records</li>
+            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ floor( ($stats->georefcnt / $stats->recordcnt) * 100) }}%) georeferenced</li>
+            @isset($dynamic_stats['SpecimensCountID'])
+                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) }}%) identified to species</li>
             @endisset
-
-            @isset($dynamic_stats['countries'])
-                <x-pie-chart class="w-64" :values="$country_georef_stats"/>
+            <li class="list-disc">{{ $stats->familycnt ?? 0 }} families</li>
+            <li class="list-disc">{{ $stats->genuscnt ?? 0 }} genera</li>
+            <li class="list-disc">{{ $stats->speciescnt ?? 0 }} species</li>
+            @isset($dynamic_stats['TotalTaxaCount'])
+                <li class="list-disc">{{ $dynamic_stats['TotalTaxaCount'] }} total taxa (including subsp. and var.)</li>
             @endisset
-        </div>
+        </ul>
     </div>
 
     <x-accordion label="More Information">
@@ -190,4 +162,55 @@ function colUrl($url, $extra_query = '') {
             </a>
         </div>
     </x-accordion>
+
+    @php
+        $fam_georef_stats = [];
+        foreach($dynamic_stats['families'] as $key => $item) {
+            if(is_numeric($item['SpecimensPerFamily'])) {
+                $fam_georef_stats[] = [
+                    'label' => $key,
+                    'value' => intval($item['SpecimensPerFamily'])
+                ];
+            }
+        }
+
+        $country_georef_stats = [];
+        foreach($dynamic_stats['countries'] as $key => $item) {
+            if(is_numeric($item['CountryCount'])) {
+                $country_georef_stats[] = [
+                    'label' => $key,
+                    'value' => intval($item['CountryCount'])
+                ];
+            }
+        }
+
+        function valueCmp($a, $b) {
+            return $b['value'] - $a['value'];
+        }
+
+        usort($country_georef_stats, 'valueCmp');
+        usort($fam_georef_stats, 'valueCmp');
+
+        $stats_tabs = [];
+        if(isset($dynamic_stats['families'])) {
+            $stats_tabs[] = 'Taxonomic Distribution';
+        }
+
+        if(isset($dynamic_stats['countries'])) {
+            $stats_tabs[] = 'Country Distribution';
+        }
+    @endphp
+    <div>
+        <div class="text-2xl font-bold">Extra Statistics</div>
+
+        <x-tabs :tabs="$stats_tabs" class:body="border-x-0 border-b-0">
+            @isset($dynamic_stats['families'])
+                <x-chart name="Taxon Distribution" type="bar" class="w-full" :values="$fam_georef_stats" />
+            @endisset
+
+            @isset($dynamic_stats['countries'])
+                <x-chart name="Geographic Distribution" type="bar" class="w-full" :values="$country_georef_stats"/>
+            @endisset
+        </x-tabs>
+    </div>
 </x-layout>
