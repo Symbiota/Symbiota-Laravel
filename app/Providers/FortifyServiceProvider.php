@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -97,16 +96,13 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::loginView(function (Request $request) {
             //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
             //
-            if (! session()->has('link')) {
+            if(!session()->has('link')) {
                 session(['link' => url()->previous()]);
             }
 
-            // If its on current page ignore target
-            if ($request->headers->get('hx-request') && ! $request->headers->get('hx-target')) {
-                return view('pages/login')->fragment('form');
-            }
-
-            return response(view('pages/login'))->header('HX-Replace-URL', url('/login'));
+            return response(view('pages/login'))
+                ->header('HX-Replace-URL', url('/login'))
+                ->header('HX-Retarget', 'body');
         });
 
         Fortify::registerView(function (Request $request) {
@@ -117,6 +113,7 @@ class FortifyServiceProvider extends ServiceProvider {
 
             return response(view('pages/signup'))->header('HX-Replace-URL', url('/register'));
         });
+
 
         Fortify::requestPasswordResetLinkView(function (Request $request) {
             //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
