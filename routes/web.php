@@ -10,6 +10,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxonomyController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\User;
@@ -37,7 +38,7 @@ use Laravel\Socialite\Facades\Socialite;
 Route::view('/', 'pages/home')->name('home');
 Route::view('Portal/', 'pages/home');
 Route::view('/tw', 'tw-components');
-Route::view('/sitemap', 'pages/sitemap');
+Route::get('/sitemap', SitemapController::class);
 Route::view('/usagepolicy', 'pages/usagepolicy');
 
 /*

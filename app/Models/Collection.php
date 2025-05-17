@@ -25,4 +25,9 @@ class Collection extends Model {
     public function occurrence() {
         return $this->hasMany(Occurrence::class, 'collid', 'collid');
     }
+
+    //collTypes
+    const Specimens = 'Preserved Specimens';
+    const GeneralObservations = 'General Observations';
+    const Observations = 'Observations';
 }
