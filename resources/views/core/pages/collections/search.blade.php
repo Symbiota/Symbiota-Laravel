@@ -41,11 +41,11 @@ $eastWest= [
         hx-push-url="true"
         x-on:change="addChip(values, event)"
         onsubmit="saveSearchToSession()"
+        id="search-form"
         hx-boost
         class="grid grid-cols-4"
         x-init="
             const session = JSON.parse(window.sessionStorage.collectionSearch)
-            console.log(session)
             for(let id of Object.keys(session)) {
                 const elem = document.getElementById(id);
                 if(elem) {
@@ -239,9 +239,14 @@ $eastWest= [
         </div>
 
         <div class="col-span-1 px-4 flex flex-col gap-4">
-            <x-radio label='Results Display' default_value="list" name="result-type" :options="[
+            <x-radio
+                onchange="htmx.find('#search-form').setAttribute('hx-get', `{{ url('collections') }}/${event.target.value}`); htmx.process('#search-form')"
+                label='Results Display'
+                default_value="list"
+                name="result-type"
+                :options="[
                     ['label' => 'List', 'value' => 'list'],
-                    ['label' => 'Table', 'value' => 'Table']
+                    ['label' => 'Table', 'value' => 'table']
                 ]" />
             <x-button type="submit" class="w-full justify-center text-base">Search</x-button>
             <x-button type="button" class="w-full justify-center text-base" variant="neutral">Reset</x-button>

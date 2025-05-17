@@ -18,6 +18,7 @@
                 value="{{ $option['value'] }}"
                 data-value="{{old($id, $default_value === $option['value'])}}"
                 @checked($default_value == $option['value'])
+                {{ $attributes }}
             >
             <div class="
                 pointer-events-none

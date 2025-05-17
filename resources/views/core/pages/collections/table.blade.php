@@ -97,7 +97,7 @@
 <x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: false}" :hasFooter="false" :hasHeader="false"
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
-        @if($collection)
+        @if(!empty($collection))
         <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => url('')],
             ['title' => 'Collection Management', 'href' => url('/collections/'. request('collid'))],
@@ -111,7 +111,7 @@
         ]" />
         @endif
 
-        @if($collection)
+        @if(!empty($collection))
         <div class="text-2xl text-primary font-bold">
             {{$collection->collectionName}} ({{$collection->institutionCode}})
         </div>
