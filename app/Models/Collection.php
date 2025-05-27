@@ -28,6 +28,8 @@ class Collection extends Model {
 
     //collTypes
     const Specimens = 'Preserved Specimens';
+
     const GeneralObservations = 'General Observations';
+
     const Observations = 'Observations';
 }

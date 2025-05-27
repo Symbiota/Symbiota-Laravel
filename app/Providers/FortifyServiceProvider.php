@@ -96,7 +96,7 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::loginView(function (Request $request) {
             //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
             //
-            if(!session()->has('link')) {
+            if (! session()->has('link')) {
                 session(['link' => url()->previous()]);
             }
 
@@ -113,7 +113,6 @@ class FortifyServiceProvider extends ServiceProvider {
 
             return response(view('pages/signup'))->header('HX-Replace-URL', url('/register'));
         });
-
 
         Fortify::requestPasswordResetLinkView(function (Request $request) {
             //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap

@@ -6,7 +6,6 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SitemapController extends Controller {
-
     public function __invoke() {
 
         $schema_version = DB::table('schemaversion')
@@ -21,7 +20,7 @@ class SitemapController extends Controller {
             //TODO (Logan) only ones with perms
             'collections' => Collection::query()->orderBy('collectionName')->get(),
             //TODO (Logan) only ones with perms
-            'checklists' => DB::table('fmchecklists')->get()
+            'checklists' => DB::table('fmchecklists')->get(),
         ]);
     }
 }
