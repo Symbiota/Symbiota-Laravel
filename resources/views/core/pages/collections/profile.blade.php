@@ -139,9 +139,9 @@ function colUrl($url, $extra_query = '') {
         <div class="text-2xl font-bold">Collection Statistics</div>
         <ul class="pl-4">
             <li class="list-disc">{{ $stats->recordcnt ?? 0 }} specimen records</li>
-            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ floor( ($stats->georefcnt / $stats->recordcnt) * 100) }}%) georeferenced</li>
+            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ $stats->georefcnt? floor( ($stats->georefcnt / $stats->recordcnt) * 100): 0 }}%) georeferenced</li>
             @isset($dynamic_stats['SpecimensCountID'])
-                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) }}%) identified to species</li>
+                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ $dynamic_stats['SpecimensCountID']? floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) : 0}}%) identified to species</li>
             @endisset
             <li class="list-disc">{{ $stats->familycnt ?? 0 }} families</li>
             <li class="list-disc">{{ $stats->genuscnt ?? 0 }} genera</li>
@@ -167,24 +167,30 @@ function colUrl($url, $extra_query = '') {
         </div>
     </x-accordion>
 
+    @if(isset($dynamic_stats['families']) || isset($dynamic_stats['countries']))
     @php
         $fam_georef_stats = [];
-        foreach($dynamic_stats['families'] as $key => $item) {
-            if(is_numeric($item['SpecimensPerFamily'])) {
-                $fam_georef_stats[] = [
-                    'label' => $key,
-                    'value' => intval($item['SpecimensPerFamily'])
-                ];
+
+        if(isset($dynamic_stats['families'])) {
+            foreach($dynamic_stats['families'] as $key => $item) {
+                if(is_numeric($item['SpecimensPerFamily'])) {
+                    $fam_georef_stats[] = [
+                        'label' => $key,
+                        'value' => intval($item['SpecimensPerFamily'])
+                    ];
+                }
             }
         }
 
         $country_georef_stats = [];
-        foreach($dynamic_stats['countries'] as $key => $item) {
-            if(is_numeric($item['CountryCount'])) {
-                $country_georef_stats[] = [
-                    'label' => $key,
-                    'value' => intval($item['CountryCount'])
-                ];
+        if(isset($dynamic_stats['countries'])) {
+            foreach($dynamic_stats['countries'] as $key => $item) {
+                if(is_numeric($item['CountryCount'])) {
+                    $country_georef_stats[] = [
+                        'label' => $key,
+                        'value' => intval($item['CountryCount'])
+                    ];
+                }
             }
         }
 
@@ -204,6 +210,7 @@ function colUrl($url, $extra_query = '') {
             $stats_tabs[] = 'Country Distribution';
         }
     @endphp
+
     <div>
         <div class="text-2xl font-bold">Extra Statistics</div>
 
@@ -217,4 +224,5 @@ function colUrl($url, $extra_query = '') {
             @endisset
         </x-tabs>
     </div>
+    @endif
 </x-layout>
