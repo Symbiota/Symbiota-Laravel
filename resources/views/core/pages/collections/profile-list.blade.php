@@ -14,11 +14,15 @@
 
     @foreach ($collections as $collection)
     <div class="border border-base-300 p-4">
-        <div class="w-64 h-64 bg-base-300">
+        <div class="flex items-center gap-4">
+            <img class="h-16" src="{{ $collection->icon }}" />
+            <div class="text-lg font-bold">{{ $collection->collectionName }}</div>
         </div>
 
-        <div class="text-lg font-bold">{{ $collection->collectionName }}</div>
-        <div>{{ $collection->fullDescription }}</div>
+        <hr class="my-2"/>
+
+        <div>{!! Purify::clean($collection->fullDescription) !!}</div>
+
         <div>
             <x-link href="{{ $collection->homepage}}">Homepage</x-link>
         </div>
@@ -28,18 +32,18 @@
             $contacts = json_decode($collection->contactJson, true);
             @endphp
             @if(is_array($contacts) && count($contacts))
-            @foreach($contacts as $contact)
-            @if(isset($contact['firstName']) && isset($contact['lastName']) && isset($contact['email']))
-            <div>
-                <span class="font-bold">{{ $contact['role'] ?? 'Contact' }}:</span>
-                {{ $contact['firstName'] . ' ' . $contact['lastName'] . ' ' . $contact['email'] }}
-            </div>
-            @endif
-            @endforeach
+                @foreach($contacts as $contact)
+                    @if(isset($contact['firstName']) && isset($contact['lastName']) && isset($contact['email']))
+                    <div>
+                        <span class="font-bold">{{ $contact['role'] ?? 'Contact' }}:</span>
+                        {{ $contact['firstName'] . ' ' . $contact['lastName'] . ' ' . $contact['email'] }}
+                    </div>
+                    @endif
+                @endforeach
             @endif
         </div>
 
-        <x-link href="{{ url('collection/' . $collection->collID) }}">More Information</x-link>
+        <x-link href="{{ url('collections/' . $collection->collID) }}">More Information</x-link>
     </div>
     @endforeach
 </x-layout>
