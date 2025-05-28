@@ -169,7 +169,7 @@ foreach($user_datasets as $datasets) {
                     {{ $occurrence->dateIdentified }}
                 </x-text-label>
 
-                <x-text-label label="taxonRemarks">
+                <x-text-label label="Taxon Remarks">
                     {{ $occurrence->taxonRemarks }}
                 </x-text-label>
 
@@ -181,11 +181,7 @@ foreach($user_datasets as $datasets) {
                     {{ $occurrence->identificationRemarks}}
                 </x-text-label>
 
-                <x-text-label label="Type STatus">
-                    {{ $occurrence->typeStatus}}
-                </x-text-label>
-
-                <x-text-label label="Type STatus">
+                <x-text-label label="Type Status">
                     {{ $occurrence->typeStatus}}
                 </x-text-label>
 
