@@ -42,7 +42,7 @@
 
                 {{-- Todo needs to check actually point data --}}
                 @if ($proj_checklists[0]->mapChecklist)
-                <x-nav-link href="{{ url('/proj_checklists/map') }}?pid={{ $pid }}">
+                <x-nav-link href="{{ url('/checklists/map') }}?pid={{ $pid }}">
                     <x-button>Map <i class="fa-solid fa-earth-americas"></i></x-button>
                 </x-nav-link>
                 @endif
