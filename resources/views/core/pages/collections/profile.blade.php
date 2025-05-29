@@ -27,9 +27,11 @@ function colUrl($url, $extra_query = '') {
             <x-button>Search Media</x-button>
         </x-nav-link>
 
+        @can('COLL_EDIT', $collection->collID)
         <x-nav-link hx-boost="true" href="{{ url('collections/table?collid=' . $collection->collID) }}">
             <x-button>Edit</x-button>
         </x-nav-link>
+        @endcan
     </div>
     <p>{!! Purify::clean($collection->fullDescription) !!}</p>
 

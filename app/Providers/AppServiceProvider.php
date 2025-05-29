@@ -50,11 +50,8 @@ class AppServiceProvider extends ServiceProvider {
 
         //  Not yet implemented
         // 'RARE_SPP_READER'
-        // 'COLL_ADMIN'
-        // 'COLL_EDITOR'
         // 'DATASET_ADMIN'
         // 'DATASET_EDITOR'
-        // 'PROJ_ADMIN'
         Gate::define('CL_ADMIN', function (User $user, $clid) {
             return $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,
