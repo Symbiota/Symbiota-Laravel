@@ -97,4 +97,12 @@ class MediaController extends Controller {
     public static function delete() {}
 
     public static function edit() {}
+
+    public static function libraryPage() {
+        return view('pages/media/library');
+    }
+
+    public static function contributorsPage() {
+        return view('pages/media/contributors');
+    }
 }

@@ -131,6 +131,8 @@ Route::group(['prefix' => '/collections'], function () {
 */
 Route::group(['prefix' => '/media'], function () {
     Route::get('/search', [MediaController::class, 'searchPage']);
+    Route::get('/library', [MediaController::class, 'libraryPage']);
+    Route::get('/contributors', [MediaController::class, 'contributorsPage']);
 });
 
 /*
