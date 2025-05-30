@@ -1,12 +1,19 @@
-@props(['label' => 'Open'])
+@props([
+    'button' => new Illuminate\View\ComponentSlot(),
+    'title' => new Illuminate\View\ComponentSlot(),
+    'body' => new Illuminate\View\ComponentSlot()
+])
 <span x-data="{ modalOpen: false }"
     @keydown.escape.window="modalOpen = false"
     class="relative"
     :class="{'z-50 w-auto h-auto':modalOpen === true}"
     >
-    <button @click="modalOpen=true" {{ $label->attributes->twMerge('inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors bg-base-100 border rounded-md hover:bg-base-200 active:bg-base-100 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none') }}>
-        {{ $label }}
-    </button>
+
+    @if(isset($button) && !$button->isEmpty())
+    <x-button @click="modalOpen=true" :attributes="$button->attributes" >
+        {{ $button }}
+    </x-button>
+    @endif
 
     <template x-teleport="body">
         <div x-show="modalOpen" class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen" x-cloak>

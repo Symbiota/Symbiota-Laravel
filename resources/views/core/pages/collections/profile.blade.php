@@ -27,6 +27,32 @@ function colUrl($url, $extra_query = '') {
             <x-button>Search Media</x-button>
         </x-nav-link>
 
+        <x-modal>
+            <x-slot name='button' variant="clear-primary">
+                Quick Search
+            </x-slot>
+
+            <x-slot name="title" class="text-2xl">
+                Quick Search
+            </x-slot>
+
+            <x-slot name="body">
+                <form hx-get="{{ url('collections/table') }}" hx-target="body" hx-indicator="#quick-search-loader" class="flex flex-col gap-2">
+                    <input type="hidden" name="collid" value="{{ $collection->collID }}">
+                    <x-input name="catalogNumber" label="Catalog Number" required />
+                    <div class="flex items-center">
+                        <x-button type="submit">
+                            Search
+                        </x-button>
+
+                        <div id="quick-search-loader" class="stroke-accent w-6 h-6 flex justify-center htmx-indicator">
+                            <x-icons.loading />
+                        </div>
+                    </div>
+                </form>
+            </x-slot>
+        </x-modal>
+
         @can('COLL_EDIT', $collection->collID)
         <x-nav-link hx-boost="true" href="{{ url('collections/table?collid=' . $collection->collID) }}">
             <x-button>Edit</x-button>
