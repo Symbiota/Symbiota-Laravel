@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -103,6 +104,23 @@ class MediaController extends Controller {
     }
 
     public static function contributorsPage() {
-        return view('pages/media/contributors');
+        $creators = DB::table('media')
+            ->join('users', 'uid', 'creatorUid')
+            ->groupBy('creatorUid')
+            ->selectRaw('creatorUid, firstName, lastName, count(*) as media_count')
+            ->orderBy('lastName')
+            ->get();
+
+        $collections = DB::table('omcollections as c')
+            ->join('omcollectionstats as s', 's.collId', 'c.collId')
+            ->select('c.collId', 'collectionName', 's.dynamicProperties', 'collType')
+            ->whereLike('s.dynamicProperties', '%imgcnt%')
+            ->orderBy('collectionName')
+            ->get();
+
+        return view('pages/media/contributors', [
+            'creators' => $creators,
+            'collections' => $collections,
+        ]);
     }
 }
