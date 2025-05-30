@@ -200,6 +200,12 @@ function colUrl($url, $extra_query = '') {
             return $b['value'] - $a['value'];
         }
 
+        function calc_chart_width($item_count, $per_item = 16) {
+            $width = $item_count * $per_item;
+
+            return $width < 600? '': $width;
+        }
+
         usort($country_georef_stats, 'valueCmp');
         usort($fam_georef_stats, 'valueCmp');
 
@@ -218,11 +224,11 @@ function colUrl($url, $extra_query = '') {
 
         <x-tabs :tabs="$stats_tabs" class:body="border-x-0 border-b-0">
             @isset($dynamic_stats['families'])
-                <x-chart name="Taxon Distribution" type="bar" class="w-full" :values="$fam_georef_stats" />
+                <x-chart name="Taxon Distribution" type="bar" width="{{ calc_chart_width(count($fam_georef_stats)) }}" height="600" class="w-full pb-4" :values="$fam_georef_stats" />
             @endisset
 
             @isset($dynamic_stats['countries'])
-                <x-chart name="Geographic Distribution" type="bar" class="w-full" :values="$country_georef_stats"/>
+                <x-chart name="Geographic Distribution" type="bar" width="{{calc_chart_width(count($dynamic_stats['countries'])) }}" height="600" class="w-full pb-4" :values="$country_georef_stats"/>
             @endisset
         </x-tabs>
     </div>

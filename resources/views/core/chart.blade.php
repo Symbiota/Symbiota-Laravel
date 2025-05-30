@@ -3,6 +3,8 @@
     'values' => [],
     'name',
     'type',
+    'width' => '',
+    'height' => '',
 ])
 {{-- Example Pi Chart For Now --}}
 @if(!empty($values))
@@ -51,6 +53,7 @@
                     borderWidth: 0
                 }
             },
+            responsive: {{ $height || $width? 'false': 'true'}},
             plugins: {
                 legend: {
                     responsive: true,
@@ -81,7 +84,7 @@
 </script>
 @endpush
 
-<div {{ $attributes }} class="relative">
-    <canvas data-chart="{{ json_encode($values) }}" id="{{ $id }}"></canvas>
+<div {{ $attributes->twMerge('relative overflow-auto') }} >
+    <canvas width="{{ $width }}" height="{{ $height }}" data-chart="{{ json_encode($values) }}" id="{{ $id }}"></canvas>
 </div>
 @endif
