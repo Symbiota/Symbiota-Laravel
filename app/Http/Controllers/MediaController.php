@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
