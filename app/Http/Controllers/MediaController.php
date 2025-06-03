@@ -102,23 +102,23 @@ class MediaController extends Controller {
         $genus = [];
         $families = [];
 
-        $select = [$request->query('taxa-type') === 'family'? 'ts.family as name': 't.UnitName1 as name'];
+        $select = [$request->query('taxa-type') === 'family' ? 'ts.family as name' : 't.UnitName1 as name'];
 
         $taxa_query = DB::table('media as m')
-                ->join('taxstatus as ts', 'ts.tid', 'm.tid')
+            ->join('taxstatus as ts', 'ts.tid', 'm.tid')
             ->join('taxa as t', 't.tid', 'ts.tidaccepted')
             ->distinct()
             ->whereRaw('ts.taxauthid = 1')
             ->whereRaw('t.RankId > 219');
 
-        if($request->query('target') === 'genus') {
+        if ($request->query('target') === 'genus') {
             $taxa_query->select('t.UnitName1 as name')
                 ->orderBy('t.UnitName1');
 
-            if($request->query('taxa')) {
+            if ($request->query('taxa')) {
                 $taxa_query->whereLike('ts.family', $request->query('taxa') . '%');
             }
-        } elseif($request->query('taxa')) {
+        } elseif ($request->query('taxa')) {
             $taxa_query->select('t.sciName as name', 't.tid')
                 ->orderBy('t.sciName')
                 ->whereLike('t.sciName', $request->query('taxa') . '%');
@@ -133,7 +133,7 @@ class MediaController extends Controller {
             'taxa' => $taxa_query->get(),
         ]);
 
-        if($request->query('fragment') === 'taxa_list') {
+        if ($request->query('fragment') === 'taxa_list') {
             return $view->fragment('taxa_list');
         } else {
             return $view;
