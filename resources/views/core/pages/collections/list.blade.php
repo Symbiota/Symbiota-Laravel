@@ -18,7 +18,7 @@
         'Specimen Records'
     ]" />
     </div>
-    <x-tabs :tabs="['Species List', 'Occurrence Records']" active="1">
+    <x-tabs :tabs="['Species List', 'Occurrence Records']" active="{{ request('active_tab') ?? 1 }}">
         {{-- Species --}}
         <div class="flex items-center gap-4 h-60">
             <x-button class="w-fit">
