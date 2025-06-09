@@ -3,7 +3,7 @@
     'taxa_value' => '' ,
     'use_thes_value' => false,
     'taxa_type_value' => '',
-    'include' => ''
+    'include' => '',
     'hide_selector' => false,
     'hide_synonyms_checkbox' => false,
 ])
