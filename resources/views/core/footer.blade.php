@@ -1,6 +1,6 @@
 @props(['logos' => [], 'grants' => []])
 <footer class="text-center">
-    <div class="flex flex-wrap justify-center">
+    <div class="flex flex-wrap justify-center max-w-[1024px] m-auto">
         @foreach ($logos as $logo)
         <div class="flex basis-0 flex-grow justify-center my-auto">
             <div class="mx-auto w-fit h-fit">

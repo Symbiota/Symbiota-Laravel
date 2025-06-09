@@ -28,7 +28,6 @@ class Occurrence extends Model {
         'sciname',
         'genus',
         'specificEpithet',
-        'datasetID',
         'organismID',
         'taxonRank',
         'infraspecificEpithet',
@@ -347,8 +346,8 @@ class Occurrence extends Model {
                 $query->orderByRaw('ISNULL(o.' . self::$searchable_fields[$idx] . ') ASC');
             }
             $query->orderBy(
-                $sort,
-                $params['sortDirection'] === 'DESC' ? 'DESC' : 'ASC'
+                'o.' . $sort,
+                empty($params['sortDirection']) || $params['sortDirection'] === 'DESC' ? 'DESC' : 'ASC'
             );
         }
 
@@ -379,6 +378,11 @@ class Occurrence extends Model {
         //excludecult Does by default?
 
         //datasetid TODO (Logan) figure out what this is;
+        if($datasetID = $params['datasetID'] ?? false) {
+            $query->join('omoccurdatasetlink as odlink', 'odlink.occid', 'o.occid')
+                ->where('odlink.datasetID', $datasetID);
+        }
+
 
         //footprintGeoJson Searching
         //Boundary Searching

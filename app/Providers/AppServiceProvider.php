@@ -50,15 +50,34 @@ class AppServiceProvider extends ServiceProvider {
 
         //  Not yet implemented
         // 'RARE_SPP_READER'
-        // 'COLL_ADMIN'
-        // 'COLL_EDITOR'
         // 'DATASET_ADMIN'
         // 'DATASET_EDITOR'
-        // 'PROJ_ADMIN'
         Gate::define('CL_ADMIN', function (User $user, $clid) {
             return $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,
                 UserRole::CL_ADMIN => $clid,
+            ]);
+        });
+
+        Gate::define('PROJ_ADMIN', function (User $user, $pid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::PROJ_ADMIN => $pid,
+            ]);
+        });
+
+        Gate::define('COLL_EDIT', function (User $user, $collid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::COLL_ADMIN => $collid,
+                UserRole::COLL_EDITOR => $collid,
+            ]);
+        });
+
+        Gate::define('COLL_ADMIN', function (User $user, $collid) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::COLL_ADMIN => $collid,
             ]);
         });
 

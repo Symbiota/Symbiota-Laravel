@@ -1,10 +1,24 @@
 @props(['collection', 'occurrences' => [], 'page' => 0])
 @php
+    function remapAssoc(array $input, array $renames = [], array $mutations = []) {
+        $remapped = [];
+
+        foreach($input as $key => $value) {
+            $new_key = $renames[$key] ?? $key;
+            $new_value = !empty($mutations[$key]) ?
+                $mutations[$key]($value):
+                $value;
+
+            $remapped[$new_key] = $new_value;
+        }
+
+        return $remapped;
+    }
+
     // TODO (Logan) Rework when occurrence editor gets transfered
     // This is need to interop with old occurrence editor form
-    function convertLegacyParams() {
-        $legacy_params = ['reset' => true];
-        $param_map = [
+    function getOccurrenceEditorUrl($other_params) {
+        $editor_renames = [
             'recordedBy' => 'q_recordedby',
             'catalogNumber' => 'q_catalognumber',
             'otherCatalogNumbers' => 'q_othercatalognumbers',
@@ -17,30 +31,37 @@
             'processingStatus' => 'q_processingstatus',
         ];
 
-        if(request('hasImages') === "with_images") {
-            $param_map['hasImages'] = 'q_imgonly';
-        } else if(request('hasImages') === "without_images") {
-            $param_map['hasImages'] = 'q_withoutimg';
-        }
-
-        foreach($param_map as $key => $value) {
-            if(request($key) != null) {
-                if($key === 'hasImages') {
-                    $legacy_params[$value] = $value;
-                } else {
-                    $legacy_params[$value] = request($key);
-                }
+        $editor_mutations = [
+            'hasImages' => fn($v) => match($v) {
+                "with_images" => 'q_imgonly',
+                "without_images" => 'q_withoutimg',
+                default => $v
             }
-        }
+        ];
 
-        return $legacy_params;
-    }
-    function getOccurrenceEditorUrl($other_params) {
         $base_url = url(config('portal.name') . '/collections/editor/occurrenceeditor.php?');
-        $query = http_build_query(array_merge(
-            convertLegacyParams(),
-            $other_params
-            ));
+
+        $remapped_params = remapAssoc($other_params, $editor_renames, $editor_mutations);
+        $remapped_params['reset'] = true;
+
+        $query = http_build_query($remapped_params);
+
+        return $base_url . $query;
+    }
+
+    // TODO (Logan) Rework when map search gets transfered
+    // This is need to interop with old occurrence editor form
+    function getMapSearchUrl() {
+        $params = request()->all();
+        $legacy_search_renames = [
+            'collid' => 'db'
+        ];
+
+        $base_url = url(config('portal.name') . '/collections/map/index.php?');
+        $remapped_params = remapAssoc(request()->all(), $legacy_search_renames);
+
+        $query = http_build_query($remapped_params);
+
         return $base_url . $query;
     }
 
@@ -76,17 +97,45 @@
 <x-layout class="p-0 h-[100vh] relative" x-data="{ menu_open: false}" :hasFooter="false" :hasHeader="false"
     :hasNavbar="false">
     <div class="pt-4 px-4 flex flex-col gap-2 h-[7rem] relative">
+        @if(!empty($collection))
         <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => url('')],
-            ['title' => 'Collection Management', 'href' => url(config('portal.name') . '/collections/misc/collprofiles.php?emode=1&collid='. request('collid'))],
+            ['title' => 'Collection Management', 'href' => url('/collections/'. request('collid'))],
             ['title' => 'Occurrence Table view'],
         ]" />
+        @else
+        <x-breadcrumbs :items="[
+            ['title' => 'Home', 'href' => url('')],
+            ['title' => 'Search Criteria', 'href' => url('/collections/search')],
+            ['title' => 'Specimen Records Table'],
+        ]" />
+        @endif
+
+        @if(!empty($collection))
         <div class="text-2xl text-primary font-bold">
             {{$collection->collectionName}} ({{$collection->institutionCode}})
         </div>
-        <div class="flex gap-4 absolute right-4">
+        @else
+        <div class="text-2xl text-primary font-bold">
+           Specimen Records Table
+        </div>
+        @endif
+
+        <div class="flex gap-4 absolute right-4 items-center">
             <x-button x-on:click="menu_open = 'search'">Adjust Search</x-button>
             <x-button x-on:click="menu_open = 'batch_update'">Batch Update</x-button>
+
+            <x-button class="w-fit" href="{{ getMapSearchUrl() }}" target="_blank">
+                <i class="text-xl fa-solid fa-earth-americas"></i>
+            </x-button>
+
+            <x-button class="w-fit" onclick="copyUrl()">
+                <i class="text-xl fa-regular fa-copy"></i>
+            </x-button>
+
+            <x-button class="w-fit" onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)">
+                <i class="text-xl fa-solid fa-download"></i>
+            </x-button>
         </div>
     </div>
 
@@ -276,8 +325,11 @@
     ];
     @endphp
 
-    <div x-data="{ occid: null, column: null, column_property: null, column_value: null }">
-        <x-context-menu>
+    <div class="relative" x-data="{ occid: null, column: null, column_property: null, column_value: null, loading: false }">
+        <div x-show="loading" x-cloak id="table-loader" class="z-[100] stroke-accent w-full h-full flex justify-center absolute">
+            <x-icons.loading />
+        </div>
+       <x-context-menu>
             <x-slot:menu>
             </div>
                 <x-context-menu-item x-on:click="menu_open = true">
@@ -312,23 +364,36 @@
 
                 <x-context-menu-item hx-include="#sort"
                     hx-get="{{url('collections/table') . '?fragment=table&collid='. request('collid')}}" hx-trigger="click"
-                    hx-target='#table-container' hx-swap="outerHTML">
+                    hx-target='#table-container' hx-swap="outerHTML"
+
+                    x-on:htmx:xhr:loadstart="loading = true"
+                    x-on:htmx:xhr:loadend="loading = false"
+                    >
                     <input type="hidden" name="sort" id="sort" x-bind:value="column_property" />
                     Sort By&nbsp;<span x-text="column"></span>
                 </x-context-menu-item>
 
                 <x-context-menu-item hx-include="#filter"
                     hx-get="{{url('collections/table') . '?fragment=table&collid='. request('collid') }}" hx-trigger="click"
-                    hx-target='#table-container' hx-swap="outerHTML">
+                    hx-target='#table-container' hx-swap="outerHTML"
+
+                    x-on:htmx:xhr:loadstart="loading = true"
+                    x-on:htmx:xhr:loadend="loading = false"
+                    >
                     <input type="hidden" x-bind:name="column_property" id="filter" x-bind:value="column_value" />
                     Filter By&nbsp;<span x-text="column"></span>
                 </x-context-menu-item>
 
                 <x-context-menu-item hx-get="{{ url('collections/table') . '?fragment=table&collid='. request('collid') }}"
-                    hx-trigger="click" hx-target='#table-container' hx-swap="outerHTML">
+                    hx-trigger="click" hx-target='#table-container' hx-swap="outerHTML"
+
+                    x-on:htmx:xhr:loadstart="loading = true"
+                    x-on:htmx:xhr:loadend="loading = false"
+                    >
                     Clear Filters
                 </x-context-menu-item>
             </x-slot:menu>
+
             @fragment('table')
             <div id="table-container"
                 class="overflow-x-scroll overflow-y-scroll w-screen h-[calc(100vh-7rem)] relative">

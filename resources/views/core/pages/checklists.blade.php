@@ -3,26 +3,36 @@
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
         'Species Inventories'
-    ]"/>
+    ]" />
     <h1 class="text-4xl font-bold text-primary">Species Inventories</h1>
 
     @php
     $prev_pid = -1;
+    $projects = [];
+    foreach($checklists as $checklist) {
+        if(empty($checklist->pid)) {
+            if(empty($projects['misc'])) {
+                $projects['misc'] = '';
+            }
+            $projects['misc'] = [ $checklist ];
+        } else if(array_key_exists($checklist->pid, $projects)) {
+            array_push($projects[$checklist->pid], $checklist);
+        } else {
+            $projects[$checklist->pid] = [ $checklist ];
+        }
+    }
     @endphp
 
-    <div>
-        @foreach($checklists as $checklist)
+    <div class="flex flex-col gap-4">
+        @foreach($projects as $pid => $proj_checklists)
         <div>
-            @if ($prev_pid !== $checklist->pid)
-            @php $prev_pid = $checklist->pid; @endphp
-
-            @if(!$loop->first) <br> @endif
+            @if(!empty($proj_checklists))
             <div class="flex items-center gap-4">
-                @if($checklist->projname)
+                @if($proj_checklists[0]->projname)
                 <x-link
-                    href="{{url('/projects/' . $checklist->pid)}}"
+                    href="{{url('/projects/' . $pid)}}"
                     class="text-2xl font-bold text-primary">
-                    {{$checklist->projname ?? 'Misc'}}
+                    {{$proj_checklists[0]->projname ?? 'Misc'}}
                 </x-link>
                 @else
                 <div class="text-2xl font-bold text-primary">
@@ -31,18 +41,22 @@
                 @endif
 
                 {{-- Todo needs to check actually point data --}}
-                @if ($checklist->mapChecklist)
-                <x-nav-link href="{{ url(config('portal.name') . '/checklists/clgmap.php') .'?pid=' . $checklist->pid }}">
+                @if ($proj_checklists[0]->mapChecklist)
+                <x-nav-link href="{{ url('/checklists/map') }}?pid={{ $pid }}">
                     <x-button>Map <i class="fa-solid fa-earth-americas"></i></x-button>
                 </x-nav-link>
                 @endif
             </div>
             @endif
-            <li class="text-base">
-                <x-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid) }}" >
-                    {{ $checklist->name }}
-                </x-link>
-            </li>
+            <ul class="list-disc pl-4">
+                @foreach($proj_checklists as $checklist)
+                <li class="text-base">
+                    <x-link hx-boost="true" href="{{ url('checklists/' . $checklist->clid) }}" >
+                        {{ $checklist->name }}
+                    </x-link>
+                </li>
+                @endforeach
+            </ul>
         </div>
         @endforeach
     </div>

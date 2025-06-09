@@ -7,6 +7,16 @@
             accordion._x_dataStack[0].open = !accordion._x_dataStack[0].open;
         }
     }
+
+    function saveSearchToSession(form) {
+        const formData = new FormData(event.target);
+        let searchJson = {};
+
+        for(let data of formData.entries()) {
+            searchJson[data[0]] = data[1];
+        }
+        window.sessionStorage.collectionSearch = JSON.stringify(searchJson);
+    }
 </script>
 @endPushOnce
 @php
@@ -30,8 +40,20 @@ $eastWest= [
         hx-target="body"
         hx-push-url="true"
         x-on:change="addChip(values, event)"
+        onsubmit="saveSearchToSession()"
+        id="search-form"
         hx-boost
         class="grid grid-cols-4"
+        x-init="
+            const session = JSON.parse(window.sessionStorage.collectionSearch)
+            for(let id of Object.keys(session)) {
+                const elem = document.getElementById(id);
+                if(elem) {
+                    elem.value = session[id];
+                    addChip(values, { target: elem });
+                };
+            }
+        "
         x-data="{
             show_all: false,
             toggle: () => show_all = true,
@@ -79,7 +101,7 @@ $eastWest= [
                 Expand All Sections
             </x-button>
             <x-accordion label='TAXONOMY' variant="clear-primary" :open="true">
-                <x-taxa-search />
+                <x-taxa-search id="taxa" />
             </x-accordion>
             <x-accordion label='LOCALITY' variant="clear-primary">
                 <div class="grid grid-cols-2 gap-4">
@@ -217,9 +239,14 @@ $eastWest= [
         </div>
 
         <div class="col-span-1 px-4 flex flex-col gap-4">
-            <x-radio label='Results Display' default_value="list" name="result-type" :options="[
+            <x-radio
+                onchange="htmx.find('#search-form').setAttribute('hx-get', `{{ url('collections') }}/${event.target.value}`); htmx.process('#search-form')"
+                label='Results Display'
+                default_value="list"
+                name="result-type"
+                :options="[
                     ['label' => 'List', 'value' => 'list'],
-                    ['label' => 'Table', 'value' => 'Table']
+                    ['label' => 'Table', 'value' => 'table']
                 ]" />
             <x-button type="submit" class="w-full justify-center text-base">Search</x-button>
             <x-button type="button" class="w-full justify-center text-base" variant="neutral">Reset</x-button>

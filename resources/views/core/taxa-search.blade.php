@@ -4,10 +4,13 @@
     'use_thes_value' => false,
     'taxa_type_value' => '',
     'include' => ''
+    'hide_selector' => false,
+    'hide_synonyms_checkbox' => false,
 ])
 <div>
     <label class="text-lg" for="{{ $id }}">Search Taxa</label>
     <div class="flex items-center group">
+        @if(!$hide_selector)
         <x-select
             name="taxa-type"
             id="taxa-type-{{$id}}"
@@ -19,6 +22,7 @@
             ['value' => 'Family', 'title' => 'Family', 'disabled' => false],
             ['value' =>'Taxonomy Group', 'title' => 'Taxonomy Group', 'disabled' => false]
         ]"/>
+        @endif
 
         <x-autocomplete-input
             name="taxa"
@@ -32,6 +36,8 @@
                 <x-slot:menu></x-slot>
         </x-autocomplete-input>
     </div>
+
+    @if(!$hide_synonyms_checkbox)
     <x-checkbox
         :id="'usethes-' . $id"
         :checked="$use_thes_value === 1"
@@ -39,4 +45,5 @@
         name="usethes"
         label="Include Synonyms"
     />
+    @endif
 </div>

@@ -1,4 +1,4 @@
-@props(['' => $checklist, 'taxons' => [], 'vouchers' => []])
+@props(['checklist', 'taxons' => [], 'vouchers' => []])
 @php
 $families = [];
 $genera = [];
@@ -43,11 +43,11 @@ foreach($vouchers as $voucher) {
 }
 
 //Set Display Settings
-$defaultSettings = json_decode($checklist->defaultSettings);
-$show_synonyms = $defaultSettings->dsynonyms ;
-$show_common = $defaultSettings->dcommon ;
-$show_notes_vouchers = $defaultSettings->dvouchers;
-$show_taxa_authors = $defaultSettings->dauthors;
+$defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
+$show_synonyms = $defaultSettings->dsynonyms ?? false;
+$show_common = $defaultSettings->dcommon ?? false;
+$show_notes_vouchers = $defaultSettings->dvouchers ?? false;
+$show_taxa_authors = $defaultSettings->dauthors ?? false;
 
 //Override defaults if using the search form
 if(request('partial') === 'taxa-list') {
@@ -57,13 +57,25 @@ if(request('partial') === 'taxa-list') {
     $show_taxa_authors = request('show_taxa_authors');
 }
 
+//Handling Dynamic Breadcrumbs
+$breadcrumbs = [
+    ['title' => 'Home', 'href' => url('') ],
+];
+
+if($checklist->projname && $checklist->pid) {
+    $breadcrumbs[] = [
+        'title' => $checklist->projname,
+        'href' => url( config('portal.name') . '/projects/index.php?pid='. $checklist->pid)
+    ];
+}
+
+$breadcrumbs[] = $checklist->name;
+
 @endphp
-<x-layout class="grid grid-cols-1 gap-4 lg:w-3/4 md:w-full mx-auto">
-    <x-breadcrumbs :items="[
-        ['title' => 'Home', 'href' => url('') ],
-        ['title' => $checklist->projname, 'href' => url( config('portal.name') . '/projects/index.php?pid='. $checklist->pid) ],
-        $checklist->name
-    ]" />
+<x-layout class="flex flex-col gap-4 lg:w-3/4 md:w-full mx-auto">
+    <div>
+    <x-breadcrumbs :items="$breadcrumbs" />
+    </div>
     <div class="flex items-center">
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
         <div class="flex flex-grow justify-end gap-4">
@@ -87,7 +99,7 @@ if(request('partial') === 'taxa-list') {
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             @isset($checklist->abstract)
-                <div><span class="font-bold">Abstract:</span> {{ $checklist->abstract }}</div>
+                <div><span class="font-bold">Abstract:</span> {!! Purify::clean($checklist->abstract) !!}</div>
             @endisset
 
             @isset($checklist->authors)
@@ -181,6 +193,11 @@ if(request('partial') === 'taxa-list') {
     </div>
     @fragment('taxa-list')
     <div id="taxa-list">
+        @if(count($taxons) <= 0)
+            <div>
+                There are no taxa to list
+            </div>
+        @endif
         @php $previous @endphp
         @foreach ($taxons as $taxon)
         @if($loop->first || $taxons[$loop->index - 1]->family !== $taxon->family)

@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      run: php -r "file_exists('.env') || copy('.env.docker-example', '.env');"
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache

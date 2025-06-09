@@ -38,6 +38,9 @@ This is a work in progress Repo and not ready for Production uses yet.
 4. Test by Navigating to a no laravel page like `sitemap` on the navbar
 5. Note that, for some pages, the relative path of symbini.php may need to be changed. They can now reference the `$SERVER_ROOT` variable. For example, collections/search/index.php might need the line `include_once('../../config/symbini.php');` changed to `include_once($SERVER_ROOT . '/config/symbini.php');`
 
+## Database
+There are some small database additions do for some laravel features mostly surrounding the users. If you are upgrading from an existing schema make sure your Symbiota Schema is up to date with the latests Symbiota release. To do the upgrade first run the `database/schema/upgrade.sql` to populate migrations for tables that already exist in the symbiota schema. Then run the command `php artisan migrate` to popluate the remaing laravel tables.
+
 #### Note: The files referenced in the current [BioKIC/Symbiota](https://github.com/BioKIC/Symbiota) that are placed into the new folder described above will not make use of any of laravel's features. This step is just a means to slowly port the project in a non blocking fashion. 
 
 ## Pages Running Laravel

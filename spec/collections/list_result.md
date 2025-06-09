@@ -1,0 +1,1 @@
+# Collection Search List Result

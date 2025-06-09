@@ -42,19 +42,19 @@
         :class="$input->attributes->get('class')"
     />
     <div {{$menu->attributes->twMerge('relative w-full')}}>
-        <div id="menu-loader-{{$id}}" class="htmx-indicator">
-        <div {{$indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1')}}>
-               @if ($indicator->isEmpty())
-                <div class="flex items-center justify-center gap-1 text-base-content">
-                    <div class="stroke-accent w-8 h-8">
-                        <x-icons.loading/>
+        <div id="menu-loader-{{$id}}" class="htmx-indicator" x-show="open" x-cloak>
+            <div {{$indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1')}}>
+                   @if ($indicator->isEmpty())
+                    <div class="flex items-center justify-center gap-1 text-base-content">
+                        <div class="stroke-accent w-8 h-8">
+                            <x-icons.loading/>
+                        </div>
+                        Searching
                     </div>
-                    Searching
-                </div>
-               @else
-                    {{ $indicator }}
-               @endif
-        </div>
+                   @else
+                        {{ $indicator }}
+                   @endif
+            </div>
         </div>
         <div
             x-on:htmx:after-swap="open = true; results = $el.children.length > 0"

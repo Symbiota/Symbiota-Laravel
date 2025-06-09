@@ -97,4 +97,67 @@ class MediaController extends Controller {
     public static function delete() {}
 
     public static function edit() {}
+
+    public static function libraryPage(Request $request) {
+        $genus = [];
+        $families = [];
+
+        $select = [$request->query('taxa-type') === 'family' ? 'ts.family as name' : 't.UnitName1 as name'];
+
+        $taxa_query = DB::table('media as m')
+            ->join('taxstatus as ts', 'ts.tid', 'm.tid')
+            ->join('taxa as t', 't.tid', 'ts.tidaccepted')
+            ->distinct()
+            ->whereRaw('ts.taxauthid = 1')
+            ->whereRaw('t.RankId > 219');
+
+        if ($request->query('target') === 'genus') {
+            $taxa_query->select('t.UnitName1 as name')
+                ->orderBy('t.UnitName1');
+
+            if ($request->query('taxa')) {
+                $taxa_query->whereLike('ts.family', $request->query('taxa') . '%');
+            }
+        } elseif ($request->query('taxa')) {
+            $taxa_query->select('t.sciName as name', 't.tid')
+                ->orderBy('t.sciName')
+                ->whereLike('t.sciName', $request->query('taxa') . '%');
+
+        } else {
+            $taxa_query->selectRaw('ts.family as name')
+                ->whereNotNull('ts.family')
+                ->orderBy('ts.family');
+        }
+
+        $view = view('pages/media/library', [
+            'taxa' => $taxa_query->get(),
+        ]);
+
+        if ($request->query('fragment') === 'taxa_list') {
+            return $view->fragment('taxa_list');
+        } else {
+            return $view;
+        }
+    }
+
+    public static function contributorsPage() {
+        $creators = DB::table('media')
+            ->join('users', 'uid', 'creatorUid')
+            ->groupBy('creatorUid')
+            ->selectRaw('creatorUid, firstName, lastName, count(*) as media_count')
+            ->orderBy('lastName')
+            ->get();
+
+        $collections = DB::table('omcollections as c')
+            ->join('omcollectionstats as s', 's.collId', 'c.collId')
+            ->select('c.collId', 'collectionName', 's.dynamicProperties', 'collType')
+            ->whereLike('s.dynamicProperties', '%imgcnt%')
+            ->orderBy('collectionName')
+            ->get();
+
+        return view('pages/media/contributors', [
+            'creators' => $creators,
+            'collections' => $collections,
+        ]);
+    }
 }

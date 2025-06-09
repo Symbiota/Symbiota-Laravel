@@ -16,6 +16,10 @@
     border-radius: 50%;
 }
 
+.tox-promotion {
+    display: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

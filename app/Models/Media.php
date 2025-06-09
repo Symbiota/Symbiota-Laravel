@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model {
-    protected $table = 'images';
+    protected $table = 'media';
 
     protected $primaryKey = 'imgid';
 
@@ -75,4 +75,9 @@ class Media extends Model {
         $domain = filter_var($domain, FILTER_SANITIZE_URL);
         $this->serverDomain = $domain;
     }
+}
+
+enum MediaType: string {
+    case Image = 'image';
+    case Audio = 'audio';
 }

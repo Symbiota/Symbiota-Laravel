@@ -39,9 +39,9 @@
 		</div>
         <br/>
 
-		<h2 class="text-2xl text-primary font-bold">Images</h2>
-		<p>Images within this website have been generously contributed by their owners to promote education and research. These contributors retain the full copyright for their images.
-		Unless stated otherwise, images are made available under the Creative Commons Attribution-ShareAlike
+		<h2 id="media" class="text-2xl text-primary font-bold">Media</h2>
+		<p>Media within this website have been generously contributed by their owners to promote education and research. These contributors retain the full copyright for their media.
+		Unless stated otherwise, media are made available under the Creative Commons Attribution-ShareAlike
 		(<x-link href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA</x-link>).
 		Users are allowed to copy, transmit, reuse, and/or adapt content, as long as attribution regarding the source of the content is made. If the content is altered, transformed,
 		or enhanced, it may be re-distributed only under the same or similar license by which it was acquired.

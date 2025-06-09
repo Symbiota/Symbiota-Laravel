@@ -4,8 +4,6 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -19,6 +17,7 @@ use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\TwoFactorDisabledResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider {
@@ -26,7 +25,20 @@ class FortifyServiceProvider extends ServiceProvider {
      * Register any application services.
      */
     public function register(): void {
+        //Fortify::ignoreRoutes();
+
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
+            public function toResponse($request) {
+                $url = session()->get('link') ?? url('');
+
+                return response(redirect($url))
+                    ->header('HX-Retarget', 'body')
+                    ->header('HX-Location', $url)
+                    ->header('HX-Boosted', 'true');
+            }
+        });
+
+        $this->app->instance(TwoFactorLoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
 
@@ -88,12 +100,9 @@ class FortifyServiceProvider extends ServiceProvider {
                 session(['link' => url()->previous()]);
             }
 
-            // If its on current page ignore target
-            if ($request->headers->get('hx-request') && ! $request->headers->get('hx-target')) {
-                return view('pages/login')->fragment('form');
-            }
-
-            return response(view('pages/login'))->header('HX-Replace-URL', url('/login'));
+            return response(view('pages/login'))
+                ->header('HX-Replace-URL', url('/login'))
+                ->header('HX-Retarget', 'body');
         });
 
         Fortify::registerView(function (Request $request) {
@@ -103,6 +112,13 @@ class FortifyServiceProvider extends ServiceProvider {
             }
 
             return response(view('pages/signup'))->header('HX-Replace-URL', url('/register'));
+        });
+
+        Fortify::requestPasswordResetLinkView(function (Request $request) {
+            //If Request Redirect on to self then only send fragment. This is for htmx to do the correct swap
+
+            return response(view('pages/auth/forgot-password')
+            )->header('HX-Replace-URL', url('/forgot-password'));
         });
 
         Fortify::confirmPasswordView(function () {
@@ -141,8 +157,8 @@ class FortifyServiceProvider extends ServiceProvider {
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        // Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {

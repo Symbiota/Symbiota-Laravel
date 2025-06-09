@@ -18,7 +18,7 @@
     }
 </script>
 @endPushOnce
-<x-layout class="flex flex-col gap-4">
+<x-layout class="flex flex-col gap-4" :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <h1 class="text-4xl font-bold">Data Usage Guidelines</h1>
     <p>
         By downloading data, the user confirms that he/she has read and agrees with the general <x-link

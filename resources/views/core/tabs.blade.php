@@ -10,7 +10,18 @@
                 }
             }
         }
-    }" x-init="wireTabs(el, {{ count($tabs) }})" {{$attributes->twMerge('w-full')}} >
+    }" x-init="
+        wireTabs(el, {{ count($tabs) }})
+        $watch('active', function(){
+            $el.dispatchEvent(new CustomEvent('tabChanged', {
+                detail: {
+                    active,
+                }
+            }))
+        })
+    "
+    {{$attributes->twMerge('w-full')}}
+    >
     {{-- Tab Menu --}}
     <div {{$attributes->twMergeFor('head', 'flex gap-1')}}>
         @for ($i = 0; $i < count($tabs); $i++)

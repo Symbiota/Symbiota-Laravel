@@ -61,6 +61,8 @@
 
         let map = L.map(id, DEFAULT_MAP_OPTIONS);
 
+        L.Path.mergeOptions(DEFAULT_SHAPE_OPTIONS);
+
         const terrainLayer = L.tileLayer('https://{s}.google.com/vt?lyrs=p&x={x}&y={y}&z={z}', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],

@@ -211,8 +211,6 @@
             if (map.symb_draw_items && map.symb_draw_items._layers) {
                 const layers = Object.values(map.symb_draw_items._layers)
                 if (Array.isArray(layers) && layers.length > 0) {
-
-                    console.log(layers)
                     saveToOpener(layers[0]);
                 }
             }

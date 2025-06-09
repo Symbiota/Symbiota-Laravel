@@ -7,7 +7,7 @@
 'chip' => 'chip value',
 ])
 <div {{ $attributes->twMerge("flex group") }}>
-    <div class="relative w-fit h-fit my-auto">
+    <div class="relative w-6 h-6">
         <input
             type="checkbox"
             name="{{$name ?? $id}}"
