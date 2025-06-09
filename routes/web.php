@@ -72,6 +72,7 @@ Route::group(['prefix' => 'checklists'], function () {
 */
 Route::group(['prefix' => 'datasets'], function () {
     Route::get('/{dataset_id}', [DatasetController::class, 'datasetProfilePage']);
+    Route::view('/', 'pages/datasets/list');
 });
 
 /*
