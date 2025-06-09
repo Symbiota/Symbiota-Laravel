@@ -4,7 +4,7 @@
         <h1 class="text-3xl text-primary mb-8">Sciname will be saved as:
             <span id="sciname-display" name="sciname-display"></span>
         </h1>
-        <form>
+        <form hx-post="{{ url('TOOD') }}">
             <x-fieldset label="Optional Quick Parser" class="mb-3">
                 <x-input label="Paste name here for parsing: " class="w-1/2 mb-0" type="text" id="quickparser" name="quickparser" value="" onchange="parseName(this.form)" />
             </x-fieldset>
