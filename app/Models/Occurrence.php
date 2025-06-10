@@ -389,15 +389,29 @@ class Occurrence extends Model {
         //Radius Searching
         if ($taxa = $params['taxa'] ?? false) {
             //TODO (Logan) Enum this default constants
-            $use_thes = $params['usethes'] ?? 1;
+            //$taxon_type = 'todo';
+            // OccurrenceTaxaManager
+            //
+            // Notes handeling taxonomy searches for higher order taxa
+            // in order to do functionality from collection/checklist.php
+            // and all other futher occurrence and no occurrence base taxonomy
+            // selection and filtering
+            //
+            // Left off in OccurrenceTaxaManager.php setTaxonRankAndType function
+            // to populate $taxa_arr with selction tids
+
+            $use_thes = isset($params['usethes']) ?1 : 0;
             $use_thes_associations = $params['usethes-associations'] ?? 2;
             //TODO (Logan) Figure out when this is needed
-            $tax_auth_id = $params['taxauthid'] ?? 2;
+            $tax_auth_id = $params['taxauthid'] ?? 1;
 
-            if (is_numeric($taxa)) {
-                $query->where('tidInterpreted', $taxa);
+            // handle , delimited
+            $taxa_arr = [];
+
+            if(is_numeric($taxa)) {
+                //In progress
+                $taxa_arr[] = $taxa;
             } else {
-                //Todo figure out Occurence Taxa Manager
                 $taxon_input = explode(',', $taxa);
                 $query->whereIn('o.sciName', $taxon_input);
             }
