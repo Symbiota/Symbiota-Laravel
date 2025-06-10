@@ -48,10 +48,6 @@ Route::get('/taxa/search', function (Request $request) {
     }
 });
 
-Route::get('/taxa/tree/{tid}', function (int $tid) {
-    return Taxonomy::getDirectChildren($tid);
-});
-
 Route::get('/geographic/search', function (Request $request) {
     $geo_term = $request->query('geoterm');
     $geo_level = $request->query('geolevel');
