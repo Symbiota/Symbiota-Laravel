@@ -53,23 +53,36 @@ class Taxonomy extends Model {
             ->select([
                 't.tid',
                 'sciName', 'ts.family', 'parenttid', 't.rankID',
+                DB::raw('ts.tidaccepted = ts.tid as accepted'),
                 DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl'),
                 DB::raw('CASE WHEN t.sciName = "Organism" then "Organism" ELSE COALESCE(tu.rankname, "Kingdom") END as rankname')
             ]);
-
         $direct_children = $query->get();
-
-        /*
-        foreach ($direct_children as $child) {
-            if (! $child->thumbnailUrl) {
-                DB::table('media')->where($child->tid);
-            }
-        }*/
 
         return $direct_children;
     }
 
+    // TODO (Logan) ed/group what this should be named
+    public static function getTaxaChecklist() {
+        // See occurrence select builder function
+        // What we need
+        // taxa string
+        // usethes (1 - if present, 0 if not)
+        // taxontype (numeric)?
+
+        // handle , delimited
+    }
+
     public static function getAllChildren(int $root_tid) {
+        $children = self::getDirectChildren($root_tid);
+
+        ['root_id' => [
+            'child_id' => ['grand_child_id' => ...]
+        ]]
+
+        foreach($children as $child) {
+            $grand_children = self::getDirectChildren($child->tid);
+        }
 //         SELECT
 //
 // from taxa t

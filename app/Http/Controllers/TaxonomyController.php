@@ -30,29 +30,7 @@ class TaxonomyController extends Controller {
     }
 
     public static function getDirectChildren(int $tid) {
-        $query = DB::table('taxa as t')
-            ->join('taxstatus as ts', 'ts.tid', 't.tid')
-            ->leftJoin('media as m', function (JoinClause $query) {
-                $query->on('m.tid', 't.tid')
-                    ->where('m.mediaType', 'image');
-            })
-            ->join('taxonunits as tu', function (JoinClause $query) {
-                $query->on('tu.rankid', 't.rankID')
-                    ->whereRaw('tu.kingdomName = t.kingdomName');
-            })->where('ts.taxauthid', 1)
-            ->where('ts.parenttid', $tid)
-            ->groupBy('t.tid')
-            ->select(['t.tid', 'sciName', 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]);
-
-        $direct_children = $query->get();
-
-        foreach ($direct_children as $child) {
-            if (! $child->thumbnailUrl) {
-                DB::table('media')->where($child->tid);
-            }
-        }
-
-        return $direct_children;
+        return Taxonomy::getDirectChildren($tid);
     }
 
     // Be very Careful when calling this function can be very slow depending on the tid
