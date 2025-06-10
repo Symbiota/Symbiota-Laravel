@@ -24,15 +24,15 @@ class DatasetController extends Controller {
         $dataset = Dataset::query()
             ->leftJoin('userroles as ur', 'ur.uid', DB::raw('?', $user->uid))
             ->where('datasetID', $dataset_id)
-            ->where(function($query) use($user) {
+            ->where(function ($query) use ($user) {
                 $query
                     ->orWhere('role', UserRole::SUPER_ADMIN)
                     ->orWhere('omoccurdatasets.uid', $user->uid)
-                    ->orWhere(function($query) {
+                    ->orWhere(function ($query) {
                         $query->whereRaw('tablePK = datasetID')
                             ->whereIn('role', [
                                 UserRole::DATASET_ADMIN,
-                                UserRole::DATASET_EDITOR
+                                UserRole::DATASET_EDITOR,
                         ]);
                     });
             });
@@ -41,7 +41,7 @@ class DatasetController extends Controller {
         $dataset = $dataset->first();
 
         return view('pages/datasets/profile', [
-            'dataset' => $dataset
+            'dataset' => $dataset,
         ]);
     }
 }

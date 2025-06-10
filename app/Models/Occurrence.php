@@ -378,11 +378,10 @@ class Occurrence extends Model {
         //excludecult Does by default?
 
         //datasetid TODO (Logan) figure out what this is;
-        if($datasetID = $params['datasetID'] ?? false) {
+        if ($datasetID = $params['datasetID'] ?? false) {
             $query->join('omoccurdatasetlink as odlink', 'odlink.occid', 'o.occid')
                 ->where('odlink.datasetID', $datasetID);
         }
-
 
         //footprintGeoJson Searching
         //Boundary Searching
