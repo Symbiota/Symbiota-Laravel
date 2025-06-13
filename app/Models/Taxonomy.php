@@ -76,9 +76,9 @@ class Taxonomy extends Model {
     public static function getAllChildren(int $root_tid) {
         $children = self::getDirectChildren($root_tid);
 
-        ['root_id' => [
-            'child_id' => ['grand_child_id' => ...]
-        ]]
+        // ['root_id' => [
+        //     'child_id' => ['grand_child_id' => ...]
+        // ]]
 
         foreach($children as $child) {
             $grand_children = self::getDirectChildren($child->tid);
