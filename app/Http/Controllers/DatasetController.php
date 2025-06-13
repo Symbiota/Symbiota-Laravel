@@ -21,27 +21,33 @@ class DatasetController extends Controller {
 
     public static function datasetProfilePage(int $dataset_id) {
         $user = request()->user();
-        $dataset = Dataset::query()
-            ->leftJoin('userroles as ur', 'ur.uid', DB::raw('?', $user->uid))
-            ->where('datasetID', $dataset_id)
-            ->where(function($query) use($user) {
-                $query
-                    ->orWhere('role', UserRole::SUPER_ADMIN)
-                    ->orWhere('omoccurdatasets.uid', $user->uid)
-                    ->orWhere(function($query) {
-                        $query->whereRaw('tablePK = datasetID')
-                            ->whereIn('role', [
-                                UserRole::DATASET_ADMIN,
-                                UserRole::DATASET_EDITOR
-                        ]);
-                    });
-            });
+        $dataset_query = Dataset::query()->where('datasetID', $dataset_id);
 
-        dd($dataset->toRawSql());
-        $dataset = $dataset->first();
+        if ($user) {
+            $dataset_query
+                ->leftJoin('userroles as ur', 'ur.uid', DB::raw($user->uid))
+                ->where(function ($query) use ($user) {
+                    $query->where(function ($query) use ($user) {
+                        $query
+                            ->where('omoccurdatasets.uid', $user->uid)
+                            ->orwhere('role', UserRole::SUPER_ADMIN)
+                            ->orwhere(function ($query) {
+                                $query
+                                    ->whereIn('role', [UserRole::DATASET_ADMIN, UserRole::DATASET_EDITOR])
+                                    ->where('tablePK', 'datasetID');
+                            });
+                    })
+                        ->orWhere('isPublic', 1);
+                });
+
+        } else {
+            $dataset_query->where('isPublic', 1);
+        }
+
+        $dataset = $dataset_query->first();
 
         return view('pages/datasets/profile', [
-            'dataset' => $dataset
+            'dataset' => $dataset,
         ]);
     }
 }
