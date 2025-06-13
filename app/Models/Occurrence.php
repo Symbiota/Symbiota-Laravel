@@ -398,7 +398,8 @@ class Occurrence extends Model {
             //
             // Left off in OccurrenceTaxaManager.php setTaxonRankAndType function
             // to populate $taxa_arr with selction tids
-
+            //
+            $taxa = str_replace(';',',', $taxa);
             $use_thes = isset($params['usethes']) ?1 : 0;
             $use_thes_associations = $params['usethes-associations'] ?? 2;
             //TODO (Logan) Figure out when this is needed
@@ -407,13 +408,14 @@ class Occurrence extends Model {
             // handle , delimited
             $taxa_arr = [];
 
-            if(is_numeric($taxa)) {
-                //In progress
-                $taxa_arr[] = $taxa;
-            } else {
-                $taxon_input = explode(',', $taxa);
-                $query->whereIn('o.sciName', $taxon_input);
-            }
+            $taxa_search_terms = explode(',', $taxa);
+            $tids = Taxonomy::query()->join('taxstatus as ts', 'taxa.tid', 'ts.tidaccepted')
+                ->join('taxa as t2', 't2.tid', 'ts.tid')
+                ->where('ts.taxauthid', $tax_auth_id)
+                ->whereIn('t2.sciName', array_map('trim', explode(',', $taxa)))
+                ->get();
+
+            $query->whereIn('o.tidInterpreted', $tids->collect()->map(fn ($v) => $v->tid));
         }
 
         if ($clid = $params['clid'] ?? false) {
