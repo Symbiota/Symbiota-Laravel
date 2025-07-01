@@ -31,10 +31,33 @@ class Taxonomy extends Model {
         return $this->hasMany(Media::class, 'tid', 'tid');
     }
 
-    public function search(string $search, int $thesaurus_id, TaxaSearchType $search_type = TaxaSearchType::Anyname) {
+    public static function findTaxonAndChildren(string $search, int $thesaurus_id, TaxaSearchType $search_type = TaxaSearchType::Anyname) {
         $search = str_replace(';',',', $search);
         $search = explode(',', $search);
-        // TODO (Logan) implement tree grab
+
+        // $use_thes = isset($params['usethes']) ?1 : 0;
+        // $use_thes_associations = $params['usethes-associations'] ?? 2;
+
+        //TODO (Logan) Figure out when this is needed
+        // $tax_auth_id = $params['taxauthid'] ?? 1;
+
+        $base_query = self::query()
+            ->join('taxstatus as ts', 'taxa.tid', 'ts.tid')
+            // Check if thesaurus_id is meant to be taxauthid
+            ->where('ts.taxauthid', $thesaurus_id)
+            ->whereIn('taxa.sciName', array_map('trim', $search))
+            ->select('ts.tidaccepted as tid');
+
+        $children_query = self::query()
+            ->join('taxstatus as ts', 'taxa.tid', 'ts.tid')
+            ->join('taxaenumtree as te', 'te.parenttid', 'ts.tidaccepted')
+            ->where('ts.taxauthid', $thesaurus_id)
+            ->whereIn('taxa.sciName', array_map('trim', $search))
+            ->select('te.tid');
+
+        $taxa_query = $base_query->union($children_query);
+
+        return $taxa_query->get();
     }
 
     public static function getDirectChildren(int $tid) {
@@ -72,94 +95,6 @@ class Taxonomy extends Model {
 
         // handle , delimited
     }
-
-    public static function getAllChildren(int $root_tid) {
-        $children = self::getDirectChildren($root_tid);
-
-        // ['root_id' => [
-        //     'child_id' => ['grand_child_id' => ...]
-        // ]]
-
-        foreach($children as $child) {
-            $grand_children = self::getDirectChildren($child->tid);
-        }
-//         SELECT
-//
-// from taxa t
-// join taxstatus ts on ts.tid = t.tid
-// where ts.taxauthid = 1 and ts.tid = ts.tidaccepted
-// limit 100;
-        //
-        $taxon_rank = self::query()
-            ->join('taxstatus as ts', 'ts.tid', 'taxa.tid')
-            ->where('ts.tid', $root_tid)
-            ->where('ts.taxauthid', 1)
-            ->select('taxa.rankID', 'taxa.sciName')
-            ->first();
-
-        $query = self::query()
-            ->join('taxstatus as ts', 'ts.tid', 'taxa.tid')
-            ->orderBy('taxa.rankID')
-            ->where('ts.taxauthid', 1)
-            ->where('taxauthid', 1)
-            ->where('rankID', '>', $taxon_rank->rankID)
-            ->whereRaw('ts.tid = ts.tidaccepted')
-            ->select(['taxa.rankID', 'taxa.tid', 'ts.parenttid', 'taxa.sciName']);
-
-        $tree = [
-            $root_tid => true
-        ];
-
-        //total / chunking number
-        //number of queries and how much memormy we have
-        //
-        $results = $query->get();
-
-        foreach ($results as $taxon) {
-            if(array_key_exists($taxon->parenttid, $tree)) {
-                $tree[$taxon->tid] = true;
-            }
-        }
-
-        return $tree;
-/*
-        return DB::table('omoccurrences')
-            ->whereIn('tidaccepted', array_keys($tree))
-            ->limit(100)->get();
-*/
-
-        //return 'done';
-
-        /*
-        $query->chunk(10000, function (\Illuminate\Support\Collection $taxa) use (&$tree) {
-            foreach ($taxa as $taxon) {
-                if(array_key_exists($taxon->parenttid, $tree)) {
-                    $tree[$taxon->tid] = $taxon;
-                }
-            }
-        });
-*/
-
-        return $tree;
-    }
-
-    // TODO (Logan) Clean this up before pr taxon-fetching-interface
-    private static function oldGetAllChildren(int $tid): array {
-        $child_tree = DB::select('with RECURSIVE children as (
-	SELECT * from taxstatus where parenttid = ?
-	UNION ALL
-	SELECT ts.* from taxstatus as ts, children as c where ts.parenttid = c.tid and ts.taxauthid = 1 and ts.tidaccepted = ts.tid
-) SELECT taxa.tid, sciName, children.family, parenttid, taxa.rankID, rankname, COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl
-            from children join taxa on taxa.tid = children.tid left join media as m on m.tid = taxa.tid join taxonunits on taxonunits.rankid = taxa.rankID and taxa.kingdomName = taxonunits.kingdomName group by taxa.tid order by taxa.rankID', [$tid]);
-
-        return $child_tree;
-    }
-
-
-    /*
-     * search where we already have a list of taxon strings
-     * search where we already have a list of tids
-    */
 }
 
 enum TaxaSearchType: string {

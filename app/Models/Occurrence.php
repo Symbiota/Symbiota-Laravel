@@ -387,35 +387,17 @@ class Occurrence extends Model {
         //Boundary Searching
         //Radius Searching
         if ($taxa = $params['taxa'] ?? false) {
-            //TODO (Logan) Enum this default constants
-            //$taxon_type = 'todo';
-            // OccurrenceTaxaManager
-            //
-            // Notes handeling taxonomy searches for higher order taxa
-            // in order to do functionality from collection/checklist.php
-            // and all other futher occurrence and no occurrence base taxonomy
-            // selection and filtering
-            //
-            // Left off in OccurrenceTaxaManager.php setTaxonRankAndType function
-            // to populate $taxa_arr with selction tids
-            //
-            $taxa = str_replace(';',',', $taxa);
             $use_thes = isset($params['usethes']) ?1 : 0;
             $use_thes_associations = $params['usethes-associations'] ?? 2;
+
             //TODO (Logan) Figure out when this is needed
             $tax_auth_id = $params['taxauthid'] ?? 1;
 
-            // handle , delimited
-            $taxa_arr = [];
+            $tids = Taxonomy::findTaxonAndChildren($taxa, $tax_auth_id)
+                ->collect()
+                ->map(fn ($v) => $v->tid);
 
-            $taxa_search_terms = explode(',', $taxa);
-            $tids = Taxonomy::query()->join('taxstatus as ts', 'taxa.tid', 'ts.tidaccepted')
-                ->join('taxa as t2', 't2.tid', 'ts.tid')
-                ->where('ts.taxauthid', $tax_auth_id)
-                ->whereIn('t2.sciName', array_map('trim', explode(',', $taxa)))
-                ->get();
-
-            $query->whereIn('o.tidInterpreted', $tids->collect()->map(fn ($v) => $v->tid));
+            $query->whereIn('o.tidInterpreted', $tids);
         }
 
         if ($clid = $params['clid'] ?? false) {
