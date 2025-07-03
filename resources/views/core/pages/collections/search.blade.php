@@ -45,7 +45,8 @@ $eastWest= [
         hx-boost
         class="grid grid-cols-4"
         x-init="
-            const session = JSON.parse(window.sessionStorage.collectionSearch)
+            const session = window.sessionStorage.collectionSearch?
+            JSON.parse(window.sessionStorage.collectionSearch): {}
             for(let id of Object.keys(session)) {
                 const elem = document.getElementById(id);
                 if(elem) {

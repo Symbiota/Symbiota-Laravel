@@ -1,4 +1,4 @@
-@props(['occurrences' => []])
+@props(['occurrences' => [], 'species_list' => []])
 @php
    $dataset_str = request('db');
    if(is_array($dataset_str)) {
@@ -20,23 +20,45 @@
     </div>
     <x-tabs :tabs="['Species List', 'Occurrence Records']" active="{{ request('active_tab') ?? 1 }}">
         {{-- Species --}}
-        <div class="flex items-center gap-4 h-60">
-            <x-button class="w-fit">
-                <a href="checklistsymbiota.php?taxatype=&taxa=&usethes=&taxonfilter=0&interface=checklist">
-                    Open checklist Explorer
-                </a>
-            </x-button>
-            <x-button class="w-fit">
-                <a href="checklistsymbiota.php?taxatype=&taxa=&usethes=&taxonfilter=0&interface=key">
-                    Open in Interactive Key Interface
-                </a>
-            </x-button>
-            <x-button class="w-fit">
-                <a href="download/index.php?taxatype=&taxa=&usethes=&taxonFilterCode=0&dltype=checklist">
-                    <i class="fa-solid fa-download"></i>
-                    Download Checklist Data
-                </a>
-            </x-button>
+        <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-4">
+                <x-button class="w-fit">
+                    <a href="checklistsymbiota.php?taxatype=&taxa=&usethes=&taxonfilter=0&interface=checklist">
+                        Open checklist Explorer
+                    </a>
+                </x-button>
+                <x-button class="w-fit">
+                    <a href="checklistsymbiota.php?taxatype=&taxa=&usethes=&taxonfilter=0&interface=key">
+                        Open in Interactive Key Interface
+                    </a>
+                </x-button>
+                <x-button class="w-fit">
+                    <a href="download/index.php?taxatype=&taxa=&usethes=&taxonFilterCode=0&dltype=checklist">
+                        <i class="fa-solid fa-download"></i>
+                        Download Checklist Data
+                    </a>
+                </x-button>
+            </div>
+
+            <div>
+                <div class="text-lg">
+                    Taxa Count: {{ count($species_list) }}
+                </div>
+                @php $previous_family = ''; @endphp
+                @foreach ($species_list as $species)
+                @if($previous_family !== $species->family)
+                <div class="uppercase mt-4">
+                    {{ $species->family }}
+                </div>
+                @endif
+                <div>
+                    <x-link href="{{ url('taxon') . '/' . $species->tid}}">
+                        {{ $species->sciName }}
+                    </x-link>
+                </div>
+                @php $previous_family = $species->family; @endphp
+                @endforeach
+            </div>
         </div>
 
         {{-- Occurrence Records --}}

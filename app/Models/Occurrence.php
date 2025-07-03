@@ -397,7 +397,7 @@ class Occurrence extends Model {
                 ->collect()
                 ->map(fn ($v) => $v->tid);
 
-            $query->whereIn('o.tidInterpreted', $tids);
+            $query->whereRaw('o.tidInterpreted in (' . $tids->join(',') . ')');
         }
 
         if ($clid = $params['clid'] ?? false) {

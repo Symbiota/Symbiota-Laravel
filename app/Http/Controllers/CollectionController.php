@@ -62,23 +62,22 @@ class CollectionController extends Controller {
 
         $occurrences = Cache::remember($request->fullUrl(), now()->addMinutes(1), function () use ($params, $request) {
 
-            /* Also Works but pagination would need to be manual because of subquery stuff
-         * Fix would be to save the img_cnt and audio_cnt when their values are created
-        $sub = Occurrence::buildSelectQuery($request)
-            ->select('o.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
-            ->take(30);
-
-        $query = DB::query()->fromSub($sub, 'o')
-            ->leftJoin('media as m', 'm.occid', '=', 'o.occid')
-            ->select(
-                'o.*',
-                DB::raw('sum(if(mediaType = "image", 1, 0)) as image_cnt'),
-                DB::raw('sum(if(mediaType = "audio", 1, 0)) as audio_cnt')
-            )
-            ->groupBy('o.occid');
-
-        return $query->get();
-        */
+        // Also Works but pagination would need to be manual because of subquery stuff
+        // Fix would be to save the img_cnt and audio_cnt when their values are created
+        // $sub = Occurrence::buildSelectQuery($request)
+        //     ->select('o.*', DB::raw('0 as image_cnt'), DB::raw('0 as audio_cnt'))
+        //     ->take(30);
+        //
+        // $query = DB::query()->fromSub($sub, 'o')
+        //     ->leftJoin('media as m', 'm.occid', '=', 'o.occid')
+        //     ->select(
+        //         'o.*',
+        //         DB::raw('sum(if(mediaType = "image", 1, 0)) as image_cnt'),
+        //         DB::raw('sum(if(mediaType = "audio", 1, 0)) as audio_cnt')
+        //     )
+        //     ->groupBy('o.occid');
+        //
+        // return $query->get();
 
             /* Works but can be slow */
             return Occurrence::buildSelectQuery($request->all())
@@ -86,7 +85,15 @@ class CollectionController extends Controller {
                 ->paginate(30)->appends($params);
         });
 
-        return view('pages/collections/list', ['occurrences' => $occurrences]);
+        //TODO (Logan) Find some way of duplciated above query
+        $species_list = Occurrence::buildSelectQuery($request->all())
+            ->join('taxstatus as ts', 'ts.tid', 'o.tidInterpreted')
+            ->select('ts.tid', 'o.sciName', 'ts.family')
+            ->distinct()
+            ->orderBy('family')
+            ->get();
+
+        return view('pages/collections/list', ['occurrences' => $occurrences, 'species_list' => $species_list]);
     }
 
     public static function importPage(int $collId) {
