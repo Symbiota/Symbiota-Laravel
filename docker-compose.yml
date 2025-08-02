@@ -21,6 +21,7 @@ services:
         volumes:
             - '.:/var/www/html'
             - '/var/www/html/vendor'
+            - 'sub-portal:/var/www/html/Portal'
             - '/var/www/html/public/build'
             - '/var/www/html/storage/logs'
         networks:
@@ -70,4 +71,6 @@ networks:
         driver: bridge
 volumes:
     sail-mariadb:
+        driver: local
+    sub-portal:
         driver: local

@@ -67,6 +67,19 @@ RUN npm install && npm run build
 
 RUN php artisan key:generate
 
+# Clone Portal
+RUN git clone https://github.com/Symbiota/Symbiota.git Portal
+
+# Setup Subportal
+COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
+COPY ./child_config/symbini.php ./Portal/config/symbini.php
+
+WORKDIR /var/www/html/Portal/config/
+RUN /bin/bash ./setup.bash
+
+WORKDIR /var/www/html/
+
 EXPOSE 80/tcp
+
 
 ENTRYPOINT ["start-container"]
