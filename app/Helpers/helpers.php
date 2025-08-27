@@ -9,6 +9,10 @@
  **/
 if(!function_exists('legacy_path')) {
     function legacy_path(string $path): string {
+        if(mb_substr($path, 0, 1) !== '/') {
+            $path = '/' . $path;
+        }
+
         return base_path(config('portal.name') . $path);
     }
 }
