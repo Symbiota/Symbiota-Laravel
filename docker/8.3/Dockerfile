@@ -57,6 +57,13 @@ COPY ./docker/8.3/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./docker/8.3/php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
+# Clone Portal
+RUN git clone https://github.com/Symbiota/Symbiota.git Portal
+
+# Setup Subportal
+COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
+COPY ./child_config/symbini.php ./Portal/config/symbini.php
+
 COPY ./ .
 
 RUN chown -R $WWWGROUP:root storage/
@@ -66,13 +73,6 @@ RUN composer install --ignore-platform-reqs --no-scripts
 RUN npm install && npm run build
 
 RUN php artisan key:generate
-
-# Clone Portal
-RUN git clone https://github.com/Symbiota/Symbiota.git Portal
-
-# Setup Subportal
-COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
-COPY ./child_config/symbini.php ./Portal/config/symbini.php
 
 WORKDIR /var/www/html/Portal/config/
 RUN /bin/bash ./setup.bash
