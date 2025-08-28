@@ -153,7 +153,7 @@
                 <x-select label="Add to project" :items="[]" />
                 <x-checkbox label="Copy over permissions and general attributes"/>
                 <x-button>Parse Checklist</x-button>
-                <x-link target="_blank" href="{{ url(config('portal.name') . '/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
+                <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
             </form>
         </x-horizontal-nav.tab>
         {{-- RELATED CHECKLISTS END --}}

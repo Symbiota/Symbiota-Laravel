@@ -1,16 +1,14 @@
 @props(['hasHeader' => true, 'hasNavbar' => true, 'hasFooter' => true])
 @php
 $navigations = [
-    ["title" => __("header.home"), "link" => '/', "htmx" => true],
-    //["title" => __("header.collections"), "link" => config('portal.name') . '/collections/search/index.php'],
-    ["title" => __("header.collections"), "link" => '/collections/search', 'htmx' => true ],
-    ["title" => __("header.map_search"), "link" => config('portal.name') . '/collections/map/index.php'],
-    //["title" => __("header.species_checklists"), "link" => config('portal.name') . '/checklists/index.php'],
-    ["title" => __("header.species_checklists"), "link" => '/checklists', 'htmx' => true],
-    ["title" => __("header.media"), "link" => '/media/search', 'htmx' => true],
-    ["title" => __("header.data_use"), "link" => '/usagepolicy', 'htmx' => true],
+    ["title" => __("header.home"), "link" => url('/'), "htmx" => true],
+    ["title" => __("header.collections"), "link" => url('/collections/search'), 'htmx' => true ],
+    ["title" => __("header.map_search"), "link" => legacy_url('/collections/map/index.php')],
+    ["title" => __("header.species_checklists"), "link" => url('/checklists'), 'htmx' => true],
+    ["title" => __("header.media"), "link" => url('/media/search'), 'htmx' => true],
+    ["title" => __("header.data_use"), "link" => url('/usagepolicy'), 'htmx' => true],
     ["title" => __("header.symbiota_help"), "link" => 'https://biokic.github.io/symbiota-docs/'],
-    ["title" => __("header.sitemap"), "link" => config('portal.name') . '/sitemap.php'],
+    ["title" => __("header.sitemap"), "link" => url('/sitemap'), 'htmx' => true],
 ];
 
 $logos = [

@@ -597,7 +597,7 @@ foreach($user_datasets as $datasets) {
                     @if(count($linked_datasets))
                         <ul>
                         @foreach ($linked_datasets as $dataset)
-                            <li><x-link href="{{ url(config('portal.name'))}}/collections/datasets/public.php?datasetid={{$dataset->datasetID}}">{{ $dataset->name }}</x-link></li>
+                            <li><x-link href="{{ legacy_url('/collections/datasets/public.php')}}?datasetid={{$dataset->datasetID}}">{{ $dataset->name }}</x-link></li>
                         @endforeach
                         </ul>
                     @else

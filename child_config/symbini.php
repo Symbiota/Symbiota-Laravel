@@ -35,10 +35,10 @@ $SECURITY_KEY = getenv('SECURITY_KEY');
 $SERVER_HOST = getenv('APP_URL');
 
 // URL path to project root folder (relative path w/o domain, e.g. '/seinet')
-$CLIENT_ROOT = '/' . getenv('PORTAL_NAME');
+$CLIENT_ROOT = getenv('PORTAL_USE_CLIENT_ROOT') === 'true' ? '/' . getenv('PORTAL_NAME') : '';
 
 // Full path to Symbiota project root folder
-$SERVER_ROOT = '/var/www/html/' . $CLIENT_ROOT;
+$SERVER_ROOT = '/var/www/html/' . getenv('PORTAL_NAME');
 
 // Must be writable by Apache; will use system default if not specified
 $TEMP_DIR_ROOT = $SERVER_ROOT . '/temp';
@@ -48,7 +48,7 @@ $LOG_PATH = $SERVER_ROOT . '/content/logs';
 
 // Path to CSS files
 $CSS_VERSION_RELEASE = getenv('PORTAL_CSS_VERSION_RELEASE');
-$CSS_BASE_PATH = $SERVER_HOST . '/' . getenv('PORTAL_NAME') . '/css/';
+$CSS_BASE_PATH = $SERVER_HOST . $CLIENT_ROOT . '/css/';
 
 // Path to user uploaded images files.  Used by tinyMCE. This is NOT for
 // collection images. See section immediatly below for collection image location

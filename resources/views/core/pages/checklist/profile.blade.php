@@ -65,7 +65,7 @@ $breadcrumbs = [
 if($checklist->projname && $checklist->pid) {
     $breadcrumbs[] = [
         'title' => $checklist->projname,
-        'href' => url( config('portal.name') . '/projects/index.php?pid='. $checklist->pid)
+        'href' => legacy_url('/projects/index.php?pid='. $checklist->pid)
     ];
 }
 
@@ -80,10 +80,10 @@ $breadcrumbs[] = $checklist->name;
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
         <div class="flex flex-grow justify-end gap-4">
             @can('CL_ADMIN', $checklist->clid)
-            <a href="{{url(config('portal.name') . '/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
+            <a href="{{legacy_url('/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> A
             </a>
-            <a href="{{url(config('portal.name') . '/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
+            <a href="{{legacy_url('/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> V
             </a>
             {{-- TODO (Logan) Figure out what this is. It is a js toggle but can we just provide options? if authorized?
@@ -121,9 +121,9 @@ $breadcrumbs[] = $checklist->name;
                 <form hx-get="{{ url()->current() }}" class="flex flex-col gap-2" hx-target="#taxa-list">
                     <input type="hidden" name="partial" value="taxa-list">
                     <x-taxa-search />
-                    <x-link href="{{ url(config('portal.name')) }}/ident/key.php?dynclid={{ 0 }}&clid={{ $checklist->clid }}">Open Symbiota Key</x-link>
-                    <x-link href="{{ url(config('portal.name')) }}/games/flashcards.php?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Flash Cards</x-link>
-                    <x-link href="{{ url(config('portal.name')) }}/games/namegame.php?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Name Game</x-link>
+                    <x-link href="{{ legacy_url('/ident/key.php') }}?dynclid={{ 0 }}&clid={{ $checklist->clid }}">Open Symbiota Key</x-link>
+                    <x-link href="{{ legacy_url('/games/flashcards.php') }}?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Flash Cards</x-link>
+                    <x-link href="{{ legacy_url('/games/namegame.php') }}?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Name Game</x-link>
 
                     <x-select class="w-64" default="0" :items="[
                         ['title' => 'Original Checklist', 'value' => 'Original Checklist', 'disabled' => false],
@@ -185,7 +185,7 @@ $breadcrumbs[] = $checklist->name;
             <div class="flex-grow">
                 <x-button
                     class="ml-auto"
-                    href="{{ url(config('portal.name') . '/collections/map/index.php')}}?db=all&type=1&reset=1&taxonfilter&cltype=vouchers&clid={{$checklist->clid}}">
+                    href="{{ legacy_url('/collections/map/index.php')}}?db=all&type=1&reset=1&taxonfilter&cltype=vouchers&clid={{$checklist->clid}}">
                         <i class="fas fa-earth-americas"></i> Map
                 </x-button>
             </div>

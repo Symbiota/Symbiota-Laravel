@@ -93,7 +93,7 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
     <div class="mb-4 flex">
         <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('')],
-        ['title' => 'Collection Management', 'href' => url( config('portal.name') . '/collections/misc/collprofiles.php?collid=' . $occurrence->collid)],
+        ['title' => 'Collection Management', 'href' => legacy_url('/collections/misc/collprofiles.php?collid=' . $occurrence->collid)],
         ['title' => 'Public Display', 'href' => url('occurrence/' . $occurrence->occid)],
         ['title' => 'Occurrence Editor']
         ]" />

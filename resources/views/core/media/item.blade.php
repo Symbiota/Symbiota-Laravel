@@ -21,7 +21,7 @@ foreach($params as $key => $value) {
 {{-- Render Media Items --}}
 @foreach ($media as $item)
 <a class="group" target="_blank"
-    href="{{ url(config('portal.name')) . '/collections/individual/index.php?occid=' . $item->occid }}">
+    href="{{ legacy_url('/collections/individual/index.php') . '?occid=' . $item->occid }}">
     <div class="relative bg-base-200">
         <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl ?? $item->url}}" />
         <div

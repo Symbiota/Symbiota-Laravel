@@ -9,7 +9,7 @@
         Natural History Collections and Observation Projects
     </div>
 
-    <x-link target="_blank" href="{{ url(config('portal.name') . '/collections/datasets/rsshandler.php') }}">RSS
+    <x-link target="_blank" href="{{ legacy_url('/collections/datasets/rsshandler.php') }}">RSS
         Feed</x-link>
 
     @foreach ($collections as $collection)

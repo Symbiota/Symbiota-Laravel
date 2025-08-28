@@ -39,7 +39,7 @@
             }
         ];
 
-        $base_url = url(config('portal.name') . '/collections/editor/occurrenceeditor.php?');
+        $base_url = legacy_url('/collections/editor/occurrenceeditor.php?');
 
         $remapped_params = remapAssoc($other_params, $editor_renames, $editor_mutations);
         $remapped_params['reset'] = true;
@@ -57,7 +57,7 @@
             'collid' => 'db'
         ];
 
-        $base_url = url(config('portal.name') . '/collections/map/index.php?');
+        $base_url = legacy_url('/collections/map/index.php?');
         $remapped_params = remapAssoc(request()->all(), $legacy_search_renames);
 
         $query = http_build_query($remapped_params);
@@ -339,10 +339,10 @@
                 <x-context-menu-item type='divider' />
 
                 <x-context-menu-item>
-                    <a x-bind:href="'{{ url(config('portal.name') . '/collections/individual/index.php') }}?occid=' + occid">Open Occurrence</a>
+                    <a x-bind:href="'{{ legacy_url('/collections/individual/index.php') }}?occid=' + occid">Open Occurrence</a>
                 </x-context-menu-item>
                 <x-context-menu-item>
-                    <a target="_blank" x-bind:href="'{{ url(config('portal.name') . '/collections/individual/index.php') }}?occid=' + occid">Open Occurrence in New
+                    <a target="_blank" x-bind:href="'{{ legacy_url('/collections/individual/index.php') }}?occid=' + occid">Open Occurrence in New
                         Tab</a>
                 </x-context-menu-item>
 

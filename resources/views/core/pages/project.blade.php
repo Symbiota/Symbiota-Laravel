@@ -58,7 +58,7 @@
                 |
                 {{-- Todo find conditions for when this would not exist if any --}}
                 <x-link
-                    href="{{url(config('portal.name') . '/ident/key.php?clid=' . $checklist->clid . '&pid=' . $project->pid . '&taxon=All+Species')}}">
+                    href="{{legacy_url('/ident/key.php?clid=' . $checklist->clid . '&pid=' . $project->pid . '&taxon=All+Species')}}">
                         <x-tooltip class="inline" text="Opens species list as an interactive key">
                             Key<i class="pl-1 text-base-content fa-solid fa-key"></i>
                         </x-tooltip>

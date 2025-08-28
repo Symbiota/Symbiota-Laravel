@@ -56,9 +56,9 @@
     <div class="grid grid-cols-1">
         <h2 class="text-2xl text-primary font-bold">Media Library</h2>
         <ul class="list-disc pl-4">
-            <li><x-link href="imagelib/index.php">Image Library</x-link></li>
+            <li><x-link href="imagelib/index.php">Media Library</x-link></li>
             <li><x-link href="imagelib/search.php">Interactive Search Tool</x-link></li>
-            <li><x-link href="imagelib/contributors.php">Image Contributors</x-link></li>
+            <li><x-link href="imagelib/contributors.php">Media Contributors</x-link></li>
             <li><x-link href="includes/usagepolicy.php">Usage Policy and Copyright Information</x-link></li>
         <ul>
     </div>
@@ -208,7 +208,7 @@
     <div>
         <div class="flex flex-items items-center gap-4">
             <h2 class="text-2xl text-primary font-bold">Biotic Inventory Projects</h2>
-            <x-button href="{{url( config('portal.name') . '/projects/index.php?newproj=1')">Add a New Project</x-button>
+            <x-button href="{{legacy_url('/projects/index.php?newproj=1')">Add a New Project</x-button>
         </div>
         <ul class="list-disc pl-4">
             @foreach ($projects as $project)
@@ -317,7 +317,7 @@
         @foreach($collections as $collection)
             @if($collection->collType == App\Models\Collection::Observations || $collection->collType == App\Models\Collection::GeneralObservations)
             <li>
-                <x-link href="{{ url( config('portal.name')) }}/collections/editor/observationsubmit.php?collid={{$collection->collID}}">{{ $collection->collectionName }} </x-link>
+                <x-link href="{{ legacy_url('/collections/editor/observationsubmit.php') }}?collid={{$collection->collID}}">{{ $collection->collectionName }} </x-link>
             </li>
             @endif
         @endforeach

@@ -1,7 +1,7 @@
 <x-layout class="flex flex-col gap-4">
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('')],
-        ['title' => 'Sitemap', 'href' => url(config('portal.name') . '/sitemap')],
+        ['title' => 'Sitemap', 'href' => url('/sitemap')],
         ['title' => 'Darwin Core Archive Publisher']
         ]" />
     <div class="text-4xl font-bold">Darwin Core Archive Publishing</div>

@@ -49,7 +49,7 @@
             @else
             <div>
                 No synonym links. Most of the synonym management must be done in the Taxonmic Thesaurus editing module
-                (see <x-link href="{{ config('portal.name') . '/sitemap' }}">Sitemap</x-link> )
+                (see <x-link href="{{ url('/sitemap') }}">Sitemap</x-link> )
             </div>
             @endif
         </div>
