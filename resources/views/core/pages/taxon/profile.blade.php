@@ -25,7 +25,7 @@
                 <div class="flex items-center gap-2">
                     <h2 class="text-xl">Taxonomy</h2>
                     <x-link class="text-base"
-                        href="{{url(config('portal.name') . '/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358')}}">
+                        href="{{legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358')}}">
                         See full taxonomic tree
                     </x-link>
                 </div>

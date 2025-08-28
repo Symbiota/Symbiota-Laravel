@@ -25,7 +25,7 @@
         @endif
 
         @if (Auth::check())
-        <a href="{{url( config('portal.name') . '/collections/editor/occurrenceeditor.php?occid=' . $occurrence->occid)}}">
+        <a href="{{ legacy_url('/collections/editor/occurrenceeditor.php?occid=' . $occurrence->occid) }}">
             <i class="text-xl fas fa-edit hover:text-base-content/50 cursor-pointer"></i>
         </a>
         @endif

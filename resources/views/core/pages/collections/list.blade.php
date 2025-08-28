@@ -84,7 +84,7 @@
                     </x-popover>
 
                     <x-tooltip text="Display as Map">
-                        <x-button class="w-fit" href="{{ url(config('portal.name') . '/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
+                        <x-button class="w-fit" href="{{ legacy_url('/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
                             <i class="text-xl fa-solid fa-earth-americas"></i>
                         </x-button>
                     </x-tooltip>

@@ -110,13 +110,13 @@ $datasets = $user->datasets();
                         </x-nav-link>
 
                         <x-nav-link
-                            href="{{ url(config('portal.name') . '/checklists/checklistadmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}">
+                            href="{{ legacy_url('/checklists/checklistadmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}">
                             <x-icons.edit x-on:click="console.log('click')" />
                             Admin
                         </x-nav-link>
 
                         <x-nav-link
-                            href="{{ url(config('portal.name') . '/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}"
+                            href="{{ legacy_url('/checklists/voucheradmin.php') }}?clid={{ $checklist->clid }}&pid={{$checklist->pid ?? ''}}"
                             {{-- TODO Logan for checklist admin pr
                             href="{{ url('checklists')}}/{{$checklist->clid}}/admin" --}}>
                             <x-icons.edit />
@@ -148,7 +148,7 @@ $datasets = $user->datasets();
                 <div class="text-2xl font-bold">Collections</div>
                 <div class="flex flex-grow justify-end">
                     @can('SUPER_ADMIN')
-                    <x-button href="{{ url(config('portal.name') . '/collections/misc/collmetadata.php') }}">
+                    <x-button href="{{ legacy_url('/collections/misc/collmetadata.php') }}">
                         Create Collection
                     </x-button>
                     @endcan
@@ -196,7 +196,7 @@ $datasets = $user->datasets();
             <div class="flex items-center">
                 <div class="text-2xl font-bold">Datasets</div>
                 <div class="flex flex-grow justify-end">
-                    <x-button {{-- href="{{url(config('portal.name'))}}/collections/datasets/index.php" --}}
+                    <x-button
                         @click="show_create_form = true">
                         Create Dataset
                     </x-button>
@@ -240,7 +240,7 @@ $datasets = $user->datasets();
 
                             <span class="flex flex-grow justify-end items-center gap-4">
                                 <x-nav-link
-                                    href="{{ url(config('portal.name'))}}/collections/datasets/public.php?datasetid={{$dataset->datasetID}}">
+                                    href="{{ legacy_url('/collections/datasets/public.php')}}?datasetid={{$dataset->datasetID}}">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                     Dataset Managment
                                 </x-nav-link>
