@@ -63,6 +63,7 @@ Route::group(['prefix' => 'checklists'], function () {
     Route::post('/create', [ChecklistController::class, 'createChecklist']);
     Route::get('/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
     Route::get('/{clid}', [ChecklistController::class, 'checklist']);
+    Route::view('/{clid}/key', 'pages/checklist/key');
 });
 
 /*
