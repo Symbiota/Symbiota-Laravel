@@ -14,7 +14,7 @@
 ## Notice
 This is a work in progress Repo and not ready for Production uses yet.
 
-## Intial Setup
+## Initial Setup
 ### Native 
 1. Install PHP with minimum version of 8.2. If you cannot get PHP 8.2 on your machine consider using docker or another container solution.
 2. Enable php extensions `curl`, `iconv`, `mysqli`, `pdo_mysql`, `zip`
