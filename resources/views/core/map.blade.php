@@ -52,7 +52,7 @@
         lang: "en",
     };
 
-    function initMap(id) {
+    function initMap(id, defaultBounds = null) {
         const DEFAULT_MAP_OPTIONS = {
             center: [0, 0],
             zoom: 2,
@@ -60,6 +60,10 @@
         };
 
         let map = L.map(id, DEFAULT_MAP_OPTIONS);
+
+        if(defaultBounds) {
+            map.fitBounds(defaultBounds);
+        }
 
         L.Path.mergeOptions(DEFAULT_SHAPE_OPTIONS);
 
@@ -106,7 +110,7 @@
 @push('js-scripts')
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        initMap("{{ $id }}");
+        initMap("{{ $id }}", JSON.parse("{{ json_encode(config('portal.mapping_boundaries')) }}"));
     }, {once: true});
 </script>
 @endpush
