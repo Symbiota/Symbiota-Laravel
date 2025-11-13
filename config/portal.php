@@ -3,14 +3,14 @@
 function getMapBounds() {
     $bounds = env('PORTAL_MAPPING_BOUNDARIES', false);
 
-    if(!$bounds) {
+    if (! $bounds) {
         return [
             [39.993956, -102.084961],
-            [37.002553, -94.680176]
+            [37.002553, -94.680176],
         ];
     }
 
-    list($latA, $lngA, $latB, $lngB) = explode(";",$bounds);
+    [$latA, $lngA, $latB, $lngB] = explode(';', $bounds);
 
     return [
         [floatval($latA), floatval($lngA)],
