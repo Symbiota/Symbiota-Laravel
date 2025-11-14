@@ -28,3 +28,17 @@ if (! function_exists('legacy_url')) {
         );
     }
 }
+
+/**
+ * Helper to generate URLs to Symbiota documentation.
+ * Makes documentation links resilient to URL changes.
+ *
+ * @param  string  $path  Path to append to the docs base URL
+ * @return string
+ **/
+if (! function_exists('docs_url')) {
+    function docs_url(string $path = ''): string {
+        $baseUrl = 'https://biokic.github.io/symbiota-docs/';
+        return $baseUrl . ltrim($path, '/');
+    }
+}
