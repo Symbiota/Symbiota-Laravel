@@ -39,6 +39,7 @@ if (! function_exists('legacy_url')) {
 if (! function_exists('docs_url')) {
     function docs_url(string $path = ''): string {
         $baseUrl = 'https://docs.symbiota.org/';
+
         return $baseUrl . ltrim($path, '/');
     }
 }
