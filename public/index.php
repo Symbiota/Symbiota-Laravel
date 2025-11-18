@@ -87,12 +87,28 @@ if (file_exists($SYMBINI_PATH)) {
 
 /* Routes that we want to fall through to laravel implementation */
 $legacy_routes = [
+    // Misc
     'index.php' => '/',
+    'sitemap.php' => '/sitemap',
+    'includes/usagepolicy.php' => '/usagepolicy',
     'profile/index.php' => isset($_REQUEST['submit']) && $_REQUEST['submit'] === 'logout' ?
     '/logout' : '/login',
     'profile/newprofile.php' => '/signup',
+
+    // Collections
     'collections/list.php' => '/collections/list',
-    'sitemap.php' => '/sitemap',
+    'collections/misc/collprofiles.php' => '/collections',
+
+    // Media
+    'imagelib/index.php' => '/media/library',
+    'imagelib/search.php' => '/media/search',
+    'imagelib/contributors.php' => '/media/contributors',
+
+    // Checklists
+    'checklists/index.php' => '/checklists',
+
+    // Datasets
+    //'collections/datasets/publiclist.php' => '/datasets'
 ];
 
 /* Generate Legacy Redirects to Laravel */
