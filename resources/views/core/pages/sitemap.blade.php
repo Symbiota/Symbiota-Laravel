@@ -349,7 +349,6 @@
     {{-- VERSIONING --}}
     <img class="h-8" src="https://img.shields.io/badge/Symbiota-v{{ config('portal.version') }}-blue.svg"
         alt="a blue badge depicting Symbiota software version">
-    {{-- TODO (Logan) --}}
     <img class="h-8" src="https://img.shields.io/badge/Schema-v{{ $schema_version }}-blue.svg"
         alt="a blue badge depicting Symbiota database schema version">
     @if(config('portal.schema_version') != $schema_version)
