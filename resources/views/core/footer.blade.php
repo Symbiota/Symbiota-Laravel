@@ -26,7 +26,7 @@
             @endif
             <p>
                 For more information about Symbiota,
-                <x-link class="text-xs" href="https://symbiota.org/docs" target="_blank" rel="noreferrer">
+                <x-link class="text-xs" href="{{ docs_url() }}" target="_blank" rel="noreferrer">
                     read the docs
                 </x-link>
                 or contact the

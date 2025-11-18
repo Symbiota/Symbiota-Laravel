@@ -182,7 +182,7 @@
     <div>
         <h2 class="text-2xl text-primary font-bold">Media</h2>
         <p>See the Symbiota documentation on
-            <x-link href="https://biokic.github.io/symbiota-docs/editor/images/">Image Submission</x-link>
+            <x-link href="{{ docs_url('Collection_Manager_Guide/Images') }}">Image Submission</x-link>
             for an overview of how images are managed within a Symbiota data portal. Field images without
             detailed locality information can be uploaded using the Taxon Species Profile page.
             Specimen images are loaded through the Specimen Editing page or through a batch upload process
@@ -308,7 +308,7 @@
             1) Allows registered users to submit a image voucherd field observation.
             2) Allows collectors to enter their own collection data for label printing and to make the data available
             to the collections obtaining the physical specimens through donations or exchange. Visit the <x-link
-                href="https://biokic.github.io/symbiota-docs/col_obs/" target="_blank">Symbiota Documentation</x-link>
+                href="{{ docs_url('Collector_Observer_Guide') }}" target="_blank">Symbiota Documentation</x-link>
             for more information on specimen processing capabilities. Note that observation projects are not activated
             on all Symbiota data portals.
         </p>
