@@ -117,7 +117,7 @@ $ACTIVATE_PALEO = false;
 
 $STORE_STATISTICS = 0;
 // Project bounding box; default map centering; (e.g. 42.3;-100.5;18.0;-127)
-$MAPPING_BOUNDARIES = '41.51; -124.49; 32.73; -114.69';
+$MAPPING_BOUNDARIES = getenv('PORTAL_MAPPING_BOUNDARIES');
 // Activates HTML5 geolocation services in Map Search
 $ACTIVATE_GEOLOCATION = false;
 // Needed for setting up Google Analytics

@@ -58,7 +58,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | MAPPING_BOUNDARIES
+    | Mapping Boundaries
     |--------------------------------------------------------------------------
     |
     | This value is the default map view bounds for the map tools if their is
