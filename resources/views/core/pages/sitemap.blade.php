@@ -1,4 +1,4 @@
-@props(['projects' => [], 'schema_version'])
+@props(['projects' => [], 'user_checklists' => [], 'user_collections' => [], 'user' => null, 'schema_version'])
 <x-layout class="grid grid-cols-1 p-10 gap-4">
     <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => '/'],
@@ -114,12 +114,11 @@
         </ul>
     </div>
 
+
     {{-- ADMIN DATA TOOLS --}}
     <h1 class="text-4xl text-primary font-bold mt-4">Data Management Tools</h1>
 
-    Please login to access editing tools
-    Contract a portal administrator for obtaining editing permissions
-
+    @if($user)
     {{-- ADMIN FUNCTIONS --}}
     @can('SUPER_ADMIN')
     <div>
@@ -267,7 +266,7 @@
             Below is a list of the checklists you are authorized to edit.
         </p>
         <ul class="list-disc pl-4">
-            @foreach ($checklists as $checklist)
+            @foreach ($user_checklists as $checklist)
             <li>
                 <x-link href="{{ url('checklist/' . $checklist->clid) }}">{{ $checklist->name }}</x-link>
             </li>
@@ -288,7 +287,7 @@
             the editing pane and display a list of editing options. </p>
         <h3 class="text-xl pt-2 text-primary font-bold">Lists of collections you have permissions to edit</h3>
         <ul class="list-disc pl-4">
-        @foreach($collections as $collection)
+        @foreach($user_collections as $collection)
             @if($collection->collType == App\Models\Collection::Specimens)
             <li>
                 <x-link href="{{ url('collections/' .$collection->collID) }}">{{ $collection->collectionName }} </x-link>
@@ -314,7 +313,7 @@
         </p>
         <h3 class="text-xl pt-2 text-primary font-bold">Observation Image Voucher submission</h3>
         <ul class="list-disc pl-4">
-        @foreach($collections as $collection)
+        @foreach($user_collections as $collection)
             @if($collection->collType == App\Models\Collection::Observations || $collection->collType == App\Models\Collection::GeneralObservations)
             <li>
                 <x-link href="{{ legacy_url('/collections/editor/observationsubmit.php') }}?collid={{$collection->collID}}">{{ $collection->collectionName }} </x-link>
@@ -325,7 +324,7 @@
 
         <h3 class="text-xl pt-2 text-primary font-bold">Personal Specimen Management and Label Printing Features</h3>
         <ul class="list-disc pl-4">
-        @foreach($collections as $collection)
+        @foreach($user_collections as $collection)
             @if($collection->collType == App\Models\Collection::GeneralObservations)
             <li>
                 <x-link href="{{ url('collections/' .$collection->collID) }}">{{ $collection->collectionName }} </x-link>
@@ -336,7 +335,7 @@
 
         <h3 class="text-xl pt-2 text-primary font-bold">Observation Profject Management</h3>
         <ul class="list-disc pl-4">
-        @foreach($collections as $collection)
+        @foreach($user_collections as $collection)
             @if($collection->collType == App\Models\Collection::Observations || $collection->collType == App\Models\Collection::GeneralObservations)
             <li>
                 <x-link href="{{ url('collections/' .$collection->collID) }}">{{ $collection->collectionName }} </x-link>
@@ -345,6 +344,16 @@
         @endforeach
         </ul>
     </div>
+    @else
+    <div>
+        <div>
+        Please <x-link href="{{ url('login') }}">login</x-link> to access editing tools.
+        </div>
+        <div>
+        Contract a portal administrator for obtaining editing permissions.
+        </div>
+    </div>
+    @endif
 
     {{-- VERSIONING --}}
     <img class="h-8" src="https://img.shields.io/badge/Symbiota-v{{ config('portal.version') }}-blue.svg"

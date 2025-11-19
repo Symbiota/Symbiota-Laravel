@@ -125,6 +125,38 @@ class User extends Authenticatable {
                     ->where('ur.uid', $this->uid);
             })
             ->orWhere('fmchecklists.uid', $this->uid)
+            ->distinct()
+            ->select('fmchecklists.*')
+            ->get();
+    }
+
+    public function projects() {
+        return DB::table('fmprojects')
+            ->leftJoin('userroles as ur', 'tablePK', 'pid')
+            ->where(function ($query) {
+                $query
+                    ->whereIn('role', [UserRole::PROJ_ADMIN])
+                    ->where('ur.uid', $this->uid);
+            })
+            ->distinct()
+            ->select('fmprojects.*')
+            ->get();
+    }
+
+    public function collections() {
+        if($this->hasOneRoles([UserRole::SUPER_ADMIN])) {
+            return DB::table('omcollections')->get();
+        }
+
+        return DB::table('omcollections')
+            ->leftJoin('userroles as ur', 'tablePK', 'collid')
+            ->where(function ($query) {
+                $query
+                    ->whereIn('role', [UserRole::COLL_EDITOR, UserRole::COLL_ADMIN])
+                    ->where('ur.uid', $this->uid);
+            })
+            ->distinct()
+            ->select('omcollections.*')
             ->get();
     }
 

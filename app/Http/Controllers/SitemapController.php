@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SitemapController extends Controller {
@@ -13,14 +12,14 @@ class SitemapController extends Controller {
             ->orderBy('dateapplied', 'DESC')
             ->first();
 
+        $user = request()->user();
+
         return view('pages/sitemap', [
             'schema_version' => $schema_version->versionnumber ?? false,
-            //TODO (Logan) only ones with perms
+            'user' => $user,
             'projects' => DB::table('fmprojects')->get(),
-            //TODO (Logan) only ones with perms
-            'collections' => Collection::query()->orderBy('collectionName')->get(),
-            //TODO (Logan) only ones with perms
-            'checklists' => DB::table('fmchecklists')->get(),
+            'user_collections' => $user? $user->collections(): [],
+            'user_checklists' => $user? $user->checklists(): [],
         ]);
     }
 }
