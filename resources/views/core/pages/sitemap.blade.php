@@ -169,10 +169,11 @@
             <li>For coding characters in a table format, open the Matrix Editor for any of the following checklists
             </li>
             <div class="ml-4">
-                {{-- TODO (Logan) dynamic content user checklists. Example below --}}
-
-                <li><x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=133') }}">SDSU Adobe Falls Ecological Reserve Plant
-                        Checklist</x-link></li>
+                @foreach ($user_checklists as $checklist)
+                <li>
+                    <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $checklist->clid) }}">{{ $checklist->name }}</x-link>
+                </li>
+                @endforeach
             </div>
         </ul>
     </div>
