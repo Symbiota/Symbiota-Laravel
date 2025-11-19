@@ -18,8 +18,8 @@ class SitemapController extends Controller {
             'schema_version' => $schema_version->versionnumber ?? false,
             'user' => $user,
             'projects' => DB::table('fmprojects')->get(),
-            'user_collections' => $user? $user->collections(): [],
-            'user_checklists' => $user? $user->checklists(): [],
+            'user_collections' => $user ? $user->collections() : [],
+            'user_checklists' => $user ? $user->checklists() : [],
         ]);
     }
 }

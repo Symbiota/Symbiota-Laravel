@@ -144,7 +144,7 @@ class User extends Authenticatable {
     }
 
     public function collections() {
-        if($this->hasOneRoles([UserRole::SUPER_ADMIN])) {
+        if ($this->hasOneRoles([UserRole::SUPER_ADMIN])) {
             return DB::table('omcollections')->get();
         }
 
