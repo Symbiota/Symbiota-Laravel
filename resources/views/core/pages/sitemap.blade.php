@@ -22,6 +22,12 @@
             <li>
                 <x-link target="_blank" href="{{ legacy_url('/collections/misc/collstats.php') }}">Collection Statistics</x-link>
             </li>
+            @if(config('portal.activate_exsiccati'))
+            <li>
+                <x-link target="_blank" href="{{ legacy_url('/collections/exsiccati/index.php') }}">Exsiccatae Index</x-link>
+
+            </li>
+            @endif
             <li>
                 <x-link target="_blank" href="{{ legacy_url('/collections/misc/protectedspecies.php') }}">
                     Protected Species

@@ -148,7 +148,7 @@ $DISPLAY_COMMON_NAMES = 1;
 $ACTIVATE_DUPLICATES = 1;
 // Activates exsiccati fields within data entry pages; adding link to exsiccati
 // search tools to portal menu is recommended
-$ACTIVATE_EXSICCATI = 1;
+$ACTIVATE_EXSICCATI = getenv('PORTAL_ACTIVATE_EXSICCATI');
 // Activates GeoLocate Toolkit located within the Processing Toolkit menu items
 $ACTIVATE_GEOLOCATE_TOOLKIT = true;
 // Activates search fields for searching by traits (if trait data have been encoded):

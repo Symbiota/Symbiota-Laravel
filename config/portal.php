@@ -65,4 +65,14 @@ return [
     | not anything else to focus on.
     */
     'mapping_boundaries' => getMapBounds(),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Activate Exsiccati
+    |--------------------------------------------------------------------------
+    |
+    | This value is the default map view bounds for the map tools if their is
+    | not anything else to focus on.
+    */
+    'activate_exsiccati' => env('PORTAL_ACTIVATE_EXSICCATI', false),
 ];
