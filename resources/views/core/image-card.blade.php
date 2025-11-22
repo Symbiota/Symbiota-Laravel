@@ -8,7 +8,7 @@
             <i class="fa-solid fa-plus"></i>
         </div>
         @endif
-        <div class="group-hover:block group-focus:block text-white absolute w-full bg-opacity-70 p-2 bg-black bottom-0">
+        <div class="group-hover:block group-focus:block text-white absolute w-full p-2 bg-black/70 bottom-0">
             {{ $title }}
         </div>
     </div>

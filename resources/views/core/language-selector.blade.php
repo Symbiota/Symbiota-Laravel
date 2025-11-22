@@ -14,7 +14,7 @@ function setLanguage(selObj){
 </script>
 @endpush
 
-<select class="py-1 px-2 text-xs text-black rounded-md" name='language' onchange="setLanguage(this)">
+<select class="py-1 px-2 text-xs text-base-content bg-base-300 rounded-md" name='language' onchange="setLanguage(this)">
     <option value="en">
         English
     </option>

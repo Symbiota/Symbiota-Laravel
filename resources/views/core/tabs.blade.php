@@ -25,7 +25,7 @@
     {{-- Tab Menu --}}
     <div {{$attributes->twMergeFor('head', 'flex gap-1')}}>
         @for ($i = 0; $i < count($tabs); $i++)
-        <div :class="active === {{ $i }}? 'bg-base-100': 'bg-opacity-50 bg-base-200'" class="relative bg-base-100 border-x border-t">
+        <div :class="active === {{ $i }}? 'bg-base-100': 'bg-base-200/50'" class="relative bg-base-100 border-base-300 border-x border-t">
             <input class="appearance-none outline-none focus:ring ring-accent absolute cursor-pointer w-full h-full"
                 id="tab-{{ $i }}" x-on.self:change="active = {{ $i }}"
                 x-on.self:focus="active = {{ $i }}"
@@ -41,7 +41,7 @@
     </div>
 
     {{-- Tab Body --}}
-    <div id="tab-body" {{$attributes->twMergeFor('body', 'p-4 border')}}>
+    <div id="tab-body" {{$attributes->twMergeFor('body', 'p-4 border border-base-300')}}>
         {{ $slot }}
     </div>
 </div>

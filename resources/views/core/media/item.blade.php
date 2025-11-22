@@ -25,7 +25,7 @@ foreach($params as $key => $value) {
     <div class="relative bg-base-200">
         <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl ?? $item->url}}" />
         <div
-            class="group-hover:block group-focus:block hidden text-white absolute w-full bg-opacity-70 p-2 bg-black bottom-0">
+            class="group-hover:block group-focus:block hidden text-white absolute w-full p-2 bg-black/70 bottom-0">
             {{$item->sciName}}
         </div>
     </div>

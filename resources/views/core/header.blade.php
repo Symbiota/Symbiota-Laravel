@@ -1,6 +1,6 @@
 <!-- /resources/views/components/header.blade.php -->
 <header class="bg-center bg-cover h-28" style="background-image: url('{{url('/images/banner.jpg')}}')">
-    <div class="flex bg-primary-darker bg-opacity-80 w-full h-full py-4">
+    <div class="flex bg-primary-darker/80 w-full h-full py-4">
         <div class="flex pl-12">
             <div class="w-[7.5rem] h-fit">
                 <a href="https://symbiota.org">
