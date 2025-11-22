@@ -93,7 +93,11 @@ export default {
             sans: ['Roboto', 'sans-serif'],
             serif: ['Merriweather', 'serif'],
         },
-        extend: {},
+        extend: {
+            borderColor: (theme) => ({
+                DEFAULT: theme('colors.base.300')
+            })
+        },
     },
     plugins: [],
 }
