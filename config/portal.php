@@ -30,8 +30,21 @@ return [
     | should be the name of the folder than hosts the subportal found in this
     | projects root folder.
     */
-
     'name' => env('PORTAL_NAME', 'Portal'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Header Variable Customization
+    |--------------------------------------------------------------------------
+    |
+    | The following are used to customize header content and layout.
+    | header_title is for the main title for the site.
+    | header_sub_title is for the text underneath the main title if any.
+    | show_brand indicates whether the brand component should be rendered.
+    */
+    'header_title' => env('PORTAL_HEADER_TITLE', 'Symbiota Brand New Portal'),
+    'header_sub_title' => env('PORTAL_HEADER_SUB_TITLE', 'Redesigned by the Symbiota Support Hub'),
+    'show_brand' => env('PORTAL_SHOW_BRAND', true),
 
     /*
     |--------------------------------------------------------------------------
