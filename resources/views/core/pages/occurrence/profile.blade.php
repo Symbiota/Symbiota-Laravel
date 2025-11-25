@@ -97,7 +97,7 @@ foreach($user_datasets as $datasets) {
     }
 }
 @endphp
-<x-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
+<x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <div class="flex items-center gap-4 mb-4">
         @if($occurrence->icon)
         <img class="w-16" src="{{ $occurrence->icon }}">

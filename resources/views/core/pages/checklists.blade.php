@@ -1,5 +1,5 @@
 @props(['checklists' => []])
-<x-layout class="grid grid-cols-1 gap-4 lg:w-3/4 md:w-full mx-auto">
+<x-margin-layout>
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
         'Species Inventories'

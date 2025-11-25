@@ -1,5 +1,5 @@
 {{-- TODO Language needs to be generalized. The current text is from the template which is not good for most portals nor is correct english. --}}
-<x-layout class="p-10">
+<x-margin-layout>
 		<h1 class="text-5xl text-primary font-bold">Guidelines for Acceptable Use of Data</h1>
         <br/>
 		<h2 class="text-2xl text-primary font-bold">Recommended Citation Formats</h2>

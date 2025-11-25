@@ -1,6 +1,6 @@
 @props(['project', 'checklists' => []])
-<x-layout class="lg:w-3/4 md:w-full mx-auto">
-    <div class="mb-4">
+<x-margin-layout>
+    <div>
         <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
         ['title' => 'Species Inventories', 'href' => url('/checklists') ],
@@ -8,7 +8,7 @@
     ]" />
     </div>
 
-    <div class="flex items-center mb-4 gap-4">
+    <div class="flex items-center gap-4 h-fit">
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
 
         <div class="flex flex-grow justify-end gap-4 items-center">
@@ -26,7 +26,7 @@
         </div>
     </div>
     {{-- Todo Add Edit and when to show mapping button logic --}}
-    <div>
+    <div class="mb-auto">
         @if(isset($project->managers) && $project->managers)
         <div>
             <span class="text-lg font-bold">Projects Mangers:</span>

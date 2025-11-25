@@ -1,6 +1,6 @@
 @props(['media' => [], 'creators' => []])
-<x-layout class="sm:w-[90%] lg:w-[70%] m-auto" x-data="{ loading: true }">
-    <h1 class="text-5xl font-bold text-primary mb-8">Multimedia Search</h1>
+<x-margin-layout x-data="{ loading: true }">
+    <h1 class="text-5xl font-bold text-primary">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
         <form hx-get="{{ url('/media/search') }}" hx-indicator="#scroll-loader" hx-vals='{"partial": true, "start": 0}'

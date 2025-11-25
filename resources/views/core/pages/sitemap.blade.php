@@ -1,5 +1,5 @@
 @props(['projects' => [], 'user_checklists' => [], 'user_collections' => [], 'user' => null, 'schema_version'])
-<x-layout class="grid grid-cols-1 p-10 gap-4 w-[90%] max-w-screen-lg mx-auto">
+<x-margin-layout>
     <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => '/'],
             ['title' => 'Site Map' ]
@@ -363,10 +363,14 @@
     @endif
 
     {{-- VERSIONING --}}
+    <div>
     <img class="h-8" src="https://img.shields.io/badge/Symbiota-v{{ config('portal.version') }}-blue.svg"
         alt="a blue badge depicting Symbiota software version">
+    </div>
+    <div>
     <img class="h-8" src="https://img.shields.io/badge/Schema-v{{ $schema_version }}-blue.svg"
         alt="a blue badge depicting Symbiota database schema version">
+    </div>
     @if(config('portal.schema_version') != $schema_version)
         <div class="bg-warning text-warning-content rounded-md p-4">
             Recommended Symbiota schema version differs from the database schema

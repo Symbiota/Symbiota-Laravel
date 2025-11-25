@@ -72,7 +72,7 @@ if($checklist->projname && $checklist->pid) {
 $breadcrumbs[] = $checklist->name;
 
 @endphp
-<x-layout class="flex flex-col gap-4 lg:w-3/4 md:w-full mx-auto">
+<x-margin-layout>
     <div>
     <x-breadcrumbs :items="$breadcrumbs" />
     </div>
