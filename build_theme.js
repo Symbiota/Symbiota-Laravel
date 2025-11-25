@@ -12,8 +12,7 @@ const colorSpace = 'oklch';
 const lighten = (clr, val) => new Color(clr).lighten(val).to(colorSpace).toString()
 const darken = (clr, val) => new Color(clr).darken(val).to(colorSpace).toString();
 
-// const theme = 'Symbiota';
-const theme = 'SEINet';
+const theme = 'Symbiota';
 const themeJson = JSON.parse(fs.readFileSync(`themes/${theme}.json`, 'utf8'));
 
 const symb_colors = themeJson['colors'];

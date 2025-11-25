@@ -63,17 +63,17 @@ $grants= [
         x-on:htmx:before-history-save.window.camel="setSnapshot()"
         >
         @if($hasHeader)
-        <x-header />
+        <x-header buttonVariant="primary"/>
         @endif
         @if($hasNavbar)
-            <x-navbar :navigations="$navigations" />
+        <x-navbar :navigations="$navigations" class="bg-navbar text-navbar-content" />
         @endif
         <x-toaster />
         <div {{ $attributes->twMerge('flex-grow p-10') }} >
             {{ $slot }}
         </div>
         @if($hasFooter)
-        <div class="bg-base-200 p-8">
+        <div class="bg-footer text-footer-content p-8">
             <x-footer :logos="$logos" :grants="$grants" />
         </div>
         @endif

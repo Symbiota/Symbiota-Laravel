@@ -1,5 +1,5 @@
 @props(['projects' => [], 'user_checklists' => [], 'user_collections' => [], 'user' => null, 'schema_version'])
-<x-layout class="grid grid-cols-1 p-10 gap-4">
+<x-layout class="grid grid-cols-1 p-10 gap-4 w-[90%] max-w-screen-lg mx-auto">
     <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => '/'],
             ['title' => 'Site Map' ]

@@ -7,6 +7,7 @@
 @import "leaflet.markercluster/dist/MarkerCluster.css";
 @import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 @import "tailwindcss";
+@import './theme.css' layer(theme);
 
 /* Needed for x-cloak attribute alpine.js to work consistently */
 [x-cloak] {
@@ -158,45 +159,3 @@
     }
 }
 
-@theme {
-    --color-primary:#1B3D2F;
-    --color-primary-lighter:rgb(32, 73, 56);
-    --color-primary-darker:rgb(22, 49, 38);
-    --color-primary-content:#FFFFFF;
-    --color-secondary:#664147;
-    --color-secondary-lighter:rgb(122, 78, 85);
-    --color-secondary-darker:rgb(82, 52, 57);
-    --color-secondary-content:#FFFFFF;
-    --color-neutral:#494440;
-    --color-neutral-lighter:rgb(88, 82, 77);
-    --color-neutral-darker:rgb(58, 54, 51);
-    --color-neutral-content:#FFFFFF;
-    --color-accent:#BFD246;
-    --color-accent-lighter:rgb(207, 221, 115);
-    --color-accent-darker:rgb(162, 180, 44);
-    --color-accent-content:#2D2D2D;
-    --color-success:#22c55e;
-    --color-success-lighter:rgb(57, 221, 117);
-    --color-success-darker:rgb(27, 158, 75);
-    --color-success-content:#2D2D2D;
-    --color-warning:#eab308;
-    --color-warning-lighter:rgb(248, 198, 43);
-    --color-warning-darker:rgb(187, 143, 6);
-    --color-warning-content:#2D2D2D;
-    --color-info:#664147;
-    --color-info-lighter:rgb(122, 78, 85);
-    --color-info-darker:rgb(82, 52, 57);
-    --color-info-content:#FFFFFF;
-    --color-error:#ef4444;
-    --color-error-lighter:rgb(244, 125, 125);
-    --color-error-darker:rgb(226, 19, 19);
-    --color-error-content:#FFFFFF;
-    --color-link:#126c00;
-    --color-link-lighter:rgb(162, 180, 44);
-    --color-link-darker:rgb(14, 86, 0);
-    --color-link-content:#FFFFFF;
-    --color-base-100:#FFFFFF;
-    --color-base-200:#F2F2F2;
-    --color-base-300:#E0E0E0;
-    --color-base-content:#2D2D2D;
-}
