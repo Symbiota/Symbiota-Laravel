@@ -11,6 +11,7 @@
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^22.7.1",
     "laravel-vite-plugin": "^1.2.0",
+    "colorjs.io": "^0.5.2",
     "tailwindcss": "^4.1.17",
     "vite": "^6.2.0"
   },
@@ -20,7 +21,6 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "alpinejs": "^3.13.8",
     "chart.js": "^4.4.8",
-    "color": "^4.2.3",
     "htmx.org": "^1.9.12",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
