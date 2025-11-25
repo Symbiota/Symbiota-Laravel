@@ -10,7 +10,7 @@
         $taxa_str = implode(',', $taxa_str);
    }
 @endphp
-<x-layout class="grid grid-col-1 gap-4 grow-0">
+<x-margin-layout class="gap-4">
     <div>
         <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('') ],
@@ -84,29 +84,28 @@
                     </x-popover>
 
                     <x-tooltip text="Display as Map">
-                        <x-button class="w-fit" href="{{ url(config('portal.name') . '/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
+                        <x-button class="w-fit h-8" href="{{ legacy_url('/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
                             <i class="text-xl fa-solid fa-earth-americas"></i>
                         </x-button>
                     </x-tooltip>
-
                     <x-tooltip text="Create KML">
-                        <x-button class="text-xl w-fit">
+                        <x-button class="w-fit h-8">
                             KML
                         </x-button>
                     </x-tooltip>
 
                     <x-tooltip text="Display as Table">
-                        <x-button class="w-fit">
+                        <x-button class="w-fit h-8">
                             <i class="text-xl fa-solid fa-table-list"></i>
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Download Specimen Data">
-                        <x-button class="w-fit" onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)">
+                        <x-button class="w-fit h-8" onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)">
                             <i class="text-xl fa-solid fa-download"></i>
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Copy Search Url to clipboard">
-                        <x-button class="w-fit" onclick="copyUrl()">
+                        <x-button class="w-fit h-8" onclick="copyUrl()">
                             <i class="text-xl fa-regular fa-copy"></i>
                         </x-button>
                     </x-tooltip>

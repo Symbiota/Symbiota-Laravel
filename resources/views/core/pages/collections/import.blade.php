@@ -3,7 +3,7 @@
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('')],
         ['title' => 'Collection Profile', 'href' => url('collections/' . request('collid') . '/import'), ],
-        ['title' => 'List of Upload Profiles', 'href' => url(config('portal.name') . '/collections/admin/specuploadmanagement.php?collid=' . request('collid'))],
+        ['title' => 'List of Upload Profiles', 'href' => legacy_url('/collections/admin/specuploadmanagement.php?collid=' . request('collid'))],
         ['title' => 'Specimen Uploader']
         ]" />
     <div>

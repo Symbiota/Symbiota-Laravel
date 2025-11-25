@@ -23,7 +23,7 @@
     </div>
 
     {{-- Loader --}}
-    <div x-show="loading" class="absolute flex z-[500] w-screen h-screen bg-black bg-opacity-75 justify-center items-center">
+    <div x-show="loading" class="absolute flex z-[500] w-screen h-screen bg-black/70 justify-center items-center">
         <div class="stroke-accent w-fit h-44 flex ">
             <x-icons.loading />
         </div>

@@ -62,6 +62,12 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 (new IlluminateLoadEnvironmentVariables())->bootstrap($app);
 //(new LoadConfiguration)->bootstrap($app);
 
+$SYMBINI_PATH = __DIR__ . '/../' . $_ENV['PORTAL_NAME'] . '/config/symbini.php';
+
+if (file_exists($SYMBINI_PATH)) {
+    include_once $SYMBINI_PATH;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Load Legacy Routing
@@ -81,18 +87,34 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 
 /* Routes that we want to fall through to laravel implementation */
 $legacy_routes = [
+    // Misc
     'index.php' => '/',
+    'sitemap.php' => '/sitemap',
+    'includes/usagepolicy.php' => '/usagepolicy',
     'profile/index.php' => isset($_REQUEST['submit']) && $_REQUEST['submit'] === 'logout' ?
     '/logout' : '/login',
     'profile/newprofile.php' => '/signup',
+
+    // Collections
     'collections/list.php' => '/collections/list',
-    //'sitemap.php' => '/sitemap',
+    'collections/misc/collprofiles.php' => '/collections',
+
+    // Media
+    'imagelib/index.php' => '/media/library',
+    'imagelib/search.php' => '/media/search',
+    'imagelib/contributors.php' => '/media/contributors',
+
+    // Checklists
+    'checklists/index.php' => '/checklists',
+
+    // Datasets
+    //'collections/datasets/publiclist.php' => '/datasets'
 ];
 
 /* Generate Legacy Redirects to Laravel */
 $legacy_black_list = [];
 foreach ($legacy_routes as $route => $redirect) {
-    $legacy_black_list['/' . $_ENV['PORTAL_NAME'] . '/' . $route] = $_ENV['APP_URL'] . $redirect;
+    $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect;
 }
 
 /* Parse URI */
@@ -192,13 +214,22 @@ $mime_types = [
     '7z' => 'application/x-7z-compressed',
 ];
 
+$portal_path = $uri;
+
+if (getenv('PORTAL_USE_CLIENT_ROOT') !== 'true') {
+    $portal_path = '/' . getenv('PORTAL_NAME') . $portal_path;
+}
+
 if (isset($legacy_black_list[$uri]) && $blacklist_redirect = $legacy_black_list[$uri]) {
     header('Location:' . $blacklist_redirect . $query);
-} elseif (preg_match("/^\/Portal.*\.(.*)/", $uri, $matches)) {
+} elseif (
+    is_file(__DIR__ . '/..' . $portal_path)
+) {
     try {
-        [$path, $file_type] = $matches;
+        $pathInfo = pathinfo($uri);
+        $file_type = $pathInfo['extension'];
+
         if ($file_type === 'php') {
-            include_once __DIR__ . '/../' . $_ENV['PORTAL_NAME'] . '/config/symbini.php';
 
             // This Class parses laravel file session auth into legacy user globals
             // On the surface his might seem overkill but laravel locks down most of
@@ -259,10 +290,10 @@ if (isset($legacy_black_list[$uri]) && $blacklist_redirect = $legacy_black_list[
                 error_log('ERROR Failure to decrypt and load laravel use in legacy system: ' . $e->getMessage());
             }
 
-            include_once __DIR__ . '/..' . $uri;
+            include_once __DIR__ . '/..' . $portal_path;
         } elseif ($mime = $mime_types[$file_type]) {
             header('Content-Type: ' . $mime);
-            echo file_get_contents(__DIR__ . '/..' . $uri);
+            echo file_get_contents(__DIR__ . '/..' . $portal_path);
         }
     } catch (Throwable $e) {
         echo $e->getMessage();

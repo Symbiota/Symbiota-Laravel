@@ -6,6 +6,8 @@
 @import "leaflet-draw/dist/leaflet.draw.css";
 @import "leaflet.markercluster/dist/MarkerCluster.css";
 @import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+@import "tailwindcss";
+@import './theme.css' layer(theme);
 
 /* Needed for x-cloak attribute alpine.js to work consistently */
 [x-cloak] {
@@ -151,4 +153,9 @@
         vertical-align: middle;
         font-size: 1rem;
     }
+
+    hr {
+        color: theme('colors.base.300')
+    }
 }
+

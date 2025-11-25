@@ -1,4 +1,5 @@
-<x-layout class="p-10">
+{{-- TODO Language needs to be generalized. The current text is from the template which is not good for most portals nor is correct english. --}}
+<x-margin-layout>
 		<h1 class="text-5xl text-primary font-bold">Guidelines for Acceptable Use of Data</h1>
         <br/>
 		<h2 class="text-2xl text-primary font-bold">Recommended Citation Formats</h2>
@@ -6,7 +7,7 @@
         <br/>
 		<h3 class="text-xl text-primary font-bold">General Citation</h3>
 		<blockquote class="bg-base-300 rounded-md p-4">
-			Biodiversity occurrence data published by: Name of people or institutional reponsible for maintaining the portal (accessed through the Name of people or institutional reponsible for maintaining the portal Portal, {{url('')}}, 2024-09-08).		</blockquote>
+			Biodiversity occurrence data published by: Name of people or institutional reponsible for maintaining the portal (accessed through the Name of people or institutional reponsible for maintaining the portal Portal, {{url('')}}, {{ date('Y-m-d') }}).		</blockquote>
         <br/>
 		<h3 class="text-xl text-primary font-bold">Usage of occurrence data from specific institutions</h3>
 		<p>Access each collection profile page to find the available citation formats.</p>

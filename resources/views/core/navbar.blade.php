@@ -1,6 +1,6 @@
 @props(['navigations'])
 <!-- resources/views/core/navbar.blade.php -->
-<nav {{$attributes}} class="bg-primary text-primary-content h-14">
+<nav {{$attributes->twMerge('h-14')}}>
     <ul class="flex flex-wrap gap-2 justify-center h-full font-bold">
         @foreach ($navigations as $nav)
         <x-navbar.item>

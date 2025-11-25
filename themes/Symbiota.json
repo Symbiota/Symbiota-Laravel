@@ -1,0 +1,42 @@
+{
+    "colors": {
+        "primary": {
+            "DEFAULT":"#1B3D2F"
+        },
+        "secondary": {
+            "DEFAULT":"#664147"
+        },
+        "neutral": {
+            "DEFAULT":"#494440"
+        },
+        "accent": {
+            "DEFAULT":"#BFD246"
+        },
+        "success": {
+            "DEFAULT":"#00c951"
+        },
+        "warning": {
+            "DEFAULT":"#efb100"
+        },
+        "info": {
+            "DEFAULT":"#2b7fff"
+        },
+        "error": {
+            "DEFAULT":"#fb2c36"
+        },
+        "link": {
+            "DEFAULT":"#126c00",
+            "lighter":"#bfd246"
+        },
+        "base": {
+            "100": "#FFFFFF",
+            "200": "#F2F2F2",
+            "300": "#E0E0E0",
+            "content": "#2D2D2D"
+        }
+    },
+    "banner":  {
+        "url": "url(http://localhost/images/banner.jpg)",
+        "position": "50% 50%"
+    }
+}

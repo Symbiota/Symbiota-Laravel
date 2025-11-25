@@ -9,15 +9,12 @@ import 'tinymce/icons/default/icons.min.js';
 import 'tinymce/themes/silver/theme.min.js';
 import 'tinymce/models/dom/model.min.js';
 import './components/autocomplete-input';
-import Color from 'color';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 window.Chart = Chart;
 
 window.tinymce_editor = editor;
-
-window.Color = Color;
 
 window.L = L;
 window.type = true;

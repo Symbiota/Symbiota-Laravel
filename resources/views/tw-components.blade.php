@@ -107,19 +107,19 @@
         </x-context-menu>
 
         <x-modal>
-            <x-slot:label>
+            <x-slot name="button">
                 Open Modal
-                </x-slot>
-                <x-slot:title class="text-2xl">
+            </x-slot>
+            <x-slot name="title" class="text-2xl">
                     Title
-                    </x-slot>
-                    <x-slot name="body">
-                        <form class="flex flex-col gap-2">
-                            <x-input name="testOne" label="Test 1" />
-                            <x-input name="testTwo" label="Test 2" />
-                            <x-button type="submit">Submit</x-button>
-                        </form>
-                    </x-slot>
+            </x-slot>
+            <x-slot name="body">
+                <form class="flex flex-col gap-2">
+                    <x-input name="testOne" label="Test 1" />
+                    <x-input name="testTwo" label="Test 2" />
+                    <x-button type="submit">Submit</x-button>
+                </form>
+            </x-slot>
         </x-modal>
 
         <x-tooltip text="Tooltip">

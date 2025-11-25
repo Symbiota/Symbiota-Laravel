@@ -2,7 +2,7 @@
     <a href="https://symbiota.org/" target="_blank">
         <picture>
 			<source width="500" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9">
-			<source width="500" media="(prefers-color-scheme: light)" srcset="https://symbiota.org/wp-content/uploads/LogoSymbiotaPNG-1024x682.png">
+			<source width="500" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/a3897966-7240-4345-ae27-af095adfdde0">
             <img width="500px" src="https://github.com/user-attachments/assets/94a3507e-675f-4fe8-8504-12a567f268e9" />
 		</picture>
     </a>
@@ -14,7 +14,7 @@
 ## Notice
 This is a work in progress Repo and not ready for Production uses yet.
 
-## Intial Setup
+## Initial Setup
 ### Native 
 1. Install PHP with minimum version of 8.2. If you cannot get PHP 8.2 on your machine consider using docker or another container solution.
 2. Enable php extensions `curl`, `iconv`, `mysqli`, `pdo_mysql`, `zip`

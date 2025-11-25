@@ -27,7 +27,7 @@
         <i
             class="z-[5] absolute peer-checked/checkbox:opacity-100 opacity-0 text-accent-content transition-opacity pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 fa-solid fa-check"></i>
 
-        <div class="z-0 pointer-events-none peer-focus/checkbox:bg-opacity-30 group-hover:bg-opacity-30 bg-opacity-0 absolute bg-accent w-8 h-8 rounded-full top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+        <div class="z-0 pointer-events-none peer-focus/checkbox:bg-accent/30 group-hover:bg-accent/30 absolute bg-accent/0 w-8 h-8 rounded-full top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
         </div>
     </div>
 

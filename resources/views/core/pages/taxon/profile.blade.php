@@ -7,7 +7,7 @@
             {{ $taxon->author}}
             @endif
         </h1>
-        <div class="flex justify-end flex-grow gap-2">
+        <div class="flex justify-end items-center flex-grow gap-2">
             <x-nav-link hx-boost="true" href="{{ url('collections/list') . '?taxa=' . $taxon->tid }}" hx-target="body">
                 <x-button class="text-sm rounded-full">
                     {{ $occurrence_count }} Records
@@ -25,7 +25,7 @@
                 <div class="flex items-center gap-2">
                     <h2 class="text-xl">Taxonomy</h2>
                     <x-link class="text-base"
-                        href="{{url(config('portal.name') . '/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358')}}">
+                        href="{{legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358')}}">
                         See full taxonomic tree
                     </x-link>
                 </div>

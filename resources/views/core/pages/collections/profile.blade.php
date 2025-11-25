@@ -1,7 +1,7 @@
 @props(['collection', 'stats'])
 @php
 function colUrl($url, $extra_query = '') {
-    return url(config('portal.name') . '/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
+    return legacy_url('/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
 }
 @endphp
 <x-layout class="flex flex-col gap-4">
