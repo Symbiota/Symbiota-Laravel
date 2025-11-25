@@ -204,38 +204,8 @@ Route::group(['prefix' => '/auth'], function () {
 /* Documenation */
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
 
-function includeLegacy($path) {
-    ob_start();
-
-    $normalizePath = strpos($path, getenv('PORTAL_NAME')) === 0?
-        base_path($path):
-        legacy_path($path);
-
-    include($normalizePath);
-
-    $output = ob_get_clean();
-    return response($output);
-}
-
-Route::get('js/{path}', function(Request $request) {
-    $path = $request->path();
-    $pathInfo = pathinfo($path);
-    $response = includeLegacy($path);
-
-    if($pathInfo['extension'] === 'js') {
-        $response->header('content-type', 'text/javascript');
-    } else if($pathInfo['extension'] === 'css') {
-        $response->header('content-type', 'text/css');
-    }
-    return $response;
-})->where('path', '.*');
-
-Route::get('css/{path}', function(Request $request) {
-    $path = $request->path();
-    return includeLegacy($path)->header('content-type', 'text/css');
-})->where('path', '.*');
-
 Route::get('{path}', function(Request $request) {
+    var_dump('here');
     global
     // Symbini Variables
     $DEFAULT_LANG,

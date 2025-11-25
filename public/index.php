@@ -223,7 +223,7 @@ if (getenv('PORTAL_USE_CLIENT_ROOT') !== 'true') {
 if (isset($legacy_black_list[$uri]) && $blacklist_redirect = $legacy_black_list[$uri]) {
     header('Location:' . $blacklist_redirect . $query);
 } elseif (
-    is_file(__DIR__ . '/..' . $portal_path)
+    is_file(__DIR__ . '/..' . $portal_path) && pathinfo($uri)['extension'] != 'php'
 ) {
     try {
         $pathInfo = pathinfo($uri);
