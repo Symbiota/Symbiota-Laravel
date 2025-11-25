@@ -9,7 +9,7 @@
  **/
 if (! function_exists('legacy_path')) {
     function legacy_path(string $path): string {
-        return base_path(getenv('PORTAL_NAME') . $path);
+        return base_path(config('portal.name') . '/' . ltrim($path, '/'));
     }
 }
 
@@ -22,10 +22,10 @@ if (! function_exists('legacy_path')) {
  **/
 if (! function_exists('legacy_url')) {
     function legacy_url(string $path = ''): string {
-        return url(
-            (getenv('PORTAL_USE_CLIENT_ROOT') === 'true' ?
-                getenv('PORTAL_NAME') : '') . $path
-        );
+        if(config('portal.use_client_root')) {
+            $path = config('portal.name') . '/' . ltrim($path, '/');
+        }
+        return url($path);
     }
 }
 

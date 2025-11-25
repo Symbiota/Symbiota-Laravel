@@ -31,6 +31,7 @@ return [
     | projects root folder.
     */
     'name' => env('PORTAL_NAME', 'Portal'),
+    'use_client_root' => env('PORTAL_USE_CLIENT_ROOT', false),
 
     /*
     |--------------------------------------------------------------------------
