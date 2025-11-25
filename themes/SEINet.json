@@ -1,0 +1,45 @@
+{
+    "colors": {
+        "primary": {
+            "DEFAULT":"#4c6c88"
+        },
+        "secondary": {
+            "DEFAULT":"#a76048"
+        },
+        "neutral": {
+            "DEFAULT":"#494440"
+        },
+        "accent": {
+            "DEFAULT":"#98bbda"
+        },
+        "success": {
+            "DEFAULT":"#00c951"
+        },
+        "warning": {
+            "DEFAULT":"#efb100"
+        },
+        "info": {
+            "DEFAULT":"#2b7fff"
+        },
+        "error": {
+            "DEFAULT":"#fb2c36"
+        },
+        "link": {
+            "DEFAULT":"#4c6c88",
+            "lighter":"#06263e"
+        },
+        "base": {
+            "100": "#FFFFFF",
+            "200": "#F2F2F2",
+            "300": "#E0E0E0",
+            "content": "#2D2D2D"
+        },
+        "banner-overlay": {
+            "DEFAULT": "oklch(46.578% 0.05728 245.72 / 0.5)"
+        }
+    },
+    "banner":  {
+        "url": "url(https://swbiodiversity.org/seinet/images/layout/grand_canyon.jpg)",
+        "position": "80% 20%"
+    }
+}
