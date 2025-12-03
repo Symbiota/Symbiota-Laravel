@@ -34,7 +34,7 @@ class FortifyServiceProvider extends ServiceProvider {
 
                 // This is to support login's redirect back to legacy pages
                 // have to pull their own styles
-                if(strpos($url, '.php')) {
+                if (strpos($url, '.php')) {
                     return $response
                         ->header('Location', $url);
                 } else {
@@ -53,7 +53,7 @@ class FortifyServiceProvider extends ServiceProvider {
 
                 // This is to support login's redirect back to legacy pages
                 // have to pull their own styles
-                if(strpos($url, '.php')) {
+                if (strpos($url, '.php')) {
                     return $response
                         ->header('Location', $url);
                 } else {
