@@ -205,7 +205,6 @@ Route::group(['prefix' => '/auth'], function () {
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
 
 Route::get('{path}', function(Request $request) {
-    var_dump('here');
     global
     // Symbini Variables
     $DEFAULT_LANG,
