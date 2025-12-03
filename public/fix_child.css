@@ -1,0 +1,71 @@
+/**
+* CSS file for adding corrections based on conflicts with the child portal's css
+*
+* If a custom overrides are need create a custom legacy-head component and link the desired
+* css files there
+**/
+
+nav a {
+    color: var(--color-navbar-content);
+}
+
+nav a:hover {
+    color: var(--color-accent);
+}
+
+footer.bg-footer p a {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+}
+
+footer.bg-footer p {
+    margin: 0px;
+}
+
+/* Manually Sets some h tag styles to be the same as header template */
+header h1, header h2 {
+    margin: 0;
+    color: inherit;
+}
+
+header h1 {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading,var(--text-4xl--line-height));
+}
+
+header h2 {
+    font-size: var(--text-base);
+}
+
+header a:hover {
+    color: inherit;
+}
+
+header div {
+    line-height: 1.5;
+}
+
+/* Adjusts language select style */
+nav select {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading,var(--text-xs--line-height));
+    color: var(--color-base-content);
+    background-color: var(--color-base-300);
+    border: none;
+    border-radius: var(--radius-md);
+}
+
+/* Adjust Breadcrumb styling to be more inline with original look */
+.navpath a {
+    text-decoration: underline;
+    font-weight: var(--font-weight-medium);
+}
+
+.navpath b {
+    font-weight: var(--font-weight-medium);
+}
+
+/* Header css that was remove and needed on map search */
+.menu a {
+    color: var(--color-primary-content)
+}
