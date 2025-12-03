@@ -25,7 +25,7 @@
             <x-button class="text-base" href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
                 {!! __("header.my_profile") !!}
             </x-button>
-            <x-button class="text-base cursor-pointer" hx-get="{{url('/logout')}}" hx-trigger="click" hx-boost="true" hx-target="body" variant="{{ $buttonVariant }}">
+            <x-button class="text-base cursor-pointer" href="{{ url('/logout') }}" hx-boost="true" hx-boost="true" variant="{{ $buttonVariant }}">
                 {!! __("header.sign_out") !!}
             </x-button>
             @else
