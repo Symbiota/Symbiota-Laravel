@@ -58,7 +58,7 @@ COPY ./docker/8.3/php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 # Clone Portal
-RUN git clone https://github.com/Symbiota/Symbiota.git Portal
+RUN git clone -b enhancement/absolute-path-symbini-import https://github.com/Symbiota/Symbiota.git Portal
 
 # Setup Subportal
 COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
@@ -71,6 +71,9 @@ RUN chown -R $WWWGROUP:root storage/
 RUN composer install --ignore-platform-reqs --no-scripts
 
 RUN npm install && npm run build
+
+# Created during npm run build
+RUN cp ./child_config/variables.css ./Portal/css/symbiota/variables.css
 
 RUN php artisan key:generate
 

@@ -101,11 +101,24 @@ fs.writeFile('resources/css/theme.css', `@import "tailwindcss";\n\n:root {\n${va
 })
 
 const child_variable_aliases = `\t/* Maps variables to child portal variables */
+    --symb-font: "Roboto";
+    --header-bg-color: var(--color-banner-overlay);
+    --header-font-color: var(--color-banner-overlay-content);
+    --header-bg-image: var(--symb-banner-url);
+
+    --brand-font-size: 1.5rem;
+    --logo-width: 120px;
+
+    --menu-top-bg-color: var(--color-navbar);
+    --menu-font-size: 1rem;
+
+    --footer-bg-color: var(--color-base-200);
+
     --body-bg-color: var(--color-base-100);
     --body-text-color: var(--color-base-content);
     --body-font-size: 1rem;
-    --body-font-family: var("Roboto",ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
-    --heading-font-family: var("Roboto",ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
+    --body-font-family: var(--symb-font,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
+    --heading-font-family: var(--symb-font,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
     --link-color: var(--color-link);
     --darkest-color: var(--color-primary);
     --medium-color: var(--color-neutral);
