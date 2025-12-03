@@ -1,1 +1,1 @@
-<?= Blade::render('legacy-head') ?>
+<?= Blade::render('legacy-head');
