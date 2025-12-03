@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "dev": "node build_theme.js && vite",
+    "build": "node build_theme.js && vite build"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",

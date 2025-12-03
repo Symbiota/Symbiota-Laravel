@@ -96,6 +96,6 @@ fs.writeFile('resources/css/theme.css', `@import "tailwindcss";\n\n:root {\n${va
         console.log(err)
     } else {
         // file written successfully
-        console.log('success');
+        console.log('Portal theme built successfully');
     }
 })
