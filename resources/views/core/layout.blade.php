@@ -66,16 +66,14 @@ $grants= [
         <x-header buttonVariant="primary"/>
         @endif
         @if($hasNavbar)
-        <x-navbar :navigations="$navigations" class="bg-navbar text-navbar-content" />
+        <x-navbar :navigations="$navigations" />
         @endif
         <x-toaster />
         <div {{ $attributes->twMerge('flex-grow p-10') }} >
             {{ $slot }}
         </div>
         @if($hasFooter)
-        <div class="bg-footer text-footer-content p-8">
-            <x-footer :logos="$logos" :grants="$grants" />
-        </div>
+        <x-footer :logos="$logos" :grants="$grants" />
         @endif
         @stack('js-scripts')
     </div>
