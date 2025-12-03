@@ -69,3 +69,29 @@ nav select {
 .menu a {
     color: var(--color-primary-content)
 }
+
+input[type='text'], input[type='number'] {
+    border: 1px solid rgb(118, 118, 118);
+    padding: 2px 3px;
+}
+
+select {
+    border: 1px solid rgb(118, 118, 118);
+    padding: 2px 4px;
+}
+
+.editimg {
+    min-width: 1.2rem;
+}
+
+input[type='file']::file-selector-button {
+  background-color: var(--color-base-200);
+  border: 1px solid rgb(118, 118, 118);
+  padding: 4px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type='file']::file-selector-button:hover {
+  background-color: var(--color-base-300);
+}
