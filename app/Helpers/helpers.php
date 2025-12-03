@@ -22,9 +22,10 @@ if (! function_exists('legacy_path')) {
  **/
 if (! function_exists('legacy_url')) {
     function legacy_url(string $path = ''): string {
-        if(config('portal.use_client_root')) {
+        if (config('portal.use_client_root')) {
             $path = config('portal.name') . '/' . ltrim($path, '/');
         }
+
         return url($path);
     }
 }
