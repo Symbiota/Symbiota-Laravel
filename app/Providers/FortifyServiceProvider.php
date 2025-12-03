@@ -30,22 +30,38 @@ class FortifyServiceProvider extends ServiceProvider {
         $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
+                $response = response(redirect($url));
 
-                return response(redirect($url))
-                    ->header('HX-Retarget', 'body')
-                    ->header('HX-Location', $url)
-                    ->header('HX-Boosted', 'true');
+                // This is to support login's redirect back to legacy pages
+                // have to pull their own styles
+                if(strpos($url, '.php')) {
+                    return $response
+                        ->header('Location', $url);
+                } else {
+                    return $response
+                        ->header('HX-Retarget', 'body')
+                        ->header('HX-Location', $url)
+                        ->header('HX-Boosted', 'true');
+                }
             }
         });
 
         $this->app->instance(TwoFactorLoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request) {
                 $url = session()->get('link') ?? url('');
+                $response = response(redirect($url));
 
-                return response(redirect($url))
-                    ->header('HX-Retarget', 'body')
-                    ->header('HX-Location', $url)
-                    ->header('HX-Boosted', 'true');
+                // This is to support login's redirect back to legacy pages
+                // have to pull their own styles
+                if(strpos($url, '.php')) {
+                    return $response
+                        ->header('Location', $url);
+                } else {
+                    return $response
+                        ->header('HX-Retarget', 'body')
+                        ->header('HX-Location', $url)
+                        ->header('HX-Boosted', 'true');
+                }
             }
         });
 
