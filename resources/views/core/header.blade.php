@@ -12,7 +12,7 @@
             @endif
             <div class="ml-8 flex justify-center flex-col text-shadow-lg font-bold">
                 <h1 class="text-4xl">{{ config('portal.header_title') }}</h1>
-                <h2 class="text-[1.05rem]">{{ config('portal.header_sub_title') }}</h2>
+                <h2 class="text-base">{{ config('portal.header_sub_title') }}</h2>
             </div>
         </div>
 
@@ -22,26 +22,18 @@
                 {!! __("header.welcome") !!}
                 {{ Auth::user()->name }}!
             </span>
-            <x-button class="text-base" variant="{{ $buttonVariant }}">
-                <x-nav-link href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true">
-                    My Profile
-                </x-nav-link>
+            <x-button class="text-base" href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
+                {!! __("header.my_profile") !!}
             </x-button>
-            <x-button class="text-base" variant="{{ $buttonVariant }}">
-                <x-nav-link hx-get="{{url('/logout')}}" hx-trigger="click" hx-boost="true" hx-target="body">
-                    {!! __("header.sign_out") !!}
-                </x-nav-link>
+            <x-button class="text-base cursor-pointer" hx-get="{{url('/logout')}}" hx-trigger="click" hx-boost="true" hx-target="body" variant="{{ $buttonVariant }}">
+                {!! __("header.sign_out") !!}
             </x-button>
             @else
-            <x-button class="text-base" variant="{{ $buttonVariant }}">
-                <x-nav-link href="#">
-                    {!! __("header.contact_us") !!}
-                </x-nav-link>
+            <x-button class="text-base" href="#" variant="{{ $buttonVariant }}">
+                {!! __("header.contact_us") !!}
             </x-button>
-            <x-button class="text-base" variant="{{ $buttonVariant }}">
-                <x-nav-link href="{{url('/login')}}" hx-boost="true" hx-push-url="true">
-                    {!! __("header.sign_in") !!}
-                </x-nav-link>
+            <x-button class="text-base" href="{{ url('/login') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
+                {!! __("header.sign_in") !!}
             </x-button>
             @endif
         </nav>
