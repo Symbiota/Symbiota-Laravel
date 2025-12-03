@@ -13,23 +13,23 @@
         <h2 class="text-2xl text-primary font-bold">Collections</h2>
 
         <ul class="list-disc pl-4">
-            <li><x-link target="_blank" href="{{ url('/collections/search') }}">Search Engine</x-link> - search collections</li>
+            <li><x-link href="{{ url('/collections/search') }}">Search Engine</x-link> - search collections</li>
             <li>
-                <x-link target="_blank" href="{{ url('/collections') }}">Collections</x-link> - list of
+                <x-link href="{{ url('/collections') }}">Collections</x-link> - list of
                 collections
                 participating in project
             </li>
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/collections/misc/collstats.php') }}">Collection Statistics</x-link>
+                <x-link href="{{ legacy_url('/collections/misc/collstats.php') }}">Collection Statistics</x-link>
             </li>
             @if(config('portal.activate_exsiccati'))
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/collections/exsiccati/index.php') }}">Exsiccatae Index</x-link>
+                <x-link href="{{ legacy_url('/collections/exsiccati/index.php') }}">Exsiccatae Index</x-link>
 
             </li>
             @endif
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/collections/misc/protectedspecies.php') }}">
+                <x-link href="{{ legacy_url('/collections/misc/protectedspecies.php') }}">
                     Protected Species
                 </x-link>
                 - list of taxa where
@@ -40,18 +40,18 @@
         <h3 class="text-lg font-bold text-primary">Data Publishing</h3>
         <ul class="list-disc pl-4">
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/collections/datasets/rsshandler.php') }}">
+                <x-link href="{{ legacy_url('/collections/datasets/rsshandler.php') }}">
                     RSS Feed for Natural History Collections and Observation Projects
                 </x-link>
             </li>
 
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/collections/datasets/datapublisher.php') }}">
+                <x-link href="{{ legacy_url('/collections/datasets/datapublisher.php') }}">
                     Darwin Core Archives (DwC-A)
                 </x-link> - published datasets of selected collections
             </li>
             <li>
-                <x-link target="_blank" href="{{ legacy_url('/content/dwca/rss.xml') }}">
+                <x-link href="{{ legacy_url('/content/dwca/rss.xml') }}">
                     DwC-A RSS Feed
                 </x-link>
             </li>
@@ -199,7 +199,7 @@
         </p>
         <ul class="list-disc pt-2 pl-4">
             <li>
-                <x-link href="{{ legacy_url('/taxa/profile/tpeditor.php?tabindex=1') }}" target="_blank">
+                <x-link href="{{ legacy_url('/taxa/profile/tpeditor.php?tabindex=1') }}">
                     Basic Field Image Submission </x-link>
             </li>
             <li>
