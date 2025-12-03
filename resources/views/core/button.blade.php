@@ -9,7 +9,7 @@ $variant_def = match($variant) {
   Default => ['bg-primary','text-primary-content','hover:bg-primary-lighter', 'active:bg-primary-darker', 'disabled:grayscale'],
 };
 
-$base = 'rounded-lg shadow-xl focus:ring hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-base font-bold flex items-center gap-1 py-1 px-2.5 h-fit w-fit';
+$base = 'rounded-lg shadow-xl focus:ring hover:ring-4 hover:ring-accent focus:ring-accent focus:outline-none text-base font-bold flex items-center gap-1 py-1 px-2.5 h-fit w-fit cursor-pointer';
 $tag = 'button';
 
 if(isset($href) && $href) {
