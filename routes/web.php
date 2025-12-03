@@ -204,9 +204,8 @@ Route::group(['prefix' => '/auth'], function () {
 /* Documenation */
 Route::get('docs/{path}', MarkdownController::class)->where('path', '.*');
 
-Route::get('{path}', function(Request $request) {
-    global
-    // Symbini Variables
+Route::get('{path}', function (Request $request) {
+    global // Symbini Variables
     $DEFAULT_LANG,
     $DEFAULT_PROJ_ID,
     $DEFAULTCATID,
@@ -307,14 +306,29 @@ Route::get('{path}', function(Request $request) {
     $MIME_FALL_BACK;
 
     $path = $request->path();
+    $user = $request->user();
+
+    if ($user) {
+        $GLOBALS['USER_RIGHTS'] = [];
+        foreach ($user->roles()->get() as $role) {
+            $GLOBALS['USER_RIGHTS'][$role->role][] = $role->tablePK;
+        }
+        $_SESSION['userparams']['un'] = $user->username;
+        $_SESSION['userparams']['dn'] = $user->firstName;
+        $_SESSION['userparams']['uid'] = $user->uid;
+        $_SESSION['userrights'] = $GLOBALS['USER_RIGHTS'];
+        $GLOBALS['PARAMS_ARR'] = $_SESSION['userparams'];
+        $GLOBALS['USERNAME'] = $user->username;
+        $GLOBALS['SYMB_UID'] = $user->uid;
+    }
 
     ob_start();
-    if(!isset($_SERVER['QUERY_STRING'])) {
+    if (! isset($_SERVER['QUERY_STRING'])) {
         $_SERVER['QUERY_STRING'] = '';
     }
 
-    if(strpos($path, getenv('PORTAL_NAME')) === 0) {
-        include(base_path($path));
+    if (strpos($path, getenv('PORTAL_NAME')) === 0) {
+        include base_path($path);
     } else {
         include legacy_path($path);
     }
