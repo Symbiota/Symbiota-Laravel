@@ -99,3 +99,26 @@ fs.writeFile('resources/css/theme.css', `@import "tailwindcss";\n\n:root {\n${va
         console.log('Portal theme built successfully');
     }
 })
+
+const child_variable_aliases = `\t/* Maps variables to child portal variables */
+    --body-bg-color: var(--color-base-100);
+    --body-text-color: var(--color-base-content);
+    --body-font-size: 1rem;
+    --body-font-family: var("Roboto",ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
+    --heading-font-family: var("Roboto",ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");
+    --link-color: var(--color-link);
+    --darkest-color: var(--color-primary);
+    --medium-color: var(--color-neutral);
+    --light-color: var(--color-base-200);
+    --bright-color: var(--color-accent);
+    --max-innertext-width: 1024px;
+`;
+
+fs.writeFile('child_config/variables.css', `:root {\n${variableString}\n${themeString}\n${child_variable_aliases}}`, err => {
+    if(err) {
+        console.log(err)
+    } else {
+        // file written successfully
+        console.log('Child Config built successfully');
+    }
+})
