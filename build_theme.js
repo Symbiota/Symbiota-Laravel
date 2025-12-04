@@ -101,7 +101,7 @@ fs.writeFile('resources/css/theme.css', `@import "tailwindcss";\n\n:root {\n${va
 })
 
 const child_variable_aliases = `\t/* Maps variables to child portal variables */
-    --symb-font: "Roboto";
+    --symb-font: "sans-serif";
     --header-bg-color: var(--color-banner-overlay);
     --header-font-color: var(--color-banner-overlay-content);
     --header-bg-image: var(--symb-banner-url);
