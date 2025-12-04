@@ -20,7 +20,7 @@
             @if (Auth::check())
             <span class="text-base text-shadow-lg">
                 {!! __("header.welcome") !!}
-                {{ Auth::user()->name }}!
+                {{ Auth::user()->firstName}}!
             </span>
             <x-button class="text-base" href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
                 {!! __("header.my_profile") !!}

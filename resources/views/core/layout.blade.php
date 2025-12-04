@@ -2,7 +2,7 @@
 @php
 $navigations = [
     ["title" => __("header.home"), "link" => url('/'), "htmx" => true],
-    ["title" => __("header.collections"), "link" => url('/collections/search'), 'htmx' => true ],
+    ["title" => __("header.search"), "link" => url('/collections/search'), 'htmx' => true ],
     ["title" => __("header.map_search"), "link" => legacy_url('/collections/map/index.php')],
     ["title" => __("header.species_checklists"), "link" => url('/checklists'), 'htmx' => true],
     ["title" => __("header.media"), "link" => url('/media/search'), 'htmx' => true],
