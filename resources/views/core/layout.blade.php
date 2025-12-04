@@ -32,7 +32,7 @@ $logos = [
 $grants= [
     [
         "link" => 'https://www.nsf.gov',
-        "label" => '#-------',
+        "label" => '#------',
         "grant_id" => ''
     ],
 ];
