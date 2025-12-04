@@ -1,19 +1,19 @@
 <?php
 $logos = [
     [
-        "img" => '/images/logo_nsf.gif',
-        "link" => 'https://www.nsf.gov',
-        "title" => 'NSF'
+        'img' => '/images/logo_nsf.gif',
+        'link' => 'https://www.nsf.gov',
+        'title' => 'NSF',
     ],
     [
-        "img" => '/images/logo_idig.png',
-        "link" => 'http://idigbio.org',
-        "title" => 'iDigBio'
+        'img' => '/images/logo_idig.png',
+        'link' => 'http://idigbio.org',
+        'title' => 'iDigBio',
     ],
     [
-        "img" => '/images/logo-asu-biokic.png',
-        "link" => 'https://biokic.asu.edu',
-        "title" => 'Biodiversity Knowledge Integration Center'
+        'img' => '/images/logo-asu-biokic.png',
+        'link' => 'https://biokic.asu.edu',
+        'title' => 'Biodiversity Knowledge Integration Center',
     ],
 ];
 
@@ -33,7 +33,7 @@ footer p {
 </style>
 <footer style="background-color: var(--color-footer); padding: 2rem; text-align:center; line-height:0;">
     <div style="display: flex; flex-wrap: wrap; max-width: var(--max-innertext-width); margin: auto; justify-content: center;">
-        <?php foreach($logos as $logo): ?>
+        <?php foreach ($logos as $logo) { ?>
         <div style="display:flex; flex-basis:0; flex-grow: 1; justify-content: center; margin: auto 0;">
             <div style="margin: 0 auto; width: fit-content; height: fit-content;">
             <a href="<?= $logo['link']?>">
@@ -41,7 +41,7 @@ footer p {
             </a>
             </div>
         </div>
-        <?php endforeach ?>
+        <?php } ?>
     </div>
 
     <div style="margin-top: 1rem;">
