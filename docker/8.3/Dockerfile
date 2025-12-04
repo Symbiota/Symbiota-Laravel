@@ -65,6 +65,7 @@ COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
 COPY ./child_config/symbini.php ./Portal/config/symbini.php
 COPY ./child_config/head.php ./Portal/includes/head.php
 COPY ./child_config/header.php ./Portal/includes/header.php
+COPY ./child_config/footer.php ./Portal/includes/footer.php
 
 COPY ./ .
 
