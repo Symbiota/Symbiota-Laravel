@@ -12,13 +12,13 @@
 <link href="<?= $CSS_BASE_PATH ?>/symbiota/main.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet">
 <link href="<?= $CSS_BASE_PATH ?>/symbiota/customizations.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet">
 <?php
-if($ACCESSIBILITY_ACTIVE){
-	?>
+if ($ACCESSIBILITY_ACTIVE) {
+    ?>
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/accessibility-compliant.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet" data-accessibility-link="accessibility-css-link" >
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/condensed.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet" data-accessibility-link="accessibility-css-link" disabled >
 	<?php
-} else{
-	?>
+} else {
+    ?>
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/accessibility-compliant.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet" data-accessibility-link="accessibility-css-link" disabled >
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/condensed.css?ver=<?= $CSS_VERSION ?>" type="text/css" rel="stylesheet" data-accessibility-link="accessibility-css-link" >
 	<?php

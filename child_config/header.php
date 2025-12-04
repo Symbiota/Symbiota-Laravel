@@ -1,8 +1,10 @@
 <?php
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/header.' . $LANG_TAG . '.php'))
-	include_once($SERVER_ROOT . '/content/lang/templates/header.en.php');
-else include_once($SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php');
-$collectionSearchPage = !empty($SHOULD_USE_HARVESTPARAMS) ? '/collections/index.php' : '/collections/search/index.php';
+if ($LANG_TAG == 'en' || ! file_exists($SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php')) {
+    include_once $SERVER_ROOT . '/content/lang/templates/header.en.php';
+} else {
+    include_once $SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php';
+}
+$collectionSearchPage = ! empty($SHOULD_USE_HARVESTPARAMS) ? '/collections/index.php' : '/collections/search/index.php';
 
 $navigations = [
     $LANG['H_HOME'] => $CLIENT_ROOT . '/index.php',
@@ -74,8 +76,8 @@ header .button-tertiary, header .button-secondary {
 
 			<nav style="display:flex;align-items:center; gap:0.75rem; flex-grow:1; justify-content:end; margin-right: 1rem;" class="top-login" aria-label="horizontal-nav">
 				<?php
-				if ($USER_DISPLAY_NAME) {
-					?>
+                if ($USER_DISPLAY_NAME) {
+                    ?>
 					<div>
 						<?= $LANG['H_WELCOME'] . ' ' . $USER_DISPLAY_NAME ?>!
 					</div>
@@ -90,37 +92,37 @@ header .button-tertiary, header .button-secondary {
 						</form>
 					</span>
 					<?php
-				} else {
-					?>
+                } else {
+                    ?>
 					<span id="contactUs">
 						<button class="button button-tertiary bottom-breathing-room-rel left-breathing-room-rel" onclick="window.location.href='#'"><?= $LANG['H_CONTACT_US'] ?></button>
 					</span>
 					<span id="login">
-						<form name="loginForm" method="post" action="<?= $CLIENT_ROOT . "/profile/index.php" ?>">
-							<input name="refurl" type="hidden" value="<?= htmlspecialchars($_SERVER['SCRIPT_NAME'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . "?" . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES) ?>">
+						<form name="loginForm" method="post" action="<?= $CLIENT_ROOT . '/profile/index.php' ?>">
+							<input name="refurl" type="hidden" value="<?= htmlspecialchars($_SERVER['SCRIPT_NAME'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '?' . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES) ?>">
 							<button class="button button-secondary bottom-breathing-room-rel left-breathing-room-rel" name="loginButton" type="submit"><?= $LANG['H_LOGIN'] ?></button>
 						</form>
 					</span>
 					<?php
-				}
-				?>
+                }
+?>
 			</nav>
             </div>
 		</div>
 		<div class="menu-wrapper" style="background-color: var(--color-primary);">
 			<nav class="top-menu" aria-label="hamburger-nav">
 				<ul class="menu" style="display:flex; list-style:none; gap:0.5rem; align-items:center; justify-content: center; margin:0; height:3.5rem; padding: 0;">
-                    <?php foreach($navigations as $name => $link): ?>
+                    <?php foreach ($navigations as $name => $link) { ?>
                         <li style="padding: 0.5rem; margin: 0.5rem 0;">
                             <a style="" href="<?= $link ?>"><?= $name ?></a>
                         </li>
-                    <?php endforeach ?>
+                    <?php } ?>
                     <li id="lang-select-li" style="padding:0.5rem;">
                         <label class="screen-reader-only" for="language-selection"><?= $LANG['H_SELECT_LANGUAGE'] ?>: </label>
                         <select style="font-size: 0.75rem; background-color: var(--color-base-300); padding: 0.25rem 0.5rem; border: none; border-radius: .375rem; font-weight: 700;" oninput="setLanguage(this)" id="language-selection" name="language-selection">
                             <option value="en">English</option>
-                            <option value="es" <?= ($LANG_TAG=='es'?'SELECTED':'') ?>>Español</option>
-                            <option value="fr" <?= ($LANG_TAG=='fr'?'SELECTED':'') ?>>Français</option>
+                            <option value="es" <?= ($LANG_TAG == 'es' ? 'SELECTED' : '') ?>>Español</option>
+                            <option value="fr" <?= ($LANG_TAG == 'fr' ? 'SELECTED' : '') ?>>Français</option>
                         </select>
                     </li>
 				</ul>
