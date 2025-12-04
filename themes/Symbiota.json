@@ -36,7 +36,7 @@
         }
     },
     "banner":  {
-        "url": "url(http://localhost/images/banner.jpg)",
+        "url": "url(/images/banner.jpg)",
         "position": "50% 50%"
     }
 }
