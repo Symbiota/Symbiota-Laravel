@@ -4,15 +4,14 @@
 
 - [ ] Comment which GitHub issue(s), if any does this PR address
 - [ ] If more description is required, add a description section
-- [ ] QA not required, but go ahead and do if the situation requires it
 - [ ] Are (basic) tests written to cover the new functionality?
 - [ ] If there is text in this PR that has not been internationalized, implementing this is not required; add a @TODO comment and create a github issue about it.
 - [ ] There are no linter errors
 - [ ] Has Pint been run?
 - [ ] Have the required updates to the .env.example been made?
 
-
-# Post Approval, Blitz Phase
+# Code Review, Blitz Phase
+- [ ] QA not required, but go ahead and do if the situation requires it
 - [ ] PR should be squash merged
 - [ ] Code reviewer can go ahead and merge a PR after approving the code review
 - [ ] Don't forget to delete your feature branch upon merge. Ignore this step as required.
