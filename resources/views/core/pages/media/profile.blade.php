@@ -1,67 +1,14 @@
-@props(['mediaID'])
-<?php global $SERVER_ROOT, $LANG_TAG, $LANG, $CHARSET, $IS_ADMIN, $DEFAULT_TITLE, $CSS_BASE_PATH, $CSS_VERSION, $ACCESSIBILITY_ACTIVE, $CLIENT_ROOT, $SYMB_UID, $ADMIN_EMAIL, $MEDIA_ROOT_URL;
+@props(['mediaID', 'imgArr', 'isEditor', 'status' => ''])
+<?php global $SERVER_ROOT, $LANG_TAG, $LANG, $IS_ADMIN, $DEFAULT_TITLE, $SYMB_UID;
 
 include_once($SERVER_ROOT . '/classes/Media.php');
 include_once($SERVER_ROOT . '/classes/utilities/GeneralUtil.php');
 include_once($SERVER_ROOT . '/classes/utilities/Language.php');
-include_once($SERVER_ROOT . '/classes/APITaxonomy.php');
 
 Language::load('imagelib/imgdetails');
 
-$action = request('submitaction') ?? '';
-$eMode = request('emode') ? filter_var(request('emode'), FILTER_SANITIZE_NUMBER_INT) : 0;
+$eMode = request('emode') ? 'true': 'false';
 
-$imgArr = Media::getMedia($mediaID);
-
-$isEditor = false;
-if ($IS_ADMIN || ($imgArr && ($imgArr['username'] === $USERNAME || ($imgArr['creatorUid'] && $imgArr['creatorUid'] == $SYMB_UID)))) {
-	$isEditor = true;
-}
-
-$status = '';
-
-if ($isEditor) {
-	if ($action == 'Submit Image Edits') {
-		Media::update($mediaID, request()->except('_token'), new LocalStorage());
-	} elseif ($action == 'Transfer Image') {
-        $taxonAPI = new APITaxonomy();
-
-        // @todo logan this is a security issue in both repos
-        $taxonArr = $taxonAPI->getTaxon(trim(request('taxa')));
-
-        if(count($taxonArr) <= 0) {
-            $status = 'Error: Scientific name does not exist in database. Did you spell it correctly? If so, contact your data administrator to add this species to the Taxonomic Thesaurus.';
-        } else if(count($taxonArr) > 1) {
-            $status = 'Error: Linking to multiple taxa is not supported.';
-        } else if($targettid = array_keys($taxonArr)[0] ?? false) {
-			Media::update($mediaID, ['tid' => $targettid ], new LocalStorage());
-
-			if($errors = Media::getErrors()) {
-				$status = 'Errors:<br/>' . implode('<br/>', $errors);
-			} else {
-				header('Location: ' . legacy_url('taxa/profile/tpeditor.php?tid=' . request('targettid') . '&tabindex=1'));
-			}
-		} else {
-			$status = "ERROR: " . $LANG['MEDIA_TRANSFER_REQUIRES_TAXON_ID'];
-		}
-	} elseif ($action == 'Delete Image') {
-		$remove_files = request('removeimg') ?? false;
-		try {
-			Media::delete(intval($mediaID), boolval($remove_files));
-			if($errors = Media::getErrors()) {
-				$status = 'Errors:<br/>' . implode('<br/>', $errors);
-			} else if(request('tid') ?? false) {
-				header('Location: ../taxa/profile/tpeditor.php?tid=' . request('tid') . '&tabindex=1');
-			} else {
-				header('Location: index.php');
-			}
-		} catch(Throwable $th) {
-			$status = "ERROR: " . $th->getMessage();
-		}
-
-	}
-	$imgArr = Media::getMedia($mediaID);
-}
 $serverPath = GeneralUtil::getDomain();
 if ($imgArr) {
 	$imgUrl = $imgArr['url'];
@@ -82,7 +29,7 @@ if ($imgArr) {
 }
 
 ?>
-<x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" x-data="{editOpen:false}" class="px-0">
+<x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" x-data="{editOpen: {{ $eMode }}}" class="px-0">
     @push('head')
         @if($imgArr)
 		<meta property="og:title" content="{{ $imgArr["sciname"] }}" />
@@ -110,7 +57,7 @@ if ($imgArr) {
 				</div>
             @elseif($isEditor)
                 <div>
-                    <x-link class="flex items-center gap-1" href="#" @click="editOpen=!editOpen" title="{{ $LANG['EDIT_IMAGE'] }}">
+                    <x-link class="flex items-center gap-1" x-bind:href="'#emode=' + (editOpen? 'true':'false')" @click="editOpen=!editOpen" title="{{ $LANG['EDIT_IMAGE'] }}">
                         <img src="{{ legacy_url('images/edit.png') }}" class="w-5"/><span class="text-sm">{{ $LANG['IMG'] }}</span>
                     </x-link>
                 </div>
@@ -207,7 +154,7 @@ if ($imgArr) {
                             <x-input :label="$LANG['WEB_IMAGE']" :inline="true" required
                                 name="url" value="{{ $imgArr['url'] }}"
                             />
-                            @if($imgArr["url"] && stripos($imgArr["url"], $MEDIA_ROOT_URL) === 0)
+                            @if($imgArr["url"] && stripos($imgArr["url"], $GLOBALS['MEDIA_ROOT_URL']) === 0)
                                 <div class="m-[70px]">
                                     <input type="checkbox" name="renameweburl" value="1" />
                                     {{ $LANG['RENAME_WEB_IMAGE_FILE'] }}
@@ -219,7 +166,7 @@ if ($imgArr) {
                             <x-input :label="$LANG['THUMBNAIL']" :inline="true"
                                 name="thumbnailUrl" value="{{ $imgArr['thumbnailUrl'] }}"
                             />
-                            @if($imgArr["thumbnailUrl"] && stripos($imgArr["thumbnailUrl"], $MEDIA_ROOT_URL) === 0)
+                            @if($imgArr["thumbnailUrl"] && stripos($imgArr["thumbnailUrl"], $GLOBALS['MEDIA_ROOT_URL']) === 0)
                                 <div class="m-[70px]">
                                     <input type="checkbox" name="renametnurl" value="1" />
                                     {{ $LANG['RENAME_THUMBNAIL_IMAGE_FILE'] }}
@@ -232,7 +179,7 @@ if ($imgArr) {
                             <x-input :label="$LANG['LARGE_IMAGE']" :inline="true"
                                 name="originalUrl" value="{{ $imgArr['originalUrl'] }}"
                             />
-                            @if($imgArr["originalUrl"] && stripos($imgArr["originalUrl"], $MEDIA_ROOT_URL) === 0)
+                            @if($imgArr["originalUrl"] && stripos($imgArr["originalUrl"], $GLOBALS['MEDIA_ROOT_URL']) === 0)
                                 <div class="m-[70px]">
                                     <input type="checkbox" name="renameorigurl" value="1" />
                                     {{ $LANG['RENAME_LARGE_IMAGE_FILE'] }}
@@ -246,7 +193,7 @@ if ($imgArr) {
                         </div>
                     </x-formgroup>
                 </form>
-                <form id="taxon-test" name="changetaxonform" method="post" target="_self" onsubmit="return verifyChangeTaxonForm(this);">
+                <form name="changetaxonform" action="{{ url('media/' . $mediaID . '/transfer/taxa') }}" method="post" target="_self">
                     @csrf
                     <x-formgroup :label="$LANG['TRANSFER_IMAGE_TO_DIFF_NAME']">
                         <x-taxa-search id="taxa" :label="$LANG['TRANSFER_TO_TAXON']" :hide_selector="true" :hide_synonyms_checkbox="true" />
@@ -260,6 +207,7 @@ if ($imgArr) {
                 <form name="deleteform" method="post" target="_self" onsubmit="return window.confirm('{{ $LANG['DELETE_IMAGE_FROM_SERVER'] }}');">
                     @csrf
                     <x-formgroup :label="$LANG['AUTHORIZED_REMOVE_IMAGE']">
+                        <input type="hidden" name="_method" value="DELETE">
                         <input name="mediaid" type="hidden" value="{{ $mediaID; }}" />
                         <div style="margin-top:2px;">
                             <x-button variant="error" type="submit" name="submitaction" id="submit" value="Delete Image">{{ $LANG['DELETE_IMAGE'] }}</x-button>
@@ -376,17 +324,17 @@ if ($imgArr) {
                 @endif
 
 
-                @if($ADMIN_EMAIL)
+                @if($GLOBALS['ADMIN_EMAIL'])
                 <div style="margin-top:20px;">
                     {{ $LANG['ERROR_COMMENT_ABOUT_IMAGE'] }}<br/> {{ $LANG['SEND_EMAIL'] }}
 
                     @php
                     $emailSubject = $DEFAULT_TITLE . ' ' . $LANG['IMG_NO'] . ' ' . $mediaID;
                     $emailBody = 'Image being referenced: ' . url('media/' . $mediaID);
-                    $emailRef = 'subject=' . $emailSubject . '&cc=' . $ADMIN_EMAIL . '&body=' . $emailBody;
+                    $emailRef = 'subject=' . $emailSubject . '&cc=' . $GLOBALS['ADMIN_EMAIL'] . '&body=' . $emailBody;
                     @endphp
 
-                    <x-link href="mailto:{{ $ADMIN_EMAIL . '?' . $emailRef }}">{{ $ADMIN_EMAIL }}</x-link>
+                    <x-link href="mailto:{{ $GLOBALS['ADMIN_EMAIL'] . '?' . $emailRef }}">{{ $GLOBALS['ADMIN_EMAIL'] }}</x-link>
                 </div>
                 @endif
             </div>

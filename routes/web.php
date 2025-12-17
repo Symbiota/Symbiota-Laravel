@@ -143,7 +143,10 @@ Route::group(['prefix' => '/media'], function () {
     Route::get('/search', [MediaController::class, 'searchPage']);
     Route::get('/library', [MediaController::class, 'libraryPage']);
     Route::get('/contributors', [MediaController::class, 'contributorsPage']);
-    Route::match(['get', 'post'], '/{media_id}', [MediaController::class, 'profilePage']);
+    Route::get('/{media_id}', [MediaController::class, 'profilePage']);
+    Route::post('/{media_id}/transfer/taxa', [MediaController::class, 'profileTaxaTransfer']);
+    Route::post('/{media_id}', [MediaController::class, 'profileUpdate']);
+    Route::delete('/{media_id}', [MediaController::class, 'profileDelete']);
 });
 
 /*
