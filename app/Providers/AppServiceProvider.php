@@ -81,6 +81,10 @@ class AppServiceProvider extends ServiceProvider {
             ]);
         });
 
+        Gate::define('MEDIA_ADMIN', function (User $user, $imgArr) {
+            return $user->hasOneRoles([UserRole::SUPER_ADMIN]) || ($user && $imgArr && $user->uid === $imgArr['creatorUid']);
+        });
+
         /**
          * Setup Blade Component Folders and Directives
          */
