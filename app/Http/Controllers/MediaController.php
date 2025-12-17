@@ -151,6 +151,8 @@ class MediaController extends Controller {
     }
 
     public static function profilePage(int $mediaID) {
-        return view('pages/media/profile', ['mediaID' => $mediaID]);
+        return view('pages/media/profile', [
+            'mediaID' => $mediaID
+        ]);
     }
 }
