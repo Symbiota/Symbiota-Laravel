@@ -5,9 +5,10 @@
     'taxa_type_value' => '',
     'hide_selector' => false,
     'hide_synonyms_checkbox' => false,
+    'label' => 'Search Taxa',
 ])
 <div>
-    <label class="text-lg" for="{{ $id }}">Search Taxa</label>
+    <label class="text-lg" for="{{ $id }}">{{ $label }}</label>
     <div class="flex items-center group">
         @if(!$hide_selector)
         <x-select
