@@ -163,45 +163,45 @@ class MediaController extends Controller {
     }
 
     public static function profilePage(int $mediaID) {
-        include_once(legacy_path('/classes/Media.php'));
+        include_once legacy_path('/classes/Media.php');
 
         $imgArr = \Media::getMedia($mediaID);
 
         return view('pages/media/profile', [
             'mediaID' => $mediaID,
             'imgArr' => $imgArr,
-            'isEditor' => Gate::check('MEDIA_ADMIN', [$imgArr])
+            'isEditor' => Gate::check('MEDIA_ADMIN', [$imgArr]),
         ]);
     }
 
     public static function profileTaxaTransfer(int $mediaID) {
-        include_once(legacy_path('/classes/Media.php'));
-        include_once(legacy_path('/classes/APITaxonomy.php'));
+        include_once legacy_path('/classes/Media.php');
+        include_once legacy_path('/classes/APITaxonomy.php');
 
         $status = '';
         $imgArr = \Media::getMedia($mediaID);
         $isEditor = Gate::check('MEDIA_ADMIN', [$imgArr]);
 
-        if($isEditor) {
+        if ($isEditor) {
             $taxonAPI = new \APITaxonomy();
 
             // @todo logan this is a security issue in both repos
             $taxonArr = $taxonAPI->getTaxon(trim(request('taxa')));
 
-            if(count($taxonArr) <= 0) {
+            if (count($taxonArr) <= 0) {
                 $status = 'Error: Scientific name does not exist in database. Did you spell it correctly? If so, contact your data administrator to add this species to the Taxonomic Thesaurus.';
-            } else if(count($taxonArr) > 1) {
+            } elseif (count($taxonArr) > 1) {
                 $status = 'Error: Linking to multiple taxa is not supported.';
-            } else if($targettid = array_keys($taxonArr)[0] ?? false) {
-                \Media::update($mediaID, ['tid' => $targettid ], new \LocalStorage());
+            } elseif ($targettid = array_keys($taxonArr)[0] ?? false) {
+                \Media::update($mediaID, ['tid' => $targettid], new \LocalStorage());
 
-                if($errors = \Media::getErrors()) {
+                if ($errors = \Media::getErrors()) {
                     $status = 'Errors:<br/>' . implode('<br/>', $errors);
                 } else {
                     return redirect(legacy_url('taxa/profile/tpeditor.php?tid=' . $targettid . '&tabindex=1'));
                 }
             } else {
-                $status = "ERROR: " . $LANG['MEDIA_TRANSFER_REQUIRES_TAXON_ID'];
+                $status = 'ERROR: ' . $LANG['MEDIA_TRANSFER_REQUIRES_TAXON_ID'];
             }
         }
 
@@ -214,13 +214,13 @@ class MediaController extends Controller {
     }
 
     public static function profileUpdate(int $mediaID) {
-        include_once(legacy_path('/classes/Media.php'));
+        include_once legacy_path('/classes/Media.php');
         $status = '';
 
         $imgArr = \Media::getMedia($mediaID);
         $isEditor = Gate::check('MEDIA_ADMIN', [$imgArr]);
 
-        if($isEditor) {
+        if ($isEditor) {
             \Media::update($mediaID, request()->except('_token'), new \LocalStorage());
         }
         $imgArr = \Media::getMedia($mediaID);
@@ -234,28 +234,28 @@ class MediaController extends Controller {
     }
 
     public static function profileDelete(int $mediaID) {
-        include_once(legacy_path('/classes/Media.php'));
+        include_once legacy_path('/classes/Media.php');
 
         $status = '';
         $imgArr = \Media::getMedia($mediaID);
         $isEditor = Gate::check('MEDIA_ADMIN', [$imgArr]);
 
-        if($isEditor) {
+        if ($isEditor) {
             $remove_files = request('removeimg') ?? false;
 
             try {
                 \Media::delete(intval($mediaID), boolval($remove_files));
-                if($errors = \Media::getErrors()) {
+                if ($errors = \Media::getErrors()) {
                     $status = 'Errors:<br/>' . implode('<br/>', $errors);
-                } else if(request('tid') ?? false) {
+                } elseif (request('tid') ?? false) {
                     return redirect(
                         legacy_url('taxa/profile/tpeditor.php?tid=' . request('tid') . '&tabindex=1')
                     );
                 } else {
                     return redirect('/');
                 }
-            } catch(Throwable $th) {
-                $status = "ERROR: " . $th->getMessage();
+            } catch (Throwable $th) {
+                $status = 'ERROR: ' . $th->getMessage();
             }
         }
 
