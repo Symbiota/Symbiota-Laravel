@@ -1,5 +1,5 @@
 @props(['media' => [], 'creators' => []])
-<x-margin-layout x-data="{ loading: true }">
+<x-margin-layout x-data="{ loading: true }" class="pb-0">
     <h1 class="text-5xl font-bold text-primary">Multimedia Search</h1>
     <fieldset>
         <legend class="text-2xl font-bold text-primary">Search Criteria</legend>
@@ -76,8 +76,7 @@
             </x-button>
         </form>
         <div x-show="!loading" x-on:htmx:after-swap="loading = false" id="photo-gallery"
-            class="flex flex-wrap flex-row gap-3">
-            <x-media.item :media="$media" />
+            class="flex flex-wrap flex-row gap-3 mt-4">
         </div>
         <div id="scroll-loader" class="htmx-indicator">
             <div class="stroke-accent w-full h-16 flex justify-center">

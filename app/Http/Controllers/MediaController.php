@@ -63,18 +63,7 @@ class MediaController extends Controller {
             $media = self::search($request);
 
             if ($request->query('partial')) {
-                $query_params = $request->except('partial');
-                $query_params['start'] = $request->query('start') ?? 0;
-
-                $base_url = $request->header('referer') ?? url()->current();
-                $base_url = substr($base_url, 0, strpos('?', $base_url));
-
-                $new_url = $base_url .
-                    '?' .
-                    http_build_query($query_params);
-
-                return response(view('media/item', ['media' => $media]))
-                    ->header('HX-Replace-URL', $new_url);
+                return response(view('media/item', ['media' => $media]));
             }
         }
         $creators = DB::table('users as u')
