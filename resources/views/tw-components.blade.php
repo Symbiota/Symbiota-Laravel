@@ -30,6 +30,25 @@
                     Async
             </x-button>
         </div>
+
+        <div class="flex gap-4">
+            <x-button @click="toast('Success Title', { description: 'Plain description' })">
+                Toast Plain
+            </x-button>
+            <x-button @click="toast('Success Title', {type: 'success', description: 'Success description'})">
+                Toast Success
+            </x-button>
+            <x-button @click="toast('Error Title', {type: 'danger', description: 'Error description'})">
+                Toast Error
+            </x-button>
+            <x-button @click="toast('Error Title', {type: 'info', description: 'Info description'})">
+                Toast Info
+            </x-button>
+            <x-button @click="toast('Warning Title', {type: 'warning', description:  'Warning description'})">
+                Toast Warning
+            </x-button>
+        </div>
+
         <x-input required :id="'input'" :label="'Text Input'" />
         <x-input required type="number" :id="'input'" :label="'Number Input'" />
         <x-radio :default_value="2"
