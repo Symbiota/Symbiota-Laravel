@@ -48,7 +48,7 @@ class MediaController extends Controller {
                 }
             })
             */
-            ->select('m.url', 'm.thumbnailUrl', 't.sciName', 'o.occid')
+            ->select('m.url', 'm.thumbnailUrl', 't.sciName', 'o.occid', 'm.tid', 'm.creatorUid', 'o.recordedBy')
             ->limit(30)
             ->offset($start);
 

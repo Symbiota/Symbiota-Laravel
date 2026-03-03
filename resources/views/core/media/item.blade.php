@@ -20,13 +20,20 @@ foreach($params as $key => $value) {
 
 {{-- Render Media Items --}}
 @foreach ($media as $item)
-<a class="group" target="_blank"
+<a class="group flex" target="_blank"
     href="{{ legacy_url('/collections/individual/index.php') . '?occid=' . $item->occid }}">
-    <div class="relative bg-base-200">
+    <div class="flex flex-col bg-base-200 w-48">
         <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl ?? $item->url}}" />
         <div
-            class="group-hover:block group-focus:block hidden text-white absolute w-full p-2 bg-black/70 bottom-0">
-            {{$item->sciName}}
+            class="text-neutral-content w-full p-2 bg-neutral grow-1 text-sm">
+            <x-link class="text-neutral-content hover:text-neutral-content/50" href="{{ url('taxon/' . $item->tid) }}">
+                {{$item->sciName}}
+            </x-link>
+            @if($item->recordedBy)
+            <div>
+                {{ $item->recordedBy }}
+            </div>
+            @endif
         </div>
     </div>
 </a>
