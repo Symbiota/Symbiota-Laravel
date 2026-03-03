@@ -21,7 +21,6 @@
         $attrsValues = $_REQUEST['attr'];	//Array of: cid + '-' + cs (ie: 2-3)
     }
 
-
     //if(!$langValue) $langValue = $DEFAULT_LANG;
     if($sortBy) $dataManager->setSortBy($sortBy);
     if($displayCommon) $dataManager->setDisplayCommon(1);
@@ -34,6 +33,11 @@
     if($attrsValues) $dataManager->setAttrs($attrsValues);
     if($rv) $dataManager->setRelevanceValue($rv);
 
+    $taxa = $dataManager->getTaxaArr();
+    ksort($taxa);
+    $clType =$dataManager->getClType();
+    $chars = $dataManager->getCharArr();
+    $count = $dataManager->getTaxaCount();
 @endphp
 
 <x-layout>
@@ -46,16 +50,11 @@
 
     <div>
         <div><x-link class="text-2xl" href="{{url('/checklists/' . $clid)}}">{{ $dataManager->getClName() }}</x-link></div>
-        <div>Edit Character Matrix</div>
-        <div>Species Count: ?</div>
+        <x-link>Edit Character Matrix</x-link>
+        @if($count)
+            <div>Species Count: {{ $count }}</div>
+        @endif
     </div>
-
-    @php
-        $taxa = $dataManager->getTaxaArr();
-        ksort($taxa);
-        $clType =$dataManager->getClType();
-        $chars = $dataManager->getCharArr();
-    @endphp
 
     @foreach ($taxa as $family => $taxaArr)
         <div class="font-bold text-xl">{{ $family }}</div>
