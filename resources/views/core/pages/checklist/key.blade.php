@@ -71,7 +71,7 @@
             <hr class="w-full"/>
             <x-select
                 class="w-72"
-                default="{{ array_search($taxonValue, $taxaValues) ?? 0 }}" id="taxon" label="Family/Genus Filter"
+                default="{{ array_search($taxonValue ?? 'All Species', $taxaValues) ?? 0 }}" id="taxon" label="Family/Genus Filter"
                 :items="$filterList"
             />
             <x-select
@@ -93,7 +93,7 @@
             <x-checkbox id="displayimages" label="Display Images"/>
             <div class="flex gap-2">
                 <x-button type="submit">Filter</x-button>
-                <x-button>Reset</x-button>
+                <x-button href="{{ url()->current() }}" hx-boost="true">Reset</x-button>
             </div>
         </form>
     </div>
