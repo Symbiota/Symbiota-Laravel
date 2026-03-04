@@ -71,6 +71,7 @@
             <x-select
                 class="min-w-72 w-full"
                 default="0" id="sortby" label="Sort By"
+                defaultValue="{{ $sortBy }}"
                 :items="[
                      [
                         'title' => 'Family/ScientificName',
