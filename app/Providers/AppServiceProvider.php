@@ -40,7 +40,6 @@ class AppServiceProvider extends ServiceProvider {
             'RARE_SPP_READER_ALL' => UserRole::RARE_SPP_READER_ALL,
             'CL_CREATE' => UserRole::CL_CREATE,
             'KEY_ADMIN' => UserRole::KEY_ADMIN,
-            'KEY_EDITOR' => UserRole::KEY_EDITOR,
             'TAXONOMY' => UserRole::TAXONOMY,
             'TAXON_PROFILE' => UserRole::TAXON_PROFILE,
             'GLOSSARY_EDITOR' => UserRole::GLOSSARY_EDITOR,
@@ -71,7 +70,13 @@ class AppServiceProvider extends ServiceProvider {
                 UserRole::RARE_SPP_ADMIN,
                 UserRole::RARE_SPP_READER_ALL,
                 UserRole::COLL_ADMIN => $collId,
-                UserRole::COLL_EDITOR => $collId,
+                     UserRole::COLL_EDITOR => $collId
+        ]);
+        Gate::define('KEY_EDITOR', function (User $user) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::KEY_EDITOR,
+                UserRole::KEY_ADMIN,
             ]);
         });
 
