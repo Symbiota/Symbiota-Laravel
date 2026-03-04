@@ -43,22 +43,25 @@
     foreach($dataManager->getTaxaFilterList() as $idx => $value) {
         $filterList[] = ['value' => trim($value), 'title' => $value, 'disabled' => false];
     }
+
+    $isKeyEditor = Gate::check('KEY_EDITOR');
 @endphp
 
 <x-margin-layout>
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => '/'],
-        ['title' => 'Checklist Name' ],
-        ['title' => 'Previous version of key' ],
-        ['title' => 'New Version' ]
+        ['title' => $dataManager->getClName(), 'href' => url('/checklists/' . $clid) ],
+        ['title' => 'Identification Key' ]
     ]" />
     <div class="relative block">
         <div><x-link class="text-2xl" href="{{ url('/checklists/' . $clid) }}">{{ $dataManager->getClName() }}</x-link></div>
         <div>
+            @if($isKeyEditor)
             <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
                 <x-icons.edit />
                 Edit Character Matrix
             </x-link>
+            @endif
         </div>
         @if($count)
             <div>Species Count: {{ $count }}</div>
@@ -101,37 +104,47 @@
     {{-- Renders Plain Taxa list --}}
     @if($sortBy == 1)
         @foreach ($taxa as $taxaArr)
+            <div>
             @foreach ($taxaArr as $tid => $taxon)
             <div>
+                @if($isKeyEditor)
+                <x-link href="{{ legacy_url('ident/tools/editor.php?tid=' . $tid) }}">
+                    <x-icons.edit/>
+                </x-link>
+                @endif
                 <x-link href="../taxa/index.php?taxon={{ $tid }}&clid={{ $clType == 'static' ? $clid : '' }}" target="_blank">
                     <i>{{ $taxon['s'] }}</i>
                 </x-link>
+                @if($displayCommon)
+                {{ !empty($taxon['v'])? ' - ' . $taxon['v']: ''}}
+                @endif
             </div>
             @endforeach
+            </div>
         @endforeach
     @else
     {{-- Renders taxa grouped by family --}}
     @foreach ($taxa as $family => $taxaArr)
+    <div>
         <div class="font-bold text-xl">{{ $family }}</div>
         <div class="pl-4">
         @foreach ($taxaArr as $tid => $taxon)
         <div>
-            {{-- TODO add perm protections --}}
-            <x-link href="{{ url('taxon/' . $tid . '/edit') }}">
+            @if($isKeyEditor)
+            <x-link href="{{ legacy_url('ident/tools/editor.php?tid=' . $tid) }}">
                 <x-icons.edit/>
             </x-link>
+            @endif
             <x-link href="{{ url('/taxon/' . $tid) }}" target="_blank">
                 <i>{{ $taxon['s'] }}</i>
             </x-link>
-            {{-- TODO remove before pr <x-link href="{{ legacy_url('/taxa/index.php?taxon=' .  $tid . '&clid=' . ($clType == 'static' ? $clid : '')) }}" target="_blank">
-                <i>{{ $taxon['s'] }}</i>
-            </x-link> --}}
             @if($displayCommon)
             {{ !empty($taxon['v'])? ' - ' . $taxon['v']: ''}}
             @endif
         </div>
         @endforeach
         </div>
+    </div>
     @endforeach
     @endif
 </x-layout>
