@@ -89,8 +89,8 @@
                      ]
                 ]"
             />
-            <x-checkbox id="displaycommon" label="Display Common Names"/>
-            <x-checkbox id="displayimages" label="Display Images"/>
+            <x-checkbox id="displaycommon" label="Display Common Names" :checked="$displayCommon"/>
+            <x-checkbox id="displayimages" label="Display Images" :checked="$displayImages"/>
             <div class="flex gap-2">
                 <x-button type="submit">Filter</x-button>
                 <x-button href="{{ url()->current() }}" hx-boost="true">Reset</x-button>
