@@ -112,7 +112,28 @@
 
 
     {{-- Renders Plain Taxa list --}}
-    @if($sortBy == 1)
+    @if($displayImages)
+        <div id="photo-gallery" class="flex flex-wrap flex-row gap-3 mt-4">
+        @foreach ($taxa as $taxaArr)
+            @foreach ($taxaArr as $tid => $taxon)
+            <div class="flex flex-col bg-base-200 w-48">
+                <a class="flex" target="_blank" href="{{ url('taxon/' . $tid) }}">
+                    <img class="h-72 w-48 object-cover" loading="lazy" src="{{ $taxon['i'] }}" />
+                </a>
+                <div
+                    class="text-neutral-content w-full p-2 bg-neutral grow-1 text-sm">
+                    <x-link class="text-neutral-content hover:text-neutral-content/50" href="{{ url('taxon/' . $tid) }}">
+                        {{ $taxon['s'] }}
+                    </x-link>
+                    @if($displayCommon)
+                    {{ !empty($taxon['v'])? ' - ' . $taxon['v']: ''}}
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        @endforeach
+        </div>
+    @elseif($sortBy == 1)
         @foreach ($taxa as $taxaArr)
             <div>
             @foreach ($taxaArr as $tid => $taxon)
