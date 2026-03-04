@@ -54,30 +54,24 @@
         ['title' => 'Identification Key' ]
     ]" />
     <div class="relative block">
-        <div><x-link class="text-2xl" href="{{ url('/checklists/' . $clid) }}">{{ $dataManager->getClName() }}</x-link></div>
-        <div>
-            @if($isKeyEditor)
-            <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
-                <x-icons.edit />
-                Edit Character Matrix
-            </x-link>
-            @endif
-        </div>
-        @if($count)
-            <div>Species Count: {{ $count }}</div>
-        @endif
+        <!-- <div><x-link class="text-4xl font-bold" href="{{ url('/checklists/' . $clid) }}">{{ $dataManager->getClName() }}</x-link></div> -->
 
+        <div class="text-4xl font-bold" >{{ $dataManager->getClName() }}</div>
+    </div>
+
+    <x-accordion label="Filter/Display Options">
         <form
-            class="bg-base-100 p-4 border rounded-md border-base-300 absolute top-0 right-0 flex flex-col gap-2"
+            class="bg-base-100 flex flex-col gap-4"
         >
-            <h4 class="text-lg font-bold font-sans">Filter/Display Options</h4>
-            <hr class="w-full"/>
+            <div class="flex items-center gap-2">
             <x-select
-                class="w-72"
-                default="{{ array_search($taxonValue ?? 'All Species', $taxaValues) ?? 0 }}" id="taxon" label="Family/Genus Filter"
+                class="min-w-72 w-full"
+                default="{{ array_search($taxonValue ?? 'All Species', $taxaValues) ?? 0 }}" id="taxon"
+                label="Family/Genus Filter"
                 :items="$filterList"
             />
             <x-select
+                class="min-w-72 w-full"
                 default="0" id="sortby" label="Sort By"
                 :items="[
                      [
@@ -92,14 +86,31 @@
                      ]
                 ]"
             />
+            </div>
+
+            <div class="flex items-center gap-2">
             <x-checkbox id="displaycommon" label="Display Common Names" :checked="$displayCommon"/>
             <x-checkbox id="displayimages" label="Display Images" :checked="$displayImages"/>
+            </div>
             <div class="flex gap-2">
                 <x-button type="submit">Filter</x-button>
                 <x-button href="{{ url()->current() }}" hx-boost="true">Reset</x-button>
             </div>
         </form>
-    </div>
+    </x-accordion>
+
+        <div>
+            @if($count)
+                    <div class="text-xl"><span class="font-bold">Species Count:</span> {{ $count }}</div>
+            @endif
+            @if($isKeyEditor || true)
+            <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
+                <x-icons.edit />
+                Edit Character Matrix
+            </x-link>
+            @endif
+        </div>
+
 
     {{-- Renders Plain Taxa list --}}
     @if($sortBy == 1)
