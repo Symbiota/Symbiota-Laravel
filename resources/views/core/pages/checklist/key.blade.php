@@ -112,7 +112,7 @@
                     <x-icons.edit/>
                 </x-link>
                 @endif
-                <x-link href="../taxa/index.php?taxon={{ $tid }}&clid={{ $clType == 'static' ? $clid : '' }}" target="_blank">
+                <x-link href="{{ url('/taxon/' . $tid) }}" target="_blank">
                     <i>{{ $taxon['s'] }}</i>
                 </x-link>
                 @if($displayCommon)
