@@ -54,11 +54,8 @@
         ['title' => 'Identification Key' ]
     ]" />
     <div class="relative block">
-        <!-- <div><x-link class="text-4xl font-bold" href="{{ url('/checklists/' . $clid) }}">{{ $dataManager->getClName() }}</x-link></div> -->
-
         <div class="text-4xl font-bold" >{{ $dataManager->getClName() }}</div>
     </div>
-
     <x-accordion label="Filter/Display Options">
         <form
             class="bg-base-100 flex flex-col gap-4"
