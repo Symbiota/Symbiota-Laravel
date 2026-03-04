@@ -63,7 +63,8 @@
             <div class="flex items-center gap-2">
             <x-select
                 class="min-w-72 w-full"
-                default="{{ array_search($taxonValue ?? 'All Species', $taxaValues) ?? 0 }}" id="taxon"
+                defaultValue="{{ $taxonValue ?? 'All Species' }}"
+                id="taxon"
                 label="Family/Genus Filter"
                 :items="$filterList"
             />
