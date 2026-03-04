@@ -116,9 +116,16 @@
         <div class="pl-4">
         @foreach ($taxaArr as $tid => $taxon)
         <div>
-            <x-link href="../taxa/index.php?taxon={{ $tid }}&clid={{ $clType == 'static' ? $clid : '' }}" target="_blank">
+            {{-- TODO add perm protections --}}
+            <x-link href="{{ url('taxon/' . $tid . '/edit') }}">
+                <x-icons.edit/>
+            </x-link>
+            <x-link href="{{ url('/taxon/' . $tid) }}" target="_blank">
                 <i>{{ $taxon['s'] }}</i>
             </x-link>
+            {{-- TODO remove before pr <x-link href="{{ legacy_url('/taxa/index.php?taxon=' .  $tid . '&clid=' . ($clType == 'static' ? $clid : '')) }}" target="_blank">
+                <i>{{ $taxon['s'] }}</i>
+            </x-link> --}}
             @if($displayCommon)
             {{ !empty($taxon['v'])? ' - ' . $taxon['v']: ''}}
             @endif
