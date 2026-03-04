@@ -146,7 +146,10 @@ event fires.
             window.addEventListener('resize', (event) => { selectPositionUpdate(); });
         });
 
-        if(defaultValue && !selectedItem) {
+        if(selectedItem) {
+            let input = $el.querySelector('input');
+            input.value = selectedItem.value;
+        } else if(defaultValue) {
             let defaultItem = selectableItems.find(v => v.value == defaultValue);
             if(defaultItem) {
                 selectedItem = defaultItem;
@@ -154,7 +157,6 @@ event fires.
                 let input = $el.querySelector('input');
                 input.value = selectedItem.value;
             }
-
         }
 
         $el.querySelector('input').addEventListener('change', function(e) {
