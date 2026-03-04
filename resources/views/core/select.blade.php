@@ -44,7 +44,8 @@ event fires.
         selectableItems: {{ json_encode($items) }},
         selectableItemActive: null,
         {{-- Note strings need quotes so defaultValue="'string'" because variables could be bound --}}
-        defaultValue: {{ $defaultValue && !$default? $defaultValue: 'null'}},
+        {{-- Second Note this is needed to cover the case when alpine variables set in --}}
+        defaultValue: {{ $defaultValue && $default === null? $defaultValue: 'null'}},
         selectId: $id('select'),
         selectKeydownValue: '',
         selectKeydownTimeout: 1000,
