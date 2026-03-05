@@ -1,10 +1,10 @@
 <?php
-
+// TODO (Logan) Translate
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | French Translations for Home View
+    | Pagination Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used by the paginator library to build
@@ -12,6 +12,8 @@ return [
     | you want to customize your views to better match your application.
     |
     */
-    'welcome-title' => 'Bienvenue',
-    'welcome-text' => 'Ce portail de données a été créé pour promouvoir la collaboration... Remplacer par le texte d\'introduction en anglais',
+
+    'previous' => '&laquo; Previous',
+    'next' => 'Next &raquo;',
+
 ];
