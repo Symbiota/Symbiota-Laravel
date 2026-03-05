@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'TITLE' => 'Rare, Threatened, Sensitive Species',
+    'ENTER_SCINAME' => 'Enter the scientific name of species you wish to add',
+    'SCINAME_NOT_EXIST' => 'ERROR: Scientific name does not exist in database. Did you spell it correctly? If so, it may have to be added to taxa table',
+    'HOME' => 'Home',
+    'SENSITIVE_TAXA' => 'Sensitive Species for Masking Locality Details',
+    'TOGGLE_EDIT' => 'Toggle Editing Functions',
+    'EDIT' => 'Edit',
+    'PENCIL_ICON' => 'pencil icon depicting edit capability',
+    'PROTECTED_SPECIES' => 'Protected Species',
+    'FILTER' => 'Filter',
+    'TAXON_SEARCH' => 'Taxon Search',
+    'SEARCH' => 'Search',
+    'DESCRIPTION' => 'Species in the list below have protective status with specific locality details below county withheld (e.g. decimal lat/long).
+	Rare, threatened, or sensitive status are the typical causes for protection though species that are cherished by collectors or wild harvesters may also appear on the list.',
+    'OCCURRENCES_PROTECTED' => 'Occurrences protected',
+    'NUMBER_AFFECTED' => 'Number of specimens affected',
+    'VERIFY_PROTECTIONS' => 'Verify Protections',
+    'GLOBAL_PROTECTIONS' => 'Global Protections',
+    'ADD_TAXON' => 'Add Taxon to List',
+    'SCIENTIFIC_NAME' => 'Scientific Name',
+    'ADD_SPECIES' => 'Add Species',
+    'REMOVE_SPECIES' => 'remove species from list',
+    'NO_TAXA' => 'No species were returned marked for global protection',
+    'PRIVATE' => 'private',
+    'STATE_PROTECTIONS' => 'State/Province Level Protections',
+    'NO_CHECKLIST' => 'No checklists returned',
+];

@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'LABEL_FORMAT_EDITOR' => 'Label Format Visual Editor',
+    'FIELDS_AVAILABLE' => 'Fields Available',
+    'FOR_FIELD_DEFINITIONS' => 'For field definitions please refer to the',
+    'DWC_QUICK_REFERENCE' => 'Darwin Core Quick Reference Guide',
+    'FILTER_FIELDS_BY_CAT' => 'Filter fields by category',
+    'ALL' => 'All',
+    'SPECIMEN' => 'Specimen',
+    'TAXON' => 'Taxon',
+    'DETERMINATION' => 'Determination',
+    'EVENT' => 'Event',
+    'LOCALITY' => 'Locality',
+    'LABEL_CONTENT_AREA' => 'Label Content Area',
+    'LABEL_CONTENT_INSTRUCTIONS' => 'drag, drop & reorder fields here; click to select fields or lines to apply formats (only one item formattable at a time); reorder lines clicking on arrows; remove lines/fields clicking on "x"',
+    'ADD_LINE' => 'Add line',
+    'LABEL_PREVIEW' => 'Label preview',
+    'CONTENT_AUTO_DISPLAYED' => 'content automatically displayed below',
+    'SAVE_CLOSE' => 'Save format & Close',
+    'CANCEL_CLOSE' => 'Cancel & Close',
+    'FIELD_OPTIONS' => 'Field Options',
+    'PREFIX' => 'Prefix',
+    'SUFFIX' => 'Suffix',
+    'LINE_OPTIONS' => 'Line Options',
+    'FIELD_DELIMITER' => 'Fields Delimiter',
+];

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'TAX_DISPLAY' => 'Taxonomy Display',
+    'HOME' => 'Home',
+    'TAX_TREE_VIEWER' => 'Taxonomic Tree Viewer',
+    'ADD_NEW_TAXON' => 'Add a New Taxon',
+    'DESCRIPTION' => 'Description',
+    'EDITORS' => 'Editors',
+    'CONTACT' => 'Contact',
+    'EMAIL' => 'Email',
+    'NOTES' => 'Notes',
+    'TAX_SEARCH' => 'Taxon Search',
+    'TAXON' => 'Taxon',
+    'DISP_TAX_TREE' => 'Display Taxon Tree',
+    'DISP_AUTHORS' => 'Display authors',
+    'MATCH_WHOLE_WORDS' => 'Match on whole words',
+    'DISP_FULL_TREE' => 'Display full tree below family',
+    'DISP_SUBGENERA' => 'Display species with subgenera',
+    'LIMIT_TO_OCCURRENCES' => 'Display only taxa linked to occurrences',
+    'EXPORT_TREE' => 'Export Taxonomy',
+    'PLUS_SIGN_DESC' => 'Image of a plus sign, indicating create new taxon',
+    'NO_TAXA_FOUND' => 'No taxa found matching your search',
+    'TAX_EXPLORE' => 'Taxonomy Explorer',
+    'EDITOR_MODE' => 'Editor mode',
+    'CENTRAL_THESAURUS' => 'Central Thesaurus',
+    'CENTRAL_TAXANOMIC_THESAURUS' => 'Central Taxonomic Thesaurus',
+];

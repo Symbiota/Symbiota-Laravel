@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'TAX_PERMISSIONS' => 'Permisos de Usuario con Interés Taxonómico',
+    'SELECT_USER' => 'Seleccionar un Usuario',
+    'SELECT_SCOPE' => 'Seleccionar el Alcance de la Relación',
+    'SELECT_TAXON' => 'Seleccionar el Nombre Científico',
+    'NEW_TAX_REL' => 'Nueva Relación Taxonómica',
+    'TAXON' => 'Taxón',
+    'SCOPE_REL' => 'Alcance de la Relación',
+    'OCC_ID_EDITOR' => 'Editor de Identificación de Ocurrencias',
+    'REGION' => 'Región de Interés',
+    'TAX_THES_EDITOR' => 'Editor de Tesauro Taxonómico',
+    'SCOPE_LIMITS' => 'Límites de Alcance Geográfico',
+    'ADD_TAX_REL' => 'Añadir Relaciones Taxonómicas',
+    'ADD_TAX' => 'Añadir Relaciones Taxonómicas',
+    'OCC_EDIT' => 'Editor de Ocurrencias',
+    'TAX_THES' => 'Editor de Tesauro Taxonómico',
+    'REMOVE_LINKS' => '¿Está seguro que quiere remover todos los enlaces de taxonomía para este usuario?',
+    'DELETE_LINKS' => 'Remover todas las relaciones taxonómicas para este usuario',
+    'REMOVE_ONE_LINK' => '¿Está seguro que quiere remover este enlace de taxonomía para este usuario?',
+    'DELETE_A_LINK' => 'Eliminar esta relación taxonómica',
+    'NOT_AUTH' => 'No está autorizado para ingresar en esta página',
+    'ADD' => 'Agregar botón',
+];

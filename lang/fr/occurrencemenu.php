@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'NO_PROJECTS' => 'Vous n\'avez pas encore d\'autorisations de gestion pour les projets d\'occurrence',
+    'TOTAL_RECORDS' => 'Nombre total d\'Occurrences',
+    'DISPLAY_ALL' => 'Afficher Tous Enregistrements',
+    'SEARCH_RECORDS' => 'Rechercher des Enregistrements',
+    'ADD_RECORD' => 'Ajouter Nouvelle Occurrence',
+    'DUP_CLUSTER' => 'regroupement en Double',
+    'PRINT_LABELS' => 'Imprimer des Étiquettes',
+    'PRINT_ANNOTATIONS' => 'Imprimer des Étiquettes d\'Annotation',
+    'SUBMIT_OBSERVATION' => 'Soumettre des Observations avec un Échantillon d\'Image',
+    'REVIEW_EDITS' => 'Examiner/vérifier Modifications d\'Occurrence',
+    'DOWNLOAD_BACKUP' => 'Télécharger Fichier de Sauvegarde (Extrait CSV)',
+    'VIEW_COMMENTS' => 'Afficher Commentaires des Utilisateurs',
+    'UNREVIEWED' => 'commentaires non examinés',
+    'DATA_CLEANING' => 'Module de Nettoyage des Données',
+    'COL_MANAGE' => 'Gestion des Collections',
+    'OBS_MANAGEMENT' => 'Gestion de Projets d\'Observation',
+    'GEN_OBS_ADMIN' => 'Observations Générales Administration',
+    'MISC_TOOLS' => 'Outils Divers',
+    'DATASET_MANAGEMENT' => 'Gestion des Jeux de Données',
+    'CROSS_COL_GEOREF' => 'Outil de Géoréférencement de Collections Multiples',
+    'CROSS_COL_TAXON' => 'Outil de Nettoyage de Taxonomie de Collections Multiples',
+    'OCCURRENCE_MENU' => 'Menu des Événements',
+];

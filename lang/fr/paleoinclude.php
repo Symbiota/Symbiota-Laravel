@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ERR_ONE_INTERVALS_EMPTY' => 'Valeur manquante : une valeur doit être sélectionnée pour l\'intervalle précoce et l\'intervalle tardif, même si ces valeurs sont identiques, par exemple \"Crétacé\" et \"Crétacé\".',
+    'ERR_BAD_TERM_ORDER' => 'Valeur illogique sélectionnée! La valeur de l\'intervalle précoce doit être géologiquement plus ancienne que celle de l\'intervalle tardif.',
+    'EARLY_INTERVAL_LABEL' => 'Intervalle Précoce',
+    'LATE_INTERVAL_LABEL' => 'Intervalle Tardif',
+    'MISMATCHED_TERM' => 'terme non concordant',
+    'ABSOLUTE_AGE_LABEL' => 'Âge absolu',
+    'STORAGE_LOC_LABEL' => 'Emplacement de stockage',
+    'LOCAL_STAGE_LABEL' => 'Étape locale',
+    'BIOTA_LABEL' => 'Biote (Flore/Faune)',
+    'BIOSTRATIGRAPHY_LABEL' => 'Biostratigraphie',
+    'TAXON_ENVIRONMENT_LABEL' => 'Environnement fiscal',
+    'MARINE' => 'marine',
+    'NON_MARINE' => 'non marin',
+    'NON_MARINE_MARINE' => 'marin et non marin',
+    'LITHOGROUP_LABEL' => 'Groupe',
+    'FORMATION_LABEL' => 'Formation',
+    'MEMBER_LABEL' => 'Membre',
+    'BED_LABEL' => 'Fond',
+    'LITHOLOGY_LABEL' => 'Lithologie',
+    'STRAT_REMARKS_LABEL' => 'Remarques stratigraphiques',
+    'ELEMENT_LABEL' => 'Élément',
+    'SLIDE_PROPERTIES_LABEL' => 'Propriétés du glissement',
+    'GEOLOGICAL_CONTEXT_ID_LABEL' => 'ID de contexte',
+];

@@ -1,0 +1,127 @@
+<?php
+
+return [
+    'EDIT_METADATA' => 'Modifier les Métadonnées et les Contacts de la Collection',
+    'COLLECTION_METADATA_EDITOR' => 'Onglet Éditeur de Métadonnées de Collection',
+    'ADD_SUCCESS' => 'Nouvelle collection ajoutée avec succès',
+    'ADD_STUFF' => 'Ajoutez des contacts, des liens vers des ressources ou l\'adresse de l\'institution ci-dessous',
+    'COL_PROFS' => 'Profils de Collecte',
+    'LOADING' => '<p>En train de charger</p>',
+    'META_EDIT' => 'Éditeur de Métadonnées',
+    'CREATE_COLL' => 'Créer Nouveau Profil de Collection',
+    'COL_META_EDIT' => 'Éditeur de Métadonnées de Collection',
+    'CONT_RES' => 'Contacts et Ressources',
+    'COL_INFO' => 'Informations sur Collecte',
+    'INST_CODE' => 'Code de l\'Établissement',
+    'MORE_INST_CODE' => 'Plus d\'Informations sur Code de Établissement',
+    'NAME_ONE' => 'Le nom (ou l\'acronyme) utilisé par l\'institution ayant la garde des dossiers d\'événement. Ce champ est requis. Pour plus de détails, voir',
+    'DWC_DEF' => 'Définition de Darwin Core',
+    'COLL_CODE' => 'Code de Collecte',
+    'MORE_COLL_CODE' => 'Plus d\'Informations sur Code de Collecte',
+    'NAME_ACRO' => 'Le nom, l\'acronyme ou le code identifiant la collection ou l\'ensemble de données d\'où provient l\'enregistrement. Ce champ est facultatif. Pour plus de détails, voir',
+    'COLL_NAME' => 'Nom de Collection',
+    'DESC' => 'Description (2000 caractères maximum)',
+    'HOMEPAGE' => 'Page d\'Accueil',
+    'CONTACT' => 'Contact',
+    'EMAIL' => 'Email',
+    'LAT' => 'Latitude',
+    'LONG' => 'Longitude',
+    'MAP' => 'Ouvrir la carte',
+    'MORE_INFO' => 'Plus d\'Information',
+    'CATEGORY' => 'Catégorie',
+    'NO_CATEGORY' => 'Aucune Catégorie',
+    'ALLOW_PUBLIC_EDITS' => 'Autoriser Modifications Publiques',
+    'MORE_PUB_EDITS' => 'Plus d\'informations sur Modifications Publiques',
+    'EXPLAIN_PUBLIC' => 'La vérification des modifications publiques permettra à tout utilisateur connecté au système de modifier les enregistrements de spécimens
+					et de résoudre les erreurs trouvées dans la collection.
+					Cependant, si l\'utilisateur n\'a pas d\'autorisation explicite pour la collection donnée,
+					les modifications ne seront pas appliquées tant qu\'elles n\'auront pas été examinées et approuvées par l\'administrateur de la collection.',
+    'LICENSE' => 'Licence',
+    'MORE_INFO_RIGHTS' => 'Plus d\'informations sur Droits',
+    'ORPHANED' => 'terme orphelin',
+    'LEGAL_DOC' => 'Un document légal donnant l\'autorisation officielle de faire quelque chose avec la ressource.
+					Ce champ peut être limité à un ensemble de valeurs en modifiant le fichier de configuration central du portail.
+					Pour plus de détails, voir',
+    'RIGHTS_HOLDER' => 'Titulaire des Droits',
+    'MORE_INFO_RIGHTS_H' => 'Plus d\'informations sur Titulaire des Droits',
+    'HOLDER_DEF' => 'L\'organisation ou la personne qui gère ou détient les droits de la ressource.
+					Pour plus de détails, voir',
+    'ACCESS_RIGHTS' => 'Droits d\'Accès',
+    'MORE_INFO_ACCESS_RIGHTS' => 'Plus d\'informations sur Droits d\'Accès',
+    'ACCESS_DEF' => 'Des informations ou un lien URL vers une page avec des détails expliquant comment utiliser les données. Voir',
+    'DATASET_TYPE' => 'Type de Jeu de Données',
+    'PRES_SPECS' => 'Spécimens Conservés',
+    'FOSSIL_SPECS' => 'Spécimens fossile',
+    'FOSSIL_WARN_1' => 'Sélectionner «Spécimens fossiles» activera le module Paléo pour cette collection et définira la valeur par défaut sur «FossilSpecimen» pour',
+    'FOSSIL_WARN_2' => 'Choisissez cette option uniquement si vous prévoyez d\'utiliser ce profil de collection pour cataloguer des fossiles.',
+    'FOSSIL_WARN_3' => 'Des fonctionnalités supplémentaires peuvent nécessiter l\'activation pour rendre vos données de spécimens fossiles accessibles au public sur ce portail.
+						Contactez votre gestionnaire de portail pour plus d\'informations.',
+    'OBSERVATIONS' => 'Observations',
+    'PERS_OBS_MAN' => 'Gestion des Observations Personnelles',
+    'MORE_COL_TYPE' => 'Plus d\'informations sur Type de Collection',
+    'COL_TYPE_DEF' => 'Spécimens conservés désignent un type de collection qui contient des échantillons physiques disponibles
+						pour inspection par les chercheurs et les experts taxonomiques. Utilisez Observations lorsque l\'enregistrement n\'est pas basé sur un spécimen physique.
+						Gestion des Observations Personnelles est un ensemble de données où les utilisateurs enregistrés peuvent gérer indépendamment leur propre sous-ensemble d\'enregistrements.
+						Les enregistrements saisis dans cet ensemble de données sont explicitement liés au profil de l\'utilisateur et ne peuvent être modifiés que par lui.
+						Ce type de collecte est généralement utilisé par les chercheurs de terrain pour gérer leurs données de collecte et imprimer des étiquettes
+						avant de déposer le matériel physique dans une collection. Même si les collections personnelles
+						sont représentés par un échantillon physique, ils sont classés en &quot;observations jusqu\'à ce que le
+						le matériel physique est accessible au public au sein d\'une collection.',
+    'MANAGEMENT' => 'Gestion',
+    'SNAPSHOT' => 'Instantané',
+    'LIVE_DATA' => 'Données en Direct',
+    'AGGREGATE' => 'Agrégat',
+    'MORE_INFO_TYPE' => 'Plus d\'informations sur Type de Gestion',
+    'SNAPSHOT_DEF' => 'Utilisez Snapshot lorsqu\'une base de données interne distincte est conservée dans la collection et que l\'ensemble de données
+						du portail Symbiota n\'est qu\'un instantané mis à jour périodiquement de la base de données centrale.
+						Un Jeu de Données en Direct est lorsque les données sont gérées directement dans le portail et que la base de données centrale est constituée des données du portail.',
+    'GUID_SOURCE' => 'Source de GUID',
+    'NOT_DEFINED' => 'Non défini',
+    'MORE_INFO_GUID' => 'Plus d\'informations sur Identifiant Unique Global',
+    'OCCURRENCE_ID' => 'ID d\'Occurrence',
+    'SYMB_GUID' => 'GUID (UUID) Généré par Symbiota',
+    'OCCID_DEF_1' => 'ID d\'Occurrence est généralement utilisé pour les ensembles de données d\'Instantané
+						lorsqu\'un champ d\'identificateur unique global (GUID) est fourni par la base de données source
+						(par exemple, spécifier la base de données) et que le GUID est mappé sur le',
+    'OCCURRENCEID' => 'occurrenceId',
+    'OCCID_DEF_2' => 'champ. L\'utilisation de l\'ID d\'Occurrence comme GUID n\'est pas recommandée pour les Jeux de Données en Direct.
+						Le numéro de catalogue peut être utilisé lorsque la valeur dans le champ du numéro de catalogue est globalement unique.
+						L\'option GUID (UUID) Généré par Symbiota déclenchera le portail de données Symbiota pour générer automatiquement
+						des UUID GUID pour chaque enregistrement. Cette option est recommandée pour beaucoup pour les Jeux de Données en Direct
+						mais non autorisé pour les collections d\'instantanés gérées dans le système de gestion local.',
+    'PUBLISH_TO_AGGS' => 'Activer Publication auprès Agrégateurs',
+    'MORE_INFO_AGGREGATORS' => 'Plus d\'informations sur la publication sur des agrégateurs',
+    'ACTIVATE_GBIF' => 'Active les outils de publication GBIF disponibles dans l\'option de menu Publier Archive Darwin Core',
+    'SOURCE_REC_URL' => 'URL de l\'Enregistrement Source',
+    'DYNAMIC_LINK_REC' => 'Lien dynamique vers la page d\'enregistrement individuel de la base de données source',
+    'MORE_INFO_SOURCE' => 'Plus d\'informations sur l\'URL d\'Enregistrement Source',
+    'ADVANCE_SETTING' => 'Réglage avancé: L\'ajout d\'un modèle d\'URL ici insérera un lien vers l\'enregistrement source dans la page des détails du spécimen.
+						Un titre d\'URL facultatif peut être inclus avec un deux-points délimitant le titre et l\'URL.
+						Par exemple, &quot;Enregistrement source SEINet',
+    'ADVANCE_SETTING_2' => 'affichera l\'ID avec l\'url pointant vers l\'original
+						enregistrement géré au sein de SEINet. Ou',
+    'ADVANCE_SETTING_3' => 'peut être utilisé pour une importation iNaturalist si vous avez mappé leur champ ID en tant que qu\'identifiant source
+						(par exemple, dbpk) lors de l\'importation. Modèles de modèles --CATALOGNUMBER-- (Numéro de Catalogue,
+						--OTHERCATALOGNUMBERS-- (Autres Numéros de Catalogue), et --OCCURRENCEID-- sont des options supplémentaires.',
+    'ICON_URL' => 'URL de Icône',
+    'WHAT_ICON' => 'Qu\'est-ce qu\'une icône?',
+    'UPLOAD_ICON' => 'Téléchargez un fichier image d\'icône ou entrez l\'URL d\'une icône d\'image qui représente la collection. Si vous saisissez l\'URL d\'une image déjà localisée
+						sur un serveur, cliquez sur &quot;Saisir URL&quot;. Le chemin de l\'URL peut être absolu ou relatif. L\'utilisation d\'icônes est facultative.',
+    'ENTER_URL' => 'Entrer URL',
+    'UPLOAD_LOCAL' => 'Télécharger Image Locale',
+    'SORT_SEQUENCE' => 'Séquence de Tri',
+    'MORE_SORTING' => 'Plus d\'informations sur Tri',
+    'LEAVE_IF_ALPHABET' => 'Laissez ce champ vide si vous souhaitez que les collections soient triées par ordre alphabétique (par défaut)',
+    'COLLECTION_ID' => 'Identifiant de Collection (GUID)',
+    'EXPLAIN_COLLID' => 'Identifiant unique global pour cette collection (voir',
+    'DWC_COLLID' => 'dwc:collectionID',
+    'EXPLAIN_COLLID_2' => 'Si votre collection a déjà un GUID précédemment attribué, cet identifiant doit être représenté ici.
+						Pour les spécimens physiques, la meilleure pratique recommandée est d\'utiliser un identifiant d\'un registre de collections tel que le
+						Registre Mondial des Dépôts de Niodiversité',
+    'SECURITY_KEY' => 'Clef de Sécurité',
+    'RECORDID' => 'IDenregistrement',
+    'SAVE_EDITS' => 'Énregistrer Modifications',
+    'CREATE_COLL_2' => 'Créer Nouvelle Collection',
+    'TINYMCE_INFO' => 'Descriptif des collections. Vous pouvez accéder à la barre d\'outils d\'édition de texte pour cette description en appuyant
+						 sur la combinaison de touches ALT + F10 sous Windows ou OPTION + F10 sous MacOS.',
+];

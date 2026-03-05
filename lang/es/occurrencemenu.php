@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'NO_PROJECTS' => 'No tiene permisos de administración para ningún proyecto de ocurrencias',
+    'TOTAL_RECORDS' => 'Conteo Total de Registros',
+    'DISPLAY_ALL' => 'Desplegar Todos los Registros',
+    'SEARCH_RECORDS' => 'Buscar Registros',
+    'ADD_RECORD' => 'Añadir un Nuevo Registro',
+    'DUP_CLUSTER' => 'Duplicar Agrupamiento',
+    'PRINT_LABELS' => 'Imprimir Etiquetas',
+    'PRINT_ANNOTATIONS' => 'Imprimir Etiquetas de Anotación',
+    'SUBMIT_OBSERVATION' => 'Enviar observación con imagen voucher',
+    'REVIEW_EDITS' => 'Revisar/Verificar Ediciones de Ocurrencia',
+    'DOWNLOAD_BACKUP' => 'Descargar archivo de respaldo (extracto CSV)',
+    'VIEW_COMMENTS' => 'Ver Comentarios de Usuarios',
+    'UNREVIEWED' => 'comentarios sin revisar',
+    'DATA_CLEANING' => 'Módulo de Limpieza de Datos',
+    'COL_MANAGE' => 'Manejo de Colecciones',
+    'OBS_MANAGEMENT' => 'Manejo de Proyectos de Observaciones',
+    'GEN_OBS_ADMIN' => 'Administración General de Observaciones',
+    'MISC_TOOLS' => 'Herramientas Misceláneas',
+    'DATASET_MANAGEMENT' => 'Manejo de Conjuntos de Datos',
+    'CROSS_COL_GEOREF' => 'Herramienta de Georreferenciación a través de Colecciones',
+    'CROSS_COL_TAXON' => 'Herramienta de Limpieza de Taxonomía a través de Colecciones',
+    'OCCURRENCE_MENU' => 'Menú de Ocurrencia',
+];

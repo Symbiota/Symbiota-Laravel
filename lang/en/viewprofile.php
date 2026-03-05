@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'FAILED' => 'Profile update failed!',
+    'PWORD_SUCCESS' => 'Password update successful',
+    'ERROR_PWD_SAME' => 'ERROR: Your new password cannot be the same as your previous password',
+    'PWD_UPDATE_FAILED' => 'Password update failed!',
+    'UPDATE_SUCCESSFUL' => 'Username update successful!',
+    'LOGIN_USED' => 'Login is already being used by another user. Please try a new login.',
+    'INCORRECT_PWD' => 'ERROR saving new login: incorrect password',
+    'ERROR_SAVING_LOGIN' => 'ERROR saving new login. Please contact administrator.',
+    'TOKENS_CLEARED' => 'Access tokens cleared!',
+    'TOKENS_ERROR' => 'ERROR clearing access tokens',
+    'DELETE_FAILED' => 'Profile deletion failed!',
+    'DATA_CONFLICT' => 'User ID required within other tables (e.g. foreign key constraint).',
+    'CONTACT_ADMIN' => 'Please contact the system administrator',
+    'HOME' => 'Home',
+    'MY_PROFILE' => 'My Profile',
+    'VIEW_PROFILE' => 'View User Profile',
+    'SPEC_CHECKLIST' => 'Species Checklists',
+    'OCC_MGMNT' => 'Occurrence Management',
+    'USER_PROFILE' => 'User Profile',
+    'IDS_NEEDED' => 'IDs Needed',
+    'IMAGES_ID' => 'Images for ID',
+];

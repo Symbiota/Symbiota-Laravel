@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'NO_PROJECTS' => 'You do not yet have management permissions for any occurrence projects',
+    'TOTAL_RECORDS' => 'Total Record Count',
+    'DISPLAY_ALL' => 'Display All Records',
+    'SEARCH_RECORDS' => 'Search Records',
+    'ADD_RECORD' => 'Add a New Record',
+    'DUP_CLUSTER' => 'Duplicate Clustering',
+    'PRINT_LABELS' => 'Print Labels',
+    'PRINT_ANNOTATIONS' => 'Print Annotation Labels',
+    'SUBMIT_OBSERVATION' => 'Submit image-vouchered observation',
+    'REVIEW_EDITS' => 'Review/Verify Occurrence Edits',
+    'DOWNLOAD_BACKUP' => 'Download backup file (CSV extract)',
+    'VIEW_COMMENTS' => 'View User Comments',
+    'UNREVIEWED' => 'unreviewed comments',
+    'DATA_CLEANING' => 'Data Cleaning Module',
+    'COL_MANAGE' => 'Collection Management',
+    'OBS_MANAGEMENT' => 'Observation Project Management',
+    'GEN_OBS_ADMIN' => 'General Observation Administration',
+    'MISC_TOOLS' => 'Miscellaneous Tools',
+    'DATASET_MANAGEMENT' => 'Dataset Management',
+    'CROSS_COL_GEOREF' => 'Cross-Collection Georeferencing Tool',
+    'CROSS_COL_TAXON' => 'Cross Collection Taxonomy Cleaning Tool',
+    'OCCURRENCE_MENU' => 'Occurrence Menu',
+];
