@@ -1,0 +1,42 @@
+<?php
+
+return [
+    'ATTRI_MINING_TOOL' => 'Herramienta de minería de atributos',
+    'OCC_ATTRI_MINING_TOOL' => 'Herramienta de minería de atributos de ocurrencia',
+    'MUST_SELECT_TRAIT' => 'Debes seleccionar un rasgo',
+    'MUST_SELECT_SOURCE_FIELD' => 'Se debe seleccionar un campo de origen',
+    'MUST_SELECT_FIELD_VALUE' => 'Debes seleccionar al menos un valor de campo',
+    'CHOOSE_ONE_STATE' => 'Por favor elija al menos un estado para asignar',
+    'SELECT_COLLECT_TO_HARVEST' => 'Seleccione al menos una colección para cosechar',
+    'COLLECTION_MANAGEMENT' => 'Gestión de colecciones',
+    'ADJUST_COLLECTION_SELECTION' => 'Ajustar selección de colección',
+    'SEARCH_ALL_COLLECTION' => 'Buscando en todas las colecciones',
+    'CLICK_DISPLAY_COLLEC_LIST' => 'haga clic para mostrar la lista de colecciones',
+    'OCC_TRAITS_MAPPING' => 'Este módulo asigna rasgos de ocurrencia a especímenes basándose en el contenido del campo de texto textual.',
+    'PHENOLOGY_TRAIT_MAPPING' => 'Por ejemplo, los rasgos fenológicos se pueden codificar en masa mapeando varios
+cadenas de texto que se muestran dentro del campo de texto Condición reproductiva a una fenología controlada definida dentro de los campos de rasgos de ocurrencia.
+Los atributos de rasgos codificados se pueden descargar y compartir a través de las herramientas de publicación y exportación del archivo Darwin Core (DwC).
+Los rasgos se incluyen dentro de un ',
+    'SEARCHING' => 'Buscando',
+    'MEASUREMENT_OR_FACT' => 'Medición o hecho',
+    'DWC_EXTENSION_FILE' => ' Archivo de extensión DwC.',
+    'HARVESTING_FILTER' => 'Filtro de recolección',
+    'OCC_TRAIT' => 'Rasgo de ocurrencia:',
+    'SELECT_TARGET_TRAIT' => 'Seleccionar rasgo objetivo (obligatorio)',
+    'NO_ATTRI_AVAILABLE' => 'No hay atributos disponibles',
+    'VERBATIM_TEXT_SOURCE' => 'Fuente del texto textual:',
+    'SELECT_SOURCE_FIELD' => 'Seleccionar campo de origen (obligatorio)',
+    'FILTER_BY_TEXT' => 'Filtrar por texto (opcional):',
+    'GET_FEILD_VALUE' => 'Obtener valores de campo',
+    'FILTER_BY_TAXON' => 'Filtrar por taxón (opcional):',
+    'VERIFYING_TAXONOMY' => 'verificando taxonomía...',
+    'TAXON_NOT_VALID' => 'taxón no válido...',
+    'SELECT_SOURCE_FIELD_VALUES' => 'Seleccionar valores de campo de origen',
+    'HOLD_DOWN_BUTTONS_TO_SELECT' => ' - mantenga presionados los botones de control o mayúsculas para seleccionar más de un valor',
+    'TOGGLE_ATTRI_TREE' => 'Activar/cerrar árbol de atributos',
+    'EXPERT NEEDED' => 'Se necesita experto',
+    'BATCH_ASSIGN_STATE' => 'Estados de asignación por lotes',
+    'SELECT_COLLECTIONS' => 'Seleccione las colecciones que desea codificar:',
+    'SELECT_DESELECT_ALL' => 'Seleccionar/Deseleccionar todo',
+    'HARVEST_COLLECTIONS' => 'Cosecha de colecciones',
+];

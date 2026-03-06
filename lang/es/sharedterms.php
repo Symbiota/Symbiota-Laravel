@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'COLL_PROFILE' => 'Perfil de Colección',
+    'MAILING_ADD' => 'Dirección Postal',
+    'NEED_INST_CODE' => 'El Código de Institución debe tener un valor',
+    'NEED_COLL_VALUE' => 'Nombre de Colección debe tener un valor',
+    'CANNOT_GUID' => 'El GUID Generado por Symbiota no puede ser seleccionado para una colección que es manejada localmente fuera de este portal (e.g. manejo tipo Snapshot). En este caso, el GUID debe ser generado en la base de datos de origen e ingresado en el portal como parte del proceso de importación de datos.',
+    'NEED_DECIMAL' => 'Los valores de latitud y longitud deben estar en formato decimal (solamente valores numéricos)',
+    'NEED_RIGHTS' => 'El campo de Derechos (e.g. licencia Creative Commons) debe tener una opción seleccionada',
+    'SORT_NUMERIC' => 'La secuencia de orden debe ser solamente numérica',
+    'AGG_GUID' => 'Un conjunto de datos Agregado (e.g. especímenes provenientes de múltiples colecciones) pueden tener únicamente occurrenceID seleccionado como fuente de los GUID',
+    'NEED_GUID' => 'Debe seleccionar una fuente de GUID para poder publicar a agregadores de datos.',
+    'MUST_SMALL' => 'El archivo de imagen debe ser menor a 350 pixeles de ancho y alto.',
+    'NOT_SUPPORTED' => 'Archivo no compatible. Las extensiones aceptadas incluyen: jpg, png, o gif.',
+    'EDIT_ADDRESS' => 'Editar dirección institucional',
+    'UNLINK_ADDRESS' => 'Desvincular dirección institucional',
+    'NO_ADDRESS' => 'No hay direcciones vinculadas',
+    'SEL_ADDRESS' => 'Seleccionar Dirección Institucional',
+    'LINK_ADDRESS' => 'Vincular Dirección',
+    'ADD_ADDRESS' => 'Añadir una nueva dirección no incluida en la lista',
+    'ADD_INST' => 'Añadir una nueva institución no incluida en la lista',
+    'LINK_URL_REQ' => 'URL de enlace y título requeridos',
+    'CLOSE' => 'Cerrar',
+];

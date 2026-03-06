@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ERR_ONE_INTERVALS_EMPTY' => 'Valor faltante: Tanto el Intervalo Temprano como el Intervalo Tardío deben tener un valor seleccionado, incluso si son iguales, p. ej., \"Cretácico\" y \"Cretácico\".',
+    'ERR_BAD_TERM_ORDER' => '¡Valor ilógico seleccionado! El valor del Intervalo Temprano debe ser geológicamente más antiguo que el del Intervalo Tardío.',
+    'EARLY_INTERVAL_LABEL' => 'Intervalo Temprano',
+    'LATE_INTERVAL_LABEL' => 'Intervalo Tardío',
+    'MISMATCHED_TERM' => 'término no coincidente',
+    'ABSOLUTE_AGE_LABEL' => 'Edad absoluta',
+    'STORAGE_LOC_LABEL' => 'Ubicación de almacenamiento',
+    'LOCAL_STAGE_LABEL' => 'Etapa local',
+    'BIOTA_LABEL' => 'Biota',
+    'BIOSTRATIGRAPHY_LABEL' => 'Bioestratigrafía',
+    'TAXON_ENVIRONMENT_LABEL' => 'Entorno del taxón',
+    'MARINE' => 'marino',
+    'NON_MARINE' => 'no marino',
+    'NON_MARINE_MARINE' => 'marino y no marino',
+    'LITHOGROUP_LABEL' => 'Grupo',
+    'FORMATION_LABEL' => 'Formación',
+    'MEMBER_LABEL' => 'Miembro',
+    'BED_LABEL' => 'Fondo',
+    'LITHOLOGY_LABEL' => 'Litología',
+    'STRAT_REMARKS_LABEL' => 'Observaciones estratigráficas',
+    'ELEMENT_LABEL' => 'Elemento',
+    'SLIDE_PROPERTIES_LABEL' => 'Propiedades del deslizamiento',
+    'GEOLOGICAL_CONTEXT_ID_LABEL' => 'ID de contexto',
+];

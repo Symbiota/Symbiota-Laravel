@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'SPCHECKREL' => 'Species Checklist Relationships',
+    'VOUCHEROFFOLLOWING' => 'Specimen voucher of the following checklists',
+    'DELVOUCHER' => 'Delete voucher link',
+    'CONFIRMVOUCHER' => 'Are you sure you want to remove this voucher link?',
+    'NOTAVOUCHER' => 'This occurrence has not been designated as a voucher for a species checklist',
+    'NEWVOUCHER' => 'New Voucher Assignment',
+    'ADDVOUCHERCHECK' => 'Add as voucher to checklist',
+    'SELECTCHECKLIST' => 'Select a Checklist',
+    'VIEWABLEPUBLIC' => 'Viewable to public',
+    'EDITORNOTES' => 'Editor Notes',
+    'VIEWABLEEDITORS' => 'Viewable only to checklist editors',
+    'ADDVOUCHER' => 'Add Voucher',
+    'UNABLETOADD' => 'Unable to use this specimen record as a voucher because scientific name counld not be verified in the taxonomic thesaurus (misspelled?)',
+    'DATASETLINKAGES' => 'Dataset Linkages',
+    'MEMBEROF' => 'Member of the following datasets',
+    'OCCURRENCENOTLINKED' => 'Occurrence is not linked to any datasets',
+    'CREATENEWREL' => 'Create New Dataset Relationship',
+    'SELECTEXISTING' => 'Select an Existing Dataset',
+    'CREATENEWDATASET' => 'Create New Dataset',
+    'LINKTO' => 'Link to Dataset',
+    'PRIVATE_STATUS' => 'private status',
+];

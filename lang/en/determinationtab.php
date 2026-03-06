@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'ID_CONFIDENCE' => 'Identification Confidence Ranking',
+    'MODIFY_CURRENT_RANKING' => 'Modify current identification ranking',
+    'ABSOLUTE' => 'Absolute',
+    'UNLIKELY' => 'Unlikely',
+    'SUBMIT_VERIFY_EDITS' => 'Submit Verification Edits',
+    'RANK' => 'Rank',
+    'L_LOW' => 'low',
+    'L_MEDIUM' => 'medium',
+    'L_HIGH' => 'high',
+    'NOT_RANKED' => 'not ranked',
+    'SET_BY' => 'Set by',
+    'ADD_NEW_DET' => 'Add New Determination',
+    'NO_HIST_ANNOTATIONS' => 'There are no historic annotations for this specimen',
+    'CONFIDENCE_IN_DET' => 'Confidence in Determination',
+    'MAKE_THIS_CURRENT' => 'Make this the current determination',
+    'ADD_TO_PRINT' => 'Add to Annotation Print Queue',
+    'SUBMIT_DET' => 'Submit Determination',
+    'CURRENT_DET' => 'CURRENT DETERMINATION',
+    'EDIT_DET' => 'Edit Determination',
+    'APPLIED_STATUS_PENDING' => 'Applied Status Pending',
+    'ADDED_TO_QUEUE' => 'Added to Print Queue',
+    'SUBMIT_DET_EDITS' => 'Submit Determination Edits',
+    'MAKE_DET_CURRENT' => 'Make Determination Current',
+    'DELETE_DET' => 'Delete Determination',
+];

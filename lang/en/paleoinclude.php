@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ERR_ONE_INTERVALS_EMPTY' => 'Missing value: Both Early Interval and Late Interval need to have a value selected, even if these values are the same, e.g. \"Cretaceous\" and \"Cretaceous\".',
+    'ERR_BAD_TERM_ORDER' => 'Illogical value selected! The Early Interval value must be geologically older than the Late Interval value.',
+    'EARLY_INTERVAL_LABEL' => 'Early Interval',
+    'LATE_INTERVAL_LABEL' => 'Late Interval',
+    'MISMATCHED_TERM' => 'mismatched term',
+    'ABSOLUTE_AGE_LABEL' => 'Absolute Age',
+    'STORAGE_LOC_LABEL' => 'Storage Location',
+    'LOCAL_STAGE_LABEL' => 'Local Stage',
+    'BIOTA_LABEL' => 'Biota',
+    'BIOSTRATIGRAPHY_LABEL' => 'Biostratigraphy',
+    'TAXON_ENVIRONMENT_LABEL' => 'Taxon Environment',
+    'MARINE' => 'marine',
+    'NON_MARINE' => 'non-marine',
+    'NON_MARINE_MARINE' => 'marine and non-marine',
+    'LITHOGROUP_LABEL' => 'Group',
+    'FORMATION_LABEL' => 'Formation',
+    'MEMBER_LABEL' => 'Member',
+    'BED_LABEL' => 'Bed',
+    'LITHOLOGY_LABEL' => 'Lithology',
+    'STRAT_REMARKS_LABEL' => 'Stratigraphic Remarks',
+    'ELEMENT_LABEL' => 'Element',
+    'SLIDE_PROPERTIES_LABEL' => 'Slide Properties',
+    'GEOLOGICAL_CONTEXT_ID_LABEL' => 'Context ID',
+];

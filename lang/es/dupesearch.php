@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'DUPL_RECORD_SEARCH' => 'Búsqueda de Registros Duplicados',
+    'EXS_DUPE' => 'Duplicados de Exsiccati',
+    'POSSIBLE_EXACT_DUPES' => 'Posibles Duplicados EXACTOS',
+    'DUPE_CAT_NUM' => 'Número de Catálogo Duplicado',
+    'DUPE_ALT_CAT_NUM' => 'Número de Catálogo Alternativo Duplicado',
+    'POSS_MATCHING_EVENTS' => 'Posibles EVENTOS Duplicados Concordantes',
+    'NOTICE_EXACT_MATCH' => 'AVISO: Posibles coincidencias exactas dentro de la colección. Es posible que el registro ya exista.',
+    'DATE_EMPTY' => 'Campo de fecha vacío',
+    'ASSOC_COLL' => 'Colectores Asociados',
+    'SCINAME_EMPTY' => 'Nombre Científico vacío',
+    'LOCALITY_EMPTY' => 'Datos de localidad vacíos',
+    'TRANSFER_ALL' => 'Transferir Todos los Campos',
+    'TRANSFER_EMPTY' => 'Transferir a Campos Vacíos Únicamente',
+    'LINK_DUPE' => 'Vincular como Duplicado',
+    'GO_TO_RECORD' => 'Ir a Registro',
+    'SURE_MERGE' => '¿Está seguro que quiere combinar estos dos registros?',
+    'MERGE_RECORDS' => 'Combinar Registros',
+    'MORE_INFO_ALT' => 'Más información sobre cómo fusionar duplicados',
+    'NO_DUPES' => 'No se han localizado registros duplicados',
+    'UNKNOWN_ERROR_WHILE_MERGING' => 'Se produjo un error desconocido al fusionar las ocurrencias',
+    'CHECK_DETERMINATIONS_ALERT' => 'Todas las determinaciones únicas se han fusionado en este registro. Consulte la pestaña Historial de determinación para asegurarse de que represente con precisión el historial de determinación de su registro.',
+];

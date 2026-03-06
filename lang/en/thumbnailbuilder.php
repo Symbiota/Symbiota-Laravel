@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'THUMB_BUILDER' => 'Thumbnail Builder',
+    'COL_MAN_MENU' => 'Collection Management Menu',
+    'THUMB_MAINT_TOOL' => 'Thumbnail Maintenance Tool',
+    'FIELD_IMAGES' => 'field images',
+    'PROCESSING_PANEL' => 'Processing Panel',
+    'START_PROCESSING' => 'Start processing',
+    'NUM_IMGS_REFRESHED' => 'Number of images to be refreshed',
+    'FINISHED' => 'Finished!',
+    'IMG_COUNT_EXPLAIN' => 'Image counts without thumbnails and/or basic web image display',
+    'THUMB_IMG_EXPLAIN' => 'This function will build thumbnail images for all occurrence images mapped from an external server.',
+    'TAX_FILTER' => 'Taxon Filter',
+    'ALL_THUMBS_DONE' => 'All images have properly mapped thumbnails. Nothing needs to be done',
+    'NOT_PROCESSING_ERROR' => 'If there are images that are not processing because they are tagged as being handled by another process, click the reset processing button to do a full reset of all image processing.',
+    'RESET_PROCESSING' => 'Reset Proccessing',
+    'INCLUDE_MED' => 'include medium-sized image derivatives in addition to thumbnails',
+    'ROTATE_IMGS' => 'rotate image derivatives based on orientation tag',
+    'PROCESSING_LIMIT' => 'Processing limit',
+    'BUILD_THUMBS' => 'Build Thumbnails',
+    'THUMB_REMAPPER' => 'Thumbnail Re-Mapper',
+    'THUMB_REMAP_EXPLAIN' => 'This tool will iterate through the remotely mapped images and refresh locally stored image derivatives.
+								Default action is to only rebuild derivatives when the creation date of the source image is more recent than the original build date.
+								The alternative option is to force the rebuild of all images.',
+    'IMAGES_AVAIL_REFRESH' => 'Number images available for refresh',
+    'CATNUM_RANGE' => 'Catalog Number Range',
+    'CATNUM_LIST' => 'Catalog Number List',
+    'ONLY_PROCESS_RECENT' => 'Only process images where the source file is more recent than thumbnails',
+    'FORCE_REBUILD' => 'Force rebuild all images',
+    'REFRESH_THUMBS' => 'Refresh Thumbnails',
+    'ERROR_PERMISSIONS' => 'ERROR: improper permissions',
+];

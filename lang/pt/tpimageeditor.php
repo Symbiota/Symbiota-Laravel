@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_VALUE' => 'Novo Valor',
+    'SUBMIT_SORT_EDITS' => 'Enviar edições de classificação de mídia',
+    'ADD_NEW_IMAGE' => 'Adicionar nova mídia',
+    'SELECT_IMAGE_TO_UPLOAD' => 'Selecione um arquivo de mídia localizado em seu computador que você deseja enviar',
+    'KEEP_LARGE_IMG' => 'Mantenha uma versão grande do arquivo, quando aplicável',
+    'IMG_SIZE_NO_GREATER' => 'Nota: o tamanho do upload não pode ser superior a 4 MB',
+    'LINK_TO_EXTERNAL' => 'Link para mídia externa',
+    'ENTER_URL_IMG' => 'Insira um URL para um arquivo de mídia já localizado em um servidor web',
+    'IMPORT_IMG_LOCAL' => 'Importar mídia para servidor local',
+    'UPLOAD_LOCAL' => 'Carregar mídia local',
+    'SEL_CREATOR' => 'Selecionar Criador',
+    'DISP_CREATOR_OVERRIDE' => 'Apresentar campo de substituição do criador',
+    'CREATOR_OVERRIDE_EXPLAIN' => 'Utilizar apenas quando o criador não for encontrado no menu suspenso acima',
+    'URL_TO_SOURCE' => 'URL para o projeto de origem. Use ao vincular a uma mídia externa.',
+    'OCC_REC_NUM' => 'Registro de Ocorrência #',
+    'UPLOAD_IMAGE' => 'Carregar mídia',
+    'MUST_HAVE_EDIT_PERM' => 'Deve ter privilégios de edição para a coleção que gerencia este arquivo de mídia',
+    'IMAGE_LINKED_TO' => 'Mídia vinculada a',
+    'TP_IMAGE_EDITOR' => 'Editor de mídia de perfil de táxon',
+    'NOT_SPECIFIED' => 'Não especificado',
+    'NOT_SET' => 'Não definido',
+];

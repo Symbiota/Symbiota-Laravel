@@ -1,0 +1,22 @@
+<?php
+
+return [
+    'ANN_LAB_MAN' => 'Gestionnaire d\'étiquettes d\'annotation',
+    'SEL_ANN' => 'Veuillez sélectionner au moins un enregistrement d\'annotation !',
+    'PERS_MAN_MEN' => 'Menu de gestion personnelle',
+    'ANN_LAB_PRINT' => 'Impression d\'étiquettes d\'annotation',
+    'CONTACT_FOR_DOC' => 'Veuillez contacter l\'administrateur du site pour rendre le dossier TEMP_DIR_ROOT accessible en écriture afin de pouvoir l\'exporter vers des fichiers docx.',
+    'SEL_DESEL' => 'Sélectionner/Désélectionner tous les spécimens',
+    'ANN_PRINT' => 'Impression des annotations',
+    'HEADER' => 'En-tête',
+    'PRINT_INF_AUTH' => 'Imprimer les auteurs des espèces pour les taxons infraspécifiques',
+    'PRINT_CATNUM' => 'Imprimer les numéros de catalogue',
+    'REM_ANNO' => 'Supprimer les annotations sélectionnées de la file d\'attente',
+    'BORDER_WIDTH' => 'Largeur de la bordure',
+    'COLUMNS_PER_PAGE' => 'Colonnes par page',
+    'SPACE_BW_LABELS' => 'Espacement entre les étiquettes',
+    'PRINT_IN_BROWSER' => 'Imprimer dans le navigateur',
+    'NO_ANNO' => 'Aucune annotation en attente d\'impression.',
+    'NO_ANNO_PERMISSIONS' => 'Vous n\'êtes pas autorisé à imprimer des étiquettes d\'annotation pour cette collection. Veuillez contacter l\'administrateur du site pour obtenir les autorisations nécessaires.',
+    'PRINT_FAMILY_NAME' => 'Imprimer le Nom de la Famille',
+];

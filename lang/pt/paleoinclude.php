@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ERR_ONE_INTERVALS_EMPTY' => 'Valor ausente: Tanto o Intervalo Inicial quanto o Intervalo Final precisam ter um valor selecionado, mesmo que sejam iguais, por exemplo, \"Cretáceo\" e \"Cretáceo\".',
+    'ERR_BAD_TERM_ORDER' => 'Valor ilógico selecionado! O valor do Intervalo Inicial deve ser geologicamente mais antigo que o valor do Intervalo Final.',
+    'EARLY_INTERVAL_LABEL' => 'Intervalo Inicial',
+    'LATE_INTERVAL_LABEL' => 'Intervalo Final',
+    'MISMATCHED_TERM' => 'termo incompatível',
+    'ABSOLUTE_AGE_LABEL' => 'Idade Absoluta',
+    'STORAGE_LOC_LABEL' => 'Local de armazenamento',
+    'LOCAL_STAGE_LABEL' => 'Etapa Local',
+    'BIOTA_LABEL' => 'Biota',
+    'BIOSTRATIGRAPHY_LABEL' => 'Bioestratigrafia',
+    'TAXON_ENVIRONMENT_LABEL' => 'Ambiente Táxon',
+    'MARINE' => 'marinho',
+    'NON_MARINE' => 'não marinho',
+    'NON_MARINE_MARINE' => 'marítimo e não marinho',
+    'LITHOGROUP_LABEL' => 'Grupo',
+    'FORMATION_LABEL' => 'Formação',
+    'MEMBER_LABEL' => 'Membro',
+    'BED_LABEL' => 'Fundo',
+    'LITHOLOGY_LABEL' => 'Litologia',
+    'STRAT_REMARKS_LABEL' => 'Observações Estratigráficas',
+    'ELEMENT_LABEL' => 'Elemento',
+    'SLIDE_PROPERTIES_LABEL' => 'Propriedades do Slide',
+    'GEOLOGICAL_CONTEXT_ID_LABEL' => 'ID do Contexto',
+];
