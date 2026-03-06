@@ -2,7 +2,6 @@
 
 return [
     'DATA_USAGE_GUIDELINES' => 'Directrices para el uso de datos',
-    'HOME' => 'Inicio',
     'GUIDE_ACCESSIBLE' => 'Directrices para el uso aceptable de datos',
     'REC_CITATION' => 'Formatos de cita recomendados',
     'USE_FOLLOWING' => 'Utilice uno de los siguientes formatos para citar datos recuperados de',
@@ -18,7 +17,6 @@ return [
     'NAME_INST_COLL' => 'Nombre de la institución o colección',
     'NAME_INST_OCCUR' => 'Nombre de la institución o colección. Conjunto de datos de ocurrencia',
     'ACCESSED_VIA' => 'acceso a través del portal de instalación de Fresh Symbiota',
-    'GLOSSARY' => 'Glosario',
     'PLEASE_CITE' => 'Por favor, cite este portal\' glosario como',
     'RECORD_USE_POLICY' => 'Política de Uso de Registros de Ocurrencias',
     'OCC_REC_POLICY_1_1' => 'Mientras',
@@ -33,7 +31,6 @@ return [
     'OCC_REC_POLICY_4' => 'Se ruega a los usuarios que no redistribuyan los datos obtenidos de este sitio 
                             sin el permiso de los propietarios de los mismos. Sin embargo, se pueden publicar libremente enlaces 
                             o referencias a este sitio.',
-    'IMAGES' => 'Imágenes',
     'IMAGES_POLICY_1' => 'Las imágenes de este sitio web han sido generosamente aportadas por sus propietarios 
                             para promover la educación y la investigación. 
                             Estos contribuyentes conservan todos los derechos de autor de sus imágenes. Salvo que se indique lo contrario,

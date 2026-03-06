@@ -2,7 +2,6 @@
 
 return [
     'ADD_GLOSSARY_TERM' => 'Ajouter un nouveau terme de glossaire',
-    'GLOSSARY' => 'Glossaire',
     'ADD_TERM' => 'Ajouter un nouveau terme',
     'PLEASE_ADD_TERM' => 'Veuillez saisir une valeur dans le champ du terme',
     'WARNING_LONG' => 'Attention, votre définition est proche de la taille maximale et peut être tronquée. Etes-vous sûr que la définition est complètement saisie ?',
@@ -17,7 +16,6 @@ return [
     'AUTHOR' => 'Auteur',
     'TRANSLATOR' => 'Traducteur',
     'SOURCE' => 'Source',
-    'NOTES' => 'Notes',
     'RES_URL' => 'URL de la ressource',
     'PLEASE_TAXON_2' => 'Veuillez entrer le groupe taxonomique (supérieur à la famille) auquel ce terme s\'applique <b>OU</b> lier le nouveau terme à un terme existant associé',
     'TAX_GROUP' => 'Groupe taxonomique',
@@ -28,7 +26,6 @@ return [
     'SYN' => 'Synonyme',
     'TRANSLATION' => 'Traduction',
     'TRANSS' => 'Traductions',
-    'IMAGES' => 'Images',
     'SEL_TERM' => 'Sélectionner le terme à lier',
     'CREATE_TERM' => 'Créer un terme',
     'NO_PERM' => 'Vous ne disposez pas des autorisations de modification du glossaire',

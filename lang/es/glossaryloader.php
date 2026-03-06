@@ -2,8 +2,6 @@
 
 return [
     'LOADER' => 'Glossary Term Loader',
-    'PLEASE_TAXON' => 'Please enter at least one taxonomic group.',
-    'HOME' => 'Home',
     'GLOSS_MGMNT' => 'Glossary Management',
     'BATCH_LOAD' => 'Descarga de Glosario por Lote',
     'G_BATCH_LOAD' => 'Descarga de Términos de Glosario por Lote',
@@ -22,7 +20,6 @@ return [
     'UNAVAILABLE' => 'Estadísticas de carga no están disponibles',
     'DOWNLOAD_TERMS' => 'Descargar Archivo CSV de Términos',
     'TERM_SUCCESS' => 'Carga de términos aparentemente fue exitosa',
-    'GO_TO' => 'Ir a',
     'G_SEARCH' => 'Búsqueda en Glosario',
     'TO_SEARCH' => 'para buscar por un nombre cargado.',
     'UPLOAD_EXPLAIN' => 'Archivos de texto planos CSV (delimitados por coma) pueden ser cargados aquí.
@@ -39,5 +36,4 @@ return [
     'ENTER_TAXON' => 'Agregar Grupo Taxonómico',
     'ENTER_SOURCE' => 'Agregar Fuentes',
     'UPLOAD' => 'Cargar Archivo',
-    'NO_PERM' => 'No tiene permisos para cargar datos de glosario por lote',
 ];

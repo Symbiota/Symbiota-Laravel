@@ -12,12 +12,10 @@ return [
     'LOAD_CHECKL' => 'Chargement de la liste de contrôle...',
     'UPLOAD_STATUS' => 'Statut du téléchargement...',
     'TAXA_LOADED' => 'Taxa chargé avec succès :',
-    'PROBLEM_TAXA' => 'Tataxons problématiques :',
     'GENERAL_ERRORS' => 'Erreurs générales :',
     'PROCEED_CHECKL' => 'Passer aux listes de contrôle',
     'UPLOAD_COMPLETE' => 'Téléchargement terminé !',
     'PROBLEM_TAXA_RESOLUTION' => 'Résolution problématique des taxons',
-    'DISPLAY' => 'Afficher',
     'ERRORS' => 'erreurs générales',
     'UPLOAD_FORM' => 'Formulaire de téléchargement de liste de contrôle',
     'CHECKLIST_FILE' => 'Fichier de liste de contrôle:',
@@ -26,15 +24,7 @@ return [
     'FILE_DESCR' => 'Le fichier d\'entrée doit être un fichier texte CSV contenant les colonnes suivantes.
              L\'ordre des colonnes n\'a pas d\'importance, même si la première ligne doit contenir des noms de colonnes conformes aux noms en gras répertoriés ci-dessous.
              Notez que les feuilles de calcul Excel (xlsx) peuvent être enregistrées sous forme de fichier CSV via l\'option "Enregistrer sous...".',
-    'SCINAME' => 'sciname',
-    'FAMILY' => 'famille',
-    'HABITAT' => 'habitat',
-    'ABUNDANCE' => 'abondance',
-    'NOTES' => 'notes',
     'INTERNALNOTES' => 'notes internes',
-    'SOURCE' => 'source',
-    'REQUIRED' => '(obligatoire)',
-    'OPTIONAL' => '(facultatif)',
     'OPTIONAL_DISP' => '(facultatif) - affiché uniquement pour les éditeurs',
     'NO_RIGHTS' => 'Vous ne semblez pas avoir le droit de modifier cette liste de contrôle. Si vous pensez qu\'il s\'agit d\'une erreur, contactez un administrateur',
 ];

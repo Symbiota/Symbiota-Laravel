@@ -2,10 +2,7 @@
 
 return [
     'SAMPLE_TYPE' => 'Sample Type',
-    'CATALOG_NUMBER' => 'Catalog Number / Barcode',
-    'GUID' => 'Material Sample ID (GUID)',
     'SAMPLE_CONDITION' => 'Condition',
-    'DISPOSITION' => 'Disposition',
     'PRESERVATION_TYPE' => 'Preservation type',
     'PREPARATION DETAILS' => 'Preparation details',
     'PREPARATION_DATE' => 'Preparation date',
@@ -13,7 +10,6 @@ return [
     'INDIVIDUAL COUNT' => 'Individual count',
     'SAMPLE_SIZE' => 'Sample Size',
     'STORAGE_LOCATION' => 'Storage location',
-    'REMARKS' => 'Remarks',
     'CONCENTRATION' => 'Concentration',
     'CONCENTRATION_UNIT' => 'Concentration Unit',
     'RATIO_OF_ABSORBANCE_260/230' => 'Ratio of Absorbance (260/230)',

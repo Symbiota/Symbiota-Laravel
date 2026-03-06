@@ -18,7 +18,6 @@ return [
     'GO_TO_RECORD' => 'Ir a Registro',
     'SURE_MERGE' => '¿Está seguro que quiere combinar estos dos registros?',
     'MERGE_RECORDS' => 'Combinar Registros',
-    'MORE_INFO' => 'Más Información',
     'MORE_INFO_ALT' => 'Más información sobre cómo fusionar duplicados',
     'NO_DUPES' => 'No se han localizado registros duplicados',
     'UNKNOWN_ERROR_WHILE_MERGING' => 'Se produjo un error desconocido al fusionar las ocurrencias',

@@ -57,7 +57,5 @@ return [
     'F_MORE_INFO' => 'For more information about Symbiota',
     'F_READ_DOCS' => 'read the docs',
     'F_CONTACT' => 'or contact the',
-    'F_SSH' => 'Symbiota Support Hub',
     'F_POWERED_BY' => 'Powered by',
 ];
-?>

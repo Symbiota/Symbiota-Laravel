@@ -2,7 +2,6 @@
 
 return [
     'ADD_GLOSSARY_TERM' => 'Add New Glossary Term',
-    'GLOSSARY' => 'Glossary',
     'ADD_TERM' => 'Add New Term',
     'PLEASE_ADD_TERM' => 'Please enter a value in the term field',
     'WARNING_LONG' => 'Warning, your definition is close to maximum size limit and may be cut off. Are you sure the definition is completely entered?',
@@ -17,7 +16,6 @@ return [
     'AUTHOR' => 'Author',
     'TRANSLATOR' => 'Translator',
     'SOURCE' => 'Source',
-    'NOTES' => 'Notes',
     'RES_URL' => 'Resource URL',
     'PLEASE_TAXON_2' => 'Please enter the taxonomic group (higher than family) to which this term applies <b>OR</b> link new term to a related existing term',
     'TAX_GROUP' => 'Taxonomic Group',
@@ -28,7 +26,6 @@ return [
     'SYN' => 'Synonym',
     'TRANSLATION' => 'Translation',
     'TRANSS' => 'Translations',
-    'IMAGES' => 'Images',
     'SEL_TERM' => 'Select Term to be Linked',
     'CREATE_TERM' => 'Create Term',
     'NO_PERM' => 'You do not have editing permissions for glossary',

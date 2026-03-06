@@ -2,9 +2,7 @@
 
 return [
     'THUMB_BUILDER' => 'Creador de miniaturas',
-    'HOME' => 'Inicio',
     'COL_MAN_MENU' => 'Menú de gestión de colecciones',
-    'SITEMAP' => 'Mapa del sitio',
     'THUMB_MAINT_TOOL' => 'Herramienta de mantenimiento de miniaturas',
     'FIELD_IMAGES' => 'imágenes de campo',
     'PROCESSING_PANEL' => 'Panel de procesamiento',
@@ -31,6 +29,5 @@ La opción alternativa es forzar la reconstrucción de todas las imágenes.',
     'ONLY_PROCESS_RECENT' => 'Procesar sólo imágenes cuyo archivo fuente sea más reciente que las miniaturas',
     'FORCE_REBUILD' => 'Forzar reconstrucción de todas las imágenes',
     'REFRESH_THUMBS' => 'Actualizar miniaturas',
-    'RESET' => 'Reiniciar',
     'ERROR_PERMISSIONS' => 'ERROR: permisos inadecuados',
 ];

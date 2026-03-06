@@ -9,7 +9,6 @@ return [
     'NEWVOUCHER' => 'Asignación de Nuevo Voucher',
     'ADDVOUCHERCHECK' => 'Añadir como voucher en un listado de especies',
     'SELECTCHECKLIST' => 'Seleccionar un Listado de Especies',
-    'NOTES' => 'Notas',
     'VIEWABLEPUBLIC' => 'Visible para el público',
     'EDITORNOTES' => 'Notas del Editor',
     'VIEWABLEEDITORS' => 'Visible únicamente para los editores del listado',

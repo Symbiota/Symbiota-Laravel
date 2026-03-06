@@ -2,9 +2,7 @@
 
 return [
     'THUMB_BUILDER' => 'Générateur de vignettes',
-    'HOME' => 'Accueil',
     'COL_MAN_MENU' => 'Menu de gestion des collections',
-    'SITEMAP' => 'Plan du site',
     'THUMB_MAINT_TOOL' => 'Outil de maintenance des vignettes',
     'FIELD_IMAGES' => 'images de terrain',
     'PROCESSING_PANEL' => 'Panneau de traitement',
@@ -31,6 +29,5 @@ L\'option alternative consiste à forcer la reconstruction de toutes les images.
     'ONLY_PROCESS_RECENT' => 'Traitez uniquement les images dont le fichier source est plus récent que les vignettes',
     'FORCE_REBUILD' => 'Forcer la reconstruction de toutes les images',
     'REFRESH_THUMBS' => 'Actualiser les vignettes',
-    'RESET' => 'Réinitialiser',
     'ERROR_PERMISSIONS' => 'ERREUR : autorisations incorrectes',
 ];

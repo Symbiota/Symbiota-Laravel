@@ -14,7 +14,6 @@ return [
     'DELETE_FAILED' => 'Échec de la suppression du profil!',
     'DATA_CONFLICT' => 'ID utilisateur requis dans un autre tableau (e.g. foreign key constraint).',
     'CONTACT_ADMIN' => 'Veuillez contacter l\'administrateur système.',
-    'HOME' => 'Accueil',
     'MY_PROFILE' => 'Mon profil',
     'VIEW_PROFILE' => 'Afficher Profil de l\'Utilisateur',
     'SPEC_CHECKLIST' => 'Listes d\'Espèces',

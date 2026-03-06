@@ -3,9 +3,7 @@
 return [
     'WEBKEY' => 'Web-Key',
     'OCCURCHECK' => 'Occurrence Checklist',
-    'HOME' => 'Home',
     'OCC_CHECKLIST' => 'Occurrence Checklist',
-    'CHECKLIST' => 'Checklist',
     'PROJ_CHECKLISTS' => 'Project Checklists',
     'TRAD_KEY' => 'Traditional key',
     'PREV_KEY' => 'Previous version of Key',

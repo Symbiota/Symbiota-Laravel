@@ -2,7 +2,6 @@
 
 return [
     'IMAGE_RECYCLER' => 'Image Recycler',
-    'HOMEPAGE' => 'Homepage',
     'COL_MAN_MEN' => 'Collection Management Menu',
     'BULK_IMAGE_RECYCLER' => 'Bulk Image Recycler',
     'BATCH_IMAGE_REMOVER' => 'Batch Image Remover',

@@ -2,7 +2,6 @@
 
 return [
     'INVALID_USERNAME' => 'Usuario inválido',
-    'INVALID_EMAIL' => 'Dirección de correo inválida',
     'CAPTCHA_FAILED' => 'Verificación el CAPTCHA falló',
     'PLEASE_CHECK' => 'Por favor marque el CAPTCHA',
     'FAILED_1' => 'FALLÓ: No fue posible crear usuario',
@@ -30,7 +29,6 @@ return [
     'EMAIL_INVALID' => 'Dirección de correo electrónico no válida',
     'LOGIN_DETAILS' => 'Detalles de Usuario',
     'USERNAME' => 'Usuario',
-    'PASSWORD' => 'Contraseña',
     'PASSWORD_AGAIN' => 'Contraseña de Nuevo',
     'FIRST_NAME' => 'Primer Nombre',
     'LAST_NAME' => 'Apellido',
@@ -38,12 +36,10 @@ return [
     'ORCID' => 'ORCID u otro GUID',
     'REQUIRED' => 'campos requeridos',
     'OPTIONAL' => 'La información de abajo es opcional, pero sugerida',
-    'TITLE' => 'Título',
     'INSTITUTION' => 'Institución',
     'CITY' => 'Ciudad',
     'STATE' => 'Estado',
     'ZIP_CODE' => 'Código Postal',
-    'COUNTRY' => 'País',
     'URL' => 'URL',
     'BIOGRAPHY' => 'Biografía',
     'PUBLIC_PROF' => 'El público puede ver el correo electrónico y la biografía en el sitio (e.g. listado de fotógrafos)',

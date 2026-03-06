@@ -2,16 +2,9 @@
 
 return [
     'TAX_DISPLAY' => 'Desplegar Taxonomía',
-    'HOME' => 'Inicio',
     'TAX_TREE_VIEWER' => 'Explorador del Árbol Taxonómico',
-    'ADD_NEW_TAXON' => 'Añadir un Nuevo Taxón',
-    'DESCRIPTION' => 'Descripción',
     'EDITORS' => 'Editores',
-    'CONTACT' => 'Contacto',
-    'EMAIL' => 'Email',
-    'NOTES' => 'Notas',
     'TAX_SEARCH' => 'Búsqueda de Taxón',
-    'TAXON' => 'Taxón',
     'DISP_TAX_TREE' => 'Desplegar Árbol Taxonómico',
     'DISP_AUTHORS' => 'Desplegar autores',
     'MATCH_WHOLE_WORDS' => 'Hacer coincidir con palabras completas',

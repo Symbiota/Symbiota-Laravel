@@ -7,7 +7,6 @@ return [
     'SAVE' => 'Guardar Ediciones',
     'DEL_SRC' => 'Borrar Fuente',
     'SURE_DEL' => '¿Está seguro que quiere borrar esta fuente?',
-    'ADD_SRC' => 'Añadir Fuente',
     'CANT_EDIT' => 'Necesita acceder al portal o tal vez no tiene los permisos necesarios para editar los datos del glosario, por favor contacte al administrador de su portal',
     'CONTRS' => 'Contribuyentes',
     'NO_CONTRS' => 'Lista de contribuyentes no está disponible',

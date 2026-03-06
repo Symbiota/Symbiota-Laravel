@@ -1,22 +1,14 @@
 <?php
 
 return [
-    'IGSN_GUID_MANAGE' => 'IGSN GUID Management',
     'IGSN_ADDED' => 'SUCCESS: IGSN added!',
     'OCCID_EXISTS' => 'FAILED: occurrenceID GUID already exists: ',
     'CATNUM_NOT_MATCH' => 'FAILED: catalogNumber does not match',
     'OCC_NOT_FOUND' => 'FAILED: occurrence record not found',
     'NOT_AUTH_TO_MOD' => 'FAILED: not authorized to modify occurrence',
     'MISS_VARS' => 'FAILED: missing variables',
-    'COLL_MANAGE' => 'Collection Management',
-    'IGSN_GUID_GEN' => 'IGSN GUID Generator',
-    'IGSN_MANAGE' => 'IGSN Management',
     'IGSN_VERIFY' => 'IGSN Verification',
-    'ERROR_PANEL' => 'Error Panel',
-    'DEV_MODE' => 'In Development Mode',
-    'ACTION_PANEL' => 'Action Panel',
     'VERIFYING' => 'Verifying all IGSNs located within SESAR system against portal database...',
-    'RESULTS' => 'Results:',
     'CHECKED' => 'Checked',
     'IGSNS' => 'IGSNs',
     'REG_IGSN_BY_COLL' => 'Registered IGSNs by Collection:',
@@ -27,7 +19,5 @@ return [
     'FINISHED_VERIFY' => 'Finished verifying GUIDs!',
     'VERIFYING_COLL' => 'Verifying collection\'s IGSNs against SESAR system...',
     'IGSN_IN_PORTAL' => 'IGSNs in portal, but not SESAR',
-    'DISPLAY_LIST' => 'display list',
     'FINISHED_LOCAL' => 'Finished verifying local IGSN GUIDs!',
-    'NOT_AUTH' => 'You are not authorized to access this page or collection identifier has not been set',
 ];

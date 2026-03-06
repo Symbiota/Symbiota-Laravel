@@ -2,7 +2,6 @@
 
 return [
     'INVALID_USERNAME' => 'Invalid username',
-    'INVALID_EMAIL' => 'Invalid email address',
     'CAPTCHA_FAILED' => 'CAPTCHA verification failed',
     'PLEASE_CHECK' => 'Please check the the CAPTCHA form',
     'FAILED_1' => 'FAILED: Unable to create user',
@@ -30,7 +29,6 @@ return [
     'EMAIL_INVALID' => 'Email address not valid',
     'LOGIN_DETAILS' => 'Login Details',
     'USERNAME' => 'Username',
-    'PASSWORD' => 'Password',
     'PASSWORD_AGAIN' => 'Password Again',
     'FIRST_NAME' => 'First Name',
     'LAST_NAME' => 'Last Name',
@@ -38,12 +36,10 @@ return [
     'ORCID' => 'ORCID or other GUID',
     'REQUIRED' => 'required fields',
     'OPTIONAL' => 'Information below is optional, but encouraged',
-    'TITLE' => 'Title',
     'INSTITUTION' => 'Institution',
     'CITY' => 'City',
     'STATE' => 'State',
     'ZIP_CODE' => 'Zip Code',
-    'COUNTRY' => 'Country',
     'URL' => 'URL',
     'BIOGRAPHY' => 'Biography',
     'PUBLIC_PROF' => 'Public can view email and bio within website (e.g., on media contributors list)',

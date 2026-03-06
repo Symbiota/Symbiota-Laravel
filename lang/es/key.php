@@ -3,9 +3,7 @@
 return [
     'WEBKEY' => 'Web-Key',
     'OCCURCHECK' => 'Listado de Comprobación de Ocurrencia',
-    'HOME' => 'Inicio',
     'OCC_CHECKLIST' => 'Lista de Ocurrencias',
-    'CHECKLIST' => 'Lista',
     'PROJ_CHECKLISTS' => 'Listas del Proyecto',
     'TRAD_KEY' => 'Clave tradicional',
     'PREV_KEY' => 'Versión anterior de Clave',

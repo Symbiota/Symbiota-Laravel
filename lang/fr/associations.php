@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'ASSOCIATIONS' => 'Associations',
     'CREATE_NEW_ASSOC' => 'Créer Nouvelle Association',
     'ASSOCIATION_TYPE' => 'Type d\'Association (requis)',
     'RESOURCE_LINK' => 'Lien vers une ressource de non-occurrence',
     'INTERNAL_OCCURRENCE' => 'Occurrence - Interne (ce portail)',
     'EXTERNAL_OCCURRENCE' => 'Occurrence - Lien externe',
-    'OBSERVATION' => 'Observation des taxons',
     'RELATIONSHIP' => 'Relations (requis)',
     'REL_SUBTYPE' => 'Sous-type de relation',
     'BASIS_OF_RECORD' => 'Base d\'Enregistrement',
@@ -19,11 +17,9 @@ return [
     'PRES_SAMPLE' => 'Spécimen Conservé',
     'REF_CITATION' => 'Citation de Référence',
     'LOC_ON_HOST' => 'Emplacement sur hôte',
-    'NOTES' => 'Remarques',
     'ESTABLISHED_DATE' => 'Date d\'établissement',
     'RECORD_ID' => 'identifiant d\'enregistrement',
     'ENTERED_BY' => 'Entré par',
-    'TAXONOMY' => 'Taxonomie',
     'INTERNAL_RESOURCE' => 'Ressource interne',
     'ACCORDING_TO' => 'Selon',
     'OBJECT_IDENTIFIER' => 'Identifier d\'Objet',
@@ -33,7 +29,6 @@ return [
     'OCC_PK' => 'Occurrence PK (occid)',
     'SEARCH_COLS' => 'Rechercher des Collections',
     'ALL_COLS' => 'Toutes Collections',
-    'SEARCH' => 'Chercher',
     'OCC_MATCHES_AVAIL' => 'Correspondances d\'Occurrences Disponibles à Lier',
     'EXTERNAL_RESOURCE' => 'Ressource Externe',
     'ADDITIONAL_ID' => 'Identificateur d\'Objet Supplémentaire',

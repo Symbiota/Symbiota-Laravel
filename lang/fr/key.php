@@ -3,9 +3,7 @@
 return [
     'WEBKEY' => 'Clé Web',
     'OCCURCHECK' => 'Liste de contrôle des événements',
-    'HOME' => 'Accueil',
     'OCC_CHECKLIST' => 'Liste de contrôle des événements',
-    'CHECKLIST' => 'Liste de contrôle',
     'PROJ_CHECKLISTS' => 'Listes de contrôle du projet',
     'TRAD_KEY' => 'Clé traditionnelle',
     'PREV_KEY' => 'Version précédente de la clé',

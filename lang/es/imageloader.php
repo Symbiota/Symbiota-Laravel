@@ -2,7 +2,6 @@
 
 return [
     'IMG_LOADER' => 'Cargador de Imágenes',
-    'HOME' => 'Inicio',
     'IMG_IMPORTER' => 'Importador de Imágenes',
     'IMG_UPLOAD_FORM' => 'Formulario de Carga de Imágenes',
     'IMG_UPLOAD_EXPLAIN' => 'Esta herramienta está diseñada para ayudar a los administradores de colecciones a importar archivos de imágenes por lotes
@@ -15,10 +14,7 @@ notas, identificador de colección, propietario, derechos de autor, sortSequence
 Los campos internos pueden incluir fotógrafoUid, occid o tid.',
     'UPLOAD_FILE' => 'Subir Archivo',
     'ANALYZE_INPUT_FILE' => 'Analizar Archivo de Entrada',
-    'SOURCE_FIELD' => 'Campo de Origen',
-    'TARGET_FIELD' => 'Campo de Destino',
     'SELECT_TARGET' => 'Seleccionar Destino',
-    'LEAVE_UNMAPPED' => 'Dejar Campo sin Asignar',
     'FIELDS_YELLOW' => 'Los campos en amarillo aún no están mapeados ni verificados',
     'LRG_IMG' => 'Imagen Grande',
     'LEAVE_BLANK' => 'Dejar en Blanco',
@@ -26,5 +22,4 @@ Los campos internos pueden incluir fotógrafoUid, occid o tid.',
     'IMPORT_LOCAL' => 'Importar al almacenamiento local',
     'BASE_PATH' => 'Ruta Base',
     'UPLOAD_IMGS' => 'Subir Imágenes',
-    'VERIFY_MAPPING' => 'Verificar Asignación',
 ];

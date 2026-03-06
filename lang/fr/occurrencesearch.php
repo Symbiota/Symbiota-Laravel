@@ -13,10 +13,8 @@ return [
     'CATALOG_NO' => 'Catalogue #',
     'OTHER_CATALOG_NO' => 'Autre Catalogue #',
     'COLLECTOR_LAST_NAME' => 'Nom du Collecteur',
-    'COLLECTOR_NUMBER' => 'Numéro de Collecteur',
     'SELECT_OCCUR_RECORD' => 'Sélectionner l\'enregistrement d\'occurrence',
     'NO_RECORDS_RETURNED' => 'Aucun enregistrement n\'a été renvoyé. Veuillez modifier votre recherche et réessayer',
     'LINK_TO_NEW_OCCUR_RECORD' => 'Lien vers un nouvel enregistrement d\'occurrence',
     'CREATE_NEW_RECORD' => 'Créer une Nouvelle Occurrence',
-    'NOT_AUTHORIZED' => 'Vous n\'êtes pas autorisé à créer des liens vers des collections',
 ];

@@ -2,7 +2,6 @@
 
 return [
     'ERROR_FILE_PATH' => 'ERRO: O caminho do arquivo deve ser inserido',
-    'ENTER_TAXON_NAME' => 'Insira um nome de táxon para o qual a multimídia será transferida',
     'TAXON_PROFILE_EDITING' => 'Vá para a página de edição do perfil do táxon',
     'EDITING_PRIVILEGES' => 'Deve ter privilégios de edição para esta imagem de gerenciamento de coleção',
     'EDIT_IMAGE' => 'Editar multimídia',
@@ -15,7 +14,6 @@ return [
     'DISPLAY_CREATOR_FIELD' => 'Exibir campo de substituição do criador',
     'DISPLAY_SPECIMEN_DETAILS' => 'Exibir detalhes da amostra',
     'CREATOR_OVERRIDE' => 'Criador (substituir)',
-    'CREATOR' => 'Criador',
     'OVERRIDE_SELECTION' => 'Irá substituir a seleção acima',
     'MANAGER' => 'Gerente',
     'SOURCE_URL' => 'URL de origem',

@@ -9,7 +9,6 @@ return [
     'NEWVOUCHER' => 'New Voucher Assignment',
     'ADDVOUCHERCHECK' => 'Add as voucher to checklist',
     'SELECTCHECKLIST' => 'Select a Checklist',
-    'NOTES' => 'Notes',
     'VIEWABLEPUBLIC' => 'Viewable to public',
     'EDITORNOTES' => 'Editor Notes',
     'VIEWABLEEDITORS' => 'Viewable only to checklist editors',

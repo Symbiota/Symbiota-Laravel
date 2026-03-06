@@ -2,7 +2,6 @@
 
 return [
     'IMAGE_RECYCLER' => 'Reciclador de imágenes',
-    'HOMEPAGE' => 'Página de inicio',
     'COL_MAN_MEN' => 'Menú de gestión de colecciones',
     'BULK_IMAGE_RECYCLER' => 'Reciclador de imágenes masivas',
     'BATCH_IMAGE_REMOVER' => 'Eliminador de imágenes por lotes',

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'HOME' => 'Inicio',
     'SPEC_UPLOAD' => 'Carga de Especímenes',
     'PATH_EMPTY' => 'La dirección al archivo está vacía. Por favor seleccione el archivo que va a ser cargado.',
     'MUST_CSV' => 'El archivo debe ser separado por comas (.csv), delimitado por tabulaciones (.txt o .tab), archivo ZIP (.zip), o una URL a un Recurso IPT',
@@ -20,7 +19,6 @@ return [
     'SEL_TAR_USER' => 'Seleccionar Usuario Objetivo',
     'FIRST_ROW' => '¿La primera fila del archivo contiene los nombres de las columnas? Aparentemente está mapeando directamente a la primera fila de datos activos del archivo en lugar de la fila de encabezados. De ser así, la primera fila de datos se perderá y algunas columnas pueden ser ignoradas. Seleccione OK para proceder, o cancele para abortar',
     'ENTER_PROF' => 'Entrar un nombre de perfil y haga click en el botón Guardar Mapeo para crear un nuevo Perfil de Carga',
-    'COL_MGMNT' => 'Panel de Administración de Colecciones',
     'LIST_UPLOAD' => 'Lista de Perfiles de Carga',
     'UP_MODULE' => 'Módulo de Carga de Datos',
     'CAUTION' => 'Precaución',
@@ -60,7 +58,6 @@ return [
     'BOTH_CATS' => 'Si ambas casillas son seleccionadas, las coincidencias serán realizadas primero con el número de catálogo y luego con otros números de catálogo',
     'ID_SOURCE' => 'Identificar Fuente de Datos',
     'IPT_URL' => 'URL de Recurso IPT',
-    'RESOURCE_URL' => 'Dirección o URL del Recurso',
     'WORKAROUND' => 'Esta opción es para dirigirse a un archivo de datos que fue subido manualmente a un servidor. Esta opción ofrece un atajo para importar archivos que son más grandes que lo permitido por los límites de carga del servidor (e.g. límites de configuración PHP)',
     'DISPLAY_OPS' => 'Desplegar Opciones Adicionales',
     'AUTOMAP' => 'Automapear Campos',
@@ -112,10 +109,8 @@ return [
     'SKEL_EXPLAIN_P3' => 'En casos donde el registro ya exista, una carga general de archivos reemplazará por completo al registro existente con los datos del nuevo registro.
 							Por otro lado, una carga esquelética actualizará el registro existente únicamente con los nuevos datos en los campos. Los campos únicament son añadidos si aún no hay datos en el campo objetivo.',
     'SKEL_EXPLAIN_P4' => 'Si un registro NO existe aún, un nuevo registro será creado en ambos casos, pero sólo el registro esquelético será marcado como no procesado',
-    'NOT_AUTH' => 'ERROR: no está autorizado para cargar archivos en esta colección',
     'PAGE_ERROR' => 'ERROR: O intentó llegar a esta página sin pasar por el menú de administración de colecciones o trató de subir un archivo que es muy grande.
 	Tal vez quiera dividir el archivo en archivos más pequeños, o comprimirlo en un archivo zip  (extensión .zip).
 	Puede contactar al administrador del portal para solicitar asistencia para cargar el archivo (pista para el admin: incrementar el límite de carga PHP puede ayudar, current upload_max_filesize',
     'USE_BACK' => 'Use las flechas para regresar a la página de carga de archivos.',
-    'UPLOAD' => 'Subir archivo',
 ];

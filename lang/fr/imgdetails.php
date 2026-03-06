@@ -3,7 +3,6 @@
 return [
     'IMG_DETAILS' => 'Détails de l\'Image',
     'ERROR_FILE_PATH' => 'ERREUR : Le chemin du fichier doit être saisi',
-    'ENTER_TAXON_NAME' => 'Entrez un nom de taxon vers lequel le multimédia sera transféré',
     'TAXON_PROFILE_EDITING' => 'Aller à la page d\'édition du profil de taxon',
     'EDITING_PRIVILEGES' => 'Doit disposer de privilèges d\'édition pour cette collection gérant l\'image',
     'EDIT_IMAGE' => 'Modifier le multimédia',
@@ -16,7 +15,6 @@ return [
     'DISPLAY_CREATOR_FIELD' => 'Afficher le champ de remplacement du créateur',
     'DISPLAY_SPECIMEN_DETAILS' => 'Afficher les détails du spécimen',
     'CREATOR_OVERRIDE' => 'Créateur (remplacement)',
-    'CREATOR' => 'Créateur',
     'OVERRIDE_SELECTION' => 'Ecrasera la sélection ci-dessus',
     'MANAGER' => 'Gestionnaire',
     'SOURCE_URL' => 'URL Source',
@@ -26,7 +24,6 @@ return [
     'LOCALITY' => 'Localité',
     'OCCURRENCE_RECORD' => 'Enregistrement d\'Occurrence',
     'LINK_OCCUR_RECORD' => 'Lien vers l\'enregistrement d\'occurrence',
-    'NOTES' => 'Notes',
     'SORT_SEQUENCE' => 'Séquence de Tri',
     'WEB_IMAGE' => 'Version moyenne',
     'RENAME_WEB_IMAGE_FILE' => 'Renommez le fichier multimédia Web sur le serveur pour qu\'il corresponde à la modification ci-dessus (privilèges d\'édition de fichiers du serveur Web requis)',

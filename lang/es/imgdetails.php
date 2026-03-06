@@ -3,7 +3,6 @@
 return [
     'IMG_DETAILS' => 'Detalles de la Imagen',
     'ERROR_FILE_PATH' => 'ERROR: Se debe ingresar la ruta del archivo',
-    'ENTER_TAXON_NAME' => 'Ingrese el nombre del taxón al que se transferirá el medios',
     'TAXON_PROFILE_EDITING' => 'Ir a la página de edición del perfil de taxón',
     'EDITING_PRIVILEGES' => 'Debe tener privilegios de edición para administrar la imagen de esta colección',
     'EDIT_IMAGE' => 'Editar recursos de medios',
@@ -16,7 +15,6 @@ return [
     'DISPLAY_CREATOR_FIELD' => 'Mostrar campo de anulación del creador',
     'DISPLAY_SPECIMEN_DETAILS' => 'Mostrar detalles de la muestra',
     'CREATOR_OVERRIDE' => 'Creador (anulación)',
-    'CREATOR' => 'Creador',
     'OVERRIDE_SELECTION' => 'Anulará la selección anterior',
     'MANAGER' => 'Administrador',
     'SOURCE_URL' => 'URL de Origen',
@@ -26,7 +24,6 @@ return [
     'LOCALITY' => 'Localidad',
     'OCCURRENCE_RECORD' => 'Registro de Ocurrencia',
     'LINK_OCCUR_RECORD' => 'Enlace al registro de sucesos',
-    'NOTES' => 'Notas',
     'SORT_SEQUENCE' => 'Ordenar Secuencia',
     'WEB_IMAGE' => 'URL de medios',
     'RENAME_WEB_IMAGE_FILE' => 'Cambie el nombre del archivo medios web en el servidor para que coincida con la edición anterior (se requieren privilegios de edición de archivos del servidor web)',

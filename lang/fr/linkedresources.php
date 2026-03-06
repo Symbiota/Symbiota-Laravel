@@ -9,7 +9,6 @@ return [
     'NEWVOUCHER' => 'Nouvel Échantillon',
     'ADDVOUCHERCHECK' => 'Ajouter comme échantillon à liste',
     'SELECTCHECKLIST' => 'Sélectionnez Liste',
-    'NOTES' => 'Notes',
     'VIEWABLEPUBLIC' => 'Visible au public',
     'EDITORNOTES' => 'Notes de Éditeur',
     'VIEWABLEEDITORS' => 'Visible uniquement pour les éditeurs de liste',

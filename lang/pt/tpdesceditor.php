@@ -2,16 +2,8 @@
 
 return [
     'NEW_DESC_BLOCK' => 'Novo Bloco de Descrição',
-    'LANGUAGE' => 'Idioma',
-    'SEL_LANGUAGE' => 'Selecionar Idioma',
-    'CAPTION' => 'Legenda',
-    'SOURCE' => 'Fonte',
-    'SOURCE_URL' => 'URL de Origem',
-    'NOTES' => 'Notas',
     'DISPLAY_LEVEL' => 'Nível de Exibição',
     'ADD_DESC_BLOCK' => 'Adicionar Bloco de Descrição',
-    'SORT_SEQUENCE' => 'Classificar Sequência',
-    'DESCRIPTIONS' => 'Descrições',
     'DESCRIPTION_' => 'Descrição ',
     'EDIT_DESC_BLOCK' => 'Editar Bloco de Descrição',
     'LINKED_TO_SYN' => 'Vinculado ao sinônimo',

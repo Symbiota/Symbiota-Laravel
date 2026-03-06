@@ -12,22 +12,15 @@ return [
     'COL_META_EDIT' => 'Éditeur de Métadonnées de Collection',
     'CONT_RES' => 'Contacts et Ressources',
     'COL_INFO' => 'Informations sur Collecte',
-    'INST_CODE' => 'Code de l\'Établissement',
     'MORE_INST_CODE' => 'Plus d\'Informations sur Code de Établissement',
     'NAME_ONE' => 'Le nom (ou l\'acronyme) utilisé par l\'institution ayant la garde des dossiers d\'événement. Ce champ est requis. Pour plus de détails, voir',
     'DWC_DEF' => 'Définition de Darwin Core',
-    'COLL_CODE' => 'Code de Collecte',
     'MORE_COLL_CODE' => 'Plus d\'Informations sur Code de Collecte',
     'NAME_ACRO' => 'Le nom, l\'acronyme ou le code identifiant la collection ou l\'ensemble de données d\'où provient l\'enregistrement. Ce champ est facultatif. Pour plus de détails, voir',
     'COLL_NAME' => 'Nom de Collection',
     'DESC' => 'Description (2000 caractères maximum)',
     'HOMEPAGE' => 'Page d\'Accueil',
     'CONTACT' => 'Contact',
-    'EMAIL' => 'Email',
-    'LAT' => 'Latitude',
-    'LONG' => 'Longitude',
-    'MAP' => 'Ouvrir la carte',
-    'MORE_INFO' => 'Plus d\'Information',
     'CATEGORY' => 'Catégorie',
     'NO_CATEGORY' => 'Aucune Catégorie',
     'ALLOW_PUBLIC_EDITS' => 'Autoriser Modifications Publiques',
@@ -42,11 +35,9 @@ return [
     'LEGAL_DOC' => 'Un document légal donnant l\'autorisation officielle de faire quelque chose avec la ressource.
 					Ce champ peut être limité à un ensemble de valeurs en modifiant le fichier de configuration central du portail.
 					Pour plus de détails, voir',
-    'RIGHTS_HOLDER' => 'Titulaire des Droits',
     'MORE_INFO_RIGHTS_H' => 'Plus d\'informations sur Titulaire des Droits',
     'HOLDER_DEF' => 'L\'organisation ou la personne qui gère ou détient les droits de la ressource.
 					Pour plus de détails, voir',
-    'ACCESS_RIGHTS' => 'Droits d\'Accès',
     'MORE_INFO_ACCESS_RIGHTS' => 'Plus d\'informations sur Droits d\'Accès',
     'ACCESS_DEF' => 'Des informations ou un lien URL vers une page avec des détails expliquant comment utiliser les données. Voir',
     'DATASET_TYPE' => 'Type de Jeu de Données',
@@ -76,9 +67,7 @@ return [
 						du portail Symbiota n\'est qu\'un instantané mis à jour périodiquement de la base de données centrale.
 						Un Jeu de Données en Direct est lorsque les données sont gérées directement dans le portail et que la base de données centrale est constituée des données du portail.',
     'GUID_SOURCE' => 'Source de GUID',
-    'NOT_DEFINED' => 'Non défini',
     'MORE_INFO_GUID' => 'Plus d\'informations sur Identifiant Unique Global',
-    'OCCURRENCE_ID' => 'ID d\'Occurrence',
     'SYMB_GUID' => 'GUID (UUID) Généré par Symbiota',
     'OCCID_DEF_1' => 'ID d\'Occurrence est généralement utilisé pour les ensembles de données d\'Instantané
 						lorsqu\'un champ d\'identificateur unique global (GUID) est fourni par la base de données source
@@ -108,8 +97,6 @@ return [
     'UPLOAD_ICON' => 'Téléchargez un fichier image d\'icône ou entrez l\'URL d\'une icône d\'image qui représente la collection. Si vous saisissez l\'URL d\'une image déjà localisée
 						sur un serveur, cliquez sur &quot;Saisir URL&quot;. Le chemin de l\'URL peut être absolu ou relatif. L\'utilisation d\'icônes est facultative.',
     'ENTER_URL' => 'Entrer URL',
-    'UPLOAD_LOCAL' => 'Télécharger Image Locale',
-    'SORT_SEQUENCE' => 'Séquence de Tri',
     'MORE_SORTING' => 'Plus d\'informations sur Tri',
     'LEAVE_IF_ALPHABET' => 'Laissez ce champ vide si vous souhaitez que les collections soient triées par ordre alphabétique (par défaut)',
     'COLLECTION_ID' => 'Identifiant de Collection (GUID)',
@@ -120,7 +107,6 @@ return [
 						Registre Mondial des Dépôts de Niodiversité',
     'SECURITY_KEY' => 'Clef de Sécurité',
     'RECORDID' => 'IDenregistrement',
-    'SAVE_EDITS' => 'Énregistrer Modifications',
     'CREATE_COLL_2' => 'Créer Nouvelle Collection',
     'TINYMCE_INFO' => 'Descriptif des collections. Vous pouvez accéder à la barre d\'outils d\'édition de texte pour cette description en appuyant
 						 sur la combinaison de touches ALT + F10 sous Windows ou OPTION + F10 sous MacOS.',

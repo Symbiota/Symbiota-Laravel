@@ -2,7 +2,6 @@
 
 return [
     'ADD_GLOSSARY_TERM' => 'Ajouter un nouveau terme de glossaire',
-    'GLOSSARY' => 'Glosario',
     'ADD_TERM' => 'Añadir Nuevo Término',
     'PLEASE_ADD_TERM' => 'Por favor introducir un valor en el campo de término',
     'WARNING_LONG' => 'Advertencia, su definición está cerca del límite máximo de palabras y puede ser recortada. ¿Está seguro que la definición está completa?',
@@ -17,7 +16,6 @@ return [
     'AUTHOR' => 'Autor',
     'TRANSLATOR' => 'Traductor',
     'SOURCE' => 'Fuente',
-    'NOTES' => 'Notas',
     'RES_URL' => 'URL de Recurso',
     'PLEASE_TAXON_2' => 'Por favor introduzca el grupo taxonómico (arriba de familia) al cual este término aplica <b>O</b> vincule el nuevo término a un término relacionado existente',
     'TAX_GROUP' => 'Grupo Taxonómico',
@@ -28,7 +26,6 @@ return [
     'SYN' => 'Sinónimo',
     'TRANSLATION' => 'Traducción',
     'TRANSS' => 'Traducciones',
-    'IMAGES' => 'Imágenes',
     'SEL_TERM' => 'Seleccione un Término a ser Vinculado',
     'CREATE_TERM' => 'Crear Término',
     'NO_PERM' => 'No tiene permisos de etitor para el glosario',

@@ -3,8 +3,6 @@
 return [
     'CHECKLIST_GENERATOR' => 'Générateur de Liste Dynamique',
     'CLICK_MAP' => 'Cliquez sur Carte',
-    'HOME' => 'Accueil',
-    'DYNAMIC_MAP' => 'Carte Dynamique',
     'CAPTURE_COORDS' => 'Faites un panoramique, zoomez et cliquez sur la carte pour capturer les coordonnées, puis soumettez les coordonnées pour créer une liste d\'espèces.',
     'MORE_DETAILS' => 'Plus de Détails',
     'RADIUS_DESCRIPTION' => 'Si un rayon est défini, des listes d\'espèces sont générées à l\'aide de données de spécimens collectées dans la zone définie.

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'NEED_NAME' => 'El campo de Nombre del Listado debe tener contenido',
     'NEED_LONG' => 'Si la latitud tiene un valor, la longitud también debe tenerlo',
     'LAT_NUMERIC' => 'La latitud debe ser estrictamente numérica (formato decimal: p.e. 34.2343)',
     'NO_NINETY' => 'Los valores de latitud no pueden ser mayores que 90 o menores que -90',
@@ -13,14 +12,11 @@ return [
     'NEED_PARENT' => 'Necesita seleccionar un listado superior para crear un Listado de Especies Excluídas',
     'CREATE_CHECKLIST' => 'Crear un nuevo Listado de Especies',
     'FOR_PARENT_LIST' => 'for parent list',
-    'SELECT_PARENT' => 'Seleccionar un listado superior',
     'REFERENCE_CHECK' => 'Listados de Especies más Inclusivos',
     'NONE' => 'Ninguno Seleccionado',
     'ASSIGNED_CHECKLISTS' => 'Listado de Especies asignados a su cuenta',
-    'NO_CHECKLISTS' => 'No tiene Listados de Especies personales',
     'CLICK_TO_CREATE' => 'Hacer click aquí para crear un nuevo listado de especies',
     'PROJ_ADMIN' => 'Administración de Proyectos de Inventario',
     'EDIT_PROJECT' => 'Editar Proyecto',
-    'NO_PROJECTS' => 'No hay Proyectos para los cuales tenga permisos administrativos',
     'INATURALIST' => 'iNaturalist',
 ];

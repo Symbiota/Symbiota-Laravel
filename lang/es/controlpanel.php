@@ -6,7 +6,6 @@ return [
 							el publico general. Por más información revisa a
 							<a href="https://docs.symbiota.org/Collection_Manager_Guide/Crowdsourcing/adding_crowdsourcing" target="_blank">
 							Documentación de Symbiota para Crowdsourcing</a>',
-    'EDIT_PROJECT' => 'Editar el Proyecto',
     'GENERAL_INSTRUCTIONS' => 'Instrucciones Generales',
     'TRAINING_URL' => 'Url de Entrenamiento',
     'EDIT_CROWD_PROJ' => 'Guardar Ediciones',
@@ -17,20 +16,11 @@ return [
     'CLOSED_APPROVED' => 'Cerrado (Aprobado)',
     'AVAILABLE_TO_ADD' => 'Disponible para Agregar',
     'ADD_TO_QUEUE' => ' Añadir a la Lista de Espera',
-    'CRITERIA' => 'Criterios',
-    'FAMILY' => 'Familia',
     'GENUS_SP' => 'Genero/Especie',
-    'COUNTRY' => 'País',
     'STATE_PROV' => 'Estado/Provincia',
     'RECORD_LIMIT' => 'Límite de Registro ',
     'VOLUNTEERS' => 'Voluntariados',
-    'USER' => 'Usuario',
     'SCORE' => 'Puntaje',
-    'PENDING_REVIEW' => 'Revisión Pendiente',
-    'APPROVED' => 'Aprobadas',
-    'REVIEW' => 'Revisión',
     'NO_RECS_PROCESSED' => 'Ningún registro procesado',
     'APPROVED_EDITORS' => 'Editores Aprobados',
-    'SCORE_BOARD' => 'Pizarra de Puntaje',
-    'NO_COLLID' => 'ERROR: número de ID de la colección no disponible',
 ];

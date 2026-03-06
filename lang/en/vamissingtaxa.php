@@ -8,14 +8,8 @@ return [
     'DISP_MODE' => 'Display Mode',
     'SPEC_LIST' => 'Species List',
     'BATCH_LINK' => 'Batch Linking',
-    'NOT_FOUND' => 'Listed below are specimens identified to a species not found in the checklist.
-                        Use the form to add the names and link the vouchers as a batch action.',
-    'SELECT_ALL' => 'Select All',
     'SPEC_ID' => 'Specimen ID',
-    'COLLECTOR' => 'Collector',
-    'LOCALITY' => 'Locality',
     'ADD_CURRENT' => 'Add name using current taxonomy',
-    'NO_VOUCHERS' => 'Add names without linking vouchers',
     'SUBMIT_VOUCHERS' => 'Submit Vouchers',
     'SPEC_COUNT' => 'Specimen Count',
     'VIEW_NEXT' => 'View Next',
@@ -27,6 +21,5 @@ return [
     'LINK_VOUCHER' => 'Link Voucher',
     'NOT_IN_CHECKLIST' => 'Listed below are taxon names not found in the checklist
                             but are represented by one or more specimens that have a locality matching the above search term.',
-    'LINK_VOUCHERS' => 'Link Voucher Specimens',
     'NOVOUCHERS' => 'No vouchers found',
 ];

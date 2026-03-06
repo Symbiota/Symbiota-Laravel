@@ -6,28 +6,20 @@ return [
     'ADD_SUCCESS' => 'New collection added successfully',
     'ADD_STUFF' => 'Add contacts, resource links, or institution address below',
     'COL_PROFS' => 'Collection Profiles',
-    'LOADING' => '<p>Loading...</p>',
     'META_EDIT' => 'Metadata Editor',
     'CREATE_COLL' => 'Create New Collection Profile',
     'COL_META_EDIT' => 'Collection Metadata Editor',
     'CONT_RES' => 'Contacts & Resources',
     'COL_INFO' => 'Collection Information',
-    'INST_CODE' => 'Institution Code',
     'MORE_INST_CODE' => 'More information about Institution Code',
     'NAME_ONE' => 'The name (or acronym) in use by the institution having custody of the occurrence records. This field is required. For more details, see',
     'DWC_DEF' => 'Darwin Core definition',
-    'COLL_CODE' => 'Collection Code',
     'MORE_COLL_CODE' => 'More information about Collection Code',
     'NAME_ACRO' => 'The name, acronym, or code identifying the collection or data set from which the record was derived. This field is optional. For more details, see',
     'COLL_NAME' => 'Collection Name',
     'DESC' => 'Description (2000 character max)',
     'HOMEPAGE' => 'Homepage',
     'CONTACT' => 'Contact',
-    'EMAIL' => 'Email',
-    'LAT' => 'Latitude',
-    'LONG' => 'Longitude',
-    'MAP' => 'Open map',
-    'MORE_INFO' => 'More information',
     'CATEGORY' => 'Category',
     'NO_CATEGORY' => 'No Category',
     'ALLOW_PUBLIC_EDITS' => 'Allow Public Edits',
@@ -42,11 +34,9 @@ return [
     'LEGAL_DOC' => 'A legal document giving official permission to do something with the resource.
 					This field can be limited to a set of values by modifying the portal\'s central configuration file.
 					For more details, see',
-    'RIGHTS_HOLDER' => 'Rights Holder',
     'MORE_INFO_RIGHTS_H' => 'More information about Rights Holder',
     'HOLDER_DEF' => 'The organization or person managing or owning the rights of the resource.
 					For more details, see',
-    'ACCESS_RIGHTS' => 'Access Rights',
     'MORE_INFO_ACCESS_RIGHTS' => 'More information about Access Rights',
     'ACCESS_DEF' => 'Information or a URL link to page with details explaining
 					how one can use the data. See',
@@ -78,9 +68,7 @@ return [
 						within the Symbiota portal is only a periodically updated snapshot of the central database.
 						A Live dataset is when the data is managed directly within the portal and the central database is the portal data.',
     'GUID_SOURCE' => 'GUID source',
-    'NOT_DEFINED' => 'Not defined',
     'MORE_INFO_GUID' => 'More information about Global Unique Identifier',
-    'OCCURRENCE_ID' => 'Occurrence Id',
     'SYMB_GUID' => 'Symbiota Generated GUID (UUID)',
     'OCCID_DEF_1' => 'Occurrence Id is generally used for
 						Snapshot datasets when a Global Unique Identifier (GUID) field
@@ -110,8 +98,6 @@ return [
     'UPLOAD_ICON' => 'Upload an icon image file or enter the URL of an image icon that represents the collection. If entering the URL of an image already located
 						on a server, click on &quot;Enter URL&quot;. The URL path can be absolute or relative. The use of icons are optional.',
     'ENTER_URL' => 'Enter URL',
-    'UPLOAD_LOCAL' => 'Upload Local Image',
-    'SORT_SEQUENCE' => 'Sort Sequence',
     'MORE_SORTING' => 'More information about Sorting',
     'LEAVE_IF_ALPHABET' => 'Leave this field empty if you want the collections to sort alphabetically (default)',
     'COLLECTION_ID' => 'Collection ID (GUID)',
@@ -122,7 +108,6 @@ return [
 						Global Registry of Biodiversity Repositories',
     'SECURITY_KEY' => 'Security Key',
     'RECORDID' => 'recordID',
-    'SAVE_EDITS' => 'Save Edits',
     'CREATE_COLL_2' => 'Create New Collection',
     'TINYMCE_INFO' => 'Collection description. You can access the text editing toolbar for this description
 						by pressing key combination ALT + F10 on Windows or OPTION + F10 on MacOS.',

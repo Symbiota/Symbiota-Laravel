@@ -18,7 +18,6 @@ return [
     'GO_TO_RECORD' => 'Aller à Enregistrement',
     'SURE_MERGE' => 'Êtes-vous sûr de vouloir fusionner ces deux enregistrements?',
     'MERGE_RECORDS' => 'Fusionner des Enregistrements',
-    'MORE_INFO' => 'Plus d\'Information',
     'MORE_INFO_ALT' => 'Plus d\'informations sur la fusion des doublons',
     'NO_DUPES' => 'Aucun enregistrement en double n\'a été localisé',
     'UNKNOWN_ERROR_WHILE_MERGING' => 'Une erreur inconnue s\'est produite lors de la fusion des occurrences',

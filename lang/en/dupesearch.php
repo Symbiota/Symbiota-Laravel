@@ -18,7 +18,6 @@ return [
     'GO_TO_RECORD' => 'Go To Record',
     'SURE_MERGE' => 'Are you sure you want to merge these two records?',
     'MERGE_RECORDS' => 'Merge Records',
-    'MORE_INFO' => 'More Information',
     'MORE_INFO_ALT' => 'More information about merging duplicates',
     'NO_DUPES' => 'No duplicate records have been located',
     'UNKNOWN_ERROR_WHILE_MERGING' => 'Unknown error occurred while merging the occurrences',

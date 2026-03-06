@@ -19,7 +19,6 @@ return [
     'OBS_MANAGEMENT' => 'Manejo de Proyectos de Observaciones',
     'GEN_OBS_ADMIN' => 'Administración General de Observaciones',
     'MISC_TOOLS' => 'Herramientas Misceláneas',
-    'DATASET_MANAGEMENT' => 'Manejo de Conjuntos de Datos',
     'CROSS_COL_GEOREF' => 'Herramienta de Georreferenciación a través de Colecciones',
     'CROSS_COL_TAXON' => 'Herramienta de Limpieza de Taxonomía a través de Colecciones',
     'OCCURRENCE_MENU' => 'Menú de Ocurrencia',

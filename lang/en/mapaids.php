@@ -17,7 +17,6 @@ return [
     'MPR_UNCERTAINTY_INSTRUCTIONS' => 'Enter uncertainty to create an error radius circle around the marker. ',
     'MPR_LAT' => 'Latitude',
     'MPR_LNG' => 'Longitude',
-    'SUBMIT' => 'Submit',
     'UNCERTAINTY_METERS' => 'Uncertainty in Meters',
     'DELETE_SELECTED' => 'Delete Selected Shape',
     'MPA_INSTRUCTIONS' => 'Click on polygon symbol to activate polygon tool. Click submit button transfer polygon to editor',

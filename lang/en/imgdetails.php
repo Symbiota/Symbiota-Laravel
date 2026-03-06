@@ -3,7 +3,6 @@
 return [
     'IMG_DETAILS' => 'Image Details',
     'ERROR_FILE_PATH' => 'ERROR: File path must be entered',
-    'ENTER_TAXON_NAME' => 'Enter a taxon name to which the media resource will be transferred',
     'TAXON_PROFILE_EDITING' => 'Go to Taxon Profile editing page',
     'EDITING_PRIVILEGES' => 'Must have editing privileges for the collection managing this media resource',
     'EDIT_IMAGE' => 'Edit Media Resource',
@@ -16,7 +15,6 @@ return [
     'DISPLAY_CREATOR_FIELD' => 'Display creator override field',
     'DISPLAY_SPECIMEN_DETAILS' => 'Display Specimen Details',
     'CREATOR_OVERRIDE' => 'Creator (override)',
-    'CREATOR' => 'Creator',
     'OVERRIDE_SELECTION' => 'Will override above selection',
     'MANAGER' => 'Manager',
     'SOURCE_URL' => 'Source URL',
@@ -26,7 +24,6 @@ return [
     'LOCALITY' => 'Locality',
     'OCCURRENCE_RECORD' => 'Occurrence Record',
     'LINK_OCCUR_RECORD' => 'Link to Occurrence Record',
-    'NOTES' => 'Notes',
     'SORT_SEQUENCE' => 'Sort sequence',
     'WEB_IMAGE' => 'Medium version',
     'RENAME_WEB_IMAGE_FILE' => 'Rename web media file on server to match above edit (web server file editing privileges required)',

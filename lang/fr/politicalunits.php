@@ -6,12 +6,10 @@ return [
     'SEL_COUNTRY' => 'Sélectionnez une valeur de pays',
     'SEL_STATE' => 'Sélectionnez une valeur d\'état',
     'SEL_COUNTY' => 'Sélectionnez une valeur de comté',
-    'HOME' => 'Accueil',
     'COL_MAN' => 'Gestion des collections',
     'CLEAN_TOOL_INDEX' => 'Index des outils de nettoyage',
     'POL_GEO_CLEAN_MENU' => 'Menu de nettoyage de la géographie politique',
     'GEO_REPORT' => 'Rapport géographique',
-    'MAIN_MENU' => 'Menu principal',
     'GEO_REPORT_EXPLAIN' => 'Cliquez sur les liens fournis ci-dessous pour lister les termes géographiques non standardisés utilisés dans la collection.
                         Les chiffres à droite de chaque désignation géographique représentent le nombre de spécimens utilisant ce terme.
                         Cliquez sur le symbole d\'édition (crayon) pour ouvrir l\'éditeur d\'occurrences. Utilisez les outils fournis pour mettre à jour par lots les champs avec le terme corrigé.
@@ -35,6 +33,4 @@ return [
     'NULL_COUNTY_NOT_LOCALITY' => 'Comté NULL et localité non Null',
     'ASSIGN_COUNTY' => 'Attribuer un comté',
     'GEN_CLEANING' => 'Nettoyage général',
-    'RECORDS' => 'enregistrements',
-    'NOT_AUTH' => 'Vous n\'êtes pas autorisé à accéder à cette page',
 ];

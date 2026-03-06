@@ -2,10 +2,7 @@
 
 return [
     'SAMPLE_TYPE' => 'Type d\'Échantillon',
-    'CATALOG_NUMBER' => 'Référence Catalogue / Code-barres',
-    'GUID' => 'ID de l\'Échantillon (GUID)',
     'SAMPLE_CONDITION' => 'État',
-    'DISPOSITION' => 'Disposition',
     'PRESERVATION_TYPE' => 'Type de Conservation',
     'PREPARATION DETAILS' => 'Détails de la Préparation',
     'PREPARATION_DATE' => 'Date de Préparation',
@@ -13,7 +10,6 @@ return [
     'INDIVIDUAL COUNT' => 'Nombre d\'Unités',
     'SAMPLE_SIZE' => 'Taille de l\'Échantillon',
     'STORAGE_LOCATION' => 'Lieu de Stockage',
-    'REMARKS' => 'Remarques',
     'CONCENTRATION' => 'Concentration',
     'CONCENTRATION_UNIT' => 'Unité de Concentration',
     'RATIO_OF_ABSORBANCE_260/230' => 'Ratio d\'Absorption (260/230)',

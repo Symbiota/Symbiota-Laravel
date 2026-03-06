@@ -8,14 +8,8 @@ return [
     'DISP_MODE' => 'Mode d\'Affichage',
     'SPEC_LIST' => 'Liste des Espèces',
     'BATCH_LINK' => 'Lier par Lot',
-    'NOT_FOUND' => 'Ci-dessous sont listés les spécimens identifiés à une espèce non trouvée dans la liste.
-	Utilisez le formulaire pour ajouter les noms et lier les bons en tant qu\'action par lot.',
-    'SELECT_ALL' => 'Tout Sélectionner',
     'SPEC_ID' => 'ID du Spécimen',
-    'COLLECTOR' => 'Collectionneur',
-    'LOCALITY' => 'Localité',
     'ADD_CURRENT' => 'Ajouter nom en utilisant la taxonomie actuelle',
-    'NO_VOUCHERS' => 'Ajouter noms sans lier èchantillons',
     'SUBMIT_VOUCHERS' => 'Soumettre des Échantillons',
     'SPEC_COUNT' => 'Nombre d\'Échantillons',
     'VIEW_NEXT' => 'Voir Suivant',
@@ -27,6 +21,5 @@ return [
     'LINK_VOUCHER' => 'Lier l\'Échantillon',
     'NOT_IN_CHECKLIST' => 'Ci-dessous sont listés les noms de taxon introuvables dans la liste mais sont représentés
 	par un ou plusieurs spécimens qui ont une localité correspondant au terme de recherche ci-dessus.',
-    'LINK_VOUCHERS' => 'Lier les Échantillons',
     'NOVOUCHERS' => 'Aucun échantillon localisé',
 ];

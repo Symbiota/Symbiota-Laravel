@@ -17,7 +17,6 @@ return [
     'MPR_UNCERTAINTY_INSTRUCTIONS' => 'Ingrese la incertidumbre para crear un círculo de radio de error alrededor del marcador.',
     'MPR_LAT' => 'Latitud',
     'MPR_LNG' => 'Longitud',
-    'SUBMIT' => 'Enviar',
     'UNCERTAINTY_METERS' => 'Incertidumbre en Metros',
     'DELETE_SELECTED' => 'Eliminar polígono seleccionado',
     'MPA_INSTRUCTIONS' => 'Haga clic en el símbolo de polígono para activar la herramienta de polígono. Haga clic en el botón Enviar para transferir el polígono al editor.',

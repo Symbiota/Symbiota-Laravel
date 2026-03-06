@@ -2,7 +2,6 @@
 
 return [
     'DATA_USAGE_GUIDELINES' => 'Data Usage Guidelines',
-    'HOME' => 'Home',
     'GUIDE_ACCESSIBLE' => 'Guidelines for Acceptable Use of Data',
     'REC_CITATION' => 'Recommended Citation Formats',
     'USE_FOLLOWING' => 'Use one of the following formats to cite data retrieved from the',
@@ -18,7 +17,6 @@ return [
     'NAME_INST_COLL' => 'Name of Institution or Collection',
     'NAME_INST_OCCUR' => 'Name of Institution or Collection. Occurrence dataset',
     'ACCESSED_VIA' => 'accessed via the Fresh Symbiota Install Portal',
-    'GLOSSARY' => 'Glossary',
     'PLEASE_CITE' => 'Please cite this portal\'s glossary as',
     'RECORD_USE_POLICY' => 'Occurrence Record Use Policy',
     'OCC_REC_POLICY_1_1' => 'While',
@@ -32,7 +30,6 @@ return [
 					contact the original investigator responsible for the data that they are accessing.',
     'OCC_REC_POLICY_4' => 'asks that users not redistribute data obtained from this site without permission for data owners.
 					However, links or references to this site may be freely posted.',
-    'IMAGES' => 'Images',
     'IMAGES_POLICY_1' => 'Images within this website have been generously contributed by their owners to promote education and research. These contributors retain the full copyright for their images.
 		Unless stated otherwise, images are made available under the Creative Commons Attribution-ShareAlike',
     'IMAGES_POLICY_2' => 'Users are allowed to copy, transmit, reuse, and/or adapt content, as long as attribution regarding the source of the content is made. If the content is altered, transformed,

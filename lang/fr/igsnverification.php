@@ -1,22 +1,14 @@
 <?php
 
 return [
-    'IGSN_GUID_MANAGE' => 'Gestion des GUID IGSN',
     'IGSN_ADDED' => 'SUCCÈS : IGSN ajouté !',
     'OCCID_EXISTS' => 'FAILED: le GUID occurrenceID existe déjà: ',
     'CATNUM_NOT_MATCH' => 'ÉCHEC : le numéro de catalogue ne correspond pas',
     'OCC_NOT_FOUND' => 'FAILED: enregistrement d\'occurrence introuvable',
     'NOT_AUTH_TO_MOD' => 'FAILED : non autorisé à modifier l\'occurrence',
     'MISS_VARS' => 'ÉCHEC : variables manquantes',
-    'COLL_MANAGE' => 'Gestion des collections',
-    'IGSN_GUID_GEN' => 'Générateur de GUID IGSN',
-    'IGSN_MANAGE' => 'Gestion IGSN',
     'IGSN_VERIFY' => 'Vérification IGSN',
-    'ERROR_PANEL' => 'Panneau d\'erreur',
-    'DEV_MODE' => 'En mode développement',
-    'ACTION_PANEL' => 'Panneau d\'action',
     'VERIFYING' => 'Vérification de tous les IGSN situés dans le système SESAR par rapport à la base de données du portail...',
-    'RESULTS' => 'Résultats :',
     'CHECKED' => 'Vérifié',
     'IGSNS' => 'IGSN',
     'REG_IGSN_BY_COLL' => 'IGSN enregistrés par collection :',
@@ -27,7 +19,5 @@ return [
     'FINISHED_VERIFY' => 'Vérification des GUID terminée !',
     'VERIFYING_COLL' => 'Vérification des IGSN de la collection par rapport au système SESAR...',
     'IGSN_IN_PORTAL' => 'IGSN dans le portail, mais pas SESAR',
-    'DISPLAY_LIST' => 'afficher la liste',
     'FINISHED_LOCAL' => 'Vérification des GUID IGSN locaux terminée !',
-    'NOT_AUTH' => 'Vous n\'êtes pas autorisé à accéder à cette page ou l\'identifiant de collection n\'a pas été défini',
 ];

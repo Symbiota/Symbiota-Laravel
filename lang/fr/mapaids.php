@@ -16,7 +16,6 @@ return [
     'MPR_UNCERTAINTY_INSTRUCTIONS' => 'Entrez l\'incertitude pour créer un cercle de rayon d\'erreur autour du marqueur.',
     'MPR_LAT' => 'Latitude',
     'MPR_LNG' => 'Longitude',
-    'SUBMIT' => 'Soumettre',
     'UNCERTAINTY_METERS' => 'Incertitude en Mètres',
     'DELETE_SELECTED' => 'Supprimer le polygone sélectionné',
     'MPA_INSTRUCTIONS' => 'Cliquez sur le symbole du polygone pour activer l\'outil Polygone. Cliquez sur le bouton Soumettre pour transférer le polygone vers l\'éditeur.',

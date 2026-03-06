@@ -1,23 +1,15 @@
 <?php
 
 return [
-    'HOME' => 'Inicio',
-    'COLLECTION_MANAGEMENT' => 'Gestión de Colecciones',
     'COOR_VALIDATOR' => 'Validador de Coordenadas',
     'RECOMMEND_USE_GEOGRAPHIC_CLEANER' => '<b>*Nota*</b>: Se recomienda utilizar las Herramientas de limpieza geográfica antes de validar las coordenadas.
     Esto garantizará que sus unidades políticas coincidan con las del tesauro geográfico.',
-    'TOOL_DESCRIPTION' => 'Al hacer clic en el botón "Validar todas las coordenadas", se revisarán todos los registros georreferenciados no 
-    validados para verificar que las coordenadas se encuentren dentro de las unidades geográficas definidas, según los polígonos geográficos 
-    almacenados en el tesauro geográfico. Haga clic en el número en la columna "Registros cuestionables" (disponible después de la validación) 
-    para ver los registros con el problema mencionado. Para obtener más información sobre esta herramienta, visite 
-    <a href="https://docs.symbiota.org/Collection_Manager_Guide/Data_Cleaning/coordinate_validator/" target="_blank">Documentación de Symbiota</a>.',
     'COORDINATES_OUTSIDE_COUNTY_LIMITS' => 'Las coordenadas están fuera de los límites de la unidad geográfica',
     'WRONG_COUNTY_ENTERED' => 'Se introdujo una unidad geográfica incorrecta',
     'COUNTY_MISSPELLED' => 'La unidad geográfica está mal escrita',
     'LAST_VER_DATE' => 'Fecha de la última verificación',
     'VALIDATION_COUNT_LIMIT' => 'La validación de coordenadas está limitada a 50 000 registros a la vez, pero se puede ejecutar varias vecesFecha de la última verificación',
     'RECORDS_TOOK' => 'registros tomados',
-    'SEC' => 'segundos',
     'SPEC_RANK_OF' => 'Registro con rango de',
     'CHECKED_BY' => 'verificado por',
     'NOTHING_TO_DISPLAY' => 'Nada que mostrar',
@@ -28,15 +20,10 @@ return [
     'VALIDATE_ALL_COORDINATES' => 'Validar todas las coordenadas',
     'UNVERIFIED_RECORDS' => 'enregistrements non vérifiés',
     'RANKING_STATISTICS' => 'Estadísticas de clasificación',
-    'RANKING' => 'Clasificación',
-    'STATUS' => 'Estado',
-    'COUNT' => 'Conteo',
     'RE-VERIFY' => 'Reverificar',
     'UNVERIFIED' => 'sin verificar',
     'UNVERIFIED_BY_COUNTRY' => 'Registros sin verificar ordenados por país',
-    'COUNTRY' => 'País',
     'VIEW_SPECIMENS' => 'Ver especímenes',
-    'NOT_AUTHORIZED' => 'No tiene autorización para acceder a esta página',
     'COUNTRY_DOES_NOT_MATCH_COORDS' => 'El país no coincide con las coordenadas',
     'STATE_PROVINCE_DOES_NOT_MATCH_COORDS' => 'El estado/provincia no coincide con las coordenadas',
     'COUNTY_DOES_NOT_MATCH_COORDS' => 'El condado no coincide con las coordenadas',

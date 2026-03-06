@@ -2,7 +2,6 @@
 
 return [
     'IMG_LOADER' => 'Image Loader',
-    'HOME' => 'Home',
     'IMG_IMPORTER' => 'Image Importer',
     'IMG_UPLOAD_FORM' => 'Image Upload Form',
     'IMG_UPLOAD_EXPLAIN' => 'This tool is designed to aid collection managers in batch importing image files
@@ -15,10 +14,7 @@ return [
 					Internal fields can include creatorUid, occid, or tid.',
     'UPLOAD_FILE' => 'Upload File',
     'ANALYZE_INPUT_FILE' => 'Analyze Input File',
-    'SOURCE_FIELD' => 'Source Field',
-    'TARGET_FIELD' => 'Target Field',
     'SELECT_TARGET' => 'Select Target',
-    'LEAVE_UNMAPPED' => 'Leave Field Unmapped',
     'FIELDS_YELLOW' => 'Fields in yellow are not yet mapped or verified',
     'LRG_IMG' => 'Large Image',
     'LEAVE_BLANK' => 'Leave blank',
@@ -26,5 +22,4 @@ return [
     'IMPORT_LOCAL' => 'Import to local storage',
     'BASE_PATH' => 'Base Path',
     'UPLOAD_IMGS' => 'Upload Images',
-    'VERIFY_MAPPING' => 'Verify Mapping',
 ];

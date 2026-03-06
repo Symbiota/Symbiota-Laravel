@@ -19,7 +19,6 @@ return [
     'OBS_MANAGEMENT' => 'Gestion de Projets d\'Observation',
     'GEN_OBS_ADMIN' => 'Observations Générales Administration',
     'MISC_TOOLS' => 'Outils Divers',
-    'DATASET_MANAGEMENT' => 'Gestion des Jeux de Données',
     'CROSS_COL_GEOREF' => 'Outil de Géoréférencement de Collections Multiples',
     'CROSS_COL_TAXON' => 'Outil de Nettoyage de Taxonomie de Collections Multiples',
     'OCCURRENCE_MENU' => 'Menu des Événements',

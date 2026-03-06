@@ -2,10 +2,7 @@
 
 return [
     'SAMPLE_TYPE' => 'Tipo de Muestra',
-    'CATALOG_NUMBER' => 'Número de Catálogo/Código de Barras',
-    'GUID' => 'ID de Muestra de Material (GUID)',
     'SAMPLE_CONDITION' => 'Condición',
-    'DISPOSITION' => 'Disposición',
     'PRESERVATION_TYPE' => 'Tipo de Conservación',
     'PREPARATION DETAILS' => 'Detalles de la Preparación',
     'PREPARATION_DATE' => 'Fecha de Preparación',
@@ -13,7 +10,6 @@ return [
     'INDIVIDUAL COUNT' => 'Recuento Individual',
     'SAMPLE_SIZE' => 'Tamaño de la Muestra',
     'STORAGE_LOCATION' => 'Ubicación de Almacenamiento',
-    'REMARKS' => 'Observaciones',
     'CONCENTRATION' => 'Concentración',
     'CONCENTRATION_UNIT' => 'Unidad de Concentración',
     'RATIO_OF_ABSORBANCE_260/230' => 'Ratio de Absorbancia (260/230)',

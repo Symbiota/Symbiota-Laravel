@@ -11,7 +11,6 @@ return [
     'NO_SECURITY' => 'Aucune sécurité',
     'HIDE_LOC_DETAILS' => 'Masquer les détails de la localité',
     'ACCEPT_STATUS' => 'Statut d\'acceptation',
-    'UNACCEPT_REASON' => 'Raison d\'inacceptabilité',
     'SUBMIT_NEW_NAME' => 'Soumettre un nouveau nom',
     'GENUS_OR_BASE' => 'Nom de genre ou de base',
     'EPITHET' => 'Épithète',
@@ -19,5 +18,4 @@ return [
     'INFRA_EPITHET_FIELD' => 'Champ d\'épithète infraspécifique',
     'RANK_FIELD' => 'Champ de rang',
     'RUN_QUICK_PARSE' => 'Analyser',
-    'REQUIRED' => '* = Champ Obligatoire',
 ];

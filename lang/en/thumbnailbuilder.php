@@ -2,9 +2,7 @@
 
 return [
     'THUMB_BUILDER' => 'Thumbnail Builder',
-    'HOME' => 'Home',
     'COL_MAN_MENU' => 'Collection Management Menu',
-    'SITEMAP' => 'Sitemap',
     'THUMB_MAINT_TOOL' => 'Thumbnail Maintenance Tool',
     'FIELD_IMAGES' => 'field images',
     'PROCESSING_PANEL' => 'Processing Panel',
@@ -31,6 +29,5 @@ return [
     'ONLY_PROCESS_RECENT' => 'Only process images where the source file is more recent than thumbnails',
     'FORCE_REBUILD' => 'Force rebuild all images',
     'REFRESH_THUMBS' => 'Refresh Thumbnails',
-    'RESET' => 'Reset',
     'ERROR_PERMISSIONS' => 'ERROR: improper permissions',
 ];

@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'ASSOCIATIONS' => 'Associations',
     'CREATE_NEW_ASSOC' => 'Create New Association',
     'ASSOCIATION_TYPE' => 'Association Type (required)',
     'RESOURCE_LINK' => 'Non-occurrence Resource Link',
     'INTERNAL_OCCURRENCE' => 'Occurrence - Internal (this portal)',
     'EXTERNAL_OCCURRENCE' => 'Occurrence - External Link',
-    'OBSERVATION' => 'Taxon Observation',
     'RELATIONSHIP' => 'Relationship (required)',
     'REL_SUBTYPE' => 'Relationship Subtype',
     'BASIS_OF_RECORD' => 'Basis of Record',
@@ -19,11 +17,9 @@ return [
     'PRES_SAMPLE' => 'Preserved Specimen',
     'REF_CITATION' => 'Reference Citation',
     'LOC_ON_HOST' => 'Location on host',
-    'NOTES' => 'Notes',
     'ESTABLISHED_DATE' => 'Date Established',
     'RECORD_ID' => 'Record ID',
     'ENTERED_BY' => 'Entered by',
-    'TAXONOMY' => 'Taxonomy',
     'INTERNAL_RESOURCE' => 'Internal Resource',
     'ACCORDING_TO' => 'According to',
     'OBJECT_IDENTIFIER' => 'Object Identifier',
@@ -33,7 +29,6 @@ return [
     'OCC_PK' => 'Occurrence PK (occid)',
     'SEARCH_COLS' => 'Search Collections',
     'ALL_COLS' => 'All Collections',
-    'SEARCH' => 'Search',
     'OCC_MATCHES_AVAIL' => 'Occurrence Matches Available to Link',
     'EXTERNAL_RESOURCE' => 'External Resource',
     'ADDITIONAL_ID' => 'Additional Identifier of Object',

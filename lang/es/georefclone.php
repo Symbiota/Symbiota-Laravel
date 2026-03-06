@@ -3,7 +3,6 @@
 return [
     'GEOREFERENCE_CLONE' => 'Herramienta de Clonación de Georeferencia',
     'SEARCH_FORM' => 'Formulario de Búsqueda',
-    'LOCALITY' => 'Localidad',
     'LOCALITY_MISSING_ERROR' => 'El campo de localidad debe tener un valor.',
     'LOCALITY_INVALID_ERROR' => 'El campo de localidad no puede contener más de 4 palabras al realizar una búsqueda profunda. Simplemente ingrese algunas palabras clave.',
     'EXACT_MATCH' => 'Coincidencia Exacta',

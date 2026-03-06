@@ -8,9 +8,7 @@ return [
     'DUPLICATE_MANAGER' => 'Duplicate Manager',
     'DUP_CLUSTERING' => 'Duplicate Clustering',
     'PERS_MANAGE_MENU' => 'Personal Management Menu',
-    'COL_MANAGE' => 'Collection Management',
     'DUP_MANAGE' => 'Duplicate Management',
-    'DUP_CLUSTERS' => 'Duplicate Clusters',
     'DUP_LINKAGES' => 'Duplicate Linkages',
     'DUP_EXPLANATION' => 'It is common within some collection domains (e.g. herbarium collections) to collect specimens in duplicate.
 						Links below list duplicate cluster and aid collection managers in batch linking
@@ -23,11 +21,8 @@ return [
     'EXS_DUP_EXPLANATION' => 'list of exsiccatae titles that are associated with this collection (including data filtering and download capabilities)',
     'EXS_DOWNLOAD' => 'Exsiccatae download',
     'EXS_DOWNLOAD_EXPLANATION' => 'CSV download of exsiccati titles, numbers, specimen information, and links to full specimen details',
-    'PREVIOUS' => 'Previous',
-    'NEXT' => 'Next',
     'WITH_ID_DIFFERENCES' => 'with Identification Differences',
     'DISP_EDIT_CONTROLS' => 'Display Editing Controls',
-    'SAVE_EDITS' => 'Save Edits',
     'SURE_DEL_DUP' => 'Are you sure you want to delete this duplicate cluster?',
     'DEL_CLUSTER' => 'Delete Cluster',
     'DEL_SPEC_FROM_CLUSTER' => 'Delete Specimen from Cluster',
@@ -35,7 +30,6 @@ return [
     'DET_BY' => 'Determined by',
     'NO_DUP_CLUSTERS' => 'No Duplicate Clusters match the request. Consider returning to the Duplicate Cluster menu and batch building duplicate clusters.',
     'RETURN_MAIN' => 'Return to main menu',
-    'NOT_AUTH' => 'You are not authorized to access this page',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES' => 'Batch copy duplicate georeference data',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES_EXPLANATION' => 'tool for copying georeference data from linked duplicates',
 ];

@@ -6,12 +6,10 @@ return [
     'SEL_COUNTRY' => 'Select a country value',
     'SEL_STATE' => 'Seleccionar un valor para estado',
     'SEL_COUNTY' => 'Seleccionar un valor para condado',
-    'HOME' => 'Inicio',
     'COL_MAN' => 'Manejo de Colecciones',
     'CLEAN_TOOL_INDEX' => 'Índice de Herramientas de Limpieza',
     'POL_GEO_CLEAN_MENU' => 'Menú de Limpieza de Geografía Política',
     'GEO_REPORT' => 'Reporte Geográfico',
-    'MAIN_MENU' => 'Menú Principal',
     'GEO_REPORT_EXPLAIN' => 'Hacer click en los enlaces provistos abajo para listar términos geográficos no estandarizados usados en la colección.
 						Los números a la derecha de cada designación geográfica representan el número de especímenes usando ese término.
 						Haga click en el símbolo de editar (lápiz) para abrir el editor de ocurrencias. Usar las herramientas de limpieza provistas para actualizar los campos por lote con el término corregido.
@@ -35,6 +33,4 @@ return [
     'NULL_COUNTY_NOT_LOCALITY' => 'Condado NULO y localidad no nula',
     'ASSIGN_COUNTY' => 'Asignar Condado',
     'GEN_CLEANING' => 'Limpieza general',
-    'RECORDS' => 'registros',
-    'NOT_AUTH' => 'No está autorizado para ingresar en esta página',
 ];

@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'ASSOCIATIONS' => 'Associações',
     'CREATE_NEW_ASSOC' => 'Criar nova associação',
     'ASSOCIATION_TYPE' => 'Tipo de associação',
     'RESOURCE_LINK' => 'Link de recurso de não ocorrência',
     'INTERNAL_OCCURRENCE' => 'Ocorrência - Interna (este portal)',
     'EXTERNAL_OCCURRENCE' => 'Ocorrência - Link Externo',
-    'OBSERVATION' => 'Observação de táxons',
     'RELATIONSHIP' => 'Relacionamento (obrigatório)',
     'REL_SUBTYPE' => 'Subtipo de relacionamento',
     'BASIS_OF_RECORD' => 'Base de Registro',
@@ -18,11 +16,9 @@ return [
     'PRES_SAMPLE' => 'Espécime Preservado',
     'REF_CITATION' => 'Citação de Referência',
     'LOC_ON_HOST' => 'Localização no host',
-    'NOTES' => 'Notas',
     'ESTABLISHED_DATE' => 'Data Estabelecida',
     'RECORD_ID' => 'ID do registro',
     'ENTERED_BY' => 'Inserido por',
-    'TAXONOMY' => 'Taxonomia',
     'INTERNAL_RESOURCE' => 'Recurso Interno',
     'ACCORDING_TO' => 'De acordo com',
     'OBJECT_IDENTIFIER' => 'Identificador de objeto',
@@ -32,7 +28,6 @@ return [
     'OCC_PK' => 'PK de ocorrência (occid)',
     'SEARCH_COLS' => 'Pesquisar coleções',
     'ALL_COLS' => 'Todas as coleções',
-    'SEARCH' => 'Procurar',
     'OCC_MATCHES_AVAIL' => 'Correspondências de ocorrência disponíveis para vinculação',
     'EXTERNAL_RESOURCE' => 'Recurso Externo',
     'ADDITIONAL_ID' => 'Identificador Adicional de Objeto',

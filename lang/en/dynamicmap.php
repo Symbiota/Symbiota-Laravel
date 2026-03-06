@@ -3,8 +3,6 @@
 return [
     'CHECKLIST_GENERATOR' => 'Dynamic Checklist Generator',
     'CLICK_MAP' => 'Click on map',
-    'HOME' => 'Home',
-    'DYNAMIC_MAP' => 'Dynamic Map',
     'CAPTURE_COORDS' => 'Pan, zoom and click on map to capture coordinates, then submit coordinates to build a species list.',
     'MORE_DETAILS' => 'More Details',
     'RADIUS_DESCRIPTION' => 'If a radius is defined, species lists are generated using specimen data collected within the defined area.

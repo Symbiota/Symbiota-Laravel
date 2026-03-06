@@ -14,7 +14,6 @@ return [
     'DELETE_FAILED' => 'Profile deletion failed!',
     'DATA_CONFLICT' => 'User ID required within other tables (e.g. foreign key constraint).',
     'CONTACT_ADMIN' => 'Please contact the system administrator',
-    'HOME' => 'Home',
     'MY_PROFILE' => 'My Profile',
     'VIEW_PROFILE' => 'View User Profile',
     'SPEC_CHECKLIST' => 'Species Checklists',

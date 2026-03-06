@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'HOME' => 'Accueil',
     'SPEC_UPLOAD' => 'Télécharger Spécimens',
     'PATH_EMPTY' => 'Le chemin du fichier est vide. Veuillez sélectionner le fichier à charger.',
     'MUST_CSV' => 'Le fichier doit être séparé par des virgules (.csv), délimité par des tabulations (.txt ou .tab), un fichier ZIP (.zip) ou une URL vers une ressource IPT',
@@ -20,7 +19,6 @@ return [
     'SEL_TAR_USER' => 'Sélectionnez Utilisateur Cible',
     'FIRST_ROW' => 'La première ligne du fichier d\'entrée contient-elle les noms de colonnes? Il semble que vous mappiez directement à la première ligne de données actives plutôt qu\'à une ligne d\'en-tête. Si tel est le cas, la première ligne de données sera perdue et certaines colonnes peuvent être ignorées. Sélectionnez OK pour continuer ou annuler pour abandonner',
     'ENTER_PROF' => 'Entrez un nom de profil et cliquez sur le bouton Enregistrer la carte pour créer un nouveau profil de téléchargement',
-    'COL_MGMNT' => 'Gestion des Collections',
     'LIST_UPLOAD' => 'Liste des Profils de Téléchargement',
     'UP_MODULE' => 'Module de Téléchargement',
     'CAUTION' => 'Avertir',
@@ -60,7 +58,6 @@ return [
     'BOTH_CATS' => 'Si les deux cases sont cochées, les correspondances seront d\'abord effectuées sur les numéros de catalogue et secondairement sur d\'autres numéros de catalogue',
     'ID_SOURCE' => 'Identifier Source de Données',
     'IPT_URL' => 'URL de Ressource IPT',
-    'RESOURCE_URL' => 'Chemin de Ressource ou URL',
     'WORKAROUND' => 'Cette option permet de pointer vers un fichier de données qui a été manuellement téléchargé sur un serveur. Cette option offre une solution de contournement pour l\'importation de fichiers plus volumineux que ce qui est autorisé par les limitations de téléchargement du serveur (par exemple, les limites de configuration PHP)',
     'DISPLAY_OPS' => 'Afficher Options Supplémentaires',
     'AUTOMAP' => 'Mapper Automatiquement Champs',
@@ -112,7 +109,6 @@ return [
     'SKEL_EXPLAIN_P3' => 'Dans les cas où un enregistrement existe déjà, un téléchargement de fichier général remplacera complètement l\'enregistrement existant par les données du nouvel
 	enregistrement. D\'un autre côté, un téléchargement squelettique augmentera l\'enregistrement existant uniquement avec de nouvelles données de terrain. Les champs ne sont ajoutés que si les données n\'existent pas déjà dans le champ cible.',
     'SKEL_EXPLAIN_P4' => 'Si un enregistrement N\'EXISTE PAS déjà, un nouvel enregistrement sera créé dans les deux cas, mais seul l\'enregistrement squelettique sera marqué comme non traité',
-    'NOT_AUTH' => 'ERREUR: vous n\'êtes pas autorisé à télécharger dans cette collection',
     'PAGE_ERROR' => 'ERREUR: Soit vous avez essayé d\'accéder à cette page sans passer par le menu de gestion des collections, soit vous avez essayé de télécharger un fichier trop volumineux.
 	Vous voudrez peut-être diviser le fichier de téléchargement en fichiers plus petits ou compresser le fichier dans une archive zip (extension .zip). Vous pouvez contacter
 	l\'administrateur du portail pour demander de l\'aide pour télécharger le fichier (conseil à l\'administrateur : augmenter les limites de téléchargement PHP peut aider, upload_max_filesize actuel',

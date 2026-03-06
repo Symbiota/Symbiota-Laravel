@@ -11,7 +11,6 @@ return [
     'NO_SECURITY' => 'No Security',
     'HIDE_LOC_DETAILS' => 'Hide Locality Details',
     'ACCEPT_STATUS' => 'Acceptance Status',
-    'UNACCEPT_REASON' => 'Unacceptability Reason',
     'SUBMIT_NEW_NAME' => 'Submit New Name',
     'GENUS_OR_BASE' => 'Genus or Base Name',
     'EPITHET' => 'Epithet',
@@ -19,5 +18,4 @@ return [
     'INFRA_EPITHET_FIELD' => 'Infraspecific Epithet Field',
     'RANK_FIELD' => 'Rank Field',
     'RUN_QUICK_PARSE' => 'Parse',
-    'REQUIRED' => '* = Required Field',
 ];

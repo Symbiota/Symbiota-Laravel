@@ -2,8 +2,6 @@
 
 return [
     'LOADER' => 'Glossary Term Loader',
-    'PLEASE_TAXON' => 'Please enter at least one taxonomic group.',
-    'HOME' => 'Home',
     'GLOSS_MGMNT' => 'Glossary Management',
     'BATCH_LOAD' => 'Glossary Batch Loader',
     'G_BATCH_LOAD' => 'Glossary Term Batch Loader',
@@ -22,7 +20,6 @@ return [
     'UNAVAILABLE' => 'Upload statistics are unavailable',
     'DOWNLOAD_TERMS' => 'Download CSV Terms File',
     'TERM_SUCCESS' => 'Terms upload appears to have been successful',
-    'GO_TO' => 'Go to',
     'G_SEARCH' => 'Glossary Search',
     'TO_SEARCH' => 'page to search for a loaded name.',
     'UPLOAD_EXPLAIN' => 'Flat structured, CSV (comma delimited) text files can be uploaded here.
@@ -39,5 +36,4 @@ return [
     'ENTER_TAXON' => 'Enter Taxonomic Group',
     'ENTER_SOURCE' => 'Enter Sources',
     'UPLOAD' => 'Upload File',
-    'NO_PERM' => 'You do not have permissions to batch upload glossary data',
 ];

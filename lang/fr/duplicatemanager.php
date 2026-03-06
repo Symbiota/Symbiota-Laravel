@@ -8,9 +8,7 @@ return [
     'DUPLICATE_MANAGER' => 'Gestionnaire de Duplications',
     'DUP_CLUSTERING' => 'Regroupement de Doublons',
     'PERS_MANAGE_MENU' => 'Personal Management Menu',
-    'COL_MANAGE' => 'Menu Gestion Personnelle',
     'DUP_MANAGE' => 'Gestion Doublons',
-    'DUP_CLUSTERS' => 'Groupes de Doublons',
     'DUP_LINKAGES' => 'Liens de Doublons',
     'DUP_EXPLANATION' => 'Il est courant dans certains domaines de collecte (par exemple, les collections d\'herbiers) de collecter des spécimens en double.
 						Les liens ci-dessous répertorient les clusters en double et aident les gestionnaires de collecte par lots
@@ -23,11 +21,8 @@ return [
     'EXS_DUP_EXPLANATION' => 'liste des titres exsiccatae associés à cette collection (y compris les capacités de filtrage et de téléchargement des données)',
     'EXS_DOWNLOAD' => 'Télécharger exsiccatae',
     'EXS_DOWNLOAD_EXPLANATION' => 'Téléchargement CSV des titres exsiccati, des numéros, des informations sur les spécimens et des liens vers les détails complets des spécimens',
-    'PREVIOUS' => 'Précédent',
-    'NEXT' => 'Suivant',
     'WITH_ID_DIFFERENCES' => 'avec des différences d\'identification',
     'DISP_EDIT_CONTROLS' => 'Afficher Commandes d\'Édition',
-    'SAVE_EDITS' => 'Enregistrer Modifications',
     'SURE_DEL_DUP' => 'Voulez-vous vraiment supprimer ce groupe en double?',
     'DEL_CLUSTER' => 'Supprimer Groupe',
     'DEL_SPEC_FROM_CLUSTER' => 'Supprimer Spécimen du Groupe',
@@ -35,7 +30,6 @@ return [
     'DET_BY' => 'Déterminé par',
     'NO_DUP_CLUSTERS' => 'Aucun cluster en double ne correspond à la demande. Envisagez de revenir au menu Dupliquer le cluster et de créer par lots des clusters dupliqués.',
     'RETURN_MAIN' => 'Retour au menu principal',
-    'NOT_AUTH' => 'Vous n\'êtes pas autorisé à accéder à cette page',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES' => 'Copie par lots des données de géoréférencement en double',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES_EXPLANATION' => 'Outil de copie des données de géoréférencement à partir de doublons liés',
 ];

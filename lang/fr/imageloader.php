@@ -2,7 +2,6 @@
 
 return [
     'IMG_LOADER' => 'Chargeur d\'Images',
-    'HOME' => 'Accueil',
     'IMG_IMPORTER' => 'Importateur d\'Images',
     'IMG_UPLOAD_FORM' => 'Formulaire de Téléchargement d\'Images',
     'IMG_UPLOAD_EXPLAIN' => 'Cet outil est conçu pour aider les gestionnaires de collections à importer par lots des fichiers image.
@@ -15,10 +14,7 @@ notes, identifiant de collection, propriétaire, droit d\'auteur, sortSequence.
 Les champs internes peuvent inclure photographeUid, occid ou tid.',
     'UPLOAD_FILE' => 'Télécharger le Fichier',
     'ANALYZE_INPUT_FILE' => 'Analyser le Fichier d\'Entrée',
-    'SOURCE_FIELD' => 'Champ Source',
-    'TARGET_FIELD' => 'Champ Cible',
     'SELECT_TARGET' => 'Sélectionner la Cible',
-    'LEAVE_UNMAPPED' => 'Laisser le Champ non Mappé',
     'FIELDS_YELLOW' => 'Les champs en jaune ne sont pas encore cartographiés ou vérifiés',
     'LRG_IMG' => 'Grande Image',
     'LEAVE_BLANK' => 'Laisser Vide',
@@ -26,5 +22,4 @@ Les champs internes peuvent inclure photographeUid, occid ou tid.',
     'IMPORT_LOCAL' => 'Importer vers le stockage local',
     'BASE_PATH' => 'Chemin de Base',
     'UPLOAD_IMGS' => 'Télécharger des Images',
-    'VERIFY_MAPPING' => 'Vérifier le Mappage',
 ];

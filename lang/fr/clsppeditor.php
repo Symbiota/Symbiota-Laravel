@@ -2,18 +2,11 @@
 
 return [
     'SPEC_DETAILS' => 'Détails de l\'Espèce',
-    'OF' => 'de',
-    'NAME_BLANK' => 'Le champ du nom scientifique est vide',
     'GEN_EDIT' => 'Modification Générale',
     'VOUCHER_EDIT' => 'Administration d\'Échantillons',
     'EDIT_CHECKLIST' => 'Modifier Informations de Liste',
-    'HABITAT' => 'Habitat',
-    'ABUNDANCE' => 'Abondance',
-    'NOTES' => 'Notes',
     'EDITOR_NOTES' => 'Notes de l\'Éditeur',
-    'SOURCE' => 'Source',
     'OVERRIDE' => 'Remplacement de Famille',
-    'SUBMIT_EDITS' => 'Soumettre Modifications de Liste',
     'RENAME_TRANSFER' => 'Renommer Taxon / Transférer Échantillons',
     'TARGET_TAXON' => 'Taxon Cible',
     'VOUCHERS_TRANSFER' => 'Notez que les échantillons et les notes seront transférés vers le nouveau taxon',
@@ -23,7 +16,6 @@ return [
     'DELETE_TAXON' => 'Supprimer Taxon de Liste',
     'VOUCHER_INFO' => 'Informations d\Échantillons',
     'NO_VOUCHERS' => 'Aucun échantillon pour cette espèce n\'a été affecté à la liste',
-    'SURE_DELETE' => 'Êtes-vous sûr de vouloir supprimer cet enregistrement d\&apos;échantillon?',
     'EDIT_VOUCHER' => 'Modifier Échantillon',
     'EDITOR_NOTES_DISPLAY' => 'Notes de l\'Éditeur (affichage de l\'Éditeur uniquement)',
     'SUBMIT_V_EDITS' => 'Soumettre Modifications',
@@ -37,5 +29,4 @@ return [
     'UNKNOWN_COLLECTION' => 'Collection Inconnue',
     'REMOVE' => 'Retirer',
     'TO_COLLECTIONS_LINK' => 'Lien vers les collections et taxons cibles',
-    'SELECT_TAXON' => 'Veuillez sélectionner un taxon dans la liste',
 ];

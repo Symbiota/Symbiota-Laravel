@@ -3,8 +3,6 @@
 return [
     'CHECKLIST_GENERATOR' => 'Generador de Listados de Especies Dinámicos',
     'CLICK_MAP' => 'Hacer click en el mapa',
-    'HOME' => 'Inicio',
-    'DYNAMIC_MAP' => 'Mapa Dinámico',
     'CAPTURE_COORDS' => 'Desplácese, amplíe y haga clic en el mapa para capturar coordenadas, luego envíe las coordenadas para crear una lista de especies.',
     'MORE_DETAILS' => 'Más Detalles',
     'RADIUS_DESCRIPTION' => 'Si un radio es definido, los listados de especies son generados usando los datos de los especímenes recolectados dentro del área definida.

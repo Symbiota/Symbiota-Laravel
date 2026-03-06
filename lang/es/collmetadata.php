@@ -6,28 +6,20 @@ return [
     'ADD_SUCCESS' => 'Nueva colección agregada exitosamente',
     'ADD_STUFF' => 'Agregar contactos, enlaces de recursos o dirección de institución a continuación',
     'COL_PROFS' => 'Perfiles de colección',
-    'LOADING' => '<p>Cargando...</p>',
     'META_EDIT' => 'Editor de metadatos',
     'CREATE_COLL' => 'Crear nuevo perfil de colección',
     'COL_META_EDIT' => 'Editor de metadatos de la colección',
     'CONT_RES' => 'Contactos y recursos',
     'COL_INFO' => 'Información de la colección',
-    'INST_CODE' => 'Código de institución',
     'MORE_INST_CODE' => 'Más información sobre el Código de Institución',
     'NAME_ONE' => 'El nombre (o acrónimo) utilizado por la institución que tiene la custodia de los registros de sucesos. Este campo es obligatorio. Para obtener más detalles, consulte',
     'DWC_DEF' => 'Definición de Darwin Core',
-    'COLL_CODE' => 'Código de colección',
     'MORE_COLL_CODE' => 'Más información sobre el Código de Colección',
     'NAME_ACRO' => 'El nombre, acrónimo o código que identifica la colección o conjunto de datos del que se derivó el registro. Este campo es opcional. Para obtener más detalles, consulte',
     'COLL_NAME' => 'Nombre de la colección',
     'DESC' => 'Descripción (2000 caracteres como máximo)',
     'HOMEPAGE' => 'Página de inicio',
     'CONTACT' => 'Contacto',
-    'EMAIL' => 'Correo electrónico',
-    'LAT' => 'Latitud',
-    'LONG' => 'Longitud',
-    'MAP' => 'Abrir mapa',
-    'MORE_INFO' => 'Más información',
     'CATEGORY' => 'Categoría',
     'NO_CATEGORY' => 'Sin categoría',
     'ALLOW_PUBLIC_EDITS' => 'Permitir ediciones públicas',
@@ -42,11 +34,9 @@ return [
     'LEGAL_DOC' => 'Un documento legal que otorga permiso oficial para hacer algo con el recurso.
                     Este campo se puede limitar a un conjunto de valores modificando el archivo de configuración central del portal.
                     Para obtener más detalles, consulte',
-    'RIGHTS_HOLDER' => 'Titular de los derechos',
     'MORE_INFO_RIGHTS_H' => 'Más información sobre el Titular de los derechos',
     'HOLDER_DEF' => 'La organización o persona que administra o posee los derechos del recurso.
                     Para obtener más detalles, consulte',
-    'ACCESS_RIGHTS' => 'Derechos de acceso',
     'MORE_INFO_ACCESS_RIGHTS' => 'Más información sobre Derechos de Acceso',
     'ACCESS_DEF' => 'Información o un enlace URL a una página con detalles que explican
                     cómo se pueden utilizar los datos. Ver',
@@ -80,7 +70,6 @@ return [
     'GUID_SOURCE' => 'fuente GUID',
     'NOT_DEFINED' => 'No definido',
     'MORE_INFO_GUID' => 'Más información sobre el Identificador Único Global',
-    'OCCURRENCE_ID' => 'Identificador de ocurrencia',
     'SYMB_GUID' => 'GUID generado por Symbiota (UUID)',
     'OCCID_DEF_1' => 'El ID de ocurrencia se usa generalmente para
                         Conjuntos de datos de instantáneas cuando un campo de identificador único global (GUID)
@@ -110,8 +99,6 @@ return [
     'UPLOAD_ICON' => 'Cargue un archivo de imagen de ícono o ingrese la URL de un ícono de imagen que represente la colección. Si ingresa la URL de una imagen ya ubicada
                         quot;Ingresar URL&quot;. La ruta URL puede ser absoluta o relativa. El uso de iconos es opcional.',
     'ENTER_URL' => 'Ingresar URL',
-    'UPLOAD_LOCAL' => 'Subir imagen local',
-    'SORT_SEQUENCE' => 'Ordenar secuencia',
     'MORE_SORTING' => 'Más información sobre Clasificación',
     'LEAVE_IF_ALPHABET' => 'Deje este campo vacío si desea que las colecciones se ordenen alfabéticamente (predeterminado)',
     'COLLECTION_ID' => 'ID de colección (GUID)',
@@ -122,7 +109,6 @@ return [
                         Registro Global de Repositorios de Biodiversidad',
     'SECURITY_KEY' => 'Clave de seguridad',
     'RECORDID' => 'ID de registro',
-    'SAVE_EDITS' => 'Guardar ediciones',
     'CREATE_COLL_2' => 'Crear nueva colección',
     'TINYMCE_INFO' => 'Descripción de la colección. Puede acceder a la barra de herramientas de edición de texto para esta descripción presionando
                         la combinación de teclas ALT + F10 en Windows u OPCIÓN + F10 en MacOS.',

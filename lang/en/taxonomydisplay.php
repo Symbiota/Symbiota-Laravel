@@ -2,16 +2,9 @@
 
 return [
     'TAX_DISPLAY' => 'Taxonomy Display',
-    'HOME' => 'Home',
     'TAX_TREE_VIEWER' => 'Taxonomic Tree Viewer',
-    'ADD_NEW_TAXON' => 'Add a New Taxon',
-    'DESCRIPTION' => 'Description',
     'EDITORS' => 'Editors',
-    'CONTACT' => 'Contact',
-    'EMAIL' => 'Email',
-    'NOTES' => 'Notes',
     'TAX_SEARCH' => 'Taxon Search',
-    'TAXON' => 'Taxon',
     'DISP_TAX_TREE' => 'Display Taxon Tree',
     'DISP_AUTHORS' => 'Display authors',
     'MATCH_WHOLE_WORDS' => 'Match on whole words',

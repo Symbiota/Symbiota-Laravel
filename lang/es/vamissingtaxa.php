@@ -8,14 +8,8 @@ return [
     'DISP_MODE' => 'Modo Desplegado',
     'SPEC_LIST' => 'Listados de Especies',
     'BATCH_LINK' => 'Enlazar por Lotes',
-    'NOT_FOUND' => 'Abajo se encuentran listados los especímenes identificados a especies no encontradas en el listado.
-                        Use el formulario para añadir los nombres y enlazar los vouchers como una acción en lote.',
-    'SELECT_ALL' => 'Seleccionar Todo',
     'SPEC_ID' => 'ID del Especímen',
-    'COLLECTOR' => 'Colector',
-    'LOCALITY' => 'Localidad',
     'ADD_CURRENT' => 'Añadir nombre usando la taxonomía actual',
-    'NO_VOUCHERS' => 'Añadir nombres sin enlazar vouchers',
     'SUBMIT_VOUCHERS' => 'Enviar Vouchers',
     'SPEC_COUNT' => 'Conteo de Especímenes',
     'VIEW_NEXT' => 'Ver Siguiente',
@@ -27,6 +21,5 @@ return [
     'LINK_VOUCHER' => 'Enlazar Voucher',
     'NOT_IN_CHECKLIST' => 'Listados abajo están los nombres de taxa no encontrados en el listado de especies
                             pero que están representados por uno o más especímenes que tienen una localidad que encaja con la búsqueda realizada.',
-    'LINK_VOUCHERS' => 'Enlazar Especímenes Voucher',
     'NOVOUCHERS' => 'No se localizaron vouchers',
 ];

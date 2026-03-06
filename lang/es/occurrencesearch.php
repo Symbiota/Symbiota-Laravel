@@ -13,10 +13,8 @@ return [
     'CATALOG_NO' => 'Catálogo #',
     'OTHER_CATALOG_NO' => 'Otro Catálogo #',
     'COLLECTOR_LAST_NAME' => 'Apellido del Colector',
-    'COLLECTOR_NUMBER' => 'Número de Coleccionista',
     'SELECT_OCCUR_RECORD' => 'Seleccionar registro de Ocurrencia',
     'NO_RECORDS_RETURNED' => 'No se devolvieron registros. Por favor modifica tu búsqueda y vuelve a intentarlo',
     'LINK_TO_NEW_OCCUR_RECORD' => 'Enlace al nuevo registro de ocurrencia',
     'CREATE_NEW_RECORD' => 'Crear Nueva Aparición',
-    'NOT_AUTHORIZED' => 'No estás autorizado a vincular ninguna colección',
 ];

@@ -13,10 +13,8 @@ return [
     'CATALOG_NO' => 'Catalog #',
     'OTHER_CATALOG_NO' => 'Other Catalog #',
     'COLLECTOR_LAST_NAME' => 'Collector Last Name',
-    'COLLECTOR_NUMBER' => 'Collector Number',
     'SELECT_OCCUR_RECORD' => 'Select Occurrence Record',
     'NO_RECORDS_RETURNED' => 'No records were returned. Please modify your search and try again',
     'LINK_TO_NEW_OCCUR_RECORD' => 'Link to New Occurrence Record',
     'CREATE_NEW_RECORD' => 'Create New Occurrence',
-    'NOT_AUTHORIZED' => 'You are not authorized to link to any collections',
 ];

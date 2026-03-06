@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'HOME' => 'Home',
     'SPEC_UPLOAD' => 'Specimen Uploader',
     'PATH_EMPTY' => 'File path is empty. Please select the file that is to be loaded.',
     'MUST_CSV' => 'File must be comma separated (.csv), tab delimited (.txt or .tab), ZIP file (.zip), or a URL to an IPT Resource',
@@ -20,7 +19,6 @@ return [
     'SEL_TAR_USER' => 'Select Target User',
     'FIRST_ROW' => 'Does the first row of the input file contain the column names? It appears that you may be mapping directly to the first row of active data rather than a header row. If so, the first row of data will be lost and some columns might be skipped. Select OK to proceed, or cancel to abort',
     'ENTER_PROF' => 'Review/modify profile name and click the Save Mapping button again to create the new profile',
-    'COL_MGMNT' => 'Collection Management Panel',
     'LIST_UPLOAD' => 'List of Upload Profiles',
     'UP_MODULE' => 'Data Upload Module',
     'CAUTION' => 'Caution',
@@ -60,7 +58,6 @@ return [
     'BOTH_CATS' => 'If both checkboxes are selected, matches will first be made on catalog numbers and secondarily on other catalog numbers',
     'ID_SOURCE' => 'Identify Data Source',
     'IPT_URL' => 'IPT Resource URL',
-    'RESOURCE_URL' => 'Resource Path or URL',
     'WORKAROUND' => 'This option is for pointing to a data file that was manually uploaded to a server. This option offers a workaround for importing files that are larger than what is allowed by server upload limitations (e.g. PHP configuration limits)',
     'DISPLAY_OPS' => 'Display Additional Options',
     'AUTOMAP' => 'Automap Fields',
@@ -112,10 +109,8 @@ return [
     'SKEL_EXPLAIN_P3' => 'In cases where a record already exists, a general file upload will completely replace the existing record with the data in the new record.
 	On the other hand, a skeletal upload will augment the existing record only with new field data. Fields are only added if data does not already exist within the target field.',
     'SKEL_EXPLAIN_P4' => 'If a record DOES NOT already exist, a new record will be created in both cases, but only the skeletal record will be tagged as unprocessed',
-    'NOT_AUTH' => 'ERROR: you are not authorized to upload to this collection',
     'PAGE_ERROR' => 'ERROR: Either you have tried to reach this page without going through the collection management menu or you have tried to upload a file that is too large.
 	You may want to breaking the upload file into smaller files or compressing the file into a zip archive (.zip extension).
 	You may want to contact portal administrator to request assistance in uploading the file (hint to admin: increasing PHP upload limits may help, current upload_max_filesize',
     'USE_BACK' => 'Use the back arrows to get back to the file upload page.',
-    'UPLOAD' => 'Upload File',
 ];

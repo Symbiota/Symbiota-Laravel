@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'AND' => 'Y',
-    'OR' => 'O',
     'EQUALS' => 'ES IGUAL',
     'NOT_EQUALS' => 'NO ES IGUAL',
     'STARTS_WITH' => 'EMPIEZA CON',

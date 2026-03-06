@@ -8,9 +8,7 @@ return [
     'DUPLICATE_MANAGER' => 'Administrador de Duplicados',
     'DUP_CLUSTERING' => 'Agrupación duplicada',
     'PERS_MANAGE_MENU' => 'Menú de gestión personal',
-    'COL_MANAGE' => 'Gestión de colecciones',
     'DUP_MANAGE' => 'Gestión de duplicados',
-    'DUP_CLUSTERS' => 'Clústeres duplicados',
     'DUP_LINKAGES' => 'Vínculos duplicados',
     'DUP_EXPLANATION' => 'Es común en algunos dominios de colección (por ejemplo, colecciones de herbario) recolectar especímenes por duplicado.
                         Los enlaces a continuación enumeran administradores de recolección de ayuda y grupos duplicados en enlaces por lotes
@@ -23,11 +21,8 @@ return [
     'EXS_DUP_EXPLANATION' => 'lista de títulos exsiccatae asociados con esta colección (incluyendo filtrado de datos y capacidades de descarga)',
     'EXS_DOWNLOAD' => 'Descarga de Exsiccatae',
     'EXS_DOWNLOAD_EXPLANATION' => 'Descarga CSV de títulos exsiccati, números, información de especímenes y enlaces a detalles completos de los especímenes',
-    'PREVIOUS' => 'Anterior',
-    'NEXT' => 'Siguiente',
     'WITH_ID_DIFFERENCES' => 'con diferencias de identificación',
     'DISP_EDIT_CONTROLS' => 'Mostrar controles de edición',
-    'SAVE_EDITS' => 'Guardar ediciones',
     'SURE_DEL_DUP' => '¿Está seguro de que desea eliminar este clúster duplicado?',
     'DEL_CLUSTER' => 'Eliminar clúster',
     'DEL_SPEC_FROM_CLUSTER' => 'Eliminar muestra del grupo',
@@ -35,7 +30,6 @@ return [
     'DET_BY' => 'Determinado por',
     'NO_DUP_CLUSTERS' => 'Ningún clúster duplicado coincide con la solicitud. Considere volver al menú Duplicar clúster y crear por lotes clústeres duplicados.',
     'RETURN_MAIN' => 'Volver al menú principal',
-    'NOT_AUTH' => 'No estás autorizado a acceder a esta página',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES' => 'Copia por lotes de datos de georreferencia duplicados',
     'BATCH_COPY_GEOREFERENCE_DUPLICATES_EXPLANATION' => 'Herramienta para copiar datos de georreferencia de duplicados vinculados',
 ];

@@ -1,22 +1,15 @@
 <?php
 
 return [
-    'HOME' => 'Home',
-    'COLLECTION_MANAGEMENT' => 'Collection Management',
     'COOR_VALIDATOR' => 'Coordinate Validator',
     'RECOMMEND_USE_GEOGRAPHIC_CLEANER' => '<b>*Note*</b>: It is recommended to use the Geography Cleaning Tools before validating coordinates. 
     This will ensure that your political units match those in the geographic thesaurus.',
-    'TOOL_DESCRIPTION' => 'Clicking the "Validate All Coordinates" button will loop through all unvalidated georeferenced records to verify that 
-    the coordinates actually fall within the defined geographic units, as defined by geographic polygons stored in the geographic thesaurus. 
-    Click on the number in the Questionable Records column (available after validating) to view records with the named issue. For more information about this tool, 
-    visit <a href="https://docs.symbiota.org/Collection_Manager_Guide/Data_Cleaning/coordinate_validator/" target="_blank">Symbiota Docs</a>.',
     'COORDINATES_OUTSIDE_COUNTY_LIMITS' => 'Coordinates fall outside of geographic unit\'s limits',
     'WRONG_COUNTY_ENTERED' => 'Wrong geographic unit was entered',
     'COUNTY_MISSPELLED' => 'Geographic unit is misspelled',
     'VALIDATION_COUNT_LIMIT' => 'Coordinate validation is limited to 50000 records at a time, but can be run multiple times.',
     'LAST_VER_DATE' => 'Last Verification Date',
     'RECORDS_TOOK' => 'records took',
-    'SEC' => 'seconds',
     'SPEC_RANK_OF' => 'Record with rank of',
     'CHECKED_BY' => 'checked by',
     'NOTHING_TO_DISPLAY' => 'Nothing to be displayed',
@@ -27,15 +20,10 @@ return [
     'VALIDATE_ALL_COORDINATES' => 'Validate All Coordinates',
     'UNVERIFIED_RECORDS' => 'unverified records',
     'RANKING_STATISTICS' => 'Ranking Statistics',
-    'RANKING' => 'Ranking',
-    'STATUS' => 'Status',
-    'COUNT' => 'Count',
     'RE-VERIFY' => 'Re-Verify',
     'UNVERIFIED' => 'unverified',
     'UNVERIFIED_BY_COUNTRY' => 'Unverified records listed by country',
-    'COUNTRY' => 'Country',
     'VIEW_SPECIMENS' => 'View Specimens',
-    'NOT_AUTHORIZED' => 'You are not authorized to access this page',
     'COUNTRY_DOES_NOT_MATCH_COORDS' => 'Country does not match coordinates',
     'STATE_PROVINCE_DOES_NOT_MATCH_COORDS' => 'State/Province does not match coordinates',
     'COUNTY_DOES_NOT_MATCH_COORDS' => 'County does not match coordinates',

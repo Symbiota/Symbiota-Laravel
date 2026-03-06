@@ -49,7 +49,7 @@ return [
     'F_KU-BI_LOGO' => 'Logotipo del KU Biodiversity Institute and Natural History Museum',
     'F_BIOKIC' => 'Biodiversity Knowledge Integration Center',
     'F_BIOKIC_LOGO' => 'Logo del Biodiversity Knowledge Integration Center',
-    'F_SSH' => 'Centro de Soporte de Symbiota',
+    'F_SSH' => 'Symbiota Support Hub (SSH)',
     'F_SSH_LOGO' => 'Logotipo del Centro de Soporte de Symbiota',
     'F_GBIF' => 'Global Biodiversity Information Facility (GBIF)',
     'F_GBIF_LOGO' => 'Logotipo del Global Biodiversity Information Facility (GBIF)',
@@ -57,7 +57,5 @@ return [
     'F_MORE_INFO' => 'Para más información sobre Symbiota',
     'F_READ_DOCS' => 'lee los documentos',
     'F_CONTACT' => 'o contacta el',
-    'F_SSH' => 'Symbiota Support Hub (SSH)',
     'F_POWERED_BY' => 'Energizado por',
 ];
-?>

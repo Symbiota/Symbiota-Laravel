@@ -12,5 +12,4 @@ return [
     'CONTR_FOR' => 'Contributors for',
     'TERM_DEF_BY' => 'Term and Definition contributed by',
     'IMG_BY' => 'Image contributed by',
-    'TRANS_BY' => 'Translation by',
 ];
