@@ -61,4 +61,3 @@ return [
     'F_POWERED_BY' => 'Powered by',
 ];
 ?>
-
