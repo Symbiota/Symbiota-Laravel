@@ -1,5 +1,5 @@
-<x-layout>
-    <x-horizontal-nav.container default_active_tab="Description" :items="[
+<x-layout class="p-0">
+    <x-horizontal-nav.container default_active_tab="Add Image Voucher" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -29,14 +29,14 @@
                 </div>
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
                 <div class="font-bold text-2xl">
                     Inventory Project Assignments
                 </div>
                 <hr />
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
                 <div class="font-bold text-2xl">
                     Permanently Remove Checklist
                 </div>
@@ -60,7 +60,7 @@
                 Edit Checklist Details
             </div>
             <hr class="mb-2" />
-            <form class="flex flex-col gap-2">
+            <form class="flex flex-col gap-4">
                 <x-input label="Checklist Name" id="checklist_name" />
                 <x-input label="Authors" id="checklist_authors" />
 
@@ -81,7 +81,7 @@
 
                 <div>
                     <x-input area label="Polygon Footprint" id="footprintwkt" />
-                    <x-button @click="openWindow('{{ url('tools/map/coordaid') }}?strict=1&mode=polygon')">
+                    <x-button class="mt-2" @click="openWindow('{{ url('tools/map/coordaid') }}?strict=1&mode=polygon')">
                         Polygon Tool
                     </x-button>
                 </div>
@@ -113,60 +113,73 @@
         {{-- DESCRIPTION END --}}
 
         {{-- RELATED CHECKLISTS START--}}
-        <x-horizontal-nav.tab name="Related Checklists">
-            <div class="flex">
-                <span class="font-bold text-2xl">
-                   Children Checklists
-                </span>
+        <x-horizontal-nav.tab name="Related Checklists" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="flex">
+                    <span class="font-bold text-2xl">
+                       Children Checklists
+                    </span>
 
-                <span class="flex flex-grow justify-end">
-                    <x-button>Add Checklist</x-button>
-                </span>
+                    <span class="flex flex-grow justify-end">
+                        <x-button>Add Checklist</x-button>
+                    </span>
+                </div>
+                <hr/>
+                <p>
+                There are no Children checklists
+                </p>
             </div>
-            <hr/>
 
-            <p>
-            There are no Children checklists
-            </p>
 
-            <div class="font-bold text-2xl">
-                Parent Checklists
+            <div class="flex flex-col gap-2">
+                <div class="font-bold text-2xl">
+                    Parent Checklists
+                </div>
+                <hr/>
+                <p>
+                There are no Parent checklists
+                </p>
             </div>
-            <hr/>
-            <p>
-            There are no Parent checklists
-            </p>
 
-            <div class="font-bold text-2xl">
-               Batch Parse Species List
+            <div class="flex flex-col gap-2">
+                <div class="font-bold text-2xl">
+                   Batch Parse Species List
+                </div>
+                <hr/>
+                <p>Use the following tool to parse a list into multiple children checklists based on taxonomic nodes (Liliopsida, Eudicots, Pinopsida, etc)</p>
+                <form class="flex flex-col gap-4">
+                    <div class="flex gap-4">
+                        <x-input id="sciname" label="Sci Name"/>
+                        <x-input id="taxonomic_id" label="Taxonomic id"/>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <x-select class="flex-grow" label="Target Checklist" :items="[]" />
+                        <x-select class="flex-grow" label="Parent Checklist" :items="[]" />
+                        <x-select class="flex-grow" label="Add to project" :items="[]" />
+                    </div>
+                    <x-radio id="transfer_method" name="transfer_method" label="Transfer method" :options="[
+                        ['label' => 'Option 1', 'value' => '1'],
+                        ['label' => 'Option 2', 'value' => '2'],
+                    ]" />
+                    <x-checkbox label="Copy over permissions and general attributes"/>
+                    <x-button>Parse Checklist</x-button>
+                    <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
+                </form>
             </div>
-            <hr/>
-            <p>Use the following tool to parse a list into multiple children checklists based on taxonomic nodes (Liliopsida, Eudicots, Pinopsida, etc)</p>
-            <form>
-                <x-input id="sciname" label="Sci Name"/>
-                <x-input id="taxonomic_id" label="Taxonomic id"/>
-                <x-select label="Target Checklist" :items="[]" />
-                <x-radio id="transfer_method" label="Transfer method" :items="[]" />
-
-                <x-select label="Parent Checklist" :items="[]" />
-
-                <x-select label="Add to project" :items="[]" />
-                <x-checkbox label="Copy over permissions and general attributes"/>
-                <x-button>Parse Checklist</x-button>
-                <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
-            </form>
         </x-horizontal-nav.tab>
         {{-- RELATED CHECKLISTS END --}}
 
         {{-- ADD IMAGE VOUCHER START--}}
-        <x-horizontal-nav.tab name="Add Image Voucher">
-            <div class="font-bold text-2xl">
-              Add Image Voucher and Link to Checklist
+        <x-horizontal-nav.tab name="Add Image Voucher" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="font-bold text-2xl">
+                  Add Image Voucher and Link to Checklist
+                </div>
+                <hr/>
+                <p>This form will allow you to add an image voucher linked to this checklist. If not already present, Scientific name will be added to checklist.</p>
             </div>
-            <hr/>
-            <p>This form will allow you to add an image voucher linked to this checklist. If not already present, Scientific name will be added to checklist.</p>
-            <form>
-                <x-select label="Voucher Project" :items="[]" />
+            <form class="flex flex-col gap-4">
+                <x-select class="w-full" label="Voucher Project" :items="[]" />
                 <x-button>Add Image Voucher and Link to Checklist</x-button>
             </form>
         </x-horizontal-nav.tab>
