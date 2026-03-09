@@ -98,20 +98,20 @@
         </form>
     </x-accordion>
 
-        <div>
-            @if($count)
-                    <div class="text-xl"><span class="font-bold">Species Count:</span> {{ $count }}</div>
-            @endif
-            @if($isKeyEditor || true)
-            <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
-                <x-icons.edit />
-                Edit Character Matrix
-            </x-link>
-            @endif
-        </div>
+    <div>
+        @if($count)
+                <div class="text-xl"><span class="font-bold">Species Count:</span> {{ $count }}</div>
+        @endif
+        @if($isKeyEditor || true)
+        <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
+            <x-icons.edit />
+            Edit Character Matrix
+        </x-link>
+        @endif
+    </div>
 
 
-    {{-- Renders Plain Taxa list --}}
+    {{--rRenders Plain Taxa list --}}
     @if($displayImages)
         <div id="photo-gallery" class="flex flex-wrap flex-row gap-3 mt-4">
         @foreach ($taxa as $taxaArr)
