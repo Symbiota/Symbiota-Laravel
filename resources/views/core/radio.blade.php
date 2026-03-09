@@ -1,6 +1,6 @@
 @props(['options'=> [], 'default_value' => null, 'name', 'label' => '', 'required' => false])
 <fieldset class="flex flex-row gap-2">
-    <legend class="text-xl text-bold">{{ $label }}</legend>
+    <legend class="text text-bold">{{ $label }}</legend>
 
     @foreach ($options as $option)
     @php
