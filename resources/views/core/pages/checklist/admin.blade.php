@@ -1,5 +1,126 @@
+@php global $SERVER_ROOT, $LANG;
+
+include_once(legacy_path('/classes/ChecklistAdmin.php'));
+include_once(legacy_path('/classes/utilities/Language.php'));
+Language::load('checklists/checklistadmin');
+
+# header('Content-Type: text/html; charset='.$CHARSET);
+# if(!$SYMB_UID) header('Location: ../profile/index.php?refurl=../checklists/checklistadmin.php?'.htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES));
+
+$clid = request('clid') ? filter_var(request('clid'), FILTER_SANITIZE_NUMBER_INT) : 0;
+$pid = array_key_exists('pid', $_REQUEST) ? filter_var($_REQUEST['pid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$targetClid = array_key_exists('targetclid', $_REQUEST) ? filter_var($_REQUEST['targetclid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$transferMethod = array_key_exists('transmethod', $_POST) ? filter_var($_POST['transmethod'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$parentClid = array_key_exists('parentclid', $_REQUEST) ? filter_var($_REQUEST['parentclid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$targetPid = array_key_exists('targetpid', $_REQUEST) ? filter_var($_REQUEST['targetpid'], FILTER_SANITIZE_NUMBER_INT) : '';
+$copyAttributes = array_key_exists('copyattributes', $_REQUEST) ? filter_var($_REQUEST['copyattributes'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$tabIndex = array_key_exists('tabindex', $_REQUEST) ? filter_var($_REQUEST['tabindex'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$action = array_key_exists('submitaction', $_REQUEST) ? htmlspecialchars($_REQUEST['submitaction'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$delclid = array_key_exists('delclid', $_POST) ? htmlspecialchars($_POST['delclid'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$editoruid = array_key_exists('editoruid', $_POST) ? htmlspecialchars($_POST['editoruid'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$pointtid = array_key_exists('pointtid', $_POST) ? htmlspecialchars($_POST['pointtid'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$pointlat = array_key_exists('pointlat', $_POST) ? htmlspecialchars($_POST['pointlat'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$pointlng = array_key_exists('pointlng', $_POST) ? htmlspecialchars($_POST['pointlng'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$notes = array_key_exists('notes', $_POST) ? htmlspecialchars($_POST['notes'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$clidadd = array_key_exists('clidadd', $_POST) ? htmlspecialchars($_POST['clidadd'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+$parsetid = array_key_exists('parsetid', $_POST) ? filter_var($_POST['parsetid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$taxon = array_key_exists('taxon', $_POST) ? htmlspecialchars($_POST['taxon'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
+
+
+$clManager = new ChecklistAdmin();
+if(!$clid && $delclid) $clid = $delclid;
+$clManager->setClid($clid);
+
+$statusStr = '';
+
+$clAdmin = Gate::check('CL_ADMIN', $clid);
+
+// TODO (Logan) move this?
+if($action == 'submitAdd'){
+	if(Gate::check('CL_CREATE')){
+		$newClid = $clManager->createChecklist($_POST);
+		if($newClid) header('Location: checklist.php?clid='.$newClid);
+	}
+	//If we made it here the user does not have any checklist roles. cancel further execution.
+	$statusStr = $LANG['NO_PERMISSIONS'];
+}
+
+if($clAdmin){
+	// Submit checklist MetaData edits
+	if($action == 'submitEdit'){
+		if($clManager->editChecklist($_POST)){
+			header('Location: checklist.php?clid=' . $clid . '&pid=' . $pid);
+		}
+		else{
+			$statusStr = $clManager->getErrorMessage();
+		}
+	}
+	elseif($action == 'deleteChecklist'){
+		if($clManager->deleteChecklist($delclid)){
+			header('Location: ../index.php');
+		}
+		else $statusStr = $LANG['ERR_DELETING_CHECKLIST'] . ': ' . $clManager->getErrorMessage();
+	}
+	elseif($action == 'addEditor'){
+		$statusStr = $clManager->addEditor($editoruid);
+	}
+	elseif(array_key_exists('deleteuid',$_REQUEST)){
+		$statusStr = $clManager->deleteEditor($_REQUEST['deleteuid']);
+	}
+	elseif($action == 'addToProject'){
+		$statusStr = $clManager->addProject($pid);
+	}
+	elseif($action == 'deleteProject'){
+		$statusStr = $clManager->deleteProject($pid);
+	}
+	elseif($action == 'addPoint'){
+		if(!$clManager->addPoint($pointtid, $pointlat, $pointlng, $notes)){
+			$statusStr = $clManager->getErrorMessage();
+		}
+	}
+	elseif($action && array_key_exists('clidadd',$_POST)){
+		if(!$clManager->addChildChecklist($clidadd)){
+			$statusStr = $LANG['ERR_ADDING_CHILD'];
+		}
+	}
+	elseif($action && array_key_exists('cliddel',$_GET)){
+		if(!$clManager->deleteChildChecklist($_GET['cliddel'])){
+			$statusStr = $clManager->getErrorMessage();
+		}
+	}
+	elseif($action == 'parseChecklist'){
+		$resultArr = $clManager->parseChecklist($parsetid, $taxon, $targetClid, $parentClid, $targetPid, $transferMethod, $copyAttributes);
+		if($resultArr){
+			$statusStr = '<div>' . $LANG['CHECK_PARSED_SUCCESS'] . '</div>';
+			if(isset($resultArr['targetPid'])){
+				$targetPid = $resultArr['targetPid'];
+				$statusStr .= '<div style="margin-left:15px"><a href="../projects/index.php?pid=' . $targetPid . '" target="_blank" rel="noopener" >' . $LANG['TARGET_PROJ'] . '</a></div>';
+			}
+			if(isset($resultArr['targetClid'])) $statusStr .= '<div style="margin-left:15px"><a href="checklist.php?clid=' . $resultArr['targetClid'] . '&pid=' . $targetPid . '" target="_blank" rel="noopener" >' . $LANG['TARGET_CHECKLIST'] . '</a></div>';
+			if(isset($resultArr['parentClid'])){
+				$parentClid = $resultArr['parentClid'];
+				$statusStr .= '<div style="margin-left:15px"><a href="checklist.php?clid=' . $resultArr['parentClid'] . '&pid=' . $targetPid . '" target="_blank" rel="noopener" >' . $LANG['PARENT_CHECKLIST'] . '</a></div>';
+			}
+		}
+	}
+}
+$clArray = $clManager->getMetaData();
+$clArray = $clManager->cleanOutArray($clArray);
+$editors = $clManager->getEditors();
+$users = [];
+foreach($clManager->getUserList() as $uid => $name) {
+    if($name) {
+        $users[] = [
+            'value' => $uid,
+            'title' => $name,
+            'disabled' => false
+        ];
+    }
+}
+
+@endphp
 <x-layout class="p-0">
-    <x-horizontal-nav.container default_active_tab="Add Image Voucher" :items="[
+    <x-horizontal-nav.container default_active_tab="Admin" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -17,14 +138,42 @@
                     </span>
 
                     <span class="flex flex-grow justify-end">
-                        <x-button>Add Editor</x-button>
+                        <x-modal>
+                            <x-slot name="button">
+                                Add Editor
+                            </x-slot>
+                            <x-slot name="title" class="text-2xl">
+                                Add New User
+                            </x-slot>
+                            <x-slot name="body">
+                                <form class="flex flex-col gap-4">
+                                    <x-select class="w-full" label="Select User" :items="$users" />
+								    <input type="hidden" name="submitaction" value="addEditor" aria-label="{{ $LANG['ADDEDITOR'] }}" />
+
+                                    <div class="flex align-items gap-2">
+                                        <x-button type="submit">Add</x-button>
+                                        <x-button variant="error" type="button">Cancel</x-button>
+                                    </div>
+                                </form>
+                            </x-slot>
+                        </x-modal>
                     </span>
                 </div>
                 <hr />
-
                 <div>
-                    @foreach (['Example Editor'] as $item)
-                    <li>{{ $item }}</li>
+                    @foreach ($editors as $uid => $editor)
+                        <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
+                            <span class="flex-grow">{{ $editor['name'] }}</span>
+                            <form method="post">
+                                @csrf
+								<input name="pid" type="hidden" value="{{ $pid }}" />
+								<input name="deleteuid" type="hidden" value="{{ $uid }}>" />
+								<input name="submitaction" type="hidden" value="DeleteEditor" />
+                                <button type="submit">
+                                    <x-icons.delete class="cursor-pointer" />
+                                <button>
+                            </form>
+                        </div>
                     @endforeach
                 </div>
             </div>
