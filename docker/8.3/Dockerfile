@@ -58,7 +58,7 @@ COPY ./docker/8.3/php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 # Clone Portal
-RUN git clone -b enhancement/absolute-path-symbini-import https://github.com/Symbiota/Symbiota.git Portal
+RUN git clone -b Development https://github.com/Symbiota/Symbiota.git Portal
 
 # Setup Subportal
 COPY ./child_config/dbconnection.php ./Portal/config/dbconnection.php
