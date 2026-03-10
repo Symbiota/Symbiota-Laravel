@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'DUPL_RECORD_SEARCH' => 'Duplicate Record Search',
+    'EXS_DUPE' => 'Exsiccati Duplicates',
+    'POSSIBLE_EXACT_DUPES' => 'Possible EXACT Duplicates',
+    'DUPE_CAT_NUM' => 'Duplicate Catalog Number',
+    'DUPE_ALT_CAT_NUM' => 'Duplicate Alternate Catalog Number',
+    'POSS_MATCHING_EVENTS' => 'Possible Matching Duplicate EVENTS',
+    'NOTICE_EXACT_MATCH' => 'NOTICE: Possible exact matches within collection. Record may already exist.',
+    'DATE_EMPTY' => 'Date field empty',
+    'ASSOC_COLL' => 'Associated Collectors',
+    'SCINAME_EMPTY' => 'Scientific Name empty',
+    'LOCALITY_EMPTY' => 'Locality data empty',
+    'TRANSFER_ALL' => 'Transfer All Fields',
+    'TRANSFER_EMPTY' => 'Transfer to Empty Fields Only',
+    'LINK_DUPE' => 'Link as Duplicate',
+    'GO_TO_RECORD' => 'Go To Record',
+    'SURE_MERGE' => 'Are you sure you want to merge these two records?',
+    'MERGE_RECORDS' => 'Merge Records',
+    'MORE_INFO_ALT' => 'More information about merging duplicates',
+    'NO_DUPES' => 'No duplicate records have been located',
+    'UNKNOWN_ERROR_WHILE_MERGING' => 'Unknown error occurred while merging the occurrences',
+    'CHECK_DETERMINATIONS_ALERT' => 'All unique determinations have been merged to this record. Please check the Determination History tab to ensure it accurately represents your record\'s determination history',
+];

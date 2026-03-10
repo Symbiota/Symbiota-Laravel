@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'ID_CONFIDENCE' => 'Categoría de Confianza de Identificación',
+    'MODIFY_CURRENT_RANKING' => 'Modificar categoría de identificación actual',
+    'CONFIDENCE_IN_DET' => 'Confianza de Determinación',
+    'ABSOLUTE' => 'Absoluta',
+    'UNLIKELY' => 'Poco Probable',
+    'SUBMIT_VERIFY_EDITS' => 'Enviar Ediciones de Verificación',
+    'RANK' => 'Categoría',
+    'L_LOW' => 'baja',
+    'L_MEDIUM' => 'media',
+    'L_HIGH' => 'alta',
+    'NOT_RANKED' => 'no clasificado',
+    'SET_BY' => 'Establecido por',
+    'ADD_NEW_DET' => 'Añadir Nueva Determinación',
+    'NO_HIST_ANNOTATIONS' => 'No existen anotaciones históricas para este espécimen',
+    'MAKE_THIS_CURRENT' => 'Hacer esta la determinación actual',
+    'ADD_TO_PRINT' => 'Añadir a la Cola de Anotaciones',
+    'SUBMIT_DET' => 'Enviar Determinación',
+    'CURRENT_DET' => 'DETERMINACIÓN ACTUAL',
+    'EDIT_DET' => 'Editar Determinación',
+    'APPLIED_STATUS_PENDING' => 'Estado Aplicado Pendiente',
+    'ADDED_TO_QUEUE' => 'Añadido a la Cola de Anotaciones',
+    'SUBMIT_DET_EDITS' => 'Enviar Ediciones de Determinación',
+    'MAKE_DET_CURRENT' => 'Hacer Determinación Actual',
+    'DELETE_DET' => 'Eliminar Determinación',
+];

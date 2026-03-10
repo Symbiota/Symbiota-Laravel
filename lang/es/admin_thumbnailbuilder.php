@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'THUMB_BUILDER' => 'Creador de miniaturas',
+    'COL_MAN_MENU' => 'Menú de gestión de colecciones',
+    'THUMB_MAINT_TOOL' => 'Herramienta de mantenimiento de miniaturas',
+    'FIELD_IMAGES' => 'imágenes de campo',
+    'PROCESSING_PANEL' => 'Panel de procesamiento',
+    'START_PROCESSING' => 'Iniciar procesamiento',
+    'NUM_IMGS_REFRESHED' => 'Número de imágenes a actualizar',
+    'FINISHED' => '¡Terminado!',
+    'IMG_COUNT_EXPLAIN' => 'Recuento de imágenes sin miniaturas y/o visualización básica de imágenes web',
+    'THUMB_IMG_EXPLAIN' => 'Esta función creará imágenes en miniatura para todas las imágenes de ocurrencia asignadas desde un servidor externo.',
+    'TAX_FILTER' => 'Filtro de taxón',
+    'ALL_THUMBS_DONE' => 'Todas las imágenes tienen miniaturas asignadas correctamente. No es necesario hacer nada',
+    'NOT_PROCESSING_ERROR' => 'Si hay imágenes que no se están procesando porque están etiquetadas como manejadas por otro proceso, haga clic en el botón restablecer procesamiento para realizar un reinicio completo de todo el procesamiento de imágenes.',
+    'RESET_PROCESSING' => 'Restablecer procesamiento',
+    'INCLUDE_MED' => 'incluir derivados de imágenes de tamaño mediano además de miniaturas',
+    'ROTATE_IMGS' => 'rotar derivados de imágenes según la etiqueta de orientación',
+    'PROCESSING_LIMIT' => 'Límite de procesamiento',
+    'BUILD_THUMBS' => 'Crear miniaturas',
+    'THUMB_REMAPPER' => 'Reasignador de miniaturas',
+    'THUMB_REMAP_EXPLAIN' => 'Esta herramienta iterará a través de las imágenes asignadas de forma remota y actualizará las imágenes derivadas almacenadas localmente.
+La acción predeterminada es reconstruir los derivados solo cuando la fecha de creación de la imagen de origen sea más reciente que la fecha de compilación original.
+La opción alternativa es forzar la reconstrucción de todas las imágenes.',
+    'IMAGES_AVAIL_REFRESH' => 'Número de imágenes disponibles para actualizar',
+    'CATNUM_RANGE' => 'Rango de números de catálogo',
+    'CATNUM_LIST' => 'Lista de números de catálogo',
+    'ONLY_PROCESS_RECENT' => 'Procesar sólo imágenes cuyo archivo fuente sea más reciente que las miniaturas',
+    'FORCE_REBUILD' => 'Forzar reconstrucción de todas las imágenes',
+    'REFRESH_THUMBS' => 'Actualizar miniaturas',
+    'ERROR_PERMISSIONS' => 'ERROR: permisos inadecuados',
+];

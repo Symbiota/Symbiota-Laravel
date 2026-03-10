@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_DESC_BLOCK' => 'Nuevo Bloque de Descripción',
+    'DISPLAY_LEVEL' => 'Nivel de Visualización',
+    'ADD_DESC_BLOCK' => 'Agregar Bloque de Descripción',
+    'DESCRIPTION_' => 'Descripción ',
+    'EDIT_DESC_BLOCK' => 'Editar Bloque de Descripción',
+    'LINKED_TO_SYN' => 'Vinculado al sinónimo',
+    'RELINK_TO_ACCEPTED' => 'volver a vincular al taxón aceptado',
+    'DESC_BLOCK_EDITS' => 'Ediciones del Bloque de Descripción',
+    'SURE_DELETE_DESC' => '¿Está seguro de que desea eliminar permanentemente esta descripción?',
+    'DEL_DESC_BLOCK' => 'Eliminar bloque de descripción',
+    'INC_STATEMENTS_BELOW' => '(Incluyendo todas las declaraciones enumeradas a continuación)',
+    'STATEMENTS' => 'Declaraciones',
+    'ADD_NEW_STATEMENT' => 'Agregar Nueva Declaración',
+    'NEW_DESC_STATMENT' => 'Nueva Declaración de Descripción',
+    'HEADING' => 'Título',
+    'ADD_STATEMENT' => 'Agregar Declaración',
+    'EDIT_STATEMENT' => 'Editar Declaración',
+    'DISPLAY_HEADER' => 'Mostrar Encabezado',
+    'SURE_DELETE_STATEMENT' => '¿Está seguro de que desea eliminar permanentemente esta declaración?',
+    'DEL_STATEMENT' => 'Eliminar Declaración',
+    'NO_DESC' => 'No hay descripciones disponibles',
+];

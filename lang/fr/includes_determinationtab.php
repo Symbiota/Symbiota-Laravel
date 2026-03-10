@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'ID_CONFIDENCE' => 'Classement de Confiance d\'Identification',
+    'MODIFY_CURRENT_RANKING' => 'Modifier classement d\'identification actuel',
+    'CONFIDENCE_IN_DET' => 'Confiance dans Détermination',
+    'ABSOLUTE' => 'Absolu',
+    'UNLIKELY' => 'Improbable',
+    'SUBMIT_VERIFY_EDITS' => 'Soumettre des Modifications de Vérification',
+    'RANK' => 'Rang',
+    'L_LOW' => 'meugler',
+    'L_MEDIUM' => 'moyen',
+    'L_HIGH' => 'haut',
+    'NOT_RANKED' => 'non classé',
+    'SET_BY' => 'Défini par',
+    'ADD_NEW_DET' => 'Ajouter une Nouvelle Détermination',
+    'NO_HIST_ANNOTATIONS' => 'Il n\'y a pas d\'annotations historiques pour ce spécimen',
+    'MAKE_THIS_CURRENT' => 'Faites-en Détermination Actuelle',
+    'ADD_TO_PRINT' => 'Ajouter à File d\'Attente d\'Impression des Annotations',
+    'SUBMIT_DET' => 'Soumettre Détermination',
+    'CURRENT_DET' => 'DÉTERMINATION DU COURANT',
+    'EDIT_DET' => 'Modifier Détermination',
+    'APPLIED_STATUS_PENDING' => 'Statut Appliqué en Attente',
+    'ADDED_TO_QUEUE' => 'Ajouté à File d\'Attente d\'Impression',
+    'SUBMIT_DET_EDITS' => 'Soumettre Modifications de Détermination',
+    'MAKE_DET_CURRENT' => 'Rendre Détermination Actuelle',
+    'DELETE_DET' => 'Supprimer Détermination',
+];

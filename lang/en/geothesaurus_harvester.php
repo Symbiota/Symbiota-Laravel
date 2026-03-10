@@ -1,0 +1,47 @@
+<?php
+
+return [
+    'HARVESTER_ISSUE' => 'The harvester encountered an issue',
+    'BATCH_HARVESTER_ISSUE' => 'The harvester encountered an issue',
+    'GEOTHESAURUS_HARVESTER' => 'Geographic Thesaurus Havester',
+    'GEOGRAPHIC_HARVESTER' => 'Geographic Harvester',
+    'ACTIVE_GEOGRAPHIC_THESAURUS' => 'Active Geographic Thesaurus',
+    'SHOW_NO_POLYGON' => 'Show boundaries missing a polygon',
+    'SHOW_NO_DATABASE' => 'Show boundaries missing in database',
+    'STATE/PROVINCE' => 'State/Province',
+    'MUNICIPALITIES' => 'Municipalities',
+    'GO_TO_GEOGRAPHIC_THESAURUS' => 'Go to Geographic Thesaurus',
+    'ACTIVE_THES_EMPTY' => 'Active thesaurus is empty',
+    'SCRIPT_INSTALL' => 'Script Install',
+    'RUN_SCRIPT' => 'Run Script',
+    'INSTALL_VIA_SCRIPT' => 'The <a href="https://symbiota.org" target="_blank">Symbiota Support Hub</a> has provided a data script that can be used to build a basic Geographic Thesaurus.
+	This data file will create countries, state/provinces for Canada, US, and Mexico, and counties/parishes for the US and Canada.
+	Once a base thesaurus is established, it can be extended using the geoBoundary import tools below.',
+    'GEOBOUNDARIES' => 'geoBoundaries Import Options',
+    'GEOBOUNDARIES_DESCRIPTION' => 'These functions can be used to import geographic boundaries and polygons via the <a href="https://www.geoboundaries.org" target="_blank">geoBoundaries</a> API.
+	These resources are publicly available through the support and contributions of numerous
+	<a href="https://www.geoboundaries.org/contribute.html" target="_blank">individuals, organizations, and funders</a>.',
+    'ADD_ALL_BOUNDARIES' => 'Add All International Boundaries',
+    'COUNTRY_LIST_NAV' => 'Return to Country List',
+    'ADD_BOUNDARIES' => 'Add Boundaries',
+    'LOADING_GEO_DATA_TEXT' => 'This process may take a while to process the geographical data',
+    'ADD_IF_GEOUNITS_MISSING' => 'Add geographical units if missing',
+    'TABLE_NAME' => 'Name',
+    'TABLE_TYPE' => 'Type',
+    'TABLE_INCOMING_COUNT' => 'Incoming Count',
+    'TABLE_DATABASE_COUNT' => 'Database Count',
+    'TABLE_ISO3' => 'ISO3',
+    'TABLE_DATABASE' => 'Database',
+    'TABLE_POLYGON' => 'Polygon',
+    'TABLE_BOUNDARY_ID' => 'Boundary ID',
+    'TABLE_CANONICAL_NAME' => 'Canonical Name',
+    'TABLE_LICENSE' => 'License',
+    'TABLE_REGION' => 'Region',
+    'TABLE_FULL_LINK' => 'Full Link',
+    'TABLE_IMAGE_PREVIEW' => 'Image Preview',
+    'YES' => 'Yes',
+    'NO' => 'No',
+    'LINK' => 'link',
+    'ERR_FILE_READ' => 'Error: unexpected fail during read',
+    'ERR_SCRIPT_MISSING' => 'Missing SQL scripts (path: config/schema/3.0/data/geothesaurus.sql)',
+];
