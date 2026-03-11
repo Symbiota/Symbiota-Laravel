@@ -1,5 +1,5 @@
 @props(['default_active_tab', 'items' => []])
-<div x-data="{ active_tab: '{{ $default_active_tab }}' }" {{$attributes->twMerge('flex flex-cols-2 mb-4 py-10')}}>
+<div x-data="{ active_tab: '{{ $default_active_tab }}' }" {{$attributes->twMerge('flex flex-cols-2 mb-4 py-4')}}>
     <div class="flex-shrink lg:w-[448px]">
         <div class="ml-auto w-fit pl-10">
             @foreach ($items as $item)
