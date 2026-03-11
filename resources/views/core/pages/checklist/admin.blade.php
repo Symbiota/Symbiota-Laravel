@@ -132,7 +132,10 @@ if($clAdmin){
 				$statusStr .= '<div style="margin-left:15px"><a href="checklist.php?clid=' . $resultArr['parentClid'] . '&pid=' . $targetPid . '" target="_blank" rel="noopener" >' . $LANG['PARENT_CHECKLIST'] . '</a></div>';
 			}
 		}
-	}
+    } elseif($action == 'resolveconflicts') {
+        var_dump($_POST);
+        $clVoucherReport->batchTransferConflicts($_POST['occid'], (array_key_exists('removetaxa',$_POST) ? true : false));
+    }
 }
 $clArray = $clManager->getMetaData();
 $clArray = $clManager->cleanOutArray($clArray);
@@ -180,19 +183,19 @@ foreach($clManager->getUserList() as $uid => $name) {
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="Reports" :items="[
-        ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
-        ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
-        ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
-        ['label' => 'Add Image Voucher', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'Voucher Conflicts', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'External Voucher Projects', 'icon' => 'fa-solid fa-database'],
-        ['label' => 'Reports', 'icon' => 'fa-solid fa-database'],
+    <x-horizontal-nav.container default_active_tab="voucher-conflicts" :items="[
+        ['id' => 'admin', 'label' => 'Admin', 'icon' => 'fa-solid fa-user'],
+        ['id' => 'description', 'label' => 'Description', 'icon' => 'fa-solid fa-list'],
+        ['id' => 'related-checklists', 'label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
+        ['id' => 'voucher-image', 'label' => 'Add Image Voucher', 'icon' => 'fa-solid fa-database'],
+        ['id' => 'non-vouchered-taxa', 'label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
+        ['id' => 'missing-taxa', 'label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
+        ['id' => 'voucher-conflicts', 'label' => 'Voucher Conflicts', 'icon' => 'fa-solid fa-database'],
+        ['id' => 'external-vouchers', 'label' => 'External Voucher Projects', 'icon' => 'fa-solid fa-database'],
+        ['id' => 'reports', 'label' => 'Reports', 'icon' => 'fa-solid fa-database'],
     ]">
         {{-- ADMIN START--}}
-        <x-horizontal-nav.tab name="Admin" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="flex">
                     <span class="font-bold text-2xl">
@@ -307,7 +310,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- ADMIN END --}}
 
         {{-- DESCRIPTION START--}}
-        <x-horizontal-nav.tab name="Description">
+        <x-horizontal-nav.tab name="description">
             <div class="font-bold text-2xl mb-2">
                 Edit Checklist Details
             </div>
@@ -374,7 +377,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- DESCRIPTION END --}}
 
         {{-- RELATED CHECKLISTS START--}}
-        <x-horizontal-nav.tab name="Related Checklists" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="related-checklists" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="flex">
                     <span class="font-bold text-2xl">
@@ -434,7 +437,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- RELATED CHECKLISTS END --}}
 
         {{-- ADD IMAGE VOUCHER START--}}
-        <x-horizontal-nav.tab name="Add Image Voucher" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="voucher-image" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
                   Add Image Voucher and Link to Checklist
@@ -451,7 +454,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- ADD IMAGE VOUCHER END --}}
 
         {{-- NON-VOUCHERED TAXA START--}}
-        <x-horizontal-nav.tab name="Non-Vouchered Taxa">
+        <x-horizontal-nav.tab name="non-vouchered-taxa">
             <div class="font-bold text-2xl">
               Taxa without Vouchers: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
             </div>
@@ -466,7 +469,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- NON-VOUCHERED TAXA END --}}
 
         {{-- MISSING TAXA START--}}
-        <x-horizontal-nav.tab name="Missing Taxa">
+        <x-horizontal-nav.tab name="missing-taxa">
             <div class="font-bold text-2xl">
               Possible Missing Taxa: # <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
             </div>
@@ -494,21 +497,64 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- MISSING TAXA END --}}
 
         {{-- VOUCHER CONFLICTS START--}}
-        <x-horizontal-nav.tab name="Voucher Conflicts">
-            <div class="font-bold text-2xl">
-              Voucher Conflicts
+        <x-horizontal-nav.tab name="voucher-conflicts" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="font-bold text-2xl">
+                    {{ $LANG['VOUCHCONF'] }}
+                </div>
+                <hr/>
+                <p>{{ $LANG['EXPLAIN_PARAGRAPH'] }}</p>
             </div>
-            <hr/>
 
-            <p>List of specimen vouchers where the current identifications conflict with the checklist. Voucher conflicts are typically due to recent annotations of specimens located within collection. Click on Checklist ID to open the editing pane for that record. </p>
+            @if(count($conflictArr) > 0)
+            <div class="font-bold">{{ $LANG['CONFLICT_COUNT'] }}: {{ count($conflictArr) }}</div>
+            <form method="post" class="flex flex-col gap-4">
+                @csrf
+                <table class="w-full border-seperate text-sm">
+                    <thead class="bg-neutral text-neutral-content ">
+                        <th class="p-2 w-fit"><x-checkbox label="" onchange="document.querySelectorAll(`input[name='occid[]']`).forEach(v => v.checked=event.target.checked)"/></th>
+                        <th class="p-2">{{ $LANG['CHECK_ID'] }}</th>
+                        <th class="p-2">{{ $LANG['VOUCHER_SPEC'] }}</th>
+                        <th class="p-2">{{ $LANG['CORRECTED_ID'] }}</th>
+                        <th class="p-2">{{ $LANG['IDED_BY'] }}</th>
+                    </thead>
+                    <tbody>
+                        @foreach($conflictArr as $id => $conflict)
+                        <tr
+                        @class([
+                            'bg-base-200'=> $loop->even,
+                            'bg-base-300' => $loop->odd,
+                            'py-4',
+                        ])>
+                            <td @class(["p-2", "bg-neutral" => $loop->even, "bg-neutral-lighter" => $loop->odd])><x-checkbox name="occid[]" label="" value="{{ $conflict['occid'] }}"/></td>
+                            <td class="p-2"><x-link target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $conflict['tid'] .'&clid=' . $conflict['clid']) }}">{{ $conflict['listid'] }}</x-link></td>
+                            <td class="p-2">
+                                <x-link target="_blank" href="{{ url('occurrence/' . $conflict['occid']) }}">
+                                {{ $conflict['recordnumber'] }}
+                                </x-link>
+                            </td>
+                            <td class="p-2">{{ $conflict['specid'] }}</td>
+                            <td class="p-2">{{ $conflict['identifiedby'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <input name="submitaction" type="hidden" value="resolveconflicts" />
+                <x-checkbox id="removetaxa" :label="$LANG['REMOVE_TAXA']" :checked="true"/>
+                <div>{{ $LANG['BATCH_ACTION'] }}:</div>
+                <x-button>{{ $LANG['LINK_VOUCHERS'] }}</x-button>
+            </form>
+            <div>* {{ $LANG['CORRECTED_WILL_ADD'] }}</div>
+            @endif
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
-        <x-horizontal-nav.tab name="External Voucher Projects" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="external-vouchers" class="flex flex-col gap-4">
+        todo external vouchers
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
-        <x-horizontal-nav.tab name="Reports" class="flex flex-col gap-4">
+        <x-horizontal-nav.tab name="reports" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
                   Reports
