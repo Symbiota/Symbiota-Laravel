@@ -178,6 +178,18 @@ foreach($clManager->getUserList() as $uid => $name) {
     }
 }
 
+$TABS = [
+    ['id' => 'admin', 'label' => $LANG['ADMIN'], 'icon' => 'fa-solid fa-user'],
+    ['id' => 'description', 'label' => $LANG['DESCRIPTION'], 'icon' => 'fa-solid fa-list'],
+    ['id' => 'related-checklists', 'label' => $LANG['RELATEDCHECK'], 'icon' => 'fa-solid fa-jar'],
+    ['id' => 'voucher-image', 'label' => $LANG['ADDIMGVOUCHER'], 'icon' => 'fa-solid fa-database'],
+    ['id' => 'non-vouchered-taxa', 'label' => $LANG['NON_VOUCHERED'], 'icon' => 'fa-solid fa-database'],
+    ['id' => 'missing-taxa', 'label' => $LANG['MISSINGTAXA'], 'icon' => 'fa-solid fa-database'],
+    ['id' => 'voucher-conflicts', 'label' => $LANG['VOUCHCONF'], 'icon' => 'fa-solid fa-database'],
+    ['id' => 'external-vouchers', 'label' => $LANG['EXTERNALVOUCHERS'], 'icon' => 'fa-solid fa-database'],
+    ['id' => 'reports', 'label' => $LANG['REPORTS'], 'icon' => 'fa-solid fa-database'],
+];
+
 @endphp
 <x-layout class="p-0">
     <div class="max-w-screen-lg px-10 pt-4">
@@ -187,17 +199,7 @@ foreach($clManager->getUserList() as $uid => $name) {
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="voucher-conflicts" :items="[
-        ['id' => 'admin', 'label' => 'Admin', 'icon' => 'fa-solid fa-user'],
-        ['id' => 'description', 'label' => 'Description', 'icon' => 'fa-solid fa-list'],
-        ['id' => 'related-checklists', 'label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
-        ['id' => 'voucher-image', 'label' => 'Add Image Voucher', 'icon' => 'fa-solid fa-database'],
-        ['id' => 'non-vouchered-taxa', 'label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
-        ['id' => 'missing-taxa', 'label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
-        ['id' => 'voucher-conflicts', 'label' => 'Voucher Conflicts', 'icon' => 'fa-solid fa-database'],
-        ['id' => 'external-vouchers', 'label' => 'External Voucher Projects', 'icon' => 'fa-solid fa-database'],
-        ['id' => 'reports', 'label' => 'Reports', 'icon' => 'fa-solid fa-database'],
-    ]">
+    <x-horizontal-nav.container default_active_tab="voucher-conflicts" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
