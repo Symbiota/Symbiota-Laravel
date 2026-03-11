@@ -8,6 +8,8 @@ Language::load([
     'checklists/checklistadmin',
     'checklists/vaconflicts',
     'checklists/voucheradmin',
+    'checklists/vamissingtaxa',
+    'checklists/checklistadminchildren'
 ]);
 
 # header('Content-Type: text/html; charset='.$CHARSET);
@@ -63,6 +65,7 @@ $clVoucherManager->setClid($clid);
 
 $clVoucherReport = new ChecklistVoucherReport();
 $clVoucherReport->setClid($clid);
+//$clVoucherReport->setCollectionVariables();
 
 $statusStr = '';
 
@@ -117,8 +120,8 @@ if($clAdmin){
 			$statusStr = $LANG['ERR_ADDING_CHILD'];
 		}
 	}
-	elseif($action && array_key_exists('cliddel',$_GET)){
-		if(!$clManager->deleteChildChecklist($_GET['cliddel'])){
+	elseif($action && array_key_exists('cliddel',$_POST)){
+		if(!$clManager->deleteChildChecklist($_POST['cliddel'])){
 			$statusStr = $clManager->getErrorMessage();
 		}
 	}
@@ -147,8 +150,11 @@ $editors = $clManager->getEditors();
 $projects = $clManager->getInventoryProjects();
 $taxaMissingVouchers = $clVoucherReport->getNewVouchers($startPos, $displayMode);
 $conflictArr = $clVoucherReport->getConflictVouchers();
+$nonVoucheredTaxa = $clVoucherReport->getNonVoucheredTaxa($startPos);
+$childChecklists = $clManager->getChildrenChecklist();
 
 $voucherProjects = [];
+
 foreach($clVoucherManager->getVoucherProjects() as $collId => $name) {
     $voucherProjects[] = [
         'value' => $collId,
@@ -165,6 +171,21 @@ foreach($user->projects() as $project) {
         'title' => $project->projname,
         'disabled' => false,
     ];
+}
+
+$childChecklistsItems = [];
+$userChecklists = [];
+
+foreach($user->checklists() as $child) {
+    $item =  [
+        'value' => $child->clid,
+        'title' => $child->name,
+        'disabled' => false,
+    ];
+    $userChecklists[] = $item;
+    if(!array_key_exists($child->clid, $childChecklists)) {
+        $childChecklistsItems[] = $item;
+    }
 }
 
 $users = [];
@@ -199,7 +220,7 @@ $TABS = [
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="reports" :items="$TABS">
+    <x-horizontal-nav.container default_active_tab="related-checklists" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -387,56 +408,105 @@ $TABS = [
             <div class="flex flex-col gap-2">
                 <div class="flex">
                     <span class="font-bold text-2xl">
-                       Children Checklists
+                       {{ $LANG['CHILD_CHECKLIST'] }}
                     </span>
 
                     <span class="flex flex-grow justify-end">
-                        <x-button>Add Checklist</x-button>
+                        <x-modal>
+                            <x-slot name="button">
+                                {{ $LANG['ADD_CHILD'] }}
+                            </x-slot>
+                            <x-slot name="title" class="text-2xl">
+                                {{ $LANG['ADD_CHILD'] }}
+                            </x-slot>
+                            <x-slot name="body">
+                                <form method="post" class="flex flex-col gap-4">
+                                    <x-select id="clidadd" class="w-full" label="Checklist" :items="$childChecklistsItems" />
+								    <input type="hidden" name="submitaction" value="addChildChecklist" aria-label="{{ $LANG['ADD_CHILD'] }}" />
+
+                                    <div class="flex align-items gap-2">
+                                        <x-button type="submit">Add</x-button>
+                                        <x-button variant="error" type="button">Cancel</x-button>
+                                    </div>
+                                </form>
+                            </x-slot>
+                        </x-modal>
                     </span>
                 </div>
                 <hr/>
-                <p>
-                There are no Children checklists
-                </p>
+                <p>{{ $LANG['CHILD_DESCRIBE'] }}</p>
+                @if($childChecklists)
+                    @foreach ($childChecklists as $child_clid => $child)
+                    <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
+                        <span class="flex-grow">
+                            <x-link target="_blank" href="{{ url('checklists/' . $child_clid) }}">
+                                {{ $child['name']}}
+                            </x-link>
+                        </span>
+                        <form method="post">
+                            @csrf
+                            <input name="cliddel" type="hidden" value="{{ $child_clid }}" />
+                            <input name="submitaction" type="hidden" value="delchild" />
+                            <button type="submit">
+                                <x-icons.delete class="cursor-pointer" />
+                            <button>
+                        </form>
+                    </div>
+                    @endforeach
+                @else
+                <p>{{ $LANG['NO_CHILDREN'] }}</p>
+                @endif
 
-                <x-link href="{{ legacy_url('/profile/viewprofile.php?excludeparent=' . $clid) }}">Create a Species Exclusion List</x-link>
+                <x-link href="{{ legacy_url('/profile/viewprofile.php?excludeparent=' . $clid) }}">
+                    {{ $LANG['CREATE_EXCLUSION_LIST'] }}
+                </x-link>
             </div>
-
 
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
-                    Parent Checklists
+                    {{ $LANG['PARENTS'] }}
                 </div>
                 <hr/>
-                <p>
-                There are no Parent checklists
-                </p>
+                @if($parents = $clManager->getParentChecklists())
+                <div class="pl-4">
+                    @foreach($parents as $parent_clid => $name)
+                    <li>
+                        <x-link target="_blank" href="{{ url('checklists/' . $parent_clid) }}">
+                            {{ $name }}
+                        </x-link>
+                    </li>
+                    @endforeach
+                </div>
+                @else
+                    <p>{{ $LANG['NO_PARENTS'] }}</p>
+                @endif
             </div>
 
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
-                   Batch Parse Species List
+                   {{ $LANG['BATCH_PARSE_SP_LIST'] }}
                 </div>
                 <hr/>
-                <p>Use the following tool to parse a list into multiple children checklists based on taxonomic nodes (Liliopsida, Eudicots, Pinopsida, etc)</p>
+                <p>{{ $LANG['BATCH_PARSE_DESCRIBE'] }}</p>
                 <form class="flex flex-col gap-4">
                     <div class="flex gap-4">
-                        {{-- TODO (Logan) replace with taxon search?--}}
-                        <x-input required id="taxon" label="Sci Name"/>
-                        <x-input required id="parsetid" label="Taxonomic id"/>
+                        {{-- TODO (Logan) replace with taxon search? --}}
+                        <x-input required id="taxon" :label="$LANG['TAXONOMICNODE']"/>
+                        <x-input required id="parsetid" :label="$LANG['PARSETID']"/>
                     </div>
-                    <div class="flex flex-wrap gap-4">
-                        <x-select id="targetclid" class="flex-grow" label="Target Checklist" :items="[]" />
-                        <x-select id="parentclid" class="flex-grow" label="Parent Checklist" :items="[]" />
-                        <x-select id="targetpid"  class="flex-grow" label="Add to project" :items="[]" />
+                    <x-select id="targetclid" class="w-full" label="Target Checklist" :items="$userChecklists" />
+                    <x-select id="parentclid" class="w-full" label="Parent Checklist" :items="$userChecklists" />
+                    <x-select id="targetpid"  class="w-full" label="Add to project" :items="$userProjects" />
                     </div>
-                    <x-radio id="transmethod" defaultValue="1" name="transmethod" label="Transfer method" :options="[
-                        ['label' => 'Transfer method', 'value' => '0'],
-                        ['label' => 'Transfer taxa', 'value' => '1'],
+                    <x-radio id="transmethod" :defaultValue="$transferMethod" name="transmethod" label="Transfer method" :options="[
+                        ['label' => $LANG['TRANSFERTAXA'], 'value' => 0],
+                        ['label' => $LANG['COPYTAXA'], 'value' => 1],
                     ]" />
-                    <x-checkbox id="parentclid" label="Copy over permissions and general attributes"/>
-                    <x-button>Parse Checklist</x-button>
-                    <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
+                    <parseChecklist
+                    <x-checkbox id="parentclid" :label="$LANG['COPYPERMISSIONANDGENERAL']" :checked="$copyAttributes"/>
+                    <input name="submitaction" type="hidden" value="parseChecklist" />
+                    <x-button>{{ $LANG['PARSE_CHECKLIST'] }}</x-button>
+                    <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">{{ $LANG['OPEN_TAX_THES_EXPLORE'] }}</x-link>
                 </form>
             </div>
         </x-horizontal-nav.tab>
@@ -446,38 +516,61 @@ $TABS = [
         <x-horizontal-nav.tab name="voucher-image" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
-                  Add Image Voucher and Link to Checklist
+                  {{ $LANG['ADDIMGVOUC'] }}
                 </div>
                 <hr/>
-                <p>This form will allow you to add an image voucher linked to this checklist. If not already present, Scientific name will be added to checklist.</p>
+                <p>{{ $LANG['FORMADDVOUCH'] }}</p>
             </div>
             {{-- Note: Should action collections/editor/observationsubmit.php --}}
-            <form class="flex flex-col gap-4">
-                <x-select class="w-full" label="Voucher Project" :items="$voucherProjects" />
-                <x-button>Add Image Voucher and Link to Checklist</x-button>
+            <form class="flex flex-col gap-4" action="{{ legacy_url('collections/editor/observationsubmit.php') }}">
+                <x-select name="collid" class="w-full" default="0" :label="$LANG['SELECTVOUCPROJ']" :items="$voucherProjects" />
+                <x-button>{{ $LANG['ADDIMGVOUC'] }}</x-button>
             </form>
         </x-horizontal-nav.tab>
         {{-- ADD IMAGE VOUCHER END --}}
 
-        {{-- NON-VOUCHERED TAXA START--}}
+        {{-- (TODO Logan possiblity rework feature?) NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="non-vouchered-taxa">
             <div class="font-bold text-2xl">
-              Taxa without Vouchers: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+              {{ $LANG['TAXWITHOUTVOUCH'] }}: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
             </div>
             <hr/>
-            <p> Listed below are species from the checklist that do not have linked specimen vouchers. Click on name to use the search statement above to dynamically query the occurrence dataset for possible voucher specimens. Use the pulldown to the right to display the specimens in a table format. </p>
+            <p>{{ $LANG['LISTEDBELOWARESPECINSTRUC'] }}</p>
             <x-select label="Display Mode"/>
-
-            <div class="font-bold text-xl">
-                All Taxa Contain Voucher Links
+            @if($nonVoucheredTaxa)
+            <div>
+            @foreach($nonVoucheredTaxa as $family => $taxa)
+            <div>
+                <div class="text-lg font-bold">{{ $family }}</div>
+                @foreach($taxa as $tid => $taxon)
+                <div class="pl-4">
+                    <x-link class="text-base" href="{{ url('taxon/' . $taxon['t']) }}">
+                        {{ $taxon['s'] }}
+                    </x-link>
+                    <a target="blank" href="{{ legacy_url('collections/list.php?usethes=1&reset=1&mode=voucher&taxa=' . $taxon['s'] . '&targetclid=' . $clid . '&targettid=' . $taxon['t']) }}">
+                        <i class="ml-4 fa-solid fa-list"></i>
+                    </a>
+                </div>
+                @endforeach
             </div>
+            @endforeach
+            </div>
+            @else
+            <div class="font-bold text-xl">
+                {{ $LANG['ALLTAXACONTAINVOUCH'] }}
+            </div>
+            @endif
         </x-horizontal-nav.tab>
         {{-- NON-VOUCHERED TAXA END --}}
 
-        {{-- MISSING TAXA START--}}
+        {{-- (TODO Logan possiblity rework feature?) MISSING TAXA START--}}
         <x-horizontal-nav.tab name="missing-taxa">
             <div class="font-bold text-2xl">
-              Possible Missing Taxa: # <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+              <span>
+              {{ $displayMode == 2? $LANG['PROBLEMS']: $LANG['POSS_MISSING'] }}:
+              </span>
+              <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+              {{ $clVoucherReport->getMissingTaxaCount() }}
             </div>
             <hr/>
 
