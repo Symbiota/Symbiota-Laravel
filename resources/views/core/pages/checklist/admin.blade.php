@@ -1,6 +1,7 @@
 @php global $SERVER_ROOT, $LANG;
 
 include_once(legacy_path('/classes/ChecklistAdmin.php'));
+include_once(legacy_path('/classes/ChecklistVoucherAdmin.php'));
 include_once(legacy_path('/classes/utilities/Language.php'));
 Language::load('checklists/checklistadmin');
 
@@ -46,6 +47,9 @@ $validated = request()->validate([
 $clManager = new ChecklistAdmin();
 if(!$clid && $delclid) $clid = $delclid;
 $clManager->setClid($clid);
+
+$clVoucherManager = new ChecklistVoucherAdmin();
+$clVoucherManager->setClid($clid);
 
 $statusStr = '';
 
@@ -126,6 +130,15 @@ $clArray = $clManager->cleanOutArray($clArray);
 $editors = $clManager->getEditors();
 $projects = $clManager->getInventoryProjects();
 
+$voucherProjects = [];
+foreach($clVoucherManager->getVoucherProjects() as $collId => $name) {
+    $voucherProjects[] = [
+        'value' => $collId,
+        'title' => $name,
+        'disabled' => false,
+    ];
+}
+
 $user = request()->user();
 $userProjects = [];
 foreach($user->projects() as $project) {
@@ -149,7 +162,7 @@ foreach($clManager->getUserList() as $uid => $name) {
 
 @endphp
 <x-layout class="p-0">
-    <x-horizontal-nav.container default_active_tab="Description" :items="[
+    <x-horizontal-nav.container default_active_tab="Related Checklists" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -356,6 +369,8 @@ foreach($clManager->getUserList() as $uid => $name) {
                 <p>
                 There are no Children checklists
                 </p>
+
+                <x-link href="{{ legacy_url('/profile/viewprofile.php?excludeparent=' . $clid) }}">Create a Species Exclusion List</x-link>
             </div>
 
 
@@ -377,19 +392,20 @@ foreach($clManager->getUserList() as $uid => $name) {
                 <p>Use the following tool to parse a list into multiple children checklists based on taxonomic nodes (Liliopsida, Eudicots, Pinopsida, etc)</p>
                 <form class="flex flex-col gap-4">
                     <div class="flex gap-4">
-                        <x-input id="sciname" label="Sci Name"/>
-                        <x-input id="taxonomic_id" label="Taxonomic id"/>
+                        {{-- TODO (Logan) replace with taxon search?--}}
+                        <x-input required id="taxon" label="Sci Name"/>
+                        <x-input required id="parsetid" label="Taxonomic id"/>
                     </div>
                     <div class="flex flex-wrap gap-4">
-                        <x-select class="flex-grow" label="Target Checklist" :items="[]" />
-                        <x-select class="flex-grow" label="Parent Checklist" :items="[]" />
-                        <x-select class="flex-grow" label="Add to project" :items="[]" />
+                        <x-select id="targetclid" class="flex-grow" label="Target Checklist" :items="[]" />
+                        <x-select id="parentclid" class="flex-grow" label="Parent Checklist" :items="[]" />
+                        <x-select id="targetpid"  class="flex-grow" label="Add to project" :items="[]" />
                     </div>
-                    <x-radio id="transfer_method" name="transfer_method" label="Transfer method" :options="[
-                        ['label' => 'Option 1', 'value' => '1'],
-                        ['label' => 'Option 2', 'value' => '2'],
+                    <x-radio id="transmethod" defaultValue="1" name="transmethod" label="Transfer method" :options="[
+                        ['label' => 'Transfer method', 'value' => '0'],
+                        ['label' => 'Transfer taxa', 'value' => '1'],
                     ]" />
-                    <x-checkbox label="Copy over permissions and general attributes"/>
+                    <x-checkbox id="parentclid" label="Copy over permissions and general attributes"/>
                     <x-button>Parse Checklist</x-button>
                     <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Open Taxonomic Thesaurus Explorer</x-link>
                 </form>
@@ -406,8 +422,9 @@ foreach($clManager->getUserList() as $uid => $name) {
                 <hr/>
                 <p>This form will allow you to add an image voucher linked to this checklist. If not already present, Scientific name will be added to checklist.</p>
             </div>
+            {{-- Note: Should action collections/editor/observationsubmit.php --}}
             <form class="flex flex-col gap-4">
-                <x-select class="w-full" label="Voucher Project" :items="[]" />
+                <x-select class="w-full" label="Voucher Project" :items="$voucherProjects" />
                 <x-button>Add Image Voucher and Link to Checklist</x-button>
             </form>
         </x-horizontal-nav.tab>
