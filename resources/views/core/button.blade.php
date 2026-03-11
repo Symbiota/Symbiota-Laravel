@@ -1,4 +1,4 @@
-@props(['variant' => 'primary', 'href', 'async' => false])
+@props(['variant' => 'primary', 'href', 'async' => false, 'disabled' => false])
 @php
 $variant_def = match($variant) {
  "neutral" => ['bg-neutral', 'text-neutral-content', 'hover:bg-neutral-lighter', 'active:bg-neutral-darker'],
@@ -35,7 +35,7 @@ if(isset($href) && $href) {
     })
 </script>
 @endPushOnce
-<{{$tag}} {{isset($href) && $href ? 'href=' . $href: ''}} {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge($base)}}>
+<{{$tag}} @disabled($disabled) {{isset($href) && $href ? 'href=' . $href: ''}} {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge($base)}}>
     {{ $slot }}
     @if(isset($icon) && !$icon->isEmpty())
     <div x-cloak x-show="loading" >
