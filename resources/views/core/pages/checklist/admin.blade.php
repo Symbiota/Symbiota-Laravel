@@ -229,7 +229,7 @@ foreach($clManager->getUserList() as $uid => $name) {
                     </span>
                 </div>
                 <hr />
-                <div>
+                <div class="flex flex-col gap-2">
                     @foreach ($editors as $uid => $editor)
                         <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
                             <span class="flex-grow">{{ $editor['name'] }}</span>
@@ -352,19 +352,19 @@ foreach($clManager->getUserList() as $uid => $name) {
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <x-checkbox id="dsynonyms" label="Display Synonyms" :checked="$settings->dsynonyms"/>
-                    <x-checkbox id="dcommon" label="Common Names" :checked="$settings->dcommon"/>
-                    <x-checkbox id="dimages" label="Display as images" :checked="$settings->dimages" />
-                    <x-checkbox id="dvoucherimages" label="Use voucher images as the preferred image" :checked="$settings->dvoucherimages"/>
-                    <x-checkbox id="ddetails" label="Show Details" :checked="$settings->ddetails"/>
+                    <x-checkbox id="dsynonyms" label="Display Synonyms" :checked="$settings->dsynonyms ?? false"/>
+                    <x-checkbox id="dcommon" label="Common Names" :checked="$settings->dcommon ?? false"/>
+                    <x-checkbox id="dimages" label="Display as images" :checked="$settings->dimages ?? false" />
+                    <x-checkbox id="dvoucherimages" label="Use voucher images as the preferred image" :checked="$settings->dvoucherimages ?? false"/>
+                    <x-checkbox id="ddetails" label="Show Details" :checked="$settings->ddetails ?? false"/>
 
                     {{-- Display images needs these two to be false --}}
-                    <x-checkbox id="dvouchers" label="Notes & Vouchers" :checked="$settings->dvouchers"/>
-                    <x-checkbox id="dauthors" label="Taxon Authors" :checked="$settings->dauthors"/>
+                    <x-checkbox id="dvouchers" label="Notes & Vouchers" :checked="$settings->dvouchers ?? false"/>
+                    <x-checkbox id="dauthors" label="Taxon Authors" :checked="$settings->dauthors ?? false"/>
 
-                    <x-checkbox id="dalpha" label="Show Alphabetically" :checked="$settings->dalpha"/>
-                    <x-checkbox id="dsubgenera" label="Show subgeneric ranking within scientific name" :checked="$settings->dsubgenera" />
-                    <x-checkbox id="activatekey" label="Activate Identification Key" :checked="$settings->activatekey" />
+                    <x-checkbox id="dalpha" label="Show Alphabetically" :checked="$settings->dalpha ?? false"/>
+                    <x-checkbox id="dsubgenera" label="Show subgeneric ranking within scientific name" :checked="$settings->dsubgenera ?? false" />
+                    <x-checkbox id="activatekey" label="Activate Identification Key" :checked="$settings->activatekey ?? false" />
                 </div>
 
                 <x-input label="Default Sort Sequence" id="sortsequence" type="number" value="{{ $checklist->sortSequence }}"/>
