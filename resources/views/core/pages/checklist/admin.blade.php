@@ -199,7 +199,7 @@ $TABS = [
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="voucher-conflicts" :items="$TABS">
+    <x-horizontal-nav.container default_active_tab="reports" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -563,38 +563,36 @@ $TABS = [
         <x-horizontal-nav.tab name="reports" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="font-bold text-2xl">
-                  Reports
+                  {{ $LANG['REPORTS'] }}
                 </div>
                 <hr/>
-                <p>
-                    See the Option Panel on the central page for more versatile export and print options that dynamically incorporate option selections.
-                </p>
+                <p>{{ $LANG['ADDITIONAL'] }}</p>
             </div>
 
             <div class="flex flex-col gap-1">
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullcsv&clid=' . $clid) }}">
-                    Full species list (CSV)
+                    {{ $LANG['FULLSPECLIST'] }}
                 </x-link>
                 @if($vouchersExist = $clVoucherManager->vouchersExist())
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullvoucherscsv&clid=' . $clid) }}">
-                    Full species list with linked vouchers (CSV)
+                    {{ $LANG['FULLSPECLISTVOUCHER'] }}
                 </x-link>
                 <x-link target="_blank"
                     href="{{ legacy_url('collections/download/index.php?searchvar=' . urlencode('clid=' . $clVoucherManager->getClidFullStr()) . '&noheader=1') }}">
-                Linked occurrence vouchers only (DwC-A, CSV, Tab-delmited)
+                    {{ $LANG['VOUCHERONLY'] }}
                 </x-link>
                 @endif
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullalloccurcsv&clid=' . $clid) }}">
-                    Full species list with all occurrences matching search terms (CSV)
+                    {{ $LANG['FULLSPECLISTALLOCCUR'] }}
                 </x-link>
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=pensoftxlsx&clid=' . $clid) }}">
-                    Pensoft Excel Export (CSV)
+                    {{ $LANG['PENSOFT_XLSX_EXPORT'] }}
                 </x-link>
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=missingoccurcsv&clid=' . $clid) }}">
-                    Specimens of taxa missing from checklist (CSV)
+                    {{ $LANG['SPECMISSTAXA'] }}
                 </x-link>
                 <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=problemtaxacsv&clid=' . $clid) }}">
-                    Specimens with misspelled, illegal, and problematic scientific Names (CSV)
+                    {{ $LANG['SPECMISSPELLED'] }}
                 </x-link>
             </div>
         </x-horizontal-nav.tab>
