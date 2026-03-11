@@ -180,6 +180,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         ['label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Voucher Conflicts', 'icon' => 'fa-solid fa-database'],
+        ['label' => 'External Voucher Projects', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Reports', 'icon' => 'fa-solid fa-database'],
     ]">
         {{-- ADMIN START--}}
@@ -493,6 +494,10 @@ foreach($clManager->getUserList() as $uid => $name) {
             <hr/>
 
             <p>List of specimen vouchers where the current identifications conflict with the checklist. Voucher conflicts are typically due to recent annotations of specimens located within collection. Click on Checklist ID to open the editing pane for that record. </p>
+        </x-horizontal-nav.tab>
+
+        {{-- REPORTS START--}}
+        <x-horizontal-nav.tab name="External Voucher Projects" class="flex flex-col gap-4">
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
