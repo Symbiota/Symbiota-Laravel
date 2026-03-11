@@ -169,6 +169,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         ['label' => 'Add Image Voucher', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Non-Vouchered Taxa', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Missing Taxa', 'icon' => 'fa-solid fa-database'],
+        ['label' => 'Voucher Conflicts', 'icon' => 'fa-solid fa-database'],
         ['label' => 'Reports', 'icon' => 'fa-solid fa-database'],
     ]">
         {{-- ADMIN START--}}
@@ -472,6 +473,17 @@ foreach($clManager->getUserList() as $uid => $name) {
             </div>
         </x-horizontal-nav.tab>
         {{-- MISSING TAXA END --}}
+
+
+        {{-- VOUCHER CONFLICTS START--}}
+        <x-horizontal-nav.tab name="Voucher Conflicts">
+            <div class="font-bold text-2xl">
+              Voucher Conflicts
+            </div>
+            <hr/>
+
+            <p>List of specimen vouchers where the current identifications conflict with the checklist. Voucher conflicts are typically due to recent annotations of specimens located within collection. Click on Checklist ID to open the editing pane for that record. </p>
+        </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
         <x-horizontal-nav.tab name="Reports">
