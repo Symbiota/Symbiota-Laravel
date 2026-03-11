@@ -4,7 +4,11 @@ include_once(legacy_path('/classes/ChecklistAdmin.php'));
 include_once(legacy_path('/classes/ChecklistVoucherAdmin.php'));
 include_once(legacy_path('/classes/ChecklistVoucherReport.php'));
 include_once(legacy_path('/classes/utilities/Language.php'));
-Language::load('checklists/checklistadmin');
+Language::load([
+    'checklists/checklistadmin',
+    'checklists/vaconflicts',
+    'checklists/voucheradmin',
+]);
 
 # header('Content-Type: text/html; charset='.$CHARSET);
 # if(!$SYMB_UID) header('Location: ../profile/index.php?refurl=../checklists/checklistadmin.php?'.htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES));
