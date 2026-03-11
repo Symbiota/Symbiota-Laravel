@@ -50,6 +50,7 @@ $clManager->setClid($clid);
 $statusStr = '';
 
 $clAdmin = Gate::check('CL_ADMIN', $clid);
+$settings = $checklist->defaultSettings? json_decode($checklist->defaultSettings): [];
 
 // TODO (Logan) move this?
 if($action == 'submitAdd'){
@@ -148,7 +149,7 @@ foreach($clManager->getUserList() as $uid => $name) {
 
 @endphp
 <x-layout class="p-0">
-    <x-horizontal-nav.container default_active_tab="Admin" :items="[
+    <x-horizontal-nav.container default_active_tab="Description" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -279,47 +280,56 @@ foreach($clManager->getUserList() as $uid => $name) {
             </div>
             <hr class="mb-2" />
             <form class="flex flex-col gap-4">
-                <x-input label="Checklist Name" id="checklist_name" />
-                <x-input label="Authors" id="checklist_authors" />
+                <x-input label="Checklist Name" id="checklist_name" value="{{ $checklist->name }}"/>
+                <x-input label="Authors" id="checklist_authors" value="{{ $checklist->authors }}" />
 
-                <x-input label="External Project ID" id="external_project_id" />
-                <x-input label="Locality" id="checklist_locality" />
-                <x-input label="Citation" id="checklist_citation" />
+                <x-select label="External Project ID" id="external_project_id" :items="[
+                    ['value' => 1, 'title' => 'None', 'disabled' => false],
+                    ['value' => 0, 'title' => 'iNaturalist', 'disabled' => false]
+                ]"/>
+
+                <x-input label="Locality" id="checklist_locality" value="{{ $checklist->locality }}" />
+                <x-input label="Citation" id="checklist_citation" value="{{ $checklist->publication }}" />
                 <x-rich-editor label="Abstract" id="Abstract">
                     {!! Purify::clean($checklist->abstract) !!}
                 </x-rich-editor>
 
-                <x-input label="Notes" id="checklist_notes" />
+                <x-input label="Notes" id="checklist_notes" value="{{ $checklist->notes }}"/>
 
-                <x-select label="More Inclusive Reference Checklist" />
+                <x-select class="w-full" label="More Inclusive Reference Checklist" :items="[
+                    ['value' => null, 'title' => 'None selected', 'disabled' => false]
+                ]"/>
 
-                <x-input label="Latitude" id="checklist_latitude" />
-                <x-input label="Longitude" id="checklist_longitude" />
-                <x-input label="Point Radius" id="checklist_point_radius" />
+                <x-input label="Latitude" id="checklist_latitude" value="{{ $checklist->latCentroid }}"/>
+                <x-input label="Longitude" id="checklist_longitude" value="{{ $checklist->longCentroid }}"/>
+                <x-input label="Point Radius" id="checklist_point_radius" value="{{ $checklist->pointRadiusMeters }}" />
 
                 <div>
-                    <x-input area label="Polygon Footprint" id="footprintwkt" />
+                    <x-input area label="Polygon Footprint" id="footprintwkt" value="{{ $checklist->footprintGeoJson }}" />
                     <x-button class="mt-2" @click="openWindow('{{ url('tools/map/coordaid') }}?strict=1&mode=polygon')">
                         Polygon Tool
                     </x-button>
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <x-checkbox label="Display Synonyms" />
-                    <x-checkbox label="Common Names" />
-                    <x-checkbox label="Display as images" />
-                    <x-checkbox label="Use voucher images as the preferred image" />
-                    <x-checkbox label="Show Details" />
-                    <x-checkbox label="Notes & Vouchers" />
-                    <x-checkbox label="Taxon Authors" />
-                    <x-checkbox label="Show Alphabetically" />
-                    <x-checkbox label="Show subgeneric ranking within scientific name" />
-                    <x-checkbox label="Activate Identification Key" />
+                    <x-checkbox id="dsynonyms" label="Display Synonyms" :checked="$settings->dsynonyms"/>
+                    <x-checkbox id="dcommon" label="Common Names" :checked="$settings->dcommon"/>
+                    <x-checkbox id="dimages" label="Display as images" :checked="$settings->dimages" />
+                    <x-checkbox id="dvoucherimages" label="Use voucher images as the preferred image" :checked="$settings->dvoucherimages"/>
+                    <x-checkbox id="ddetails" label="Show Details" :checked="$settings->ddetails"/>
+
+                    {{-- Display images needs these two to be false --}}
+                    <x-checkbox id="dvouchers" label="Notes & Vouchers" :checked="$settings->dvouchers"/>
+                    <x-checkbox id="dauthors" label="Taxon Authors" :checked="$settings->dauthors"/>
+
+                    <x-checkbox id="dalpha" label="Show Alphabetically" :checked="$settings->dalpha"/>
+                    <x-checkbox id="dsubgenera" label="Show subgeneric ranking within scientific name" :checked="$settings->dsubgenera" />
+                    <x-checkbox id="activatekey" label="Activate Identification Key" :checked="$settings->activatekey" />
                 </div>
 
-                <x-input label="Default Sort Sequence" id="sort_sequence" type="number" />
+                <x-input label="Default Sort Sequence" id="sortsequence" type="number" value="{{ $checklist->sortSequence }}"/>
 
-                <x-select class="w-64" label="Access" default="0" :items="[
+                <x-select id="access" class="w-64" label="Access" defaultValue="{{$checklist->access}}" :items="[
                             [ 'title' => 'Private', 'value' => 'private', 'disabled' => false],
                             [ 'title' => 'Can view with link', 'value' => 'view_with_link', 'disabled' => false],
                             [ 'title' => 'Public', 'value' => 'public', 'disabled' => false],
