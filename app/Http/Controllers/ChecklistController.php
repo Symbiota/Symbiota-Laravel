@@ -75,7 +75,7 @@ class ChecklistController extends Controller {
             ->leftJoin('fmprojects as p', 'p.pid', 'cpl.pid')
             ->where('c.clid', $clid)
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
-            ->select('c.*', 'c.notes', 'p.projname', 'p.pid');
+            ->select('c.*', 'c.notes', 'p.pid', 'p.projname', 'p.displayname', 'p.managers', 'p.briefdescription', 'p.fulldescription');
 
         if (! $user || ! $user->canViewChecklist($clid)) {
             $checklists_query
