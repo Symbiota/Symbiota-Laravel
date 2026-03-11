@@ -7,6 +7,8 @@ Language::load('checklists/checklistadmin');
 # header('Content-Type: text/html; charset='.$CHARSET);
 # if(!$SYMB_UID) header('Location: ../profile/index.php?refurl=../checklists/checklistadmin.php?'.htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES));
 
+$_POST = request()->all();
+
 $clid = request('clid') ? filter_var(request('clid'), FILTER_SANITIZE_NUMBER_INT) : 0;
 $pid = array_key_exists('pid', $_REQUEST) ? filter_var($_REQUEST['pid'], FILTER_SANITIZE_NUMBER_INT) : 0;
 $targetClid = array_key_exists('targetclid', $_REQUEST) ? filter_var($_REQUEST['targetclid'], FILTER_SANITIZE_NUMBER_INT) : 0;
@@ -26,6 +28,20 @@ $clidadd = array_key_exists('clidadd', $_POST) ? htmlspecialchars($_POST['clidad
 $parsetid = array_key_exists('parsetid', $_POST) ? filter_var($_POST['parsetid'], FILTER_SANITIZE_NUMBER_INT) : 0;
 $taxon = array_key_exists('taxon', $_POST) ? htmlspecialchars($_POST['taxon'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
 
+$validated = request()->validate([
+    'pid' => 'integer:strict|numeric',
+    'targetclid' => 'integer',
+    'parentclid' => 'integer',
+    'targetpid' => 'integer',
+    'tabindex' => 'integer',
+    'delclid' => 'integer',
+    'editoruid' => 'integer',
+    'pointtid' => 'integer',
+    'pointlat' => 'float',
+    'pointlng' => 'float',
+    'clidAdd' => 'integer',
+    'parsetid' => 'integer',
+]);
 
 $clManager = new ChecklistAdmin();
 if(!$clid && $delclid) $clid = $delclid;
@@ -107,6 +123,18 @@ if($clAdmin){
 $clArray = $clManager->getMetaData();
 $clArray = $clManager->cleanOutArray($clArray);
 $editors = $clManager->getEditors();
+$projects = $clManager->getInventoryProjects();
+
+$user = request()->user();
+$userProjects = [];
+foreach($user->projects() as $project) {
+    $userProjects[] = [
+        'value' => $project->pid,
+        'title' => $project->projname,
+        'disabled' => false,
+    ];
+}
+
 $users = [];
 foreach($clManager->getUserList() as $uid => $name) {
     if($name) {
@@ -147,7 +175,7 @@ foreach($clManager->getUserList() as $uid => $name) {
                             </x-slot>
                             <x-slot name="body">
                                 <form class="flex flex-col gap-4">
-                                    <x-select class="w-full" label="Select User" :items="$users" />
+                                    <x-select id="editoruid" class="w-full" label="Select User" :items="$users" />
 								    <input type="hidden" name="submitaction" value="addEditor" aria-label="{{ $LANG['ADDEDITOR'] }}" />
 
                                     <div class="flex align-items gap-2">
@@ -167,7 +195,7 @@ foreach($clManager->getUserList() as $uid => $name) {
                             <form method="post">
                                 @csrf
 								<input name="pid" type="hidden" value="{{ $pid }}" />
-								<input name="deleteuid" type="hidden" value="{{ $uid }}>" />
+								<input name="deleteuid" type="hidden" value="{{ $uid }}" />
 								<input name="submitaction" type="hidden" value="DeleteEditor" />
                                 <button type="submit">
                                     <x-icons.delete class="cursor-pointer" />
@@ -179,10 +207,51 @@ foreach($clManager->getUserList() as $uid => $name) {
             </div>
 
             <div class="flex flex-col gap-4">
-                <div class="font-bold text-2xl">
-                    Inventory Project Assignments
+                <div class="flex">
+                    <span class="font-bold text-2xl">
+                        {{ $LANG['INVENTORYPROJECTS'] }}
+                    </span>
+
+                    <span class="flex flex-grow justify-end">
+                        <x-modal>
+                            <x-slot name="button" :disabled="count($userProjects) === 0" >
+                                Add Project
+                            </x-slot>
+                            <x-slot name="title" class="text-2xl">
+                                Add to a Project
+                            </x-slot>
+                            <x-slot name="body">
+                                <form class="flex flex-col gap-4">
+                                    <x-select id="pid" class="w-full" label="Select a Project" :items="$userProjects" />
+								    <input type="hidden" name="submitaction" value="addToProject" aria-label="{{ $LANG['SUBMIT_BUTTON'] }}" />
+
+                                    <div class="flex align-items gap-2">
+                                        <x-button type="submit">Add</x-button>
+                                        <x-button variant="error" type="button">Cancel</x-button>
+                                    </div>
+                                </form>
+                            </x-slot>
+                        </x-modal>
+                    </span>
                 </div>
                 <hr />
+                @foreach($projects as $linked_pid => $name)
+                <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
+                    <span class="flex-grow">
+                        <x-link href="{{ url('projects/' . $pid) }}">{{ $name }}</x-link>
+                    </span>
+                    @can('PROJ_ADMIN', $linked_pid)
+                    <form method="post">
+                        @csrf
+                        <input name="pid" type="hidden" value="{{ $linked_pid }}" />
+                        <input name="submitaction" type="hidden" value="deleteProject" />
+                        <button type="submit">
+                            <x-icons.delete class="cursor-pointer" />
+                        <button>
+                    </form>
+                    @endcan
+                </div>
+                @endforeach
             </div>
 
             <div class="flex flex-col gap-4">
@@ -196,7 +265,7 @@ foreach($clManager->getUserList() as $uid => $name) {
                     or a system administrator.
                 </p>
                 <p class="font-bold text-lg text-warning">WARNING: Action cannot be undone</p>
-                <x-button disabled>
+                <x-button :disabled="count($projects) > 0 || count($editors) > 0" >
                     Delete Checklist
                 </x-button>
             </div>
