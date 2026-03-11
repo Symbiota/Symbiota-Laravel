@@ -139,6 +139,7 @@ $clArray = $clManager->cleanOutArray($clArray);
 $editors = $clManager->getEditors();
 $projects = $clManager->getInventoryProjects();
 $taxaMissingVouchers = $clVoucherReport->getNewVouchers($startPos, $displayMode);
+$conflictArr = $clVoucherReport->getConflictVouchers();
 
 $voucherProjects = [];
 foreach($clVoucherManager->getVoucherProjects() as $collId => $name) {
