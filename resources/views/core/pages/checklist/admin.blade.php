@@ -173,6 +173,13 @@ foreach($clManager->getUserList() as $uid => $name) {
 
 @endphp
 <x-layout class="p-0">
+    <div class="max-w-screen-lg px-10 pt-4">
+        <x-breadcrumbs :items="[
+            ['title' => 'Home', 'href' => url('') ],
+            ['title' => 'Return to Checklist', 'href' => url('checklists/' . $clid) ],
+            ['title' => 'Checklist Administration' ]
+        ]"/>
+    </div>
     <x-horizontal-nav.container default_active_tab="Reports" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
@@ -485,7 +492,6 @@ foreach($clManager->getUserList() as $uid => $name) {
             </div>
         </x-horizontal-nav.tab>
         {{-- MISSING TAXA END --}}
-
 
         {{-- VOUCHER CONFLICTS START--}}
         <x-horizontal-nav.tab name="Voucher Conflicts">
