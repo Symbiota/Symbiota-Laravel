@@ -2,6 +2,7 @@
 
 include_once(legacy_path('/classes/ChecklistAdmin.php'));
 include_once(legacy_path('/classes/ChecklistVoucherAdmin.php'));
+include_once(legacy_path('/classes/ChecklistVoucherReport.php'));
 include_once(legacy_path('/classes/utilities/Language.php'));
 Language::load('checklists/checklistadmin');
 
@@ -29,6 +30,11 @@ $clidadd = array_key_exists('clidadd', $_POST) ? htmlspecialchars($_POST['clidad
 $parsetid = array_key_exists('parsetid', $_POST) ? filter_var($_POST['parsetid'], FILTER_SANITIZE_NUMBER_INT) : 0;
 $taxon = array_key_exists('taxon', $_POST) ? htmlspecialchars($_POST['taxon'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) : '';
 
+// Added in non voucher taxa
+$startPos = (array_key_exists('start', $_REQUEST) ? filter_var($_REQUEST['start'], FILTER_SANITIZE_NUMBER_INT) : 0);
+$displayMode = (array_key_exists('displaymode', $_REQUEST) ? filter_var($_REQUEST['displaymode'], FILTER_SANITIZE_NUMBER_INT) : 0);
+
+
 $validated = request()->validate([
     'pid' => 'integer:strict|numeric',
     'targetclid' => 'integer',
@@ -50,6 +56,9 @@ $clManager->setClid($clid);
 
 $clVoucherManager = new ChecklistVoucherAdmin();
 $clVoucherManager->setClid($clid);
+
+$clVoucherReport = new ChecklistVoucherReport();
+$clVoucherReport->setClid($clid);
 
 $statusStr = '';
 
@@ -129,6 +138,7 @@ $clArray = $clManager->getMetaData();
 $clArray = $clManager->cleanOutArray($clArray);
 $editors = $clManager->getEditors();
 $projects = $clManager->getInventoryProjects();
+$taxaMissingVouchers = $clVoucherReport->getNewVouchers($startPos, $displayMode);
 
 $voucherProjects = [];
 foreach($clVoucherManager->getVoucherProjects() as $collId => $name) {
@@ -162,7 +172,7 @@ foreach($clManager->getUserList() as $uid => $name) {
 
 @endphp
 <x-layout class="p-0">
-    <x-horizontal-nav.container default_active_tab="Related Checklists" :items="[
+    <x-horizontal-nav.container default_active_tab="Reports" :items="[
         ['label' => 'Admin', 'icon' => 'fa-solid fa-user'],
         ['label' => 'Description', 'icon' => 'fa-solid fa-list'],
         ['label' => 'Related Checklists', 'icon' => 'fa-solid fa-jar'],
@@ -434,7 +444,7 @@ foreach($clManager->getUserList() as $uid => $name) {
         {{-- NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="Non-Vouchered Taxa">
             <div class="font-bold text-2xl">
-              Taxa without Vouchers: # <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
+              Taxa without Vouchers: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
             </div>
             <hr/>
             <p> Listed below are species from the checklist that do not have linked specimen vouchers. Click on name to use the search statement above to dynamically query the occurrence dataset for possible voucher specimens. Use the pulldown to the right to display the specimens in a table format. </p>
@@ -486,24 +496,42 @@ foreach($clManager->getUserList() as $uid => $name) {
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
-        <x-horizontal-nav.tab name="Reports">
-            <div class="font-bold text-2xl">
-              Reports
+        <x-horizontal-nav.tab name="Reports" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="font-bold text-2xl">
+                  Reports
+                </div>
+                <hr/>
+                <p>
+                    See the Option Panel on the central page for more versatile export and print options that dynamically incorporate option selections.
+                </p>
             </div>
-            <hr/>
-
-            <p>
-                See the Option Panel on the central page for more versatile export and print options that dynamically incorporate option selections.
-            </p>
 
             <div class="flex flex-col gap-1">
-                <x-link href="#">Full species list (CSV)</x-link>
-                <x-link href="#">Full species lis with linked vouchers (CSV)</x-link>
-                <x-link href="#">Linked occurrence vouchers only (DwC-A, CSV, Tab-delmited)</x-link>
-                <x-link href="#">Full species list with all occurrences matching search terms (CSV)</x-link>
-                <x-link href="#">Pensoft Excel Export (CSV)</x-link>
-                <x-link href="#">Specimens of taxa missing from checklist (CSV)</x-link>
-                <x-link href="#">Specimens with misspelled, illegal, and problematic scientific Names (CSV)</x-link>
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullcsv&clid=' . $clid) }}">
+                    Full species list (CSV)
+                </x-link>
+                @if($vouchersExist = $clVoucherManager->vouchersExist())
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullvoucherscsv&clid=' . $clid) }}">
+                    Full species list with linked vouchers (CSV)
+                </x-link>
+                <x-link target="_blank"
+                    href="{{ legacy_url('collections/download/index.php?searchvar=' . urlencode('clid=' . $clVoucherManager->getClidFullStr()) . '&noheader=1') }}">
+                Linked occurrence vouchers only (DwC-A, CSV, Tab-delmited)
+                </x-link>
+                @endif
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullalloccurcsv&clid=' . $clid) }}">
+                    Full species list with all occurrences matching search terms (CSV)
+                </x-link>
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=pensoftxlsx&clid=' . $clid) }}">
+                    Pensoft Excel Export (CSV)
+                </x-link>
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=missingoccurcsv&clid=' . $clid) }}">
+                    Specimens of taxa missing from checklist (CSV)
+                </x-link>
+                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=problemtaxacsv&clid=' . $clid) }}">
+                    Specimens with misspelled, illegal, and problematic scientific Names (CSV)
+                </x-link>
             </div>
         </x-horizontal-nav.tab>
         {{-- REPORTS END --}}
