@@ -307,7 +307,7 @@ foreach($clManager->getUserList() as $uid => $name) {
                 <x-input label="Checklist Name" id="checklist_name" value="{{ $checklist->name }}"/>
                 <x-input label="Authors" id="checklist_authors" value="{{ $checklist->authors }}" />
 
-                <x-select label="External Project ID" id="external_project_id" :items="[
+                <x-select class="w-full" label="External Project ID" id="external_project_id" :items="[
                     ['value' => 1, 'title' => 'None', 'disabled' => false],
                     ['value' => 0, 'title' => 'iNaturalist', 'disabled' => false]
                 ]"/>
