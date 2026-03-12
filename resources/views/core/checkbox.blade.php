@@ -31,7 +31,9 @@
         </div>
     </div>
 
+    @if($label)
     <label class="ml-2 relative inline-block align-middle text-base-content select-none" for="{{ $id }}">
         {{ $label}}
     </label>
+    @endif
 </div>
