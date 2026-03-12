@@ -9,11 +9,9 @@ Language::load([
     'checklists/vaconflicts',
     'checklists/voucheradmin',
     'checklists/vamissingtaxa',
-    'checklists/checklistadminchildren'
+    'checklists/checklistadminchildren',
+    'checklists/checklistadminmeta'
 ]);
-
-# header('Content-Type: text/html; charset='.$CHARSET);
-# if(!$SYMB_UID) header('Location: ../profile/index.php?refurl=../checklists/checklistadmin.php?'.htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES));
 
 $_POST = request()->all();
 
@@ -71,6 +69,7 @@ $statusStr = '';
 
 $clAdmin = Gate::check('CL_ADMIN', $clid);
 $settings = $checklist->defaultSettings? json_decode($checklist->defaultSettings): [];
+$dynamicProperties = $checklist->dynamicProperties? json_decode($checklist->dynamicProperties): [];
 
 // TODO (Logan) move this?
 if($action == 'submitAdd'){
@@ -220,22 +219,22 @@ $TABS = [
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="related-checklists" :items="$TABS">
+    <x-horizontal-nav.container default_active_tab="admin" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <div class="flex">
                     <span class="font-bold text-2xl">
-                        Current Editors
+                        {{ $LANG['CURREDIT'] }}
                     </span>
 
                     <span class="flex flex-grow justify-end">
                         <x-modal>
                             <x-slot name="button">
-                                Add Editor
+                                {{ $LANG['ADDEDITOR'] }}
                             </x-slot>
                             <x-slot name="title" class="text-2xl">
-                                Add New User
+                                {{ $LANG['ADDNEWUSER'] }}
                             </x-slot>
                             <x-slot name="body">
                                 <form class="flex flex-col gap-4">
@@ -282,7 +281,7 @@ $TABS = [
                                 Add Project
                             </x-slot>
                             <x-slot name="title" class="text-2xl">
-                                Add to a Project
+                                {{ $LANG['LINKTOPROJECT'] }}
                             </x-slot>
                             <x-slot name="body">
                                 <form class="flex flex-col gap-4">
@@ -320,17 +319,13 @@ $TABS = [
 
             <div class="flex flex-col gap-4">
                 <div class="font-bold text-2xl">
-                    Permanently Remove Checklist
+                    {{ $LANG['PERMREMOVECHECK'] }}
                 </div>
                 <hr />
-                <p>
-                    Before a checklist can be deleted, all editors (except yourself) and inventory project assignments
-                    must be removed. Inventory project assignments can only be removed by active managers of the project
-                    or a system administrator.
-                </p>
-                <p class="font-bold text-lg text-warning">WARNING: Action cannot be undone</p>
+                <p>{{ $LANG['REMOVEUSERCHECK'] }}</p>
+                <p class="font-bold text-lg text-warning">{{ $LANG['WARNINGNOUN'] }}</p>
                 <x-button :disabled="count($projects) > 0 || count($editors) > 0" >
-                    Delete Checklist
+                    {{ $LANG['DELETECHECK'] }}
                 </x-button>
             </div>
         </x-horizontal-nav.tab>
@@ -339,60 +334,72 @@ $TABS = [
         {{-- DESCRIPTION START--}}
         <x-horizontal-nav.tab name="description">
             <div class="font-bold text-2xl mb-2">
-                Edit Checklist Details
+                {{ $LANG['EDITCHECKDET'] }}
             </div>
             <hr class="mb-2" />
             <form class="flex flex-col gap-4">
-                <x-input label="Checklist Name" id="checklist_name" value="{{ $checklist->name }}"/>
-                <x-input label="Authors" id="checklist_authors" value="{{ $checklist->authors }}" />
-
-                <x-select class="w-full" label="External Project ID" id="external_project_id" :items="[
-                    ['value' => 1, 'title' => 'None', 'disabled' => false],
-                    ['value' => 0, 'title' => 'iNaturalist', 'disabled' => false]
+                <x-input :label="$LANG['CHECKNAME']" id="checklist_name" value="{{ $checklist->name }}"/>
+                <x-input :label="$LANG['AUTHORS']" id="checklist_authors" value="{{ $checklist->authors }}" />
+                <x-select class="w-full" id="type" :label="$LANG['CHECKTYPE']" :items="[
+                    ['value' => 'static', 'title' => $LANG['GENCHECK'], 'disabled' => false],
+                    ['value' => 'excludespp', 'title' => $LANG['EXCLUDESPP'], 'disabled' => !$userChecklists],
+                    ['value' => 'rarespp', 'title' => $LANG['RARETHREAT'], 'disabled' => !Gate::check('RARE_SPP_ADMIN')]
+                ]"/>
+                {{-- TODO (Logan) There is a an optional for excluding parent. Generally confusing not sure how to proceed--}}
+                <x-select class="w-full" :label="$LANG['EXTSERVICE']" id="externalservice" :items="[
+                    ['value' => 0, 'title' => 'None', 'disabled' => false],
+                    ['value' => 'iNaturalist', 'title' => 'iNaturalist', 'disabled' => false]
                 ]"/>
 
-                <x-input label="Locality" id="checklist_locality" value="{{ $checklist->locality }}" />
-                <x-input label="Citation" id="checklist_citation" value="{{ $checklist->publication }}" />
-                <x-rich-editor label="Abstract" id="Abstract">
+                {{-- TODO (Logan) toggle this only when iNaturalist is selected --}}
+                <x-input :label="$LANG['EXTSERVICEID']" id="externalserviceid" />
+                <x-input :label="$LANG['EXTSERVICETAXON']" id="externalserviceiconictaxon" />
+
+                <x-input :label="$LANG['LOC']" id="checklist_locality" value="{{ $checklist->locality }}" />
+                <x-input :label="$LANG['CITATION']" id="checklist_citation" value="{{ $checklist->publication }}" />
+                <x-rich-editor :label="$LANG['LOC']" id="Abstract">
                     {!! Purify::clean($checklist->abstract) !!}
                 </x-rich-editor>
 
-                <x-input label="Notes" id="checklist_notes" value="{{ $checklist->notes }}"/>
+                <x-input :label="$LANG['NOTES']" id="checklist_notes" value="{{ $checklist->notes }}"/>
 
-                <x-select class="w-full" label="More Inclusive Reference Checklist" :items="[
+				{{-- uses $refClArr = $clManager->getReferenceChecklists(); $id $name--}}
+                <x-select class="w-full" :label="$LANG['REFERENCE_CHECK']" :items="[
                     ['value' => null, 'title' => 'None selected', 'disabled' => false]
                 ]"/>
 
-                <x-input label="Latitude" id="checklist_latitude" value="{{ $checklist->latCentroid }}"/>
-                <x-input label="Longitude" id="checklist_longitude" value="{{ $checklist->longCentroid }}"/>
-                <x-input label="Point Radius" id="checklist_point_radius" value="{{ $checklist->pointRadiusMeters }}" />
+                {{-- TODO (Logan) point radius tool --}}
+                <x-input :label="$LANG['LATCENT']" id="checklist_latitude" value="{{ $checklist->latCentroid }}"/>
+                <x-input :label="$LANG['LONGCENT']" id="checklist_longitude" value="{{ $checklist->longCentroid }}"/>
+                <x-input :label="$LANG['POINTRAD']" id="checklist_point_radius" value="{{ $checklist->pointRadiusMeters }}" />
 
                 <div>
-                    <x-input area label="Polygon Footprint" id="footprintwkt" value="{{ $checklist->footprintGeoJson }}" />
+                    <x-input area :label="$LANG['POLYFOOT']" id="footprintwkt" value="{{ $checklist->footprintGeoJson }}" />
                     <x-button class="mt-2" @click="openWindow('{{ url('tools/map/coordaid') }}?strict=1&mode=polygon')">
+                        {{-- TODO (Logan) translation --}}
                         Polygon Tool
                     </x-button>
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <x-checkbox id="dsynonyms" label="Display Synonyms" :checked="$settings->dsynonyms ?? false"/>
-                    <x-checkbox id="dcommon" label="Common Names" :checked="$settings->dcommon ?? false"/>
-                    <x-checkbox id="dimages" label="Display as images" :checked="$settings->dimages ?? false" />
-                    <x-checkbox id="dvoucherimages" label="Use voucher images as the preferred image" :checked="$settings->dvoucherimages ?? false"/>
-                    <x-checkbox id="ddetails" label="Show Details" :checked="$settings->ddetails ?? false"/>
+                    <x-checkbox id="dsynonyms" :label="$LANG['DISPLAY_SYNONYMS']" :checked="$settings->dsynonyms ?? false"/>
+                    <x-checkbox id="dcommon" :label="$LANG['COMMON']" :checked="$settings->dcommon ?? false"/>
+                    <x-checkbox id="dimages" :label="$LANG['DISPLAYIMAGES']" :checked="$settings->dimages ?? false" />
+                    <x-checkbox id="dvoucherimages" :label="$LANG['DISPLAYVOUCHERIMAGES']" :checked="$settings->dvoucherimages ?? false"/>
+                    <x-checkbox id="ddetails" :label="$LANG['SHOWDETAILS']" :checked="$settings->ddetails ?? false"/>
 
                     {{-- Display images needs these two to be false --}}
-                    <x-checkbox id="dvouchers" label="Notes & Vouchers" :checked="$settings->dvouchers ?? false"/>
-                    <x-checkbox id="dauthors" label="Taxon Authors" :checked="$settings->dauthors ?? false"/>
+                    <x-checkbox id="dvouchers" :label="$LANG['NOTESVOUC']" :checked="$settings->dvouchers ?? false"/>
+                    <x-checkbox id="dauthors" :label="$LANG['TAXONAUTHOR']" :checked="$settings->dauthors ?? false"/>
 
-                    <x-checkbox id="dalpha" label="Show Alphabetically" :checked="$settings->dalpha ?? false"/>
-                    <x-checkbox id="dsubgenera" label="Show subgeneric ranking within scientific name" :checked="$settings->dsubgenera ?? false" />
-                    <x-checkbox id="activatekey" label="Activate Identification Key" :checked="$settings->activatekey ?? false" />
+                    <x-checkbox id="dalpha" :label="$LANG['TAXONABC']" :checked="$settings->dalpha ?? false"/>
+                    <x-checkbox id="dsubgenera" :label="$LANG['SHOWSUBGENERA']" :checked="$settings->dsubgenera ?? false" />
+                    <x-checkbox id="activatekey" :label="$LANG['ACTIVATEKEY']" :checked="$settings->activatekey ?? false" />
                 </div>
 
-                <x-input label="Default Sort Sequence" id="sortsequence" type="number" value="{{ $checklist->sortSequence }}"/>
+                <x-input :label="$LANG['DEFAULT_SORT']" id="sortsequence" type="number" value="{{ $checklist->sortSequence }}"/>
 
-                <x-select id="access" class="w-64" label="Access" defaultValue="{{$checklist->access}}" :items="[
+                <x-select id="access" class="w-64" :label="$LANG['ACCESS']" defaultValue="{{$checklist->access}}" :items="[
                             [ 'title' => 'Private', 'value' => 'private', 'disabled' => false],
                             [ 'title' => 'Can view with link', 'value' => 'view_with_link', 'disabled' => false],
                             [ 'title' => 'Public', 'value' => 'public', 'disabled' => false],
@@ -502,7 +509,6 @@ $TABS = [
                         ['label' => $LANG['TRANSFERTAXA'], 'value' => 0],
                         ['label' => $LANG['COPYTAXA'], 'value' => 1],
                     ]" />
-                    <parseChecklist
                     <x-checkbox id="parentclid" :label="$LANG['COPYPERMISSIONANDGENERAL']" :checked="$copyAttributes"/>
                     <input name="submitaction" type="hidden" value="parseChecklist" />
                     <x-button>{{ $LANG['PARSE_CHECKLIST'] }}</x-button>
