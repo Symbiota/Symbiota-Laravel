@@ -17,7 +17,7 @@ class ChecklistController extends Controller {
             ->leftJoin('fmprojects as p', 'p.pid', 'cpl.pid')
             ->where('c.clid', $clid)
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
-            ->select('c.*', 'p.*');
+            ->select('c.*', 'c.notes', 'p.projname', 'p.pid');
 
         if (! $user || ! $user->canViewChecklist($clid)) {
             $checklists_query
@@ -29,25 +29,19 @@ class ChecklistController extends Controller {
         return $checklists_query->first();
     }
 
-    public static function checklist(int $clid) {
-        $checklist = self::getChecklistData($clid);
-
-        if (empty($checklist)) {
-            return view('pages/checklist/not-found');
-        }
-
+    public static function getChecklistTaxa($checklist) {
         $taxon_query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid');
 
         // Selects taxa associated to a given checklist
-        $sub_query = DB::table('fmchklsttaxalink')->where('clid', $clid)->select('tid');
+        $sub_query = DB::table('fmchklsttaxalink')->where('clid', $checklist->clid)->select('tid');
 
         // Optionally grabs
         if ($checklist->type != 'rarespp') {
             $parent_query = DB::table('fmchklsttaxalink as ctl')
                 ->join('taxstatus as ts', 'ts.tid', 'ctl.tid')
                 ->join('taxa as t', 't.tid', 'ts.tid')
-                ->where('clid', $clid)
+                ->where('clid', $checklist->clid)
                 ->whereNotNull('ts.parenttid')
                 ->where('t.rankId', '>', 220)->select('ts.parenttid as tid');
 
@@ -80,16 +74,31 @@ class ChecklistController extends Controller {
             ->distinct()
             ->get();
 
-        $vouchers = DB::table('fmvouchers as fm')
+        return $taxons;
+    }
+
+    public static function getVouchers($checklist, $taxons) {
+        return DB::table('fmvouchers as fm')
             ->select('fmt.tid', 'fm.occid', 'fm.tid', 'fm.notes', 'fm.editornotes', 'o.recordedBy', 'o.recordNumber', 'c.institutionCode')
             ->join('fmchklsttaxalink as fmt', 'fmt.clTaxaID', 'fm.clTaxaID')
             ->join('omoccurrences as o', 'o.occid', 'fm.occid')
             ->join('omcollections as c', 'o.collid', 'c.collid')
-            ->where('fm.clid', $clid)
+            ->where('fm.clid', $checklist->clid)
             ->orderBy('c.collid')
             ->whereIn('fmt.tid', $taxons->map(fn ($t) => $t->tid))
             ->distinct()
             ->get();
+    }
+
+    public static function checklist(int $clid) {
+        $checklist = self::getChecklistData($clid);
+
+        if (empty($checklist)) {
+            return view('pages/checklist/not-found');
+        }
+
+        $taxons = self::getChecklistTaxa($checklist);
+        $vouchers = self::getVouchers($checklist, $taxons);
 
         $page_data = [
             'checklist' => $checklist,
@@ -102,6 +111,25 @@ class ChecklistController extends Controller {
         }
 
         return view('pages/checklist/profile', $page_data);
+    }
+
+    public static function browserPrint(int $clid) {
+        $checklist = self::getChecklistData($clid);
+
+        if (empty($checklist)) {
+            return view('pages/checklist/not-found');
+        }
+
+        $taxons = self::getChecklistTaxa($checklist);
+        $vouchers = self::getVouchers($checklist, $taxons);
+
+        $page_data = [
+            'checklist' => $checklist,
+            'vouchers' => $vouchers,
+            'taxons' => $taxons,
+        ];
+
+        return view('pages/checklist/printProfile', $page_data);
     }
 
     public static function getChecklistsData(Request $request) {
