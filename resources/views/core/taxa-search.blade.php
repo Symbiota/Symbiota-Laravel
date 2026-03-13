@@ -1,5 +1,6 @@
 @props([
     'id' => uniqid(),
+    'tidName' => 'tid',
     'taxa_value' => '' ,
     'use_thes_value' => false,
     'taxa_type_value' => '',
@@ -31,9 +32,14 @@
             search="{{url('/api/taxa/search')}}"
             include="#usethes-{{$id}}, #taxa-type-{{$id}}"
         >
-            <x-slot:input class="peer-input z-20 rounded-l-none"></x-slot>
-                <x-slot:menu></x-slot>
+            <x-slot name="input"
+                @auto_input_select="document.querySelector('#{{ 'tid-' . $id }}').value = event.detail.selection.id"
+                @input="document.querySelector('#{{ 'tid-' . $id }}').value = ''"
+                class="peer-input z-20 rounded-l-none">
+            </x-slot>
+            <x-slot name="menu"></x-slot>
         </x-autocomplete-input>
+        <input id="{{ 'tid-' . $id }}" type="hidden" name="{{ $tidName }}" value="" />
     </div>
 
     @if(!$hide_synonyms_checkbox)

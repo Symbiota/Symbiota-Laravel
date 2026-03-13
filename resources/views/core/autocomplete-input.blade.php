@@ -35,6 +35,8 @@
         x-on:keyup.enter="open = false"
         x-on:focus="open = true"
         x-on:click="open = true"
+        @auto_input_select="{{ $input->attributes->get('@auto_input_select') }}"
+        @input="{{ $input->attributes->get('@input') }}"
         :placeholder="$placeholder"
         :name='$name'
         :id="$id"
