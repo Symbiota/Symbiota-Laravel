@@ -2,6 +2,7 @@
     'id' => uniqid(),
     'name' => 'taxa',
     'tidName' => 'tid',
+    'label' => 'Search Taxa',
     'taxa_value' => '' ,
     'tid_value' => '',
     'use_thes_value' => false,
