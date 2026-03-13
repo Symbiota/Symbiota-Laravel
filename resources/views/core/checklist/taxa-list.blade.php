@@ -58,7 +58,7 @@
                 @php
                 $editTitle = array_key_exists($id, $children)? $children[$id]: $checklist->name;
                 @endphp
-                <a x-show="{{ $sppEditToggle }}" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ $LANG['EDIT_DETAILS'] . ': ' . $editTitle }}">
+                <a x-cloak x-show="{{ $sppEditToggle }}" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ $LANG['EDIT_DETAILS'] . ': ' . $editTitle }}">
                     <x-icons.edit />
                 </a>
                 @endforeach
@@ -91,58 +91,4 @@
         @php $previous=$taxon @endphp
     @endforeach
 </div>
-
-{{-- <div>
-    <div id="taxa-list">
-        @if(count($taxons) <= 0)
-            <div>
-                There are no taxa to list
-            </div>
-        @endif
-        @php $previous @endphp
-        @foreach ($taxons as $taxon)
-        @if($loop->first || $taxons[$loop->index - 1]->family !== $taxon->family)
-        <div class="text-lg font-bold uppercase">{{ $taxon->family }}</div>
-        @endif
-        <div class="pl-4">
-            <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">
-                {{ $taxon->sciname }}
-                @if($show_taxa_authors && isset($taxon->author))
-                {{ $taxon->author }}
-                @endif
-            </x-link>
-
-            <x-nav-link href="{{url('collections/list')}}?usethes=1&clid={{$checklist->clid}}&taxa={{$taxon->tid}}">
-            <i class="ml-4 fa-solid fa-list"></i>
-            </x-nav-link>
-
-            @if($show_common && isset($taxon->vernacularNames))
-            <div class="pl-2">
-                <span class="font-bold">Vernacular Names:</span>
-                {{ $taxon->vernacularNames }}
-            </div>
-            @endif
-
-            @if($show_synonyms && isset($taxon->synonyms))
-            <div class="pl-2">
-                <span class="font-bold">Synonyms:</span>
-                {{ $taxon->synonyms }}
-            </div>
-            @endif
-
-            @if($show_notes_vouchers && array_key_exists($taxon->tid, $taxa_vouchers))
-            <div class="pl-2">
-                <span class="font-bold">Vouchers:</span>
-                @foreach ($taxa_vouchers[$taxon->tid] as $voucher)
-                <span>
-                <x-link target="_blank" href="{{ url('occurrence/' . $voucher->occid) }}">{{ $voucher->recordedBy }} {{ $voucher->recordNumber }} [{{ $voucher->institutionCode }}]</x-link>
-                @if (!$loop->last) | @endif
-                @endforeach
-                </span>
-            </div>
-            @endif
-        </div>
-        @endforeach
-    </div>
-</div>--}}
 @endfragment
