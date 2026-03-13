@@ -50,6 +50,10 @@ function autoSearchInit(el) {
                 const incoming_option = menu.children[i].innerHTML
                 const prev_options = input.value.slice(0, input.value.lastIndexOf(",") + 1)
                 input.value = (prev_options ? prev_options + " " : prev_options) + incoming_option;
+
+                input.dispatchEvent(
+                    new CustomEvent('auto_input_select', {detail: { selection: menu.children[i] }})
+                );
             })
         }
     });
@@ -85,6 +89,9 @@ function autoSearchInit(el) {
                 const incoming_option = menu.children[getIndex()].innerHTML
                 const prev_options = input.value.slice(0, input.value.lastIndexOf(",") + 1)
                 input.value = (prev_options ? prev_options + " " : prev_options) + incoming_option;
+                input.dispatchEvent(
+                    new CustomEvent('auto_input_select', {detail: { selection: menu.children[getIndex()] }})
+                );
                 break;
         }
     })
