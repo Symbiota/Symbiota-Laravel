@@ -43,6 +43,12 @@ function autoSearchInit(el) {
         setIndex(0);
         for (let i = 0; i < e.target.children.length; i++) {
             //child.classList.add("hover:bg-base-200")
+            if(input.value.toLowerCase() === menu.children[i].innerHTML.toLowerCase()) {
+                input.dispatchEvent(
+                    new CustomEvent('auto_input_select', {detail: { selection: menu.children[i] }})
+                );
+            }
+
             e.target.children[i].classList.add("cursor-pointer")
             e.target.children[i].addEventListener('mouseover', () => setIndex(i))
             e.target.children[i].addEventListener('mousedown', (event) => {
