@@ -197,6 +197,7 @@ $breadcrumbs[] = $checklist->name;
                 </x-button>
             </div>
 
+            @if($isClAdmin)
             <x-modal>
                 <x-slot name="button">{{ $LANG['ADD_SPECIES'] }}</x-slot>
                 <x-slot name="title" class="text-2xl">{{ $LANG['ADD_SPECIES']}}</x-slot>
@@ -219,6 +220,7 @@ $breadcrumbs[] = $checklist->name;
                     </form>
                 </x-slot>
             </x-modal>
+            @endif
         </div>
     </div>
 
