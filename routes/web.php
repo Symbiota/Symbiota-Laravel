@@ -74,7 +74,8 @@ Route::group(['prefix' => 'checklists'], function () {
     Route::post('/dynamicmap', [ChecklistController::class, 'buildDynChecklist']);
     Route::get('/map', [ChecklistController::class, 'mapPage']);
     Route::post('/create', [ChecklistController::class, 'createChecklist']);
-    Route::get('/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
+    Route::match(['GET', 'POST'], '/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
+    Route::get('/{clid}/pdf', [ChecklistController::class, 'browserPrint']);
     Route::get('/{clid}', [ChecklistController::class, 'checklist']);
 });
 

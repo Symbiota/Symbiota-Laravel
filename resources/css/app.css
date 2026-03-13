@@ -77,11 +77,10 @@
         }
 
         a {
-            color: theme('colors.accent.darker');
-            font-weight: theme('fontWeight.bold');
+            color: theme('colors.link.DEFAULT');
 
             &:hover {
-                color: theme('colors.accent.DEFAULT');
+                color: theme('colors.link.lighter');
             }
         }
 
