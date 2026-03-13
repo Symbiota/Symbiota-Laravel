@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'EDIT_SUCCESS' => 'Record edited successfully',
+    'EDIT_ERROR' => 'ERROR editing record',
+    'DELETE_SUCCESS' => 'Record deleted successfully',
+    'DELETE_ERROR' => 'ERROR deleting record',
+    'DUPLICATE_MANAGER' => 'Duplicate Manager',
+    'DUP_CLUSTERING' => 'Duplicate Clustering',
+    'PERS_MANAGE_MENU' => 'Personal Management Menu',
+    'DUP_MANAGE' => 'Duplicate Management',
+    'DUP_LINKAGES' => 'Duplicate Linkages',
+    'DUP_EXPLANATION' => 'It is common within some collection domains (e.g. herbarium collections) to collect specimens in duplicate.
+						Links below list duplicate cluster and aid collection managers in batch linking
+						their specimen records to duplicate specimens housed at other institutions.',
+    'SPEC_DUP_CLUSTERS' => 'Specimen duplicate clusters',
+    'DUP_CLUSTERS_CONFLICTING' => 'Specimen duplicate clusters with conflicted identifications',
+    'BATCH_LINK_DUPS' => 'Batch link specimen duplicates',
+    'BATCH_LINK_EXPLANATION' => 'tool for batch clustering specimen duplicates based on matching last name of collector, collector number, and collection date',
+    'EXS_DUPS' => 'Exsiccatae duplicates',
+    'EXS_DUP_EXPLANATION' => 'list of exsiccatae titles that are associated with this collection (including data filtering and download capabilities)',
+    'EXS_DOWNLOAD' => 'Exsiccatae download',
+    'EXS_DOWNLOAD_EXPLANATION' => 'CSV download of exsiccati titles, numbers, specimen information, and links to full specimen details',
+    'WITH_ID_DIFFERENCES' => 'with Identification Differences',
+    'DISP_EDIT_CONTROLS' => 'Display Editing Controls',
+    'SURE_DEL_DUP' => 'Are you sure you want to delete this duplicate cluster?',
+    'DEL_CLUSTER' => 'Delete Cluster',
+    'DEL_SPEC_FROM_CLUSTER' => 'Delete Specimen from Cluster',
+    'SURE_DEL_SPEC_FROM_CLUSTER' => 'Are you sure you want to remove this occurrence record from this cluster?',
+    'DET_BY' => 'Determined by',
+    'NO_DUP_CLUSTERS' => 'No Duplicate Clusters match the request. Consider returning to the Duplicate Cluster menu and batch building duplicate clusters.',
+    'RETURN_MAIN' => 'Return to main menu',
+    'BATCH_COPY_GEOREFERENCE_DUPLICATES' => 'Batch copy duplicate georeference data',
+    'BATCH_COPY_GEOREFERENCE_DUPLICATES_EXPLANATION' => 'tool for copying georeference data from linked duplicates',
+];

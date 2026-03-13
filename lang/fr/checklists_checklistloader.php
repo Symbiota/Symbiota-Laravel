@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'SPEC_CHECKLOAD' => 'Chargeur de liste de contrôle des espèces',
+    'SELECT_FILE' => 'Veuillez sélectionner un fichier à télécharger',
+    'DOCUMENT' => 'Document',
+    'MUST_BE_CSV' => 'doit être un fichier CSV (avec une extension .csv) ',
+    'RETURN_CHECKLIST' => 'Retour à la liste de contrôle',
+    'CHECK_LOADER' => 'Chargeur de listes de contrôle',
+    'RETURN_LOADER' => 'Retour au chargeur',
+    'INPUT_MATCH' => 'et assurez-vous que le fichier d\'entrée correspond aux exigences des instructions',
+    'LOAD_CHECKL' => 'Chargement de la liste de contrôle...',
+    'UPLOAD_STATUS' => 'Statut du téléchargement...',
+    'TAXA_LOADED' => 'Taxa chargé avec succès :',
+    'GENERAL_ERRORS' => 'Erreurs générales :',
+    'PROCEED_CHECKL' => 'Passer aux listes de contrôle',
+    'UPLOAD_COMPLETE' => 'Téléchargement terminé !',
+    'PROBLEM_TAXA_RESOLUTION' => 'Résolution problématique des taxons',
+    'ERRORS' => 'erreurs générales',
+    'UPLOAD_FORM' => 'Formulaire de téléchargement de liste de contrôle',
+    'CHECKLIST_FILE' => 'Fichier de liste de contrôle:',
+    'TAXA_RESOLUTION' => 'Résolution taxonomique :',
+    'LEAVE_TAXA' => 'Laisser la taxonomie telle quelle',
+    'FILE_DESCR' => 'Le fichier d\'entrée doit être un fichier texte CSV contenant les colonnes suivantes.
+             L\'ordre des colonnes n\'a pas d\'importance, même si la première ligne doit contenir des noms de colonnes conformes aux noms en gras répertoriés ci-dessous.
+             Notez que les feuilles de calcul Excel (xlsx) peuvent être enregistrées sous forme de fichier CSV via l\'option "Enregistrer sous...".',
+    'INTERNALNOTES' => 'notes internes',
+    'OPTIONAL_DISP' => '(facultatif) - affiché uniquement pour les éditeurs',
+    'NO_RIGHTS' => 'Vous ne semblez pas avoir le droit de modifier cette liste de contrôle. Si vous pensez qu\'il s\'agit d\'une erreur, contactez un administrateur',
+];

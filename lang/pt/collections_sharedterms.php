@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'NAV_HOME' => 'Página inicial',
+    'NAV_COLLECTIONS' => 'Coleções',
+    'NAV_SEARCH' => 'Critérios de Pesquisa',
+    'TAB_CHECKLIST' => 'Inventários Taxonômicos',
+    'TAB_OCCURRENCES' => 'Registros de ocorrências',
+    'TAB_MAP' => 'Mapas',
+    'SPECIMEN_COLLECTIONS' => 'Coleções da Amostra',
+    'EXPAND' => 'Expandir',
+    'CONDENSE' => 'Condensar',
+    'SELECT_DESELECT' => 'Selecionar/Desmarcar',
+    'ALL_COLLECTIONS' => 'Todas as coleções',
+    'ALL_COLLECTIONS_CAP' => 'Todas as coleções',
+    'SELECT_DESELECT_ALL_SPECIMENS' => 'Selecionar/desmarcar Todas as Amostras',
+    'SELECT_DESELECT_ALL_OBSERVATIONS' => 'Selecionar/desmarcar Todas as Observações',
+    'DISPLAY_SORT' => 'Exibir painel de classificação',
+    'DOWNLOAD_SPECIMEN_DATA' => 'Baixar Dados da Amostra',
+    'COPY_TO_CLIPBOARD' => 'Copiar URL para Área de Transferência',
+    'BUTTON_RESET' => 'Redefinir Formulário',
+    'SEARCH' => 'Pesquisar',
+    'DISPLAY_FORMAT' => 'Formato de Exibição de Resultados',
+    'LIST' => 'Lista',
+    'TABLE' => 'Tabela de Dados',
+    'ALL_SPECIMEN_COLLECTIONS' => 'Todas as coleções de amostras',
+    'ALL_OBSERVATION_COLLECTIONS' => 'Todas as coleções de observações',
+];

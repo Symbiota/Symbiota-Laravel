@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'COLL_PROFILE' => 'Collection Profile',
+    'MAILING_ADD' => 'Mailing Address',
+    'NEED_INST_CODE' => 'Institution Code must have a value',
+    'NEED_COLL_VALUE' => 'Collection Name must have a value',
+    'CANNOT_GUID' => 'The Symbiota Generated GUID option cannot be selected for a collection that is managed locally outside of the data portal (e.g. Snapshot management type). In this case, the GUID must be generated within the source collection database and delivered to the data portal as part of the upload process.',
+    'NEED_DECIMAL' => 'Latitude and longitude values must be in the decimal format (numeric only)',
+    'NEED_RIGHTS' => 'Rights field (e.g. Creative Commons license) must have a selection',
+    'SORT_NUMERIC' => 'Sort sequence must be numeric only',
+    'AGG_GUID' => 'An Aggregate dataset (e.g. specimens coming from multiple collections) can only have occurrenceID selected for the GUID source',
+    'NEED_GUID' => 'You must select a GUID source in order to publish to data aggregators.',
+    'MUST_SMALL' => 'The image file must be less than 350 pixels in both width and height.',
+    'NOT_SUPPORTED' => 'File not supported. Accepted extensions include: jpg, png, or gif file.',
+    'EDIT_ADDRESS' => 'Edit institution address',
+    'UNLINK_ADDRESS' => 'Unlink institution address',
+    'NO_ADDRESS' => 'No addresses linked',
+    'SEL_ADDRESS' => 'Select Institution Address',
+    'LINK_ADDRESS' => 'Link Address',
+    'ADD_ADDRESS' => 'Add a new address not on the list',
+    'ADD_INST' => 'Add an institution not on list',
+    'LINK_URL_REQ' => 'Link URL and title is required',
+    'CLOSE' => 'Close',
+];

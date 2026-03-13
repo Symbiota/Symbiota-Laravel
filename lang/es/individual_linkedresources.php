@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'SPCHECKREL' => 'Relaciones de Listados de Especies',
+    'VOUCHEROFFOLLOWING' => 'Espécimen es voucher de los siguientes listados de especies',
+    'DELVOUCHER' => 'Eliminar voucher enlazado',
+    'CONFIRMVOUCHER' => '¿Está seguro que quiere eliminar el voucher enlazado?',
+    'NOTAVOUCHER' => 'Esta ocurrencia no ha sido designada como un voucher en un listado de especies',
+    'NEWVOUCHER' => 'Asignación de Nuevo Voucher',
+    'ADDVOUCHERCHECK' => 'Añadir como voucher en un listado de especies',
+    'SELECTCHECKLIST' => 'Seleccionar un Listado de Especies',
+    'VIEWABLEPUBLIC' => 'Visible para el público',
+    'EDITORNOTES' => 'Notas del Editor',
+    'VIEWABLEEDITORS' => 'Visible únicamente para los editores del listado',
+    'ADDVOUCHER' => 'Añadir Voucher',
+    'UNABLETOADD' => 'No es posible usar este registro de espécimen como voucher porque el nombre científico no pudo ser verificado en el tesauro taxonómico (¿mal escrito?)',
+    'DATASETLINKAGES' => 'Conjuntos de Datos Enlazados',
+    'MEMBEROF' => 'Miembro de los siguientes conjuntos de datos',
+    'OCCURRENCENOTLINKED' => 'La occurrencia no está enlazada a ningún conjunto de datos',
+    'CREATENEWREL' => 'Crear una nueva Relación de Conjunto de Datos',
+    'SELECTEXISTING' => 'Seleccionar un Conjunto de Datos Existente',
+    'CREATENEWDATASET' => 'Crear un Nuevo Conjunto de Datos',
+    'LINKTO' => 'Enlazar a Conjunto de Datos',
+    'PRIVATE_STATUS' => 'estado privado',
+];

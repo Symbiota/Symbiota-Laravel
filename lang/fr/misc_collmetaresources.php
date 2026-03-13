@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'CONTACTS_RESOURCE_TAB' => 'Onglet Contacts et Ressources',
+    'LINK_RESOURCE' => 'Liste des Ressources Liées',
+    'ENGLISH' => 'Anglais',
+    'SPANISH' => 'Espagnol',
+    'FRENCH' => 'Français',
+    'PORTUGUESE' => 'Portugais',
+    'NO_LINKS' => 'Aucun lien n\'a encore été défini',
+    'ADD_EDIT_LINK' => 'Ajouter/Modifier Ressource de Lien Externe',
+    'CAPTION_OVERRIDE' => 'Remplacement de Légende',
+    'CONTACTS' => 'Contacts',
+    'ROLE' => 'Rôle',
+    'C_CONTACT' => 'contact central',
+    'PHONE' => 'Téléphoner',
+    'NO_CONTACTS' => 'Aucun contact n\'a encore été défini',
+    'ADD_EDIT_CONTACT' => 'Ajouter/Modifier Contact',
+    'IS_C_CONTACT' => 'est contact central',
+    'ADD_CONTACT' => 'Ajouter Contact',
+    'EDIT_CONTACT' => 'Modifier Contact',
+    'RESET_FORM' => 'Réinitialiser Formulaire',
+    'FIRST_NAME_REQ' => 'Prénom est un champ obligatoire',
+    'LAST_NAME_REQ' => 'Nom de famille est un champ obligatoire',
+];

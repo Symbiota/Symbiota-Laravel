@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'EDIT_SUCCESS' => 'Enregistrement modifié avec succès',
+    'EDIT_ERROR' => 'Erreur lors de la modification de l\'enregistrement',
+    'DELETE_SUCCESS' => 'Enregistrement supprimé avec succès',
+    'DELETE_ERROR' => 'Erreur lors de la suppression de l\'enregistrement',
+    'DUPLICATE_MANAGER' => 'Gestionnaire de Duplications',
+    'DUP_CLUSTERING' => 'Regroupement de Doublons',
+    'PERS_MANAGE_MENU' => 'Personal Management Menu',
+    'DUP_MANAGE' => 'Gestion Doublons',
+    'DUP_LINKAGES' => 'Liens de Doublons',
+    'DUP_EXPLANATION' => 'Il est courant dans certains domaines de collecte (par exemple, les collections d\'herbiers) de collecter des spécimens en double.
+						Les liens ci-dessous répertorient les clusters en double et aident les gestionnaires de collecte par lots
+						à lier leurs enregistrements de spécimens à des spécimens en double conservés dans d\'autres institutions.',
+    'SPEC_DUP_CLUSTERS' => 'Groupes de spécimens en double',
+    'DUP_CLUSTERS_CONFLICTING' => 'Groupes de spécimens en double avec des identifications conflictuelles',
+    'BATCH_LINK_DUPS' => 'Lier par lots spécimens en double',
+    'BATCH_LINK_EXPLANATION' => 'outil de regroupement de lots de spécimens en double en fonction du nom de famille du collecteur, du numéro de collecteur et de la date de collecte correspondants',
+    'EXS_DUPS' => 'Doublons Exsiccatae',
+    'EXS_DUP_EXPLANATION' => 'liste des titres exsiccatae associés à cette collection (y compris les capacités de filtrage et de téléchargement des données)',
+    'EXS_DOWNLOAD' => 'Télécharger exsiccatae',
+    'EXS_DOWNLOAD_EXPLANATION' => 'Téléchargement CSV des titres exsiccati, des numéros, des informations sur les spécimens et des liens vers les détails complets des spécimens',
+    'WITH_ID_DIFFERENCES' => 'avec des différences d\'identification',
+    'DISP_EDIT_CONTROLS' => 'Afficher Commandes d\'Édition',
+    'SURE_DEL_DUP' => 'Voulez-vous vraiment supprimer ce groupe en double?',
+    'DEL_CLUSTER' => 'Supprimer Groupe',
+    'DEL_SPEC_FROM_CLUSTER' => 'Supprimer Spécimen du Groupe',
+    'SURE_DEL_SPEC_FROM_CLUSTER' => 'Voulez-vous vraiment supprimer cet enregistrement d\'occurrence de ce cluster?',
+    'DET_BY' => 'Déterminé par',
+    'NO_DUP_CLUSTERS' => 'Aucun cluster en double ne correspond à la demande. Envisagez de revenir au menu Dupliquer le cluster et de créer par lots des clusters dupliqués.',
+    'RETURN_MAIN' => 'Retour au menu principal',
+    'BATCH_COPY_GEOREFERENCE_DUPLICATES' => 'Copie par lots des données de géoréférencement en double',
+    'BATCH_COPY_GEOREFERENCE_DUPLICATES_EXPLANATION' => 'Outil de copie des données de géoréférencement à partir de doublons liés',
+];
