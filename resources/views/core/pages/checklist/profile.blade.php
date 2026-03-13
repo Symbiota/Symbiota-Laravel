@@ -1,68 +1,17 @@
 @props(['checklist', 'taxons' => [], 'vouchers' => []])
 @php
-$families = [];
-$genera = [];
-$species = [];
-$taxa_vouchers = [];
-
 global $SERVER_ROOT, $LANG;
 include_once(legacy_path('/classes/ChecklistManager.php'));
 include_once(legacy_path('/classes/utilities/Language.php'));
 Language::load('checklists/checklist');
 
-//Construct Family Tree
-foreach($taxons as $taxon) {
-    if($taxon->family) {
-        if(isset($families[$taxon->family])) {
-            $families[$taxon->family] += 1;
-        } else {
-            $families[$taxon->family] = 1;
-        }
-    }
-
-    // Todo Add Rank Id check
-    if($taxon->unitName1) {
-        if(isset($genera[$taxon->unitName1])) {
-            $genera[$taxon->unitName1] += 1;
-        } else {
-            $genera[$taxon->unitName1] = 1;
-        }
-    }
-
-    if($taxon->unitName2) {
-        if(isset($species[$taxon->unitName2])) {
-            $species[$taxon->unitName2] += 1;
-        } else {
-            $species[$taxon->unitName2] = 1;
-        }
-    }
-}
-
-//Construct Voucher Lookup
-foreach($vouchers as $voucher) {
-    if(array_key_exists($voucher->tid, $taxa_vouchers)) {
-        array_push($taxa_vouchers[$voucher->tid], $voucher);
-    } else {
-        $taxa_vouchers[$voucher->tid] = [$voucher];
-    }
-}
-
 //Set Display Settings
 $defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
-$show_synonyms = $defaultSettings->dsynonyms ?? false;
-$show_common = $defaultSettings->dcommon ?? false;
-$show_notes_vouchers = $defaultSettings->dvouchers ?? false;
-$show_taxa_authors = $defaultSettings->dauthors ?? false;
-$show_taxa_alphabetically = $defaultSettings->dalpha ?? false;
-
-//Override defaults if using the search form
-if(request('partial') === 'taxa-list') {
-    $show_synonyms = request('show_synonyms');
-    $show_common = request('show_common');
-    $show_notes_vouchers = request('show_notes_vouchers');
-    $show_taxa_authors = request('show_taxa_authors');
-    $show_taxa_alphabetically = request('show_taxa_alphabetically');
-}
+$show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? false;
+$show_common = request('show_common') ?? $defaultSettings->dcommon ?? false;
+$show_notes_vouchers = request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false;
+$show_taxa_authors = request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false;
+$show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false;
 
 $clManager = new ChecklistManager();
 $clManager->setClid($checklist->clid);
@@ -100,30 +49,30 @@ if($checklist->projname && $checklist->pid) {
 $breadcrumbs[] = $checklist->name;
 
 @endphp
-<x-margin-layout>
+<x-margin-layout x-data="{ sppEditToggle: false }">
     <div>
-    <x-breadcrumbs :items="$breadcrumbs" />
+        <x-breadcrumbs :items="$breadcrumbs" />
     </div>
     <div class="flex items-center">
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
-        <div class="flex flex-grow justify-end gap-4">
+        <div class="flex flex-grow justify-end gap-2">
             @can('CL_ADMIN', $checklist->clid)
-            <a href="{{legacy_url('/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
+            <x-button href="{{legacy_url('/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> A
-            </a>
-            <a href="{{legacy_url('/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
+            </x-button>
+            <x-button href="{{legacy_url('/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
                 <i class="flex-end fas fa-edit"></i> V
-            </a>
-            {{-- TODO (Logan) Figure out what this is. It is a js toggle but can we just provide options? if authorized?
-            <a href="">
-                <i class="flex-end fas fa-edit"></i> Spp
-            </a>
-            --}}
+            </x-button>
+
+            <x-button @click="sppEditToggle = !sppEditToggle" >
+                <i class="flex-end fas fa-edit"></i>Spp
+                <span x-show="sppEditToggle">- ON</span>
+            </x-button>
             @endcan
         </div>
     </div>
-    {{-- TODO (Logan) figure out alternatives to this --}}
-    @if(isset($checklist->abstract) || isset($checklist->authors) || isset($checklist->locality))
+
+    @if($checklist->abstract || $checklist->authors || $checklist->locality || ($checklist->latCentroid && $checklist->longCentroid) || $checklist->notes || count($exclusions) || count($children) || count($parent))
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
             <x-checklist.metadata
@@ -135,14 +84,11 @@ $breadcrumbs[] = $checklist->name;
         </div>
     </x-accordion>
     @endif
-    {{-- TODO (Logan) scope to clid --}}
-
 
     <div class="flex items-center gap-2">
         <div class="flex w-fit">
             <x-popover class="w-[500px]">
-                <form hx-get="{{ url()->current() }}" class="flex flex-col gap-2" hx-target="#taxa-list">
-                    <input type="hidden" name="partial" value="taxa-list">
+                <form x-data="{ form: $el }" target="_blank" id="checklist-display-form" class="flex flex-col gap-2">
                     <x-taxa-search />
                     <x-link href="{{ legacy_url('/ident/key.php') }}?dynclid={{ 0 }}&clid={{ $checklist->clid }}">Open Symbiota Key</x-link>
                     <x-link href="{{ legacy_url('/games/flashcards.php') }}?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">Flash Cards</x-link>
@@ -153,6 +99,7 @@ $breadcrumbs[] = $checklist->name;
                         ['title' => 'Central Thesaurus', 'value' => 'Central Thesaurus', 'disabled' => false]
                     ]" />
 
+                    <input type="hidden" name="clid" value="{{ $checklist->clid }}" />
                     <div class="text-lg font-bold">Taxonmic Filter</div>
                     <x-checkbox
                         label="Display Synonyms"
@@ -187,13 +134,31 @@ $breadcrumbs[] = $checklist->name;
                         name="show_taxa_alphabetically"
                     />
                     <div class="flex items-center">
-                        <x-button x-on:click="popoverOpen=false">Build List</x-button>
-                        <div class="flex flex-grow justify-end gap-4 text-xl">
-                            <i class="fa-solid fa-download"></i>
-                                <a target="_blank" href="{{ url('checklists/' . $checklist->clid. '/pdf') }}">
-                                    <i class="fa-solid fa-print"></i>
-                                </a>
-                            <i class="fa-regular fa-file-word"></i>
+                        <x-button type="button"
+                            x-on:click="popoverOpen=false"
+                            hx-target="#taxa-list"
+                            hx-vals='{"partial": "taxa-list"}'
+                            hx-include="#checklist-display-form"
+                            hx-get="{{ url()->current() }}"
+                        >
+                        {{ $LANG['BUILD_LIST'] }}
+                        </x-button>
+                        <div class="flex flex-grow items-center justify-end gap-4 text-xl">
+                            <button name="dllist_x" type="submit"
+                                data-action="{{ legacy_url('checklists/checklist.php') }}"
+                                x-on:click="form.action=$el.getAttribute('data-action'); target='_blank';form.method='post'">
+                                <x-icons.download />
+                            </button>
+                            <button type="submit"
+                                data-action="{{ url('checklists/' . $checklist->clid. '/pdf') }}"
+                                x-on:click="form.action=$el.getAttribute('data-action');form.target='_blank';form.method='get'">
+                                <x-icons.print />
+                            </button>
+                            <button name="exportdoc" type="submit"
+                                data-action="{{ legacy_url('checklists/mswordexport.php') }}"
+                                x-on:click="form.action=$el.getAttribute('data-action'); form.target='_blank';form.method='post'">
+                                <x-icons.word />
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -218,14 +183,17 @@ $breadcrumbs[] = $checklist->name;
             </div>
         </div>
     </div>
+
     <x-checklist.taxa-list
+        :checklist="$checklist"
         :taxa="$taxaList"
         :taxa_vouchers="$voucherArr"
-        :checklist="$checklist"
+        :children="$children"
         :show_synonyms="$show_synonyms"
         :show_common="$show_common"
         :show_notes_vouchers="$show_notes_vouchers"
         :show_taxa_authors="$show_taxa_authors"
         :show_taxa_alphabetically="$show_taxa_alphabetically"
+        sppEditToggle="sppEditToggle"
     />
 </x-layout>
