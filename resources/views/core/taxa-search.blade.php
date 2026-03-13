@@ -1,6 +1,7 @@
 @props([
     'id' => uniqid(),
-    'tidName' => 'tid',
+    'tid_name' => 'tid',
+    'label' => 'Search Taxa',
     'taxa_value' => '' ,
     'use_thes_value' => false,
     'taxa_type_value' => '',
@@ -8,7 +9,7 @@
     'hide_synonyms_checkbox' => false,
 ])
 <div>
-    <label class="text-lg" for="{{ $id }}">Search Taxa</label>
+    <label class="text-lg" for="{{ $id }}">{{ $label }}</label>
     <div class="flex items-center group">
         @if(!$hide_selector)
         <x-select
@@ -39,7 +40,7 @@
             </x-slot>
             <x-slot name="menu"></x-slot>
         </x-autocomplete-input>
-        <input id="{{ 'tid-' . $id }}" type="hidden" name="{{ $tidName }}" value="" />
+        <input id="{{ 'tid-' . $id }}" type="hidden" name="{{ $tid_name }}" value="" />
     </div>
 
     @if(!$hide_synonyms_checkbox)

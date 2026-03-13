@@ -22,7 +22,7 @@ $clManager->setClid($checklist->clid);
 
 if($isClAdmin){
 	if(request('formsubmit') === 'AddSpecies'){
-		$statusStr = $clManager->addNewSpecies(request()->all());
+		$statusStr = $clManager->addNewSpecies(request()->except('_token'));
 	}
 }
 
@@ -205,14 +205,14 @@ $breadcrumbs[] = $checklist->name;
                         @csrf
                         <input type="hidden" name="partial" value="taxa-list" />
                         <input type="hidden" name="formsubmit" value="AddSpecies" />
-
-                        <x-input :label="$LANG['TAXON']" id="speciestoadd" />
-                        <x-input :label="$LANG['MORPHOSPECIES']" id="morphospecies" />
-                        <x-input :label="$LANG['FAMILYOVERRIDE']" id="familyoverride" />
+                        <input type="hidden" name="clid" value="{{ $checklist->clid }}" />
+                        <x-taxa-search :label="$LANG['TAXON']" />
+                        {{-- <x-input :label="$LANG['MORPHOSPECIES']" id="morphospecies" /> --}}
+                        <x-input :label="$LANG['FAMILYOVERRIDE']" id="familyOverride" />
                         <x-input :label="$LANG['HABITAT']" id="habitat" />
                         <x-input :label="$LANG['ABUNDANCE']" id="abundance" />
                         <x-input :label="$LANG['NOTES']" id="notes" />
-                        <x-input :label="$LANG['INTNOTES']" id="internalnotes" />
+                        <x-input :label="$LANG['INTNOTES']" id="internalNotes" />
                         <x-input :label="$LANG['SOURCE']" id="source" />
                         <x-button>{{ $LANG['ADD_SPECIES'] }}</x-button>
                         <x-link href="{{ legacy_url('checklists/tools/checklistloader.php?clid=' . $checklist->clid .'&pid=' . $checklist->pid) }}">{{ $LANG['BATCH_LOAD_SPREADSHEET'] }}</x-link>
