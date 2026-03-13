@@ -63,7 +63,7 @@ Route::group(['prefix' => 'checklists'], function () {
     Route::post('/create', [ChecklistController::class, 'createChecklist']);
     Route::match(['GET', 'POST'], '/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
     Route::get('/{clid}/pdf', [ChecklistController::class, 'browserPrint']);
-    Route::get('/{clid}', [ChecklistController::class, 'checklist']);
+    Route::match(['GET', 'POST'], '/{clid}', [ChecklistController::class, 'checklist']);
 });
 
 /*
