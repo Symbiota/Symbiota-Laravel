@@ -5,6 +5,10 @@ include_once(legacy_path('/classes/ChecklistManager.php'));
 include_once(legacy_path('/classes/utilities/Language.php'));
 Language::load('checklists/checklist');
 
+
+$isClAdmin = Gate::check('CL_ADMIN', $checklist->clid);
+$statusStr = false;
+
 //Set Display Settings
 $defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
 $show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? false;
@@ -15,6 +19,13 @@ $show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSetti
 
 $clManager = new ChecklistManager();
 $clManager->setClid($checklist->clid);
+
+if($isClAdmin){
+	if(request('formsubmit') === 'AddSpecies'){
+		$statusStr = $clManager->addNewSpecies(request()->all());
+	}
+}
+
 $clManager->setShowCommon(true);
 $clManager->setShowSynonyms(true);
 $clManager->setShowCommon(true);
@@ -83,6 +94,10 @@ $breadcrumbs[] = $checklist->name;
             />
         </div>
     </x-accordion>
+    @endif
+
+    @if($statusStr)
+    <div class="bg-error text-error-content p-2 rounded-md">{{ $statusStr }}</div>
     @endif
 
     <div class="flex items-center gap-2">
@@ -181,6 +196,29 @@ $breadcrumbs[] = $checklist->name;
                         <i class="fas fa-earth-americas"></i> Map
                 </x-button>
             </div>
+
+            <x-modal>
+                <x-slot name="button">{{ $LANG['ADD_SPECIES'] }}</x-slot>
+                <x-slot name="title" class="text-2xl">{{ $LANG['ADD_SPECIES']}}</x-slot>
+                <x-slot name="body">
+                    <form method="post" class="flex flex-col gap-4">
+                        @csrf
+                        <input type="hidden" name="partial" value="taxa-list" />
+                        <input type="hidden" name="formsubmit" value="AddSpecies" />
+
+                        <x-input :label="$LANG['TAXON']" id="speciestoadd" />
+                        <x-input :label="$LANG['MORPHOSPECIES']" id="morphospecies" />
+                        <x-input :label="$LANG['FAMILYOVERRIDE']" id="familyoverride" />
+                        <x-input :label="$LANG['HABITAT']" id="habitat" />
+                        <x-input :label="$LANG['ABUNDANCE']" id="abundance" />
+                        <x-input :label="$LANG['NOTES']" id="notes" />
+                        <x-input :label="$LANG['INTNOTES']" id="internalnotes" />
+                        <x-input :label="$LANG['SOURCE']" id="source" />
+                        <x-button>{{ $LANG['ADD_SPECIES'] }}</x-button>
+                        <x-link href="{{ legacy_url('checklists/tools/checklistloader.php?clid=' . $checklist->clid .'&pid=' . $checklist->pid) }}">{{ $LANG['BATCH_LOAD_SPREADSHEET'] }}</x-link>
+                    </form>
+                </x-slot>
+            </x-modal>
         </div>
     </div>
 
