@@ -5,6 +5,11 @@ $genera = [];
 $species = [];
 $taxa_vouchers = [];
 
+global $SERVER_ROOT, $LANG;
+include_once(legacy_path('/classes/ChecklistManager.php'));
+include_once(legacy_path('/classes/utilities/Language.php'));
+Language::load('checklists/checklist');
+
 //Construct Family Tree
 foreach($taxons as $taxon) {
     if($taxon->family) {
@@ -48,6 +53,7 @@ $show_synonyms = $defaultSettings->dsynonyms ?? false;
 $show_common = $defaultSettings->dcommon ?? false;
 $show_notes_vouchers = $defaultSettings->dvouchers ?? false;
 $show_taxa_authors = $defaultSettings->dauthors ?? false;
+$show_taxa_alphabetically = $defaultSettings->dalpha ?? false;
 
 //Override defaults if using the search form
 if(request('partial') === 'taxa-list') {
@@ -55,7 +61,29 @@ if(request('partial') === 'taxa-list') {
     $show_common = request('show_common');
     $show_notes_vouchers = request('show_notes_vouchers');
     $show_taxa_authors = request('show_taxa_authors');
+    $show_taxa_alphabetically = request('show_taxa_alphabetically');
 }
+
+$clManager = new ChecklistManager();
+$clManager->setClid($checklist->clid);
+$clManager->setShowCommon(true);
+$clManager->setShowSynonyms(true);
+$clManager->setShowCommon(true);
+$clManager->setShowVouchers(true);
+
+if($show_taxa_authors) {
+    $clManager->setShowAuthors(true);
+}
+if($show_taxa_alphabetically) {
+    $clManager->setShowAlphaTaxa(true);
+}
+//$clManager->setShowSubgenera(true);
+
+$taxaList = $clManager->getTaxaList(1, 0);
+$voucherArr = $clManager->getVoucherArr();
+$parent = $clManager->getParentChecklist();
+$children = $clManager->getChildClidArr();
+$exclusions = $clManager->getExclusionChecklist();
 
 //Handling Dynamic Breadcrumbs
 $breadcrumbs = [
@@ -98,17 +126,12 @@ $breadcrumbs[] = $checklist->name;
     @if(isset($checklist->abstract) || isset($checklist->authors) || isset($checklist->locality))
     <x-accordion label='More Details' variant="clear-primary">
         <div class="flex flex-col gap-2">
-            @isset($checklist->abstract)
-                <div><span class="font-bold">Abstract:</span> {!! Purify::clean($checklist->abstract) !!}</div>
-            @endisset
-
-            @isset($checklist->authors)
-                <div><span class="font-bold">Authors:</span> {{ $checklist->authors }}</div>
-            @endisset
-
-            @isset($checklist->locality)
-                <div><span class="font-bold">Locality:</span> {{ $checklist->locality }}</div>
-            @endisset
+            <x-checklist.metadata
+                :checklist="$checklist"
+                :parent="$parent"
+                :children="$children"
+                :exclusions="$exclusions"
+            />
         </div>
     </x-accordion>
     @endif
@@ -158,18 +181,18 @@ $breadcrumbs[] = $checklist->name;
                         :checked="$show_taxa_authors"
                         name="show_taxa_authors"
                     />
-                    {{-- They currently show Alphabetically already
                     <x-checkbox
                         label="Show Taxa Alphabetically"
                         :checked="$defaultSettings->dalpha ?? false"
-                        name="sort_alphabetically"
+                        name="show_taxa_alphabetically"
                     />
-                    --}}
                     <div class="flex items-center">
                         <x-button x-on:click="popoverOpen=false">Build List</x-button>
                         <div class="flex flex-grow justify-end gap-4 text-xl">
                             <i class="fa-solid fa-download"></i>
-                            <i class="fa-solid fa-print"></i>
+                                <a target="_blank" href="{{ url('checklists/' . $checklist->clid. '/pdf') }}">
+                                    <i class="fa-solid fa-print"></i>
+                                </a>
                             <i class="fa-regular fa-file-word"></i>
                         </div>
                     </div>
@@ -177,10 +200,14 @@ $breadcrumbs[] = $checklist->name;
             </x-popover>
         </div>
         <div class="flex items-center gap-2 w-full">
-            <div><span class="font-bold">Families:</span> {{ count($families) }}</div>
-            <div><span class="font-bold">Genera:</span> {{ count($genera) }}</div>
-            <div><span class="font-bold">Species:</span> {{ count($species) }}</div>
-            <div><span class="font-bold">Total Taxa:</span> {{ count($taxons) }}</div>
+            @foreach([
+                $LANG['FAMILIES'] => $clManager->getFamilyCount(),
+                $LANG['GENERA'] => $clManager->getGenusCount(),
+                $LANG['SPECIES'] => $clManager->getSpeciesCount(),
+                $LANG['TOTAL_TAXA'] => $clManager->getTaxaCount(),
+            ] as $label => $value)
+            <div><span class="font-bold">{{ $label }}: </span>{{ $value }}</div>
+            @endforeach
 
             <div class="flex-grow">
                 <x-button
@@ -191,57 +218,14 @@ $breadcrumbs[] = $checklist->name;
             </div>
         </div>
     </div>
-    @fragment('taxa-list')
-    <div id="taxa-list">
-        @if(count($taxons) <= 0)
-            <div>
-                There are no taxa to list
-            </div>
-        @endif
-        @php $previous @endphp
-        @foreach ($taxons as $taxon)
-        @if($loop->first || $taxons[$loop->index - 1]->family !== $taxon->family)
-        <div class="text-lg font-bold">{{ $taxon->family }}</div>
-        @endif
-        <div class="pl-4">
-            <x-link class="text-base" href="{{ url('taxon/' . $taxon->tid) }}">
-                {{ $taxon->sciname }}
-                @if($show_taxa_authors && isset($taxon->author))
-                {{ $taxon->author }}
-                @endif
-            </x-link>
-
-            <x-nav-link href="{{url('collections/list')}}?usethes=1&clid={{$checklist->clid}}&taxa={{$taxon->tid}}">
-            <i class="ml-4 fa-solid fa-list"></i>
-            </x-nav-link>
-
-            @if($show_common && isset($taxon->vernacularNames))
-            <div class="pl-2">
-                <span class="font-bold">Vernacular Names:</span>
-                {{ $taxon->vernacularNames }}
-            </div>
-            @endif
-
-            @if($show_synonyms && isset($taxon->synonyms))
-            <div class="pl-2">
-                <span class="font-bold">Synonyms:</span>
-                {{ $taxon->synonyms }}
-            </div>
-            @endif
-
-            @if($show_notes_vouchers && array_key_exists($taxon->tid, $taxa_vouchers))
-            <div class="pl-2">
-                <span class="font-bold">Vouchers:</span>
-                @foreach ($taxa_vouchers[$taxon->tid] as $voucher)
-                <span>
-                <x-link target="_blank" href="{{ url('occurrence/' . $voucher->occid) }}">{{ $voucher->recordedBy }} {{ $voucher->recordNumber }} [{{ $voucher->institutionCode }}]</x-link>
-                @if (!$loop->last) | @endif
-                @endforeach
-                </span>
-            </div>
-            @endif
-        </div>
-        @endforeach
-    </div>
-    @endfragment
+    <x-checklist.taxa-list
+        :taxa="$taxaList"
+        :taxa_vouchers="$voucherArr"
+        :checklist="$checklist"
+        :show_synonyms="$show_synonyms"
+        :show_common="$show_common"
+        :show_notes_vouchers="$show_notes_vouchers"
+        :show_taxa_authors="$show_taxa_authors"
+        :show_taxa_alphabetically="$show_taxa_alphabetically"
+    />
 </x-layout>
