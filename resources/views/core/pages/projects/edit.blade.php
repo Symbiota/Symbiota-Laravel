@@ -28,10 +28,10 @@ Language::load([
         </div>
     </div>
 
-    <x-tabs :active="1" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
+    <x-tabs :active="2" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
         <div class="flex flex-col gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h1>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
                 <hr/>
             </div>
             <form class="flex flex-col gap-4">
@@ -47,7 +47,7 @@ Language::load([
             </form>
 
             <div>
-                <h1 class="text-2xl font-bold text-primary">{{ $LANG['DELPROJECT'] }}</h1>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELPROJECT'] }}</h3>
                 <hr/>
             </div>
             <form class="flex flex-col gap-4">
@@ -62,11 +62,61 @@ Language::load([
                 </div>
             </form>
         </div>
-        <div>
-            TODO Inventory Managers
+        <div class="flex flex-col gap-4">
+            <div>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['INVENTORY_PROJECT_MANAGERS'] }}</h3>
+                <hr/>
+            </div>
+            <div class="flex flex-col gap-2">
+            @foreach (['thing 1', 'thing 2'] as $key => $value)
+            <div class="flex items-center p-2 bg-base-200 border border-base-300">
+                <span>{{ $value }}</span>
+                <span class="flex-grow flex justify-end">
+                    <x-icons.delete/>
+                </span>
+            </div>
+            @endforeach
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_NEW_MANAGER'] }}</h3>
+                <hr/>
+            </div>
+            <form class="flex flex-col gap-4">
+                <x-select id="user" :items="[
+                    [ 'value' => 0, 'title' => 'user' ]
+                ]"/>
+                <x-button>{{ $LANG['ADD_TO_MANAGER_LIST'] }}</x-button>
+            </form>
         </div>
-        <div>
-           Checklist Management
+        <div class="flex flex-col gap-4">
+            <div>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_A_CHECKLIST'] }}</h3>
+                <hr/>
+            </div>
+            <form class="flex flex-col gap-4">
+                <x-select :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="user" :items="[
+                    [ 'value' => 0, 'title' => 'user' ]
+                ]"/>
+                <x-button>{{ $LANG['ADD_CHECKLIST'] }}</x-button>
+            </form>
+
+            <div>
+                <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELETE_A_CHECKLIST'] }}</h3>
+                <hr/>
+            </div>
+            <form class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2">
+                @foreach (['thing 1', 'thing 2'] as $key => $value)
+                <div class="flex items-center p-2 bg-base-200 border border-base-300">
+                    <span>{{ $value }}</span>
+                    <span class="flex-grow flex justify-end">
+                        <x-icons.delete/>
+                    </span>
+                </div>
+                @endforeach
+                </div>
+            </form>
         </div>
     </x-tabs>
 
