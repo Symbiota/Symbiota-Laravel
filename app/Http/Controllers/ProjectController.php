@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class ProjectController extends Controller {
     public static function getProjectData(int $pid) {
         $project = DB::table('fmprojects')
-            ->select('pid', 'projname', 'managers', 'fullDescription', 'notes')
+            ->select('pid', 'projname', 'managers', 'fullDescription', 'notes', 'isPublic')
             ->where('pid', '=', $pid)
             ->first();
 
