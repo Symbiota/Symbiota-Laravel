@@ -19,7 +19,7 @@
         </div>
     </span>
 
-    <span x-ref="content" class="rounded-full cursor-pointer bg-neutral-100 w-fit">{{ $slot }}</span>
+    <span x-ref="content" class="rounded-full cursor-pointer w-fit">{{ $slot }}</span>
 
 
 </div>
