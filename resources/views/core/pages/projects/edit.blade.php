@@ -3,10 +3,16 @@
 @php
 global $LANG, $IS_KEY_MOD_IS_ACTIVE;
 include_once(legacy_path('/classes/utilities/Language.php'));
+include_once(legacy_path('/classes/ImInventories.php'));
+
 Language::load([
     'projects/index',
     'checklists/index'
 ]);
+
+$projManager = new ImInventories('write');
+$projManager->setPid($project->pid);
+
 @endphp
 
 <x-margin-layout>
@@ -21,27 +27,28 @@ Language::load([
     <div class="flex items-center">
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
         <div class="flex flex-grow justify-end gap-4">
-            <a href="{{ url('projects/' . $project->pid) }}">
-                <i class="flex-end fas fa-edit"></i>
+            <x-button href="{{ url('projects/' . $project->pid) }}">
                 Public View
-            </a>
+            </x-button>
         </div>
     </div>
 
-    <x-tabs :active="2" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
+    <x-tabs :active="0" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
         <div class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
                 <hr/>
             </div>
             <form class="flex flex-col gap-4">
-                <x-input id="projname" :label="$LANG['PROJNAME']" />
-                <x-input id="managers" :label="$LANG['MANAG']" />
-                <x-input id="fulldescription" :label="$LANG['DESCRIP']" />
-                <x-input id="notes" :label="$LANG['NOTES']" />
+                <x-input id="projname" :label="$LANG['PROJNAME']" :value="$project->projname"/>
+                <x-input id="managers" :label="$LANG['MANAG']" :value="$project->managers" />
+                <x-rich-editor id="fulldescription" :label="$LANG['DESCRIP']">
+                    {{ Purify::clean($project->fullDescription) }}
+                </x-rich-editor>
+                <x-input id="notes" :label="$LANG['NOTES']" :value="$project->notes"/>
                 <x-select id="ispublic" :defaultValue="$project->isPublic" :label="$LANG['ACCESS']" :items="[
-                    [ 'value' => 0, 'title' => $LANG['PRIVATE'] ],
-                    [ 'value' => 1, 'title' => $LANG['PUBLIC'] ]
+                    [ 'value' => 0, 'title' => $LANG['PRIVATE'], 'disabled' => false ],
+                    [ 'value' => 1, 'title' => $LANG['PUBLIC'], 'disabled' => false ]
                 ]" />
                 <x-button>{{ $LANG['SUBMITEDIT'] }}</x-button>
             </form>
@@ -83,8 +90,8 @@ Language::load([
                 <hr/>
             </div>
             <form class="flex flex-col gap-4">
-                <x-select id="user" :items="[
-                    [ 'value' => 0, 'title' => 'user' ]
+                <x-select class="w-full" id="user" :items="[
+                    [ 'value' => 0, 'title' => 'user', 'disabled' => false ]
                 ]"/>
                 <x-button>{{ $LANG['ADD_TO_MANAGER_LIST'] }}</x-button>
             </form>
@@ -95,7 +102,7 @@ Language::load([
                 <hr/>
             </div>
             <form class="flex flex-col gap-4">
-                <x-select :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="user" :items="[
+                <x-select class="w-full" :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="user" :items="[
                     [ 'value' => 0, 'title' => 'user' ]
                 ]"/>
                 <x-button>{{ $LANG['ADD_CHECKLIST'] }}</x-button>
@@ -107,9 +114,11 @@ Language::load([
             </div>
             <form class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
-                @foreach (['thing 1', 'thing 2'] as $key => $value)
+                @foreach ($checklists as $checklist)
                 <div class="flex items-center p-2 bg-base-200 border border-base-300">
-                    <span>{{ $value }}</span>
+                    <x-link href="{{ url('/checklists/' . $checklist->clid) }}">
+                        {{ $checklist->name }}
+                    </x-link>
                     <span class="flex-grow flex justify-end">
                         <x-icons.delete/>
                     </span>

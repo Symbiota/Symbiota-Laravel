@@ -83,8 +83,8 @@ Route::group(['prefix' => 'datasets'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/projects'], function () {
-    Route::get('/{pid}', [ProjectController::class, 'project']);
-    Route::get('/{pid}/edit', [ProjectController::class, 'editProject']);
+    Route::get('/{pid}', [ProjectController::class, 'project'])->where('pid', '[0-9]+');
+    Route::get('/{pid}/edit', [ProjectController::class, 'editProject'])->where('pid', '[0-9]+');
 });
 
 /*
