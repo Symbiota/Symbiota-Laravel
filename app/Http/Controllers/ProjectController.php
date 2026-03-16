@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller {
     public static function getProjectData(int $pid) {
@@ -26,6 +27,15 @@ class ProjectController extends Controller {
     }
 
     public static function EditProject(int $pid) {
-        return view('pages/projects/edit', self::getProjectData($pid));
+
+        if(auth()->check()) {
+            if(Gate::check('PROJ_ADMIN', $pid)) {
+                return view('pages/projects/edit', self::getProjectData($pid));
+            } else {
+                return response(view('pages/auth/access-denied'), 403);
+            }
+        } else {
+            return redirect('/login');
+        }
     }
 }
