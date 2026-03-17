@@ -42,7 +42,7 @@ Language::load([
     </x-text-label>
 
     @isset($project->fullDescription)
-    <p>{{ $project->fullDescription }}</p>
+    <div>{!! Purify::clean($project->fullDescription) !!}</div>
     @endisset
 
     @isset($project->notes)
