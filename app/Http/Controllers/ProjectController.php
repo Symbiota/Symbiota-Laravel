@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
 
 class ProjectController extends Controller {
     public static function getProjectData(int $pid) {
@@ -57,6 +58,15 @@ class ProjectController extends Controller {
         include_once(legacy_path('/classes/ImInventories.php'));
         $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
+
+        if(!$projManager->deleteProject(request('pid'))) {
+            $statusStr = $projManager->getErrorMessage();
+            $data = self::getProjectData($pid);
+            $data['delete_errors'] = new MessageBag([ $statusStr ]);
+
+            return view('pages/projects/edit', $data)
+                ->fragment('project_delete_form');
+        }
 
         return response(null, 204, [
             // TODO (Logan) Should this just be checklists  page,

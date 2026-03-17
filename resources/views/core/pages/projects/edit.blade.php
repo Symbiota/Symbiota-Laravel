@@ -58,7 +58,8 @@ $projManager->setPid($project->pid);
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELPROJECT'] }}</h3>
                 <hr/>
             </div>
-            <form hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
+            @fragment('project_delete_form')
+            <form id="project_delete_form" hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
                 <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
 
                 @csrf
@@ -72,6 +73,10 @@ $projManager->setPid($project->pid);
                 </div>
                 @endif
             </form>
+            @isset($delete_errors)
+            <x-errors :errors="$delete_errors"/>
+            @endisset
+            @endfragment
         </div>
         <div class="flex flex-col gap-4">
             <div>
