@@ -128,35 +128,4 @@ $projManager->setPid($project->pid);
             </form>
         </div>
     </x-tabs>
-
-
-    {{-- Todo Add Edit and when to show mapping button logic --}}
-    <div>
-        <x-text-label :label="$LANG['PROJMANAG']">
-            {{ $project->managers }}
-        </x-text-label>
-
-        @isset($project->fullDescription)
-            <p>{{ $project->fullDescription }}</p>
-        @endisset
-
-        @isset($project->notes)
-            <x-text-label :label="$LANG['NOTES']">{{ $project->notes }}</x-text-label>
-        @endisset
-
-        <div class="text-lg font-bold">Research checklists</div>
-        <div class="flex flex-col gap-2 pl-4">
-            @foreach ($checklists as $checklist)
-            <li>
-                <x-link
-                    href="{{legacy_url('/checklists/checklist.php?clid=' . $checklist->clid . '&pid=' . $project->pid) }}">{{$checklist->name}}</x-link>
-                |
-                {{-- Todo find conditions for when this would not exist if any --}}
-                <x-link
-                    href="{{legacy_url('/ident/key.php?clid=' . $checklist->clid . '&pid=' . $project->pid . '&taxon=All+Species')}}">
-                    Key<i class="pl-1 text-base-content fa-solid fa-key"></i></x-link>
-            </li>
-            @endforeach
-        </div>
-    </div>
 </x-margin-layout>
