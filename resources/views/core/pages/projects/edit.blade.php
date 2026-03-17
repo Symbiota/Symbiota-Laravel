@@ -58,16 +58,19 @@ $projManager->setPid($project->pid);
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELPROJECT'] }}</h3>
                 <hr/>
             </div>
-            <form class="flex flex-col gap-4">
-                <x-button variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
+            <form hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
+                <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
 
+                @csrf
+                @if($project->managers || count($checklists))
                 <div class="bg-warning text-warning-content p-2 rounded-md">
                     @if($project->managers)
                     {{ $LANG['DELCONDITION1'] }}
-                    @elseif($checklists)
+                    @elseif(count($checklists) > 0)
                     {{ $LANG['DELCONDITION2'] }}
                     @endif
                 </div>
+                @endif
             </form>
         </div>
         <div class="flex flex-col gap-4">

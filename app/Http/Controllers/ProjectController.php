@@ -26,6 +26,10 @@ class ProjectController extends Controller {
         return view('pages/project', self::getProjectData($pid));
     }
 
+    public static function publicProjects() {
+        return view('pages/projects');
+    }
+
     public static function create(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
         $projManager = new \ImInventories('write');
@@ -54,12 +58,10 @@ class ProjectController extends Controller {
         $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
-	    // submitDelete
-        if(!$projManager->deleteProject(request('pid'))) {
-		    $statusStr = $projManager->getErrorMessage();
-        }
-
-        return self::projectAdmin($pid);
+        return response(null, 204, [
+            // TODO (Logan) Should this just be checklists  page,
+            'HX-Location' => '/projects',
+        ]);
     }
 
     public static function removeUser(int $pid, int $uid) {
