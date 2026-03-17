@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller {
     public static function getProjectData(int $pid) {
@@ -27,9 +26,9 @@ class ProjectController extends Controller {
         return view('pages/project', self::getProjectData($pid));
     }
 
-    public static function  create(int $pid) {
+    public static function create(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // addNewProject
@@ -41,7 +40,7 @@ class ProjectController extends Controller {
 
     public static function update(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // submitEdit
@@ -52,7 +51,7 @@ class ProjectController extends Controller {
 
     public static function delete(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // submitDelete
@@ -65,7 +64,7 @@ class ProjectController extends Controller {
 
     public static function removeUser(int $pid, int $uid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // deluid
@@ -78,7 +77,7 @@ class ProjectController extends Controller {
 
     public static function addUser(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
         //Add to Manager List
@@ -91,7 +90,7 @@ class ProjectController extends Controller {
 
     public static function addChecklist(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // Add Checklist
@@ -104,7 +103,7 @@ class ProjectController extends Controller {
 
     public static function removeChecklist(int $pid) {
         include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new ImInventories('write');
+        $projManager = new \ImInventories('write');
         $projManager->setPid($pid);
 
 	    // Delete Checklist
