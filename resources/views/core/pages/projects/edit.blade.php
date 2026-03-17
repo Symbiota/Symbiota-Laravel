@@ -39,7 +39,8 @@ $projManager->setPid($project->pid);
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
                 <hr/>
             </div>
-            <form class="flex flex-col gap-4">
+            <form method="post" action="{{ url('projects/' . $project->pid . '/edit') }}" class="flex flex-col gap-4">
+                @csrf
                 <x-input id="projname" :label="$LANG['PROJNAME']" :value="$project->projname"/>
                 <x-input id="managers" :label="$LANG['MANAG']" :value="$project->managers" />
                 <x-rich-editor id="fulldescription" :label="$LANG['DESCRIP']">
