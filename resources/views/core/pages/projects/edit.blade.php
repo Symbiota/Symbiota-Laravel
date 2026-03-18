@@ -75,14 +75,14 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
             </div>
             @fragment('project_delete_form')
             <form id="project_delete_form" hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
-                <x-button :disabled="$project->managers || !empty($checklists)" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
+                <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
 
                 @csrf
-                @if($project->managers || !empty($checklists) > 0)
+                @if($project->managers || count($checklists) > 0)
                 <div class="bg-warning text-warning-content p-2 rounded-md">
                     @if($project->managers)
                     {{ $LANG['DELCONDITION1'] }}
-                    @elseif(!empty($checklists))
+                    @elseif(count($checklists) > 0)
                     {{ $LANG['DELCONDITION2'] }}
                     @endif
                 </div>
