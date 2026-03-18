@@ -94,7 +94,7 @@
                     href="{{ legacy_url('/glossary/index.php') }}">Glossary</x-link>
             </li>
             <li><x-link
-                    href="{{ url('/taxa/taxonomy/taxonomydisplay.php') }}">Taxonomic
+                    href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">Taxonomic
                     Tree Viewer</x-link></li>
             <li><x-link
                     href="{{ legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php') }}">Taxonomy
