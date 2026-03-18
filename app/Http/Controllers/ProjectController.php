@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\UserRole;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
 class ProjectController extends Controller {
-    public static function getProjectData(int $pid) {
-        $project = DB::table('fmprojects')
-            ->select('pid', 'projname', 'managers', 'fullDescription', 'notes', 'isPublic')
-            ->where('pid', '=', $pid)
+    private static function getProjectData(int $pid) {
+        $project = Project::query()
+            ->where('pid', $pid)
             ->first();
 
-        $checklists = DB::table('fmchecklists as c')
-            ->select('link.pid', 'c.defaultSettings', 'c.clid', 'c.name', 'mapChecklist')
-            ->leftJoin('fmchklstprojlink as link', 'link.clid', '=', 'c.clid')
-            ->where('link.pid', '=', $pid)
-            ->orderByRaw('-link.pid DESC')
-            ->get();
+        $checklists = $project->checklists();
 
         return ['project' => $project, 'checklists' => $checklists];
     }
@@ -34,7 +28,8 @@ class ProjectController extends Controller {
     }
 
     public static function project(int $pid) {
-        return view('pages/project', self::getProjectData($pid));
+        $data = self::getProjectData($pid);
+        return view('pages/project', $data);
     }
 
     public static function publicProjects() {
@@ -61,7 +56,6 @@ class ProjectController extends Controller {
     public static function create(int $pid) {
         $projManager = self::getProjectManager($pid);
 
-	    // addNewProject
 		$pid = $projManager->insertProject(request()->all());
 		if(!$pid) $statusStr = $projManager->getErrorMessage();
 
@@ -70,8 +64,6 @@ class ProjectController extends Controller {
 
     public static function update(int $pid) {
         $projManager = self::getProjectManager($pid);
-
-	    // submitEdit
 		$projManager->updateProject(request()->all());
 
         return self::projectAdmin($pid);
@@ -95,8 +87,6 @@ class ProjectController extends Controller {
     public static function removeUser(int $pid, int $uid) {
         $projManager = self::getProjectManager($pid);
         $error = false;
-
-	    // deluid
 		if(!$projManager->deleteUserRole('ProjAdmin', $pid, request('uid'))) {
 			$error = $projManager->getErrorMessage();
 		}
