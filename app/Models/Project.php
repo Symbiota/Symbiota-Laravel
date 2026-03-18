@@ -13,7 +13,7 @@ class Project extends Model {
     protected $fillable = [
         'projname',
         'managers',
-        'fullDescription',
+        'fulldescription',
         'notes',
         'isPublic',
     ];
