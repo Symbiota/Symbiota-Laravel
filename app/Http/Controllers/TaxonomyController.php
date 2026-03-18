@@ -162,4 +162,12 @@ class TaxonomyController extends Controller {
             'media' => $taxa_media,
         ]);
     }
+
+    public static function createTaxon() {
+        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
+
+        return view('pages/taxon/create', [
+            'kingdoms' => $kingdoms,
+        ]);
+    }
 }
