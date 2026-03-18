@@ -19,10 +19,13 @@ class ProjectController extends Controller {
     }
 
     /* Wrapper to reuse setup of legacy project manager. This should get remove when the models system is integrated into projects */
-    private static function getProjectManager(int $pid) {
+    private static function getProjectManager(?int $pid = null) {
         include_once legacy_path('/classes/ImInventories.php');
         $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+
+        if($pid) {
+            $projManager->setPid($pid);
+        }
 
         return $projManager;
     }
@@ -50,19 +53,26 @@ class ProjectController extends Controller {
         }
     }
 
-    public static function projectAdmin(int $pid) {
-        return self::projectAdminView($pid);
+    public static function projectCreate() {
+        return view('pages/projects/create');
     }
 
-    public static function create(int $pid) {
-        $projManager = self::getProjectManager($pid);
-
+    public static function create() {
+        $projManager = self::getProjectManager();
         $pid = $projManager->insertProject(request()->all());
-        if (! $pid) {
-            $statusStr = $projManager->getErrorMessage();
+        if(!$pid) {
+            return view('pages/projects/create', [
+                'errors' => new MessageBag([$projManager->getErrorMessage()])
+            ]);
+        } else {
+            return response(null, 201, [
+                'HX-Location' => '/projects/' . $pid . '/edit',
+            ]);
         }
+    }
 
-        return self::projectAdmin($pid);
+    public static function projectAdmin(int $pid) {
+        return self::projectAdminView($pid);
     }
 
     public static function update(int $pid) {

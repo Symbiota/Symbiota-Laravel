@@ -18,6 +18,10 @@ class Project extends Model {
         'isPublic',
     ];
 
+    protected $attributes = [
+        'isPublic' => 0
+    ];
+
     public function checklists() {
         return DB::table('fmchecklists as c')
             ->select('link.pid', 'c.defaultSettings', 'c.clid', 'c.name', 'mapChecklist')
