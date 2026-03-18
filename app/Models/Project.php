@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -6,13 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 class Project extends Model {
     protected $table = 'fmprojects';
+
     protected $primaryKey = 'pid';
+
     protected $fillable = [
         'projname',
         'managers',
         'fullDescription',
         'notes',
-        'isPublic'
+        'isPublic',
     ];
 
     public function checklists() {

@@ -69,6 +69,7 @@ class AppServiceProvider extends ServiceProvider {
 
         Gate::define('PROJ_VIEW', function (User $user, $pid) {
             $project = Project::where('pid', $pid)->first();
+
             return $project->isPublic || $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,
                 UserRole::PROJ_ADMIN => $pid,
