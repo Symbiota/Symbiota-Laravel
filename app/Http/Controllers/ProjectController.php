@@ -23,7 +23,7 @@ class ProjectController extends Controller {
         include_once legacy_path('/classes/ImInventories.php');
         $projManager = new \ImInventories('write');
 
-        if($pid) {
+        if ($pid) {
             $projManager->setPid($pid);
         }
 
@@ -60,9 +60,9 @@ class ProjectController extends Controller {
     public static function create() {
         $projManager = self::getProjectManager();
         $pid = $projManager->insertProject(request()->all());
-        if(!$pid) {
+        if (! $pid) {
             return view('pages/projects/create', [
-                'errors' => new MessageBag([$projManager->getErrorMessage()])
+                'errors' => new MessageBag([$projManager->getErrorMessage()]),
             ]);
         } else {
             return response(null, 201, [

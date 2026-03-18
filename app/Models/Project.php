@@ -19,7 +19,7 @@ class Project extends Model {
     ];
 
     protected $attributes = [
-        'isPublic' => 0
+        'isPublic' => 0,
     ];
 
     public function checklists() {
