@@ -33,6 +33,7 @@ import 'tinymce/skins/content/default/content.js';
 
 /* Initialize TinyMCE */
 export function render () {
+  tinymce.remove();
   tinymce.init({
     selector: 'textarea[data-mce-editor="true"]',
     plugins: 'advlist code emoticons link lists table',
