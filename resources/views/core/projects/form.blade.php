@@ -27,7 +27,7 @@
 
 <x-select
     id="ispublic"
-    :defaultValue="$project->isPublic"
+    :defaultValue="$project->ispublic"
     :label="$LANG['ACCESS']"
     :items="[
         [ 'value' => 0, 'title' => $LANG['PRIVATE'], 'disabled' => false ],

@@ -15,11 +15,11 @@ class Project extends Model {
         'managers',
         'fulldescription',
         'notes',
-        'isPublic',
+        'ispublic',
     ];
 
     protected $attributes = [
-        'isPublic' => 0,
+        'ispublic' => 0,
     ];
 
     public function checklists() {
