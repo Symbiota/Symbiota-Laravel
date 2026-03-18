@@ -120,23 +120,29 @@ class ProjectController extends Controller {
 
     public static function addChecklist(int $pid) {
         $projManager = self::getProjectManager($pid);
+        $addClid = request('clid');
+        $error = null;
 
-	    // Add Checklist
-		if(!$projManager->insertChecklistProjectLink(request('clid'))){
-			$statusStr = $projManager->getErrorMessage();
-		}
+        if(!$addClid) {
+			$error = new MessageBag(['A checklist must be selected']);
+        } else if(!$projManager->insertChecklistProjectLink($addClid)) {
+			$error = new MessageBag([ $projManager->getErrorMessage() ]) ;
+        }
 
-        return self::projectAdmin($pid);
+        return response(self::projectAdminView($pid, [ 'checklist_form_errors' => $error ], 'checklists'), 201);
     }
 
     public static function removeChecklist(int $pid) {
         $projManager = self::getProjectManager($pid);
+        $delClid = request('clid');
+        $error = null;
 
-	    // Delete Checklist
-		if(!$projManager->deleteChecklistProjectLink(request('clid'))){
-			$statusStr = $projManager->getErrorMessage();
-		}
+        if(!$delClid) {
+			$error = new MessageBag(['A checklist must be selected']);
+        } else if(!$projManager->deleteChecklistProjectLink(request('clid'))) {
+			$error = new MessageBag([ $projManager->getErrorMessage() ]) ;
+        }
 
-        return self::projectAdmin($pid);
+        return response(self::projectAdminView($pid, [ 'checklist_form_errors' => $error ], 'checklists'));
     }
 }

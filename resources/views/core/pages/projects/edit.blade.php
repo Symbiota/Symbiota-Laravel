@@ -13,13 +13,18 @@ Language::load([
 $projManager = new ImInventories('write');
 $projManager->setPid($project->pid);
 
-
 $userItems = [];
 foreach($projManager->getUserArr() as $uid => $userName)  {
     $userItems[] = ['value' => $uid, 'title' => $userName, 'disabled' => false ];
 }
 
 $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'));
+
+$checklistItems = [];
+foreach($projManager->getChecklistArr() as $clid => $checklist) {
+    $checklistItems[] = ['value' => $clid, 'title' => $checklist['name'], 'disabled' => false ];
+}
+
 @endphp
 
 <x-margin-layout>
@@ -42,7 +47,7 @@ $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'
 
     <x-errors :errors="$errors ?? []"/>
 
-    <x-tabs :active="1" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
+    <x-tabs :active="0" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
         <div class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
@@ -85,8 +90,9 @@ $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'
             <x-errors :errors="$delete_errors ?? []"/>
             @endfragment
         </div>
+
+        <div id="inventory_managers" class="flex flex-col gap-4" x-cloak>
         @fragment('managers')
-        <div id="inventory_managers" class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['INVENTORY_PROJECT_MANAGERS'] }}</h3>
                 <hr/>
@@ -98,7 +104,7 @@ $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'
             <div class="flex items-center p-2 bg-base-200 border border-base-300">
                 <span>{{ $name }}</span>
                 <span class="flex-grow flex justify-end">
-                    <x-icons.delete hx-delete="{{ url('projects/' . $project->pid . '/managers/' . $uid) }}" hx-target="#inventory_managers" hx-include="input[name='_token']" hx-swap="outerHTML"/>
+                    <x-icons.delete hx-delete="{{ url('projects/' . $project->pid . '/managers/' . $uid) }}" hx-target="#inventory_managers" hx-include="input[name='_token']"/>
                 </span>
             </div>
             @endforeach
@@ -108,23 +114,28 @@ $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_NEW_MANAGER'] }}</h3>
                 <hr/>
             </div>
-            <form hx-post="{{ url('projects/' . $project->pid . '/managers') }}" class="flex flex-col gap-4" hx-target="#inventory_managers" hx-swap="outerHTML">
+            <form hx-post="{{ url('projects/' . $project->pid . '/managers') }}" class="flex flex-col gap-4" hx-target="#inventory_managers">
                 @csrf
                 <x-select class="w-full" id="uid" :items="$userItems"/>
                 <x-button>{{ $LANG['ADD_TO_MANAGER_LIST'] }}</x-button>
             </form>
             <x-errors :errors="$add_user_errors ?? []"/>
-        </div>
         @endfragment
-        <div class="flex flex-col gap-4">
+        </div>
+
+        <div id="inventory_checklists" class="flex flex-col gap-4" x-cloak>
+        @fragment('checklists')
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_A_CHECKLIST'] }}</h3>
                 <hr/>
             </div>
-            <form class="flex flex-col gap-4">
-                <x-select class="w-full" :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="user" :items="[
-                    [ 'value' => 0, 'title' => 'user' ]
-                ]"/>
+
+            <form class="flex flex-col gap-4"
+                hx-post="{{ url('projects/' . $project->pid . '/checklists') }}"
+                hx-target="#inventory_checklists"
+            >
+                @csrf
+                <x-select class="w-full" :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="clid" :items="$checklistItems"/>
                 <x-button>{{ $LANG['ADD_CHECKLIST'] }}</x-button>
             </form>
 
@@ -132,20 +143,23 @@ $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELETE_A_CHECKLIST'] }}</h3>
                 <hr/>
             </div>
-            <form class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
+
+            <div class="flex flex-col gap-2">
                 @foreach ($checklists as $checklist)
                 <div class="flex items-center p-2 bg-base-200 border border-base-300">
                     <x-link href="{{ url('/checklists/' . $checklist->clid) }}">
                         {{ $checklist->name }}
                     </x-link>
                     <span class="flex-grow flex justify-end">
-                        <x-icons.delete/>
+                        @csrf
+                        <x-icons.delete hx-delete="{{ url('projects/' . $project->pid . '/checklists/' . $checklist->clid) }}" hx-target="#inventory_checklists" hx-include="input[name='_token']" />
                     </span>
                 </div>
                 @endforeach
-                </div>
-            </form>
+            </div>
+
+            <x-errors :errors="$checklist_form_errors ?? []"/>
+        @endfragment
         </div>
     </x-tabs>
 </x-margin-layout>
