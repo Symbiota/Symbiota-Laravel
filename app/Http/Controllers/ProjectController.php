@@ -103,6 +103,7 @@ class ProjectController extends Controller {
         $addUid = request('uid');
 
         if (! $addUid) {
+            // TODO (Logan) translate
             $error = 'A user must be selected';
         } elseif (! $projManager->insertUserRole($addUid, UserRole::PROJ_ADMIN, 'fmprojects', $pid, request()->user()->uid)) {
             $error = $projManager->getErrorMessage();
@@ -117,6 +118,7 @@ class ProjectController extends Controller {
         $error = null;
 
         if (! $addClid) {
+            // TODO (Logan) translate
             $error = new MessageBag(['A checklist must be selected']);
         } elseif (! $projManager->insertChecklistProjectLink($addClid)) {
             $error = new MessageBag([$projManager->getErrorMessage()]);
@@ -131,6 +133,7 @@ class ProjectController extends Controller {
         $error = null;
 
         if (! $delClid) {
+            // TODO (Logan) translate
             $error = new MessageBag(['A checklist must be selected']);
         } elseif (! $projManager->deleteChecklistProjectLink(request('clid'))) {
             $error = new MessageBag([$projManager->getErrorMessage()]);

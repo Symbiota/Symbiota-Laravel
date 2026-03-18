@@ -30,8 +30,8 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
 <x-margin-layout>
     <div>
         <x-breadcrumbs :items="[
-        ['title' => 'Home', 'href' => url('') ],
-        ['title' => 'Species Inventories', 'href' => url('/checklists') ],
+        ['title' => $LANG['NAV_HOME'], 'href' => url('') ],
+        ['title' => $LANG['SPECIES_INVENTORIES'], 'href' => url('/checklists') ],
         $project->projname
     ]" />
     </div>
@@ -40,6 +40,7 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
         <div class="flex flex-grow justify-end gap-4">
             <x-button href="{{ url('projects/' . $project->pid) }}">
+                {{-- TODO (Logan) translate --}}
                 Public View
             </x-button>
         </div>
