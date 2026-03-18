@@ -168,11 +168,13 @@ class TaxonomyController extends Controller {
         $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->orderBy('rankid')->orderBy('rankname', 'desc')->get();
         // <option value="×">×</option>
         $indContent = [['title'=>"", 'value'=>"", 'disabled'=>false], ['title'=>'×', 'value'=>'×', 'disabled'=>false]];
+        $securityOptions = [['title'=>'No Security', 'value'=>0, 'disabled'=>false], ['title'=>'Hide Locality Details', 'value'=>1, 'disabled'=>false]];
         !empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title'=>'†', 'value'=>'†', 'disabled'=>false] : null; // @TODO confirm that GLOBALS can be accessed this way
         return view('pages/taxon/create', [
             'kingdoms' => $kingdoms,
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
+            'securityOptions' => $securityOptions,
         ]);
     }
 }
