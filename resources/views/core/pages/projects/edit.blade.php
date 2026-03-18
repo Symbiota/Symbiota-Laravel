@@ -13,6 +13,13 @@ Language::load([
 $projManager = new ImInventories('write');
 $projManager->setPid($project->pid);
 
+
+$userItems = [];
+foreach($projManager->getUserArr() as $uid => $userName)  {
+    $userItems[] = ['value' => $uid, 'title' => $userName, 'disabled' => false ];
+}
+
+$managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'));
 @endphp
 
 <x-margin-layout>
@@ -33,7 +40,9 @@ $projManager->setPid($project->pid);
         </div>
     </div>
 
-    <x-tabs :active="0" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
+    <x-errors :errors="$errors ?? []"/>
+
+    <x-tabs :active="1" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
         <div class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
@@ -60,35 +69,36 @@ $projManager->setPid($project->pid);
             </div>
             @fragment('project_delete_form')
             <form id="project_delete_form" hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
-                <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
+                <x-button :disabled="$project->managers || !empty($checklists)" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
 
                 @csrf
-                @if($project->managers || count($checklists))
+                @if($project->managers || !empty($checklists) > 0)
                 <div class="bg-warning text-warning-content p-2 rounded-md">
                     @if($project->managers)
                     {{ $LANG['DELCONDITION1'] }}
-                    @elseif(count($checklists) > 0)
+                    @elseif(!empty($checklists))
                     {{ $LANG['DELCONDITION2'] }}
                     @endif
                 </div>
                 @endif
             </form>
-            @isset($delete_errors)
-            <x-errors :errors="$delete_errors"/>
-            @endisset
+            <x-errors :errors="$delete_errors ?? []"/>
             @endfragment
         </div>
-        <div class="flex flex-col gap-4">
+        @fragment('managers')
+        <div id="inventory_managers" class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['INVENTORY_PROJECT_MANAGERS'] }}</h3>
                 <hr/>
             </div>
+            @csrf
+
             <div class="flex flex-col gap-2">
-            @foreach (['thing 1', 'thing 2'] as $key => $value)
+            @foreach ($managerArr as $uid => $name)
             <div class="flex items-center p-2 bg-base-200 border border-base-300">
-                <span>{{ $value }}</span>
+                <span>{{ $name }}</span>
                 <span class="flex-grow flex justify-end">
-                    <x-icons.delete/>
+                    <x-icons.delete hx-delete="{{ url('projects/' . $project->pid . '/managers/' . $uid) }}" hx-target="#inventory_managers" hx-include="input[name='_token']" hx-swap="outerHTML"/>
                 </span>
             </div>
             @endforeach
@@ -98,13 +108,14 @@ $projManager->setPid($project->pid);
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_NEW_MANAGER'] }}</h3>
                 <hr/>
             </div>
-            <form class="flex flex-col gap-4">
-                <x-select class="w-full" id="user" :items="[
-                    [ 'value' => 0, 'title' => 'user', 'disabled' => false ]
-                ]"/>
+            <form hx-post="{{ url('projects/' . $project->pid . '/managers') }}" class="flex flex-col gap-4" hx-target="#inventory_managers" hx-swap="outerHTML">
+                @csrf
+                <x-select class="w-full" id="uid" :items="$userItems"/>
                 <x-button>{{ $LANG['ADD_TO_MANAGER_LIST'] }}</x-button>
             </form>
+            <x-errors :errors="$add_user_errors ?? []"/>
         </div>
+        @endfragment
         <div class="flex flex-col gap-4">
             <div>
                 <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_A_CHECKLIST'] }}</h3>

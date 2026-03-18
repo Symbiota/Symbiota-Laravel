@@ -85,8 +85,12 @@ Route::group(['prefix' => 'datasets'], function () {
 Route::group(['prefix' => '/projects'], function () {
     Route::get('/', [ProjectController::class, 'publicProjects'])->where('pid', '[0-9]+');
     Route::get('/{pid}', [ProjectController::class, 'project'])->where('pid', '[0-9]+');
-    Route::post('/{pid}/edit', [ProjectController::class, 'update'])->where('pid', '[0-9]+');
-    Route::delete('/{pid}/edit', [ProjectController::class, 'delete'])->where('pid', '[0-9]+');
+
+    /* Admin Routes */
+    Route::post('/{pid}/edit', [ProjectController::class, 'update'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::delete('/{pid}/edit', [ProjectController::class, 'delete'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::post('/{pid}/managers', [ProjectController::class, 'addUser'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::delete('/{pid}/managers/{uid}', [ProjectController::class, 'removeUser'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
     Route::get('/{pid}/edit', [ProjectController::class, 'projectAdmin'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
 });
 

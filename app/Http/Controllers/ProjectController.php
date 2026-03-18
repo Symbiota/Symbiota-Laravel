@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserRole;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
@@ -23,6 +24,15 @@ class ProjectController extends Controller {
         return ['project' => $project, 'checklists' => $checklists];
     }
 
+    /* Wrapper to reuse setup of legacy project manager. This should get remove when the models system is integrated into projects */
+    private static function getProjectManager(int $pid) {
+        include_once(legacy_path('/classes/ImInventories.php'));
+        $projManager = new \ImInventories('write');
+        $projManager->setPid($pid);
+
+        return $projManager;
+    }
+
     public static function project(int $pid) {
         return view('pages/project', self::getProjectData($pid));
     }
@@ -31,10 +41,25 @@ class ProjectController extends Controller {
         return view('pages/projects');
     }
 
+    public static function projectAdminView(int $pid, Arrayable|Array $data = [], ?string $fragment = null) {
+        $viewData = [
+            ...self::getProjectData($pid),
+            ...$data
+        ];
+
+        if($fragment) {
+            return view('pages/projects/edit', $viewData)->fragment($fragment);
+        } else {
+            return view('pages/projects/edit', $viewData);
+        }
+    }
+
+    public static function projectAdmin(int $pid) {
+        return self::projectAdminView($pid);
+    }
+
     public static function create(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
 
 	    // addNewProject
 		$pid = $projManager->insertProject(request()->all());
@@ -44,9 +69,7 @@ class ProjectController extends Controller {
     }
 
     public static function update(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
 
 	    // submitEdit
 		$projManager->updateProject(request()->all());
@@ -55,17 +78,12 @@ class ProjectController extends Controller {
     }
 
     public static function delete(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
 
         if(!$projManager->deleteProject(request('pid'))) {
-            $statusStr = $projManager->getErrorMessage();
-            $data = self::getProjectData($pid);
-            $data['delete_errors'] = new MessageBag([ $statusStr ]);
-
-            return view('pages/projects/edit', $data)
-                ->fragment('project_delete_form');
+            return self::projectAdminView($pid, [
+                'delete_errors' =>  new MessageBag([ $projManager->getErrorMessage() ])
+            ], 'project_delete_form');
         }
 
         return response(null, 204, [
@@ -75,35 +93,33 @@ class ProjectController extends Controller {
     }
 
     public static function removeUser(int $pid, int $uid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
+        $error = false;
 
 	    // deluid
 		if(!$projManager->deleteUserRole('ProjAdmin', $pid, request('uid'))) {
-			$statusStr = $projManager->getErrorMessage();
+			$error = $projManager->getErrorMessage();
 		}
 
-        return self::projectAdmin($pid);
+        return self::projectAdminView($pid, [ 'add_user_errors' => $error? new MessageBag([ $error ]): null ], 'managers');
     }
 
     public static function addUser(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
+        $error = false;
+        $addUid = request('uid');
 
-        //Add to Manager List
-        if(!$projManager->insertUserRole(request('uid'), UserRole::PROJ_ADMIN, 'fmprojects', $pid, request()->user()->uid)) {
-            $statusStr = $projManager->getErrorMessage();
+        if(!$addUid) {
+            $error = 'A user must be selected';
+        } else if(!$projManager->insertUserRole($addUid, UserRole::PROJ_ADMIN, 'fmprojects', $pid, request()->user()->uid)) {
+            $error = $projManager->getErrorMessage();
         }
 
-        return self::projectAdmin($pid);
+        return response(self::projectAdminView($pid, [ 'add_user_errors' => $error? new MessageBag([ $error ]): null ], 'managers'), 201);
     }
 
     public static function addChecklist(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
 
 	    // Add Checklist
 		if(!$projManager->insertChecklistProjectLink(request('clid'))){
@@ -114,9 +130,7 @@ class ProjectController extends Controller {
     }
 
     public static function removeChecklist(int $pid) {
-        include_once(legacy_path('/classes/ImInventories.php'));
-        $projManager = new \ImInventories('write');
-        $projManager->setPid($pid);
+        $projManager = self::getProjectManager($pid);
 
 	    // Delete Checklist
 		if(!$projManager->deleteChecklistProjectLink(request('clid'))){
@@ -124,10 +138,5 @@ class ProjectController extends Controller {
 		}
 
         return self::projectAdmin($pid);
-    }
-
-    // rename to adminView
-    public static function projectAdmin(int $pid) {
-        return view('pages/projects/edit', self::getProjectData($pid));
     }
 }
