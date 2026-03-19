@@ -38,26 +38,35 @@
             },
             init() {
                 this.$nextTick(() => { // manually adding listeners after rankid is rendered worked when referencing the onChange in the select component did not. Also tried $watch but that did not work either.
-                    const selectEl = document.getElementById('rankid');
-                    if (selectEl) {
-                        selectEl.addEventListener('change', (e) => {
-                            this.rankid = e.target.value;
-                            this.updateLabels();
-                        });
-                        selectEl.addEventListener('input', (e) => {
-                            this.rankid = e.target.value;
-                            this.updateLabels();
-                        });
-                    }
-                });
-            }
+                            const selectEl = document.getElementById('rankid');
+                            if (selectEl) {
+                                selectEl.addEventListener('change', (e) => {
+                                    this.rankid = e.target.value;
+                                    this.updateLabels();
+                                });
+                                selectEl.addEventListener('input', (e) => {
+                                    this.rankid = e.target.value;
+                                    this.updateLabels();
+                                });
+                            }
+        
+                            const parentNameEl = document.getElementById('parentname');
+                            if (parentNameEl) {
+                                console.log("deleteMe got here a1)");
+        parentNameEl.addEventListener('taxa-selected', (e)=> {
+        const selectedId = e.detail.selection.id;
+        console.log('Selected parent taxon ID:', selectedId);
+        });
+        }
+        });
+        }
         }">
         <h1 class="text-4xl font-bold">Add New Taxon
         </h1>
         <div id="sciname-preview" class="mt-4">
             <h1 class="text-2xl font-bold">Sciname will be saved as:
                 <span class="text-primary"
-                    x-text="unit1Label + ' ' + this.$refs.unitname1?.value + (this.$refs.unitname2?.value ? ' ' + this.$refs.unitname2.value : '') + (this.$refs.unitname3?.value ? ' ' + this.$refs.unitind3?.value + ' ' + this.$refs.unitname3.value : '')"></span>
+                    x-text="unit1Label + ' ' + this.$refs?.unitname1?.value + (this.$refs?.unitname2?.value ? ' ' + this.$refs?.unitname2.value : '') + (this.$refs?.unitname3?.value ? ' ' + this.$refs?.unitind3?.value + ' ' + this.$refs?.unitname3.value : '')"></span>
             </h1>
         </div>
         <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"

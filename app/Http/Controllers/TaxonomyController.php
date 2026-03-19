@@ -166,9 +166,10 @@ class TaxonomyController extends Controller {
     public static function createTaxon() {
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->orderBy('rankid')->orderBy('rankname', 'desc')->get();
-        $indContent = [['title'=>"", 'value'=>"", 'disabled'=>false], ['title'=>'×', 'value'=>'×', 'disabled'=>false]];
-        $securityOptions = [['title'=>'No Security', 'value'=>0, 'disabled'=>false], ['title'=>'Hide Locality Details', 'value'=>1, 'disabled'=>false]];
-        !empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title'=>'†', 'value'=>'†', 'disabled'=>false] : null; // @TODO confirm that GLOBALS can be accessed this way
+        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
+        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
+        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
+
         return view('pages/taxon/create', [
             'kingdoms' => $kingdoms,
             'allTaxonRanks' => $allTaxonRanks,
@@ -177,7 +178,7 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function store(){
-            // @TODO implement taxon creation
+    public static function store() {
+        // @TODO implement taxon creation
     }
 }
