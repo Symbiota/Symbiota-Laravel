@@ -71,7 +71,7 @@
                     x-text="unit1Label + ' ' + unitname1.value + (unitname2.value ? ' ' + unitname2.value : '') + (unitname3.value ? ' ' + unitind3.value + ' ' + unitname3.value : '')"></span>
             </h1>
         </div>
-        <form class="mt-4 flex flex-col items-start gap-4 w-full max-w-4xl">
+        <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl">
             <div class="w-3/4">
                 <fieldset class="border border-base-300 rounded-md p-4 mb-4">
                     <legend class="text-2xl font-semibold">Optional Quick Parser
@@ -81,20 +81,22 @@
                     <x-button class="mt-2">Parse</x-button>
                 </fieldset>
             </div>
-            <fieldset class="border border-base-300 rounded-md p-4 mb-4">
+            <fieldset class="w-full border border-base-300 rounded-md p-4 mb-4">
 
                 <legend class="text-2xl font-semibold">Add New Taxon</legend>
 
-                <x-select label="Taxon Rank" name="rankid" id="rankid"
-                    x-model="rankid" :items="$allTaxonRanks
-                        ->map(
-                            fn($r) => [
-                                'title' => $r->rankname,
-                                'value' => $r->rankid,
-                                'disabled' => false,
-                            ],
-                        )
-                        ->toArray()" />
+                <div class="w-3/4">
+                    <x-select label="Taxon Rank" name="rankid" id="rankid"
+                        x-model="rankid" :items="$allTaxonRanks
+                            ->map(
+                                fn($r) => [
+                                    'title' => $r->rankname,
+                                    'value' => $r->rankid,
+                                    'disabled' => false,
+                                ],
+                            )
+                            ->toArray()" />
+                </div>
                 <div id="unit1" class="flex items-center gap-2 mb-4">
                     <div class="flex flex-col">
                         <label class="text mb-1" for="unitind1-toggle"
@@ -156,9 +158,10 @@
                     <x-input label="Source" name="source" id="source"
                         value="" />
                 </div>
-                <x-select class="m-2" label="Locality Security"
-                    name="securitystatus" id="securitystatus"
-                    :items="$securityOptions" />
+                <div class="w-3/4">
+                    <x-select label="Locality Security" name="securitystatus"
+                        id="securitystatus" :items="$securityOptions" />
+                </div>
                 <fieldset class="border border-base-300 rounded-md p-4 mb-4">
                     <legend class="text-2xl font-semibold">Acceptance Status
                     </legend>
