@@ -6,6 +6,7 @@ use App\Models\UserRole;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
 
 class ChecklistController extends Controller {
     public static function getChecklistData(int $clid) {
@@ -136,8 +137,52 @@ class ChecklistController extends Controller {
     }
 
     public static function dynamicMapPage(Request $request) {
-
         return view('pages/checklist/dynamic-builder');
+    }
+
+    public static function buildDynChecklist(Request $request) {
+        global $LANG, $SERVER_ROOT, $DYN_CHECKLIST_RADIUS;
+        include_once(legacy_path('/classes/utilities/Language.php'));
+        include_once(legacy_path('/classes/DynamicChecklistManager.php'));
+
+        $error = null;
+
+        $lat = filter_var(request('lat'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $lng = filter_var(request('lng'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $radius = filter_var(request('radius'), FILTER_SANITIZE_NUMBER_INT);
+        $radiusUnits = request('radiusunits') === 'mi'? 'mi': 'km';
+        $dynamicRadius = $DYN_CHECKLIST_RADIUS ?? 10;
+        $taxa = request('taxa');
+        $tid = filter_var(request('tid'), FILTER_SANITIZE_NUMBER_INT);
+        $interface = request('interface') === 'checklist'? 'checklist': 'key';
+
+        $dynClManager = new \DynamicChecklistManager();
+
+        if($taxa && !$tid) {
+            $tid = $dynClManager->getTid($taxa);
+        }
+
+        $dynClid = 0;
+
+        if(is_numeric($lng) && is_numeric($lng)) {
+            if($radius) {
+                $dynClid = $dynClManager->createChecklist($lat, $lng, $radius, $radiusUnits, $tid);
+            } else {
+                $dynClid = $dynClManager->createDynamicChecklist($lat, $lng, $dynamicRadius, $tid);
+            }
+        }
+
+        $dynClManager->removeOldChecklists();
+
+        if(!$dynClid) {
+            $error = new MessageBag([ $LANG['ERROR_GEN_CHECK'] ]);
+        } else if($interface == "key") {
+            return redirect(legacy_url('ident/key.php?dynclid=' . $dynClid."&taxon=All Species"));
+        } else {
+            return redirect(legacy_url('checklists/checklist.php?dynclid=' . $dynClid));
+        }
+
+        return view('pages/checklist/dynamic-builder', ['error' => $error ]);
     }
 
     public static function mapPage(Request $request) {
