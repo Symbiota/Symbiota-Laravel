@@ -1,6 +1,6 @@
 @props(['collection', 'stats'])
 @php
-global $LANG;
+global $LANG, $LANG_TAG;
 include_once(legacy_path('/classes/utilities/Language.php'));
 Language::load('collections/misc/collprofiles');
 
@@ -8,7 +8,7 @@ function colUrl($url, $extra_query = '') {
     return legacy_url('/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
 }
 @endphp
-<x-layout class="flex flex-col gap-4">
+<x-margin-layout>
     <x-breadcrumbs :items="[
         ['title' => 'Home', 'href' => url('')],
         ['title' => 'Collection Search Page', 'href' => url('collections/search'), ],
@@ -46,10 +46,7 @@ function colUrl($url, $extra_query = '') {
                     <x-input name="catalogNumber" x-effect="if(modalOpen) $focus.focus($el)" label="Catalog Number" required />
 
                     <div class="flex items-center">
-                        <x-button type="submit">
-                            Search
-                        </x-button>
-
+                        <x-button type="submit">{{ $LANG['SEARCH'] }}</x-button>
                         <div id="quick-search-loader" class="stroke-accent w-6 h-6 flex justify-center htmx-indicator">
                             <x-icons.loading />
                         </div>
@@ -60,51 +57,75 @@ function colUrl($url, $extra_query = '') {
 
         @can('COLL_EDIT', $collection->collID)
         <x-nav-link hx-boost="true" href="{{ url('collections/table?collid=' . $collection->collID) }}">
-            <x-button>Edit</x-button>
+            <x-button>{{ $LANG['OCCURRENCE_EDITOR'] }}</x-button>
         </x-nav-link>
         @endcan
     </div>
-    <p>{!! Purify::clean($collection->fullDescription) !!}</p>
 
     @can('COLL_EDIT', $collection->collid)
-    <x-accordion label="Manager Control Panel" open="true">
-        <div class="flex gap-2">
+    <x-accordion :label="$LANG['TOGGLE_MAN']" open="true">
+        <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
-                colUrl('editor/occurrenceeditor.php', '&gotomode=1') => 'Add New Occurrence Record',
-                colUrl('editor/imageoccursubmit.php') => 'Add Skeletal Records',
-                colUrl('editor/skeletalsubmit.php') => 'Add New Occurrence Record',
-                colUrl('editor/occurrencetabledisplay.php', '&displayquery=1') => 'Edit Existing Occurrence Records',
-                colUrl('editor/batchdeterminations.php') => 'Add Batch Determinations/Nomenclatural Adjustments',
-                colUrl('reports/labelmanager.php') => 'Print specimen Labels',
-                colUrl('reports/annotationmanager.php') => 'Print Annotation Labels',
-                colUrl('georef/batchgeoreftool.php') => 'Batch Georeference Specimens',
-                colUrl('loans/index.php') => 'Loan Management',
+                colUrl('editor/occurrenceeditor.php', '&gotomode=1') => $LANG['ADD_NEW_OCCUR'],
+
+                // TODO (Logan) exlcude if colltype doesn't have "Specimens" in it
+                colUrl('editor/imageoccursubmit.php') => $LANG['CREATE_NEW_REC'],
+                colUrl('editor/skeletalsubmit.php') => $LANG['SKELETAL'],
+
+                colUrl('editor/occurrencetabledisplay.php', '&displayquery=1') => $LANG['EDIT_EXISTING'],
+                // TODO (Logan) exclude if colltype general observations
+                colUrl('editor/batchdeterminations.php') => $LANG['ADD_BATCH_DETER'],
+
+                colUrl('reports/labelmanager.php') => $LANG['PRINT_LABELS'],
+                colUrl('reports/annotationmanager.php') => $LANG['PRINT_ANNOTATIONS'],
+
+                // TODO (Logan) exclude if colltype general observations
+                colUrl('georef/batchgeoreftool.php') => $LANG['BATCH_GEOREF'],
+                // TODO (Logan) only "Preserved Specimens"
+                colUrl('loans/index.php') => $LANG['LOAN_MANAGEMENT'],
             ];
 
+            // TODO (Logan) exclude if colltype general observations. Also traits activated
             $trait_links = [
-                colUrl('traitattr/occurattributes.php') => 'Trait Coding from Images',
-                colUrl('traitattr/attributemining.php') => 'Trait Mining from Verbatim Text',
+                colUrl('traitattr/occurattributes.php') => $LANG['TRAIT_CODING'],
+                colUrl('traitattr/attributemining.php') => $LANG['TRAIT_MINING'],
             ];
+
             $admin_links = [
-                colUrl('misc/commentlist.php') => 'View Posted Comments',
-                colUrl('misc/collmetadata.php') => 'Edit Meta Data',
-                colUrl('misc/collpermissions.php') => 'Import/Update Specimen Records',
-                colUrl('specprocessor/index.php') => 'Processing Toolbox',
-                colUrl('datasets/datapublisher.php') => 'Darwin Core Archive Publishing',
-                colUrl('editor/editreviewer.php') => 'Review/Verify Occurrence Edits',
-                colUrl('datasets/duplicatemanager.php') => 'Duplicate Clustering',
+                colUrl('misc/commentlist.php') => $LANG['VIEW_COMMENTS'],
+                colUrl('misc/collmetadata.php') => $LANG['EDIT_META'],
+                colUrl('misc/collpermissions.php') => $LANG['MANAGE_PERMISSIONS'],
+                colUrl('specprocessor/index.php') => $LANG['PROCESSING_TOOLBOX'],
+                colUrl('datasets/datapublisher.php') => $LANG['DARWIN_CORE_PUB'],
+                colUrl('editor/editreviewer.php') => $LANG['REVIEW_SPEC_EDITS'],
+                // TODO (Logan) figure out why commented out in old code
+                // colUrl('reports/accessreport.php') => $LANG['ACCESS_REPORT'],
+                // TODO (Logan) !empty($ACTIVATE_DUPLICATES)
+                colUrl('datasets/duplicatemanager.php') => $LANG['DUP_CLUSTER'],
             ];
 
             $upload_links = [
-                colUrl('admin/specupload.php', '&uploadtype=7') => 'Skeletal Text File Import',
-                colUrl('admin/specupload.php', '&uploadtype=3') => 'Full Text File Import',
-                colUrl('admin/specupload.php', '&uploadtype=6') => 'DwC-Archive Import',
-                colUrl('admin/specupload.php', '&uploadtype=8') => 'IPT Import',
-                colUrl('admin/importextended.php') => 'Extended Data Import',
-                colUrl('admin/specupload.php', '&uploadtype=9') => 'Notes from Nature Import',
-                colUrl('admin/specuploadmanagement.php') => 'Saved Import Profiles',
-                colUrl('admin/specuploadmanagement.php', '&action=addprofile') => 'Create a new Import Profile',
+                colUrl('admin/specupload.php', '&uploadtype=7') => $LANG['SKELETAL_FILE_IMPORT'],
+                colUrl('admin/specupload.php', '&uploadtype=3') => $LANG['TEXT_FILE_IMPORT'],
+                colUrl('admin/specupload.php', '&uploadtype=6') => $LANG['DWCA_IMPORT'],
+                colUrl('admin/specupload.php', '&uploadtype=8') => $LANG['IPT_IMPORT'],
+                colUrl('admin/importextended.php') => $LANG['EXTENDED_IMPORT'],
+                // TODO (Logan) live data only
+                colUrl('admin/specupload.php', '&uploadtype=9') => $LANG['NFN_IMPORT'],
+                colUrl('admin/specuploadmanagement.php') => $LANG['IMPORT_PROFILES'],
+                colUrl('admin/specuploadmanagement.php', '&action=addprofile') => $LANG['CREATE_PROFILE'],
+            ];
+
+            $general_maintenance = [
+                colUrl('cleaning/index.php', '&obsuid=0') => $LANG['DATA_CLEANING'],
+                colUrl('collbackup.php') => $LANG['BACKUP_DATA_FILE'],
+                // TODO (Logan) only live data
+                colUrl('admin/restorebackup.php') => $LANG['RESTORE_BACKUP'],
+                // TODO (Logan) figure out why commented out in old code?
+                // legacy_url('imagelib/admin/igsnmapper.php') => $LANG['GUID_MANAGEMENT'],
+                legacy_url('imagelib/admin/thumbnailbuilder.php?collid=' . request('collid')) => $LANG['THUMBNAIL_MAINTENANCE'],
+                colUrl('misc/collprofiles.php', '&action=UpdateStatistics') => $LANG['UPDATE_STATS'],
             ];
 
             @endphp
@@ -117,7 +138,7 @@ function colUrl($url, $extra_query = '') {
                         <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
                 </ul>
-                <div class="font-bold text-lg">Occurrence Trait Coding Tools</div>
+                <div class="font-bold text-lg">{{ $LANG['TRAIT_CODING_TOOLS'] }}</div>
                 <ul class="pl-4">
                     @foreach ($trait_links as $link => $title)
                     <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
@@ -135,9 +156,23 @@ function colUrl($url, $extra_query = '') {
                     @endforeach
 
                 </ul>
-                <div class="font-bold text-lg">Import/Update Specimen Records</div>
+
+                <div class="font-bold text-lg">{{ $LANG['IMPORT_SPECIMEN'] }}</div>
+                {{-- TODO (Logan) ? mark button <x-link
+                    target="_blank"
+                    href="{{ docs_url('Collection_Manager_Guide/Importing_Uploading/') }}">
+                    {{ $LANG['MORE_INFO'] }}
+                </x-link>
+                --}}
                 <ul class="pl-4">
                     @foreach ($upload_links as $link => $title)
+                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
+                    @endforeach
+                </ul>
+
+                <div class="font-bold text-lg">{{ $LANG['MAINTENANCE_TASKS'] }}</div>
+                <ul class="pl-4">
+                    @foreach ($general_maintenance as $link => $title)
                     <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
                     @endforeach
                 </ul>
@@ -147,12 +182,27 @@ function colUrl($url, $extra_query = '') {
     </x-accordion>
     @endcan
 
-    <div>
+    <div class="flex flex-col gap-2">
+        <p>{!! Purify::clean($collection->fullDescription) !!}</p>
+
+        @isset($collection->resourceJson)
+            @if($resourceArr = json_decode($collection->resourceJson, true))
+            <div>
+                @foreach($resourceArr as $rArr)
+                <div>
+                    <x-link href="{{ $rArr['url'] }}" target="_blank">{{ $rArr['title'][$LANG_TAG] ?? $LANG['HOMEPAGE'] }}</x-link>
+                </div>
+                @endforeach
+            </div>
+            @endif
+        @endisset
+
         @php
             $contacts = json_decode($collection->contactJson, true);
         @endphp
         @if(is_array($contacts) && count($contacts))
-            <div class="text-2xl font-bold">Contacts</div>
+        <div>
+            <div class="text-2xl font-bold">{{ $LANG['CONTACT'] }}</div>
             @foreach($contacts as $contact)
                 @if(isset($contact['firstName']) && isset($contact['lastName']) && isset($contact['email']))
                     <div>
@@ -161,6 +211,7 @@ function colUrl($url, $extra_query = '') {
                     </div>
                 @endif
             @endforeach
+        </div>
         @endif
     </div>
 
@@ -169,35 +220,57 @@ function colUrl($url, $extra_query = '') {
         $dynamic_stats = $stats->dynamicProperties? json_decode($stats->dynamicProperties, true): [];
     @endphp
     <div>
-        <div class="text-2xl font-bold">Collection Statistics</div>
+        <div class="text-2xl font-bold">{{ $LANG['COLL_STATISTICS'] }}</div>
         <ul class="pl-4">
-            <li class="list-disc">{{ $stats->recordcnt ?? 0 }} specimen records</li>
-            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ $stats->georefcnt? floor( ($stats->georefcnt / $stats->recordcnt) * 100): 0 }}%) georeferenced</li>
+            <li class="list-disc">{{ $stats->recordcnt ?? 0 }} {{ $LANG['SPECIMEN_RECORDS'] }}</li>
+            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ $stats->georefcnt? floor( ($stats->georefcnt / $stats->recordcnt) * 100): 0 }}%) {{ $LANG['GEOREFERENCED'] }}</li>
             @isset($dynamic_stats['SpecimensCountID'])
-                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ $dynamic_stats['SpecimensCountID']? floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) : 0}}%) identified to species</li>
+                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ $dynamic_stats['SpecimensCountID']? floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) : 0}}%) {{ $LANG['IDED_TO_SPECIES'] }}</li>
             @endisset
-            <li class="list-disc">{{ $stats->familycnt ?? 0 }} families</li>
-            <li class="list-disc">{{ $stats->genuscnt ?? 0 }} genera</li>
-            <li class="list-disc">{{ $stats->speciescnt ?? 0 }} species</li>
+            <li class="list-disc">{{ $stats->familycnt ?? 0 }} {{ $LANG['FAMILIES'] }}</li>
+            <li class="list-disc">{{ $stats->genuscnt ?? 0 }} {{ $LANG['GENERA'] }}</li>
+            <li class="list-disc">{{ $stats->speciescnt ?? 0 }} {{ $LANG['SPECIES'] }}</li>
             @isset($dynamic_stats['TotalTaxaCount'])
-                <li class="list-disc">{{ $dynamic_stats['TotalTaxaCount'] }} total taxa (including subsp. and var.)</li>
+                <li class="list-disc">{{ $dynamic_stats['TotalTaxaCount'] }} {{ $LANG['TOTAL_TAXA'] }}</li>
             @endisset
         </ul>
     </div>
 
     <x-accordion label="More Information">
-        <div><span class="font-bold">Collection Type:</span> {{ $collection->collType }}</div>
-        <div><span class="font-bold">Management:</span> {{ $collection->managementType }}</div>
+        <x-text-label :label="$LANG['COLLECTION_TYPE']">
+            {{ $collection->collType }}
+        </x-text-label>
+
+        <x-text-label :label="$LANG['MANAGEMENT']">
+            {{ $collection->managementType }}
+        </x-text-label>
+
         @if($collection->managementType != 'Live Data')
-        <div><span class="font-bold">Last Update:</span> {{ $stats->uploaddate }}</div>
+        <x-text-label :label="$LANG['LAST_UPDATE']">
+            {{ $stats->datelastmodified }}
+        </x-text-label>
         @endif
-        <div><span class="font-bold">Digital Metadata:</span> <x-link href="{{colUrl('datasets/emlhandler.php')}}">EML File</x-link></div>
-        <div><span class="font-bold">IPT / DwC-A Source:</span> <x-link href="{{ $collection->path }} ">{{ $collection->title }}</x-link></div>
-        <div><span class="font-bold">Usage Rights:</span>
-            <a href="{{ $collection->rights }}">
-                <img class="w-32" src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nd.png"/>
-            </a>
-        </div>
+
+        @if($collection->dwcaUrl)
+        <x-link :href="$collection->dwcaUrl">{{ $LANG['DWCA_PUB'] }}</x-link>
+        @endif
+
+        <x-text-label :label="$LANG['DIGITAL_METADATA']">
+            <x-link :href="colUrl('datasets/emlhandler.php')" target="_blank">
+                EML File
+            </x-link>
+        </x-text-label>
+
+        <x-text-label :label="$LANG['IPT_SOURCE']">
+            <x-link href="#todo">{{ $collection->title }}</x-link>
+        </x-text-label>
+
+        @if($collection->rights)
+        <x-text-label :label="$LANG['LICENSE']">
+            {{-- TODO (Logan) GeneralUtil::getRightsHtml --}}
+            <img class="w-32" src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nd.png"/>
+        </x-text-label>
+        @endif
     </x-accordion>
 
     @if(isset($dynamic_stats['families']) || isset($dynamic_stats['countries']))
@@ -242,16 +315,17 @@ function colUrl($url, $extra_query = '') {
 
         $stats_tabs = [];
         if(isset($dynamic_stats['families'])) {
-            $stats_tabs[] = 'Taxonomic Distribution';
+            $stats_tabs[] = $LANG['TAXON_DIST'];
+
         }
 
         if(isset($dynamic_stats['countries'])) {
-            $stats_tabs[] = 'Country Distribution';
+            $stats_tabs[] = $LANG['GEO_DIST'];
         }
     @endphp
 
     <div>
-        <div class="text-2xl font-bold">Extra Statistics</div>
+        <div class="text-2xl font-bold">{{ $LANG['EXTRA_STATS'] }}</div>
 
         <x-tabs :tabs="$stats_tabs" class:body="border-x-0 border-b-0">
             @isset($dynamic_stats['families'])
@@ -264,4 +338,4 @@ function colUrl($url, $extra_query = '') {
         </x-tabs>
     </div>
     @endif
-</x-layout>
+</x-margin-layout>
