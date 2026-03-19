@@ -1,10 +1,9 @@
-@props(['id', 'label' => false, 'placeholder' => '', 'search' => '', 'name' => 'search', 'request_config' => '{}', 'vals' => '', 'include' => '', 'value' => '', 'error_text', 'assistive_text', 'menu' => new Illuminate\View\ComponentSlot(), 'input' => new Illuminate\View\ComponentSlot(), 'indicator' => new Illuminate\View\ComponentSlot(), 'result' => new Illuminate\View\ComponentSlot(), 'isRequired' => false])
+@props(['id', 'label' => false, 'placeholder' => '', 'search' => '', 'name' => 'search', 'request_config' => '{}', 'vals' => '', 'include' => '', 'value' => '', 'error_text', 'assistive_text', 'menu' => new Illuminate\View\ComponentSlot(), 'input' => new Illuminate\View\ComponentSlot(), 'indicator' => new Illuminate\View\ComponentSlot(), 'result' => new Illuminate\View\ComponentSlot()])
 {{-- See resouces/js/components/autocomplete-input.js for scripts --}}
 <div x-data="{ el: $el, open: false, results: {{ !$result->isEmpty() ? 'true' : 'false' }} }" x-init="autoSearchInit($el)" class="w-full">
-    <x-input :isRequired="$isRequired" value="{{ $value }}" autocomplete="off"
-        type="search" hx-get="{{ $search }}"
-        hx-include="{{ $include }}" hx-vals="{{ $vals }}"
-        data-request-config="{{ $request_config }}"
+    <x-input value="{{ $value }}" autocomplete="off" type="search"
+        hx-get="{{ $search }}" hx-include="{{ $include }}"
+        hx-vals="{{ $vals }}" data-request-config="{{ $request_config }}"
         hx-trigger="input changed delay:700ms, search"
         hx-indicator="#menu-loader-{{ $id }}"
         hx-target="#search-results-{{ $id }}" hx-replace-url="false"

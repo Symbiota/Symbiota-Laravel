@@ -139,9 +139,9 @@
                         value="" />
                 </div>
                 <div class="w-1/2">
-                    <x-taxa-search :label="'Parent Taxon'" :isRequired="true"
-                        id="parentname" name="parentname" :hide_selector="true"
-                        :label_classes="''" :hide_synonyms_checkbox="true" />
+                    <x-taxa-search :label="'Parent Taxon'" required id="parentname"
+                        name="parentname" :hide_selector="true" :label_classes="''"
+                        :hide_synonyms_checkbox="true" />
                 </div>
                 <div class="w-1/2 mt-2">
                     <x-input label="Notes" name="notes" id="notes"

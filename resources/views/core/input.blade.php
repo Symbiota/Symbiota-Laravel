@@ -5,7 +5,6 @@
     'error_text',
     'assistive_text',
     'area' => false,
-    'isRequired' => false,
 ])
 <!-- resources/views/core/input.blade.php -->
 <div class="group w-full text-base-content">
@@ -20,12 +19,12 @@
     @endif
 
     @if ($area)
-        <textarea @required($isRequired) name="{{ $name ?? $id }}" id="{{ $id }}"
+        <textarea name="{{ $name ?? $id }}" id="{{ $id }}"
             {{ $attributes->twMerge('px-3 py-2 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full') }}>{{ $slot }}</textarea>
     @else
-        <input @required($isRequired)
+        <input
             {{ $attributes->twMerge('px-3 py-2 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full
-                                ') }}
+                                                        ') }}
             name="{{ $name ?? $id }}" id="{{ $id }}" />
     @endif
 

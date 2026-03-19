@@ -6,12 +6,14 @@
     'hide_selector' => false,
     'hide_synonyms_checkbox' => false,
     'label' => '',
-    'isRequired' => false,
     'label_classes' => 'text-lg',
 ])
 <div>
     <label class="{{ $label_classes }}"
-        for="{{ $id }}">{{ $label ?: 'Search Taxa' }}</label>
+        for="{{ $id }}">{{ $label ?: 'Search Taxa' }} @if ($attributes['aria-required'] || $attributes['required'])
+            <span class="vertical-align text-error italic pr-1">*</span>
+        @endif
+    </label>
     <div class="flex items-center group">
         @if (!$hide_selector)
             <x-select name="taxa-type" id="taxa-type-{{ $id }}"
@@ -35,8 +37,8 @@
                 ]" />
         @endif
 
-        <x-autocomplete-input :isRequired="$isRequired" name="taxa" :id="$id"
-            :value="$taxa_value" placeholder="Type to search..."
+        <x-autocomplete-input name="taxa" :id="$id" :value="$taxa_value"
+            placeholder="Type to search..."
             search="{{ url('/api/taxa/search') }}"
             include="#usethes-{{ $id }}, #taxa-type-{{ $id }}">
             <x-slot:input class="peer-input z-20 rounded-l-none"></x-slot>
