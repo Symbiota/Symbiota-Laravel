@@ -145,6 +145,11 @@ class ChecklistController extends Controller {
         include_once legacy_path('/classes/utilities/Language.php');
         include_once legacy_path('/classes/DynamicChecklistManager.php');
 
+        \Language::load([
+            'checklists/dynamicmap',
+            'checklists/checklist'
+        ]);
+
         $error = null;
 
         $lat = filter_var(request('lat'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -182,7 +187,7 @@ class ChecklistController extends Controller {
             return redirect(legacy_url('checklists/checklist.php?dynclid=' . $dynClid));
         }
 
-        return view('pages/checklist/dynamic-builder', ['error' => $error]);
+        return view('pages/checklist/dynamic-builder', ['errors' => $error]);
     }
 
     public static function mapPage(Request $request) {

@@ -18,8 +18,6 @@ Language::load([
 
     <h1 class="sr-only">{{ $LANG['DYNAMIC_MAP'] }}></h1>
 
-    <x-errors :errors="$errors" />
-
     <div class="flex flex-col gap-1" x-data="{'moreDetail': false}">
         <p>
             {{ $LANG['CAPTURE_COORDS'] }}
@@ -52,6 +50,8 @@ Language::load([
         <div>
             <x-button>{{ $LANG['BUILD_CHECKLIST'] }}</x-button>
         </div>
+
+        <x-errors :errors="$errors" />
     </form>
 
     <script>
