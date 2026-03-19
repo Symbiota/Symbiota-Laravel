@@ -24,10 +24,12 @@ function colUrl($url, $extra_query = '') {
 
     <div class="flex items-center gap-2">
         <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
+                {{-- TODO (Logan) Translations --}}
             <x-button>Search Collection</x-button>
         </x-nav-link>
 
         <x-nav-link hx-boost="true" href="{{ url('media/search?collId=' . $collection->collID) }}">
+            {{-- TODO (Logan) Translations --}}
             <x-button>Search Media</x-button>
         </x-nav-link>
 
@@ -132,6 +134,7 @@ function colUrl($url, $extra_query = '') {
 
             {{-- Data Editor Control Panel --}}
             <div class="flex-grow">
+                {{-- TODO (Logan) Translations --}}
                 <div class="font-bold text-xl">Data Editor</div>
                 <ul class="pl-4">
                     @foreach ($data_links as $link => $title)
@@ -149,6 +152,7 @@ function colUrl($url, $extra_query = '') {
             @can('COLL_ADMIN', $collection->collid)
             {{-- Administration Conrol Panel--}}
             <div class="flex-grow">
+                {{-- TODO (Logan) Translations --}}
                 <div class="font-bold text-xl">Administration</div>
                 <ul class="pl-4">
                     @foreach ($admin_links as $link => $title)
