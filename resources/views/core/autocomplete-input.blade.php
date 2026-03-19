@@ -9,7 +9,9 @@
         hx-target="#search-results-{{ $id }}" hx-replace-url="false"
         hx-push-url="false" x-on:htmx:before-send.stop="results = false"
         x-on:blur="open = false" x-on:keyup.enter="open = false"
-        x-on:focus="open = true" x-on:click="open = true" :placeholder="$placeholder"
+        x-on:focus="open = true" x-on:click="open = true"
+        @auto_input_select="{{ $input->attributes->get('@auto_input_select') }}"
+        @input="{{ $input->attributes->get('@input') }}" :placeholder="$placeholder"
         :name='$name' :id="$id" :label="$label"
         :class="$input->attributes->get('class')" />
     <div {{ $menu->attributes->twMerge('relative w-full') }}>
@@ -34,7 +36,7 @@
             x-on:click="open = false" data-selected-index="0" x-cloak
             x-show="open && results" x-ref="menu"
             id="search-results-{{ $id }}"
-            {{ $result->attributes->twMerge('mt-1 h-fit absolute bg-base-100 z-50 w-full border-base-300 border') }}>
+            {{ $result->attributes->twMerge('mt-1 h-fit absolute bg-base-100 z-[1500] w-full border-base-300 border') }}>
             {{ $result }}
         </div>
     </div>

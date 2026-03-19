@@ -17,8 +17,8 @@
     <!-- Accordion Body ---->
     <div x-cloak x-show="open"
         x-transition:enter="transition ease-out duration-300 delay-50"
-        x-transition:enter-start="opacity-0 h-10 "
-        x-transition:enter-end="opacity-100 h-100"
+        x-transition:enter-start="h-10 "
+        x-transition:enter-end="h-fit"
         {{ $attributes->twMergeFor('body', 'border-base-300 bg-base-100 border-b border-x p-4') }}
         >
         {{$slot}}
