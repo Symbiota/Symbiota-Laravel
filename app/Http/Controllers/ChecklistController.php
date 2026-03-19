@@ -147,7 +147,7 @@ class ChecklistController extends Controller {
 
         \Language::load([
             'checklists/dynamicmap',
-            'checklists/checklist'
+            'checklists/checklist',
         ]);
 
         $error = null;
