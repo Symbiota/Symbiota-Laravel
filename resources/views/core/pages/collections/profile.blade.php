@@ -41,9 +41,10 @@ function colUrl($url, $extra_query = '') {
             </x-slot>
 
             <x-slot name="body">
-                <form hx-get="{{ url('collections/table') }}" hx-target="body" hx-indicator="#quick-search-loader" class="flex flex-col gap-2">
+                <form hx-get="{{ url('collections/table') }}" hx-target="body" hx-push-url="true" hx-indicator="#quick-search-loader" class="flex flex-col gap-2">
                     <input type="hidden" name="collid" value="{{ $collection->collID }}">
-                    <x-input name="catalogNumber" label="Catalog Number" required />
+                    <x-input name="catalogNumber" x-effect="if(modalOpen) $focus.focus($el)" label="Catalog Number" required />
+
                     <div class="flex items-center">
                         <x-button type="submit">
                             Search
