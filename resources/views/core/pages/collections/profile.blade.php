@@ -10,9 +10,9 @@ function colUrl($url, $extra_query = '') {
 @endphp
 <x-margin-layout>
     <x-breadcrumbs :items="[
-        ['title' => 'Home', 'href' => url('')],
-        ['title' => 'Collection Search Page', 'href' => url('collections/search'), ],
-        ['title' => 'Collection Profile']
+        ['title' => $LANG['HOME'], 'href' => url('')],
+        ['title' => $LANG['COLLECTION_SEARCH'], 'href' => url('collections/search')],
+        ['title' => $LANG['COLL_PROFILE']]
         ]" />
 
     <div class="flex items-center gap-4">
