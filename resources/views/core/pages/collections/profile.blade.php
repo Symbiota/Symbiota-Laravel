@@ -1,5 +1,9 @@
 @props(['collection', 'stats'])
 @php
+global $LANG;
+include_once(legacy_path('/classes/utilities/Language.php'));
+Language::load('collections/misc/collprofiles');
+
 function colUrl($url, $extra_query = '') {
     return legacy_url('/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
 }
@@ -29,11 +33,11 @@ function colUrl($url, $extra_query = '') {
 
         <x-modal>
             <x-slot name='button' variant="clear-primary">
-                Quick Search
+                {{ $LANG['QUICK_SEARCH'] }}
             </x-slot>
 
             <x-slot name="title" class="text-2xl">
-                Quick Search
+                {{ $LANG['QUICK_SEARCH'] }}
             </x-slot>
 
             <x-slot name="body">
