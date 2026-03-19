@@ -1,8 +1,7 @@
 @props(['errors'])
 @php
-global $LANG, $SERVER_ROOT, $DYN_CHECKLIST_RADIUS, $CLIENT_ROOT;
+global $LANG;
 include_once(legacy_path('/classes/utilities/Language.php'));
-include_once(legacy_path('/classes/DynamicChecklistManager.php'));
 
 Language::load([
 	'checklists/dynamicmap',
@@ -13,9 +12,11 @@ Language::load([
 
 <x-margin-layout>
     <x-breadcrumbs :items="[
-        ['title' => 'Home', 'href' => url('')],
-        ['title' => 'Dynamic Map'],
+        ['title' => $LANG['HOME'], 'href' => url('')],
+        ['title' => $LANG['DYNAMIC_MAP']],
         ]" />
+
+    <h1 class="sr-only">{{ $LANG['DYNAMIC_MAP'] }}></h1>
 
     <x-errors :errors="$errors" />
 
@@ -32,7 +33,7 @@ Language::load([
             <span x-show="!moreDetail">{{ $LANG['MORE_DETAILS'] }}</span>
         </x-button>
     </div>
-    <form method="post">
+    <form method="post" class="flex flex-col gap-4">
         @csrf
         <div class="flex flex-wrap items-center gap-2">
             <input type="hidden" name="interface" value="{{ request('interface') ?? 'checklist' }}" />
@@ -41,8 +42,8 @@ Language::load([
             <div class="min-w-20 max-w-40 flex-grow"><x-input id="lng" label="Longitude" value=""/></div>
             <div class="min-w-20 max-w-40 flex-grow"><x-input id="radius" label="Radius" type="number" /></div>
             <x-select class="min-w-10 flex-grow" id="radiusunits" label="Units" default="0" :items="[
-            ['title' => 'Kilometers', 'value' => 'km' ],
-            ['title' => 'Miles', 'value' => 'mi' ]
+            ['title' => $LANG['KM'], 'value' => 'km' ],
+            ['title' => $LANG['MILES'], 'value' => 'mi' ]
         ]" />
         </div>
 
