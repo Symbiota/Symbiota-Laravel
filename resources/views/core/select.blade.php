@@ -23,7 +23,7 @@ event fires.
     'select_text' => 'Select Item'
 ])
 @php
-    if($defaultValue && !$default) {
+    if($defaultValue !== null && !$default) {
         for($i = 0; $i < count($items); $i++) {
             $item = $items[$i];
             if($item && $item['value'] === $defaultValue) {
