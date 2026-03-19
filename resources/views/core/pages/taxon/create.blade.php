@@ -17,49 +17,11 @@
     </div>
 
     <div class="flex flex-col items-center justify-center"
-        x-data="{
+        x-init ="taxonomyCreateInit()" x-data="{
             unit1Label: 'Genus',
             unit2Label: 'Species',
             rankid: null,
             allTaxonRanks: @js($allTaxonRanks),
-            updateLabels() {
-                const rankValue = parseInt(this.rankid);
-                const highRankThreshold = 220;
-                if (rankValue >= highRankThreshold) {
-                    this.unit1Label = 'Genus';
-                    this.unit2Label = 'Species';
-                } else if (this.rankid) {
-                    const selectedRank = this.allTaxonRanks.find(rank => rank.rankid == this.rankid);
-                    this.unit1Label = selectedRank ? selectedRank.rankname : 'Genus';
-                } else {
-                    this.unit1Label = 'Genus';
-                    this.unit2Label = 'Species';
-                }
-            },
-            init() {
-                this.$nextTick(() => { // manually adding listeners after rankid is rendered worked when referencing the onChange in the select component did not. Also tried $watch but that did not work either.
-                            const selectEl = document.getElementById('rankid');
-                            if (selectEl) {
-                                selectEl.addEventListener('change', (e) => {
-                                    this.rankid = e.target.value;
-                                    this.updateLabels();
-                                });
-                                selectEl.addEventListener('input', (e) => {
-                                    this.rankid = e.target.value;
-                                    this.updateLabels();
-                                });
-                            }
-        
-                            const parentNameEl = document.getElementById('parentname');
-                            if (parentNameEl) {
-                                console.log("deleteMe got here a1)");
-        parentNameEl.addEventListener('taxa-selected', (e)=> {
-        const selectedId = e.detail.selection.id;
-        console.log('Selected parent taxon ID:', selectedId);
-        });
-        }
-        });
-        }
         }">
         <h1 class="text-4xl font-bold">Add New Taxon
         </h1>
