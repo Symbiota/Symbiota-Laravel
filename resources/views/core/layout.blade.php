@@ -49,18 +49,19 @@ $grants= [
     @stack('js-libs')
 </head>
 
-<body x-trap>
+<body
+    x-trap="true"
+    x-data="{
+        innerHTMLSnapshot: null,
+        init: () => innerHTMLSnapshot = $el.innerHTML,
+        setSnapshot: () => $el.innerHTML = innerHTMLSnapshot
+    }"
+    x-on:htmx:before-history-save.window.camel="setSnapshot()"
+>
     {{-- This div with the snapshots is to prevent alpine from try to render dom state using the html history,
          dom history will need to be handled in a different way
     --}}
-    <div id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content" x-data="{
-        innerHTMLSnapshot: null,
-        init: () => {
-            innerHTMLSnapshot = $el.innerHTML
-        },
-        setSnapshot: () => { $el.innerHTML = innerHTMLSnapshot }
-        }"
-        x-on:htmx:before-history-save.window.camel="setSnapshot()"
+    <div id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content"
         >
         @if($hasHeader)
         <x-header buttonVariant="primary"/>
