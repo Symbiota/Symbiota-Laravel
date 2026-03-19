@@ -176,4 +176,8 @@ class TaxonomyController extends Controller {
             'securityOptions' => $securityOptions,
         ]);
     }
+
+    public static function store(){
+            // @TODO implement taxon creation
+    }
 }

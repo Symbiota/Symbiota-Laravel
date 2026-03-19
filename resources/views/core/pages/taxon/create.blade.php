@@ -1,4 +1,9 @@
-@props(['kingdoms' => [], 'allTaxonRanks' => []])
+@props([
+    'kingdoms' => [],
+    'allTaxonRanks' => [],
+    'indContent' => [],
+    'securityOptions' => [],
+])
 <x-layout>
     <div class="mb-4">
         <x-breadcrumbs :items="[
@@ -11,67 +16,53 @@
         ]" />
     </div>
 
-    <div class="flex flex-col items-center justify-center" x-data="{
-        unit1Label: 'Genus',
-        unit2Label: 'Species',
-        rankid: null,
-        allTaxonRanks: @js($allTaxonRanks),
-        updateLabels() {
-            console.log('updateLabels called with rankid:', this.rankid);
-            const rankValue = parseInt(this.rankid);
-    
-            if (rankValue >= 220) {
-                // High taxonomic ranks: show Genus/Species layout
-                this.unit1Label = 'Genus';
-                this.unit2Label = 'Species';
-                console.log('High taxonomic rank (>=220): Genus/Species layout');
-            } else if (this.rankid) {
-                // Low taxonomic ranks: show selected rank name
-                const selectedRank = this.allTaxonRanks.find(rank => rank.rankid == this.rankid);
-                this.unit1Label = selectedRank ? selectedRank.rankname : 'Genus';
-                console.log('Low taxonomic rank (<220): unit1Label set to:', this.unit1Label);
-            } else {
-                // No rank selected
-                this.unit1Label = 'Genus';
-                this.unit2Label = 'Species';
-                console.log('No rank selected: default to Genus/Species');
-            }
-        }
-    }"
-        x-init="console.log('Alpine.js initialized');
-        $watch('rankid', (value) => {
-            console.log('rankid changed to:', value);
-            updateLabels();
-        });
-        
-        // Watch for changes to the actual select element 
-        $nextTick(() => {
-            const selectEl = document.getElementById('rankid');
-            if (selectEl) {
-                console.log('Found select element:', selectEl);
-                selectEl.addEventListener('change', (e) => {
-                    console.log('Native change event fired, value:', e.target.value);
-                    rankid = e.target.value;
-                    updateLabels();
+    <div class="flex flex-col items-center justify-center"
+        x-data="{
+            unit1Label: 'Genus',
+            unit2Label: 'Species',
+            rankid: null,
+            allTaxonRanks: @js($allTaxonRanks),
+            updateLabels() {
+                const rankValue = parseInt(this.rankid);
+                const highRankThreshold = 220;
+                if (rankValue >= highRankThreshold) {
+                    this.unit1Label = 'Genus';
+                    this.unit2Label = 'Species';
+                } else if (this.rankid) {
+                    const selectedRank = this.allTaxonRanks.find(rank => rank.rankid == this.rankid);
+                    this.unit1Label = selectedRank ? selectedRank.rankname : 'Genus';
+                } else {
+                    this.unit1Label = 'Genus';
+                    this.unit2Label = 'Species';
+                }
+            },
+            init() {
+                this.$nextTick(() => { // manually adding listeners after rankid is rendered worked when referencing the onChange in the select component did not. Also tried $watch but that did not work either.
+                    const selectEl = document.getElementById('rankid');
+                    if (selectEl) {
+                        selectEl.addEventListener('change', (e) => {
+                            this.rankid = e.target.value;
+                            this.updateLabels();
+                        });
+                        selectEl.addEventListener('input', (e) => {
+                            this.rankid = e.target.value;
+                            this.updateLabels();
+                        });
+                    }
                 });
-                selectEl.addEventListener('input', (e) => {
-                    console.log('Native input event fired, value:', e.target.value);
-                    rankid = e.target.value;
-                    updateLabels();
-                });
-            } else {
-                console.log('Select element not found');
             }
-        });">
+        }">
         <h1 class="text-4xl font-bold">Add New Taxon
         </h1>
         <div id="sciname-preview" class="mt-4">
             <h1 class="text-2xl font-bold">Sciname will be saved as:
                 <span class="text-primary"
-                    x-text="unit1Label + ' ' + unitname1.value + (unitname2.value ? ' ' + unitname2.value : '') + (unitname3.value ? ' ' + unitind3.value + ' ' + unitname3.value : '')"></span>
+                    x-text="unit1Label + ' ' + this.$refs.unitname1?.value + (this.$refs.unitname2?.value ? ' ' + this.$refs.unitname2.value : '') + (this.$refs.unitname3?.value ? ' ' + this.$refs.unitind3?.value + ' ' + this.$refs.unitname3.value : '')"></span>
             </h1>
         </div>
-        <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl">
+        <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
+            method="POST" action="{{ route('taxon.store') }}">
+            @csrf
             <div class="w-3/4">
                 <fieldset class="border border-base-300 rounded-md p-4 mb-4">
                     <legend class="text-2xl font-semibold">Optional Quick Parser
@@ -113,7 +104,7 @@
                                 class="vertical-align text-error italic pr-1">*</span>
                         </label>
                         <x-input required name="unitname1" id="unitname1"
-                            value="" />
+                            value="" x-ref="unitname1" />
                     </div>
                 </div>
 
@@ -131,34 +122,35 @@
                             for="unitname2"><span
                                 x-text="unit2Label + ' Name'"></span>
                         </label>
-                        <x-input name="unitname2" id="unitname2"
-                            value="" />
+                        <x-input name="unitname2" id="unitname2" value=""
+                            x-ref="unitname2" />
                     </div>
                 </div>
                 <div id="unit3" class="inline-flex items-center gap-2"
                     x-show="rankid && parseInt(rankid) >= 230">
                     <x-input label="Infraspecific designation" name="unitind3"
-                        id="unitind3" placeholder="spp., var., forma, etc." />
+                        id="unitind3" placeholder="spp., var., forma, etc."
+                        x-ref="unitind3" />
                     <x-input label="Infraspecific Epithet" name="unitname3"
-                        id="unitname3" value="" />
+                        id="unitname3" value="" x-ref="unitname3" />
                 </div>
-                <div class="w-3/4">
+                <div class="w-1/2">
                     <x-input label="Author" name="author" id="author"
                         value="" />
                 </div>
-                <div class="w-3/4">
+                <div class="w-1/2">
                     <x-input required label="Parent Taxon" name="parentname"
                         id="parentname" value="" />
                 </div>
-                <div class="w-3/4">
+                <div class="w-1/2">
                     <x-input label="Notes" name="notes" id="notes"
                         value="" />
                 </div>
-                <div class="w-3/4">
+                <div class="w-1/2">
                     <x-input label="Source" name="source" id="source"
                         value="" />
                 </div>
-                <div class="w-3/4">
+                <div class="w-1/2">
                     <x-select label="Locality Security" name="securitystatus"
                         id="securitystatus" :items="$securityOptions" />
                 </div>
