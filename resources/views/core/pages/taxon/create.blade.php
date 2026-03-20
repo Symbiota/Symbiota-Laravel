@@ -17,12 +17,27 @@
     </div>
 
     <div class="flex flex-col items-center justify-center"
-        x-init ="taxonomyCreateInit()" x-data="{
+        x-init ="$nextTick(() => { 
+            console.log('Alpine component initialized');
+            if (window.taxonomyCreateInit) taxonomyCreateInit.call(this);
+            $watch('rankid', (newValue, oldValue) => {
+                console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
+                updateLabels();
+            });
+        })"
+        x-data="{
             unit1Label: 'Genus',
             unit2Label: 'Species',
             rankid: null,
             allTaxonRanks: @js($allTaxonRanks),
-        }">
+            updateLabels() {
+                console.log('updateLabels called from Alpine component');
+                if (window.updateLabels) {
+                    window.updateLabels(this);
+                }
+            }
+        }"
+        x-effect="console.log('Current rankid value:', rankid)">
         <h1 class="text-4xl font-bold">Add New Taxon
         </h1>
         <div id="sciname-preview" class="mt-4">
@@ -49,7 +64,8 @@
 
                 <div class="w-3/4">
                     <x-select label="Taxon Rank" name="rankid" id="rankid"
-                        x-model="rankid" :items="$allTaxonRanks
+                        @select-changed="rankid = $event.detail.value; console.log('Select changed to:', $event.detail.value)"
+                        :items="$allTaxonRanks
                             ->map(
                                 fn($r) => [
                                     'title' => $r->rankname,

@@ -1,39 +1,40 @@
-function updateLabels() {
-    const rankValue = parseInt(this.rankid);
+function updateLabels(alpineData) {
+    console.log("updateLabels called! rankid:", alpineData?.rankid);
+    
+    // Defensive check to ensure alpineData exists
+    if (!alpineData) {
+        return;
+    }
+
+    const rankValue = parseInt(alpineData.rankid);
     const highRankThreshold = 220;
+    
     if (rankValue >= highRankThreshold) {
-        this.unit1Label = "Genus";
-        this.unit2Label = "Species";
-    } else if (this.rankid) {
-        const selectedRank = this.allTaxonRanks.find(
-            (rank) => rank.rankid == this.rankid,
+        alpineData.unit1Label = "Genus";
+        alpineData.unit2Label = "Species";
+        console.log("Set labels for high rank (>=220): Genus/Species");
+    } else if (alpineData.rankid && alpineData.allTaxonRanks && Array.isArray(alpineData.allTaxonRanks)) {
+        const selectedRank = alpineData.allTaxonRanks.find(
+            (rank) => rank.rankid == alpineData.rankid,
         );
-        this.unit1Label = selectedRank ? selectedRank.rankname : "Genus";
+        alpineData.unit1Label = selectedRank ? selectedRank.rankname : "Genus";
+        console.log("Set label for selected rank:", selectedRank?.rankname || "Genus");
     } else {
-        this.unit1Label = "Genus";
-        this.unit2Label = "Species";
+        // Default fallback
+        alpineData.unit1Label = "Genus"; 
+        alpineData.unit2Label = "Species";
+        console.log("Using fallback: Genus/Species");
     }
 }
 
 function taxonomyCreateInit() {
-    this.$nextTick(() => {
-        console.log("deleteMe got here a0");
-        // manually adding listeners after rankid is rendered worked when referencing the onChange in the select component did not. Also tried $watch but that did not work either.
-        const selectEl = document.getElementById("rankid");
-        if (selectEl) {
-            selectEl.addEventListener("change", (e) => {
-                this.rankid = e.target.value;
-                this.updateLabels();
-            });
-            selectEl.addEventListener("input", (e) => {
-                this.rankid = e.target.value;
-                this.updateLabels();
-            });
-        }
-
+    // Store reference to Alpine.js context
+    const alpineContext = this;
+    
+    // Use queueMicrotask to ensure DOM elements are ready
+    queueMicrotask(() => {
         const parentNameEl = document.getElementById("parentname");
         if (parentNameEl) {
-            console.log("deleteMe got here a1");
             parentNameEl.addEventListener("change", (e) => {
                 const selectedId = e.detail.selection.id;
                 console.log("Selected parent taxon ID:", selectedId);
@@ -41,6 +42,9 @@ function taxonomyCreateInit() {
         }
     });
 }
+
+window.taxonomyCreateInit = taxonomyCreateInit;
+window.updateLabels = updateLabels;
 
 window.taxonomyCreateInit = taxonomyCreateInit;
 window.updateLabels = updateLabels;
