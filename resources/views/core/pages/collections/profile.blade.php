@@ -246,7 +246,7 @@ function colUrl($url, $extra_query = '') {
         </ul>
     </div>
 
-    <x-accordion label="More Information">
+    <x-accordion :label="$LANG['MORE_INFO']">
         <x-text-label :label="$LANG['COLLECTION_TYPE']">
             {{ $collection->collType }}
         </x-text-label>
