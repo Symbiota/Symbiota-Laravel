@@ -50,7 +50,8 @@ function colUrl($url, $extra_query = '') {
                     class="flex flex-col gap-2"
                 >
                     <input type="hidden" name="collid" value="{{ $collection->collID }}">
-                    <x-input name="catalogNumber" x-effect="if(modalOpen) $focus.focus($el)" label="Catalog Number" required />
+                    <x-input name="catalogNumber" x-effect="if(modalOpen) $focus.focus($el)" label="Catalog Number" />
+                    <x-taxa-search />
 
                     <div class="flex items-center">
                         <x-button type="submit">{{ $LANG['SEARCH'] }}</x-button>
