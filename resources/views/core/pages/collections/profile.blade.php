@@ -2,6 +2,7 @@
 @php
 global $LANG, $LANG_TAG;
 include_once(legacy_path('/classes/utilities/Language.php'));
+include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 Language::load('collections/misc/collprofiles');
 
 function colUrl($url, $extra_query = '') {
@@ -249,7 +250,16 @@ function colUrl($url, $extra_query = '') {
         </x-text-label>
 
         <x-text-label :label="$LANG['MANAGEMENT']">
-            {{ $collection->managementType }}
+        @switch($collection->managementType)
+            @case('Live Data')
+                {{ $LANG['LIVE_DATA'] }}
+                @break
+            @case('Aggregate')
+                {{ $LANG['DATA_AGGREGATE'] }}
+                @break
+            @default
+                {{ $LANG['DATA_SNAPSHOT'] }}
+        @endswitch
         </x-text-label>
 
         @if($collection->managementType != 'Live Data')
@@ -262,22 +272,44 @@ function colUrl($url, $extra_query = '') {
         <x-link :href="$collection->dwcaUrl">{{ $LANG['DWCA_PUB'] }}</x-link>
         @endif
 
+		@if($collection->managementType == 'Live Data')
+        <x-text-label :label="$LANG['GLOBAL_UNIQUE_ID']">
+            {{ $collection->collectionGuid }}
+        </x-text-label>
+		@endif
+
+		@if($collection->managementType == 'Snapshot')
+        <x-text-label :label="$LANG['IPT_SOURCE']">
+            <x-link href="#todo">{{ $collection->title }}</x-link>
+        </x-text-label>
+		@endif
+
         <x-text-label :label="$LANG['DIGITAL_METADATA']">
             <x-link :href="colUrl('datasets/emlhandler.php')" target="_blank">
+                {{-- TODO (Logan) translation (note) there is not a transferable one --}}
                 EML File
             </x-link>
         </x-text-label>
 
-        <x-text-label :label="$LANG['IPT_SOURCE']">
-            <x-link href="#todo">{{ $collection->title }}</x-link>
+        @if($collection->rights && false)
+        <x-text-label :label="$LANG['LICENSE']">
+            <div class="w-32">
+            {!! Purify::clean(GeneralUtil::getRightsHtml($collection->rights)) !!}
+            </div>
+        </x-text-label>
+        @else
+        <div>
+			<x-link href="{{ url('usagepolicy') }}" target="_blank">{{ $LANG['USAGE_POLICY'] }}</x-link>
+		</div>
+        @endif
+
+        <x-text-label :label="$LANG['RIGHTS_HOLDER']">
+            {{ $collection->rightsHolder }}
         </x-text-label>
 
-        @if($collection->rights)
-        <x-text-label :label="$LANG['LICENSE']">
-            {{-- TODO (Logan) GeneralUtil::getRightsHtml --}}
-            <img class="w-32" src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nd.png"/>
+        <x-text-label :label="$LANG['ACCESS_RIGHTS']">
+            {{ $collection->accessRights }}
         </x-text-label>
-        @endif
     </x-accordion>
 
     @if(isset($dynamic_stats['families']) || isset($dynamic_stats['countries']))
