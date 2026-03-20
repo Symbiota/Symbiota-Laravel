@@ -1,6 +1,6 @@
 @props(['collection', 'stats'])
 @php
-global $LANG, $LANG_TAG;
+global $LANG, $LANG_TAG, $DEFAULT_TITLE, $SERVER_HOST, $CLIENT_ROOT;
 include_once(legacy_path('/classes/utilities/Language.php'));
 include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 Language::load('collections/misc/collprofiles');
@@ -235,13 +235,40 @@ function colUrl($url, $extra_query = '') {
         @endif
 
         {{-- TODO (Logan) double check this link is stable and being used --}}
-        @if(($collection->publishToIdigbio ?? false) && ($collection->aggKeysStr['idigbioKey']))
+        @if(($collection->publishToIdigbio ?? false) && ($collection->aggKeysStr['idigbioKey'] ?? false))
         @php $idigBioUrl = 'https://www.idigbio.org/portal/recordsets/' .  $collection->aggKeysStr['datasetKey'] @endphp
         <x-text-label :label="$LANG['IDIGBIO_DATASET']">
             <x-link :href="$idigBioUrl" target="_blank" rel="noopener noreferrer">
                 {{ $idigBioUrl }}
             </x-link>
         </x-text-label>
+        @endif
+
+        @if(file_exists(legacy_path('/includes/citationcollection.php')))
+            <x-text-label label="Cite this collection">
+                <blockquote>
+				{{-- If GBIF dataset key is available, fetch GBIF format from API --}}
+                @if($collection->publishToGbif && ($collection->aggKeysStr['datasetKey'] ?? false) && file_exists(legacy_path('/includes/citationgbif.php')) && false)
+                @php
+					$gbifUrl = 'http://api.gbif.org/v1/dataset/' . $collection->aggKeysStr['datasetKey'];
+					$responseData = json_decode(file_get_contents($gbifUrl));
+($collection->aggKeysStr['datasetKey'] ?? false);
+					$collData['gbiftitle'] = $responseData->title;
+					$collData['doi'] = $responseData->doi;
+                    // TODO (Logan) create laravel template
+                    include(legacy_path('/includes/citationgbif.php'));
+                @endphp
+                @else
+                    @php
+					    $collData['collectionname'] = $collection->collectionName;
+					    $collData['recordid'] = $collection->recordId;
+					    $collData['dwcaurl'] = $collection->dwcaUrl;
+
+                        include(legacy_path('/includes/citationcollection.php'))
+                    @endphp
+                @endif
+                </blockquote>
+            </x-text-label>
         @endif
     </div>
 
