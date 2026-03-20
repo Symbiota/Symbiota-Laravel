@@ -378,35 +378,31 @@ function colUrl($url, $extra_query = '') {
         </x-text-label>
     </x-accordion>
 
-    @if(isset($dynamic_stats['families']) || isset($dynamic_stats['countries']))
+    @if(isset($stats->dynamicProperties->families) || isset($stats->dynamicProperties->countries))
     @php
-        $fam_georef_stats = [];
+        $fam_georef_stats = array();
 
-        if(isset($dynamic_stats['families'])) {
-            foreach($dynamic_stats['families'] as $key => $item) {
-                if(is_numeric($item['SpecimensPerFamily'])) {
+        if(isset($stats->dynamicProperties->families)) {
+            foreach($stats->dynamicProperties->families as $key => $item) {
+                if(is_numeric($item->SpecimensPerFamily)) {
                     $fam_georef_stats[] = [
                         'label' => $key,
-                        'value' => intval($item['SpecimensPerFamily'])
+                        'value' => intval($item->SpecimensPerFamily)
                     ];
                 }
             }
         }
 
-        $country_georef_stats = [];
-        if(isset($dynamic_stats['countries'])) {
-            foreach($dynamic_stats['countries'] as $key => $item) {
-                if(is_numeric($item['CountryCount'])) {
+        $country_georef_stats = array();
+        if(isset($stats->dynamicProperties->countries)) {
+            foreach($stats->dynamicProperties->countries as $key => $item) {
+                if(is_numeric($item->CountryCount)) {
                     $country_georef_stats[] = [
                         'label' => $key,
-                        'value' => intval($item['CountryCount'])
+                        'value' => intval($item->CountryCount)
                     ];
                 }
             }
-        }
-
-        function valueCmp($a, $b) {
-            return $b['value'] - $a['value'];
         }
 
         function calc_chart_width($item_count, $per_item = 16) {
@@ -415,16 +411,22 @@ function colUrl($url, $extra_query = '') {
             return $width < 600? '': $width;
         }
 
+        function valueCmp(array $a, array $b): int {
+            if($b['value'] > $a['value']) return 1;
+            else if($b['value'] < $a['value']) return -1;
+            else return 0;
+        }
+
         usort($country_georef_stats, 'valueCmp');
         usort($fam_georef_stats, 'valueCmp');
 
         $stats_tabs = [];
-        if(isset($dynamic_stats['families'])) {
+        if(isset($stats->dynamicProperties->families)) {
             $stats_tabs[] = $LANG['TAXON_DIST'];
 
         }
 
-        if(isset($dynamic_stats['countries'])) {
+        if(isset($stats->dynamicProperties->countries)) {
             $stats_tabs[] = $LANG['GEO_DIST'];
         }
     @endphp
@@ -433,12 +435,12 @@ function colUrl($url, $extra_query = '') {
         <div class="text-2xl font-bold">{{ $LANG['EXTRA_STATS'] }}</div>
 
         <x-tabs :tabs="$stats_tabs" class:body="border-x-0 border-b-0">
-            @isset($dynamic_stats['families'])
+            @isset($stats->dynamicProperties->families)
                 <x-chart name="Taxon Distribution" type="bar" width="{{ calc_chart_width(count($fam_georef_stats)) }}" height="600" class="w-full pb-4" :values="$fam_georef_stats" />
             @endisset
 
-            @isset($dynamic_stats['countries'])
-                <x-chart name="Geographic Distribution" type="bar" width="{{calc_chart_width(count($dynamic_stats['countries'])) }}" height="600" class="w-full pb-4" :values="$country_georef_stats"/>
+            @isset($stats->dynamicProperties->countries)
+                <x-chart name="Geographic Distribution" type="bar" width="{{calc_chart_width(count($country_georef_stats)) }}" height="600" class="w-full pb-4" :values="$country_georef_stats"/>
             @endisset
         </x-tabs>
     </div>
