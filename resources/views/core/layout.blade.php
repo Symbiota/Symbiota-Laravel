@@ -61,6 +61,10 @@ $grants= [
             document.querySelectorAll('[x-if]').forEach((item) => {
                 item._x_currentIfEl && item._x_currentIfEl.remove()
             })
+
+            document.querySelectorAll('[x-teleport]').forEach((item) => {
+                item._x_teleport && item._x_teleport.remove();
+            })
         })
     </script>
 </head>
