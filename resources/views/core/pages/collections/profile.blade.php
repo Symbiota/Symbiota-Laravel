@@ -24,7 +24,7 @@ function colUrl($url, $extra_query = '') {
 
     <div class="flex items-center gap-2">
         <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
-                {{-- TODO (Logan) Translations --}}
+            {{-- TODO (Logan) Translations --}}
             <x-button>Search Collection</x-button>
         </x-nav-link>
 
@@ -43,7 +43,12 @@ function colUrl($url, $extra_query = '') {
             </x-slot>
 
             <x-slot name="body">
-                <form hx-get="{{ url('collections/table') }}" hx-target="body" hx-push-url="true" hx-indicator="#quick-search-loader" class="flex flex-col gap-2">
+                <form method="get" action="{{ url('collections/table') }}"
+                    hx-get="{{ url('collections/table') }}"
+                    hx-push-url="true"
+                    hx-target="body"
+                    class="flex flex-col gap-2"
+                >
                     <input type="hidden" name="collid" value="{{ $collection->collID }}">
                     <x-input name="catalogNumber" x-effect="if(modalOpen) $focus.focus($el)" label="Catalog Number" required />
 
