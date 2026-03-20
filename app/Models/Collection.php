@@ -25,6 +25,8 @@ class Collection extends Model {
 
     protected $casts = [
         'dynamicProperties' => 'json',
+        'aggKeysStr' => 'json',
+        'dwcTermJson' => 'json',
     ];
 
     public function occurrence() {

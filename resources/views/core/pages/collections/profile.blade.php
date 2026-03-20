@@ -224,8 +224,26 @@ function colUrl($url, $extra_query = '') {
             @endforeach
         </div>
         @endif
-    </div>
 
+        @if(($collection->publishToGbif ?? false) && ($collection->aggKeysStr['datasetKey'] ?? false))
+        @php $gbifUrl = 'http://www.gbif.org/dataset/' .  $collection->aggKeysStr['datasetKey'] @endphp
+        <x-text-label :label="$LANG['GBIF_DATASET']">
+            <x-link :href="$gbifUrl" target="_blank" rel="noopener noreferrer">
+                {{ $gbifUrl }}
+            </x-link>
+        </x-text-label>
+        @endif
+
+        {{-- TODO (Logan) double check this link is stable and being used --}}
+        @if(($collection->publishToIdigbio ?? false) && ($collection->aggKeysStr['idigbioKey']))
+        @php $idigBioUrl = 'https://www.idigbio.org/portal/recordsets/' .  $collection->aggKeysStr['datasetKey'] @endphp
+        <x-text-label :label="$LANG['IDIGBIO_DATASET']">
+            <x-link :href="$idigBioUrl" target="_blank" rel="noopener noreferrer">
+                {{ $idigBioUrl }}
+            </x-link>
+        </x-text-label>
+        @endif
+    </div>
 
     <div>
         <div class="text-2xl font-bold">{{ $LANG['COLL_STATISTICS'] }}</div>
