@@ -20,22 +20,32 @@ function colUrl($url, $extra_query = '') {
         @isset($collection->icon)
             <img class="h-20"src="{{ $collection->icon }}"/>
         @endisset
-        <span class="text-4xl font-bold">{{ $collection->collectionName}}</span>
+        <span class="md:text-4xl text-xl font-bold">{{ $collection->collectionName}}</span>
     </div>
 
-    <div class="flex items-center gap-2">
-        <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
-            {{-- TODO (Logan) Translations --}}
-            <x-button>Search Collection</x-button>
-        </x-nav-link>
+    <div class="flex flex-wrap items-center gap-2">
+        @if($datasetKey = $collection->aggKeysStr['datasetKey'] ?? false)
+        <div class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
+            <iframe
+                title="GBIF citation"
+                src="https://www.gbif.org/api/widgets/literature/button?gbifDatasetKey={{ $datasetKey }}"
+                frameborder="0"
+                allowtransparency="true"
+                class="h-7 w-40 rounded-md"
+                >
+            </iframe>
+        </div>
+        <a href="https://bionomia.net/dataset/{{ $datasetKey }}" class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
+            <img src="https://api.bionomia.net/dataset/{{ $datasetKey }}/badge.svg" onerror="this.style.display=\'none\'"
+                alt="Bionomia dataset badge"
+                class="h-7 rounded-md"
+            >
+        </a>
+        @endif
 
-        <x-nav-link hx-boost="true" href="{{ url('media/search?collId=' . $collection->collID) }}">
-            {{-- TODO (Logan) Translations --}}
-            <x-button>Search Media</x-button>
-        </x-nav-link>
-
+        <div class="flex-grow md:justify-end flex items-center gap-2">
         <x-modal>
-            <x-slot name='button' variant="clear-primary">
+            <x-slot name='button' class="flex-grow-1" variant="clear-primary">
                 {{ $LANG['QUICK_SEARCH'] }}
             </x-slot>
 
@@ -69,31 +79,11 @@ function colUrl($url, $extra_query = '') {
             <x-button>{{ $LANG['OCCURRENCE_EDITOR'] }}</x-button>
         </x-nav-link>
         @endcan
-    </div>
-
-   @if($datasetKey = $collection->aggKeysStr['datasetKey'] ?? false)
-    <div class="flex gap-2">
-        <div class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
-            <iframe
-                title="GBIF citation"
-                src="https://www.gbif.org/api/widgets/literature/button?gbifDatasetKey={{ $datasetKey }}"
-                frameborder="0"
-                allowtransparency="true"
-                class="h-7 w-40 rounded-md"
-                >
-            </iframe>
         </div>
-        <a href="https://bionomia.net/dataset/{{ $datasetKey }}" class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
-            <img src="https://api.bionomia.net/dataset/{{ $datasetKey }}/badge.svg" onerror="this.style.display=\'none\'"
-                alt="Bionomia dataset badge"
-                class="h-7 rounded-md"
-            >
-        </a>
     </div>
-   @endif
 
     @can('COLL_EDIT', $collection->collid)
-    <x-accordion :label="$LANG['TOGGLE_MAN']" :open="false" variant="clear-primary">
+    <x-accordion :label="$LANG['TOGGLE_MAN']" :open="true" variant="clear-primary">
         <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
@@ -308,6 +298,18 @@ function colUrl($url, $extra_query = '') {
                 <li class="list-disc">{{ $totalTaxaCount }} {{ $LANG['TOTAL_TAXA'] }}</li>
             @endif
         </ul>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
+            {{-- TODO (Logan) Translations --}}
+            <x-button>Search Collection</x-button>
+        </x-nav-link>
+
+        <x-nav-link hx-boost="true" href="{{ url('media/search?collId=' . $collection->collID) }}">
+            {{-- TODO (Logan) Translations --}}
+            <x-button>Search Media</x-button>
+        </x-nav-link>
     </div>
 
     <x-accordion :label="$LANG['MORE_INFO']" :open="true" variant="clear-primary">
