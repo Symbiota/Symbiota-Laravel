@@ -42,13 +42,15 @@
             } else {
                 this.popoverPosition = 'bottom';
             }
+        },
+        destroy() {
+            window.removeEventListener('resize', this.popoverPositionCalculate);
         }
     }"
     x-init="
+        destroy();
         that = this;
-        window.addEventListener('resize', function(){
-            popoverPositionCalculate();
-        });
+        window.addEventListener('resize', popoverPositionCalculate);
 
         $watch('popoverOpen', function(value){
             if(value) {
