@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Collection extends Model {
     use HasFactory;
@@ -22,8 +23,24 @@ class Collection extends Model {
 
     protected $hidden = ['securityKey', 'guidTarget', 'aggKeysStr', 'dwcTermJson', 'publishToGbif', 'publishToIdigbio', 'dynamicProperties'];
 
+    protected $casts = [
+        'dynamicProperties' => 'json',
+    ];
+
     public function occurrence() {
         return $this->hasMany(Occurrence::class, 'collid', 'collid');
+    }
+
+    public function stats() {
+        $stats = DB::table('omcollectionstats as ocs')->where('collid', $this->collid)
+            ->select(['ocs.*', DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate')])
+            ->first();
+
+        if ($stats && $stats->dynamicProperties) {
+            $stats->dynamicProperties = json_decode($stats->dynamicProperties);
+        }
+
+        return $stats;
     }
 
     //collTypes

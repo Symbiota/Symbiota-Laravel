@@ -226,23 +226,20 @@ function colUrl($url, $extra_query = '') {
     </div>
 
 
-    @php
-        $dynamic_stats = $stats->dynamicProperties? json_decode($stats->dynamicProperties, true): [];
-    @endphp
     <div>
         <div class="text-2xl font-bold">{{ $LANG['COLL_STATISTICS'] }}</div>
         <ul class="pl-4">
             <li class="list-disc">{{ $stats->recordcnt ?? 0 }} {{ $LANG['SPECIMEN_RECORDS'] }}</li>
             <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ $stats->georefcnt? floor( ($stats->georefcnt / $stats->recordcnt) * 100): 0 }}%) {{ $LANG['GEOREFERENCED'] }}</li>
-            @isset($dynamic_stats['SpecimensCountID'])
-                <li class="list-disc">{{ $dynamic_stats['SpecimensCountID'] }} ({{ $dynamic_stats['SpecimensCountID']? floor( ($dynamic_stats['SpecimensCountID'] / $stats->recordcnt) * 100) : 0}}%) {{ $LANG['IDED_TO_SPECIES'] }}</li>
-            @endisset
+            @if($specimensCount = $stats->dynamicProperties->SpecimensCountID ?? false)
+                <li class="list-disc">{{ $specimensCount }} ({{ $specimensCount? floor( ($specimensCount / $stats->recordcnt) * 100) : 0}}%) {{ $LANG['IDED_TO_SPECIES'] }}</li>
+            @endif
             <li class="list-disc">{{ $stats->familycnt ?? 0 }} {{ $LANG['FAMILIES'] }}</li>
             <li class="list-disc">{{ $stats->genuscnt ?? 0 }} {{ $LANG['GENERA'] }}</li>
             <li class="list-disc">{{ $stats->speciescnt ?? 0 }} {{ $LANG['SPECIES'] }}</li>
-            @isset($dynamic_stats['TotalTaxaCount'])
-                <li class="list-disc">{{ $dynamic_stats['TotalTaxaCount'] }} {{ $LANG['TOTAL_TAXA'] }}</li>
-            @endisset
+            @if($totalTaxaCount = $stats->dynamicProperties->TotalTaxaCount ?? false)
+                <li class="list-disc">{{ $totalTaxaCount }} {{ $LANG['TOTAL_TAXA'] }}</li>
+            @endif
         </ul>
     </div>
 

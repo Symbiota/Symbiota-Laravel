@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -9,15 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller {
     public static function collection(int $collid) {
-        $collection = DB::table('omcollections as c')->leftJoin('uploadspecparameters as usp', 'usp.collid', 'c.collid')->where('c.collid', $collid)->select('*')->first();
-
-        $collection_stats = DB::table('omcollectionstats as ocs')->where('collid', $collid)
-            ->select(['ocs.*',
-                DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate'),
-            ])
+        $collection = Collection::query()
+            ->leftJoin('uploadspecparameters as usp', 'usp.collId', 'omcollections.collId')
+            ->where('omcollections.collId', $collid)
             ->first();
 
-        return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection_stats]);
+        return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection->stats()]);
     }
 
     public static function profileList() {
