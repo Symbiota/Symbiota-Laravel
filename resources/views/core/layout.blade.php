@@ -47,20 +47,27 @@ $grants= [
     @stack('css-styles')
     {{-- Note This stack should only be used if navigating without partial load. Currently only dev documentation --}}
     @stack('js-libs')
+
+    {{--
+    This Script cleans up alpine dom manipulations before htmx snapshots the page.
+    Note other was have have been tried such as snapshotting before alpine does the dom
+    manipulations but this did not work for repeated backwards and forwards history swapping.
+    --}}
+    <script>
+        document.addEventListener('htmx:beforeHistorySave', (evt) => {
+            document.querySelectorAll('[x-for]').forEach((item) => {
+                item._x_lookup && Object.values(item._x_lookup).forEach((el) => el.remove())
+            })
+            document.querySelectorAll('[x-if]').forEach((item) => {
+                item._x_currentIfEl && item._x_currentIfEl.remove()
+            })
+        })
+    </script>
 </head>
 
 <body
     x-trap="true"
-    x-data="{
-        innerHTMLSnapshot: null,
-        init: () => innerHTMLSnapshot = $el.innerHTML,
-        setSnapshot: () => $el.innerHTML = innerHTMLSnapshot
-    }"
-    x-on:htmx:before-history-save.window.camel="setSnapshot()"
 >
-    {{-- This div with the snapshots is to prevent alpine from try to render dom state using the html history,
-         dom history will need to be handled in a different way
-    --}}
     <div id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content"
         >
         @if($hasHeader)
