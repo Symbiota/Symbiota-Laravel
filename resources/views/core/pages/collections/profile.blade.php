@@ -93,7 +93,7 @@ function colUrl($url, $extra_query = '') {
    @endif
 
     @can('COLL_EDIT', $collection->collid)
-    <x-accordion :label="$LANG['TOGGLE_MAN']" open="true">
+    <x-accordion :label="$LANG['TOGGLE_MAN']" :open="false" variant="clear-primary">
         <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
@@ -310,7 +310,7 @@ function colUrl($url, $extra_query = '') {
         </ul>
     </div>
 
-    <x-accordion :label="$LANG['MORE_INFO']">
+    <x-accordion :label="$LANG['MORE_INFO']" :open="true" variant="clear-primary">
         <x-text-label :label="$LANG['COLLECTION_TYPE']">
             {{ $collection->collType }}
         </x-text-label>
