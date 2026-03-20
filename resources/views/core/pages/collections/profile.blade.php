@@ -71,6 +71,27 @@ function colUrl($url, $extra_query = '') {
         @endcan
     </div>
 
+   @if($datasetKey = $collection->aggKeysStr['datasetKey'] ?? false)
+    <div class="flex gap-2">
+        <div class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
+            <iframe
+                title="GBIF citation"
+                src="https://www.gbif.org/api/widgets/literature/button?gbifDatasetKey={{ $datasetKey }}"
+                frameborder="0"
+                allowtransparency="true"
+                class="h-7 w-40 rounded-md"
+                >
+            </iframe>
+        </div>
+        <a href="https://bionomia.net/dataset/{{ $datasetKey }}" class="hover:ring-4 focus:ring-4 rounded-md ring-accent">
+            <img src="https://api.bionomia.net/dataset/{{ $datasetKey }}/badge.svg" onerror="this.style.display=\'none\'"
+                alt="Bionomia dataset badge"
+                class="h-7 rounded-md"
+            >
+        </a>
+    </div>
+   @endif
+
     @can('COLL_EDIT', $collection->collid)
     <x-accordion :label="$LANG['TOGGLE_MAN']" open="true">
         <div class="flex flex-wrap gap-2">
