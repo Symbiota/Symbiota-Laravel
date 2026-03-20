@@ -19,8 +19,13 @@
 
         let count = label_value_map.length;
 
-        const labels = label_value_map.map(v => `${v.label} (${v.value})` );
-        const values = label_value_map.map(v => v.value);
+        const labels = [];
+        const values = [];
+
+        for(let item of label_value_map) {
+            labels.push(`${item.label} (${item.value})`);
+            values.push(item.value);
+        }
 
         let base_colors = [
             '#ff595e',
