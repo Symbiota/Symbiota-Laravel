@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_VALUE' => 'New Value',
+    'SUBMIT_SORT_EDITS' => 'Submit Media Sort Edits',
+    'ADD_NEW_IMAGE' => 'Add New Media',
+    'SELECT_IMAGE_TO_UPLOAD' => 'Select a media file located on your computer that you want to upload',
+    'KEEP_LARGE_IMG' => 'Keep a large version of file, when applicable',
+    'IMG_SIZE_NO_GREATER' => 'Note: upload size can not be greater than 4MB',
+    'LINK_TO_EXTERNAL' => 'Link to External Media',
+    'ENTER_URL_IMG' => 'Enter a URL to a media file already located on a web server',
+    'IMPORT_IMG_LOCAL' => 'Import Media to local server',
+    'UPLOAD_LOCAL' => 'Upload Local Media',
+    'SEL_CREATOR' => 'Select Creator',
+    'DISP_CREATOR_OVERRIDE' => 'Display creator override field',
+    'CREATOR_OVERRIDE_EXPLAIN' => 'Use only when creator is not found in above pulldown',
+    'URL_TO_SOURCE' => 'URL to source project. Use when linking to an external media resource.',
+    'OCC_REC_NUM' => 'Occurrence Record #',
+    'UPLOAD_IMAGE' => 'Upload Media Resource',
+    'MUST_HAVE_EDIT_PERM' => 'Must have editing privileges for the collection managing this media file',
+    'IMAGE_LINKED_TO' => 'Media linked to',
+    'TP_IMAGE_EDITOR' => 'Taxon Profile Media Editor',
+    'NOT_SPECIFIED' => 'Not Specified',
+    'NOT_SET' => 'Not Set',
+];

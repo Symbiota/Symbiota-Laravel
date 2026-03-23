@@ -1,0 +1,24 @@
+<?php
+
+return [
+    'FAILED' => '¡Falló actualización de perfil!',
+    'PWORD_SUCCESS' => 'Actualización de contraseña exitosa',
+    'ERROR_PWD_SAME' => 'ERROR: Su nueva contraseña no puede ser la misma que su contraseña anterior',
+    'PWD_UPDATE_FAILED' => '¡Falló actualización de contraseña!',
+    'UPDATE_SUCCESSFUL' => '¡Actualización de nombre de usuario exitosa!',
+    'LOGIN_USED' => 'El inicio de sesión ya está siendo utilizado por otro usuario. Intente un nuevo inicio de sesión.',
+    'INCORRECT_PWD' => 'ERROR al guardar el nuevo inicio de sesión: contraseña incorrecta',
+    'ERROR_SAVING_LOGIN' => 'ERROR al guardar el nuevo inicio de sesión. Póngase en contacto con el administrador',
+    'TOKENS_CLEARED' => '¡Tokens de acceso borrados!',
+    'TOKENS_ERROR' => 'ERROR al borrar tokens de acceso',
+    'DELETE_FAILED' => '¡Falló eliminación del perfil!',
+    'DATA_CONFLICT' => 'ID de usuario requerido dentro de otra tabla (e.g. foreign key constraint).',
+    'CONTACT_ADMIN' => 'Por favor contacte al administrador del sistema.',
+    'MY_PROFILE' => 'Mi Perfil',
+    'VIEW_PROFILE' => 'Ver Perfil del Usuario',
+    'SPEC_CHECKLIST' => 'Listados de Especies',
+    'OCC_MGMNT' => 'Manejo de Ocurrencias',
+    'USER_PROFILE' => 'Perfil de Usuarios',
+    'IDS_NEEDED' => 'Identificaciones Necesarias',
+    'IMAGES_ID' => 'Imágenes para Identificación',
+];

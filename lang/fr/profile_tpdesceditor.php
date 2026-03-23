@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_DESC_BLOCK' => 'Nouveau Bloc de Description',
+    'DISPLAY_LEVEL' => 'Niveau d\'Affichage',
+    'ADD_DESC_BLOCK' => 'Ajouter Bloc de Description',
+    'DESCRIPTION_' => 'Description ',
+    'EDIT_DESC_BLOCK' => 'Modifier Bloc de Description',
+    'LINKED_TO_SYN' => 'Lié à un synonyme',
+    'RELINK_TO_ACCEPTED' => 'relier au taxon accepté',
+    'DESC_BLOCK_EDITS' => 'Modifications du bloc de Description',
+    'SURE_DELETE_DESC' => 'Êtes-vous sûr de vouloir supprimer définitivement cette description ?',
+    'DEL_DESC_BLOCK' => 'Supprimer Bloc de Description',
+    'INC_STATEMENTS_BELOW' => '(Y compris toutes les instructions répertoriées ci-dessous)',
+    'STATEMENTS' => 'Déclarations',
+    'ADD_NEW_STATEMENT' => 'Ajouter Nouvelle Instruction',
+    'NEW_DESC_STATMENT' => 'Nouvelle Instruction de Description',
+    'HEADING' => 'En-tête',
+    'ADD_STATEMENT' => 'Ajouter Instruction',
+    'EDIT_STATEMENT' => 'Modifier l\'Instruction',
+    'DISPLAY_HEADER' => 'Afficher l\'En-tête',
+    'SURE_DELETE_STATEMENT' => 'Êtes-vous sûr de vouloir supprimer définitivement cette instruction?',
+    'DEL_STATEMENT' => 'Supprimer l\'Instruction',
+    'NO_DESC' => 'Aucune description disponible',
+];

@@ -1,0 +1,47 @@
+<?php
+
+return [
+    'HARVESTER_ISSUE' => 'La cosechadora encontró un problema',
+    'BATCH_HARVESTER_ISSUE' => 'El recolector encontró un problema',
+    'GEOTHESAURUS_HARVESTER' => 'Tesauro geográfico Havester',
+    'GEOGRAPHIC_HARVESTER' => 'Cosechadora geográfica',
+    'ACTIVE_GEOGRAPHIC_THESAURUS' => 'Tesauro geográfico activo',
+    'SHOW_NO_POLYGON' => 'Mostrar límites faltando un polígono',
+    'SHOW_NO_DATABASE' => 'Mostrar límites que faltan en la base de datos',
+    'STATE/PROVINCE' => 'Estado/Provincia',
+    'MUNICIPALITIES' => 'Municipios',
+    'GO_TO_GEOGRAPHIC_THESAURUS' => 'Ir al Tesauro Geográfico',
+    'ACTIVE_THES_EMPTY' => 'El diccionario de sinónimos activo está vacío',
+    'SCRIPT_INSTALL' => 'Instalación del Script',
+    'RUN_SCRIPT' => 'Ejecutar script',
+    'INSTALL_VIA_SCRIPT' => 'El <a href="https://symbiota.org" target="_blank">Centro de Soporte de Symbiota</a> ha proporcionado un script de datos que se puede utilizar para crear un tesauro geográfico básico.
+Este archivo de datos creará países, estados/provincias para Canadá, Estados Unidos y México, y condados/parroquias para Estados Unidos y Canadá.
+Una vez que se haya establecido un tesauro base, se puede ampliar utilizando las herramientas de importación de límites geográficos que se muestran a continuación.',
+    'GEOBOUNDARIES' => 'geoBoundaries opciones de importación',
+    'GEOBOUNDARIES_DESCRIPTION' => 'Estas funciones se pueden utilizar para importar límites geográficos y polígonos a través de la API de <a href="https://www.geoboundaries.org" target="_blank">geoBoundaries</a>.
+	Los recursos de geoBoundaries están disponibles públicamente gracias al apoyo y las contribuciones de numerosas
+	<a href="https://www.geoboundaries.org/contribute.html" target="_blank">personas, organizaciones y entidades financiadoras</a>',
+    'ADD_ALL_BOUNDARIES' => 'Agregar todos los límites internacionales',
+    'COUNTRY_LIST_NAV' => 'Volver a la lista de países',
+    'ADD_BOUNDARIES' => 'Agregar límites',
+    'LOADING_GEO_DATA_TEXT' => 'Este proceso puede tardar un poco en procesar los datos geográficos',
+    'ADD_IF_GEOUNITS_MISSING' => 'Agregar unidades geográficas si faltan',
+    'TABLE_NAME' => 'Nombre',
+    'TABLE_TYPE' => 'Tipo',
+    'TABLE_INCOMING_COUNT' => 'Recuento entrante',
+    'TABLE_DATABASE_COUNT' => 'Recuento de la base de datos',
+    'TABLE_ISO3' => 'ISO3',
+    'TABLE_DATABASE' => 'Base de datos',
+    'TABLE_POLYGON' => 'Polígono',
+    'TABLE_BOUNDARY_ID' => 'ID de límite',
+    'TABLE_CANONICAL_NAME' => 'Nombre canónico',
+    'TABLE_LICENSE' => 'Licencia',
+    'TABLE_REGION' => 'Región',
+    'TABLE_FULL_LINK' => 'Enlace completo',
+    'TABLE_IMAGE_PREVIEW' => 'Vista previa de imagen',
+    'YES' => 'Sí',
+    'NO' => 'No',
+    'LINK' => 'enlace',
+    'ERR_FILE_READ' => 'Error: unexpected fail during read',
+    'ERR_SCRIPT_MISSING' => 'Faltan scripts SQL (ruta: config/schema/3.0/data/geothesaurus.sql)',
+];

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_VALUE' => 'Nouvelle Valeur',
+    'SUBMIT_SORT_EDITS' => 'Soumettre des modifications de tri multimédia',
+    'ADD_NEW_IMAGE' => 'Ajouter un nouveau multimédia',
+    'SELECT_IMAGE_TO_UPLOAD' => 'Sélectionnez un fichier multimédia situé sur votre ordinateur que vous souhaitez télécharger',
+    'KEEP_LARGE_IMG' => 'Conserver une version volumineuse du fichier, le cas échéant',
+    'IMG_SIZE_NO_GREATER' => 'Remarque: la taille du téléchargée ne peut pas être supérieure à 4 Mo',
+    'LINK_TO_EXTERNAL' => 'Lien vers un multimédia externe',
+    'ENTER_URL_IMG' => 'Saisissez une URL vers un fichier multimédia déjà situé sur un serveur Web',
+    'IMPORT_IMG_LOCAL' => 'Importer du multimédia sur le serveur local',
+    'UPLOAD_LOCAL' => 'Télécharger du multimédia local',
+    'SEL_CREATOR' => 'Sélectionner le créateur',
+    'DISP_CREATOR_OVERRIDE' => 'Afficher le champ de remplacement du créateur',
+    'CREATOR_OVERRIDE_EXPLAIN' => 'Utiliser uniquement lorsque le créateur n\'est pas trouvé dans la liste déroulante ci-dessus',
+    'URL_TO_SOURCE' => 'URL vers le projet source. À utiliser lors de la création d\'un lien vers un média externe.',
+    'OCC_REC_NUM' => 'Enregistrement d\'Occurrence #',
+    'UPLOAD_IMAGE' => 'Télécharger du multimédia',
+    'MUST_HAVE_EDIT_PERM' => 'Doit disposer de privilèges d\'édition pour la collection gérant ce fichier multimédia',
+    'IMAGE_LINKED_TO' => 'Multimédia lié à',
+    'TP_IMAGE_EDITOR' => 'Éditeur multimédia de profil de taxon',
+    'NOT_SPECIFIED' => 'Non spécifié',
+    'NOT_SET' => 'Non défini',
+];

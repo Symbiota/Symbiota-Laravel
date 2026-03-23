@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NEW_VALUE' => 'Nuevo Valor',
+    'SUBMIT_SORT_EDITS' => 'Enviar ediciones de clasificación medios',
+    'ADD_NEW_IMAGE' => 'Agregar nuevos elementos medios',
+    'SELECT_IMAGE_TO_UPLOAD' => 'Seleccione un archivo medios ubicado en su computadora que desee cargar',
+    'KEEP_LARGE_IMG' => 'Mantenga una versión grande del archivo, cuando corresponda.',
+    'IMG_SIZE_NO_GREATER' => 'Nota: el tamaño de cargada no puede ser superior a 4 MB',
+    'LINK_TO_EXTERNAL' => 'Enlace a medios externo',
+    'ENTER_URL_IMG' => 'Ingrese una URL a un archivo medios que ya se encuentra en un servidor web',
+    'IMPORT_IMG_LOCAL' => 'Importar medios al servidor local',
+    'UPLOAD_LOCAL' => 'Cargar medios local',
+    'SEL_CREATOR' => 'Seleccionar creador',
+    'DISP_CREATOR_OVERRIDE' => 'Mostrar campo de anulación del creador',
+    'CREATOR_OVERRIDE_EXPLAIN' => 'Usar solo cuando el creador no se encuentra en el menú desplegable anterior',
+    'URL_TO_SOURCE' => 'URL al proyecto fuente. Úselo al vincular a un medio externo.',
+    'OCC_REC_NUM' => 'Registro de Ocurrencia #',
+    'UPLOAD_IMAGE' => 'Subir medios',
+    'MUST_HAVE_EDIT_PERM' => 'Debe tener privilegios de edición para la colección que administra este archivo medios.',
+    'IMAGE_LINKED_TO' => 'Medios enlazada a',
+    'TP_IMAGE_EDITOR' => 'Editor medios de perfiles de taxones',
+    'NOT_SPECIFIED' => 'No especificado',
+    'NOT_SET' => 'No establecido',
+];
