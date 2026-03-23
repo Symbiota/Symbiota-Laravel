@@ -44,3 +44,31 @@ if (! function_exists('docs_url')) {
         return $baseUrl . ltrim($path, '/');
     }
 }
+
+if (! function_exists('item')) {
+    function item(mixed $value, ?string $title = null, bool $disabled = false): array {
+        return ['value' => $value, 'title' => $title ?? $value, 'disabled' => $disabled];
+    }
+}
+
+if (! function_exists('itemize')) {
+    function itemize(array $values, array $defaults = []): array {
+        $items = $defaults;
+        foreach ($values as $key => $label) {
+            $items[] = item($key, $label);
+        }
+
+        return $items;
+    }
+}
+
+if (! function_exists('itemize_flat')) {
+    function itemize_flat(array $values, array $defaults = []): array {
+        $items = $defaults;
+        foreach ($values as $value) {
+            $items[] = item($value);
+        }
+
+        return $items;
+    }
+}
