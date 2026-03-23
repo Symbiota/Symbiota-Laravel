@@ -17,21 +17,18 @@
     </div>
 
     <div class="flex flex-col items-center justify-center"
-        x-init ="$nextTick(() => { 
-            console.log('Alpine component initialized');
-            if (window.taxonomyCreateInit) taxonomyCreateInit.call(this);
+        x-init =" 
             $watch('rankid', (newValue, oldValue) => {
                 console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
                 updateLabels();
             });
-        })"
+        "
         x-data="{
             unit1Label: 'Genus',
             unit2Label: 'Species',
             rankid: null,
             allTaxonRanks: @js($allTaxonRanks),
             updateLabels() {
-                console.log('updateLabels called from Alpine component');
                 if (window.updateLabels) {
                     window.updateLabels(this);
                 }
