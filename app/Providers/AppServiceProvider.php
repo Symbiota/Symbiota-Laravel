@@ -67,13 +67,14 @@ class AppServiceProvider extends ServiceProvider {
             ]);
         });
 
-        Gate::define('PROJ_VIEW', function (User $user, $pid) {
+        Gate::define('PROJ_VIEW', function (?User $user, $pid) {
             $project = Project::where('pid', $pid)->first();
-
-            return $project->isPublic || $user->hasOneRoles([
+            $projAdmin = $user ? $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,
                 UserRole::PROJ_ADMIN => $pid,
-            ]);
+            ]) : false;
+
+            return $project->ispublic || $projAdmin;
         });
 
         Gate::define('COLL_EDIT', function (User $user, $collid) {
