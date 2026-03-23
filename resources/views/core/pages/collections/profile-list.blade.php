@@ -1,4 +1,4 @@
-@props(['collections'])
+@props(['collections' => \App\Models\Collection::query()->get()])
 <x-layout class="flex flex-col gap-4">
     <x-breadcrumbs :items="[
         ['title' => __('header.H_HOME'), 'href' => url('')],

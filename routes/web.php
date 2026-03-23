@@ -120,7 +120,7 @@ Route::group(['prefix' => '/tools'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/collections'], function () {
-    Route::get('/', [CollectionController::class, 'profileList']);
+    Route::view('/', 'pages/collections/profile-list');
     Route::get('/search', [CollectionController::class, 'searchPage']);
     Route::get('/publisher', [CollectionController::class, 'publisherPage']);
     Route::get('/map/search', [CollectionController::class, 'mapSearchPage']);
