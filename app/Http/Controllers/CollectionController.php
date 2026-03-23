@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -21,8 +22,7 @@ class CollectionController extends Controller {
     }
 
     public static function profileList() {
-        $collections = DB::table('omcollections as c')->select('*')->get();
-
+        $collections = Collection::query()->get();
         return view('pages/collections/profile-list', ['collections' => $collections]);
     }
 
