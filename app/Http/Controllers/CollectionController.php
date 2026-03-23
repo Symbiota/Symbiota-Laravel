@@ -23,6 +23,7 @@ class CollectionController extends Controller {
 
     public static function profileList() {
         $collections = Collection::query()->get();
+
         return view('pages/collections/profile-list', ['collections' => $collections]);
     }
 
