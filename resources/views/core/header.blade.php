@@ -19,21 +19,21 @@
         <nav class="flex grow items-center justify-end space-x-3 mr-4">
             @if (Auth::check())
             <span class="text-base text-shadow-lg">
-                {!! __("templates_header.H_WELCOME") !!}
+                {!! __("header.H_WELCOME") !!}
                 {{ Auth::user()->firstName}}!
             </span>
             <x-button class="text-base" href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
-                {!! __("templates_header.H_MY_PROFILE") !!}
+                {!! __("header.H_MY_PROFILE") !!}
             </x-button>
             <x-button class="text-base cursor-pointer" href="{{ url('/logout') }}" hx-boost="true" hx-boost="true" variant="{{ $buttonVariant }}">
-                {!! __("template_header.H_LOGOUT") !!}
+                {!! __("header.H_LOGOUT") !!}
             </x-button>
             @else
             <x-button class="text-base" href="#" variant="{{ $buttonVariant }}">
-                {!! __("templates_header.H_CONTACT_US") !!}
+                {!! __("header.H_CONTACT_US") !!}
             </x-button>
             <x-button class="text-base" href="{{ url('/login') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
-                {!! __("templates_header.H_LOGIN") !!}
+                {!! __("header.H_LOGIN") !!}
             </x-button>
             @endif
         </nav>

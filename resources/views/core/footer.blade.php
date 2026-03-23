@@ -19,7 +19,7 @@
         <div class="text-xs">
             @if(!empty($grants))
             <p>
-                {{ __('templates_header.F_NSF_AWARDS') }}
+                {{ __('header.F_NSF_AWARDS') }}
                 @for ($i = 0; $i < count($grants); $i++)
                 <x-link class="text-xs" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
                    {{$grants[$i]['label']}}
@@ -29,18 +29,18 @@
             </p>
             @endif
             <p>
-                {{ __('templates_header.F_MORE_INFO') }},
+                {{ __('header.F_MORE_INFO') }},
 
                 <x-link class="text-xs" href="{{ docs_url() }}" target="_blank" rel="noreferrer">
-                    {{ __('templates_header.F_READ_DOCS') }},
+                    {{ __('header.F_READ_DOCS') }},
                 </x-link>
-                {{ __('templates_header.F_CONTACT') }},
+                {{ __('header.F_CONTACT') }},
                 <x-link class="text-xs" href="https://symbiota.org/contact-the-support-hub/" target="_blank" rel="noreferrer">
-                    {{ __('templates_header.F_SSH') }},
+                    {{ __('header.F_SSH') }},
                 </x-link>
             </p>
             <p>
-                {{ __('templates_header.F_POWERED_BY') }},
+                {{ __('header.F_POWERED_BY') }},
                 <x-link class="text-xs" href="https://symbiota.org/" target="_blank">
                     Symbiota
                 </x-link>

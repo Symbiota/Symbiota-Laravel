@@ -1,14 +1,14 @@
 @props(['hasHeader' => true, 'hasNavbar' => true, 'hasFooter' => true])
 @php
 $navigations = [
-    ["title" => __("templates_header.H_HOME"), "link" => url('/'), "htmx" => true],
-    ["title" => __("templates_header.H_SEARCH"), "link" => url('/collections/search'), 'htmx' => true ],
-    ["title" => __("templates_header.H_MAP_SEARCH"), "link" => legacy_url('/collections/map/index.php')],
-    ["title" => __("templates_header.H_INVENTORIES"), "link" => url('/checklists'), 'htmx' => true],
-    ["title" => __("templates_header.H_MEDIA"), "link" => url('/media/search'), 'htmx' => true],
-    ["title" => __("templates_header.H_DATA_USAGE"), "link" => url('/usagepolicy'), 'htmx' => true],
-    ["title" => __("templates_header.H_HELP"), "link" => docs_url()],
-    ["title" => __("templates_header.H_SITEMAP"), "link" => url('/sitemap'), 'htmx' => true],
+    ["title" => __("header.H_HOME"), "link" => url('/'), "htmx" => true],
+    ["title" => __("header.H_SEARCH"), "link" => url('/collections/search'), 'htmx' => true ],
+    ["title" => __("header.H_MAP_SEARCH"), "link" => legacy_url('/collections/map/index.php')],
+    ["title" => __("header.H_INVENTORIES"), "link" => url('/checklists'), 'htmx' => true],
+    ["title" => __("header.H_MEDIA"), "link" => url('/media/search'), 'htmx' => true],
+    ["title" => __("header.H_DATA_USAGE"), "link" => url('/usagepolicy'), 'htmx' => true],
+    ["title" => __("header.H_HELP"), "link" => docs_url()],
+    ["title" => __("header.H_SITEMAP"), "link" => url('/sitemap'), 'htmx' => true],
 ];
 
 $logos = [
