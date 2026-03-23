@@ -26,7 +26,7 @@
         x-data="{
             unit1Label: 'Genus',
             unit2Label: 'Species',
-            rankid: null,
+            rankid: 220,
             allTaxonRanks: @js($allTaxonRanks),
             updateLabels() {
                 if (window.updateLabels) {
@@ -92,8 +92,8 @@
                     </div>
                 </div>
 
-                <div id="unit2" class="flex items-center gap-2 mb-4"
-                    x-show="!rankid || parseInt(rankid) >= 220">
+                <div id="unit2"
+                    class="flex items-center gap-2 mb-4"="!rankid || parseInt(rankid) >= 220">
                     <div class="flex flex-col">
                         <label class="text mb-1" for="unitind2-toggle"
                             x-text="unit2Label + ' Decorator'"></label>
@@ -126,6 +126,8 @@
                     <x-taxa-search :label="'Parent Taxon'" required id="parentname"
                         name="parentname" :hide_selector="true" :label_classes="''"
                         :hide_synonyms_checkbox="true" />
+                    <input type="hidden" name="parenttid" id="parenttid"
+                        value="">
                 </div>
                 <div class="w-1/2 mt-2">
                     <x-input label="Notes" name="notes" id="notes"
