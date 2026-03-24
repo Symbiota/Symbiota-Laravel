@@ -35,6 +35,7 @@ use Laravel\Socialite\Facades\Socialite;
 | General Routes
 |--------------------------------------------------------------------------
 */
+
 Route::view('/', 'pages/home')->name('home');
 Route::view('Portal/', 'pages/home');
 Route::view('/tw', 'tw-components');
@@ -47,7 +48,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
-    Route::get('/create', [TaxonomyController::class, 'createTaxon'])->name('taxon.createview'); // Note that I think we ought to name more routes to make them easier to change
+    Route::get('/create', [TaxonomyController::class, 'createTaxon'])->name('taxon.createview')->middleware('auth.403'); // Note that I think we ought to name more routes to make them easier to change
     Route::post('/store', [TaxonomyController::class, 'store'])->name('taxon.store');
     Route::get('/{tid}', [TaxonomyController::class, 'taxon']);
     Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
@@ -183,10 +184,11 @@ Route::group(['prefix' => '/auth'], function () {
     Route::get('/oauth/orcid', function () {
         $orcid_user = Socialite::driver('orcid')->user();
 
-        $user = User::updateOrCreate([
-            'guid' => $orcid_user->id,
-            'oauth_provider' => 'orcid',
-        ],
+        $user = User::updateOrCreate(
+            [
+                'guid' => $orcid_user->id,
+                'oauth_provider' => 'orcid',
+            ],
             [
                 'name' => $orcid_user->name,
                 'firstName' => $orcid_user->attributes['firstName'],
@@ -195,7 +197,8 @@ Route::group(['prefix' => '/auth'], function () {
                 //'guid' => $orcid_user->id,
                 'access_token' => $orcid_user->token,
                 'refresh_token' => $orcid_user->refreshToken,
-            ]);
+            ]
+        );
 
         Auth::login($user);
 
