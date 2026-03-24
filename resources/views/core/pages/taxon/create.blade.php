@@ -142,12 +142,34 @@
                 <fieldset class="border border-base-300 rounded-md p-4 mb-4">
                     <legend class="text-2xl font-semibold">Acceptance Status
                     </legend>
-                    <x-radio name="acceptance_status" :options="[
+                    <x-radio name="acceptstatus" :options="[
                         ['label' => 'Accepted', 'value' => 1],
                         ['label' => 'Not Accepted', 'value' => 0],
                     ]"
                         default_value="1" />
                 </fieldset>
+                <div id="accdiv" class="hidden">
+                    <div>
+                        <div class="left-column">
+                            <label for="acceptedstr"> Accepted Taxon:
+                            </label>
+                        </div>
+                        <input id="acceptedstr" name="acceptedstr"
+                            type="text" class="search-bar-long" />
+                        <input id="tidaccepted" name="tidaccepted"
+                            type="hidden" />
+                    </div>
+                    <div>
+                        <div class="left-column">
+                            <label for="unacceptabilityreason"> Unacceptability
+                                Reason:
+                            </label>
+                        </div>
+                        <input type='text' id='unacceptabilityreason'
+                            name='unacceptabilityreason'
+                            class='search-bar-long' />
+                    </div>
+                </div>
                 <div>
                     <span class="text-sm italic text-base-content">* = Required
                         Field</span>
