@@ -193,10 +193,10 @@ class TaxonomyController extends Controller {
 
         if ($tidResult > 0) {
             // Redirect to the newly created taxon's page
-            // return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+            return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
             // Redirect back with error message
-            // return redirect()->back()->withInput()->withErrors(['error' => $tidResult]);
+            return redirect()->back()->withInput()->withErrors(['error' => $tidResult]);
         }
     }
 }
