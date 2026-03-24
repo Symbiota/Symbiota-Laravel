@@ -180,5 +180,23 @@ class TaxonomyController extends Controller {
 
     public static function store() {
         // @TODO implement taxon creation
+        // pass the POST data to TaxonomyEditorManager's loadNewName method
+        $postData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $loaderObj = new \TaxonomyEditorManager();
+        // if (! $loaderObj->validateNewName($postData)) {
+        //     // Redirect back with error message
+        //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
+        // } else {
+        $tidResult = $loaderObj->loadNewName($postData);
+        // }
+
+        if ($tidResult > 0) {
+            // Redirect to the newly created taxon's page
+            // return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+        } else {
+            // Redirect back with error message
+            // return redirect()->back()->withInput()->withErrors(['error' => $tidResult]);
+        }
     }
 }
