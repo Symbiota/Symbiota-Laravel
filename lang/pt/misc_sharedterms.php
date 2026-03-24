@@ -2,6 +2,7 @@
 
 return [
     'COLL_PROFILE' => 'Perfil da coleção',
+    'FILTER' => 'Filtro',
     'QUICK_SEARCH' => 'Pesquisa rápida',
     'CAT_NUM' => 'Número de catálogo',
     'COL_MGMNT' => 'Gestão de Coleções',
