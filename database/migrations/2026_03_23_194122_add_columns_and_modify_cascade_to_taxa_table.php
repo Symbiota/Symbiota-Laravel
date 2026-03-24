@@ -11,7 +11,6 @@ return new class() extends Migration {
      */
     public function up(): void {
         Schema::table('taxa', function (Blueprint $table) {
-            // Drop the existing problematic foreign key constraint
             $table->dropForeign('FK_taxa_uid');
         });
 
@@ -19,12 +18,10 @@ return new class() extends Migration {
         DB::statement('UPDATE taxa SET modifiedUid = NULL WHERE modifiedUid IS NOT NULL AND modifiedUid NOT IN (SELECT uid FROM users)');
 
         Schema::table('taxa', function (Blueprint $table) {
-            // Add the new columns
             $table->addColumn('string', 'cultivarEpithet', ['length' => 50, 'nullable' => true]);
             $table->addColumn('string', 'tradeName', ['length' => 50, 'nullable' => true]);
 
-            // Recreate the foreign key with proper handling
-            $table->foreign(['modifiedUid'], 'FK_taxa_uid')->references(['uid'])->on('users')->onUpdate('cascade')->onDelete('set null');
+            $table->foreign(['modifiedUid'], 'FK_taxa_uid')->references(['uid'])->on('users')->onUpdate('cascade')->onDelete('set null'); // assuming we want to remove the references when we delete a user?
         });
     }
 
@@ -33,13 +30,8 @@ return new class() extends Migration {
      */
     public function down(): void {
         Schema::table('taxa', function (Blueprint $table) {
-            // Drop the foreign key first
             $table->dropForeign('FK_taxa_uid');
-
-            // Drop the new columns
             $table->dropColumn(['cultivarEpithet', 'tradeName']);
-
-            // Recreate the original foreign key constraint
             $table->foreign(['modifiedUid'], 'FK_taxa_uid')->references(['uid'])->on('users')->onUpdate('restrict')->onDelete('no action');
         });
     }
