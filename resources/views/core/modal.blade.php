@@ -43,7 +43,7 @@
                     </button>
                 </div>
                 @isset($body)
-                    <div {{ $body->attributes->twMerge('relative w-[50rem] max-w-[75vw]') }}>{{ $body }}</div>
+                    <div x-init="htmx.process($el)" {{ $body->attributes->twMerge('relative w-[50rem] max-w-[75vw]') }}>{{ $body }}</div>
                 @endisset
             </div>
         </div>

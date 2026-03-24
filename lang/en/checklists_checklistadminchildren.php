@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'CHILD_CHECKLIST' => 'Children Checklists',
+    'CHILD_DESCRIBE' => 'Checklists will inherit scientific names, vouchers, notes, etc from all children checklists.
+	Adding a new taxon or voucher to a child checklist will automatically add it to all parent checklists.',
+    'LINK_NEW' => 'Link New Checklist',
+    'SELECT_CHILD' => 'Select Child Checklist',
+    'ADD_CHILD' => 'Add Child Checklist',
+    'SURE' => 'Are you sure you want to remove',
+    'AS_CHILD' => 'as a child checklist',
+    'CREATE_EXCLUSION_LIST' => 'Create a Species Exclusion List',
+    'PARENTS' => 'Parent Checklists',
+    'NO_PARENTS' => 'There are no Parent Checklists',
+    'BATCH_PARSE_SP_LIST' => 'Batch Parse Species List',
+    'BATCH_PARSE_DESCRIBE' => 'Use the following tool to parse a list into multiple children checklists based on taxonomic nodes (Liliopsida, Eudicots, Pinopsida, etc)',
+    'TAXONOMICNODE' => 'Sci name',
+    'PARSETID' => 'Taxonomic id',
+    'TARGETCHECKLIST' => 'Target checklist',
+    'SELECTTARGETCHECKLIST' => 'Select Target Checklist',
+    'CREATENEWCHECKLIST' => 'Create New Checklist',
+    'TRANSFER_METHOD' => 'Transfer method',
+    'TRANSFERTAXA' => 'Transfer taxa',
+    'COPYTAXA' => 'Copy taxa',
+    'LINK_PARENT_CHECKLIST' => 'Link to parent checklist',
+    'NOPARENTCHECKLIST' => 'No Parent Checklist',
+    'ADD_TO_PROJECT' => 'Add to project',
+    'NEWPROJECT' => 'New Project',
+    'COPYPERMISSIONANDGENERAL' => 'Copy over permission and general attributes',
+    'PARSE_CHECKLIST' => 'Parse Checklist',
+    'OPEN_TAX_THES_EXPLORE' => 'Open Taxonomic Thesaurus Explorer',
+];

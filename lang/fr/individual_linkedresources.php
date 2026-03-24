@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'SPCHECKREL' => 'Relations des Listes d\'Espèces',
+    'VOUCHEROFFOLLOWING' => 'Échantillon des listes suivantes',
+    'DELVOUCHER' => 'Supprimer l\'échantillon lié',
+    'CONFIRMVOUCHER' => 'Êtes-vous sûr de vouloir supprimer cet échantillon lié?',
+    'NOTAVOUCHER' => 'Cette occurrence n\'a pas été désignée comme échantillon pour une liste d\'espèces',
+    'NEWVOUCHER' => 'Nouvel Échantillon',
+    'ADDVOUCHERCHECK' => 'Ajouter comme échantillon à liste',
+    'SELECTCHECKLIST' => 'Sélectionnez Liste',
+    'VIEWABLEPUBLIC' => 'Visible au public',
+    'EDITORNOTES' => 'Notes de Éditeur',
+    'VIEWABLEEDITORS' => 'Visible uniquement pour les éditeurs de liste',
+    'ADDVOUCHER' => 'Ajouter Échantillon',
+    'UNABLETOADD' => 'Impossible d\'utiliser ce spécimen comme pièce justificative car le nom scientifique n\'a pas pu être vérifié dans le thésaurus taxonomique (mal orthographié?)',
+    'DATASETLINKAGES' => 'Liens des Ensembles de Données',
+    'MEMBEROF' => 'Membre des ensembles de données suivants',
+    'OCCURRENCENOTLINKED' => 'Occurrence n\'est liée à aucun ensemble de données',
+    'CREATENEWREL' => 'Créer Nouvelle Relation de Ensemble de Données',
+    'SELECTEXISTING' => 'Sélectionnez un Ensemble de Données Existant',
+    'CREATENEWDATASET' => 'Créer Nouvel Ensemble de Données',
+    'LINKTO' => 'Lien vers Ensemble de Données',
+    'PRIVATE_STATUS' => 'statut privé',
+];

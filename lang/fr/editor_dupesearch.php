@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'DUPL_RECORD_SEARCH' => 'Recherche d\'enregistrements en Double',
+    'EXS_DUPE' => 'Exsiccati Doublons',
+    'POSSIBLE_EXACT_DUPES' => 'Doublons EXACTS Possibles',
+    'DUPE_CAT_NUM' => 'Numéro de Catalogue en Double',
+    'DUPE_ALT_CAT_NUM' => 'Numéro de Catalogue Alternatif de Double',
+    'POSS_MATCHING_EVENTS' => 'ÉVÉNEMENTS en Double Correspondants Possibles',
+    'NOTICE_EXACT_MATCH' => 'AVIS: Correspondances exactes possibles au sein de la collection. L\'enregistrement existe peut-être déjà.',
+    'DATE_EMPTY' => 'Champ de date vide',
+    'ASSOC_COLL' => 'Collectionneurs Associés',
+    'SCINAME_EMPTY' => 'Nom Scientifique vide',
+    'LOCALITY_EMPTY' => 'Données de localité vides',
+    'TRANSFER_ALL' => 'Transférer Tous Champs',
+    'TRANSFER_EMPTY' => 'Transférer Vers Champs Vides Uniquement',
+    'LINK_DUPE' => 'Lien en Tant que Doublon',
+    'GO_TO_RECORD' => 'Aller à Enregistrement',
+    'SURE_MERGE' => 'Êtes-vous sûr de vouloir fusionner ces deux enregistrements?',
+    'MERGE_RECORDS' => 'Fusionner des Enregistrements',
+    'MORE_INFO_ALT' => 'Plus d\'informations sur la fusion des doublons',
+    'NO_DUPES' => 'Aucun enregistrement en double n\'a été localisé',
+    'UNKNOWN_ERROR_WHILE_MERGING' => 'Une erreur inconnue s\'est produite lors de la fusion des occurrences',
+    'CHECK_DETERMINATIONS_ALERT' => 'Toutes les déterminations uniques ont été fusionnées dans cet enregistrement. Veuillez vérifier l\'onglet Historique des déterminations pour vous assurer qu\'il représente avec précision l\'historique des déterminations de votre dossier.',
+];

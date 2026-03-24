@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'TAX_DISPLAY' => 'Desplegar Taxonomía',
+    'TAX_TREE_VIEWER' => 'Explorador del Árbol Taxonómico',
+    'EDITORS' => 'Editores',
+    'TAX_SEARCH' => 'Búsqueda de Taxón',
+    'DISP_TAX_TREE' => 'Desplegar Árbol Taxonómico',
+    'DISP_AUTHORS' => 'Desplegar autores',
+    'MATCH_WHOLE_WORDS' => 'Hacer coincidir con palabras completas',
+    'DISP_FULL_TREE' => 'Desplegar árbol completo abajo de familia',
+    'DISP_SUBGENERA' => 'Desplegar especies con subgéneros',
+    'LIMIT_TO_OCCURRENCES' => 'Mostrar solo taxones vinculados a ocurrencias',
+    'EXPORT_TREE' => 'Taxonomía de exportación',
+    'PLUS_SIGN_DESC' => 'Imagen de un signo más que indica crear un nuevo taxón',
+    'NO_TAXA_FOUND' => 'No se encontraron taxones que coincidan con su búsqueda',
+    'TAX_EXPLORE' => 'Explorador Taxonómico',
+    'EDITOR_MODE' => 'Modo de Editor',
+    'CENTRAL_THESAURUS' => 'Tesauro Central',
+    'CENTRAL_TAXANOMIC_THESAURUS' => 'Tesauro Taxonómico Central',
+];

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'OCCUR_COMMENTS' => 'Comentarios de Ocurrencia',
+    'COMMENTS_LISTING' => 'Liste des Commentaires',
+    'OCC_COMMENTS_LISTING' => 'Liste des Commentaires sur Occurrences',
+    'FIRST_PAGE' => 'Première Page',
+    'FILTER_OPT' => 'Options de Filtrage',
+    'ALL_COMMENTERS' => 'Tous Commentateurs',
+    'DISP_ALL_GEN_OBS' => 'Afficher toutes observations générales (option SuperAdmin uniquement)',
+    'NON-PUBLIC' => 'Non-public',
+    'REVIEWED' => 'Révisé',
+    'ALL' => 'Tout',
+    'POSTED_ON' => 'publié le ',
+    'VIEW_BY_ADMIN' => 'visible uniquement par les administrateurs',
+    'NOT_PUBLIC' => 'Pas public',
+    'HIDE_PUBLIC' => 'Masquer Commentaire du Public',
+    'MARK_UNREVIEWED' => 'Marquer Comme non Révisé',
+    'MARK_REVIEWED' => 'Marquer comme Révisé',
+    'SURE_DELETE_COMMENT' => 'Êtes-vous sûr de vouloir supprimer ce commentaire?',
+    'DEL_COMMENT' => 'Supprimer Commentaire',
+    'NO_COMMENTS_MATCHING' => 'Aucun commentaire correspondant aux options de filtre définies n\'est disponible',
+    'ONLY_PUBLIC_NONREVIEWED' => 'Notez que seuls les commentaires publics non révisés sont actuellement affichés. <br/>Modifier le formulaire à droite pour afficher tous les commentaires.',
+    'COLLID_NULL' => 'ERREUR: collid est nul',
+    'START_DATE' => 'Date de début',
+    'END_DATE' => 'Date de fin',
+    'COMMENT_TYPE' => 'Type de commentaire',
+];
