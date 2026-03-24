@@ -80,6 +80,10 @@ $reviewStatusItems = [
     item(10, __('misc_commentlist.REVIEWED')),
 ];
 
+$editStatusItems = [
+    item(5, __('includes_traittab.EXPERT_NEEDED')),
+];
+
 $sourceItems = itemize_flat($attrManager->getSourceControlledArr(), [
     item('', __('traitattr_occurattributes.ALL_SOURCE_TYPE'))
 ]);
