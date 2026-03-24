@@ -27,4 +27,23 @@ function updateLabels(alpineData) {
     }
 }
 
+function validateTaxonForm(alpineData) {
+    console.log("Validating taxon form...");
+    let message = "";
+    const parenttid = document.querySelector('[name="parenttid"]');
+    const unitname1 = document.querySelector('[name="unitname1"]');
+    if (parenttid?.value && !unitname1?.value) {
+        message = "Missing required field: " + alpineData.unit1Label;
+    }
+    if (!parenttid?.value) {
+        message = "Parent taxon is not valid";
+    }
+    const isValid = !!(parenttid?.value && unitname1?.value);
+    const validationObj = { isValid: isValid, message: message };
+    console.log("Form validation result:");
+    console.log(validationObj);
+    return validationObj;
+}
+
 window.updateLabels = updateLabels;
+window.validateTaxonForm = validateTaxonForm;

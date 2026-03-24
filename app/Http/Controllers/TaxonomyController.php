@@ -185,6 +185,8 @@ class TaxonomyController extends Controller {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $loaderObj = new \TaxonomyEditorManager();
+        // @TODO check whether it exists already and if so return an error message instead of trying to create it and having the database throw an error
+
         // if (! $loaderObj->validateNewName($postData)) {
         //     // Redirect back with error message
         //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
