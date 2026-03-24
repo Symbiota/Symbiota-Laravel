@@ -10,6 +10,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RssController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxonomyController;
 use App\Http\Controllers\UserProfileController;
@@ -71,6 +72,7 @@ Route::group(['prefix' => 'checklists'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'datasets'], function () {
+    Route::get('/rss', [RssController::class, 'show']);
     Route::get('/{dataset_id}', [DatasetController::class, 'datasetProfilePage']);
     Route::view('/', 'pages/datasets/list');
 });
