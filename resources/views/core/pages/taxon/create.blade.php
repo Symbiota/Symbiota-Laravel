@@ -56,7 +56,12 @@
                     if (window.updateScinameDisplay) {
                         window.updateScinameDisplay();
                     }
-                }
+                },
+                parseName() {
+                    if (window.parseName) {
+                        window.parseName();
+                    }
+                },
             }"
             x-effect="console.log('Current rankid value:', rankid)">
             <h1 class="text-4xl font-bold">Add New Taxon
@@ -66,7 +71,8 @@
                     <span id="sciname-preview" class="text-primary"></span>
                 </h1>
             </div>
-            <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
+            <form id="taxon-form"
+                class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
                 method="POST" action="{{ route('taxon.store') }}"
                 @change="validate(); updateScinameDisplay();">
                 @csrf
@@ -77,8 +83,10 @@
                             Parser
                         </legend>
                         <x-input label="Quick Parser" name="quickparser"
-                            id="quickparser" value="" />
-                        <x-button class="mt-2">Parse</x-button>
+                            id="quickparser" value=""
+                            @enter="parseName()" />
+                        <x-button @click="parseName()"
+                            class="mt-2">Parse</x-button>
                     </fieldset>
                 </div>
                 <fieldset
@@ -163,7 +171,8 @@
                         class="inline-flex items-center gap-2"
                         x-show="rankid && parseInt(rankid) >= 300">
                         <x-input label="Trade Name" name="tradeName"
-                            id="tradeName" value="" x-ref="tradeName" />
+                            id="tradeName" value=""
+                            x-ref="tradeName" />
                     </div>
                     <div class="w-1/2">
                         <x-input label="Author" name="author" id="author"

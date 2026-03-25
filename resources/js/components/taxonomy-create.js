@@ -160,6 +160,178 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
+function parseName(f) {
+    console.log("deleteMe parseName function called");
+    const taxonForm = document.getElementById("taxon-form");
+    if (!taxonForm.quickparser.value) {
+        return;
+    }
+    let sciNameInput = taxonForm.quickparser.value;
+    sciNameInput = sciNameInput.trim();
+    taxonForm.reset();
+    const sciNameArr = sciNameInput.split(" ");
+    let activeIndex = 0;
+    let rankId = "";
+    const isGenericHybridOrExtinct =
+        sciNameArr.length > 0 && sciNameArr[activeIndex].length == 1;
+    if (isGenericHybridOrExtinct) {
+        taxonForm.unitind1.value = sciNameArr[activeIndex];
+        if (sciNameArr[activeIndex].toLowerCase() == "x") {
+            taxonForm.unitind1.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+        } else if (sciNameArr[activeIndex].toLowerCase() == "†") {
+            taxonForm.unitind1.selectedIndex = 2; // @TODO - this is pretty brittle, should use value instead of index
+        }
+        // activeIndex = 1 ;
+        activeIndex += 1;
+    }
+    taxonForm.unitname1.value = sciNameArr[activeIndex];
+    activeIndex += 1;
+    if (sciNameArr.length > activeIndex) {
+        const isHybrid = sciNameArr[activeIndex].length == 1;
+        if (isHybrid) {
+            if (sciNameArr[activeIndex].toLowerCase() == "x") {
+                taxonForm.unitind2.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+            }
+            activeIndex += 1;
+        }
+        if (
+            sciNameArr[activeIndex]?.substring(0, 1) == "(" &&
+            sciNameArr[activeIndex]?.substring(
+                sciNameArr[activeIndex].length - 1,
+            ) == ")"
+        ) {
+            //active unit is a subgeneric designation, append to unitname1
+            taxonForm.unitname1.value =
+                taxonForm.unitname1.value + " " + sciNameArr[activeIndex];
+            activeIndex = activeIndex + 1;
+            rankId = 190;
+        }
+        if (sciNameArr.length > activeIndex) {
+            taxonForm.unitname2.value = sciNameArr[activeIndex];
+        }
+        activeIndex = activeIndex + 1;
+    }
+    if (sciNameArr.length > activeIndex) {
+        let subjectUnit = sciNameArr[activeIndex];
+        if (subjectUnit == "ssp.") subjectUnit = "subsp.";
+        if (subjectUnit == "fo.") subjectUnit = "f.";
+        if (
+            subjectUnit == "subsp." ||
+            subjectUnit == "var." ||
+            subjectUnit == "f."
+        ) {
+            taxonForm.unitind3.value = subjectUnit;
+            taxonForm.unitname3.value = sciNameArr[activeIndex + 1];
+            activeIndex = activeIndex + 2;
+        } else if (sciNameArr[activeIndex].length == 1) {
+            taxonForm.unitind3.value = sciNameArr[activeIndex];
+            activeIndex = activeIndex + 1;
+            while (sciNameArr.length > activeIndex) {
+                taxonForm.unitname3.value = (
+                    taxonForm.unitname3.value +
+                    " " +
+                    sciNameArr[activeIndex]
+                ).trim();
+                activeIndex = activeIndex + 1;
+            }
+        } else {
+            let firstChar = sciNameArr[activeIndex].substring(0, 1);
+            if (firstChar != firstChar.toUpperCase()) {
+                taxonForm.unitname3.value = sciNameArr[activeIndex];
+                activeIndex = activeIndex + 1;
+            }
+        }
+    }
+    let author = "";
+    while (sciNameArr.length > activeIndex) {
+        //Place remain taxon units into the author field
+        author = author + " " + sciNameArr[activeIndex];
+        activeIndex = activeIndex + 1;
+    }
+    taxonForm.author.value = author.trim();
+    let unitName1 = taxonForm.unitname1.value;
+    //If rankid is not set, determine rank
+    if (taxonForm.unitname2.value == "") {
+        if (rankId == "" && unitName1.length > 4) {
+            if (
+                unitName1.indexOf("aceae") == unitName1.length - 5 ||
+                unitName1.indexOf("idae") == unitName1.length - 4
+            ) {
+                rankId = 140;
+            } else if (
+                unitName1.indexOf("oideae") == unitName1.length - 6 ||
+                unitName1.indexOf("inae") == unitName1.length - 4
+            ) {
+                rankId = 150;
+            } else if (unitName1.indexOf("ineae") == unitName1.length - 5) {
+                rankId = 110;
+            } else if (unitName1.indexOf("ales") == unitName1.length - 4) {
+                rankId = 100;
+            }
+        }
+    } else {
+        rankId = 220;
+        if (taxonForm.unitname3.value != "") {
+            rankId = 230;
+            if (taxonForm.unitind3.value == "var.") rankId = 240;
+            else if (taxonForm.unitind3.value == "f.") rankId = 260;
+            else if (taxonForm.unitind3.value == "×") rankId = 220;
+        }
+    }
+    //Deal with problematic subgeneric ranks
+    let parentName = "";
+    if (unitName1.indexOf("(") > -1) {
+        if (
+            unitName1.substring(0, 1) == "(" &&
+            unitName1.substring(unitName1.length - 1) == ")"
+        ) {
+            unitName1 =
+                unitName1.substring(1, unitName1.length - 1) + " " + unitName1;
+            taxonForm.unitname1.value = unitName1;
+            rankId = 190;
+        }
+        if (rankId == 190) {
+            parentName = unitName1.substring(0, unitName1.indexOf("(")).trim();
+        } else if (rankId > 190) {
+            if (rankId == 220) parentName = unitName1;
+            taxonForm.unitname1.value = unitName1
+                .substring(0, unitName1.indexOf("("))
+                .trim();
+        }
+    }
+    taxonForm.rankid.value = rankId;
+    if (unitName1.substring(0, 1) == "×" || unitName1.substring(0, 1) == "†") {
+        if (taxonForm.unitind1.value == "") {
+            if (unitName1.substring(0, 1) == "×")
+                taxonForm.unitind1.selectedIndex = 1;
+            if (unitName1.substring(0, 1) == "†")
+                taxonForm.unitind1.selectedIndex = 2;
+        }
+        taxonForm.unitname1.value = taxonForm.unitname1.value.substring(1);
+    }
+    if (taxonForm.unitname2.value.substring(0, 1) == "×") {
+        if (taxonForm.unitind2.value == "") {
+            if (taxonForm.unitname2.value.substring(0, 1) == "×")
+                taxonForm.unitind2.selectedIndex = 1;
+        }
+        taxonForm.unitname2.value = taxonForm.unitname2.value.substring(1);
+    }
+    if (parentName == "") {
+        //Set parent name
+        if (rankId > 180) {
+            if (rankId == 220) parentName = taxonForm.unitname1.value;
+            else if (rankId > 220)
+                parentName =
+                    taxonForm.unitname1.value + " " + taxonForm.unitname2.value;
+        }
+    }
+    if (parentName != "") setParent(parentName, taxonForm.unitind1.value);
+    showOnlyRelevantFields(rankId);
+    updateFullname(f);
+    taxonForm.quickparser.value = "";
+}
+
 window.updateLabels = updateLabels;
 window.validateTaxonForm = validateTaxonForm;
 window.updateScinameDisplay = updateScinameDisplay;
+window.parseName = parseName;
