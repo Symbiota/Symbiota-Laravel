@@ -29,6 +29,7 @@
             $watch('rankid', (newValue, oldValue) => {
                 console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
                 updateLabels();
+                validate();
             });
         "
             x-data="{
@@ -206,7 +207,7 @@
                     </div>
                     <x-button class="mt-2" x-bind:disabled="!isValid"
                         x-text=" isValid ? 'Submit New Name' : 'Submission disabled'"></x-button>
-                    <p><span class="text-sm italic accent-error-lighter"
+                    <p><span class="text-sm italic text-red-700"
                             x-text="validationMessage"></span>
                     </p>
                 </fieldset>

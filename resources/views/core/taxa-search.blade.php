@@ -43,7 +43,7 @@
             search="{{ url('/api/taxa/search') }}"
             include="#usethes-{{ $id }}, #taxa-type-{{ $id }}">
             <x-slot name="input"
-                @auto_input_select="document.querySelector('#{{ 'tid-' . $id }}').value = event.detail.selection.id"
+                @auto_input_select="const el = document.querySelector('#{{ 'tid-' . $id }}'); el.value = event.detail.selection.id; el.dispatchEvent(new Event('change', { bubbles: true }))"
                 @input="document.querySelector('#{{ 'tid-' . $id }}').value = ''"
                 class="peer-input z-20 rounded-l-none">
             </x-slot>
