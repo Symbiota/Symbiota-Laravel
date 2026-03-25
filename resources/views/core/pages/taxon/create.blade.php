@@ -51,6 +51,11 @@
                         this.isValid = validationResult.isValid;
                         this.validationMessage = validationResult.message;
                     }
+                },
+                updateScinameDisplay() {
+                    if (window.updateScinameDisplay) {
+                        window.updateScinameDisplay();
+                    }
                 }
             }"
             x-effect="console.log('Current rankid value:', rankid)">
@@ -58,13 +63,12 @@
             </h1>
             <div id="sciname-preview" class="mt-4">
                 <h1 class="text-2xl font-bold">Sciname will be saved as:
-                    <span class="text-primary"
-                        x-text="unit1Label + ' ' + this.$refs?.unitname1?.value + (this.$refs?.unitname2?.value ? ' ' + this.$refs?.unitname2.value : '') + (this.$refs?.unitname3?.value ? ' ' + this.$refs?.unitind3?.value + ' ' + this.$refs?.unitname3.value : '')"></span>
+                    <span id="sciname-preview" class="text-primary"></span>
                 </h1>
             </div>
             <form class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
                 method="POST" action="{{ route('taxon.store') }}"
-                @change="validate()">
+                @change="validate(); updateScinameDisplay();">
                 @csrf
                 <div class="w-3/4">
                     <fieldset

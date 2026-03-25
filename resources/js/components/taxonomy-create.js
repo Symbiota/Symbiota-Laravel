@@ -100,7 +100,7 @@ async function validateTaxonForm(alpineData) {
         author?.value,
     );
     if (exists) {
-        message = sciName + " already exists in the taxonomy";
+        message = sciName + " already exists in the database.";
         return { isValid: false, message: message };
     }
     return { isValid: true, message: "" };
@@ -137,6 +137,10 @@ function updateScinameDisplay() {
 
     const unitname3 = document.querySelector('[name="unitname3"]').value;
     const unitind3 = document.querySelector('[name="unitind3"]').value;
+    const cultivarEpithet = document.querySelector(
+        '[name="cultivarEpithet"]',
+    ).value;
+    const tradeName = document.querySelector('[name="tradeName"]').value;
     // const unit3namevisible =
     //     document.getElementById("unit3").style.display !== "none";
     // const rankid = document.querySelector('[name="rankid"]');
@@ -145,15 +149,17 @@ function updateScinameDisplay() {
     if (unitname3) {
         sciname = sciname + (unitind3 + " " + unitname3).trim();
     }
-    if (f.cultivarEpithet.value) {
-        sciname += " " + standardizeCultivarEpithet(f.cultivarEpithet.value);
+    if (cultivarEpithet) {
+        sciname += " " + standardizeCultivarEpithet(cultivarEpithet);
     }
-    if (f.tradeName.value) {
-        sciname += " " + standardizeTradeName(f.tradeName.value);
+    if (tradeName) {
+        sciname += " " + standardizeTradeName(tradeName);
     }
-    f.sciname.value = sciname.trim();
-    return sciname;
+    const target = document.getElementById("sciname-preview");
+    target.textContent = sciname.trim();
+    // return sciname;
 }
 
 window.updateLabels = updateLabels;
 window.validateTaxonForm = validateTaxonForm;
+window.updateScinameDisplay = updateScinameDisplay;
