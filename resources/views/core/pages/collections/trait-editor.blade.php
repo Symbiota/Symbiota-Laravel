@@ -94,8 +94,6 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
 ]);
 
 $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
-
-
 @endphp
 
 <x-margin-layout x-data="{ mode: {{ $mode }} }">
@@ -203,6 +201,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
             <div>
                 {!! $attrManager->echoFormTraits($traitID) !!}
             </div>
+            <x-trait-radio :traits="$traitArr" :traitId="$traitID" />
             <x-input id="notes" :label="__('projects.NOTES')" />
             <x-select class="w-full" id="status"
                 :label="__('taxonomy_batchloader.STATUS')"
