@@ -27,18 +27,52 @@ function updateLabels(alpineData) {
     }
 }
 
-function validateTaxonForm(alpineData) {
+async function checkNameExistence(sciname, rankid, author = "") {
+    console.log("deleteMe a1 Checking name existence for:", {
+        sciname,
+        rankid,
+        author,
+    });
+    if (!sciname || !rankid) {
+        return false;
+    }
+    const params = new URLSearchParams({ sciname, rankid });
+    if (author) {
+        params.set("author", author);
+    }
+    const response = await fetch(`/api/v3/taxonomy/check-exists?${params}`);
+    console.log("deleteMe a2 API response is: ");
+    console.log(response);
+    const data = await response.json();
+    console.log("deleteMe a3 API response data is: ");
+    console.log(data);
+    return data.exists;
+}
+
+async function validateTaxonForm(alpineData) {
     console.log("Validating taxon form...");
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
-    if (parenttid?.value && !unitname1?.value) {
-        message = "Missing required field: " + alpineData.unit1Label;
-    }
+    const rankid = document.querySelector('[name="rankid"]');
+    const author = document.querySelector('[name="author"]');
+
     if (!parenttid?.value) {
         message = "Parent taxon is not valid";
+    } else if (!unitname1?.value) {
+        message = "Missing required field: " + alpineData.unit1Label;
+    } else {
+        const exists = await checkNameExistence(
+            unitname1.value,
+            rankid?.value,
+            author?.value,
+        );
+        if (exists) {
+            message = unitname1.value + " already exists in the taxonomy";
+        }
     }
-    const isValid = !!(parenttid?.value && unitname1?.value);
+
+    const isValid = !!(parenttid?.value && unitname1?.value && !message);
     const validationObj = { isValid: isValid, message: message };
     console.log("Form validation result:");
     console.log(validationObj);
