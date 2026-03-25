@@ -160,7 +160,7 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
-function parseName(f) {
+function parseName() {
     console.log("deleteMe parseName function called");
     const taxonForm = document.getElementById("taxon-form");
     if (!taxonForm.quickparser.value) {
@@ -325,9 +325,19 @@ function parseName(f) {
                     taxonForm.unitname1.value + " " + taxonForm.unitname2.value;
         }
     }
-    if (parentName != "") setParent(parentName, taxonForm.unitind1.value);
-    showOnlyRelevantFields(rankId);
-    updateFullname(f);
+    // if (parentName != "") setParent(parentName, taxonForm.unitind1.value);
+    //@TODO set the taxa_value prop of the x-taxa-search component to parentName to trigger the search for the parent taxon and set the parenttid hidden input value based on the search result
+    
+    const result = await checkNameExistence(parentName, rankId);
+    const parentTid = result?.tid;
+    const parentTidInput = taxonForm.querySelector('input[name="parenttid"]');
+    if (parentTidInput) parentTidInput.value = parentTid || "";
+    console.log("deleteMe parent name is: " + parentName);
+
+
+    // @TODO handle case where there are two matches in the DB
+    // showOnlyRelevantFields(rankId);
+    // updateFullname(f);
     taxonForm.quickparser.value = "";
 }
 

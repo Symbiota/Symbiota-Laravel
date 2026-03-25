@@ -84,9 +84,9 @@
                         </legend>
                         <x-input label="Quick Parser" name="quickparser"
                             id="quickparser" value=""
-                            @enter="parseName()" />
-                        <x-button @click="parseName()"
-                            class="mt-2">Parse</x-button>
+                            @enter="parseName(); await validate();" />
+                        <x-button @click="parseName(); await validate();"
+                            type="button" class="mt-2">Parse</x-button>
                     </fieldset>
                 </div>
                 <fieldset
