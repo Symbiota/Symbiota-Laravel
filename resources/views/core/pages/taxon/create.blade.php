@@ -43,9 +43,9 @@
                         window.updateLabels(this);
                     }
                 },
-                validate() {
+                async validate() {
                     if (window.validateTaxonForm) {
-                        const validationResult = window.validateTaxonForm(this);
+                        const validationResult = await window.validateTaxonForm(this);
                         this.isValid = validationResult.isValid;
                         this.validationMessage = validationResult.message;
                     }

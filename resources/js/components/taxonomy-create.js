@@ -58,7 +58,8 @@ async function validateTaxonForm(alpineData) {
     const author = document.querySelector('[name="author"]');
 
     if (!parenttid?.value) {
-        message = "Parent taxon is not valid";
+        message =
+            "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
     } else if (!unitname1?.value) {
         message = "Missing required field: " + alpineData.unit1Label;
     } else {
