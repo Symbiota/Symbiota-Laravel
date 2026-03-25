@@ -179,7 +179,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 
     @if(!empty($imgArr))
     <div class="flex items-center gap-2">
-        <x-radio class="m-0" name="resradio" :options="[
+        <x-radio class="m-0" name="resradio" default_value="high" :options="[
             [ 'value' => 'high', 'label' => __('traitattr_occurattributes.HIGH_RES') ],
             [ 'value' => 'med', 'label' => __('traitattr_occurattributes.MED_RES') ],
         ]" />
@@ -197,11 +197,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
         </div>
 
         <div class="border border-base-300 flex-grow p-4 flex flex-col gap-4">
-            <div class="text-lg font-bold">Trait Name</div>
-            <div>
-                {!! $attrManager->echoFormTraits($traitID) !!}
-            </div>
-            <x-trait-radio :traits="$traitArr" :traitId="$traitID" />
+            <x-trait-form :traits="$traitArr" :traitId="$traitID" />
             <x-input id="notes" :label="__('projects.NOTES')" />
             <x-select class="w-full" id="status"
                 :label="__('taxonomy_batchloader.STATUS')"
