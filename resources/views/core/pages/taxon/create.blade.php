@@ -26,6 +26,7 @@
         <div x-show="tid === null || isNaN(Number(tid))"
             class="flex flex-col items-center justify-center"
             x-init =" 
+            validate();
             $watch('rankid', (newValue, oldValue) => {
                 console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
                 updateLabels();
@@ -84,7 +85,7 @@
 
                     <div class="w-3/4">
                         <x-select label="Taxon Rank" name="rankid"
-                            id="rankid"
+                            id="rankid" :defaultValue="220"
                             @select-changed="rankid = $event.detail.value; console.log('Select changed to:', $event.detail.value)"
                             :items="$allTaxonRanks
                                 ->map(
@@ -129,9 +130,12 @@
                                 class="text-base-content text-base text-bold mb-1"
                                 for="unitname2"><span
                                     x-text="unit2Label + ' Name'"></span>
+                                <span
+                                    class="vertical-align text-error italic pr-1">*</span>
                             </label>
                             <x-input name="unitname2" id="unitname2"
-                                value="" x-ref="unitname2" />
+                                value="" x-ref="unitname2"
+                                x-bind:required="!rankid || parseInt(rankid) >= 220" />
                         </div>
                     </div>
                     <div id="unit3" class="inline-flex items-center gap-2"
@@ -141,7 +145,8 @@
                             placeholder="spp., var., forma, etc."
                             x-ref="unitind3" />
                         <x-input label="Infraspecific Epithet" name="unitname3"
-                            id="unitname3" value="" x-ref="unitname3" />
+                            id="unitname3" value="" x-ref="unitname3"
+                            x-bind:required="rankid && parseInt(rankid) >= 230" />
                     </div>
                     <div class="w-1/2">
                         <x-input label="Author" name="author" id="author"

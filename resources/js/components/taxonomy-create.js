@@ -54,30 +54,49 @@ async function validateTaxonForm(alpineData) {
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
+    const unitname2 = document.querySelector('[name="unitname2"]');
+    const unit2namevisible =
+        document.getElementById("unit2").style.display !== "none";
+    const unitname3 = document.querySelector('[name="unitname3"]');
+    const unit3namevisible =
+        document.getElementById("unit3").style.display !== "none";
     const rankid = document.querySelector('[name="rankid"]');
     const author = document.querySelector('[name="author"]');
 
+    if (!unitname1?.value) {
+        message = "Missing required field: " + alpineData.unit1Label + " Name";
+        return { isValid: false, message: message };
+    }
+    if (unit2namevisible && !unitname2?.value) {
+        message = "Missing required field: " + alpineData.unit2Label + " Name";
+        return { isValid: false, message: message };
+    }
+    if (unit3namevisible && !unitname3?.value) {
+        message = "Missing required field: Infraspecific Epithet Name";
+        return { isValid: false, message: message };
+    }
     if (!parenttid?.value) {
         message =
             "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
-    } else if (!unitname1?.value) {
-        message = "Missing required field: " + alpineData.unit1Label + " Name";
-    } else {
-        const exists = await checkNameExistence(
-            unitname1.value,
-            rankid?.value,
-            author?.value,
-        );
-        if (exists) {
-            message = unitname1.value + " already exists in the taxonomy";
-        }
+        return { isValid: false, message: message };
     }
-
-    const isValid = !!(parenttid?.value && unitname1?.value && !message);
-    const validationObj = { isValid: isValid, message: message };
-    console.log("Form validation result:");
-    console.log(validationObj);
-    return validationObj;
+    const sciName = (
+        unitname1.value +
+        " " +
+        unitname2.value +
+        " " +
+        unitname3.value
+    ).trim();
+    const exists = await checkNameExistence(
+        sciName,
+        rankid?.value,
+        author?.value,
+    );
+    if (exists) {
+        message = sciName + " already exists in the taxonomy";
+        return { isValid: false, message: message };
+    }
+    return { isValid: true, message: "" };
 }
 
 window.updateLabels = updateLabels;
