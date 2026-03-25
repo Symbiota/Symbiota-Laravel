@@ -62,6 +62,9 @@ async function validateTaxonForm(alpineData) {
         document.getElementById("unit3").style.display !== "none";
     const rankid = document.querySelector('[name="rankid"]');
     const author = document.querySelector('[name="author"]');
+    const cultivarEpithetVisible =
+        document.getElementById("cultivarEpithet-div").style.display !== "none";
+    const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
     if (!unitname1?.value) {
         message = "Missing required field: " + alpineData.unit1Label + " Name";
@@ -73,6 +76,10 @@ async function validateTaxonForm(alpineData) {
     }
     if (unit3namevisible && !unitname3?.value) {
         message = "Missing required field: Infraspecific Epithet Name";
+        return { isValid: false, message: message };
+    }
+    if (cultivarEpithetVisible && !cultivarEpithet?.value) {
+        message = "Missing required field: Cultivar Epithet";
         return { isValid: false, message: message };
     }
     if (!parenttid?.value) {
@@ -97,6 +104,55 @@ async function validateTaxonForm(alpineData) {
         return { isValid: false, message: message };
     }
     return { isValid: true, message: "" };
+}
+
+const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
+    if (unstandardizedCultivarEpithet) {
+        const cleanString = unstandardizedCultivarEpithet.replace(
+            /(^['"“”]+)|(['"“”]+$)/g,
+            "",
+        );
+        return "'" + cleanString + "'";
+    } else {
+        return "";
+    }
+};
+
+const standardizeTradeName = (unstandardizedTradeName) => {
+    if (unstandardizedTradeName) {
+        return unstandardizedTradeName.toUpperCase();
+    } else {
+        return "";
+    }
+};
+
+function updateScinameDisplay() {
+    const unitind1 = document.querySelector('[name="unitind1"]').value;
+    const unitname1 = document.querySelector('[name="unitname1"]').value;
+
+    const unitind2 = document.querySelector('[name="unitind2"]').value;
+    const unitname2 = document.querySelector('[name="unitname2"]').value;
+    // const unit2namevisible =
+    //     document.getElementById("unit2").style.display !== "none";
+
+    const unitname3 = document.querySelector('[name="unitname3"]').value;
+    const unitind3 = document.querySelector('[name="unitind3"]').value;
+    // const unit3namevisible =
+    //     document.getElementById("unit3").style.display !== "none";
+    // const rankid = document.querySelector('[name="rankid"]');
+    // const author = document.querySelector('[name="author"]');
+    let sciname = unitind1 + unitname1 + " " + unitind2 + unitname2 + " ";
+    if (unitname3) {
+        sciname = sciname + (unitind3 + " " + unitname3).trim();
+    }
+    if (f.cultivarEpithet.value) {
+        sciname += " " + standardizeCultivarEpithet(f.cultivarEpithet.value);
+    }
+    if (f.tradeName.value) {
+        sciname += " " + standardizeTradeName(f.tradeName.value);
+    }
+    f.sciname.value = sciname.trim();
+    return sciname;
 }
 
 window.updateLabels = updateLabels;

@@ -148,15 +148,28 @@
                             id="unitname3" value="" x-ref="unitname3"
                             x-bind:required="rankid && parseInt(rankid) >= 230" />
                     </div>
+                    <div id="cultivarEpithet-div"
+                        class="inline-flex items-center gap-2"
+                        x-show="rankid && parseInt(rankid) >= 300">
+                        <x-input label="Cultivar Epithet" name="cultivarEpithet"
+                            id="cultivarEpithet" value=""
+                            x-ref="cultivarEpithet" />
+                    </div>
+                    <div id="tradeName-div"
+                        class="inline-flex items-center gap-2"
+                        x-show="rankid && parseInt(rankid) >= 300">
+                        <x-input label="Trade Name" name="tradeName"
+                            id="tradeName" value="" x-ref="tradeName" />
+                    </div>
                     <div class="w-1/2">
                         <x-input label="Author" name="author" id="author"
                             value="" />
                     </div>
                     <div class="w-1/2">
                         <x-taxa-search :label="'Parent Taxon'" required
-                            id="parentname" name="parentname" :tidName="'parenttid'"
-                            :hide_selector="true" :label_classes="''"
-                            :hide_synonyms_checkbox="true" />
+                            id="parentname" name="parentname"
+                            :tidName="'parenttid'" :hide_selector="true"
+                            :label_classes="''" :hide_synonyms_checkbox="true" />
                     </div>
                     <div class="w-1/2 mt-2">
                         <x-input label="Notes" name="notes" id="notes"
