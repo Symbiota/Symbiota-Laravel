@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class RssController extends Controller {
-
     protected $rssFeedGenerator;
 
-    public function show(){
+    public function show() {
 
         // TODO implement cache
         // Try to get the RSS feed from cache
