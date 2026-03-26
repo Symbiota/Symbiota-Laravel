@@ -169,6 +169,7 @@ async function parseName() {
     let sciNameInput = taxonForm.quickparser.value;
     sciNameInput = sciNameInput.trim();
     taxonForm.reset();
+    console.log("deleteMe after reset, unitname1 element:", taxonForm.unitname1, "by id:", document.getElementById("unitname1"));
     const sciNameArr = sciNameInput.split(" ");
     let activeIndex = 0;
     let rankId = "";

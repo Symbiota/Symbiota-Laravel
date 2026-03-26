@@ -66,7 +66,7 @@
             x-effect="console.log('Current rankid value:', rankid)">
             <h1 class="text-4xl font-bold">Add New Taxon
             </h1>
-            <div id="sciname-preview" class="mt-4">
+            <div class="mt-4">
                 <h1 class="text-2xl font-bold">Sciname will be saved as:
                     <span id="sciname-preview" class="text-primary"></span>
                 </h1>
@@ -152,13 +152,13 @@
                                 x-bind:required="!rankid || parseInt(rankid) >= 220" />
                         </div>
                     </div>
-                    <div id="unit3" class="inline-flex items-top gap-2"
+                    <div id="unit3" class="inline-flex items-center gap-2"
                         x-show="rankid && parseInt(rankid) >= 230">
                         <x-input label="Infraspecific designation"
                             name="unitind3" id="unitind3"
                             placeholder="spp., var., forma, etc."
                             x-ref="unitind3" />
-                        <div class="flex flex-col">
+                        <div class="flex flex-col w-full">
                             <label
                                 class="text-base-content text-base text-bold mb-1"
                                 for="unitname3"><span
