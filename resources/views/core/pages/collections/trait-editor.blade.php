@@ -129,11 +129,11 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 
 
     <div @cloak($mode === $EDIT) x-show="mode !== {{ $EDIT }}">
-        <x-button @click="mode = {{ $EDIT }}">Edit</x-button>
+        <x-button @click="mode = {{ $EDIT }}">{{ __('projects.EDIT') }}</x-button>
     </div>
 
     <div @cloak($mode === $REVIEW) x-show="mode !== {{ $REVIEW }}">
-        <x-button  @click="mode = {{ $REVIEW }}">Review</x-button>
+        <x-button  @click="mode = {{ $REVIEW }}">{{ __('traitattr_occurattributes.REVIEW') }}</x-button>
     </div>
 
     <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
