@@ -29,7 +29,7 @@ if ($imgArr) {
 }
 
 ?>
-<x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" x-data="{editOpen: {{ $eMode }}}" class="px-0">
+<x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false" x-data="{editOpen: {{ $eMode }}}">
     @push('head')
         @if($imgArr)
 		<meta property="og:title" content="{{ $imgArr["sciname"] }}" />
