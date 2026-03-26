@@ -7,7 +7,6 @@ $EDIT = 1;
 
 $collid = request('collid');
 $submitForm = request('submitform') ?? '';
-//$mode = request('mode') == $EDIT ? $EDIT: $REVIEW;
 $mode = request('mode') == $REVIEW? $REVIEW: $EDIT;
 $traitID = request('traitid') ?? '';
 $paneX = request('panex') ?? '575';
@@ -21,6 +20,12 @@ if (!is_numeric($paneX)) $paneX = '';
 if (!is_numeric($paneY)) $paneY = '';
 
 $imgArr = [];
+
+// TODO (Logan) resolve this question of whether review or not can happen by collEditors
+$canReview = Gate::check('COLL_ADMIN', $collid);
+if($mode === $REVIEW && !$canReview) {
+    $mode = $EDIT;
+}
 
 $attrManager = new OccurrenceAttributes();
 $attrManager->setCollid($collid);
@@ -49,12 +54,13 @@ if ($submitForm == 'Save and Next') {
 $imgArr = array();
 $occid = 0;
 $catNum = '';
+
 if ($traitID) {
 	$imgRetArr = array();
-	if ($mode == 1) {
+	if ($mode == $EDIT) {
 		$imgRetArr = $attrManager->getImageUrls();
 		$imgArr = current($imgRetArr);
-	} elseif ($mode == 2) {
+	} elseif ($mode == $REVIEW) {
 		$imgRetArr = $attrManager->getReviewUrls($traitID);
 		if ($imgRetArr) $imgArr = current($imgRetArr);
 	}
@@ -121,12 +127,13 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 
     <hr/>
 
+
     <div @cloak($mode === $EDIT) x-show="mode !== {{ $EDIT }}">
-        <x-button @click="mode = 2">Edit</x-button>
+        <x-button @click="mode = {{ $EDIT }}">Edit</x-button>
     </div>
 
     <div @cloak($mode === $REVIEW) x-show="mode !== {{ $REVIEW }}">
-        <x-button  @click="mode = 1">Review</x-button>
+        <x-button  @click="mode = {{ $REVIEW }}">Review</x-button>
     </div>
 
     <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
@@ -211,6 +218,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
             <img class="w-150 h-150" src="{{ $image['web'] ?? $image['lg'] }}" loading="lazy" />
         </div>
         @endforeach
+
         <div class="border border-base-300 flex-grow p-4 flex flex-col gap-4">
             <x-trait-form :traits="$traitArr" :traitId="$traitID" />
             <x-input id="notes" :label="__('projects.NOTES')" />
