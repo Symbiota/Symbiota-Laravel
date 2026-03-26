@@ -13,7 +13,7 @@
                 'title' => 'Taxononmic Tree View',
                 'href' => legacy_url('/taxa/taxonomy/taxonomydisplay.php'),
             ],
-            'Create Taxon',
+            ['title' => __('taxonomy_taxonomyloader.CREATE_TAXON')],
         ]" />
     </div>
     <div x-data="{ tid: @js(request()->query('tid')) }">
@@ -64,10 +64,12 @@
                 },
             }"
             x-effect="console.log('Current rankid value:', rankid)">
-            <h1 class="text-4xl font-bold">Add New Taxon
+            <h1 class="text-4xl font-bold">
+                {{ __('taxonomy_taxonomyloader.TAXON_LOADER') }}
             </h1>
             <div class="mt-4">
-                <h1 class="text-2xl font-bold">Sciname will be saved as:
+                <h1 class="text-2xl font-bold">
+                    {{ __('taxonomy_taxonomyloader.SCINAME_SAVED_AS') }}:
                     <span id="sciname-preview" class="text-primary"></span>
                 </h1>
             </div>
@@ -79,25 +81,28 @@
                 <div class="w-3/4">
                     <fieldset
                         class="border border-base-300 rounded-md p-4 mb-4">
-                        <legend class="text-2xl font-semibold">Optional Quick
-                            Parser
+                        <legend class="text-2xl font-semibold">
+                            {{ __('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER') }}
                         </legend>
-                        <x-input label="Quick Parser" name="quickparser"
+                        <x-input :label="__('taxonomy_taxonomyloader.QUICK_PARSER')" name="quickparser"
                             id="quickparser" value=""
                             @keydown.enter="await parseName(); await validate();" />
                         <x-button @click="await parseName(); await validate();"
-                            type="button" class="mt-2">Parse</x-button>
+                            type="button"
+                            class="mt-2">{{ __('taxonomy_taxonomyloader.RUN_QUICK_PARSE') }}</x-button>
                     </fieldset>
                 </div>
                 <fieldset
                     class="w-full border border-base-300 rounded-md p-4 mb-4">
 
-                    <legend class="text-2xl font-semibold">Add New Taxon
+                    <legend class="text-2xl font-semibold">
+                        {{ __('taxonomy_taxonomyloader.TAXON_LOADER') }}
                     </legend>
 
                     <div class="w-3/4">
-                        <x-select label="Taxon Rank" name="rankid"
-                            id="rankid" :defaultValue="220"
+                        <x-select
+                            label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
+                            name="rankid" id="rankid" :defaultValue="220"
                             @select-changed="rankid = $event.detail.value; console.log('Select changed to:', $event.detail.value)"
                             :items="$allTaxonRanks
                                 ->map(
@@ -112,7 +117,7 @@
                     <div id="unit1" class="flex items-center gap-2 mb-4">
                         <div class="flex flex-col">
                             <label class="text mb-1" for="unitind1-toggle"
-                                x-text="unit1Label + ' Decorator'"></label>
+                                x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                             <x-select name="unitind1" id="unitind1"
                                 :items="$indContent" :default="0" />
                         </div>
@@ -120,7 +125,8 @@
                             <label
                                 class="text-base-content text-base text-bold mb-1"
                                 for="unitname1">
-                                <span x-text="unit1Label + ' Name'"></span>
+                                <span
+                                    x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.NAME') }}'"></span>
                                 <span
                                     class="vertical-align text-error italic pr-1">*</span>
                             </label>
@@ -133,7 +139,7 @@
                         x-show="!rankid || parseInt(rankid) >= 220">
                         <div class="flex flex-col">
                             <label class="text mb-1" for="unitind2-toggle"
-                                x-text="unit2Label + ' Decorator'"></label>
+                                x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                             <x-select name="unitind2" id="unitind2"
                                 :items="$indContent" :default="0" />
                         </div>
@@ -142,7 +148,8 @@
                                 class="text-base-content text-base text-bold mb-1"
                                 for="unitname2">
                                 <div class="flex items-center gap-1">
-                                    <span x-text="unit2Label + ' Name'"></span>
+                                    <span
+                                        x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.NAME') }}'"></span>
                                     <span
                                         class="vertical-align text-error italic pr-1">*</span>
                                 </div>
@@ -162,7 +169,7 @@
                             <label
                                 class="text-base-content text-base text-bold mb-1"
                                 for="unitname3"><span
-                                    x-text="'Infraspecific Epithet'"></span>
+                                    x-text="'{{ __('taxonomy_taxonomyloader.INFRASPECIFIC_EPITHET') }}'"></span>
                                 <span
                                     class="vertical-align text-error italic pr-1">*</span>
                             </label>
@@ -174,55 +181,68 @@
                     <div id="cultivarEpithet-div"
                         class="inline-flex items-center gap-2"
                         x-show="rankid && parseInt(rankid) >= 300">
-                        <x-input label="Cultivar Epithet" name="cultivarEpithet"
-                            id="cultivarEpithet" value=""
-                            x-ref="cultivarEpithet" />
+                        <x-input
+                            label="{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}"
+                            name="cultivarEpithet" id="cultivarEpithet"
+                            value="" x-ref="cultivarEpithet" />
                     </div>
                     <div id="tradeName-div"
                         class="inline-flex items-center gap-2"
                         x-show="rankid && parseInt(rankid) >= 300">
-                        <x-input label="Trade Name" name="tradeName"
-                            id="tradeName" value=""
+                        <x-input
+                            label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
+                            name="tradeName" id="tradeName" value=""
                             x-ref="tradeName" />
                     </div>
                     <div class="w-1/2">
-                        <x-input label="Author" name="author" id="author"
-                            value="" />
+                        <x-input label="{{ __('glossary_addterm.AUTHOR') }}"
+                            name="author" id="author" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-taxa-search :label="'Parent Taxon'" required
+                        <x-taxa-search :label="'{{ __('taxonomy_taxonomyloader.PARENT_TAXON') }}'" required
                             id="parentname" name="parentname"
                             :tidName="'parenttid'" :hide_selector="true"
                             :label_classes="''" :hide_synonyms_checkbox="true" />
                     </div>
                     <div class="w-1/2 mt-2">
-                        <x-input label="Notes" name="notes" id="notes"
-                            value="" />
+                        <x-input label="{{ __('projects.NOTES') }}"
+                            name="notes" id="notes" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-input label="Source" name="source" id="source"
-                            value="" />
+                        <x-input label="{{ __('glossary_addterm.SOURCE') }}"
+                            name="source" id="source" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-select label="Locality Security"
+                        <x-select
+                            label="{{ __('taxonomy_taxonomyloader.LOC_SECURITY') }}"
                             name="securitystatus" id="securitystatus"
                             :items="$securityOptions" />
                     </div>
                     <fieldset
                         class="border border-base-300 rounded-md p-4 mb-4">
-                        <legend class="text-2xl font-semibold">Acceptance
-                            Status
+                        <legend class="text-2xl font-semibold">
+                            {{ __('taxonomy_taxonomyloader.ACCEPT_STATUS') }}
+                        </legend>
                         </legend>
                         <x-radio name="acceptstatus" :options="[
-                            ['label' => 'Accepted', 'value' => 1],
-                            ['label' => 'Not Accepted', 'value' => 0],
+                            [
+                                'label' => __('taxonomy_taxoneditor.ACCEPTED'),
+                                'value' => 1,
+                            ],
+                            [
+                                'label' => __(
+                                    'taxonomy_taxoneditor.NOT_ACCEPTED',
+                                ),
+                                'value' => 0,
+                            ],
                         ]"
                             default_value="1" />
                     </fieldset>
                     <div id="accdiv" class="hidden">
                         <div>
                             <div class="left-column">
-                                <label for="acceptedstr"> Accepted Taxon:
+                                <label for="acceptedstr">
+                                    {{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}:
                                 </label>
                             </div>
                             <input id="acceptedstr" name="acceptedstr"
@@ -233,8 +253,7 @@
                         <div>
                             <div class="left-column">
                                 <label for="unacceptabilityreason">
-                                    Unacceptability
-                                    Reason:
+                                    {{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}:
                                 </label>
                             </div>
                             <input type='text' id='unacceptabilityreason'
@@ -244,11 +263,11 @@
                     </div>
                     <div>
                         <span class="text-sm italic text-base-content">* =
-                            Required
+                            {{ __('taxonomy_taxonomyloader.REQUIRED') }}
                             Field</span>
                     </div>
                     <x-button class="mt-2" x-bind:disabled="!isValid"
-                        x-text=" isValid ? 'Submit New Name' : 'Submission disabled'"></x-button>
+                        x-text=" isValid ? '{{ __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"></x-button>
                     <p><span id="validationMessage"
                             class="text-sm italic text-red-700"
                             x-text="validationMessage"></span>

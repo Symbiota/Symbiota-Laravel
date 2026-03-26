@@ -17,4 +17,12 @@ return [
     'INFRA_EPITHET_FIELD' => 'Campo de epíteto infraespecífico',
     'RANK_FIELD' => 'Campo de clasificación',
     'RUN_QUICK_PARSE' => 'Análisis rápido',
+    'OPTIONAL_QUICK_PARSER' => 'Análisis rápido opcional',
+    'QUICK_PARSER' => 'Análisis rápido',
+    'DECORATOR' => 'Decorador',
+    'NAME' => 'Nombre',
+    'CULTIVAR_EPITHET' => 'Epíteto de cultivar',
+    'REQUIRED' => 'Requerido',
+    'SUBMISSION_DISABLED' => 'Envío Deshabilitado',
+    'CREATE_TAXON' => 'Crear Taxón',
 ];

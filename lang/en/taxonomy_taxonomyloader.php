@@ -18,4 +18,12 @@ return [
     'INFRA_EPITHET_FIELD' => 'Infraspecific Epithet Field',
     'RANK_FIELD' => 'Rank Field',
     'RUN_QUICK_PARSE' => 'Parse',
+    'OPTIONAL_QUICK_PARSER' => 'Optional Quick Parser',
+    'QUICK_PARSER' => 'Quick Parser',
+    'DECORATOR' => 'Decorator',
+    'NAME' => 'Name',
+    'CULTIVAR_EPITHET' => 'Cultivar Epithet',
+    'REQUIRED' => 'Required',
+    'SUBMISSION_DISABLED' => 'Submission Disabled',
+    'CREATE_TAXON' => 'Create Taxon',
 ];

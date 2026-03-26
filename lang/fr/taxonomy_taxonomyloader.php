@@ -18,4 +18,12 @@ return [
     'INFRA_EPITHET_FIELD' => 'Champ d\'épithète infraspécifique',
     'RANK_FIELD' => 'Champ de rang',
     'RUN_QUICK_PARSE' => 'Analyser',
+    'OPTIONAL_QUICK_PARSER' => 'Analyse rapide optionnelle',
+    'QUICK_PARSER' => 'Analyse rapide',
+    'DECORATOR' => 'Décorateur',
+    'NAME' => 'Nom',
+    'CULTIVAR_EPITHET' => 'Épithète de cultivar',
+    'REQUIRED' => 'Requis',
+    'SUBMISSION_DISABLED' => 'Soumission Désactivée',
+    'CREATE_TAXON' => 'Créer un taxon',
 ];
