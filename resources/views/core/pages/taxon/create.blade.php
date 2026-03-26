@@ -199,7 +199,7 @@
                             name="author" id="author" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-taxa-search :label="'{{ __('taxonomy_taxonomyloader.PARENT_TAXON') }}'" required
+                        <x-taxa-search :label="'{{ __('taxonomy_taxonomyeditor.PARENT_TAXON') }}'" required
                             id="parentname" name="parentname"
                             :tidName="'parenttid'" :hide_selector="true"
                             :label_classes="''" :hide_synonyms_checkbox="true" />
@@ -214,7 +214,7 @@
                     </div>
                     <div class="w-1/2">
                         <x-select
-                            label="{{ __('taxonomy_taxonomyloader.LOC_SECURITY') }}"
+                            label="{{ __('taxonomy_taxonomyeditor.LOC_SECURITY') }}"
                             name="securitystatus" id="securitystatus"
                             :items="$securityOptions" />
                     </div>
@@ -224,6 +224,7 @@
                             {{ __('taxonomy_taxonomyloader.ACCEPT_STATUS') }}
                         </legend>
                         </legend>
+                        {{-- blade-formatter-disable --}}
                         <x-radio name="acceptstatus" :options="[
                             [
                                 'label' => __('taxonomy_taxoneditor.ACCEPTED'),
@@ -231,12 +232,13 @@
                             ],
                             [
                                 'label' => __(
-                                    'taxonomy_taxoneditor.NOT_ACCEPTED',
+                                    'taxonomy_taxoneditor.NOT_ACCEPTED'
                                 ),
                                 'value' => 0,
                             ],
                         ]"
                             default_value="1" />
+                        {{-- blade-formatter-enable --}}
                     </fieldset>
                     <div id="accdiv" class="hidden">
                         <div>

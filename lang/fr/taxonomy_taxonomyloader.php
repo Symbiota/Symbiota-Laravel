@@ -26,4 +26,5 @@ return [
     'REQUIRED' => 'Requis',
     'SUBMISSION_DISABLED' => 'Soumission Désactivée',
     'CREATE_TAXON' => 'Créer un taxon',
+    'INFRASPECIFIC_EPITHET' => 'Épithète infraspécifique',
 ];

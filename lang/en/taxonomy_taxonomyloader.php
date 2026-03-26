@@ -26,4 +26,5 @@ return [
     'REQUIRED' => 'Required',
     'SUBMISSION_DISABLED' => 'Submission Disabled',
     'CREATE_TAXON' => 'Create Taxon',
+    'INFRASPECIFIC_EPITHET' => 'Infraspecific Epithet',
 ];

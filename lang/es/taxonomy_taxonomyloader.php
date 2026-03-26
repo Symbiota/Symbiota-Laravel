@@ -25,4 +25,5 @@ return [
     'REQUIRED' => 'Requerido',
     'SUBMISSION_DISABLED' => 'Envío Deshabilitado',
     'CREATE_TAXON' => 'Crear Taxón',
+    'INFRASPECIFIC_EPITHET' => 'Epíteto infraespecífico',
 ];
