@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'IMG_DETAILS' => 'Detalles de la Imagen',
+    'MEDIA_DETAILS' => 'Detalles de medios',
     'ERROR_FILE_PATH' => 'ERROR: Se debe ingresar la ruta del archivo',
     'TAXON_PROFILE_EDITING' => 'Ir a la página de edición del perfil de taxón',
     'EDITING_PRIVILEGES' => 'Debe tener privilegios de edición para administrar la imagen de esta colección',
-    'EDIT_IMAGE' => 'Editar recursos de medios',
+    'EDIT_MEDIA' => 'Editar recursos de medios',
     'TWEET' => 'Tweet',
     'EDIT_IMAGE_DETAILS' => 'Editar detalles de recursos medios',
     'CAPTION' => 'Título',

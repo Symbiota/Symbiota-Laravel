@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'IMG_DETAILS' => 'Détails de l\'Image',
+    'MEDIA_DETAILS' => 'Détails médias',
     'ERROR_FILE_PATH' => 'ERREUR : Le chemin du fichier doit être saisi',
     'TAXON_PROFILE_EDITING' => 'Aller à la page d\'édition du profil de taxon',
     'EDITING_PRIVILEGES' => 'Doit disposer de privilèges d\'édition pour cette collection gérant l\'image',
-    'EDIT_IMAGE' => 'Modifier le multimédia',
+    'EDIT_MEDIA' => 'Modifier le multimédia',
     'TWEET' => 'Tweet',
     'EDIT_IMAGE_DETAILS' => 'Modifier les détails multimédia',
     'CAPTION' => 'Légende',
