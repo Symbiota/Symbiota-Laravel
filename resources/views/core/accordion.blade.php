@@ -15,7 +15,7 @@
     </x-button>
 
     <!-- Accordion Body ---->
-    <div x-cloak x-show="open"
+    <div @cloak(!$open) x-show="open"
         x-transition:enter="transition ease-out duration-300 delay-50"
         x-transition:enter-start="h-10 "
         x-transition:enter-end="h-fit"
