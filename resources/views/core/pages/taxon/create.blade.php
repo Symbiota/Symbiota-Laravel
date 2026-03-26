@@ -25,15 +25,12 @@
         </div>
         <div x-show="tid === null || isNaN(Number(tid))"
             class="flex flex-col items-center justify-center"
-            x-init =" 
-            validate();
-            $watch('rankid', (newValue, oldValue) => {
-                console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
-                updateLabels();
-                validate();
-            });
-        "
-            x-data="{
+            x-init=" validate();
+             $watch('rankid', (newValue, oldValue) => {
+                 console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
+                 updateLabels();
+                 validate();
+             });" x-data="{
                 unit1Label: 'Genus',
                 unit2Label: 'Species',
                 rankid: 220,
@@ -199,7 +196,7 @@
                             name="author" id="author" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-taxa-search :label="'{{ __('taxonomy_taxonomyeditor.PARENT_TAXON') }}'" required
+                        <x-taxa-search :label="__('taxonomy_taxonomyeditor.PARENT_TAXON')" required
                             id="parentname" name="parentname"
                             :tidName="'parenttid'" :hide_selector="true"
                             :label_classes="''" :hide_synonyms_checkbox="true" />
@@ -222,7 +219,6 @@
                         class="border border-base-300 rounded-md p-4 mb-4">
                         <legend class="text-2xl font-semibold">
                             {{ __('taxonomy_taxonomyloader.ACCEPT_STATUS') }}
-                        </legend>
                         </legend>
                         {{-- blade-formatter-disable --}}
                         <x-radio name="acceptstatus" :options="[
