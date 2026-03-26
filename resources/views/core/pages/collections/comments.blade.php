@@ -1,7 +1,6 @@
 @php global $SERVER_ROOT;
 include_once(legacy_path('/classes/OccurrenceSupport.php'));
 
-// TODO number match this
 $collid = request('collid')? filter_var(request('collid'), FILTER_SANITIZE_NUMBER_INT) : 0;
 $page = is_numeric(request('page'))? intval(request('page')): 1;
 $limit = is_numeric(request('limit'))? intval(request('limit')): 5;
