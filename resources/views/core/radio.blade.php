@@ -6,7 +6,7 @@
     @php
        $id = $option['id']?? uniqid();
     @endphp
-    <div class="flex gap-2 items-start mb-1 items-center">
+    <div class="flex gap-2 items-start items-center">
         <div class="grid place-items-center">
             <input
                 class="peer col-start-1 row-start-1 appearance-none shrink-0
@@ -36,7 +36,7 @@
             "
             ></div>
         </div>
-        <label for="{{ $id }}">
+        <label class="my-auto" for="{{ $id }}">
             {{ $option['label'] }}
         </label>
     </div>
