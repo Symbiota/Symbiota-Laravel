@@ -196,8 +196,9 @@
                             name="author" id="author" value="" />
                     </div>
                     <div class="w-1/2">
-                        <x-taxa-search :label="__('taxonomy_taxonomyeditor.PARENT_TAXON')" required
-                            id="parentname" name="parentname"
+                        <x-taxa-search
+                            label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
+                            required id="parentname" name="parentname"
                             :tidName="'parenttid'" :hide_selector="true"
                             :label_classes="''" :hide_synonyms_checkbox="true" />
                     </div>
@@ -211,7 +212,7 @@
                     </div>
                     <div class="w-1/2">
                         <x-select
-                            label="{{ __('taxonomy_taxonomyeditor.LOC_SECURITY') }}"
+                            label="{{ __('taxonomy_taxoneditor.LOC_SECURITY') }}"
                             name="securitystatus" id="securitystatus"
                             :items="$securityOptions" />
                     </div>
