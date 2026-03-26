@@ -160,7 +160,7 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
-function parseName() {
+async function parseName() {
     console.log("deleteMe parseName function called");
     const taxonForm = document.getElementById("taxon-form");
     if (!taxonForm.quickparser.value) {
@@ -175,11 +175,14 @@ function parseName() {
     const isGenericHybridOrExtinct =
         sciNameArr.length > 0 && sciNameArr[activeIndex].length == 1;
     if (isGenericHybridOrExtinct) {
-        taxonForm.unitind1.value = sciNameArr[activeIndex];
-        if (sciNameArr[activeIndex].toLowerCase() == "x") {
-            taxonForm.unitind1.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
-        } else if (sciNameArr[activeIndex].toLowerCase() == "†") {
-            taxonForm.unitind1.selectedIndex = 2; // @TODO - this is pretty brittle, should use value instead of index
+        const unitind1El = document.getElementById("unitind1");
+        if (unitind1El) {
+            unitind1El.value = sciNameArr[activeIndex];
+            if (sciNameArr[activeIndex].toLowerCase() == "x") {
+                unitind1El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+            } else if (sciNameArr[activeIndex].toLowerCase() == "†") {
+                unitind1El.selectedIndex = 2; // @TODO - this is pretty brittle, should use value instead of index
+            }
         }
         // activeIndex = 1 ;
         activeIndex += 1;
@@ -190,7 +193,8 @@ function parseName() {
         const isHybrid = sciNameArr[activeIndex].length == 1;
         if (isHybrid) {
             if (sciNameArr[activeIndex].toLowerCase() == "x") {
-                taxonForm.unitind2.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+                const unitind2El = document.getElementById("unitind2");
+                if (unitind2El) unitind2El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
             }
             activeIndex += 1;
         }
@@ -299,20 +303,21 @@ function parseName() {
                 .trim();
         }
     }
-    taxonForm.rankid.value = rankId;
+    const rankidEl = document.getElementById("rankid");
+    if (rankidEl) rankidEl.value = rankId;
     if (unitName1.substring(0, 1) == "×" || unitName1.substring(0, 1) == "†") {
-        if (taxonForm.unitind1.value == "") {
-            if (unitName1.substring(0, 1) == "×")
-                taxonForm.unitind1.selectedIndex = 1;
-            if (unitName1.substring(0, 1) == "†")
-                taxonForm.unitind1.selectedIndex = 2;
+        const unitind1El = document.getElementById("unitind1");
+        if (!unitind1El?.value) {
+            if (unitName1.substring(0, 1) == "×") unitind1El.selectedIndex = 1;
+            if (unitName1.substring(0, 1) == "†") unitind1El.selectedIndex = 2;
         }
         taxonForm.unitname1.value = taxonForm.unitname1.value.substring(1);
     }
     if (taxonForm.unitname2.value.substring(0, 1) == "×") {
-        if (taxonForm.unitind2.value == "") {
+        const unitind2El = document.getElementById("unitind2");
+        if (!unitind2El?.value) {
             if (taxonForm.unitname2.value.substring(0, 1) == "×")
-                taxonForm.unitind2.selectedIndex = 1;
+                unitind2El.selectedIndex = 1;
         }
         taxonForm.unitname2.value = taxonForm.unitname2.value.substring(1);
     }
@@ -326,14 +331,25 @@ function parseName() {
         }
     }
     // if (parentName != "") setParent(parentName, taxonForm.unitind1.value);
-    //@TODO set the taxa_value prop of the x-taxa-search component to parentName to trigger the search for the parent taxon and set the parenttid hidden input value based on the search result
-    
-    const result = await checkNameExistence(parentName, rankId);
-    const parentTid = result?.tid;
-    const parentTidInput = taxonForm.querySelector('input[name="parenttid"]');
-    if (parentTidInput) parentTidInput.value = parentTid || "";
-    console.log("deleteMe parent name is: " + parentName);
+    if (parentName !== "") {
+        const taxaSearchInput = taxonForm.querySelector(
+            'input#parentname[name="taxa"]',
+        );
+        if (taxaSearchInput) taxaSearchInput.value = parentName;
 
+        try {
+            const response = await fetch(
+                `/api/taxa/search?taxa=${encodeURIComponent(parentName)}&format=json`,
+            );
+            const results = await response.json();
+            const exactMatch = results.find((r) => r.sciname === parentName);
+            const parentTidInput = document.querySelector("#tid-parentname");
+            if (parentTidInput) parentTidInput.value = exactMatch?.tid ?? "";
+        } catch (e) {
+            console.error("Error looking up parent taxon:", e);
+        }
+    }
+    console.log("deleteMe parent name is: " + parentName);
 
     // @TODO handle case where there are two matches in the DB
     // showOnlyRelevantFields(rankId);

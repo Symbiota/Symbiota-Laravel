@@ -57,9 +57,9 @@
                         window.updateScinameDisplay();
                     }
                 },
-                parseName() {
+                async parseName() {
                     if (window.parseName) {
-                        window.parseName();
+                        await window.parseName();
                     }
                 },
             }"
@@ -84,8 +84,8 @@
                         </legend>
                         <x-input label="Quick Parser" name="quickparser"
                             id="quickparser" value=""
-                            @enter="parseName(); await validate();" />
-                        <x-button @click="parseName(); await validate();"
+                            @keydown.enter="await parseName(); await validate();" />
+                        <x-button @click="await parseName(); await validate();"
                             type="button" class="mt-2">Parse</x-button>
                     </fieldset>
                 </div>
@@ -140,25 +140,36 @@
                         <div class="flex flex-col">
                             <label
                                 class="text-base-content text-base text-bold mb-1"
-                                for="unitname2"><span
-                                    x-text="unit2Label + ' Name'"></span>
-                                <span
-                                    class="vertical-align text-error italic pr-1">*</span>
+                                for="unitname2">
+                                <div class="flex items-center gap-1">
+                                    <span x-text="unit2Label + ' Name'"></span>
+                                    <span
+                                        class="vertical-align text-error italic pr-1">*</span>
+                                </div>
                             </label>
                             <x-input name="unitname2" id="unitname2"
                                 value="" x-ref="unitname2"
                                 x-bind:required="!rankid || parseInt(rankid) >= 220" />
                         </div>
                     </div>
-                    <div id="unit3" class="inline-flex items-center gap-2"
+                    <div id="unit3" class="inline-flex items-top gap-2"
                         x-show="rankid && parseInt(rankid) >= 230">
                         <x-input label="Infraspecific designation"
                             name="unitind3" id="unitind3"
                             placeholder="spp., var., forma, etc."
                             x-ref="unitind3" />
-                        <x-input label="Infraspecific Epithet" name="unitname3"
-                            id="unitname3" value="" x-ref="unitname3"
-                            x-bind:required="rankid && parseInt(rankid) >= 230" />
+                        <div class="flex flex-col">
+                            <label
+                                class="text-base-content text-base text-bold mb-1"
+                                for="unitname3"><span
+                                    x-text="'Infraspecific Epithet'"></span>
+                                <span
+                                    class="vertical-align text-error italic pr-1">*</span>
+                            </label>
+                            <x-input name="unitname3" id="unitname3"
+                                value="" x-ref="unitname3"
+                                x-bind:required="rankid && parseInt(rankid) >= 230" />
+                        </div>
                     </div>
                     <div id="cultivarEpithet-div"
                         class="inline-flex items-center gap-2"
@@ -238,7 +249,8 @@
                     </div>
                     <x-button class="mt-2" x-bind:disabled="!isValid"
                         x-text=" isValid ? 'Submit New Name' : 'Submission disabled'"></x-button>
-                    <p><span class="text-sm italic text-red-700"
+                    <p><span id="validationMessage"
+                            class="text-sm italic text-red-700"
                             x-text="validationMessage"></span>
                     </p>
                 </fieldset>
