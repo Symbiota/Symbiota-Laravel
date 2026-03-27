@@ -28,11 +28,6 @@ function updateLabels(alpineData) {
 }
 
 async function checkNameExistence(sciname, rankid, author = "") {
-    console.log("deleteMe a1 Checking name existence for:", {
-        sciname,
-        rankid,
-        author,
-    });
     if (!sciname || !rankid) {
         return false;
     }
@@ -41,16 +36,11 @@ async function checkNameExistence(sciname, rankid, author = "") {
         params.set("author", author);
     }
     const response = await fetch(`/api/v3/taxonomy/check-exists?${params}`);
-    console.log("deleteMe a2 API response is: ");
-    console.log(response);
     const data = await response.json();
-    console.log("deleteMe a3 API response data is: ");
-    console.log(data);
     return data.exists;
 }
 
 async function validateTaxonForm(alpineData) {
-    console.log("Validating taxon form...");
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
@@ -160,8 +150,7 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
-async function parseName() {
-    console.log("deleteMe parseName function called");
+async function parseName() { //lightly modified from original function in old codebase
     const taxonForm = document.getElementById("taxon-form");
     if (!taxonForm.quickparser.value) {
         return;
@@ -169,7 +158,6 @@ async function parseName() {
     let sciNameInput = taxonForm.quickparser.value;
     sciNameInput = sciNameInput.trim();
     taxonForm.reset();
-    console.log("deleteMe after reset, unitname1 element:", taxonForm.unitname1, "by id:", document.getElementById("unitname1"));
     const sciNameArr = sciNameInput.split(" ");
     let activeIndex = 0;
     let rankId = "";
@@ -180,12 +168,11 @@ async function parseName() {
         if (unitind1El) {
             unitind1El.value = sciNameArr[activeIndex];
             if (sciNameArr[activeIndex].toLowerCase() == "x") {
-                unitind1El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+                unitind1El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index, but following the pattern established in the old codebase
             } else if (sciNameArr[activeIndex].toLowerCase() == "†") {
-                unitind1El.selectedIndex = 2; // @TODO - this is pretty brittle, should use value instead of index
+                unitind1El.selectedIndex = 2; // @TODO - this is pretty brittle, should use value instead of index, but following the pattern established in the old codebase
             }
         }
-        // activeIndex = 1 ;
         activeIndex += 1;
     }
     taxonForm.unitname1.value = sciNameArr[activeIndex];
@@ -195,7 +182,7 @@ async function parseName() {
         if (isHybrid) {
             if (sciNameArr[activeIndex].toLowerCase() == "x") {
                 const unitind2El = document.getElementById("unitind2");
-                if (unitind2El) unitind2El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index
+                if (unitind2El) unitind2El.selectedIndex = 1; // @TODO - this is pretty brittle, should use value instead of index, but following the pattern established in the old codebase
             }
             activeIndex += 1;
         }
@@ -205,7 +192,6 @@ async function parseName() {
                 sciNameArr[activeIndex].length - 1,
             ) == ")"
         ) {
-            //active unit is a subgeneric designation, append to unitname1
             taxonForm.unitname1.value =
                 taxonForm.unitname1.value + " " + sciNameArr[activeIndex];
             activeIndex = activeIndex + 1;
@@ -249,7 +235,7 @@ async function parseName() {
     }
     let author = "";
     while (sciNameArr.length > activeIndex) {
-        //Place remain taxon units into the author field
+        //Place remaining taxon units into the author field
         author = author + " " + sciNameArr[activeIndex];
         activeIndex = activeIndex + 1;
     }
@@ -331,7 +317,6 @@ async function parseName() {
                     taxonForm.unitname1.value + " " + taxonForm.unitname2.value;
         }
     }
-    // if (parentName != "") setParent(parentName, taxonForm.unitind1.value);
     if (parentName !== "") {
         const taxaSearchInput = taxonForm.querySelector(
             'input#parentname[name="taxa"]',
@@ -350,11 +335,6 @@ async function parseName() {
             console.error("Error looking up parent taxon:", e);
         }
     }
-    console.log("deleteMe parent name is: " + parentName);
-
-    // @TODO handle case where there are two matches in the DB
-    // showOnlyRelevantFields(rankId);
-    // updateFullname(f);
     taxonForm.quickparser.value = "";
 }
 

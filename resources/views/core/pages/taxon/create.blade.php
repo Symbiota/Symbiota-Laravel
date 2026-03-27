@@ -59,8 +59,7 @@
                         await window.parseName();
                     }
                 },
-            }"
-            x-effect="console.log('Current rankid value:', rankid)">
+            }">
             <h1 class="text-4xl font-bold">
                 {{ __('taxonomy_taxonomyloader.TAXON_LOADER') }}
             </h1>
@@ -100,7 +99,7 @@
                         <x-select
                             label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
                             name="rankid" id="rankid" :defaultValue="220"
-                            @select-changed="rankid = $event.detail.value; console.log('Select changed to:', $event.detail.value)"
+                            @select-changed="rankid = $event.detail.value;"
                             :items="$allTaxonRanks
                                 ->map(
                                     fn($r) => [
