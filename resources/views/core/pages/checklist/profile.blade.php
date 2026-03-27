@@ -14,7 +14,10 @@ $show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? fals
 $show_common = request('show_common') ?? $defaultSettings->dcommon ?? false;
 $show_notes_vouchers = request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false;
 $show_taxa_authors = request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false;
+$show_images = request('show_images') ?? $defaultSettings->dimages ?? false;
 $show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false;
+$limit_voucher_images = ('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false;
+$show_subgenera = request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false;
 
 $clManager = new ChecklistManager();
 $clManager->setClid($checklist->clid);
@@ -25,18 +28,18 @@ if($isClAdmin){
 	}
 }
 
-$clManager->setShowCommon(true);
-$clManager->setShowSynonyms(true);
-$clManager->setShowCommon(true);
-$clManager->setShowVouchers(true);
-
-if($show_taxa_authors) {
-    $clManager->setShowAuthors(true);
-}
-if($show_taxa_alphabetically) {
-    $clManager->setShowAlphaTaxa(true);
-}
-//$clManager->setShowSubgenera(true);
+$clManager->setShowCommon($show_common);
+$clManager->setShowSynonyms($show_synonyms);
+$clManager->setShowVouchers($show_notes_vouchers);
+$clManager->setShowAuthors($show_taxa_authors);
+$clManager->setShowImages($show_images);
+$clManager->setShowAlphaTaxa($show_taxa_alphabetically);
+/*
+TODO (Logan) figure out why there is no ui option for these in the original.
+Maybe these were deprecated options and they can be removed?
+$clManager->setLimitImagesToVouchers($limit_voucher_images);
+$clManager->setShowSubgenera($show_subgenera);
+*/
 
 $taxaList = $clManager->getTaxaList(1, 0);
 $voucherArr = $clManager->getVoucherArr();
