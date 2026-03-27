@@ -10,13 +10,12 @@
     'show_taxa_alphabetically' => false,
     'sppEditToggle' => false,
 ])
-@php global $LANG @endphp
 
 @fragment('taxa-list')
 <div id="taxa-list">
     @if(count($taxa) <= 0)
-        <div>
-            There are no taxa to list
+        <div class="text-2xl font-bold">
+            {{ __('checklists_checklist.NOTAXA') }}
         </div>
     @endif
 
@@ -58,7 +57,7 @@
                 @php
                 $editTitle = array_key_exists($id, $children)? $children[$id]: $checklist->name;
                 @endphp
-                <a x-cloak x-show="{{ $sppEditToggle }}" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ $LANG['EDIT_DETAILS'] . ': ' . $editTitle }}">
+                <a x-cloak x-show="{{ $sppEditToggle }}" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ __('checklists_checklist.EDIT_DETAILS') . ': ' . $editTitle }}">
                     <x-icons.edit />
                 </a>
                 @endforeach
@@ -67,7 +66,7 @@
 
             @if($show_synonyms && isset($taxon['syn']))
             <div class="pl-4">
-                <span class="font-bold">Synonyms:</span>
+                <span class="font-bold">{{ __('taxa.SYNONYMS') }}:</span>
                 {!! Purify::clean($taxon['syn']) !!}
             </div>
             @endif

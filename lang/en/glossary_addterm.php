@@ -15,7 +15,6 @@ return [
     'ADD_LANG' => 'Add language',
     'AUTHOR' => 'Author',
     'TRANSLATOR' => 'Translator',
-    'SOURCE' => 'Source',
     'RES_URL' => 'Resource URL',
     'PLEASE_TAXON_2' => 'Please enter the taxonomic group (higher than family) to which this term applies <b>OR</b> link new term to a related existing term',
     'TAX_GROUP' => 'Taxonomic Group',
