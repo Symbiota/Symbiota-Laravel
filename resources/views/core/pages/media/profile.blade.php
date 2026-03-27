@@ -82,13 +82,7 @@ if ($imgArr) {
         @endif
     </div>
 
-    @if($status )
-        <hr />
-        <div class="text-error">
-            {!! $status !!}
-        </div>
-        <hr />
-    @endif
+    <x-errors :errors="$errors"/>
 
     @if(!$imgArr)
         <h2>{{ __('imagelib_imgdetails.UNABLE_TO_LOCATE') }}</h2>

@@ -167,28 +167,28 @@ class MediaController extends Controller {
         include_once legacy_path('/classes/Media.php');
         include_once legacy_path('/classes/APITaxonomy.php');
 
-        $status = '';
+        $status = [];
         $imgArr = \Media::getMedia($mediaID);
         $isEditor = Gate::check('MEDIA_ADMIN', [$imgArr]);
 
         if ($isEditor) {
             $taxonAPI = new \APITaxonomy();
             $taxonArr = $taxonAPI->getTaxon(trim(request('taxa')));
-
+            $status  = [];
             if (count($taxonArr) <= 0) {
-                $status = 'Error: Scientific name does not exist in database. Did you spell it correctly? If so, contact your data administrator to add this species to the Taxonomic Thesaurus.';
+                $status[] = 'Error: Scientific name does not exist in database. Did you spell it correctly? If so, contact your data administrator to add this species to the Taxonomic Thesaurus.';
             } elseif (count($taxonArr) > 1) {
-                $status = 'Error: Linking to multiple taxa is not supported.';
+                $status[] = 'Error: Linking to multiple taxa is not supported.';
             } elseif ($targettid = array_keys($taxonArr)[0] ?? false) {
                 \Media::update($mediaID, ['tid' => $targettid], new \LocalStorage());
 
                 if ($errors = \Media::getErrors()) {
-                    $status = 'Errors:<br/>' . implode('<br/>', $errors);
+                    $status = $errors;
                 } else {
                     return redirect(legacy_url('taxa/profile/tpeditor.php?tid=' . $targettid . '&tabindex=1'));
                 }
             } else {
-                $status = 'ERROR: ' . __('imagelib_imgdetails.MEDIA_TRANSFER_REQUIRES_TAXON_ID');
+                $status[] = 'ERROR: ' . __('imagelib_imgdetails.MEDIA_TRANSFER_REQUIRES_TAXON_ID');
             }
         }
 
@@ -196,7 +196,7 @@ class MediaController extends Controller {
             'mediaID' => $mediaID,
             'isEditor' => $isEditor,
             'imgArr' => $imgArr,
-            'status' => $status,
+            'errors' => message_bag($status),
         ]);
     }
 
