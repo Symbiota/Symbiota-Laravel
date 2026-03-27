@@ -180,17 +180,14 @@ class TaxonomyController extends Controller {
     }
 
     public static function store() {
-        // @TODO implement taxon creation
-        // pass the POST data to TaxonomyEditorManager's loadNewName method
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $loaderObj = new \TaxonomyEditorManager();
-        // @TODO check whether it exists already and if so return an error message instead of trying to create it and having the database throw an error
 
         // if (! $loaderObj->validateNewName($postData)) {
         //     // Redirect back with error message
         //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
-        // } else {
+        // } else { // @TODO to be fixed in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         $tidResult = $loaderObj->loadNewName($postData);
         // }
 
@@ -198,8 +195,7 @@ class TaxonomyController extends Controller {
             // Redirect to the newly created taxon's page
             return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
-            // Redirect back with error message
-            return redirect()->back()->withInput()->withErrors(['error' => $tidResult]);
+            return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
     }
 }

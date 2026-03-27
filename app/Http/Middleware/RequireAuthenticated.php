@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RequireAuthenticated {
     public function handle(Request $request, Closure $next): Response {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             abort(403);
         }
 

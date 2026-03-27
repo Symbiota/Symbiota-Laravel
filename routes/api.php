@@ -135,8 +135,7 @@ Route::group(['prefix' => 'v3'], function () {
     | Collections API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'collection'], function () {
-    });
+    Route::group(['prefix' => 'collection'], function () {});
 
     /*
     |--------------------------------------------------------------------------
@@ -153,24 +152,21 @@ Route::group(['prefix' => 'v3'], function () {
     | Inventory API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'inventory'], function () {
-    });
+    Route::group(['prefix' => 'inventory'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Installation API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'installation'], function () {
-    });
+    Route::group(['prefix' => 'installation'], function () {});
 
     /*
     |--------------------------------------------------------------------------
     | Media API
     |--------------------------------------------------------------------------
     */
-    Route::group(['prefix' => 'media'], function () {
-    });
+    Route::group(['prefix' => 'media'], function () {});
 
     /*
     |--------------------------------------------------------------------------
@@ -184,14 +180,14 @@ Route::group(['prefix' => 'v3'], function () {
             $rankid = $request->query('rankid');
             $author = $request->query('author');
 
-            if (!$sciname || !$rankid) {
+            if (! $sciname || ! $rankid) {
                 return response()->json(['exists' => false, 'tid' => null]);
             }
 
             $query = DB::table('taxa as t')
                 ->join('taxstatus as ts', 'ts.tid', 't.tid')
                 ->where('ts.taxauthid', 1)
-                ->where(function ($q) use ($sciname, $author) {
+                ->where(function ($q) use ($sciname) {
                     $q->where('t.sciname', $sciname)
                         ->orWhereRaw('CONCAT(t.sciname, " ", t.author) = ?', [$sciname]);
                 })
