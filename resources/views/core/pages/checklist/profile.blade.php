@@ -254,4 +254,4 @@ $breadcrumbs[] = $checklist->name;
         :show_taxa_alphabetically="$show_taxa_alphabetically"
         sppEditToggle="sppEditToggle"
     />
-</x-layout>
+</x-margin-layout>
