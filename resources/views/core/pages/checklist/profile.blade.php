@@ -70,14 +70,24 @@ $breadcrumbs[] = $checklist->name;
         <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
         <div class="flex flex-grow justify-end gap-2">
             @can('CL_ADMIN', $checklist->clid)
-            <x-button href="{{legacy_url('/checklists/checklistadmin.php?clid=' . $checklist->clid)}}">
+            <x-button href="{{legacy_url('/checklists/checklistadmin.php?clid=' . $checklist->clid)}}"
+                aria-label="{{ __('checklists_checklist.CHECKLIST_ADMIN') }}"
+                title="{{ __('checklists_checklist.CHECKLIST_ADMIN') }}"
+                >
                 <i class="flex-end fas fa-edit"></i> A
             </x-button>
-            <x-button href="{{legacy_url('/checklists/voucheradmin.php?clid=' . $checklist->clid)}}">
+            <x-button href="{{legacy_url('/checklists/voucheradmin.php?clid=' . $checklist->clid)}}"
+                aria-label="{{ __('checklists_checklist.MANAGE_VOUCHERS') }}"
+                title="{{ __('checklists_checklist.MANAGE_VOUCHERS') }}"
+            >
                 <i class="flex-end fas fa-edit"></i> V
             </x-button>
 
-            <x-button @click="sppEditToggle = !sppEditToggle" >
+
+            <x-button @click="sppEditToggle = !sppEditToggle"
+                aria-label="{{ __('checklists_checklist.EDIT_LIST') }}"
+                title="{{ __('checklists_checklist.EDIT_LIST') }}"
+            >
                 <i class="flex-end fas fa-edit"></i>Spp
                 <span x-show="sppEditToggle">- ON</span>
             </x-button>
