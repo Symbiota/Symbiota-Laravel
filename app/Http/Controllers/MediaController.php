@@ -174,7 +174,7 @@ class MediaController extends Controller {
         if ($isEditor) {
             $taxonAPI = new \APITaxonomy();
             $taxonArr = $taxonAPI->getTaxon(trim(request('taxa')));
-            $status  = [];
+            $status = [];
             if (count($taxonArr) <= 0) {
                 $status[] = 'Error: Scientific name does not exist in database. Did you spell it correctly? If so, contact your data administrator to add this species to the Taxonomic Thesaurus.';
             } elseif (count($taxonArr) > 1) {
