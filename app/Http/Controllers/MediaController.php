@@ -190,7 +190,7 @@ class MediaController extends Controller {
                     return redirect(legacy_url('taxa/profile/tpeditor.php?tid=' . $targettid . '&tabindex=1'));
                 }
             } else {
-                $status = 'ERROR: ' . $LANG['MEDIA_TRANSFER_REQUIRES_TAXON_ID'];
+                $status = 'ERROR: ' . __('imagelib_imgdetails.MEDIA_TRANSFER_REQUIRES_TAXON_ID');
             }
         }
 
