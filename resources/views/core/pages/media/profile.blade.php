@@ -1,11 +1,8 @@
 @props(['mediaID', 'imgArr', 'isEditor', 'status' => ''])
-<?php global $SERVER_ROOT, $LANG_TAG, $LANG, $IS_ADMIN, $DEFAULT_TITLE, $SYMB_UID;
+<?php global $SERVER_ROOT, $DEFAULT_TITLE;
 
-include_once($SERVER_ROOT . '/classes/Media.php');
-include_once($SERVER_ROOT . '/classes/utilities/GeneralUtil.php');
-include_once($SERVER_ROOT . '/classes/utilities/Language.php');
-
-Language::load('imagelib/imgdetails');
+include_once(legacy_path('/classes/Media.php'));
+include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 
 $eMode = request('emode') ? 'true': 'false';
 
@@ -71,7 +68,7 @@ if ($imgArr) {
                 </div>
             @endif
 
-            @if($SYMB_UID && ($IS_ADMIN || array_key_exists("TaxonProfile", $USER_RIGHTS)))
+            @can('TAXON_PROFILE')
                 <div title="{{ __('imagelib_imgdetails.TAXON_PROFILE_EDITING') }}">
                     <x-link class="flex items-center gap-1" href="{{ legacy_url('taxa/profile/tpeditor.php?&tabindex=1&tid=' . $imgArr['tid'])}}" target="_blank">
                         <img src="{{ legacy_url('images/edit.png') }}" class="w-5"/>
@@ -80,7 +77,7 @@ if ($imgArr) {
                         </span>
                     </x-link>
                 </div>
-            @endif
+            @endcan
         </div>
         @endif
     </div>
