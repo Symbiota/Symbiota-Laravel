@@ -68,6 +68,7 @@ if ($imgArr) {
                 </div>
             @endif
 
+            @isset($imgArr['tid'])
             @can('TAXON_PROFILE')
                 <div title="{{ __('imagelib_imgdetails.TAXON_PROFILE_EDITING') }}">
                     <x-link class="flex items-center gap-1" href="{{ legacy_url('taxa/profile/tpeditor.php?&tabindex=1&tid=' . $imgArr['tid'])}}" target="_blank">
@@ -78,6 +79,7 @@ if ($imgArr) {
                     </x-link>
                 </div>
             @endcan
+            @endisset
         </div>
         @endif
     </div>
