@@ -1,9 +1,6 @@
 @props(['checklist', 'taxons' => [], 'vouchers' => []])
-@php
-global $SERVER_ROOT, $LANG;
+@php global $SERVER_ROOT;
 include_once(legacy_path('/classes/ChecklistManager.php'));
-include_once(legacy_path('/classes/utilities/Language.php'));
-Language::load('checklists/checklist');
 
 $isClAdmin = Gate::check('CL_ADMIN', $checklist->clid);
 $statusStr = false;
