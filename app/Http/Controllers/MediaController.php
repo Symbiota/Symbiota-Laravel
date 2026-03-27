@@ -173,8 +173,6 @@ class MediaController extends Controller {
 
         if ($isEditor) {
             $taxonAPI = new \APITaxonomy();
-
-            // @todo logan this is a security issue in both repos
             $taxonArr = $taxonAPI->getTaxon(trim(request('taxa')));
 
             if (count($taxonArr) <= 0) {
