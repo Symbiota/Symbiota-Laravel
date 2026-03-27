@@ -7,11 +7,10 @@
     'hide_selector' => false,
     'hide_synonyms_checkbox' => false,
     'label' => '',
-    'label_classes' => 'text-lg',
 ])
 <div>
-    <label class="{{ $label_classes }}"
-        for="{{ $id }}">{{ $label ?: 'Search Taxa' }} @if ($attributes['aria-required'] || $attributes['required'])
+    <label class="text-lg" for="{{ $id }}">{{ $label ?: 'Search Taxa' }}
+        @if ($attributes['aria-required'] || $attributes['required'])
             <span class="vertical-align text-error italic pr-1">*</span>
         @endif
     </label>

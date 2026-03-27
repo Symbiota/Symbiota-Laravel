@@ -199,7 +199,7 @@
                             label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
                             required id="parentname" name="parentname"
                             :tidName="'parenttid'" :hide_selector="true"
-                            :label_classes="''" :hide_synonyms_checkbox="true" />
+                            :hide_synonyms_checkbox="true" />
                     </div>
                     <div class="w-1/2 mt-2">
                         <x-input label="{{ __('projects.NOTES') }}"

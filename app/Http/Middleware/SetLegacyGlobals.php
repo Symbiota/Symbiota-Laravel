@@ -9,11 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLegacyGlobals {
     /**
-     * Set legacy portal globals from the authenticated Laravel session so that
-     * Portal submodule classes (e.g. TaxonomyEditorManager) can read the
-     * current user's UID via $GLOBALS['SYMB_UID'].
-     *
-     * Must run after StartSession so the auth guard can read from the session.
+     * Set legacy portal globals from the authenticated Laravel session so that Portal submodule classes (e.g. TaxonomyEditorManager) can read the current user's UID via $GLOBALS['SYMB_UID'].
      */
     public function handle(Request $request, Closure $next): Response {
         $user = Auth::user();
