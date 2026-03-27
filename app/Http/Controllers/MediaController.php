@@ -196,7 +196,7 @@ class MediaController extends Controller {
 
         return view('pages/media/profile', [
             'mediaID' => $mediaID,
-            'isEditor' => $imgArr,
+            'isEditor' => $isEditor,
             'imgArr' => $imgArr,
             'status' => $status,
         ]);
