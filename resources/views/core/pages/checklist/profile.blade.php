@@ -15,6 +15,8 @@ $show_images = request('show_images') ?? $defaultSettings->dimages ?? false;
 $show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false;
 $limit_voucher_images = ('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false;
 $show_subgenera = request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false;
+$activate_key = $defaultSettings->activateKey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false;
+
 
 $clManager = new ChecklistManager();
 $clManager->setClid($checklist->clid);
@@ -112,9 +114,11 @@ $breadcrumbs[] = $checklist->name;
             <x-popover class="w-[500px]">
                 <form x-data="{ form: $el, show_images: {{ $show_images? 'true': 'false' }}}" target="_blank" id="checklist-display-form" class="flex flex-col gap-2">
                     <x-taxa-search />
+                    @if($activate_key)
                     <x-link href="{{ legacy_url('/ident/key.php') }}?dynclid={{ 0 }}&clid={{ $checklist->clid }}">
                         {{__('checklists_checklist.OPEN_KEY')}}
                     </x-link>
+                    @endif
                     <x-link href="{{ legacy_url('/games/flashcards.php') }}?dynclid={{ 0 }}&listname={{ $checklist->name }}&clid={{ $checklist->clid }}">
                         {{__('checklists_checklist.FLASH') }}
                     </x-link>
