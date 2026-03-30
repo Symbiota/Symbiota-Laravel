@@ -134,6 +134,8 @@ $breadcrumbs[] = $checklist->name;
                     <x-checkbox
                         :label="__('checklists_checklist.DISPLAY_SYNONYMS')"
                         :checked="$show_synonyms"
+                        x-show="!show_images"
+                        x-bind:disabled="show_images"
                         name="show_synonyms"
                     />
                     <x-checkbox
@@ -152,11 +154,15 @@ $breadcrumbs[] = $checklist->name;
                     <x-checkbox
                         :label="__('checklists_checklist.NOTESVOUC')"
                         :checked="$show_notes_vouchers"
+                        x-show="!show_images"
+                        x-bind:disabled="show_images"
                         name="show_notes_vouchers"
                     />
                     <x-checkbox
                         :label="__('checklists_checklist.TAXONAUTHOR')"
                         :checked="$show_taxa_authors"
+                        x-show="!show_images"
+                        x-bind:disabled="show_images"
                         name="show_taxa_authors"
                     />
                     <x-checkbox
