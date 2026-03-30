@@ -142,11 +142,11 @@ $breadcrumbs[] = $checklist->name;
                         name="show_common"
                     />
 
-                    {{-- <x-checkbox
+                    <x-checkbox
                         :label="__('checklists_checklist.DISPLAYIMAGES')"
-                        :checked="$defaultSettings->dimages ?? false"
-                        name="show_as_images"
-                    /> --}}
+                        :checked="$show_images"
+                        name="show_images"
+                    />
 
                     <x-checkbox
                         :label="__('checklists_checklist.NOTESVOUC')"
@@ -163,13 +163,13 @@ $breadcrumbs[] = $checklist->name;
                         :checked="$defaultSettings->dalpha ?? false"
                         name="show_taxa_alphabetically"
                     />
+                    <input type="hidden" name="partial" value="taxa-list">
                     <div class="flex items-center">
                         <x-button type="button"
                             x-on:click="popoverOpen=false"
                             hx-target="#taxa-list"
-                            hx-vals='{"partial": "taxa-list"}'
                             hx-include="#checklist-display-form"
-                            hx-get="{{ url()->current() }}"
+                            hx-get="{{ url()->current() }}?partial=taxa-list"
                         >
                         {{ __('checklists_checklist.BUILD_LIST') }}
                         </x-button>
@@ -238,7 +238,37 @@ $breadcrumbs[] = $checklist->name;
             @endif
         </div>
     </div>
+    @fragment('taxa-list')
+    @if($show_images)
+    <div class="flex flex-wrap gap-4 justify-center">
+    @foreach($taxaList as $tid => $taxon)
+    <div class="flex flex-col bg-base-200 w-48">
+        <img class="h-72 w-48 object-cover" loading="lazy" src="{{$taxon['tnurl'] ?? $taxon['url'] ?? ''}}" />
+        <div
+            class="text-neutral-content w-full p-2 bg-neutral grow-1 text-sm">
+            <x-link class="text-neutral-content hover:text-neutral-content/50" href="{{ url('taxon/' . $tid) }}">
+                {{ $taxon['sciname'] ?? 'unknown' }}
+            </x-link>
 
+            @if($show_common && isset($taxon['vern']))
+            <div class="font-bold">{{ $taxon['vern']}}</div>
+            @endif
+
+            @if(isset($taxon['clid']))
+                @foreach(explode(',',$taxon['clid']) as $id)
+                @php
+                $editTitle = array_key_exists($id, $children)? $children[$id]: $checklist->name;
+                @endphp
+                <a x-cloak x-show="sppEditToggle" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ __('checklists_checklist.EDIT_DETAILS') . ': ' . $editTitle }}">
+                    <x-icons.edit class="text-neutral-content hover:text-neutral-content/50" />
+                </a>
+                @endforeach
+            @endif
+        </div>
+    </div>
+    @endforeach
+    </div>
+    @else
     <x-checklist.taxa-list
         :checklist="$checklist"
         :taxa="$taxaList"
@@ -251,4 +281,6 @@ $breadcrumbs[] = $checklist->name;
         :show_taxa_alphabetically="$show_taxa_alphabetically"
         sppEditToggle="sppEditToggle"
     />
+    @endif
+    @endfragment
 </x-margin-layout>

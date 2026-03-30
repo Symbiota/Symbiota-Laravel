@@ -11,7 +11,7 @@
     'sppEditToggle' => false,
 ])
 
-@fragment('taxa-list')
+{{-- @fragment('taxa-list') --}}
 <div id="taxa-list">
     @if(count($taxa) <= 0)
         <div class="text-2xl font-bold">
@@ -90,4 +90,4 @@
         @php $previous=$taxon @endphp
     @endforeach
 </div>
-@endfragment
+{{-- @endfragment--}}
