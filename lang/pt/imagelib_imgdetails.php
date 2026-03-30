@@ -1,10 +1,11 @@
 <?php
 
 return [
+    'MEDIA_DETAILS' => 'Detalhes da mídia',
     'ERROR_FILE_PATH' => 'ERRO: O caminho do arquivo deve ser inserido',
     'TAXON_PROFILE_EDITING' => 'Vá para a página de edição do perfil do táxon',
     'EDITING_PRIVILEGES' => 'Deve ter privilégios de edição para esta imagem de gerenciamento de coleção',
-    'EDIT_IMAGE' => 'Editar multimídia',
+    'EDIT_MEDIA' => 'Editar multimídia',
     'TWEET' => 'Tuitar',
     'EDIT_IMAGE_DETAILS' => 'Editar detalhes de multimídia',
     'CAPTION' => 'Rubrica',
