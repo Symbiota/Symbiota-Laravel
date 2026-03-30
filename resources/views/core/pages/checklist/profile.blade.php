@@ -110,7 +110,7 @@ $breadcrumbs[] = $checklist->name;
     <div class="flex items-center gap-2">
         <div class="flex w-fit">
             <x-popover class="w-[500px]">
-                <form x-data="{ form: $el }" target="_blank" id="checklist-display-form" class="flex flex-col gap-2">
+                <form x-data="{ form: $el, show_images: {{ $show_images? 'true': 'false' }}}" target="_blank" id="checklist-display-form" class="flex flex-col gap-2">
                     <x-taxa-search />
                     <x-link href="{{ legacy_url('/ident/key.php') }}?dynclid={{ 0 }}&clid={{ $checklist->clid }}">
                         {{__('checklists_checklist.OPEN_KEY')}}
@@ -145,6 +145,7 @@ $breadcrumbs[] = $checklist->name;
                     <x-checkbox
                         :label="__('checklists_checklist.DISPLAYIMAGES')"
                         :checked="$show_images"
+                        x-on:change="show_images = $event.target.checked"
                         name="show_images"
                     />
 
@@ -184,7 +185,7 @@ $breadcrumbs[] = $checklist->name;
                                 x-on:click="form.action=$el.getAttribute('data-action');form.target='_blank';form.method='get'">
                                 <x-icons.print />
                             </button>
-                            <button name="exportdoc" type="submit"
+                            <button x-show="!show_images" name="exportdoc" type="submit"
                                 data-action="{{ legacy_url('checklists/mswordexport.php') }}"
                                 x-on:click="form.action=$el.getAttribute('data-action'); form.target='_blank';form.method='post'">
                                 <x-icons.word />
