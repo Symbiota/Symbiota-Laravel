@@ -24,7 +24,7 @@ class Project extends Model {
 
     public function checklists() {
         return DB::table('fmchecklists as c')
-            ->select('link.pid', 'c.defaultSettings', 'c.clid', 'c.name', 'mapChecklist')
+            ->select('link.pid', 'c.defaultSettings', 'c.clid', 'c.name', 'mapChecklist', 'c.latCentroid', 'c.longCentroid')
             ->leftJoin('fmchklstprojlink as link', 'link.clid', '=', 'c.clid')
             ->where('link.pid', '=', $this->pid)
             ->orderByRaw('-link.pid DESC')
