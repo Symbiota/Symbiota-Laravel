@@ -89,4 +89,13 @@ return [
     | not anything else to focus on.
     */
     'activate_exsiccati' => env('PORTAL_ACTIVATE_EXSICCATI', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Primary Taxonomic Kingdom
+    |--------------------------------------------------------------------------
+    |
+    | This value is the default taxonomic kingdom for the portal. This is used to filter taxonomic ranks.
+    */
+    'primary_taxonomic_kingdom' => env('PORTAL_PRIMARY_TAXONOMIC_KINGDOM', 'Plantae'),
 ];

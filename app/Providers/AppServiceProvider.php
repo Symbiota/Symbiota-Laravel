@@ -85,6 +85,13 @@ class AppServiceProvider extends ServiceProvider {
             return $user->hasOneRoles([UserRole::SUPER_ADMIN]) || ($user && $imgArr && $user->uid === $imgArr['creatorUid']);
         });
 
+        Gate::define('TAXON_EDITOR', function (User $user) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::TAXONOMY,
+            ]);
+        });
+
         /**
          * Setup Blade Component Folders and Directives
          */

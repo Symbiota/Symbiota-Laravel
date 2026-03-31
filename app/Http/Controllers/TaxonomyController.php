@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
     public static function taxonData(int $tid) {
@@ -176,6 +177,7 @@ class TaxonomyController extends Controller {
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
+            'canCreate' => Gate::check('TAXON_EDITOR'),
         ]);
     }
 

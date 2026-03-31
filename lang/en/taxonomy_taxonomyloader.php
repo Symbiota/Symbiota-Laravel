@@ -16,4 +16,5 @@ return [
     'SUBMISSION_DISABLED' => 'Submission Disabled',
     'CREATE_TAXON' => 'Create Taxon',
     'INFRASPECIFIC_EPITHET' => 'Infraspecific Epithet',
+    'NO_PERMISSION_CREATE' => 'You do not have permission to create a new taxon.'
 ];

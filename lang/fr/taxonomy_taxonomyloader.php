@@ -16,4 +16,5 @@ return [
     'SUBMISSION_DISABLED' => 'Soumission Désactivée',
     'CREATE_TAXON' => 'Créer un taxon',
     'INFRASPECIFIC_EPITHET' => 'Épithète infraspécifique',
+    'NO_PERMISSION_CREATE' => 'Vous n\'avez pas la permission de créer un nouveau taxon.'
 ];
