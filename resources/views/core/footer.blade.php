@@ -19,7 +19,7 @@
         <div class="text-xs">
             @if(!empty($grants))
             <p>
-                This project made possible by U.S. National Science Foundation Awards
+                {{ __('header.F_NSF_AWARDS') }}
                 @for ($i = 0; $i < count($grants); $i++)
                 <x-link class="text-xs" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID={{$grants[$i]['grant_id']}}" target="_blank">
                    {{$grants[$i]['label']}}
@@ -29,17 +29,18 @@
             </p>
             @endif
             <p>
-                For more information about Symbiota,
+                {{ __('header.F_MORE_INFO') }},
+
                 <x-link class="text-xs" href="{{ docs_url() }}" target="_blank" rel="noreferrer">
-                    read the docs
+                    {{ __('header.F_READ_DOCS') }},
                 </x-link>
-                or contact the
+                {{ __('header.F_CONTACT') }},
                 <x-link class="text-xs" href="https://symbiota.org/contact-the-support-hub/" target="_blank" rel="noreferrer">
-                    Symbiota Support Hub
+                    {{ __('header.F_SSH') }},
                 </x-link>
             </p>
             <p>
-                Powered by
+                {{ __('header.F_POWERED_BY') }},
                 <x-link class="text-xs" href="https://symbiota.org/" target="_blank">
                     Symbiota
                 </x-link>
