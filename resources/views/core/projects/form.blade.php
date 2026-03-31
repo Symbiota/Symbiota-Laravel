@@ -1,37 +1,35 @@
 @props(['project' => \App\Models\Project::make()])
 
-@php global $LANG @endphp
-
 @csrf
 <x-input
     id="projname"
-    :label="$LANG['PROJNAME']"
+    :label="__('projects.PROJNAME')"
     :value="$project->projname"
     required
 />
 
 <x-input
     id="managers"
-    :label="$LANG['MANAG']"
+    :label="__('projects.MANAG')"
     :value="$project->managers"
 />
 
-<x-rich-editor id="fulldescription" :label="$LANG['DESCRIP']">
+<x-rich-editor id="fulldescription" :label="__('projects.DESCRIP')">
     {{ Purify::clean($project->fulldescription) }}
 </x-rich-editor>
 
 <x-input
     id="notes"
-    :label="$LANG['NOTES']"
+    :label="__('projects.NOTES')"
     :value="$project->notes"
 />
 
 <x-select
     id="ispublic"
     :defaultValue="$project->ispublic"
-    :label="$LANG['ACCESS']"
+    :label="__('projects.ACCESS')"
     :items="[
-        [ 'value' => 0, 'title' => $LANG['PRIVATE'], 'disabled' => false ],
-        [ 'value' => 1, 'title' => $LANG['PUBLIC'], 'disabled' => false ]
+        [ 'value' => 0, 'title' => __('projects.PRIVATE'), 'disabled' => false ],
+        [ 'value' => 1, 'title' => __('projects.PUBLIC'), 'disabled' => false ]
     ]"
 />

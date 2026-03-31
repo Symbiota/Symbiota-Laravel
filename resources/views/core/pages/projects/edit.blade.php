@@ -30,8 +30,8 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
 <x-margin-layout>
     <div>
         <x-breadcrumbs :items="[
-        ['title' => $LANG['NAV_HOME'], 'href' => url('') ],
-        ['title' => $LANG['SPECIES_INVENTORIES'], 'href' => url('/checklists') ],
+        ['title' => __('header.H_HOME'), 'href' => url('') ],
+        ['title' => __('checklists.SPECIES_INVENTORIES'), 'href' => url('/checklists') ],
         $project->projname
     ]" />
     </div>
@@ -47,32 +47,32 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
 
     <x-errors :errors="$errors ?? []"/>
 
-    <x-tabs :active="0" :tabs="[$LANG['METADATA'], $LANG['INVMANAG'], $LANG['CHECKMANAG']]">
+    <x-tabs :active="0" :tabs="[__('projects.METADATA'), __('projects.INVMANAG'), __('projects.CHECKMANAG')]">
         <div class="flex flex-col gap-4">
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['EDIT'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.EDIT') }}</h3>
                 <hr/>
             </div>
             <form method="post" action="{{ url('projects/' . $project->pid . '/edit') }}" class="flex flex-col gap-4">
                 <x-projects.form :project="$project" />
-                <x-button>{{ $LANG['SUBMITEDIT'] }}</x-button>
+                <x-button>{{ __('projects.SUBMITEDIT') }}</x-button>
             </form>
 
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELPROJECT'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.DELPROJECT') }}</h3>
                 <hr/>
             </div>
             @fragment('project_delete_form')
-            <form id="project_delete_form" hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ $LANG['CONFIRMDEL'] }}" class="flex flex-col gap-4">
-                <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ $LANG['SUBMITDELETE'] }}</x-button>
+            <form id="project_delete_form" hx-delete="{{ url('projects/' . $project->pid . '/edit') }}" hx-confirm="{{ __('projects.CONFIRMDEL') }}" class="flex flex-col gap-4">
+                <x-button :disabled="$project->managers || count($checklists) > 0" variant="error">{{ __('projects.SUBMITDELETE') }}</x-button>
 
                 @csrf
                 @if($project->managers || count($checklists) > 0)
                 <div class="bg-warning text-warning-content p-2 rounded-md">
                     @if($project->managers)
-                    {{ $LANG['DELCONDITION1'] }}
+                    {{ __('projects.DELCONDITION1') }}
                     @elseif(count($checklists) > 0)
-                    {{ $LANG['DELCONDITION2'] }}
+                    {{ __('projects.DELCONDITION2') }}
                     @endif
                 </div>
                 @endif
@@ -84,7 +84,7 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
         <div id="inventory_managers" class="flex flex-col gap-4" x-cloak>
         @fragment('managers')
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['INVENTORY_PROJECT_MANAGERS'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.INVENTORY_PROJECT_MANAGERS') }}</h3>
                 <hr/>
             </div>
             @csrf
@@ -101,13 +101,13 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
             </div>
 
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_NEW_MANAGER'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.ADD_NEW_MANAGER') }}</h3>
                 <hr/>
             </div>
             <form hx-post="{{ url('projects/' . $project->pid . '/managers') }}" class="flex flex-col gap-4" hx-target="#inventory_managers">
                 @csrf
                 <x-select class="w-full" id="uid" :items="$userItems"/>
-                <x-button>{{ $LANG['ADD_TO_MANAGER_LIST'] }}</x-button>
+                <x-button>{{ __('projects.ADD_TO_MANAGER_LIST') }}</x-button>
             </form>
             <x-errors :errors="$add_user_errors ?? []"/>
         @endfragment
@@ -116,7 +116,7 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
         <div id="inventory_checklists" class="flex flex-col gap-4" x-cloak>
         @fragment('checklists')
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['ADD_A_CHECKLIST'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.ADD_A_CHECKLIST') }}</h3>
                 <hr/>
             </div>
 
@@ -125,12 +125,12 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
                 hx-target="#inventory_checklists"
             >
                 @csrf
-                <x-select class="w-full" :label="$LANG['SELECT_CHECKLIST_TO_ADD']" id="clid" :items="$checklistItems"/>
-                <x-button>{{ $LANG['ADD_CHECKLIST'] }}</x-button>
+                <x-select class="w-full" :label="__('projects.SELECT_CHECKLIST_TO_ADD')" id="clid" :items="$checklistItems"/>
+                <x-button>{{ __('projects.ADD_CHECKLIST') }}</x-button>
             </form>
 
             <div>
-                <h3 class="text-2xl font-bold text-primary">{{ $LANG['DELETE_A_CHECKLIST'] }}</h3>
+                <h3 class="text-2xl font-bold text-primary">{{ __('projects.DELETE_A_CHECKLIST') }}</h3>
                 <hr/>
             </div>
 
