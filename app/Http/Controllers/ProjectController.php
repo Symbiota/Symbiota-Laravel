@@ -88,8 +88,7 @@ class ProjectController extends Controller {
         }
 
         return response(null, 204, [
-            // TODO (Logan) Should this just be checklists  page,
-            'HX-Location' => '/projects',
+            'HX-Location' => '/checklists',
         ]);
     }
 
