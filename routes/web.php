@@ -98,7 +98,7 @@ Route::group(['prefix' => '/projects'], function () {
     Route::post('/{pid}/checklists', [ProjectController::class, 'addChecklist'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
     Route::delete('/{pid}/checklists/{clid}', [ProjectController::class, 'removeChecklist'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
 
-    Route::get('/{pid}/edit', [ProjectController::class, 'projectAdmin'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::get('/{pid}/edit', [ProjectController::class, 'projectAdminView'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
 });
 
 /*

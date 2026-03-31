@@ -71,10 +71,6 @@ class ProjectController extends Controller {
         }
     }
 
-    public static function projectAdmin(int $pid) {
-        return self::projectAdminView($pid);
-    }
-
     public static function update(int $pid) {
         $projManager = self::getProjectManager($pid);
         $projManager->updateProject(request()->all());
