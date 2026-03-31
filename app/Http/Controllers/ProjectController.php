@@ -123,7 +123,7 @@ class ProjectController extends Controller {
 
         if (! $addClid) {
             $error = new MessageBag([
-                __('validation.required', ['attribute' => 'checklist'])
+                __('validation.required', ['attribute' => 'checklist']),
             ]);
         } elseif (! $projManager->insertChecklistProjectLink($addClid)) {
             $error = new MessageBag([$projManager->getErrorMessage()]);
@@ -139,7 +139,7 @@ class ProjectController extends Controller {
 
         if (! $delClid) {
             $error = new MessageBag([
-                __('validation.required', ['attribute' => 'checklist'])
+                __('validation.required', ['attribute' => 'checklist']),
             ]);
         } elseif (! $projManager->deleteChecklistProjectLink(request('clid'))) {
             $error = new MessageBag([$projManager->getErrorMessage()]);
