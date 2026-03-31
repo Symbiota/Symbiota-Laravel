@@ -15,7 +15,7 @@
 />
 
 <x-rich-editor id="fulldescription" :label="__('projects.DESCRIP')">
-    {{ Purify::clean($project->fulldescription) }}
+    {!! Purify::clean($project->fulldescription) !!}
 </x-rich-editor>
 
 <x-input
