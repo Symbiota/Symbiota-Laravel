@@ -99,7 +99,7 @@
                         <x-select
                             label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
                             name="rankid" id="rankid" :defaultValue="220"
-                            @select-changed="rankid = $event.detail.value;"
+                            onChange="rankid = $event.target.value"
                             :items="$allTaxonRanks
                                 ->map(
                                     fn($r) => [
