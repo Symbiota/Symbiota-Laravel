@@ -7,6 +7,7 @@
     id="projname"
     :label="$LANG['PROJNAME']"
     :value="$project->projname"
+    required
 />
 
 <x-input
