@@ -1,14 +1,7 @@
 @props(['project'])
 
 @php
-global $LANG, $IS_KEY_MOD_IS_ACTIVE;
-include_once(legacy_path('/classes/utilities/Language.php'));
 include_once(legacy_path('/classes/ImInventories.php'));
-
-Language::load([
-    'projects/index',
-    'checklists/index'
-]);
 
 $projManager = new ImInventories('write');
 $projManager->setPid($project->pid);
