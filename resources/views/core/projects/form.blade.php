@@ -29,7 +29,7 @@
     :defaultValue="$project->ispublic"
     :label="__('projects.ACCESS')"
     :items="[
-        [ 'value' => 0, 'title' => __('projects.PRIVATE'), 'disabled' => false ],
-        [ 'value' => 1, 'title' => __('projects.PUBLIC'), 'disabled' => false ]
+        item(0, __('projects.PRIVATE')),
+        item(1, __('projects.PUBLIC'))
     ]"
 />

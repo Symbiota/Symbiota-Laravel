@@ -13,16 +13,12 @@ Language::load([
 $projManager = new ImInventories('write');
 $projManager->setPid($project->pid);
 
-$userItems = [];
-foreach($projManager->getUserArr() as $uid => $userName)  {
-    $userItems[] = ['value' => $uid, 'title' => $userName, 'disabled' => false ];
-}
-
+$userItems = itemize($projManager->getUserArr());
 $managerArr = $projManager->getManagers('ProjAdmin', 'fmprojects', request('pid'));
 
 $checklistItems = [];
 foreach($projManager->getChecklistArr() as $clid => $checklist) {
-    $checklistItems[] = ['value' => $clid, 'title' => $checklist['name'], 'disabled' => false ];
+    $checklistItems[] = item($clid, $checklist['name']);
 }
 
 @endphp
