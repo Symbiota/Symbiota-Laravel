@@ -1,19 +1,14 @@
 @props(['project', 'checklists' => []])
 
 @php
-global $LANG, $IS_KEY_MOD_IS_ACTIVE;
-include_once(legacy_path('/classes/utilities/Language.php'));
-Language::load([
-    'projects/index',
-    'checklists/index'
-]);
+global $IS_KEY_MOD_IS_ACTIVE;
 @endphp
 
 <x-margin-layout x-data="{ descOpen: false}">
     <div>
         <x-breadcrumbs :items="[
-        ['title' => $LANG['NAV_HOME'], 'href' => url('') ],
-        ['title' => $LANG['SPECIES_INVENTORIES'], 'href' => url('/checklists') ],
+        ['title' => __('header.H_HOME'), 'href' => url('') ],
+        ['title' => __('checklists.SPECIES_INVENTORIES'), 'href' => url('/checklists') ],
         $project->projname
     ]" />
     </div>
@@ -23,21 +18,21 @@ Language::load([
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
 
         <div class="flex flex-grow justify-end gap-4 items-center">
-            <x-button hx-boost="true" href="{{ url('checklists/map') }}?pid={{ $project->pid }}" :title="$LANG['MAPREP']">
+            <x-button hx-boost="true" href="{{ url('checklists/map') }}?pid={{ $project->pid }}" :title="__('projects.MAPREP')">
                 <i class="flex-end fas fa-earth-americas"></i>
-                {{ $LANG['MAP'] }}
+                {{ __('checklists.MAP') }}
             </x-button>
 
             @can('PROJ_ADMIN', $project->pid)
-            <x-button href="{{ url('projects/' . $project->pid . '/edit') }}" :title="$LANG['TOGGLEEDIT']">
+            <x-button href="{{ url('projects/' . $project->pid . '/edit') }}" :title="__('projects.TOGGLEEDIT')">
                 <i class="flex-end fas fa-edit"></i>
-                {{ $LANG['EDIT'] }}
+                {{ __('projects.EDIT') }}
             </x-button>
             @endcan
         </div>
     </div>
 
-    <x-text-label :label="$LANG['PROJMANAG']">
+    <x-text-label :label="__('projects.PROJMANAG')">
         {{ $project->managers }}
     </x-text-label>
 
@@ -46,12 +41,12 @@ Language::load([
     @endisset
 
     @isset($project->notes)
-    <x-text-label :label="$LANG['NOTES']">{{ $project->notes }}</x-text-label>
+    <x-text-label :label="__('projects.NOTES')">{{ $project->notes }}</x-text-label>
     @endisset
 
     <div>
         <div class="flex gap-2 items-center">
-            <div class="text-lg font-bold">{{ $LANG['RESCHECK'] }}</div>
+            <div class="text-lg font-bold">{{ __('projects.RESCHECK') }}</div>
             <x-tooltip text="What is a Research Species List">
                 <button class="flex items-center h-6 w-6 bg-base-100 hover:bg-base-300 rounded-full border border-base-content font-bold text-base-content cursor-pointer" @click="descOpen = !descOpen">
                     <span class="h-6 w-6">?<span>
@@ -60,7 +55,7 @@ Language::load([
             </x-tooltip>
         </div>
         <div x-cloak x-show="descOpen">
-            {{ $LANG['RESCHECKQUES'] }}
+            {{ __('projects.RESCHECKQUES') }}
         </div>
     </div>
 
@@ -75,8 +70,8 @@ Language::load([
             |
             <x-link
                 href="{{legacy_url('/ident/key.php?clid=' . $checklist->clid . '&pid=' . $project->pid . '&taxon=All+Species')}}">
-                    <x-tooltip class="inline" :text="$LANG['SYMBOLOPEN']">
-                        <i class="pl-1 text-base-content fa-solid fa-key"></i> Key
+                    <x-tooltip class="inline" :text="__('projects.SYMBOLOPEN')">
+                        <i class="pl-1 text-base-content fa-solid fa-key"></i> {{ __('ident_key.KEY') }}
                     </x-tooltip>
             </x-link>
             @endif
