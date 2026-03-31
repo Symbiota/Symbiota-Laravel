@@ -2,6 +2,14 @@
 
 @php
 global $IS_KEY_MOD_IS_ACTIVE;
+
+$hasMappableChecklist = false;
+foreach($checklists as $checklist) {
+    if($checklist->longCentroid && $checklist->latCentroid && $checklist->mapChecklist) {
+        $hasMappableChecklist = true;
+        break;
+    }
+}
 @endphp
 
 <x-margin-layout x-data="{ descOpen: false}">
@@ -13,15 +21,16 @@ global $IS_KEY_MOD_IS_ACTIVE;
     ]" />
     </div>
 
-    {{-- Todo Add Edit and when to show mapping button logic --}}
     <div class="flex items-center gap-4 h-fit">
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
 
         <div class="flex flex-grow justify-end gap-4 items-center">
+            @if($hasMappableChecklist)
             <x-button hx-boost="true" href="{{ url('checklists/map') }}?pid={{ $project->pid }}" :title="__('projects.MAPREP')">
                 <i class="flex-end fas fa-earth-americas"></i>
                 {{ __('checklists.MAP') }}
             </x-button>
+            @endif
 
             @can('PROJ_ADMIN', $project->pid)
             <x-button href="{{ url('projects/' . $project->pid . '/edit') }}" :title="__('projects.TOGGLEEDIT')">
