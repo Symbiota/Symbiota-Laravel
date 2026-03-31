@@ -195,8 +195,8 @@ event fires.
         x-transition:enter="transition ease-out duration-50"
         x-transition:enter-start="opacity-0 -translate-y-1"
         x-transition:enter-end="opacity-100"
-        :class="{ 'bottom-0 mb-11' : selectDropdownPosition == 'top', 'top-0 mt-11' : selectDropdownPosition == 'bottom' }"
-        class="absolute w-fit z-10 mt-1 overflow-auto bg-white rounded-md shadow-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        :class="{ 'bottom-0 mb-11' : selectDropdownPosition == 'top', 'top-0 mt-9' : selectDropdownPosition == 'bottom' }"
+        class="absolute w-fit z-10 mt-1 overflow-auto bg-white rounded-md shadow-md max-h-56 ring-1 ring-base-300 ring-opacity-5 focus:outline-none"
         x-cloak>
 
         <template x-for="(item, index) in selectableItems" :key="index + '-' + item.value">
@@ -206,7 +206,7 @@ event fires.
                 :data-disabled="item.disabled"
                 :class="{ 'bg-base-200 text-base-content' : selectableItemIsActive(item), '' : !selectableItemIsActive(item) }"
                 @mousemove="selectableItemActive=item"
-                class="relative flex items-center h-full py-2 px-8 text-base-content cursor-default select-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
+                class="relative flex items-center h-full py-2 px-8 text-base-content cursor-default select-none cursor-pointer data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
                 <svg x-show="selectedItem.value==item.value" class="absolute left-0 w-4 h-4 ml-2 stroke-current text-base-content/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 <span class="block font-medium truncate" x-text="item.title"></span>
             </li>
