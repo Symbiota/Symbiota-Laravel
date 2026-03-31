@@ -10,6 +10,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RssController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxonomyController;
 use App\Http\Controllers\UserProfileController;
@@ -74,6 +75,7 @@ Route::group(['prefix' => 'checklists'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'datasets'], function () {
+    Route::get('/rss', [RssController::class, 'show']);
     Route::get('/{dataset_id}', [DatasetController::class, 'datasetProfilePage']);
     Route::view('/', 'pages/datasets/list');
 });
@@ -146,6 +148,10 @@ Route::group(['prefix' => '/media'], function () {
     Route::get('/search', [MediaController::class, 'searchPage']);
     Route::get('/library', [MediaController::class, 'libraryPage']);
     Route::get('/contributors', [MediaController::class, 'contributorsPage']);
+    Route::get('/{media_id}', [MediaController::class, 'profilePage']);
+    Route::post('/{media_id}/transfer/taxa', [MediaController::class, 'profileTaxaTransfer']);
+    Route::post('/{media_id}', [MediaController::class, 'profileUpdate']);
+    Route::delete('/{media_id}', [MediaController::class, 'profileDelete']);
 });
 
 /*

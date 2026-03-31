@@ -6,14 +6,10 @@
     'taxa_type_value' => '',
     'hide_selector' => false,
     'hide_synonyms_checkbox' => false,
-    'label' => '',
+    'label' => 'Search Taxa',
 ])
 <div>
-    <label class="text-lg" for="{{ $id }}">{{ $label ?: 'Search Taxa' }}
-        @if ($attributes['aria-required'] || $attributes['required'])
-            <span class="vertical-align text-error italic pr-1">*</span>
-        @endif
-    </label>
+    <label class="text-lg" for="{{ $id }}">{{ $label }}</label>
     <div class="flex items-center group">
         @if (!$hide_selector)
             <x-select name="taxa-type" id="taxa-type-{{ $id }}"
@@ -38,8 +34,7 @@
         @endif
 
         <x-autocomplete-input name="taxa" :id="$id" :value="$taxa_value"
-            placeholder="Type to search..."
-            search="{{ url('/api/taxa/search') }}"
+            placeholder="Type to search..." search="{{ url('/api/taxa/search') }}"
             include="#usethes-{{ $id }}, #taxa-type-{{ $id }}">
             <x-slot name="input"
                 @auto_input_select="const el = document.querySelector('#{{ 'tid-' . $id }}'); el.value = event.detail.selection.id; el.dispatchEvent(new Event('change', { bubbles: true }))"

@@ -72,3 +72,9 @@ if (! function_exists('itemize_flat')) {
         return $items;
     }
 }
+
+if (! function_exists('message_bag')) {
+    function message_bag(array $messages): \Illuminate\Support\MessageBag {
+        return new \Illuminate\Support\MessageBag($messages);
+    }
+}

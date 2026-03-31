@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'IMG_DETAILS' => 'Image Details',
+    'MEDIA_DETAILS' => 'Media Details',
     'ERROR_FILE_PATH' => 'ERROR: File path must be entered',
     'TAXON_PROFILE_EDITING' => 'Go to Taxon Profile editing page',
     'EDITING_PRIVILEGES' => 'Must have editing privileges for the collection managing this media resource',
-    'EDIT_IMAGE' => 'Edit Media Resource',
+    'EDIT_MEDIA' => 'Edit Media Resource',
     'TWEET' => 'Tweet',
     'EDIT_IMAGE_DETAILS' => 'Edit Media Details',
     'CAPTION' => 'Caption',
