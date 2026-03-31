@@ -32,13 +32,19 @@ import 'tinymce/skins/content/default/content.js';
 
 
 /* Initialize TinyMCE */
-export function render () {
+
+export function remove () {
   tinymce.remove();
-  tinymce.init({
-    selector: 'textarea[data-mce-editor="true"]',
-    plugins: 'advlist code emoticons link lists table',
-    toolbar: 'bold italic | bullist numlist | link emoticons',
-    skin_url: 'default',
-    content_css: 'default',
-  });
+};
+
+export function render (selector) {
+    if(selector) {
+        tinymce.init({
+            selector: selector,
+            plugins: 'advlist code emoticons link lists table',
+            toolbar: 'bold italic | bullist numlist | link emoticons',
+            skin_url: 'default',
+            content_css: 'default',
+        });
+    }
 };
