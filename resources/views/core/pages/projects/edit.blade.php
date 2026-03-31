@@ -40,8 +40,7 @@ foreach($projManager->getChecklistArr() as $clid => $checklist) {
         <h1 class="text-4xl font-bold text-primary">{{ $project->projname }}</h1>
         <div class="flex flex-grow justify-end gap-4">
             <x-button href="{{ url('projects/' . $project->pid) }}">
-                {{-- TODO (Logan) translate --}}
-                Public View
+                {{__('Public View')}}
             </x-button>
         </div>
     </div>
