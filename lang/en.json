@@ -1,3 +1,8 @@
 {
-    "Public View": "Public View"
+    "Public View": "Public View",
+    "Resource Access Denied": "Resource Access Denied",
+    "You don't have permission to access this page" : "You don't have permission to access this page",
+    "You must be logged in to access this page": "You must be logged in to access this page",
+    "Return to homepage" : "Return to homepage",
+    "Go back": "Go back"
 }

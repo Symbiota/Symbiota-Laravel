@@ -1,3 +1,8 @@
 {
-    "Public View": "Vista Pública"
+    "Public View": "Vista Pública",
+    "Resource Access Denied": "Acceso a Recursos Denegado",
+    "You don't have permission to access this page" : "No tienes permiso para acceder a esta página",
+    "You must be logged in to access this page": "Debes iniciar sesión para acceder a esta página",
+    "Return to homepage" : "Volver a la página principal",
+    "Go back": "Vuelve atrás"
 }
