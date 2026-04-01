@@ -2,8 +2,8 @@
     @fragment('form')
     <form hx-post="{{url('/login')}}" hx-swap="outerHTML" class="flex justify-center m-auto max-w-screen-sm mt-5">
         @csrf
-        <fieldset class="w-full p-4 grid grid-cols-1 gap-4">
-            <legend class="text-primary text-2xl font-bold">Portal Login</legend>
+        <fieldset data-testid="login-form-fieldset" aria-labelledby="login-form-legend" role="group" name="login-form-fieldset" class="w-full p-4 grid grid-cols-1 gap-4">
+            <legend id="login-form-legend" class="text-primary text-2xl font-bold">Portal Login</legend>
             <x-input required :id="'email'" value="{{ old('email') }}" :label="'Email'" />
             <x-input required type="password" :id="'password'" value="{{ old('password') }}" :label="'Password'" />
             <x-checkbox :id="'remember-me'" :label="'Remember me on this computer'" />

@@ -25,14 +25,14 @@
             <x-button class="text-base" href="{{ url('/user/profile') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
                 {!! __("header.H_MY_PROFILE") !!}
             </x-button>
-            <x-button class="text-base cursor-pointer" href="{{ url('/logout') }}" hx-boost="true" hx-boost="true" variant="{{ $buttonVariant }}">
+            <x-button role="link" name="logout" id="logout" class="text-base cursor-pointer" href="{{ url('/logout') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
                 {!! __("header.H_LOGOUT") !!}
             </x-button>
             @else
             <x-button class="text-base" href="#" variant="{{ $buttonVariant }}">
                 {!! __("header.H_CONTACT_US") !!}
             </x-button>
-            <x-button class="text-base" href="{{ url('/login') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
+            <x-button role="link" name="login" id="login" data-testid="login-btn" class="text-base" href="{{ url('/login') }}" hx-boost="true" hx-push-url="true" variant="{{ $buttonVariant }}">
                 {!! __("header.H_LOGIN") !!}
             </x-button>
             @endif
