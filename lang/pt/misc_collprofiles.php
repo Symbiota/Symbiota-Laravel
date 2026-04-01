@@ -96,4 +96,6 @@ return [
     'OCCURENCE_IDENTIFIER' => 'Número de catálogo',
     'INFO_ALT' => 'Ícone de informação indicando link para informações sobre importação/atualização',
     'LAST_MODIFIED' => 'Última modificação',
+    'EML_FILE' => 'Arquivo EML',
+    'TOTAL_TAXA_INCLUDING' => 'táxons totais (incluindo subsp. e var.)'
 ];

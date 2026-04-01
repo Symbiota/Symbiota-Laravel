@@ -34,21 +34,44 @@ class Collection extends Model {
     }
 
     public function stats() {
-        $stats = DB::table('omcollectionstats as ocs')->where('collid', $this->collid)
-            ->select(['ocs.*', DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate')])
+        $stats = CollectionStats::query()->where('collid', $this->collid)
+            ->select([
+                'omcollectionstats.*',
+                DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate')
+            ])
             ->first();
+        return $stats;
+    }
 
-        if ($stats && $stats->dynamicProperties) {
-            $stats->dynamicProperties = json_decode($stats->dynamicProperties);
+    public function dwcaPaths() {
+        $paths = DB::table('uploadspecparameters')
+            ->where('collid', $this->collid)
+            ->select(['uspid', 'title', 'path'])
+            ->get();
+
+        foreach($paths as $path) {
+            $path->path = str_replace('/archive.do', '/resource.do', trim($path->path));
         }
 
-        return $stats;
+        return $paths;
+    }
+
+
+    public function isTraitCodingActivated(): bool {
+        $results = DB::table('tmtraits')->select('traitid')->limit(1)->get();
+        return $results->count() ? true: false;
     }
 
     //collTypes
     const Specimens = 'Preserved Specimens';
-
     const GeneralObservations = 'General Observations';
-
     const Observations = 'Observations';
+
+    public function isSpecimens() {
+        return $this->collType === self::Specimens;
+    }
+
+    public function isObservations() {
+        return $this->collType === self::GeneralObservations || $this->collType === self::Observations;
+    }
 }

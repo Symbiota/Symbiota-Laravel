@@ -1,11 +1,20 @@
 @props(['collection', 'stats'])
+
 @php
 global $DEFAULT_TITLE, $SERVER_HOST, $CLIENT_ROOT;
 include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 
-function colUrl($url, $extra_query = '') {
+function colUrl(string $url, string $extra_query = '') {
     return legacy_url('/collections/' . $url) . '?collid=' . request('collid') . $extra_query;
 }
+
+function tryColUrl(string $url, bool $predicate = true, string $extra_query = '') {
+    return colUrl($url, $extra_query);
+}
+
+$isLive = $collection->managementType == 'Live Data';
+$isSpecimens = $collection->isSpecimens();
+
 @endphp
 <x-margin-layout>
     <x-breadcrumbs :items="[
@@ -85,117 +94,87 @@ function colUrl($url, $extra_query = '') {
         <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
-                colUrl('editor/occurrenceeditor.php', '&gotomode=1') => __('misc_collprofiles.ADD_NEW_OCCUR'),
+                __('misc_collprofiles.ADD_NEW_OCCUR') => colUrl('editor/occurrenceeditor.php', '&gotomode=1'),
+                __('misc_collprofiles.CREATE_NEW_REC') => tryColUrl('editor/imageoccursubmit.php', $isSpecimens),
+                __('misc_collprofiles.SKELETAL') => colUrl('editor/skeletalsubmit.php'),
+                __('misc_collprofiles.EDIT_EXISTING') => colUrl('editor/occurrencetabledisplay.php', '&displayquery=1'),
+                __('misc_collprofiles.ADD_BATCH_DETER') => tryColUrl('editor/batchdeterminations.php', $isSpecimens),
 
-                // TODO (Logan) exlcude if colltype doesn't have "Specimens" in it
-                colUrl('editor/imageoccursubmit.php') => __('misc_collprofiles.CREATE_NEW_REC'),
-                colUrl('editor/skeletalsubmit.php') => __('misc_collprofiles.SKELETAL'),
-
-                colUrl('editor/occurrencetabledisplay.php', '&displayquery=1') => __('misc_collprofiles.EDIT_EXISTING'),
-                // TODO (Logan) exclude if colltype general observations
-                colUrl('editor/batchdeterminations.php') => __('misc_collprofiles.ADD_BATCH_DETER'),
-
-                colUrl('reports/labelmanager.php') => __('profile_occurrencemenu.PRINT_LABELS'),
-                colUrl('reports/annotationmanager.php') => __('profile_occurrencemenu.PRINT_ANNOTATIONS'),
-
-                // TODO (Logan) exclude if colltype general observations
-                colUrl('georef/batchgeoreftool.php') => __('misc_collprofiles.BATCH_GEOREF'),
-                // TODO (Logan) only "Preserved Specimens"
-                colUrl('loans/index.php') => __('misc_collprofiles.LOAN_MANAGEMENT'),
+                __('profile_occurrencemenu.PRINT_LABELS') => colUrl('reports/labelmanager.php'),
+                __('profile_occurrencemenu.PRINT_ANNOTATIONS') => colUrl('reports/annotationmanager.php'),
+                __('misc_collprofiles.BATCH_GEOREF') => tryColUrl('georef/batchgeoreftool.php', $isSpecimens),
+                __('misc_collprofiles.LOAN_MANAGEMENT') => tryColUrl('loans/index.php', $isSpecimens),
             ];
 
-            // TODO (Logan) exclude if colltype general observations. Also traits activated
             $trait_links = [
-                colUrl('traitattr/occurattributes.php') => __('misc_collprofiles.TRAIT_CODING'),
-                colUrl('traitattr/attributemining.php') => __('misc_collprofiles.TRAIT_MINING'),
+                __('misc_collprofiles.TRAIT_CODING') => colUrl('traitattr/occurattributes.php'),
+                __('misc_collprofiles.TRAIT_MINING') => colUrl('traitattr/attributemining.php'),
             ];
 
             $admin_links = [
-                colUrl('misc/commentlist.php') => __('profile_occurrencemenu.VIEW_COMMENTS'),
-                colUrl('misc/collmetadata.php') => __('misc_collmetadata.EDIT_METADATA'),
-                colUrl('misc/collpermissions.php') => __('misc_collprofiles.MANAGE_PERMISSIONS'),
-                colUrl('specprocessor/index.php') => __('misc_collprofiles.PROCESSING_TOOLBOX'),
-                colUrl('datasets/datapublisher.php') => __('misc_collprofiles.DARWIN_CORE_PUB'),
-                colUrl('editor/editreviewer.php') => __('misc_collprofiles.REVIEW_SPEC_EDITS'),
-                // TODO (Logan) figure out why commented out in old code
-                // colUrl('reports/accessreport.php') => __('misc_collprofiles.ACCESS_REPORT'),
-                // TODO (Logan) !empty($ACTIVATE_DUPLICATES)
-                colUrl('datasets/duplicatemanager.php') => __('profile_occurrencemenu.DUP_CLUSTER'),
+                __('profile_occurrencemenu.VIEW_COMMENTS') => colUrl('misc/commentlist.php'),
+                __('misc_collmetadata.EDIT_METADATA') => colUrl('misc/collmetadata.php'),
+                __('misc_collprofiles.MANAGE_PERMISSIONS') => colUrl('misc/collpermissions.php'),
+                __('misc_collprofiles.PROCESSING_TOOLBOX') => colUrl('specprocessor/index.php'),
+                __('misc_collprofiles.DARWIN_CORE_PUB') => colUrl('datasets/datapublisher.php'),
+                __('misc_collprofiles.REVIEW_SPEC_EDITS') => colUrl('editor/editreviewer.php'),
+                // TODO (Logan) Note is currently disabled in Symbiota repo keeping here for completeness
+                // __('misc_collprofiles.ACCESS_REPORT') => tryColUrl('reports/accessreport.php', false),
+                __('profile_occurrencemenu.DUP_CLUSTER') => tryColUrl('datasets/duplicatemanager.php', config('portal.activate_duplicates')),
             ];
 
             $upload_links = [
-                colUrl('admin/specupload.php', '&uploadtype=7') => __('misc_collprofiles.SKELETAL_FILE_IMPORT'),
-                colUrl('admin/specupload.php', '&uploadtype=3') => __('misc_collprofiles.TEXT_FILE_IMPORT'),
-                colUrl('admin/specupload.php', '&uploadtype=6') => __('misc_collprofiles.DWCA_IMPORT'),
-                colUrl('admin/specupload.php', '&uploadtype=8') => __('misc_collprofiles.IPT_IMPORT'),
-                colUrl('admin/importextended.php') => __('misc_collprofiles.EXTENDED_IMPORT'),
-                // TODO (Logan) live data only
-                colUrl('admin/specupload.php', '&uploadtype=9') => __('admin_specupload.NFN_IMPORT'),
-                colUrl('admin/specuploadmanagement.php') => __('misc_collprofiles.IMPORT_PROFILES'),
-                colUrl('admin/specuploadmanagement.php', '&action=addprofile') => __('misc_collprofiles.CREATE_PROFILE'),
+                __('misc_collprofiles.SKELETAL_FILE_IMPORT') => colUrl('admin/specupload.php', '&uploadtype=7'),
+                __('misc_collprofiles.TEXT_FILE_IMPORT') => colUrl('admin/specupload.php', '&uploadtype=3'),
+                __('misc_collprofiles.DWCA_IMPORT') => colUrl('admin/specupload.php', '&uploadtype=6'),
+                __('misc_collprofiles.IPT_IMPORT') => colUrl('admin/specupload.php', '&uploadtype=8'),
+                __('misc_collprofiles.EXTENDED_IMPORT') => colUrl('admin/importextended.php'),
+                __('admin_specupload.NFN_IMPORT') => tryColUrl('admin/specupload.php', '&uploadtype=9', $isLive),
+                __('misc_collprofiles.IMPORT_PROFILES') => tryColUrl('admin/specuploadmanagement.php', $isLive),
+                __('misc_collprofiles.CREATE_PROFILE') => tryColUrl('admin/specuploadmanagement.php', '&action=addprofile', $isLive),
             ];
 
             $general_maintenance = [
-                colUrl('cleaning/index.php', '&obsuid=0') => __('profile_occurrencemenu.DATA_CLEANING'),
-                colUrl('collbackup.php') => __('misc_collprofiles.BACKUP_DATA_FILE'),
-                // TODO (Logan) only live data
-                colUrl('admin/restorebackup.php') => __('misc_collprofiles.RESTORE_BACKUP'),
-                // TODO (Logan) figure out why commented out in old code?
-                // legacy_url('imagelib/admin/igsnmapper.php') => __('misc_collprofiles.GUID_MANAGEMENT'),
-                legacy_url('imagelib/admin/thumbnailbuilder.php?collid=' . request('collid')) => __('misc_collprofiles.THUMBNAIL_MAINTENANCE'),
-                colUrl('misc/collprofiles.php', '&action=UpdateStatistics') => __('misc_collstats.UPDATE_STATS'),
+                __('profile_occurrencemenu.DATA_CLEANING') => colUrl('cleaning/index.php', '&obsuid=0'),
+                __('misc_collprofiles.BACKUP_DATA_FILE') => colUrl('collbackup.php'),
+                __('misc_collprofiles.RESTORE_BACKUP') => tryColUrl('admin/restorebackup.php', $isLive),
+                // TODO (Logan) Commented out in Symbiota repo should this be brought over? I can put it under a config flag
+                //__('misc_collprofiles.GUID_MANAGEMENT') => legacy_url('imagelib/admin/igsnmapper.php'),
+                __('misc_collprofiles.THUMBNAIL_MAINTENANCE') => legacy_url('imagelib/admin/thumbnailbuilder.php?collid=' . request('collid')),
+                __('misc_collstats.UPDATE_STATS') => colUrl('misc/collprofiles.php', '&action=UpdateStatistics'),
             ];
 
             @endphp
 
             {{-- Data Editor Control Panel --}}
             <div class="flex-grow">
-                {{-- TODO (Logan) Translations --}}
-                <div class="font-bold text-xl">Data Editor</div>
-                <ul class="pl-4">
-                    @foreach ($data_links as $link => $title)
-                        <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
-                    @endforeach
-                </ul>
+                <div class="font-bold text-xl">{{ __('misc_collprofiles.DAT_EDIT') }}</div>
+                <x-list-of-links :links="$data_links" />
+
+                @if($collection->isTraitCodingActivated())
                 <div class="font-bold text-lg">{{ __('misc_collprofiles.TRAIT_CODING_TOOLS') }}</div>
-                <ul class="pl-4">
-                    @foreach ($trait_links as $link => $title)
-                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
-                    @endforeach
-                </ul>
+                <x-list-of-links :links="$trait_links" />
+                @endif
             </div>
 
             @can('COLL_ADMIN', $collection->collid)
             {{-- Administration Conrol Panel--}}
             <div class="flex-grow">
-                {{-- TODO (Logan) Translations --}}
-                <div class="font-bold text-xl">Administration</div>
-                <ul class="pl-4">
-                    @foreach ($admin_links as $link => $title)
-                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
-                    @endforeach
+                <div class="font-bold text-xl">{{ __('misc_collprofiles.ADMIN_CONTROL') }} </div>
+                <x-list-of-links :links="$admin_links" />
 
-                </ul>
-
-                <div class="font-bold text-lg">{{ __('misc_collprofiles.IMPORT_SPECIMEN') }}</div>
-                {{-- TODO (Logan) ? mark button <x-link
-                    target="_blank"
-                    href="{{ docs_url('Collection_Manager_Guide/Importing_Uploading/') }}">
-                    {{ __('misc_collprofiles.MORE_INFO') }}
-                </x-link>
-                --}}
-                <ul class="pl-4">
-                    @foreach ($upload_links as $link => $title)
-                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
-                    @endforeach
-                </ul>
+                <div class="flex items-center gap-2">
+                    <div class="font-bold text-lg">{{ __('misc_collprofiles.IMPORT_SPECIMEN') }}</div>
+                        <x-question-mark-button
+                            target="_blank"
+                            href="{{ docs_url('Collection_Manager_Guide/Importing_Uploading/') }}"
+                            title="{{__('header.H_MORE_INFO')}}"
+                        />
+                    </div>
+                <x-list-of-links :links="$upload_links" />
 
                 <div class="font-bold text-lg">{{ __('misc_collprofiles.MAINTENANCE_TASKS') }}</div>
-                <ul class="pl-4">
-                    @foreach ($general_maintenance as $link => $title)
-                    <li class="list-disc"><x-link href="{{ $link }}">{{ $title }}</x-link></li>
-                    @endforeach
-                </ul>
+                <x-list-of-links :links="$general_maintenance" />
             </div>
             @endcan
         </div>
@@ -264,7 +243,6 @@ function colUrl($url, $extra_query = '') {
 ($collection->aggKeysStr['datasetKey'] ?? false);
 					$collData['gbiftitle'] = $responseData->title;
 					$collData['doi'] = $responseData->doi;
-                    // TODO (Logan) create laravel template
                     include(legacy_path('/includes/citationgbif.php'));
                 @endphp
                 @else
@@ -284,29 +262,72 @@ function colUrl($url, $extra_query = '') {
     <div>
         <div class="text-2xl font-bold">{{ __('misc_collprofiles.COLL_STATISTICS') }}</div>
         <ul class="pl-4">
-            <li class="list-disc">{{ $stats->recordcnt ?? 0 }} {{ __('misc_collprofiles.SPECIMEN_RECORDS') }}</li>
-            <li class="list-disc">{{ $stats->georefcnt ?? 0 }} ({{ $stats->georefcnt? floor( ($stats->georefcnt / $stats->recordcnt) * 100): 0 }}%) {{ __('misc_collstats.GEOREFERENCED') }}</li>
-            @if($specimensCount = $stats->dynamicProperties->SpecimensCountID ?? false)
-                <li class="list-disc">{{ $specimensCount }} ({{ $specimensCount? floor( ($specimensCount / $stats->recordcnt) * 100) : 0}}%) {{ __('misc_collprofiles.IDED_TO_SPECIES') }}</li>
+            <li class="list-disc">
+                {{ number_format($stats->georefcnt ?? 0) }} ({{ $stats->recordcnt_percent($stats->georefcnt ?? 0) }}%) {{ __('misc_collstats.GEOREFERENCED') }}
+            </li>
+
+            @if($media_stats = $stats->media())
+                @if(is_numeric($media_stats['media_count']))
+                <li class="list-disc">
+                    {{ implode(' ', [
+                        number_format($media_stats['media_count']),
+                        '(' . $stats->recordcnt_percent($media_stats['media_count']) . '%)',
+                        __('misc_collprofiles.WITH_IMAGES'),
+                        '(' . number_format($media_stats['total_media_count']) . ' ' . strtolower(__('taxa.TOTAL_IMAGES')) . ')',
+                    ]) }}
+                </li>
+                @endif
             @endif
-            {{-- TODO (Logan) media image counts --}}
-            <li class="list-disc lowercase">{{ $stats->familycnt ?? 0 }} {{ __('checklists_checklist.FAMILIES') }}</li>
-            <li class="list-disc lowercase">{{ $stats->genuscnt ?? 0 }} {{ __('checklists_checklist.GENERA') }}</li>
-            <li class="list-disc lowercase">{{ $stats->speciescnt ?? 0 }} {{ __('checklists_checklist.SPECIES') }}</li>
-            @if($totalTaxaCount = $stats->dynamicProperties->TotalTaxaCount ?? false)
-                <li class="list-disc lowercase">{{ $totalTaxaCount }} {{ __('checklists_checklist.TOTAL_TAXA') }}</li>
+
+            @php
+                $genbank = $stats->genbank();
+                $bold = $stats->bold();
+                $genetic = $stats->other_genetic();
+            @endphp
+            @if($genbank || $bold || $genetic)
+            <li class="list-disc">
+                @if($genbank)
+                {{ number_format($genbank) }} {{ __('misc_collprofiles.GENBANK_REF') }}
+                @endif
+
+                @if($bold)
+                {{ number_format($bold) }} {{ __('misc_collprofiles.BOLD_REF') }}
+                @endif
+
+                @if($genetic)
+                {{ number_format($genetic) }} {{ __('misc_collprofiles.OTHER_GENETIC_REF') }}
+                @endif
+                {{ __('misc_collprofiles.GENETIC_REF') }}
+            </li>
+            @endif
+
+            @if($ref_cnt = $stats->references())
+            <li class="list-disc">
+                {{ number_format($ref_cnt) }} {{ __('misc_collprofiles.PUB_REFS') }}
+            </li>
+            @endif
+
+            @if($spec_cnt = $stats->specimen())
+            <li class="list-disc">
+                {{ number_format($spec_cnt) }} ({{ $stats->recordcnt_percent($spec_cnt) }}%) {{ __('misc_collprofiles.SPECIMEN_RECORDS') }}
+            </li>
+            @endif
+
+            <li class="list-disc lowercase">{{ number_format($stats->familycnt ?? 0) }} {{ __('checklists_checklist.FAMILIES') }}</li>
+            <li class="list-disc lowercase">{{ number_format($stats->genuscnt ?? 0) }} {{ __('checklists_checklist.GENERA') }}</li>
+            <li class="list-disc lowercase">{{ number_format($stats->speciescnt ?? 0) }} {{ __('checklists_checklist.SPECIES') }}</li>
+            @if($total_taxa_cnt = $stats->total_taxa())
+                <li class="list-disc">{{ number_format($total_taxa_cnt) }} {{ __('misc_collprofiles.TOTAL_TAXA_INCLUDING') }}</li>
             @endif
         </ul>
     </div>
 
     <div class="flex items-center gap-2">
         <x-nav-link hx-boost="true" href="{{ url('collections/search?collId=' . $collection->collID) }}">
-            {{-- TODO (Logan) Translations --}}
             <x-button>{{ __('misc_collprofiles.ADVANCED_SEARCH_THIS_COLLECTION') }}</x-button>
         </x-nav-link>
 
         <x-nav-link hx-boost="true" href="{{ url('media/search?collId=' . $collection->collID) }}">
-            {{-- TODO (Logan) Translations --}}
             <x-button>{{ __('misc_collprofiles.MEDIA_SEARCH_THIS_COLLECTION') }}</x-button>
         </x-nav-link>
     </div>
@@ -347,14 +368,15 @@ function colUrl($url, $extra_query = '') {
 
 		@if($collection->managementType == 'Snapshot')
         <x-text-label :label="__('misc_collprofiles.IPT_SOURCE')">
-            <x-link href="#todo">{{ $collection->title }}</x-link>
+            @foreach($collection->dwcaPaths() as $path)
+            <x-link href="{{ $path->path }}">{{ $path->title }}</x-link>@if(!$loop->last){{'|'}}@endif
+            @endforeach
         </x-text-label>
 		@endif
 
         <x-text-label :label="__('misc_collprofiles.DIGITAL_METADATA')">
             <x-link :href="colUrl('datasets/emlhandler.php')" target="_blank">
-                {{-- TODO (Logan) translation (note) there is not a transferable one --}}
-                EML File
+                {{__('misc_collprofiles.EML_FILE') }}
             </x-link>
         </x-text-label>
 
