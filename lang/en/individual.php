@@ -71,7 +71,7 @@ return [
     'USAGE_RIGHTS' => 'Usage Rights',
     'RIGHTS_HOLDER' => 'Rights Holder',
     'ACCESS_RIGHTS' => 'Access Rights',
-    'USAGE_POLICY' => 'General Data Usage Policy',
+    'GENERAL_DATA_USAGE_POLICY' => 'General Data Usage Policy',
     'SOURCE_RECORD' => 'Source Record',
     'DATA_SOURCE' => 'Data source',
     'SOURCE_MANAGEMENT' => 'Source management',
