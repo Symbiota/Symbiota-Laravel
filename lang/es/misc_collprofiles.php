@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'USAGE_POLICY' => 'Política de uso',
     'COLLEC_PROFILE' => 'Perfil de Colección para',
     'RSS_FEED' => 'RSS Feed',
     'COLLECTION_SEARCH' => 'Página de Búsqueda de Colección',
@@ -77,7 +78,7 @@ return [
     'GEOG_DIST_COUNTRIES' => 'Distribución Geográfica - Países',
     'COLLECTION_PROJECTS' => 'Colecciones de Historia Natural y Proyectos de Observaciones',
     'ADVANCED_SEARCH_THIS_COLLECTION' => 'Búsqueda avanzada en esta colección',
-    'IMAGE_SEARCH_THIS_COLLECTION' => 'Medios Buscar en esta colección',
+    'MEDIA_SEARCH_THIS_COLLECTION' => 'Medios Buscar en esta colección',
     'IDENTIFIER_PLACEHOLDER_LIST' => 'Buscar por número de catálogo, ID de ocurrencia o ID de registro.',
     'SEARCH_BY_TAXON' => 'Buscar por taxón',
     'OCCURENCE_IDENTIFIER' => 'Número de Catálogo',

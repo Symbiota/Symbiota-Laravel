@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'USAGE_POLICY' => 'Usage policy',
     'COLLEC_PROFILE' => 'Collection Profile for',
     'RSS_FEED' => 'RSS Feed',
     'COLLECTION_SEARCH' => 'Collection Search Page',
@@ -76,7 +77,7 @@ return [
     'GEOG_DIST_COUNTRIES' => 'Geographic Distribution - Countries',
     'COLLECTION_PROJECTS' => 'Natural History Collections and Observation Projects',
     'ADVANCED_SEARCH_THIS_COLLECTION' => 'Advanced Search this Collection',
-    'IMAGE_SEARCH_THIS_COLLECTION' => 'Media Search this Collection',
+    'MEDIA_SEARCH_THIS_COLLECTION' => 'Media Search this Collection',
     'IDENTIFIER_PLACEHOLDER_LIST' => 'Search by Catalog Number, Occurrence ID, or Record ID.',
     'SEARCH_BY_TAXON' => 'Search by Taxon',
     'OCCURENCE_IDENTIFIER' => 'Catalog Number',
