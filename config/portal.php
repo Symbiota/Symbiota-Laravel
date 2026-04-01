@@ -85,8 +85,8 @@ return [
     | Activate Exsiccati
     |--------------------------------------------------------------------------
     |
-    | This value is the default map view bounds for the map tools if their is
-    | not anything else to focus on.
+    | Activates exsiccati fields within data entry pages. Adding link to
+    | exsiccati search tools to portal menu is recommended
     */
     'activate_exsiccati' => env('PORTAL_ACTIVATE_EXSICCATI', false),
 
@@ -98,4 +98,11 @@ return [
     | This value is the default taxonomic kingdom for the portal. This is used to filter taxonomic ranks.
     */
     'primary_taxonomic_kingdom' => env('PORTAL_PRIMARY_TAXONOMIC_KINGDOM', 'Plantae'),
+    | Activate Duplicates
+    |--------------------------------------------------------------------------
+    |
+    | Activates Specimen Duplicate listings and support features. Mainly
+    | relavent for herabrium collections
+    */
+    'activate_duplicates' => env('PORTAL_ACTIVATE_DUPLICATES', false),
 ];
