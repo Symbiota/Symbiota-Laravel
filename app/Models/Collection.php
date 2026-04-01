@@ -37,9 +37,10 @@ class Collection extends Model {
         $stats = CollectionStats::query()->where('collid', $this->collid)
             ->select([
                 'omcollectionstats.*',
-                DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate')
+                DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate'),
             ])
             ->first();
+
         return $stats;
     }
 
@@ -49,22 +50,24 @@ class Collection extends Model {
             ->select(['uspid', 'title', 'path'])
             ->get();
 
-        foreach($paths as $path) {
+        foreach ($paths as $path) {
             $path->path = str_replace('/archive.do', '/resource.do', trim($path->path));
         }
 
         return $paths;
     }
 
-
     public function isTraitCodingActivated(): bool {
         $results = DB::table('tmtraits')->select('traitid')->limit(1)->get();
-        return $results->count() ? true: false;
+
+        return $results->count() ? true : false;
     }
 
     //collTypes
     const Specimens = 'Preserved Specimens';
+
     const GeneralObservations = 'General Observations';
+
     const Observations = 'Observations';
 
     public function isSpecimens() {
