@@ -84,4 +84,6 @@ return [
     'OCCURENCE_IDENTIFIER' => 'Número de Catálogo',
     'INFO_ALT' => 'Icono de información que indica un enlace a información sobre importación/actualización',
     'LAST_MODIFIED' => 'Última Modificación',
+    'EML_FILE' => 'Archivo EML',
+    'TOTAL_TAXA_INCLUDING' => 'Taxones totales (incluyendo subsp. y var.)'
 ];

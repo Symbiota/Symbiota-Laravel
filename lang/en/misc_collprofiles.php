@@ -83,4 +83,6 @@ return [
     'OCCURENCE_IDENTIFIER' => 'Catalog Number',
     'INFO_ALT' => 'Info. icon indicating link to information about import/update',
     'LAST_MODIFIED' => 'Last Modified',
+    'EML_FILE' => 'EML File',
+    'TOTAL_TAXA_INCLUDING' => 'total taxa (including subsp. and var.)'
 ];

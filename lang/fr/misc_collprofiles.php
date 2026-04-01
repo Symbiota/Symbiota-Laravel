@@ -84,4 +84,6 @@ return [
     'OCCURENCE_IDENTIFIER' => 'Numéro de Catalogue',
     'INFO_ALT' => 'Icône d\'information indiquant un lien vers des informations sur l\'importation/mise à jour',
     'LAST_MODIFIED' => 'Dernière Modification',
+    'EML_FILE' => 'Fichier EML',
+    'TOTAL_TAXA_INCLUDING' => 'taxons totaux (y compris subsp. et var.)'
 ];
