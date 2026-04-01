@@ -83,8 +83,22 @@ Route::group(['prefix' => 'datasets'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => '/projects'], function () {
-    Route::get('/{pid}', [ProjectController::class, 'project']);
-    Route::get('/{pid}/edit', [ProjectController::class, 'editProject']);
+    Route::get('/', [ProjectController::class, 'publicProjects'])->where('pid', '[0-9]+');
+    Route::get('/{pid}', [ProjectController::class, 'project'])->where('pid', '[0-9]+')->can('PROJ_VIEW', 'pid');
+
+    /* Admin Routes */
+    Route::get('/create', [ProjectController::class, 'projectCreate'])->can('SUPER_ADMIN');
+    Route::post('/create', [ProjectController::class, 'create'])->can('SUPER_ADMIN');
+
+    Route::post('/{pid}/edit', [ProjectController::class, 'update'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::delete('/{pid}/edit', [ProjectController::class, 'delete'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::post('/{pid}/managers', [ProjectController::class, 'addUser'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::delete('/{pid}/managers/{uid}', [ProjectController::class, 'removeUser'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+
+    Route::post('/{pid}/checklists', [ProjectController::class, 'addChecklist'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+    Route::delete('/{pid}/checklists/{clid}', [ProjectController::class, 'removeChecklist'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
+
+    Route::get('/{pid}/edit', [ProjectController::class, 'projectAdminView'])->where('pid', '[0-9]+')->can('PROJ_ADMIN', 'pid');
 });
 
 /*

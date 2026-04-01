@@ -66,6 +66,10 @@ $grants= [
             document.querySelectorAll('[x-teleport]').forEach((item) => {
                 item._x_teleport && item._x_teleport.remove();
             })
+
+            if(window.tinymce_editor) {
+                window.tinymce_editor.remove();
+            }
         })
     </script>
 </head>

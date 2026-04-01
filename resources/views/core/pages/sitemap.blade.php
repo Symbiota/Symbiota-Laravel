@@ -214,7 +214,9 @@
     <div>
         <div class="flex flex-items items-center gap-4">
             <h2 class="text-2xl text-primary font-bold">Biotic Inventory Projects</h2>
-            <x-button href="{{ legacy_url('/projects/index.php?newproj=1') }}">Add a New Project</x-button>
+            @can('SUPER_ADMIN')
+            <x-button href="{{ url('/projects/create') }}">Add a New Project</x-button>
+            @endcan
         </div>
         <ul class="list-disc pl-4">
             @foreach ($projects as $project)

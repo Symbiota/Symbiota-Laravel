@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Blade;
@@ -64,6 +65,16 @@ class AppServiceProvider extends ServiceProvider {
                 UserRole::SUPER_ADMIN,
                 UserRole::PROJ_ADMIN => $pid,
             ]);
+        });
+
+        Gate::define('PROJ_VIEW', function (?User $user, $pid) {
+            $project = Project::where('pid', $pid)->first();
+            $projAdmin = $user ? $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::PROJ_ADMIN => $pid,
+            ]) : false;
+
+            return $project->ispublic || $projAdmin;
         });
 
         Gate::define('COLL_EDIT', function (User $user, $collid) {
