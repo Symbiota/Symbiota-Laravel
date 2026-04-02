@@ -96,7 +96,7 @@ $isObservations = $collection->isObservations();
         <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
-                __('misc_collprofiles.SUBMIT_IMAGE_V') => tryColUrl('editor/imageoccursubmit.php', $isObservations),
+                __('misc_collprofiles.SUBMIT_IMAGE_V') => tryColUrl('editor/observationsubmit.php', $isObservations),
                 __('misc_collprofiles.ADD_NEW_OCCUR') => colUrl('editor/occurrenceeditor.php', '&gotomode=1'),
                 __('misc_collprofiles.CREATE_NEW_REC') => tryColUrl('editor/imageoccursubmit.php', $isSpecimens),
                 __('misc_collprofiles.SKELETAL') => tryColUrl('editor/skeletalsubmit.php', $isSpecimens),
