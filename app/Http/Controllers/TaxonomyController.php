@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
     public static function taxonData(int $tid) {
@@ -174,5 +175,41 @@ class TaxonomyController extends Controller {
         return view('pages/taxon/show', [
             'parents' => $parents,
         ]);
+    }
+    public static function createTaxon() {
+        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
+        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get(); // @TODO this shouldn't always be plantae and should vary by portal
+        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
+        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
+        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
+
+        return view('pages/taxon/create', [
+            'kingdoms' => $kingdoms,
+            'allTaxonRanks' => $allTaxonRanks,
+            'indContent' => $indContent,
+            'securityOptions' => $securityOptions,
+            'canCreate' => Gate::check('TAXON_EDITOR'),
+        ]);
+    }
+
+    public static function store() {
+        $postData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $loaderObj = new \TaxonomyEditorManager();
+
+        // if (! $loaderObj->validateNewName($postData)) {
+        //     // Redirect back with error message
+        //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
+        // } else { // @TODO to be fixed in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+        $tidResult = $loaderObj->loadNewName($postData);
+        // }
+
+        if ($tidResult > 0) {
+            // Redirect to the newly created taxon's page
+            return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+        } else {
+            return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+        }
     }
 }

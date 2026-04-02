@@ -74,9 +74,13 @@ Route::get('/geographic/search', function (Request $request) {
     $result = $query
         ->orderByRaw('g.geoterm = ? DESC, g.geoterm LIKE ? DESC, g.geoterm, CHAR_LENGTH(g.geoterm)', [$geo_term, $geo_term . '%'])
         ->select([
-        'g.geoThesID', 'g.geoterm', 'g.geoLevel', 'g.parentID',
-        'parent.geoterm AS parentterm', 'parent.geoLevel AS parentlevel',
-    ])->take(30)->get();
+            'g.geoThesID',
+            'g.geoterm',
+            'g.geoLevel',
+            'g.parentID',
+            'parent.geoterm AS parentterm',
+            'parent.geoLevel AS parentlevel',
+        ])->take(30)->get();
 
     if ($format === 'json') {
         return $result;
@@ -171,6 +175,35 @@ Route::group(['prefix' => 'v3'], function () {
     */
     Route::group(['prefix' => 'taxonomy'], function () {
         Route::get('{tid}/children', [TaxonomyController::class, 'getDirectChildren']);
+        Route::get('check-exists', function (Request $request) {
+            $sciname = $request->query('sciname');
+            $rankid = $request->query('rankid');
+            $author = $request->query('author');
+
+            if (! $sciname || ! $rankid) {
+                return response()->json(['exists' => false, 'tid' => null]);
+            }
+
+            $query = DB::table('taxa as t')
+                ->join('taxstatus as ts', 'ts.tid', 't.tid')
+                ->where('ts.taxauthid', 1)
+                ->where(function ($q) use ($sciname) {
+                    $q->where('t.sciname', $sciname)
+                        ->orWhereRaw('CONCAT(t.sciname, " ", t.author) = ?', [$sciname]);
+                })
+                ->where('t.rankid', (int) $rankid);
+
+            if ($author) {
+                $query->where('t.author', $author);
+            }
+
+            $result = $query->select('t.tid')->first();
+
+            return response()->json([
+                'exists' => $result !== null,
+                'tid' => $result?->tid,
+            ]);
+        });
     });
 });
 
