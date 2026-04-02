@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TaxonomyController extends Controller {
@@ -160,6 +161,18 @@ class TaxonomyController extends Controller {
             'taxa_descriptions' => $taxa_descriptions,
             'external_links' => $external_links,
             'media' => $taxa_media,
+        ]);
+    }
+
+    public static function show(Request $request) {
+        $parents = [];
+        $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
+        if ($parentTid) {
+            $parents = self::getParents($parentTid);
+        }
+
+        return view('pages/taxon/show', [
+            'parents' => $parents,
         ]);
     }
 }
