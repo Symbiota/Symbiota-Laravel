@@ -9,11 +9,13 @@ function colUrl(string $url, string $extra_query = '') {
 }
 
 function tryColUrl(string $url, bool $predicate = true, string $extra_query = '') {
-    return colUrl($url, $extra_query);
+    return $predicate? colUrl($url, $extra_query): false;
 }
 
 $isLive = $collection->managementType == 'Live Data';
+$isAggregate = $collection->managementType == 'Aggregate';
 $isSpecimens = $collection->isSpecimens();
+$isObservations = $collection->isObservations();
 
 @endphp
 <x-margin-layout>
@@ -94,9 +96,10 @@ $isSpecimens = $collection->isSpecimens();
         <div class="flex flex-wrap gap-2">
             @php
             $data_links = [
+                __('misc_collprofiles.SUBMIT_IMAGE_V') => tryColUrl('editor/imageoccursubmit.php', $isObservations),
                 __('misc_collprofiles.ADD_NEW_OCCUR') => colUrl('editor/occurrenceeditor.php', '&gotomode=1'),
                 __('misc_collprofiles.CREATE_NEW_REC') => tryColUrl('editor/imageoccursubmit.php', $isSpecimens),
-                __('misc_collprofiles.SKELETAL') => colUrl('editor/skeletalsubmit.php'),
+                __('misc_collprofiles.SKELETAL') => tryColUrl('editor/skeletalsubmit.php', $isSpecimens),
                 __('misc_collprofiles.EDIT_EXISTING') => colUrl('editor/occurrencetabledisplay.php', '&displayquery=1'),
                 __('misc_collprofiles.ADD_BATCH_DETER') => tryColUrl('editor/batchdeterminations.php', $isSpecimens),
 
@@ -115,9 +118,9 @@ $isSpecimens = $collection->isSpecimens();
                 __('profile_occurrencemenu.VIEW_COMMENTS') => colUrl('misc/commentlist.php'),
                 __('misc_collmetadata.EDIT_METADATA') => colUrl('misc/collmetadata.php'),
                 __('misc_collprofiles.MANAGE_PERMISSIONS') => colUrl('misc/collpermissions.php'),
-                __('misc_collprofiles.PROCESSING_TOOLBOX') => colUrl('specprocessor/index.php'),
-                __('misc_collprofiles.DARWIN_CORE_PUB') => colUrl('datasets/datapublisher.php'),
-                __('misc_collprofiles.REVIEW_SPEC_EDITS') => colUrl('editor/editreviewer.php'),
+                __('misc_collprofiles.PROCESSING_TOOLBOX') => tryColUrl('specprocessor/index.php', $isSpecimens && !isAggregate),
+                __('misc_collprofiles.DARWIN_CORE_PUB') => tryColUrl('datasets/datapublisher.php', $isSpecimens && !isAggregate),
+                __('misc_collprofiles.REVIEW_SPEC_EDITS') => tryColUrl('editor/editreviewer.php', $isSpecimens),
                 // TODO (Logan) Note is currently disabled in Symbiota repo keeping here for completeness
                 // __('misc_collprofiles.ACCESS_REPORT') => tryColUrl('reports/accessreport.php', false),
                 __('profile_occurrencemenu.DUP_CLUSTER') => tryColUrl('datasets/duplicatemanager.php', config('portal.activate_duplicates')),
@@ -135,7 +138,7 @@ $isSpecimens = $collection->isSpecimens();
             ];
 
             $general_maintenance = [
-                __('profile_occurrencemenu.DATA_CLEANING') => colUrl('cleaning/index.php', '&obsuid=0'),
+                __('profile_occurrencemenu.DATA_CLEANING') => tryColUrl('cleaning/index.php', $isSpecimens, '&obsuid=0'),
                 __('misc_collprofiles.BACKUP_DATA_FILE') => colUrl('collbackup.php'),
                 __('misc_collprofiles.RESTORE_BACKUP') => tryColUrl('admin/restorebackup.php', $isLive),
                 // TODO (Logan) Commented out in Symbiota repo should this be brought over? I can put it under a config flag
@@ -151,7 +154,7 @@ $isSpecimens = $collection->isSpecimens();
                 <div class="font-bold text-xl">{{ __('misc_collprofiles.DAT_EDIT') }}</div>
                 <x-list-of-links :links="$data_links" />
 
-                @if($collection->isTraitCodingActivated())
+                @if($collection->isTraitCodingActivated() && $isSpecimens)
                 <div class="font-bold text-lg">{{ __('misc_collprofiles.TRAIT_CODING_TOOLS') }}</div>
                 <x-list-of-links :links="$trait_links" />
                 @endif
