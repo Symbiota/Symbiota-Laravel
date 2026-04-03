@@ -114,14 +114,14 @@ class CollectionController extends Controller {
     }
     public static function skeletalView(int $collId) {
         return view('pages/collections/skeletal-submit', [
-            'collection' => Collection::query()->where('collid', $collId)->first()
+            'collection' => Collection::query()->where('collid', $collId)->first(),
         ]);
     }
 
     public static function skeletalAdd(int $collId) {
         global $SERVER_ROOT;
-        include_once(legacy_path('/classes/OccurrenceEditorManager.php'));
-        include_once(legacy_path('/classes/GeographicThesaurus.php'));
+        include_once legacy_path('/classes/OccurrenceEditorManager.php');
+        include_once legacy_path('/classes/GeographicThesaurus.php');
 
         $occurrenceEditor = new \OccurrenceEditorManager();
         $occurrenceEditor->setCollId($collId);
@@ -134,46 +134,46 @@ class CollectionController extends Controller {
         $status = true;
         $error = false;
 
-        if(request('stateprovince') && request('country')) {
+        if (request('stateprovince') && request('country')) {
             $occurrence['country'] = \GeographicThesaurus::getCountryByState(request('stateprovince'));
         }
 
-        if(request('catalognumber') && $occurrenceEditor->catalogNumberExists(request('catalognumber'))) {
-			$occid = $occurrenceEditor->getOccId();
-			if(request('addaction') == '1') {
+        if (request('catalognumber') && $occurrenceEditor->catalogNumberExists(request('catalognumber'))) {
+            $occid = $occurrenceEditor->getOccId();
+            if (request('addaction') == '1') {
                 $status = false;
-				$error = 'dupeCatalogNumber';
-			}
-			elseif(request('addaction') == '2') {
-				if(!$occurrenceEditor->editOccurrence($occurrence, $isEditor)){
+                $error = 'dupeCatalogNumber';
+            } elseif (request('addaction') == '2') {
+                if (! $occurrenceEditor->editOccurrence($occurrence, $isEditor)) {
                     $error = $occurrenceEditor->getErrorStr();
-				}
-			}
+                }
+            }
         } else {
-			if($occurrenceEditor->addOccurrence($occurrence)) {
-				$occid = $occurrenceEditor->getOccId();
-			} else {
+            if ($occurrenceEditor->addOccurrence($occurrence)) {
+                $occid = $occurrenceEditor->getOccId();
+            } else {
                 $error = $occurrenceEditor->getErrorStr();
-			}
+            }
         }
 
-        if($error) {
+        if ($error) {
             return response(
                 Blade::render(
                     '<x-errors :errors="$errors" />',
                     ['errors' => message_bag([$error])]
                 )
             )->header('HX-Retarget', 'div[id=form-errors]')
-             ->header('HX-Reswap', 'innerHTML');
+                ->header('HX-Reswap', 'innerHTML');
         } else {
-            $url = legacy_url("collections/editor/occurrenceeditor.php?occid=" . $occid . "&collid=" . $collId);
+            $url = legacy_url('collections/editor/occurrenceeditor.php?occid=' . $occid . '&collid=' . $collId);
+
             return response(
                 Blade::render(
                     '<div class="flex gap-2">
                         <x-link target="_blank" :href="$url">{{ $occid }}</x-link>
                         <x-link target="_blank" :href="$url . \'&tabtarget=2\'"><i class="fa-solid fa-file-image"></i></x-link>
                     </div>',
-                    ['occid' => $occid, 'url' => $url ]
+                    ['occid' => $occid, 'url' => $url]
                 )
             );
         }
