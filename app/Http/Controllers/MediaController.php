@@ -14,7 +14,7 @@ class MediaController extends Controller {
             ->leftJoin('taxa as t', 't.tid', '=', 'm.tid')
             ->leftJoin('users as u', 'u.uid', '=', 'm.creatoruid')
             ->leftJoin('omoccurrences as o', 'o.occid', '=', 'm.occid')
-            ->when($request->query('media_type'), function (Builder $query, $type) {
+            ->when($request->query('mediaType'), function (Builder $query, $type) {
                 $query->where('m.mediaType', '=', $type);
             })
             ->when($request->query('tid'), function (Builder $query, $tid) {
@@ -80,13 +80,17 @@ class MediaController extends Controller {
         return view('pages/media/search', ['media' => $media, 'creators' => $creators, 'tags' => $tag_options]);
     }
 
-    public static function getMediaData() {}
+    public static function getMediaData() {
+    }
 
-    public static function add() {}
+    public static function add() {
+    }
 
-    public static function delete() {}
+    public static function delete() {
+    }
 
-    public static function edit() {}
+    public static function edit() {
+    }
 
     public static function libraryPage(Request $request) {
         $genus = [];
@@ -112,7 +116,6 @@ class MediaController extends Controller {
             $taxa_query->select('t.sciName as name', 't.tid')
                 ->orderBy('t.sciName')
                 ->whereLike('t.sciName', $request->query('taxa') . '%');
-
         } else {
             $taxa_query->selectRaw('ts.family as name')
                 ->whereNotNull('ts.family')

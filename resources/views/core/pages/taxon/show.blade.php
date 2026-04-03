@@ -26,4 +26,9 @@
             <div>{{ $parent->rankname }}: {{ $parent->sciName }}</div>
         @endforeach
     </div>
+    <ul>
+    <div id="taxon-tree-v2">
+        <x-tree-node :nodes="$parents" />
+    <div>
+</ul>
 </x-layout>

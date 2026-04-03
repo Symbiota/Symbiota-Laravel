@@ -165,17 +165,6 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function show(Request $request) {
-        $parents = [];
-        $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
-        if ($parentTid) {
-            $parents = self::getParents($parentTid);
-        }
-
-        return view('pages/taxon/show', [
-            'parents' => $parents,
-        ]);
-    }
     public static function createTaxon() {
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $primaryKingdom = config('portal.primary_taxonomic_kingdom');
@@ -211,5 +200,22 @@ class TaxonomyController extends Controller {
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
+    }
+
+    public static function show(Request $request) {
+        $parents = [];
+        $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
+        if ($parentTid) {
+            $parents = self::getParents($parentTid);
+        }
+        // @TODO get each parent's children
+        foreach ($parents as $parent) {
+            $parent->children = self::getDirectChildren($parent->tid);
+        }
+
+
+        return view('pages/taxon/show', [
+            'parents' => $parents,
+        ]);
     }
 }
