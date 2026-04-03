@@ -213,9 +213,33 @@ class TaxonomyController extends Controller {
             $parent->children = self::getDirectChildren($parent->tid);
         }
 
+        $rankMap = [
+            0 => 1, // non-ranked node
+            1 => 2, // organism
+            10 => 3, // kingdom
+            20 => 4, // subkingdom
+            30 => 5, // division
+            40 => 6, // subdivision
+            50 => 7, // superclass
+            60 => 8, // class
+            70 => 9, // subclass
+            100 => 10, // order
+            110 => 11, // suborder
+            140 => 12, // family
+            150 => 13, // subfamily
+            160 => 13, // tribe
+            170 => 13, // subtribe
+            180 => 13, // genus
+            190 => 14, // subgenus
+            200 => 14, // section
+            210 => 14, // subsection
+            220 => 14, // species
+            300 => 14, // infraspecies
+        ];
 
         return view('pages/taxon/show', [
             'parents' => $parents,
+            'rankMap' => $rankMap,
         ]);
     }
 }

@@ -1,5 +1,6 @@
 @props([
     'parents' => [],
+    'rankMap' => [],
 ])
 <x-layout class="grid grid-col-1 gap-4">
     <div class="w-fit">
@@ -28,7 +29,7 @@
     </div>
     <ul>
     <div id="taxon-tree-v2">
-        <x-tree-node :nodes="$parents" />
+        <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="3" />
     <div>
 </ul>
 </x-layout>
