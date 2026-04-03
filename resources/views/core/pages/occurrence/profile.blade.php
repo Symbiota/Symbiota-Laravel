@@ -1,5 +1,6 @@
 @props([
     'occurrence',
+    'collection',
     'images' => [],
     'audio' => [],
     'collection_contacts' => [],
@@ -12,6 +13,7 @@
     'user_datasets' => [],
 ])
 @php
+
 function getLocalityStr($occur) {
     $localityArr = [
         $occur->country,
@@ -142,183 +144,91 @@ foreach($user_datasets as $datasets) {
         <div class="relative flex flex-col gap-4">
             {{-- OCCURRENCE INFORMATION START--}}
             <div>
-                <x-text-label label="Catalog #">{{ $occurrence->catalogNumber }}</x-text-label>
-                <x-text-label label="Occurrence ID">{{ $occurrence->occurrenceID}}</x-text-label>
+                <x-text-label :label="__('collections_list.CATALOG_NUMBER') . ' #'">{{ $occurrence->catalogNumber }}</x-text-label>
+                <x-text-label :label="__('individual.OCCURRENCE_ID')">{{ $occurrence->occurrenceID}}</x-text-label>
 
-                @if($identifiers)
+                @if(is_array($identifiers) && count($identifiers))
                     @foreach ($identifiers as $identifier)
-                        <x-text-label :label="$identifier->identifierName? $identifier->identifierName: 'Secondary Catalog #'">{{ $identifier->identifierValue }}</x-text-label>
+                        <x-text-label :label="$identifier->identifierName? $identifier->identifierName: __('OTHER_CATALOG_NUMBERS')">{{ $identifier->identifierValue }}</x-text-label>
                     @endforeach
                 @elseif($occurrence->otherCatalogNumbers)
-                    <x-text-label label="Secondary Catalog #">{{ $occurrence->otherCatalogNumbers }}</x-text-label>
+                    <x-text-label :label="__('individual.OTHER_CATALOG_NUMBERS')">{{ $occurrence->otherCatalogNumbers }}</x-text-label>
                 @endif
 
-                <x-text-label label="Taxon">
+                <x-text-label :label="__('ident_key.TAXON')">
                     <i class="font-italic">{{ $occurrence->sciname }}</i>
                     @if($occurrence->scientificNameAuthorship)
                         ({{$occurrence->scientificNameAuthorship}})
                     @endif
                 </x-text-label>
 
-                <x-text-label label="Identification Qualifier">{{ $occurrence->identificationQualifier }}</x-text-label>
-                <x-text-label label="Family">{{ $occurrence->family}}</x-text-label>
-                <x-text-label label="Determiner">
-                    {{ $occurrence->identifiedBy }}
-                </x-text-label>
-                <x-text-label label="Date Determined">
-                    {{ $occurrence->dateIdentified }}
-                </x-text-label>
+                @foreach([
+                    __('individual.ID_QUALIFIER') => $occurrence->identificationQualifier,
+                    __('taxa.FAMILY') => $occurrence->family,
+                    __('individual.DETERMINER') => $occurrence->identifiedBy,
+                    __('individual.DATE_DET') => $occurrence->dateIdentified,
+                    __('individual.TAXON_REMARKS') => $occurrence->taxonRemarks,
+                    __('individual.ID_REFERENCES') => $occurrence->identificationReferences,
+                    __('individual.ID_REMARKS') => $occurrence->identificationRemarks,
+                    __('individual.TYPE_STATUS') => $occurrence->typeStatus,
+                    __('individual.EVENT_ID') => $occurrence->eventID,
+                    __('individual.OBSERVER') => $occurrence->recordedBy,
+                    //Todo fix conflicting lang tag
+                    __('collections_list.NUMBER') => $occurrence->recordNumber,
+                    __('individual.DATE') => format_range($occurrence->eventDate, $occurrence->eventDate2),
+                    __('individual.VERBATIM_DATE') => $occurrence->verbatimEventDate,
+                    __('individual.ADDITIONAL_COLLECTORS') => $occurrence->associatedCollectors,
+                    __('imagelib_imgdetails.LOCALITY') => getLocalityStr($occurrence),
+                    __('individual.LAT_LNG') => format_latlong_err($occurrence),
+                    __('individual.VERBATIM_COORDINATES') => $occurrence->verbatimCoordinates,
+                    __('individual.LOCATION_REMARKS') => $occurrence->locationRemarks,
+                    __('individual.GEOREF_REMARKS') => $occurrence->georeferenceRemarks,
+                    __('collections_list.ELEVATION') => format_range($occurrence->minimumElevationInMeters, $occurrence->maximumElevationInMeters, 'Meters'),
+                    __('individual.VERBATIM_ELEVATION') => $occurrence->verbatimElevation,
+                    __('individual.DEPTH') => format_range($occurrence->minimumDepthInMeters, $occurrence->maximumDepthInMeters, 'Meters'),
+                    __('individual.VERBATIM_DEPTH') => $occurrence->verbatimDepth,
+                    __('individual.INFO_WITHHELD') => $occurrence->informationWithheld,
+                    __('checklists_checklist.HABITAT') => $occurrence->habitat,
+                    __('individual.SUBSTRATE') => $occurrence->substrate,
+                    // TODO fix lang conflict
+                    __('individual.ASSOCIATED_TAXA') => $occurrence->associatedTaxa,
+                    __('taxa.DESCRIPTION') => $occurrence->verbatimAttributes,
+                    __('individual.DYNAMIC_PROPERTIES') => $occurrence->dynamicProperties,
+                    __('individual.REPRODUCTIVE_CONDITION') => $occurrence->reproductiveCondition,
+                    __('individual.LIFE_STAGE') => $occurrence->lifeStage,
+                    __('individual.SEX') => $occurrence->sex,
+                    __('individual.INDIVIDUAL_COUNT') => $occurrence->individualCount,
+                    __('individual.SAMPLE_PROTOCOL') => $occurrence->samplingProtocol,
+                    __('individual.PREPARATIONS') => $occurrence->preparations,
+                    __('projects.NOTES') => implode(', ', format_notes($occurrence)),
+                    __('individual.DISPOSITION') => $occurrence->disposition,
 
-                <x-text-label label="Taxon Remarks">
-                    {{ $occurrence->taxonRemarks }}
-                </x-text-label>
+                    //TODO (Logan) Paleontology Terms
+                    __('individual.CHRONOSTRAT') => 'todo',
+                    __('individual.LITHOSTRAT') => 'todo',
+                    __('individual.ABSOLUTE_AGE') => 'todo',
 
-                <x-text-label label="ID References">
-                    {{ $occurrence->identificationReferences}}
-                </x-text-label>
+                    __('individual.EXCICCATI_SERIES') => 'todo',
+                    __('individual.MATERIAL_SAMPLES') => 'todo',
+                ] as $label => $value)
+                <x-text-label :label="$label">{{ $value }}</x-text-label>
+                @endforeach
 
-                <x-text-label label="ID Remarks">
-                    {{ $occurrence->identificationRemarks}}
-                </x-text-label>
-
-                <x-text-label label="Type Status">
-                    {{ $occurrence->typeStatus}}
-                </x-text-label>
-
-                <x-text-label label="Event ID">
-                    {{ $occurrence->eventID }}
-                </x-text-label>
-
-                <x-text-label label="Observer">
-                    {{ $occurrence->recordedBy }}
-                </x-text-label>
-
-                <x-text-label label="Number">
-                    {{ $occurrence->recordNumber}}
-                </x-text-label>
-
-                <x-text-label label="Date">
-                    {{ format_range($occurrence->eventDate, $occurrence->eventDate2) }}
-                </x-text-label>
-
-                <x-text-label label="Verbatim Date">
-                    {{ $occurrence->verbatimEventDate }}
-                </x-text-label>
-
-                <x-text-label label="Additional Collectors">
-                    {{ $occurrence->associatedCollectors }}
-                </x-text-label>
-
-                <x-text-label label="Locality">
-                    {{ getLocalityStr($occurrence) }}
-                </x-text-label>
-
-                <x-text-label label="Latiude/Longitude">
-                    {{ format_latlong_err($occurrence) }}
-                </x-text-label>
-
-                <x-text-label label="Verbatim Coordinates">
-                    {{ $occurrence->verbatimCoordinates }}
-                </x-text-label>
-
-                <x-text-label label="Location Remarks">
-                    {{ $occurrence->locationRemarks}}
-                </x-text-label>
-
-                <x-text-label label="Georeference Remarks">
-                    {{ $occurrence->georeferenceRemarks}}
-                </x-text-label>
-
-                <x-text-label label="Elevation">
-                    {{ format_range($occurrence->minimumElevationInMeters, $occurrence->maximumElevationInMeters, 'Meters') }}
-                </x-text-label>
-
-                <x-text-label label="Verbatim Elevation">
-                    {{ $occurrence->verbatimElevation }}
-                </x-text-label>
-
-                <x-text-label label="Depth">
-                    {{ format_range($occurrence->minimumDepthInMeters, $occurrence->maximumDepthInMeters, 'Meters') }}
-                </x-text-label>
-
-                <x-text-label label="Verbatim Depth">
-                    {{ $occurrence->verbatimDepth }}
-                </x-text-label>
-
-                <x-text-label label="Information withheld">
-                    {{ $occurrence->informationWithheld }}
-                </x-text-label>
-
-                <x-text-label label="Habitat">
-                    {{ $occurrence->habitat }}
-                </x-text-label>
-
-                <x-text-label label="Substrate">
-                    {{ $occurrence->substrate }}
-                </x-text-label>
-
-                <x-text-label label="Associated Taxa">
-                    {{ $occurrence->associatedTaxa }}
-                </x-text-label>
-
-                <x-text-label label="Description">
-                    {{ $occurrence->verbatimAttributes }}
-                </x-text-label>
-
-                <x-text-label label="Dynamic Properties">
-                    {{ $occurrence->dynamicProperties }}
-                </x-text-label>
-
-                <x-text-label label="Reproductive Condition">
-                    {{ $occurrence->reproductiveCondition }}
-                </x-text-label>
-
-                <x-text-label label="Life Stage">
-                    {{ $occurrence->lifeStage}}
-                </x-text-label>
-
-                <x-text-label label="Sex">
-                    {{ $occurrence->sex}}
-                </x-text-label>
-
-                <x-text-label label="Individual Count">
-                    {{ $occurrence->individualCount }}
-                </x-text-label>
-
-                <x-text-label label="Sampling Protocol">
-                    {{ $occurrence->samplingProtocol }}
-                </x-text-label>
-
-                <x-text-label label="Preparations">
-                    {{ $occurrence->preparations }}
-                </x-text-label>
-
-                <x-text-label label="Notes">
-                    {{ implode(', ', format_notes($occurrence)) }}
-                </x-text-label>
-
-                <x-text-label label="Disposition">
-                    {{ $occurrence->disposition }}
-                </x-text-label>
-
-                <x-text-label label="Paleontology Terms">
-                </x-text-label>
-
-                <x-text-label label="Exsiccati series">
-                </x-text-label>
-
-                <x-text-label label="Material Samples">
-                </x-text-label>
-
-                <x-text-label label="License">
-                    {{ $occurrence->rights }}
+                <x-text-label :label="__('misc_collmetadata.LICENSE')">
+                    @if($occurrence->rights)
+                    <x-link :href="$occurrence->rights">
+                        {{ $occurrence->rights }}
+                    </x-link>
+                    @endif
                 </x-text-label>
             </div>
             {{-- OCCURRENCE INFORMATION END --}}
 
             @if(count($determinations))
                 <div>
-                    <div class="font-bold text-lg">Determination History:</div>
+                    <div class="font-bold text-lg">
+                        {{ __('individual.DET_HISTORY') }}
+                    </div>
                     <hr />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -328,10 +238,10 @@ foreach($user_datasets as $datasets) {
                             @if($det->scientificNameAuthorship)
                                 ({{$det->scientificNameAuthorship}})
                             @endif
-                            <x-text-label label="Determiner">
+                            <x-text-label :label="__('individual.DETERMINER')">
                                 {{ $det->identifiedBy }}
                             </x-text-label>
-                            <x-text-label label="Date">
+                            <x-text-label :label="__('individual.DATE')">
                                 {{ $det->dateIdentified }}
                             </x-text-label>
                         </div>
@@ -345,10 +255,14 @@ foreach($user_datasets as $datasets) {
 
             @if(count($images))
             <div>
-                <div class="font-bold text-lg">Images</div>
+                <div class="font-bold text-lg">
+                    {{-- todo move to media ligo --}}
+                    {{ __('individual.SPECIMEN_IMAGES') }}
+                </div>
                 <hr />
             </div>
             <div class="w-fit">
+            {{-- TODO (Logan) lang for image resolutions --}}
                 @foreach ($images as $item)
                 <x-media.image :image="$item">
                     <div class="flex flex-col gap-2">
@@ -386,9 +300,7 @@ foreach($user_datasets as $datasets) {
             @endif
 
             <div>
-                <span>
-                For additional information about his specimen, please contact:
-                </span>
+                <span>{{ __('individual.ADDITIONAL_INFO') }}</span>
                 <span>
                 @foreach ($collection_contacts as $contact)
                     @if($contact->firstName && $contact->firstName)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\Media;
 use App\Models\MediaType;
 use App\Models\OccurrenceComment;
@@ -16,12 +17,13 @@ class OccurrenceController extends Controller {
         return DB::table('omoccurrences as o')
             ->join('omcollections as c', 'c.collID', 'o.collid')
             ->where('o.occid', '=', $occid)
-            ->select('o.*', 'c.icon', 'c.collectionName', 'c.institutionCode', 'c.contactJson', 'c.rights')
+            ->select('o.*', 'c.icon', 'c.collectionName', 'c.collectionName', 'c.institutionCode', 'c.contactJson', 'c.rights', 'c.colltype')
             ->first();
     }
 
     public static function profilePage(int $occid) {
         $occurrence = self::occurrenceProfileData($occid);
+        $collection = Collection::query()->where('collid', $occurrence->collid)->first();
         $media = Media::where('occid', $occid)->get();
         $determinations = OccurrenceIdentification::where('occid', $occid)->get();
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
@@ -63,7 +65,7 @@ class OccurrenceController extends Controller {
 
         $collection_contacts = false;
         try {
-            $collection_contacts = json_decode($occurrence->contactJson);
+            $collection_contacts = json_decode($collection->contactJson);
         } finally {
         }
 
@@ -82,6 +84,7 @@ class OccurrenceController extends Controller {
 
         return view('pages/occurrence/profile', [
             'occurrence' => $occurrence,
+            'collection' => $collection,
             'images' => $images,
             'audio' => $audio,
             'identifiers' => $identifiers,
