@@ -80,17 +80,13 @@ class MediaController extends Controller {
         return view('pages/media/search', ['media' => $media, 'creators' => $creators, 'tags' => $tag_options]);
     }
 
-    public static function getMediaData() {
-    }
+    public static function getMediaData() {}
 
-    public static function add() {
-    }
+    public static function add() {}
 
-    public static function delete() {
-    }
+    public static function delete() {}
 
-    public static function edit() {
-    }
+    public static function edit() {}
 
     public static function libraryPage(Request $request) {
         $genus = [];
