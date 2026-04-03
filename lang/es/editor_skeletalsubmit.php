@@ -46,4 +46,5 @@ return [
     'ERROR_NO_ID' => 'ERROR: identificador de colección no establecido',
     'CLEAR' => 'Borrar formulario',
     'AUTHORSHIP' => 'Authoría',
+    'PROTECT_LOCALITY_DETAILS_FROM_PUBLIC' => 'Protéger détails de localité du grand public',
 ];
