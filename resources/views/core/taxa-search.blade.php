@@ -1,5 +1,6 @@
 @props([
     'id' => uniqid(),
+    'name' => 'taxa',
     'tidName' => 'tid',
     'taxa_value' => '' ,
     'tid_value' => '',
@@ -27,7 +28,7 @@
         @endif
 
         <x-autocomplete-input
-            name="taxa"
+            :name="$name"
             :id="$id"
             :value="$taxa_value"
             placeholder="Type to search..."
