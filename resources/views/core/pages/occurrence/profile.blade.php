@@ -261,25 +261,27 @@ foreach($user_datasets as $datasets) {
                 </div>
                 <hr />
             </div>
-            <div class="w-fit">
+            <div class="w-fit flex flex-wrap gap-2">
             {{-- TODO (Logan) lang for image resolutions --}}
                 @foreach ($images as $item)
-                <x-media.image :image="$item">
+                <x-media.image :image="$item" :href="$item->url ?? $item->thumbnailUrl ?? $item->originalUrl">
                     <div class="flex flex-col gap-2">
-                        @if($item->thumbnailUrl)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->thumbnailUrl }}">Low Resolution</x-link>
-                        @endif
-
                         @if($item->url && $item->originalUrl != $item->url)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->url }}">Normal Resolution</x-link>
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->url }}">
+                            {{ __('individual.OPEN_MEDIUM') }}
+                        </x-link>
                         @endif
 
                         @if($item->originalUrl)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->originalUrl }}">High Resolution</x-link>
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->originalUrl }}">
+                            {{ __('individual.OPEN_LARGE') }}
+                        </x-link>
                         @endif
 
                         @if($item->sourceUrl)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->sourceUrl}}">Source</x-link>
+                        <x-link class="text-base-100" target="_blank" href="{{ $item->sourceUrl}}">
+                            {{ __("individual.OPEN_SOURCE") }}
+                        </x-link>
                         @endif
                     </div>
                 </x-media>
@@ -294,7 +296,7 @@ foreach($user_datasets as $datasets) {
             </div>
             <div class="w-fit">
                 @foreach ($audio as $item)
-                {{-- TODO (Logan) audio player --}}
+                    <x-media.audio :item="$item" />
                 @endforeach
             </div>
             @endif
