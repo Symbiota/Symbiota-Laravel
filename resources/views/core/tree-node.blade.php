@@ -4,7 +4,7 @@
         <li x-data="{ open: false }">
             @if(count($node->children ?? []) > 0)
                 <div style="padding-left: {{ ($rankMap[$node->rankID]/$standardizingFraction ?? 0) }}rem" @click="open = !open">
-                    <x-link class="no-underline">{{ $node->sciName }} {{$node->rankID}} (Click to <span x-text="open ? 'collapse' : 'expand'"></span>)</x-link>
+                    <x-link class="no-underline">{{ $node->sciName }} {{$node->rankID}} (Click to <span x-text="open ? 'collapse' : 'show all children'"></span>)</x-link>
                 </div>
                 <div style="padding-left: {{ ($rankMap[$node->rankID]/$standardizingFraction ?? 0) + ($depth * 2) }}rem" x-show="open">
                     <x-tree-node :nodes="$node->children ?? []" :depth="$depth + 1" :rankMap="$rankMap" :standardizingFraction="$standardizingFraction" />
