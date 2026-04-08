@@ -64,6 +64,7 @@
                         }
                     },
                     async parseName() {
+                        console.log('parseName wrapper called');
                         if (window.parseName) {
                             await window.parseName();
                         }
