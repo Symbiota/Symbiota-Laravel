@@ -91,7 +91,7 @@ $isObservations = $collection->isObservations();
         </div>
     </div>
 
-    @can('COLL_EDIT', $collection->collid)
+    @can('COLL_EDIT', $collection->collID)
     <x-accordion :label="__('misc_collprofiles.TOGGLE_MAN')" :open="true" variant="clear-primary">
         <div class="flex flex-wrap gap-2">
             @php
@@ -118,8 +118,8 @@ $isObservations = $collection->isObservations();
                 __('profile_occurrencemenu.VIEW_COMMENTS') => colUrl('misc/commentlist.php'),
                 __('misc_collmetadata.EDIT_METADATA') => colUrl('misc/collmetadata.php'),
                 __('misc_collprofiles.MANAGE_PERMISSIONS') => colUrl('misc/collpermissions.php'),
-                __('misc_collprofiles.PROCESSING_TOOLBOX') => tryColUrl('specprocessor/index.php', $isSpecimens && !isAggregate),
-                __('misc_collprofiles.DARWIN_CORE_PUB') => tryColUrl('datasets/datapublisher.php', $isSpecimens && !isAggregate),
+                __('misc_collprofiles.PROCESSING_TOOLBOX') => tryColUrl('specprocessor/index.php', $isSpecimens && !$isAggregate),
+                __('misc_collprofiles.DARWIN_CORE_PUB') => tryColUrl('datasets/datapublisher.php', $isSpecimens && !$isAggregate),
                 __('misc_collprofiles.REVIEW_SPEC_EDITS') => tryColUrl('editor/editreviewer.php', $isSpecimens),
                 // TODO (Logan) Note is currently disabled in Symbiota repo keeping here for completeness
                 // __('misc_collprofiles.ACCESS_REPORT') => tryColUrl('reports/accessreport.php', false),
@@ -160,7 +160,7 @@ $isObservations = $collection->isObservations();
                 @endif
             </div>
 
-            @can('COLL_ADMIN', $collection->collid)
+            @can('COLL_ADMIN', $collection->collID)
             {{-- Administration Conrol Panel--}}
             <div class="flex-grow">
                 <div class="font-bold text-xl">{{ __('misc_collprofiles.ADMIN_CONTROL') }} </div>
