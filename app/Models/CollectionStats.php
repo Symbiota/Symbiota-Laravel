@@ -29,7 +29,7 @@ class CollectionStats extends Model {
             'total_media_count' => 0,
         ];
 
-        if ($str = $this->dynamicProperties['imgcnt']) {
+        if ($str = $this->dynamicProperties['imgcnt'] ?? null) {
             [$total_count, $count] = explode(':', $str);
             $media_stats['media_count'] = $count;
             $media_stats['total_media_count'] = $total_count;
@@ -39,7 +39,7 @@ class CollectionStats extends Model {
     }
 
     private function extra(string $key): mixed {
-        return $this->dynamicProperties[$key] ?? 0;
+        return ($this->dynamicProperties ?? [])[$key] ?? 0;
     }
 
     public function specimen() {

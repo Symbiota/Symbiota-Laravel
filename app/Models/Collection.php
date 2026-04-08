@@ -11,7 +11,7 @@ class Collection extends Model {
 
     protected $table = 'omcollections';
 
-    protected $primaryKey = 'collid';
+    protected $primaryKey = 'collID';
 
     public $timestamps = false;
 
@@ -30,11 +30,11 @@ class Collection extends Model {
     ];
 
     public function occurrence() {
-        return $this->hasMany(Occurrence::class, 'collid', 'collid');
+        return $this->hasMany(Occurrence::class, 'collid', 'collID');
     }
 
     public function stats() {
-        $stats = CollectionStats::query()->where('collid', $this->collid)
+        $stats = CollectionStats::query()->where('collid', $this->collID)
             ->select([
                 'omcollectionstats.*',
                 DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate'),
@@ -46,7 +46,7 @@ class Collection extends Model {
 
     public function dwcaPaths() {
         $paths = DB::table('uploadspecparameters')
-            ->where('collid', $this->collid)
+            ->where('collid', $this->collID)
             ->select(['uspid', 'title', 'path'])
             ->get();
 

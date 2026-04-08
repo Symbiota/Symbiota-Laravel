@@ -12,7 +12,8 @@ class CollectionController extends Controller {
     public static function collection(int $collid) {
         $collection = Collection::query()
             ->leftJoin('uploadspecparameters as usp', 'usp.collId', 'omcollections.collId')
-            ->where('omcollections.collId', $collid)
+            ->where('omcollections.collID', $collid)
+            ->select('omcollections.*')
             ->first();
 
         return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection->stats()]);
