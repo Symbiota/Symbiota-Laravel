@@ -227,14 +227,14 @@ class TaxonomyController extends Controller {
             110 => 11, // suborder
             140 => 12, // family
             150 => 13, // subfamily
-            160 => 13, // tribe
-            170 => 13, // subtribe
-            180 => 13, // genus
-            190 => 14, // subgenus
-            200 => 14, // section
-            210 => 14, // subsection
-            220 => 14, // species
-            300 => 14, // infraspecies
+            160 => 14, // tribe
+            170 => 15, // subtribe
+            180 => 16, // genus
+            190 => 17, // subgenus
+            200 => 18, // section
+            210 => 19, // subsection
+            220 => 20, // species
+            300 => 21, // infraspecies
         ];
 
         return view('pages/taxon/show', [

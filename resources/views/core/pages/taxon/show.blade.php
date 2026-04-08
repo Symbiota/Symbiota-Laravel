@@ -29,7 +29,7 @@
     </div>
     <ul>
     <div id="taxon-tree-v2">
-        <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="3" />
+        <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
     <div>
 </ul>
 </x-layout>
