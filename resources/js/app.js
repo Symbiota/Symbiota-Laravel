@@ -9,6 +9,7 @@ import 'tinymce/icons/default/icons.min.js';
 import 'tinymce/themes/silver/theme.min.js';
 import 'tinymce/models/dom/model.min.js';
 import './components/autocomplete-input';
+import './components/taxonomy-create';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
