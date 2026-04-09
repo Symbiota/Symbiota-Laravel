@@ -98,6 +98,9 @@ return [
     | This value is the default taxonomic kingdom for the portal. This is used to filter taxonomic ranks.
     */
     'primary_taxonomic_kingdom' => env('PORTAL_PRIMARY_TAXONOMIC_KINGDOM', 'Plantae'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Activate Duplicates
     |--------------------------------------------------------------------------
     |
