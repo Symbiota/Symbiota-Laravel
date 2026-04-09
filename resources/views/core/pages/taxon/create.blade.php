@@ -7,6 +7,8 @@
     'errors' => [],
     'canCreateOrEdit' => false,
     'taxonInfo' => null,
+    'parentName' => '',
+    'acceptedName' => '',
 ])
 <x-layout>
     <div class="mb-4">
@@ -36,7 +38,7 @@
                  });" x-data="{
                     unit1Label: 'Genus',
                     unit2Label: 'Species',
-                    rankid: 220,
+                    rankid: @js($mode === 'edit' && $taxonInfo ? (int)$taxonInfo->rankID : 220),
                     isValid: false,
                     validationMessage: '',
                     allTaxonRanks: @js($allTaxonRanks),
@@ -106,7 +108,7 @@
                         <div class="w-3/4">
                             <x-select
                                 label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
-                                name="rankid" id="rankid" :defaultValue="220"
+                                name="rankid" id="rankid" :defaultValue="$mode === 'edit' && $taxonInfo ? $taxonInfo->rankID : 220"
                                 onChange="rankid = $event.target.value"
                                 :items="$allTaxonRanks
                                     ->map(
@@ -124,7 +126,8 @@
                                 <label class="text mb-1" for="unitind1-toggle"
                                     x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                                 <x-select name="unitind1" id="unitind1"
-                                    :items="$indContent" :default="0" />
+                                    :items="$indContent" :default="0"
+                                    :defaultValue="$mode === 'edit' && $taxonInfo ? ($taxonInfo->unitInd1 ?? '') : ''" />
                             </div>
                             <div class="flex flex-col">
                                 <label
@@ -136,7 +139,7 @@
                                         class="vertical-align text-error italic pr-1">*</span>
                                 </label>
                                 <x-input required name="unitname1"
-                                    id="unitname1" value=""
+                                    id="unitname1" value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->unitName1 ?? '') : '' }}"
                                     x-ref="unitname1" />
                             </div>
                         </div>
@@ -147,7 +150,8 @@
                                 <label class="text mb-1" for="unitind2-toggle"
                                     x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                                 <x-select name="unitind2" id="unitind2"
-                                    :items="$indContent" :default="0" />
+                                    :items="$indContent" :default="0"
+                                    :defaultValue="$mode === 'edit' && $taxonInfo ? ($taxonInfo->unitInd2 ?? '') : ''" />
                             </div>
                             <div class="flex flex-col">
                                 <label
@@ -161,7 +165,7 @@
                                     </div>
                                 </label>
                                 <x-input name="unitname2" id="unitname2"
-                                    value="" x-ref="unitname2"
+                                    value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->unitName2 ?? '') : '' }}" x-ref="unitname2"
                                     x-bind:required="!rankid || parseInt(rankid) >= 220" />
                             </div>
                         </div>
@@ -171,6 +175,7 @@
                             <x-input label="Infraspecific designation"
                                 name="unitind3" id="unitind3"
                                 placeholder="spp., var., forma, etc."
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->unitInd3 ?? '') : '' }}"
                                 x-ref="unitind3" />
                             <div class="flex flex-col w-full">
                                 <label
@@ -181,7 +186,7 @@
                                         class="vertical-align text-error italic pr-1">*</span>
                                 </label>
                                 <x-input name="unitname3" id="unitname3"
-                                    value="" x-ref="unitname3"
+                                    value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->unitName3 ?? '') : '' }}" x-ref="unitname3"
                                     x-bind:required="rankid && parseInt(rankid) >= 230" />
                             </div>
                         </div>
@@ -191,7 +196,7 @@
                             <x-input
                                 label="{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}"
                                 name="cultivarEpithet" id="cultivarEpithet"
-                                value="" x-ref="cultivarEpithet" />
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->cultivarEpithet ?? '') : '' }}" x-ref="cultivarEpithet" />
                         </div>
                         <div id="tradeName-div"
                             class="inline-flex items-center gap-2"
@@ -199,36 +204,39 @@
                             <x-input
                                 label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
                                 name="tradeName" id="tradeName"
-                                value="" x-ref="tradeName" />
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->tradeName ?? '') : '' }}" x-ref="tradeName" />
                         </div>
                         <div class="w-1/2">
                             <x-input
                                 label="{{ __('glossary_addterm.AUTHOR') }}"
                                 name="author" id="author"
-                                value="" />
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->author ?? '') : '' }}" />
                         </div>
                         <div class="w-1/2">
                             <x-taxa-search
                                 label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
                                 required id="parentname" name="parentname"
                                 :tidName="'parenttid'" :hide_selector="true"
-                                :hide_synonyms_checkbox="true" />
+                                :hide_synonyms_checkbox="true"
+                                :taxa_value="$mode === 'edit' && $taxonInfo ? $parentName : ''"
+                                :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->parenttid ?? '') : ''" />
                         </div>
                         <div class="w-1/2 mt-2">
                             <x-input label="{{ __('projects.NOTES') }}"
                                 name="notes" id="notes"
-                                value="" />
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->notes ?? '') : '' }}" />
                         </div>
                         <div class="w-1/2">
                             <x-input
                                 label="{{ __('glossary_addterm.SOURCE') }}"
                                 name="source" id="source"
-                                value="" />
+                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->source ?? '') : '' }}" />
                         </div>
                         <div class="w-1/2">
                             <x-select
                                 label="{{ __('taxonomy_taxoneditor.LOC_SECURITY') }}"
                                 name="securitystatus" id="securitystatus"
+                                :defaultValue="$mode === 'edit' && $taxonInfo ? $taxonInfo->securityStatus : 0"
                                 :items="$securityOptions" />
                         </div>
                         <fieldset
@@ -249,10 +257,10 @@
                                 'value' => 0,
                             ],
                         ]"
-                            default_value="1" />
+                            :default_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->tid == $taxonInfo->tidaccepted ? 1 : 0) : 1" />
                         {{-- blade-formatter-enable --}}
                         </fieldset>
-                        <div id="accdiv" class="hidden">
+                        <div id="accdiv" class="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? '' : 'hidden' }}">
                             <div>
                                 <div class="left-column">
                                     <label for="acceptedstr">
@@ -260,9 +268,10 @@
                                     </label>
                                 </div>
                                 <input id="acceptedstr" name="acceptedstr"
-                                    type="text" class="search-bar-long" />
+                                    type="text" class="search-bar-long"
+                                    value="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? $acceptedName : '' }}" />
                                 <input id="tidaccepted" name="tidaccepted"
-                                    type="hidden" />
+                                    type="hidden" value="{{ $mode === 'edit' && $taxonInfo ? $taxonInfo->tidaccepted : '' }}" />
                             </div>
                             <div>
                                 <div class="left-column">
@@ -273,7 +282,8 @@
                                 <input type='text'
                                     id='unacceptabilityreason'
                                     name='unacceptabilityreason'
-                                    class='search-bar-long' />
+                                    class='search-bar-long'
+                                    value='{{ $mode === "edit" && $taxonInfo ? ($taxonInfo->UnacceptabilityReason ?? "") : "" }}' />
                             </div>
                         </div>
                         <div>

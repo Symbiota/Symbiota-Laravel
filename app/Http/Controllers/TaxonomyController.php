@@ -176,6 +176,16 @@ class TaxonomyController extends Controller {
         $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
         ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
 
+        $parentName = '';
+        if ($taxon && $taxon->parenttid) {
+            $parentName = DB::table('taxa')->where('tid', $taxon->parenttid)->value('sciName') ?? '';
+        }
+
+        $acceptedName = '';
+        if ($taxon && $taxon->tidaccepted && $taxon->tidaccepted != $taxon->tid) {
+            $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
+        }
+
         return view('pages/taxon/create', [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
@@ -185,6 +195,8 @@ class TaxonomyController extends Controller {
             'securityOptions' => $securityOptions,
             'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
             'taxonInfo' => $taxon,
+            'parentName' => $parentName,
+            'acceptedName' => $acceptedName,
         ]);
     }
 
