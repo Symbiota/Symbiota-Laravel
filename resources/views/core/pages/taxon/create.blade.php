@@ -1,10 +1,12 @@
 @props([
+    'mode' => 'create',
     'kingdoms' => [],
     'allTaxonRanks' => [],
     'indContent' => [],
     'securityOptions' => [],
     'errors' => [],
-    'canCreate' => false,
+    'canCreateOrEdit' => false,
+    'taxonInfo' => null,
 ])
 <x-layout>
     <div class="mb-4">
@@ -17,23 +19,14 @@
             ['title' => __('taxonomy_taxonomyloader.CREATE_TAXON')],
         ]" />
     </div>
-    @if (!$canCreate)
+    @if (!$canCreateOrEdit)
         <div class="flex flex-col items-center justify-center mb-4">
             <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>
         </div>
     @endif
     <div x-data="{ tid: @js(request()->query('tid')), mode: @js(request()->query('mode')) }">
-        @if ($canCreate)
-            <div class="flex flex-col items-center justify-center alert alert-success mb-4"
-                id="successful-creation"
-                x-show="tid !== null && !isNaN(Number(tid))">
-                <p>Taxon created successfully with ID (TODO this should go to
-                    taxon
-                    editor page): <span x-text="tid"></span>
-                </p>
-            </div>
-            <div x-show="mode === 'edit'">Edit mode!</div>
-            <div x-show="tid === null || isNaN(Number(tid))"
+        @if ($canCreateOrEdit)
+            <div
                 class="flex flex-col items-center justify-center"
                 x-init=" validate();
                  $watch('rankid', (newValue, oldValue) => {
@@ -71,7 +64,7 @@
                     },
                 }">
                 <h1 class="text-4xl font-bold">
-                    {{ __('taxonomy_taxonomyloader.TAXON_LOADER') }}
+                    {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
                 </h1>
                 <div class="mt-4">
                     <h1 class="text-2xl font-bold">
@@ -85,27 +78,29 @@
                     @change="validate(); updateScinameDisplay();">
                     @csrf
                     <div class="w-3/4">
-                        <fieldset
-                            class="border border-base-300 rounded-md p-4 mb-4">
-                            <legend class="text-2xl font-semibold">
-                                {{ __('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER') }}
-                            </legend>
-                            <x-input :label="__(
-                                'taxonomy_taxonomyloader.QUICK_PARSER',
-                            )" name="quickparser"
-                                id="quickparser" value=""
-                                @keydown.enter="await parseName(); await validate();" />
-                            <x-button
-                                @click="await parseName(); await validate();"
-                                type="button"
-                                class="mt-2">{{ __('taxonomy_taxonomyloader.RUN_QUICK_PARSE') }}</x-button>
-                        </fieldset>
+                        @if($mode === 'create')
+                            <fieldset
+                                class="border border-base-300 rounded-md p-4 mb-4">
+                                <legend class="text-2xl font-semibold">
+                                    {{ __('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER') }}
+                                </legend>
+                                <x-input :label="__(
+                                    'taxonomy_taxonomyloader.QUICK_PARSER',
+                                )" name="quickparser"
+                                    id="quickparser" value=""
+                                    @keydown.enter="await parseName(); await validate();" />
+                                <x-button
+                                    @click="await parseName(); await validate();"
+                                    type="button"
+                                    class="mt-2">{{ __('taxonomy_taxonomyloader.RUN_QUICK_PARSE') }}</x-button>
+                            </fieldset>
+                        @endif
                     </div>
                     <fieldset
                         class="w-full border border-base-300 rounded-md p-4 mb-4">
 
                         <legend class="text-2xl font-semibold">
-                            {{ __('taxonomy_taxonomyloader.TAXON_LOADER') }}
+                            {{ $mode === 'create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
                         </legend>
 
                         <div class="w-3/4">

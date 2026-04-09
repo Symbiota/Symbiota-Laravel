@@ -134,7 +134,7 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function taxonEdit(int $tid) {
+    public static function editTaxonProfile(int $tid) {
         $taxon = self::taxonData($tid);
 
         $parents = self::getParents($tid);
@@ -164,7 +164,11 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function editTaxon(){
+    public static function editTaxon($tid){
+        $taxon = self::taxonData($tid);
+        if(!$taxon){
+            // @TODO return a 404 not found page
+        } 
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $primaryKingdom = config('portal.primary_taxonomic_kingdom');
         $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
@@ -179,7 +183,8 @@ class TaxonomyController extends Controller {
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
-            'canCreate' => Gate::check('TAXON_EDITOR'),
+            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
+            'taxonInfo' => $taxon,
         ]);
     }
 
@@ -197,7 +202,7 @@ class TaxonomyController extends Controller {
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
-            'canCreate' => Gate::check('TAXON_EDITOR'),
+            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
         ]);
     }
 

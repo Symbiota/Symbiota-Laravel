@@ -50,9 +50,10 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 */
 Route::group(['prefix' => 'taxon'], function () {
     Route::get('/create', [TaxonomyController::class, 'createTaxon'])->name('taxon.createview')->middleware('auth'); // Note that I think we ought to name more routes to make them easier to change
-    Route::post('/store', [TaxonomyController::class, 'store'])->name('taxon.store');
+    Route::post('/store', [TaxonomyController::class, 'store'])->name('taxon.store'); // @TODO gate
     Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->name('taxon.view');
-    Route::get('/{tid}/edit', [TaxonomyController::class, 'taxonEdit']);
+    Route::get('/{tid}/profileEdit', [TaxonomyController::class, 'editTaxonProfile'])->name('taxon.profileEdit')->middleware('auth'); // @TODO gate
+    Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->name('taxon.editview')->middleware('auth'); // @TODO gate
 });
 
 /*

@@ -13,8 +13,11 @@
                     {{ $occurrence_count }} Records
                 </x-button>
             </x-nav-link>
+            <a href="{{ url('/taxon/' . $taxon->tid . '/profileEdit') }}">
+                <x-icons.edit class="text-xl"/> Edit Taxon Profile
+            </a>
             <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
-                <x-icons.edit class="text-xl"/>
+                <x-icons.edit class="text-xl"/> Edit Taxon
             </a>
         </div>
     </div>
