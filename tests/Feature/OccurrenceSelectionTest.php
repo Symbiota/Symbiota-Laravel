@@ -26,7 +26,7 @@ class OccurrenceSelectionTest extends TestCase {
         ]);
 
         $params = [
-            'collid' => $collection->collid,
+            'collid' => $collection->collID,
             'locality' => fake()->country(),
         ];
 
@@ -34,7 +34,7 @@ class OccurrenceSelectionTest extends TestCase {
         assertTrue($inserted);
 
         $occurrence = Occurrence::buildSelectQuery([
-            'collid' => $collection->collid,
+            'collid' => $collection->collID,
         ])
             ->select('*')
             ->first();
