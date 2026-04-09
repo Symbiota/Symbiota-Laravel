@@ -46,14 +46,14 @@ async function validateTaxonForm(alpineData) {
     const unitname1 = document.querySelector('[name="unitname1"]');
     const unitname2 = document.querySelector('[name="unitname2"]');
     const unit2namevisible =
-        document.getElementById("unit2").style.display !== "none";
+        !alpineData.rankid || parseInt(alpineData.rankid) >= 220;
     const unitname3 = document.querySelector('[name="unitname3"]');
     const unit3namevisible =
-        document.getElementById("unit3").style.display !== "none";
+        !!(alpineData.rankid && parseInt(alpineData.rankid) >= 230);
     const rankid = document.querySelector('[name="rankid"]');
     const author = document.querySelector('[name="author"]');
     const cultivarEpithetVisible =
-        document.getElementById("cultivarEpithet-div").style.display !== "none";
+        !!(alpineData.rankid && parseInt(alpineData.rankid) >= 300);
     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
     if (!unitname1?.value) {

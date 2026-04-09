@@ -68,12 +68,14 @@
                 <h1 class="text-4xl font-bold">
                     {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
                 </h1>
-                <div class="mt-4">
-                    <h1 class="text-2xl font-bold">
-                        {{ __('taxonomy_taxonomyloader.SCINAME_SAVED_AS') }}:
-                        <span id="sciname-preview" class="text-primary"></span>
-                    </h1>
-                </div>
+                @if($mode === 'create')
+                    <div class="mt-4">
+                        <h1 class="text-2xl font-bold">
+                            {{ __('taxonomy_taxonomyloader.SCINAME_SAVED_AS') }}:
+                            <span id="sciname-preview" class="text-primary"></span>
+                        </h1>
+                    </div>
+                @endif
                 <form id="taxon-form"
                     class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
                     method="POST" action="{{ route('taxon.store') }}"
