@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -99,6 +100,17 @@ class CollectionController extends Controller {
 
     public static function mapSearchPage() {
         return view('pages/collections/map-search');
+    }
+
+    public static function updateStats(int $collId) {
+        global $SERVER_ROOT;
+        include_once(legacy_path("/classes/OccurrenceCollectionProfile.php"));
+        $collManager = new \OccurrenceCollectionProfile();
+        $collManager->setCollid($collId);
+
+        return response()->stream(function() use($collManager) {
+            $collManager->updateStatistics(true);
+        }, 200, ['X-Accel-Buffering' => 'no']);
     }
 }
 

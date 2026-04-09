@@ -1,7 +1,7 @@
 @props(['collection', 'stats'])
 
 @php
-global $DEFAULT_TITLE, $SERVER_HOST, $CLIENT_ROOT;
+global $DEFAULT_TITLE, $SERVER_HOST, $SERVER_ROOT, $CLIENT_ROOT;
 include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 
 function colUrl(string $url, string $extra_query = '') {
@@ -18,13 +18,12 @@ $isSpecimens = $collection->isSpecimens();
 $isObservations = $collection->isObservations();
 
 @endphp
-<x-margin-layout>
+<x-margin-layout x-data="{ showStatsMessages: false}">
     <x-breadcrumbs :items="[
         ['title' => __('header.H_HOME'), 'href' => url('')],
         ['title' => __('misc_collprofiles.COLLECTION_SEARCH'), 'href' => url('collections/search')],
         ['title' => __('misc_sharedterms.COLL_PROFILE')]
         ]" />
-
     <div class="flex items-center gap-4">
         @isset($collection->icon)
             <img class="h-20"src="{{ $collection->icon }}"/>
@@ -144,7 +143,6 @@ $isObservations = $collection->isObservations();
                 // TODO (Logan) Commented out in Symbiota repo should this be brought over? I can put it under a config flag
                 //__('misc_collprofiles.GUID_MANAGEMENT') => legacy_url('imagelib/admin/igsnmapper.php'),
                 __('misc_collprofiles.THUMBNAIL_MAINTENANCE') => legacy_url('imagelib/admin/thumbnailbuilder.php?collid=' . request('collid')),
-                __('misc_collstats.UPDATE_STATS') => colUrl('misc/collprofiles.php', '&action=UpdateStatistics'),
             ];
 
             @endphp
@@ -177,12 +175,45 @@ $isObservations = $collection->isObservations();
                 <x-list-of-links :links="$upload_links" />
 
                 <div class="font-bold text-lg">{{ __('misc_collprofiles.MAINTENANCE_TASKS') }}</div>
-                <x-list-of-links :links="$general_maintenance" />
+                <x-list-of-links :links="$general_maintenance">
+                    @csrf
+                    <li>
+                        <x-link
+                            class="cursor-pointer"
+                            hx-ext="hx-stream"
+                            hx-include="input[name=_token]"
+                            hx-patch="{{ url('collections/' . $collection->collID . '/stats') }}"
+                            hx-trigger="click"
+                            hx-target="#stats-output"
+                            x-on:htmx:after-request="setTimeout(() => location.reload(), 1000)"
+                            hx-swap="stream"
+                            @click="showStatsMessages = true"
+                            hx-indicator="#stats-loader"
+                        >
+                        {{ __('misc_collstats.UPDATE_STATS') }}
+                        </x-link>
+                    </li>
+                </x-list-of-links>
             </div>
             @endcan
         </div>
     </x-accordion>
     @endcan
+
+    <div x-show="showStatsMessages" class="flex flex-col gap-4" >
+        <div>
+            <div class="font-bold text-xl flex items-center gap-2">
+                {{ __('misc_collprofiles.UPDATE_STATISTICS') }}
+                <div  id="stats-loader" class="htmx-indicator stroke-accent w-7 h-7">
+                    <x-icons.loading/>
+                </div>
+            </div>
+            <hr class="mt-2"/>
+        </div>
+
+        <div id="stats-output" class="p-4 bg-base-200"></div>
+        <hr/>
+    </div>
 
     <div class="flex flex-col gap-2">
         <p>{!! Purify::clean($collection->fullDescription) !!}</p>
