@@ -14,7 +14,7 @@
     <form>
         <x-fieldset legend="Taxon Search">
             <x-taxa-search hide_selector="true" tidName="parenttid" />
-            <x-checkbox id="display-authors" label="Display authors" name="display-authors" />
+            <x-checkbox id="displayauthor" label="Display authors" name="displayauthor" />
             <x-checkbox id="match-on-whole-words" label="Match on whole words" name="match-on-whole-words" />
             <x-checkbox id="display-full-tree-below-family" label="Display full tree below family" name="display-full-tree-below-family" />
             <x-checkbox id="display-subgenera" label="Display species with subgenera" name="display-subgenera" />

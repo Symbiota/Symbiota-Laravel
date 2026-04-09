@@ -30,7 +30,7 @@ class TaxonomyController extends Controller {
         return $parent_tree;
     }
 
-    public static function getDirectChildren(int $tid) {
+    public static function getDirectChildren(int $tid, int $displayAuthor = 0) {
         $query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid')
             ->leftJoin('media as m', function (JoinClause $query) {
@@ -43,7 +43,7 @@ class TaxonomyController extends Controller {
             })->where('ts.taxauthid', 1)
             ->where('ts.parenttid', $tid)
             ->groupBy('t.tid')
-            ->select(['t.tid', 'sciName', 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]);
+            ->select(array_filter(['t.tid', 'sciName', $displayAuthor ? 't.author' : null, 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]));
 
         $direct_children = $query->get();
 
@@ -118,7 +118,7 @@ class TaxonomyController extends Controller {
         $parents = self::getParents($tid);
 
         $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid);
+        $children = self::getDirectChildren($tid, 1);
 
         $occurrence_count = self::getTaxonOccurrenceStats($tid);
         $taxa_descriptions = self::getTaxaDescriptions($tid);
@@ -141,7 +141,7 @@ class TaxonomyController extends Controller {
         $parents = self::getParents($tid);
 
         $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid);
+        $children = self::getDirectChildren($tid, 1);
 
         $occurrence_count = self::getTaxonOccurrenceStats($tid);
         $taxa_descriptions = self::getTaxaDescriptions($tid);
@@ -205,12 +205,19 @@ class TaxonomyController extends Controller {
     public static function show(Request $request) {
         $parents = [];
         $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
+        $displayAuthor = $request->filled('displayauthor') ? (int) $request->input('displayauthor') : 0;
+        // if($displayAuthor){
+        //     include_once legacy_path('/classes/TaxonomyDisplayManager.php');
+        //     $taxonomyDisplayManager = new \TaxonomyDisplayManager();
+        //     $taxonomyDisplayManager->setDisplayAuthor($displayAuthor);
+
+        // }
         if ($parentTid) {
             $parents = self::getParents($parentTid);
         }
         // @TODO get each parent's children
         foreach ($parents as $parent) {
-            $parent->children = self::getDirectChildren($parent->tid);
+            $parent->children = self::getDirectChildren($parent->tid, $displayAuthor);
         }
 
         $rankMap = [
