@@ -22,7 +22,7 @@
             <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>
         </div>
     @endif
-    <div x-data="{ tid: @js(request()->query('tid')) }">
+    <div x-data="{ tid: @js(request()->query('tid')), mode: @js(request()->query('mode')) }">
         @if ($canCreate)
             <div class="flex flex-col items-center justify-center alert alert-success mb-4"
                 id="successful-creation"
@@ -32,6 +32,7 @@
                     editor page): <span x-text="tid"></span>
                 </p>
             </div>
+            <div x-show="mode === 'edit'">Edit mode!</div>
             <div x-show="tid === null || isNaN(Number(tid))"
                 class="flex flex-col items-center justify-center"
                 x-init=" validate();

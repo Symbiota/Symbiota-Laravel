@@ -164,15 +164,35 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function createTaxon() {
+    public static function editTaxon(){
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $primaryKingdom = config('portal.primary_taxonomic_kingdom');
-        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get(); // @TODO this shouldn't always be plantae and should vary by portal
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
         $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
         $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
         ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
 
         return view('pages/taxon/create', [
+            'mode' => 'edit',
+            'targetTid' => request()->route('tid'),
+            'kingdoms' => $kingdoms,
+            'allTaxonRanks' => $allTaxonRanks,
+            'indContent' => $indContent,
+            'securityOptions' => $securityOptions,
+            'canCreate' => Gate::check('TAXON_EDITOR'),
+        ]);
+    }
+
+    public static function createTaxon() {
+        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
+        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
+        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
+        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
+        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
+
+        return view('pages/taxon/create', [
+            'mode' => 'create',
             'kingdoms' => $kingdoms,
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
@@ -195,7 +215,7 @@ class TaxonomyController extends Controller {
 
         if ($tidResult > 0) {
             // Redirect to the newly created taxon's page
-            return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+            return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
