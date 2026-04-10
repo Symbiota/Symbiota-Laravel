@@ -27,8 +27,8 @@ function updateLabels(alpineData) {
     }
 }
 
-async function checkNameExistence(sciname, rankid, author = "") {
-    if (!sciname || !rankid) {
+async function checkNameExistence(sciname, rankid, author = "", mode = "create") {
+    if (!sciname || !rankid || mode === "edit") { // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
         return false;
     }
     const params = new URLSearchParams({ sciname, rankid });
@@ -50,28 +50,29 @@ async function validateTaxonForm(alpineData) {
     const unitname3 = document.querySelector('[name="unitname3"]');
     const unit3namevisible =
         !!(alpineData.rankid && parseInt(alpineData.rankid) >= 230);
-    const rankid = document.querySelector('[name="rankid"]');
-    const author = document.querySelector('[name="author"]');
     const cultivarEpithetVisible =
         !!(alpineData.rankid && parseInt(alpineData.rankid) >= 300);
     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
-    if (!unitname1?.value) {
-        message = "Missing required field: " + alpineData.unit1Label + " Name";
-        return { isValid: false, message: message };
+    if(alpineData.mode === 'create') {
+        if (!unitname1?.value) {
+            message = "Missing required field: " + alpineData.unit1Label + " Name";
+            return { isValid: false, message: message };
+        }
+        if (unit2namevisible && !unitname2?.value) {
+            message = "Missing required field: " + alpineData.unit2Label + " Name";
+            return { isValid: false, message: message };
+        }
+        if (unit3namevisible && !unitname3?.value) {
+            message = "Missing required field: Infraspecific Epithet Name";
+            return { isValid: false, message: message };
+        }
+        if (cultivarEpithetVisible && !cultivarEpithet?.value) {
+            message = "Missing required field: Cultivar Epithet";
+            return { isValid: false, message: message };
+        }
     }
-    if (unit2namevisible && !unitname2?.value) {
-        message = "Missing required field: " + alpineData.unit2Label + " Name";
-        return { isValid: false, message: message };
-    }
-    if (unit3namevisible && !unitname3?.value) {
-        message = "Missing required field: Infraspecific Epithet Name";
-        return { isValid: false, message: message };
-    }
-    if (cultivarEpithetVisible && !cultivarEpithet?.value) {
-        message = "Missing required field: Cultivar Epithet";
-        return { isValid: false, message: message };
-    }
+
     if (!parenttid?.value) {
         message =
             "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
@@ -86,8 +87,9 @@ async function validateTaxonForm(alpineData) {
     ).trim();
     const exists = await checkNameExistence(
         sciName,
-        rankid?.value,
-        author?.value,
+        alpineData.rankid,
+        alpineData.author,
+        alpineData.mode,
     );
     if (exists) {
         message = sciName + " already exists in the database.";

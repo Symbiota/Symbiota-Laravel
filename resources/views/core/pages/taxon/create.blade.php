@@ -32,7 +32,6 @@
                 class="flex flex-col items-center justify-center"
                 x-init=" validate();
                  $watch('rankid', (newValue, oldValue) => {
-                     console.log('Watcher triggered! Old:', oldValue, 'New:', newValue);
                      updateLabels();
                      validate();
                  });" x-data="{
@@ -81,6 +80,7 @@
                     method="POST" action="{{ route('taxon.store') }}"
                     @change="validate(); updateScinameDisplay();">
                     @csrf
+                    <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                     <div class="w-3/4">
                         @if($mode === 'create')
                             <fieldset
@@ -123,7 +123,8 @@
                                     ->toArray()" />
                         </div>
                         <div id="unit1"
-                            class="flex items-center gap-2 mb-4">
+                            class="flex items-center gap-2 mb-4"
+                            x-show="mode !== 'edit'">
                             <div class="flex flex-col">
                                 <label class="text mb-1" for="unitind1-toggle"
                                     x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
@@ -139,15 +140,15 @@
                                         x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.NAME') }}'"></span>
                                     <span
                                         class="vertical-align text-error italic pr-1">*</span>
-                                </label>
-                                <x-input required name="unitname1"
+                                </label>    
+                                <x-input  required name="unitname1"
                                     id="unitname1" value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->unitName1 ?? '') : '' }}"
                                     x-ref="unitname1" />
                             </div>
                         </div>
 
                         <div id="unit2" class="flex items-center gap-2 mb-4"
-                            x-show="!rankid || parseInt(rankid) >= 220">
+                            x-show="mode !== 'edit' && (!rankid || parseInt(rankid) >= 220)">
                             <div class="flex flex-col">
                                 <label class="text mb-1" for="unitind2-toggle"
                                     x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
@@ -173,7 +174,7 @@
                         </div>
                         <div id="unit3"
                             class="inline-flex items-center gap-2"
-                            x-show="rankid && parseInt(rankid) >= 230">
+                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 230">
                             <x-input label="Infraspecific designation"
                                 name="unitind3" id="unitind3"
                                 placeholder="spp., var., forma, etc."
@@ -194,7 +195,7 @@
                         </div>
                         <div id="cultivarEpithet-div"
                             class="inline-flex items-center gap-2"
-                            x-show="rankid && parseInt(rankid) >= 300">
+                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 300">
                             <x-input
                                 label="{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}"
                                 name="cultivarEpithet" id="cultivarEpithet"
@@ -202,7 +203,7 @@
                         </div>
                         <div id="tradeName-div"
                             class="inline-flex items-center gap-2"
-                            x-show="rankid && parseInt(rankid) >= 300">
+                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 300">
                             <x-input
                                 label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
                                 name="tradeName" id="tradeName"
@@ -294,7 +295,7 @@
                                 Field</span>
                         </div>
                         <x-button class="mt-2" x-bind:disabled="!isValid"
-                            x-text=" isValid ? '{{ __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"></x-button>
+                            x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"></x-button>
                         <p><span id="validationMessage"
                                 class="text-sm italic text-red-700"
                                 x-text="validationMessage"></span>
