@@ -27,8 +27,12 @@ function updateLabels(alpineData) {
     }
 }
 
-async function checkNameExistence(sciname, rankid, author = "", mode = "create") {
-    if (!sciname || !rankid || mode === "edit") { // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
+async function checkNameExistence(sciname, rankid, author = "", preExistingTaxonInfo = null) {
+    const isTheSameAsPreExistingTaxon = preExistingTaxonInfo && preExistingTaxonInfo.sciname === sciname && preExistingTaxonInfo.rankid == rankid && preExistingTaxonInfo.author == author;
+    if (isTheSameAsPreExistingTaxon) {
+        return false;
+    }
+    if (!sciname || !rankid) { // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
         return false;
     }
     const params = new URLSearchParams({ sciname, rankid });
@@ -40,7 +44,7 @@ async function checkNameExistence(sciname, rankid, author = "", mode = "create")
     return data.exists;
 }
 
-async function validateTaxonForm(alpineData) {
+async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
@@ -54,23 +58,21 @@ async function validateTaxonForm(alpineData) {
         !!(alpineData.rankid && parseInt(alpineData.rankid) >= 300);
     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
-    if(alpineData.mode === 'create') {
-        if (!unitname1?.value) {
-            message = "Missing required field: " + alpineData.unit1Label + " Name";
-            return { isValid: false, message: message };
-        }
-        if (unit2namevisible && !unitname2?.value) {
-            message = "Missing required field: " + alpineData.unit2Label + " Name";
-            return { isValid: false, message: message };
-        }
-        if (unit3namevisible && !unitname3?.value) {
-            message = "Missing required field: Infraspecific Epithet Name";
-            return { isValid: false, message: message };
-        }
-        if (cultivarEpithetVisible && !cultivarEpithet?.value) {
-            message = "Missing required field: Cultivar Epithet";
-            return { isValid: false, message: message };
-        }
+    if (!unitname1?.value) {
+        message = "Missing required field: " + alpineData.unit1Label + " Name";
+        return { isValid: false, message: message };
+    }
+    if (unit2namevisible && !unitname2?.value) {
+        message = "Missing required field: " + alpineData.unit2Label + " Name";
+        return { isValid: false, message: message };
+    }
+    if (unit3namevisible && !unitname3?.value) {
+        message = "Missing required field: Infraspecific Epithet Name";
+        return { isValid: false, message: message };
+    }
+    if (cultivarEpithetVisible && !cultivarEpithet?.value) {
+        message = "Missing required field: Cultivar Epithet";
+        return { isValid: false, message: message };
     }
 
     if (!parenttid?.value) {
@@ -89,7 +91,7 @@ async function validateTaxonForm(alpineData) {
         sciName,
         alpineData.rankid,
         alpineData.author,
-        alpineData.mode,
+        preExistingTaxonInfo
     );
     if (exists) {
         message = sciName + " already exists in the database.";

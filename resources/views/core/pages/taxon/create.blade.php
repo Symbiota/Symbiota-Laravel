@@ -26,7 +26,7 @@
             <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>
         </div>
     @endif
-    <div x-data="{ tid: @js(request()->query('tid')), mode: @js(request()->query('mode')) }">
+    <div x-data="{ tid: @js(request()->query('tid')), mode: @js($mode) }">
         @if ($canCreateOrEdit)
             <div
                 class="flex flex-col items-center justify-center"
@@ -48,7 +48,7 @@
                     },
                     async validate() {
                         if (window.validateTaxonForm) {
-                            const validationResult = await window.validateTaxonForm(this);
+                            const validationResult = await window.validateTaxonForm(this, @js($taxonInfo));
                             this.isValid = validationResult.isValid;
                             this.validationMessage = validationResult.message;
                         }
@@ -77,7 +77,7 @@
                 @endif
                 <form id="taxon-form"
                     class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
-                    method="POST" action="{{ route('taxon.store') }}"
+                    method="POST" action="{{ $mode === 'create' ? route('taxon.store') : route('taxon.update') }}"
                     @change="validate(); updateScinameDisplay();">
                     @csrf
                     <x-input type="hidden" name="mode" id="mode" :value="$mode" />
@@ -123,8 +123,7 @@
                                     ->toArray()" />
                         </div>
                         <div id="unit1"
-                            class="flex items-center gap-2 mb-4"
-                            x-show="mode !== 'edit'">
+                            class="flex items-center gap-2 mb-4">
                             <div class="flex flex-col">
                                 <label class="text mb-1" for="unitind1-toggle"
                                     x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
@@ -148,7 +147,7 @@
                         </div>
 
                         <div id="unit2" class="flex items-center gap-2 mb-4"
-                            x-show="mode !== 'edit' && (!rankid || parseInt(rankid) >= 220)">
+                            x-show="(!rankid || parseInt(rankid) >= 220)">
                             <div class="flex flex-col">
                                 <label class="text mb-1" for="unitind2-toggle"
                                     x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
@@ -174,7 +173,7 @@
                         </div>
                         <div id="unit3"
                             class="inline-flex items-center gap-2"
-                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 230">
+                            x-show="rankid && parseInt(rankid) >= 230">
                             <x-input label="Infraspecific designation"
                                 name="unitind3" id="unitind3"
                                 placeholder="spp., var., forma, etc."
@@ -195,7 +194,7 @@
                         </div>
                         <div id="cultivarEpithet-div"
                             class="inline-flex items-center gap-2"
-                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 300">
+                            x-show="rankid && parseInt(rankid) >= 300">
                             <x-input
                                 label="{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}"
                                 name="cultivarEpithet" id="cultivarEpithet"
@@ -203,7 +202,7 @@
                         </div>
                         <div id="tradeName-div"
                             class="inline-flex items-center gap-2"
-                            x-show="mode !== 'edit' && rankid && parseInt(rankid) >= 300">
+                            x-show="rankid && parseInt(rankid) >= 300">
                             <x-input
                                 label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
                                 name="tradeName" id="tradeName"

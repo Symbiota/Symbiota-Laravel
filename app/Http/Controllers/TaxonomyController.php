@@ -221,13 +221,13 @@ class TaxonomyController extends Controller {
     public static function store() {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $loaderObj = new \TaxonomyEditorManager();
+        $editorManager = new \TaxonomyEditorManager();
 
-        // if (! $loaderObj->validateNewName($postData)) {
+        // if (! $editorManager->validateNewName($postData)) {
         //     // Redirect back with error message
         //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
         // } else { // @TODO to be fixed in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
-        $tidResult = $loaderObj->loadNewName($postData);
+        $tidResult = $editorManager->loadNewName($postData);
         // }
 
         if ($tidResult > 0) {
@@ -235,6 +235,20 @@ class TaxonomyController extends Controller {
             return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+        }
+    }
+
+    public static function update(){
+        $postData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $status = $editorManager->submitTaxonEdits($postData); // @TODO check what's up with securitystatusstart
+
+        if ($status === true) {
+            // Redirect to the newly created taxon's page
+            return redirect()->route('taxon.view', ['tid' => $postData['tid']])->with('success', 'Taxon updated successfully!');
+        } else {
+            return redirect()->back()->withInput()->withErrors(['error' => $status]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
     }
 }
