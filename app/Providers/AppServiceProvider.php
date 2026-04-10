@@ -64,6 +64,17 @@ class AppServiceProvider extends ServiceProvider {
             ]);
         });
 
+        // Todo implement usertaxonomy
+        Gate::define('SECURED_READER', function (User $user, int $collId) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::RARE_SPP_ADMIN,
+                UserRole::RARE_SPP_READER_ALL,
+                UserRole::COLL_ADMIN=> $collId,
+                UserRole::COLL_EDITOR=> $collId,
+            ]);
+        });
+
         Gate::define('PROJ_ADMIN', function (User $user, $pid) {
             return $user->hasOneRoles([
                 UserRole::SUPER_ADMIN,

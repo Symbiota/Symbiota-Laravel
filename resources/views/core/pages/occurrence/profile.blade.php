@@ -15,14 +15,13 @@
 @php
 
 function getLocalityStr($occur) {
-    $localityArr = [
-        $occur->country,
-        $occur->stateProvince,
-        $occur->county,
-        $occur->municipality,
-    ];
+    $localityArr = [];
 
-    $locality_attributes = ['Locality' => implode(', ', $localityArr)];
+    if($occur->country) $localityArr[] = $occur->country;
+    if($occur->stateProvince) $localityArr[] = $occur->stateProvince;
+    if($occur->county) $localityArr[] = $occur->county;
+    if($occur->municipality) $localityArr[] = $occur->municipality;
+
     return implode(', ', $localityArr);
     if($occur->recordSecurity == 1) {
         // notice Locality details protected
@@ -156,9 +155,11 @@ foreach($user_datasets as $datasets) {
                 @endif
 
                 <x-text-label :label="__('ident_key.TAXON')">
-                    <i class="font-italic">{{ $occurrence->sciname }}</i>
-                    @if($occurrence->scientificNameAuthorship)
-                        ({{$occurrence->scientificNameAuthorship}})
+                    @if($occurrence->sciname)
+                        <i class="font-italic">{{ $occurrence->sciname }}</i>
+                        @if($occurrence->scientificNameAuthorship)
+                            ({{$occurrence->scientificNameAuthorship}})
+                        @endif
                     @endif
                 </x-text-label>
 
@@ -211,7 +212,23 @@ foreach($user_datasets as $datasets) {
                     __('individual.EXCICCATI_SERIES') => 'todo',
                     __('individual.MATERIAL_SAMPLES') => 'todo',
                 ] as $label => $value)
-                <x-text-label :label="$label">{{ $value }}</x-text-label>
+                @if($label == __('imagelib_imgdetails.LOCALITY'))
+                    <x-text-label :label="$label">{{ $value }}</x-text-label>
+                    @if($occurrence->recordSecurity)
+                    <div class="font-bold bg-warning p-1 rounded-md text-warning-content">
+                        <div>
+                        {{ __('individual.DETAILS_PROTECTED') }}: {{ __('individual.PROTECTED_REASON') }}
+                        </div>
+                        <div>
+                        @can('SECURED_READER', $collection->collID)
+                        {{ __('individual.ACCESS_GRANTED') }}
+                        @endcan
+                        </div>
+                    </div>
+                    @endif
+                @else
+                    <x-text-label :label="$label">{{ $value }}</x-text-label>
+                @endif
                 @endforeach
 
                 <x-text-label :label="__('misc_collmetadata.LICENSE')">

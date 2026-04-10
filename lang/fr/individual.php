@@ -134,4 +134,6 @@ return [
     'PERMISSION_ERROR' => 'ERREUR lors de la suppression du bon : erreur d\'autorisation',
     'CULT_STATUS' => 'Statut de Culture',
     'CULTIVATED' => 'Cultivé',
+    'EVENT_ID' => 'Event ID',
+    'DETAILS_PROTECTED' => 'Détails protégés'
 ];
