@@ -97,7 +97,7 @@ $legacy_routes = [
 
     // Collections
     'collections/list.php' => '/collections/list',
-    'collections/misc/collprofiles.php' => '/collections',
+    'collections/misc/collprofiles.php' => '/collections/' . $_REQUEST['collid'],
 
     // Media
     'imagelib/index.php' => '/media/library',

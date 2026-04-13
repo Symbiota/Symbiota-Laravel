@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'USAGE_POLICY' => 'Política de uso',
     'RSS_FEED' => 'Feed RSS',
     'CONTACT' => 'Contatos',
     'HOMEPAGE' => 'Página inicial',
@@ -17,15 +18,12 @@ return [
     'SKELETAL' => 'Adicionar registros esqueléticos',
     'EDIT_EXISTING' => 'Editar registros de ocorrência existentes',
     'ADD_BATCH_DETER' => 'Adicionar determinações de lote/ajustes de nomenclatura',
-    'PRINT_LABELS' => 'Imprimir etiquetas de amostras',
-    'PRINT_ANNOTATIONS' => 'Imprimir etiquetas de anotações',
     'TRAIT_CODING_TOOLS' => 'Ferramentas de codificação de características de ocorrência',
     'TRAIT_CODING' => 'Codificação de características de imagens',
     'TRAIT_MINING' => 'Mineração de características do texto literal',
     'BATCH_GEOREF' => 'Amostras de Georreferenciação em Lote',
     'LOAN_MANAGEMENT' => 'Gestão de Empréstimos',
     'ADMIN_CONTROL' => 'Painel de controle de administração',
-    'VIEW_COMMENTS' => 'Ver comentários postados',
     'UNREVIEWED_COMMENTS' => 'comentários não revisados',
     'EDIT_META' => 'Editar metadados',
     'MANAGE_PERMISSIONS' => 'Gerenciar permissões',
@@ -91,11 +89,13 @@ return [
     'GEOG_DIST_COUNTRIES' => 'Distribuição Geográfica - Países',
     'COLLECTION_PROJECTS' => 'Coleções de História Natural e Projetos de Observação',
     'ADVANCED_SEARCH_THIS_COLLECTION' => 'Pesquisa avançada nesta coleção',
-    'IMAGE_SEARCH_THIS_COLLECTION' => 'Pesquisa multimídia nesta coleção',
+    'MEDIA_SEARCH_THIS_COLLECTION' => 'Pesquisa multimídia nesta coleção',
     'IDENTIFIER_PLACEHOLDER_LIST' => 'Pesquise por número de catálogo, ID de ocorrência ou ID de registro.',
     'MORE_INFO_ALT' => 'Mais informações sobre o número de catálogo',
     'SEARCH_BY_TAXON' => 'Pesquisa por táxon',
     'OCCURENCE_IDENTIFIER' => 'Número de catálogo',
     'INFO_ALT' => 'Ícone de informação indicando link para informações sobre importação/atualização',
     'LAST_MODIFIED' => 'Última modificação',
+    'EML_FILE' => 'Arquivo EML',
+    'TOTAL_TAXA_INCLUDING' => 'táxons totais (incluindo subsp. e var.)',
 ];

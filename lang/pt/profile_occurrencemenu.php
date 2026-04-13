@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'NO_PROJECTS' => 'Você ainda não possui permissões de gerenciamento para nenhum projeto de ocorrência.',
+    'TOTAL_RECORDS' => 'Contagem total de registros',
+    'DISPLAY_ALL' => 'Exibir todos os registros',
+    'SEARCH_RECORDS' => 'Registros de pesquisa',
+    'ADD_RECORD' => 'Adicionar um novo registro',
+    'DUP_CLUSTER' => 'Agrupamento de duplicados',
+    'PRINT_LABELS' => 'Imprimir etiquetas',
+    'PRINT_ANNOTATIONS' => 'Imprimir Etiquetas de Anotação',
+    'SUBMIT_OBSERVATION' => 'Enviar observação com comprovante de imagem',
+    'REVIEW_EDITS' => 'Revisar/Verificar Edições de Ocorrência',
+    'DOWNLOAD_BACKUP' => 'Baixar arquivo de backup (extração CSV)',
+    'VIEW_COMMENTS' => 'Ver comentários de usuários',
+    'UNREVIEWED' => 'comentários não revisados',
+    'DATA_CLEANING' => 'Módulo de limpeza de dados',
+    'COL_MANAGE' => 'Gestão de Cobranças',
+    'OBS_MANAGEMENT' => 'Gestão de Projetos de Observação',
+    'GEN_OBS_ADMIN' => 'Administração Geral de Observação',
+    'MISC_TOOLS' => 'Ferramentas diversas',
+    'CROSS_COL_GEOREF' => 'Ferramenta de georreferenciamento entre coleções',
+    'CROSS_COL_TAXON' => 'Ferramenta de limpeza de taxonomia de coleções cruzadas',
+    'OCCURRENCE_MENU' => 'Menu de Ocorrências',
+];

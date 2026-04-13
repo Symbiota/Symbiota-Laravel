@@ -10,6 +10,8 @@ import 'tinymce/themes/silver/theme.min.js';
 import 'tinymce/models/dom/model.min.js';
 import './components/autocomplete-input';
 import './components/taxonomy-create';
+import './components/chart';
+import './htmx-extensions/html-streaming';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -21,7 +23,6 @@ window.L = L;
 window.type = true;
 // See Github https://github.com/Leaflet/Leaflet.draw/issues/1013 for context
 window.radius = undefined;
-
 window.htmx = htmx;
 
 window.Alpine = Alpine;
