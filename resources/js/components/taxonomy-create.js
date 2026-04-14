@@ -27,12 +27,36 @@ function updateLabels(alpineData) {
     }
 }
 
-async function checkNameExistence(sciname, rankid, author = "", preExistingTaxonInfo = null) {
-    const isTheSameAsPreExistingTaxon = preExistingTaxonInfo && preExistingTaxonInfo.sciname === sciname && preExistingTaxonInfo.rankid == rankid && preExistingTaxonInfo.author == author;
+async function checkNameExistence(
+    sciname,
+    rankid,
+    author = "",
+    preExistingTaxonInfo = null,
+) {
+    console.log("deleteMe preExistingTaxonInfo in checkNameExistence is: ");
+    console.log(preExistingTaxonInfo);
+    const preExistingSciname = (
+        preExistingTaxonInfo.unitname1 +
+        " " +
+        preExistingTaxonInfo.unitname2 +
+        " " +
+        preExistingTaxonInfo.unitname3
+    ).trim();
+    console.log("deleteMe preExistingSciname is: ");
+    console.log(preExistingSciname);
+    const isTheSameAsPreExistingTaxon =
+        preExistingTaxonInfo &&
+        preExistingSciname === sciname &&
+        preExistingTaxonInfo.rankid == rankid &&
+        preExistingTaxonInfo.author == author;
+    console.log("deleteMe isTheSameAsPreExistingTaxon is: ");
+    console.log(isTheSameAsPreExistingTaxon);
+
     if (isTheSameAsPreExistingTaxon) {
         return false;
     }
-    if (!sciname || !rankid) { // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
+    if (!sciname || !rankid) {
+        // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
         return false;
     }
     const params = new URLSearchParams({ sciname, rankid });
@@ -45,6 +69,13 @@ async function checkNameExistence(sciname, rankid, author = "", preExistingTaxon
 }
 
 async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
+    console.log("deleteMe validateTaxonForm entered and alpineData is: ");
+    console.log(alpineData);
+    if (preExistingTaxonInfo) {
+        return validateTaxonEditForm(preExistingTaxonInfo, alpineData);
+    }
+    console.log("deleteMe preExistingTaxonInfo is: ");
+    console.log(preExistingTaxonInfo);
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
@@ -52,10 +83,12 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
     const unit2namevisible =
         !alpineData.rankid || parseInt(alpineData.rankid) >= 220;
     const unitname3 = document.querySelector('[name="unitname3"]');
-    const unit3namevisible =
-        !!(alpineData.rankid && parseInt(alpineData.rankid) >= 230);
-    const cultivarEpithetVisible =
-        !!(alpineData.rankid && parseInt(alpineData.rankid) >= 300);
+    const unit3namevisible = !!(
+        alpineData.rankid && parseInt(alpineData.rankid) >= 230
+    );
+    const cultivarEpithetVisible = !!(
+        alpineData.rankid && parseInt(alpineData.rankid) >= 300
+    );
     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
     if (!unitname1?.value) {
@@ -91,13 +124,51 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
         sciName,
         alpineData.rankid,
         alpineData.author,
-        preExistingTaxonInfo
+        preExistingTaxonInfo,
     );
     if (exists) {
         message = sciName + " already exists in the database.";
         return { isValid: false, message: message };
     }
     return { isValid: true, message: "" };
+}
+
+async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
+    const sciName = (
+        alpineData.unitname1 +
+        " " +
+        alpineData.unitname2 +
+        " " +
+        alpineData.unitname3
+    ).trim();
+    const isDuplicate = await checkNameExistence(
+        sciName,
+        alpineData.rankid,
+        alpineData.author,
+        preExistingTaxonInfo,
+    );
+    if (isDuplicate) {
+        return false;
+    }
+    if (alpineData.unitname1?.trim() == "") {
+        // @TODO why is this necessary?
+        alert("Unitname 1 field must have a value"); // @TODO confirm
+        return false;
+    }
+    return true;
+}
+
+function isTheSameEntryAsItStarted(f, originalForm) {
+    return new Promise((resolve) => {
+        if (f != null && originalForm != null && !hasChanged(f, originalForm)) {
+            document.getElementById("error-display").textContent =
+                processTextContent("");
+            resolve(true);
+            return;
+        } else {
+            resolve(false);
+        }
+    });
 }
 
 const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
@@ -154,7 +225,8 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
-async function parseName() { //lightly modified from original function in old codebase
+async function parseName() {
+    //lightly modified from original function in old codebase
     const taxonForm = document.getElementById("taxon-form");
     if (!taxonForm.quickparser.value) {
         return;
