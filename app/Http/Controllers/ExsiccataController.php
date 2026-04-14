@@ -6,13 +6,13 @@ use App\Models\UserRole;
 use Illuminate\Http\Request;
 
 class ExsiccataController extends Controller {
-
     //title list page
     public static function index(Request $request) {
         $filters = self::filters($request);
 
-        if (in_array($request->query('formsubmit'), ['dlexs', 'dlexs_titleOnly'], true))
+        if (in_array($request->query('formsubmit'), ['dlexs', 'dlexs_titleOnly'], true)) {
             return self::downloadIndex($filters, $request->query('formsubmit') === 'dlexs_titleOnly');
+        }
 
         $exsManager = self::exsManager();
 
@@ -55,8 +55,9 @@ class ExsiccataController extends Controller {
         $filters = self::filters($request);
         $title = $exsManager->getTitleObj($ometid);
 
-        if (!$title)
+        if (! $title) {
             abort(404);
+        }
 
         $selectLookupArr = $exsManager->getSelectLookupArr();
         unset($selectLookupArr[$ometid]);
@@ -95,14 +96,14 @@ class ExsiccataController extends Controller {
         } elseif ($action === 'Delete Exsiccata') {
             $status = $exsManager->deleteTitle($ometid);
             $status = $status ?: 'SUCCESS: exsiccata title deleted';
-            if (!str_starts_with($status, 'ERROR')) {
+            if (! str_starts_with($status, 'ERROR')) {
                 $redirectPath = '/exsiccata';
             }
         } elseif ($action === 'Merge Exsiccatae') {
             $targetOmetid = (int) $request->input('targetometid');
             $status = $exsManager->mergeTitles($ometid, $targetOmetid);
             $status = $status ?: 'SUCCESS: exsiccata titles merged';
-            if ($targetOmetid && !str_starts_with($status, 'ERROR')) {
+            if ($targetOmetid && ! str_starts_with($status, 'ERROR')) {
                 $redirectPath = '/exsiccata/' . $targetOmetid;
             }
         } elseif ($action === 'Add New Number') {
@@ -121,8 +122,9 @@ class ExsiccataController extends Controller {
         $filters = self::filters($request);
         $number = $exsManager->getExsNumberObj($omenid);
 
-        if (!$number || (int) ($number['ometid'] ?? 0) !== $ometid)
+        if (! $number || (int) ($number['ometid'] ?? 0) !== $ometid) {
             abort(404);
+        }
 
         $occurrenceGroups = $exsManager->getExsOccArr($omenid);
         $selectLookupArr = $exsManager->getSelectLookupArr();
@@ -168,14 +170,16 @@ class ExsiccataController extends Controller {
         } elseif ($action === 'Delete Number') {
             $status = $exsManager->deleteNumber($omenid);
             $status = $status ?: 'SUCCESS: exsiccata number deleted';
-            if (!str_starts_with($status, 'ERROR'))
+            if (! str_starts_with($status, 'ERROR')) {
                 $redirectPath = '/exsiccata/' . $ometid;
+            }
         } elseif ($action === 'Transfer Number') {
             $targetOmetid = (int) trim((string) $request->input('targetometid'), 'k'); // Added "k" prefix to key so that Chrom would maintain the correct sort order (from legacy code)
             $status = $exsManager->transferNumber($omenid, $targetOmetid);
             $status = $status ?: 'SUCCESS: exsiccata number transferred';
-            if ($targetOmetid && !str_starts_with($status, 'ERROR'))
+            if ($targetOmetid && ! str_starts_with($status, 'ERROR')) {
                 $redirectPath = '/exsiccata/' . $targetOmetid;
+            }
         } elseif ($action === 'Add Specimen Link') {
             $data = $request->all();
             $data['omenid'] = $omenid;
@@ -206,6 +210,7 @@ class ExsiccataController extends Controller {
     //get the exiccatae manager from legacy class
     private static function exsManager(string $type = 'readonly') {
         include_once legacy_path('/classes/OccurrenceExsiccatae.php');
+
         return new \OccurrenceExsiccatae($type);
     }
 
@@ -224,8 +229,10 @@ class ExsiccataController extends Controller {
     private static function isEditor(Request $request) {
         $user = $request->user();
 
-        if (!$user)
+        if (! $user) {
             return false;
+        }
+
         //todo test if user not super admin and has collection editor permission
         return $user->hasOneRoles([UserRole::SUPER_ADMIN]) || $user->roles()->where('role', UserRole::COLL_ADMIN)->exists();
     }
@@ -233,14 +240,16 @@ class ExsiccataController extends Controller {
     // check isEditor if attempted direct request (todo tes)
     private static function authorizeEdit(Request $request) {
         //
-        if (!self::isEditor($request))
+        if (! self::isEditor($request)) {
             abort(403);
+        }
     }
 
     //get the user name for lagacy class
     private static function editedBy(Request $request) {
 
         $user = $request->user();
+
         return (string) ($user?->username ?? $user?->name ?? '');
     }
 
@@ -278,6 +287,7 @@ class ExsiccataController extends Controller {
             $titleOnly,
         );
         $content = ob_get_clean();
+
         //get the file as csv
         return response($content, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
