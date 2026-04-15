@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 class ExsiccataController extends Controller {
     //title list page
     public static function index(Request $request) {
+        $ometid = (int) $request->query('ometid', 0);
+        $omenid = (int) $request->query('omenid', 0);
+
+        if ($omenid) {
+            return self::number($request, $ometid, $omenid);
+        }
+
+        if ($ometid) {
+            return self::title($request, $ometid);
+        }
+
         $filters = self::filters($request);
 
         if (in_array($request->query('formsubmit'), ['dlexs', 'dlexs_titleOnly'], true)) {
@@ -34,29 +45,39 @@ class ExsiccataController extends Controller {
 
     //adding exiccatae on index page
     public static function store(Request $request) {
+        $omenid = (int) $request->input('omenid', 0);
+        $ometid = (int) $request->input('ometid', 0);
+
+        if ($omenid) {
+            return self::storeNumber($request, $ometid, $omenid);
+        }
+
+        if ($ometid) {
+            return self::storeTitle($request, $ometid);
+        }
+
         self::authorizeEdit($request);
 
         $exsManager = self::exsManager('write');
         $action = (string) $request->input('formsubmit');
         $status = '';
-        $redirectPath = '/exsiccata';
 
         if ($action === 'Add Exsiccata Title') {
             $status = $exsManager->addTitle($request->all(), self::editedBy($request));
             $status = $status ?: 'SUCCESS: exsiccata title added';
         }
 
-        return self::redirectWithStatus($redirectPath, $request, $status);
+        return self::redirectWithStatus($request, $status);
     }
 
-    //Displays the exsiccata title, if the ometid doesn't exist throw 404 (?)
+    //Displays the exsiccata title
     public static function title(Request $request, int $ometid) {
         $exsManager = self::exsManager();
         $filters = self::filters($request);
         $title = $exsManager->getTitleObj($ometid);
 
         if (! $title) {
-            abort(404);
+            return self::missingRecordView($request, $ometid, null);
         }
 
         $selectLookupArr = $exsManager->getSelectLookupArr();
@@ -86,34 +107,34 @@ class ExsiccataController extends Controller {
         $exsManager = self::exsManager('write');
         $action = (string) $request->input('formsubmit');
         $status = '';
-        $redirectPath = '/exsiccata/' . $ometid;
+        $redirectParams = ['ometid' => $ometid];
 
         if ($action === 'Save') {
-            $daata = $request->all();
-            $daata['ometid'] = $ometid;
-            $status = $exsManager->editTitle($daata, self::editedBy($request));
+            $data = $request->all();
+            $data['ometid'] = $ometid;
+            $status = $exsManager->editTitle($data, self::editedBy($request));
             $status = $status ?: 'SUCCESS: exsiccata title updated';
         } elseif ($action === 'Delete Exsiccata') {
             $status = $exsManager->deleteTitle($ometid);
             $status = $status ?: 'SUCCESS: exsiccata title deleted';
             if (! str_starts_with($status, 'ERROR')) {
-                $redirectPath = '/exsiccata';
+                $redirectParams = [];
             }
         } elseif ($action === 'Merge Exsiccatae') {
             $targetOmetid = (int) $request->input('targetometid');
             $status = $exsManager->mergeTitles($ometid, $targetOmetid);
             $status = $status ?: 'SUCCESS: exsiccata titles merged';
             if ($targetOmetid && ! str_starts_with($status, 'ERROR')) {
-                $redirectPath = '/exsiccata/' . $targetOmetid;
+                $redirectParams = ['ometid' => $targetOmetid];
             }
         } elseif ($action === 'Add New Number') {
-            $daata = $request->all();
-            $daata['ometid'] = $ometid;
-            $status = $exsManager->addNumber($daata);
+            $data = $request->all();
+            $data['ometid'] = $ometid;
+            $status = $exsManager->addNumber($data);
             $status = $status ?: 'SUCCESS: exsiccata number added';
         }
 
-        return self::redirectWithStatus($redirectPath, $request, $status);
+        return self::redirectWithStatus($request, $status, $redirectParams);
     }
 
     //Display omenid page
@@ -122,9 +143,11 @@ class ExsiccataController extends Controller {
         $filters = self::filters($request);
         $number = $exsManager->getExsNumberObj($omenid);
 
-        if (! $number || (int) ($number['ometid'] ?? 0) !== $ometid) {
-            abort(404);
+        if (! $number || ($ometid && (int) ($number['ometid'] ?? 0) !== $ometid)) {
+            return self::missingRecordView($request, $ometid, $omenid);
         }
+
+        $ometid = (int) ($number['ometid'] ?? $ometid);
 
         $occurrenceGroups = $exsManager->getExsOccArr($omenid);
         $selectLookupArr = $exsManager->getSelectLookupArr();
@@ -160,7 +183,7 @@ class ExsiccataController extends Controller {
 
         $action = (string) $request->input('formsubmit');
         $status = '';
-        $redirectPath = '/exsiccata/' . $ometid . '/' . $omenid;
+        $redirectParams = ['ometid' => $ometid, 'omenid' => $omenid];
 
         if ($action === 'Save Edits') {
             $data = $request->all();
@@ -171,14 +194,14 @@ class ExsiccataController extends Controller {
             $status = $exsManager->deleteNumber($omenid);
             $status = $status ?: 'SUCCESS: exsiccata number deleted';
             if (! str_starts_with($status, 'ERROR')) {
-                $redirectPath = '/exsiccata/' . $ometid;
+                $redirectParams = ['ometid' => $ometid];
             }
         } elseif ($action === 'Transfer Number') {
             $targetOmetid = (int) trim((string) $request->input('targetometid'), 'k'); // Added "k" prefix to key so that Chrom would maintain the correct sort order (from legacy code)
             $status = $exsManager->transferNumber($omenid, $targetOmetid);
             $status = $status ?: 'SUCCESS: exsiccata number transferred';
             if ($targetOmetid && ! str_starts_with($status, 'ERROR')) {
-                $redirectPath = '/exsiccata/' . $targetOmetid;
+                $redirectParams = ['ometid' => $targetOmetid];
             }
         } elseif ($action === 'Add Specimen Link') {
             $data = $request->all();
@@ -204,7 +227,7 @@ class ExsiccataController extends Controller {
             $status = $status ?: 'SUCCESS: specimen transferred';
         }
 
-        return self::redirectWithStatus($redirectPath, $request, $status);
+        return self::redirectWithStatus($request, $status, $redirectParams);
     }
 
     //get the exiccatae manager from legacy class
@@ -254,16 +277,18 @@ class ExsiccataController extends Controller {
     }
 
     //keep the status/error after form submit
-    private static function redirectWithStatus(string $path, Request $request, string $status) {
+    private static function redirectWithStatus(Request $request, string $status, array $redirectParams = []) {
         //keep ccurrent filters(?) in queryString instead of url
-        return redirect($path . self::queryString($request))
+        return redirect(route('exsiccata.index') . self::queryString($request, $redirectParams))
             ->with('status', $status)
             ->with('statusType', str_starts_with($status, 'SUCCESS') ? 'success' : 'error');
     }
 
     //helper function to preserve the filter values, and normalize checkbox/select/int cast
-    private static function queryString(Request $request) {
+    private static function queryString(Request $request, array $redirectParams = []) {
         $query = array_filter([
+            'ometid' => $redirectParams['ometid'] ?? null,
+            'omenid' => $redirectParams['omenid'] ?? null,
             'searchterm' => $request->input('searchterm'),
             'specimenonly' => $request->input('specimenonly'),
             'imagesonly' => $request->input('imagesonly'),
@@ -272,6 +297,26 @@ class ExsiccataController extends Controller {
         ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0');
 
         return $query ? '?' . http_build_query($query) : '';
+    }
+
+    // function for missing record display
+    private static function missingRecordView(Request $request, ?int $ometid, ?int $omenid) {
+        return view('pages.collections.exsiccata', [
+            ...self::filters($request),
+            'ometid' => $ometid,
+            'omenid' => $omenid,
+            'title' => [],
+            'number' => [],
+            'titles' => [],
+            'numbers' => [],
+            'occurrences' => [],
+            'collections' => [],
+            'selectLookupArr' => [],
+            'isEditor' => self::isEditor($request),
+            'isDetailPage' => true,
+            'isOccurrencePage' => (bool) $omenid,
+            'unableLocateRecord' => true,
+        ]);
     }
 
     //download handle ->legacy function

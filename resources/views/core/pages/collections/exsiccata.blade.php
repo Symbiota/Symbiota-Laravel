@@ -16,6 +16,7 @@
     $ometid = $ometid ?? null;
     $omenid = $omenid ?? null;
     $selectLookupArr = $selectLookupArr ?? [];
+    $unableLocateRecord = $unableLocateRecord ?? false;
 
     $query = array_filter([
         'searchterm' => $searchTerm,
@@ -25,14 +26,8 @@
         'sortby' => $sortBy,
     ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0');
     $queryString = $query ? '?' . http_build_query($query) : '';
-    //store the post depending on page
     $postAction = route('exsiccata.store');
-    if ($isDetailPage) {
-        $currentOmetid = $ometid ?? ($title['ometid'] ?? null);
-        $postAction = $isOccurrencePage
-            ? route('exsiccata.number.store', ['ometid' => $currentOmetid, 'omenid' => $omenid])
-            : route('exsiccata.title.store', ['ometid' => $currentOmetid]);
-    }
+    $currentOmetid = $ometid ?? ($title['ometid'] ?? null);
 
     // Breadcrumbs building
     $breadcrumbs = [
@@ -44,15 +39,24 @@
     } else {
         $breadcrumbs[] = [
             'title' => __('exsiccati.RET_MAIN_EXS_INDEX'),
-            'href' => url('/exsiccata' . $queryString),
+            'href' => route('exsiccata.index') . $queryString,
         ];
-        $breadcrumbs[] = [
-            'title' => $title['title'] ?? '',
-            'href' => url('/exsiccata/' . ($ometid ?? ($title['ometid'] ?? null)) . $queryString),
-        ];
+        if (! $unableLocateRecord) {
+            $breadcrumbs[] = [
+                'title' => $title['title'] ?? '',
+                'href' => route('exsiccata.index') . '?' . http_build_query(array_filter([
+                    'ometid' => $currentOmetid,
+                    'searchterm' => $searchTerm,
+                    'specimenonly' => $specimenOnly,
+                    'imagesonly' => $imagesOnly,
+                    'collid' => $collId,
+                    'sortby' => $sortBy,
+                ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')),
+            ];
 
-        if ($isOccurrencePage)
-            $breadcrumbs[] = ['title' => '#' . ($number['exsnumber'] ?? '')];
+            if ($isOccurrencePage)
+                $breadcrumbs[] = ['title' => '#' . ($number['exsnumber'] ?? '')];
+        }
     }
 @endphp
 
@@ -152,8 +156,12 @@
             </div>
         @endif
 
+        @if($unableLocateRecord)
+            <div class="text-lg font-semibold">
+                {{ __('exsiccati.UNABLE_LOCATE_REC') }}
+            </div>
         {{--Index Page--}}
-        @if(!$isDetailPage)
+        @elseif(!$isDetailPage)
             <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
                 <div class="flex-1">
                     <div class="flex items-center justify-between gap-4">
@@ -230,7 +238,14 @@
                                 @foreach($titles as $titleId => $titleData)
                                     <li>
                                         <div>
-                                            <a href="{{ url('/exsiccata/' . $titleId . $queryString) }}" class="font-medium text-link-darker underline underline-offset-2">
+                                            <a href="{{ route('exsiccata.index') . '?' . http_build_query(array_filter([
+                                                'ometid' => $titleId,
+                                                'searchterm' => $searchTerm,
+                                                'specimenonly' => $specimenOnly,
+                                                'imagesonly' => $imagesOnly,
+                                                'collid' => $collId,
+                                                'sortby' => $sortBy,
+                                            ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="font-medium text-link-darker underline underline-offset-2">
                                                 {{ $titleData['title'] ?? '' }}
                                             </a>
                                         </div>
@@ -376,6 +391,7 @@
                 <div id="exseditdiv" class="hidden space-y-4 rounded border border-slate-300 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsAddForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.TITLE') }}</label>
                             <input name="title" type="text" value="{{ $title['title'] ?? '' }}" class="mt-1 w-[90%] rounded border px-3 py-2" />
@@ -418,6 +434,7 @@
 
                     <form method="POST" action="{{ $postAction }}" onsubmit="return window.confirm('{{ __('exsiccati.SURE_DELETE_EXS') }}');">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <x-button name="formsubmit" type="submit" value="Delete Exsiccata" variant="error" class="text-sm">
                             {{ __('exsiccati.DEL_EXS') }}
                         </x-button>
@@ -425,6 +442,7 @@
 
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsMergeForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
                             <select name="targetometid" class="mt-1 w-full max-w-[90%] rounded border px-3 py-2">
@@ -443,6 +461,7 @@
                 <div id="numadddiv" class="hidden rounded border border-slate-300 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.EXS_NUM') }}</label>
                             <input name="exsnumber" type="text" class="mt-1 w-full max-w-[180px] rounded border px-3 py-2" />
@@ -467,7 +486,15 @@
                     @foreach($numbers as $numberId => $numberData)
                         <li>
                             <div>
-                                <a href="{{ url('/exsiccata/' . ($ometid ?? ($title['ometid'] ?? null)) . '/' . $numberId . $queryString) }}" class="font-medium text-link-darker underline underline-offset-2">
+                                <a href="{{ route('exsiccata.index') . '?' . http_build_query(array_filter([
+                                    'ometid' => $currentOmetid,
+                                    'omenid' => $numberId,
+                                    'searchterm' => $searchTerm,
+                                    'specimenonly' => $specimenOnly,
+                                    'imagesonly' => $imagesOnly,
+                                    'collid' => $collId,
+                                    'sortby' => $sortBy,
+                                ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="font-medium text-link-darker underline underline-offset-2">
                                     #{{ $numberData['number'] ?? '' }}
                                     @if(!empty($numberData['sciname']))
                                         - <i>{{ $numberData['sciname'] }}</i>
@@ -496,8 +523,15 @@
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-bold">
-                        <a href="{{ url('/exsiccata/' . ($ometid ?? ($title['ometid'] ?? null)) . $queryString) }}" class="text-link-darker underline underline-offset-2">
-                            {{ $title['title'] ?? '' }}
+                        <a href="{{ route('exsiccata.index') . '?' . http_build_query(array_filter([
+                            'ometid' => $currentOmetid,
+                            'searchterm' => $searchTerm,
+                            'specimenonly' => $specimenOnly,
+                            'imagesonly' => $imagesOnly,
+                            'collid' => $collId,
+                            'sortby' => $sortBy,
+                        ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="text-link-darker underline underline-offset-2">
+                            {{ Purify::clean($title['title']) ?? '' }}
                         </a>
                         #{{ $number['exsnumber'] ?? '' }}
                     </h1>
@@ -538,6 +572,8 @@
                 <div id="numeditdiv" class="hidden space-y-4 border-slate-300 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.NUMBER') }}</label>
                             <input name="exsnumber" type="text" value="{{ $number['exsnumber'] ?? '' }}" class="mt-1 w-full max-w-[180px] rounded border px-3 py-2" />
@@ -553,6 +589,8 @@
 
                     <form method="POST" action="{{ $postAction }}" onsubmit="return window.confirm('{{ __('exsiccati.SURE_DEL_EXS_NUM') }}');">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <x-button name="formsubmit" type="submit" value="Delete Number" variant="error" class="text-sm">
                             {{ __('exsiccati.DEL_NUM') }}
                         </x-button>
@@ -560,6 +598,8 @@
 
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsMergeForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
                             <select name="targetometid" class="mt-1 w-full max-w-[90%] rounded border px-3 py-2" onfocus="buildExsSelect(this)">
@@ -575,6 +615,8 @@
                 <div id="occadddiv" class="hidden rounded border border-slate-300 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyOccAddForm(this)" class="space-y-3">
                         @csrf
+                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.COLL') }}</label>
                             <select name="occaddcollid" class="mt-1 w-full max-w-[420px] rounded border px-3 py-2">
@@ -675,6 +717,8 @@
                                 <div id="occeditdiv-{{ $occid }}" class="mt-4 hidden space-y-4 rounded border border-slate-300 p-4">
                                     <form method="POST" action="{{ $postAction }}" class="space-y-3">
                                         @csrf
+                                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                                         <input type="hidden" name="occid" value="{{ $occid }}" />
                                         <div>
                                             <label class="block font-medium">{{ __('exsiccati.RANKING') }}</label>
@@ -691,6 +735,8 @@
 
                                     <form method="POST" action="{{ $postAction }}" onsubmit="return window.confirm('{{ __('exsiccati.SURE_DEL_SPEC_LINK') }}');">
                                         @csrf
+                                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                                         <input type="hidden" name="occid" value="{{ $occid }}" />
                                         <x-button name="formsubmit" type="submit" value="Delete Link to Specimen" variant="error" class="text-sm">
                                             {{ __('exsiccati.DEL_SPEC_LINK') }}
@@ -699,6 +745,8 @@
 
                                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyOccTransferForm(this)" class="space-y-3">
                                         @csrf
+                                        <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
+                                        <input type="hidden" name="omenid" value="{{ $omenid }}" />
                                         <input type="hidden" name="occid" value="{{ $occid }}" />
                                         <div>
                                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
