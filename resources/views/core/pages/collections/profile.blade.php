@@ -235,7 +235,7 @@ $isObservations = $collection->isObservations();
         @endphp
         @if(is_array($contacts) && count($contacts))
         <div>
-            <div class="text-2xl font-bold">{{ __('misc_collmetadata.CONTACT') }}</div>
+            <div class="text-2xl font-bold">{{ __('header.H_CONTACTS') }}</div>
             @foreach($contacts as $contact)
                 @if(isset($contact['firstName']) && isset($contact['lastName']) && isset($contact['email']))
                     <div>
