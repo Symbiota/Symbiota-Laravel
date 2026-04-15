@@ -43,7 +43,7 @@
         ];
         if (! $unableLocateRecord) {
             $breadcrumbs[] = [
-                'title' => $title['title'] ?? '',
+                'title' => Purify::clean($title['title']  ?? ''),
                 'href' => route('exsiccata.index') . '?' . http_build_query(array_filter([
                     'ometid' => $currentOmetid,
                     'searchterm' => $searchTerm,
@@ -179,7 +179,7 @@
                     </div>
 
                     @if($isEditor)
-                        <div id="exsadddiv" class="hidden mt-3 max-w-xl rounded border border-slate-300 p-3">
+                        <div id="exsadddiv" class="hidden mt-3 max-w-xl rounded border p-3">
                             <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsAddForm(this)" class="space-y-2">
                                 @csrf
                                 <div>
@@ -230,7 +230,7 @@
                         <div class="mb-3 text-lg font-semibold">{{ __('exsiccati.EXS_TITLES') }}</div>
 
                         @if(empty($titles))
-                            <div class="rounded border border-slate-200 bg-white px-4 py-6 text-lg">
+                            <div class="bg-white px-4 py-6 text-lg">
                                 {{ __('exsiccati.NO_EXS_MATCHING') }}
                             </div>
                         @else
@@ -246,13 +246,13 @@
                                                 'collid' => $collId,
                                                 'sortby' => $sortBy,
                                             ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="font-medium text-link-darker underline underline-offset-2">
-                                                {{ $titleData['title'] ?? '' }}
+                                                {!! Purify::clean($titleData['title'] ?? '') !!}
                                             </a>
                                         </div>
 
                                         @if(!empty($titleData['editor']) || !empty($titleData['exsrange']))
                                             <div class="ml-4 text-sm text-slate-600">
-                                                {{ $titleData['editor'] ?? '' }}{{ !empty($titleData['exsrange']) ? ' [' . $titleData['exsrange'] . ']' : '' }}
+                                                {!! Purify::clean($titleData['editor'] ?? '') !!} {!! !empty($titleData['exsrange']) ? ' [' . Purify::clean($titleData['exsrange']) . ']' : '' !!}
                                             </div>
                                         @endif
                                     </li>
@@ -262,7 +262,7 @@
                     </div>
                 </div>
 
-                <form method="GET" action="{{ route('exsiccata.index') }}" class="w-full rounded border border-slate-300 bg-slate-50 p-4 lg:sticky lg:top-4 lg:w-80 lg:flex-none">
+                <form method="GET" action="{{ route('exsiccata.index') }}" class="w-full rounded border bg-slate-50 p-4 lg:sticky lg:top-4 lg:w-80 lg:flex-none">
                     <div class="space-y-4">
                         <div>
                             <label class="block font-semibold">{{ __('exsiccati.SEARCH') }}</label>
@@ -388,7 +388,7 @@
             </div>
 
             @if($isEditor)
-                <div id="exseditdiv" class="hidden space-y-4 rounded border border-slate-300 p-4">
+                <div id="exseditdiv" class="hidden space-y-4 rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -458,7 +458,7 @@
                     </form>
                 </div>
 
-                <div id="numadddiv" class="hidden rounded border border-slate-300 p-4">
+                <div id="numadddiv" class="hidden rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -477,8 +477,10 @@
                 </div>
             @endif
 
+            <hr class="border border-accent-lighter" />
+
             @if(empty($numbers))
-                <div class="rounded border border-slate-200 bg-white px-4 py-6 text-lg font-semibold">
+                <div class="bg-white text-lg font-semibold">
                     {{ __('exsiccati.NO_EXS_NUMS') }}
                 </div>
             @else
@@ -555,7 +557,6 @@
                         @endif
                     </div>
                 </div>
-
                 @if($isEditor)
                     <div class="flex gap-2">
                         <button type="button" onclick="toggle('numeditdiv')" class="cursor-pointer px-3 py-2">
@@ -567,9 +568,8 @@
                     </div>
                 @endif
             </div>
-
             @if($isEditor)
-                <div id="numeditdiv" class="hidden space-y-4 border-slate-300 p-4">
+                <div id="numeditdiv" class="hidden border space-y-4 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -612,7 +612,7 @@
                     </form>
                 </div>
 
-                <div id="occadddiv" class="hidden rounded border border-slate-300 p-4">
+                <div id="occadddiv" class="hidden rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyOccAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -656,9 +656,11 @@
                     </form>
                 </div>
             @endif
-
+            <div class="my-4">
+                <hr class="border border-accent-lighter" >
+            </div>
             @if(empty($occurrences))
-                <div class="rounded border border-slate-200 bg-white px-4 py-6 font-semibold">
+                <div class="bg-white px-4 py-6 font-semibold">
                     {{ __('exsiccati.NO_SPECS_WITH_EX_NUM') }}
                 </div>
             @else
@@ -714,7 +716,7 @@
 
                             @if($isEditor)
                                 {{-- Occurrence link editing stays inline so each linked specimen can be adjusted without leaving the number page. --}}
-                                <div id="occeditdiv-{{ $occid }}" class="mt-4 hidden space-y-4 rounded border border-slate-300 p-4">
+                                <div id="occeditdiv-{{ $occid }}" class="mt-4 hidden space-y-4 rounded border p-4">
                                     <form method="POST" action="{{ $postAction }}" class="space-y-3">
                                         @csrf
                                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -766,7 +768,7 @@
                             @endif
 
                             <div class="my-4">
-                                <hr>
+                                <hr class="border border-accent-lighter" >
                             </div>
                         </div>
                     @endforeach
