@@ -35,19 +35,14 @@ async function checkNameExistence(
 ) {
     console.log("deleteMe preExistingTaxonInfo in checkNameExistence is: ");
     console.log(preExistingTaxonInfo);
-    const preExistingSciname = (
-        preExistingTaxonInfo.unitname1 +
-        " " +
-        preExistingTaxonInfo.unitname2 +
-        " " +
-        preExistingTaxonInfo.unitname3
-    ).trim();
-    console.log("deleteMe preExistingSciname is: ");
-    console.log(preExistingSciname);
+    console.log("deleteMe sciname in checkNameExistence is: " + sciname);
+    console.log("deleteMe rankid in checkNameExistence is: " + rankid);
+    console.log("deleteMe author in checkNameExistence is: " + author);
     const isTheSameAsPreExistingTaxon =
         preExistingTaxonInfo &&
-        preExistingSciname === sciname &&
-        preExistingTaxonInfo.rankid == rankid &&
+        preExistingTaxonInfo.sciName === sciname &&
+        (preExistingTaxonInfo.rankid ?? preExistingTaxonInfo.rankID) ==
+            rankid &&
         preExistingTaxonInfo.author == author;
     console.log("deleteMe isTheSameAsPreExistingTaxon is: ");
     console.log(isTheSameAsPreExistingTaxon);
@@ -71,11 +66,14 @@ async function checkNameExistence(
 async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
     console.log("deleteMe validateTaxonForm entered and alpineData is: ");
     console.log(alpineData);
+    console.log(JSON.parse(JSON.stringify(alpineData)));
     if (preExistingTaxonInfo) {
         return validateTaxonEditForm(preExistingTaxonInfo, alpineData);
     }
+    console.log("deleteMe SHOULD NOT GET HERE IN THE TAXONOMY EDITOR");
     console.log("deleteMe preExistingTaxonInfo is: ");
     console.log(preExistingTaxonInfo);
+
     let message = "";
     const parenttid = document.querySelector('[name="parenttid"]');
     const unitname1 = document.querySelector('[name="unitname1"]');
@@ -120,6 +118,8 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
         " " +
         unitname3.value
     ).trim();
+    console.log("deleteMe sciName in validateTaxonForm is: ");
+    console.log(sciName);
     const exists = await checkNameExistence(
         sciName,
         alpineData.rankid,
@@ -134,17 +134,21 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
 }
 
 async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
+    const unitname1 = document.querySelector('[name="unitname1"]');
+    const unitname2 = document.querySelector('[name="unitname2"]');
+    const unitname3 = document.querySelector('[name="unitname3"]');
+    const authorEl = document.querySelector('[name="author"]');
     const sciName = (
-        alpineData.unitname1 +
+        (unitname1?.value || "") +
         " " +
-        alpineData.unitname2 +
+        (unitname2?.value || "") +
         " " +
-        alpineData.unitname3
+        (unitname3?.value || "")
     ).trim();
     const isDuplicate = await checkNameExistence(
         sciName,
         alpineData.rankid,
-        alpineData.author,
+        authorEl?.value || "",
         preExistingTaxonInfo,
     );
     if (isDuplicate) {

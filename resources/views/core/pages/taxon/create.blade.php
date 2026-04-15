@@ -30,17 +30,20 @@
         @if ($canCreateOrEdit)
             <div
                 class="flex flex-col items-center justify-center"
-                x-init=" validate();
-                 $watch('rankid', (newValue, oldValue) => {
-                     updateLabels();
-                     validate();
-                 });" x-data="{
+                x-data="{
                     unit1Label: 'Genus',
                     unit2Label: 'Species',
                     rankid: @js($mode === 'edit' && $taxonInfo ? (int)$taxonInfo->rankID : 220),
                     isValid: false,
                     validationMessage: '',
                     allTaxonRanks: @js($allTaxonRanks),
+                    init() {
+                        this.validate();
+                        this.$watch('rankid', (newValue, oldValue) => {
+                            this.updateLabels();
+                            this.validate();
+                        });
+                    },
                     updateLabels() {
                         if (window.updateLabels) {
                             window.updateLabels(this);
@@ -49,6 +52,8 @@
                     async validate() {
                         if (window.validateTaxonForm) {
                             const validationResult = await window.validateTaxonForm(this, @js($taxonInfo));
+                            console.log('deleteMe a1 validationResult is: ');
+                            console.log(validationResult);
                             this.isValid = validationResult.isValid;
                             this.validationMessage = validationResult.message;
                         }
