@@ -297,8 +297,8 @@
                             <span class="text-sm italic text-base-content">* =
                                 {{ __('taxonomy_taxonomyloader.REQUIRED') }}
                                 Field</span>
-                        </div>
-                        <x-button class="mt-2" x-bind:disabled="!isValid"
+                        </div>  
+                        <x-button name="submitButton" id="submitButton" class="mt-2" x-bind:disabled="!isValid"
                             x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"></x-button>
                         <p><span id="validationMessage"
                                 class="text-sm italic text-red-700"

@@ -134,6 +134,7 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
 }
 
 async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
+    console.log("deleteMe validateTaxonEditForm entered");
     const unitname1 = document.querySelector('[name="unitname1"]');
     const unitname2 = document.querySelector('[name="unitname2"]');
     const unitname3 = document.querySelector('[name="unitname3"]');
@@ -145,6 +146,7 @@ async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
         " " +
         (unitname3?.value || "")
     ).trim();
+    console.log("deleteMe about to run checkNameExistence in validateTaxonEditForm");
     const isDuplicate = await checkNameExistence(
         sciName,
         alpineData.rankid,
@@ -152,14 +154,14 @@ async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
         preExistingTaxonInfo,
     );
     if (isDuplicate) {
-        return false;
+        return { isValid: false, message: sciName + " already exists in the database." };
     }
     if (alpineData.unitname1?.trim() == "") {
         // @TODO why is this necessary?
         alert("Unitname 1 field must have a value"); // @TODO confirm
-        return false;
+        return { isValid: false, message: "Unitname 1 field must have a value" };
     }
-    return true;
+    return { isValid: true, message: "" };
 }
 
 function isTheSameEntryAsItStarted(f, originalForm) {
