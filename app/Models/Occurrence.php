@@ -288,6 +288,32 @@ class Occurrence extends Model {
         return $this->belongsToMany(PortalPublication::class, 'portaloccurrences', 'occid', 'pubid')->withPivot('remoteOccid');
     }
 
+    public static function getPaleoParents(string $term) {
+        $parents = DB::select('with RECURSIVE parents as (
+SELECT * FROM omoccurpaleogts WHERE gtsterm = ? AND rankid > 10
+UNION ALL
+SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid AND c.rankid > 10
+) SELECT gtsterm from parents order by rankid', [ $term ]);
+        return implode('|', array_map(fn($p) => $p->gtsterm, $parents));
+    }
+
+    public function paleo() {
+        $paleo = DB::table('omoccurpaleo')->where('occid', $this->occid)->first();
+
+        $paleo->earlyIntervalHierarchy = $paleo->earlyInterval?
+            self::getPaleoParents($paleo->earlyInterval): null;
+
+        $paleo->lateIntervalHierarchy = $paleo->lateInterval?
+            self::getPaleoParents($paleo->lateInterval): null;
+
+        return $paleo;
+    }
+
+    public static function fromKey($occid) {
+        return Occurrence::query()->where('occid', $occid)->first();
+    }
+
+
     /* Produces DB query builder object based on a request for general purpose use
      * This Function's only depedency on eloquent is the protected variables
      */

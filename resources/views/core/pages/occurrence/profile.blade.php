@@ -1,6 +1,6 @@
 @props([
     'occurrence',
-    'collection',
+    'collection' => new StdClass(),
     'images' => [],
     'audio' => [],
     'collection_contacts' => [],
@@ -11,7 +11,9 @@
     'linked_datasets' => [],
     'user_checklists' => [],
     'user_datasets' => [],
+    'paleo' => null,
 ])
+
 @php
 
 function getLocalityStr($occur) {
@@ -100,11 +102,11 @@ foreach($user_datasets as $datasets) {
 @endphp
 <x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <div class="flex items-center gap-4 mb-4">
-        @if($occurrence->icon)
-        <img class="w-16" src="{{ $occurrence->icon }}">
+        @if($collection->icon)
+        <img class="w-16" src="{{ $collection->icon }}">
         @endif
         <x-link href="{{ url('collections/' . $occurrence->collid) }}" class="text-2xl font-bold text-base-content hover:text-base-content/50">
-            {{ $occurrence->collectionName }} ({{ $occurrence->institutionCode }})
+            {{ $collection->collectionName }} ({{ $collection->institutionCode }})
         </x-link>
 
         <div class="text-2xl font-bold">
@@ -203,14 +205,6 @@ foreach($user_datasets as $datasets) {
                     __('individual.PREPARATIONS') => $occurrence->preparations,
                     __('projects.NOTES') => implode(', ', format_notes($occurrence)),
                     __('individual.DISPOSITION') => $occurrence->disposition,
-
-                    //TODO (Logan) Paleontology Terms
-                    __('individual.CHRONOSTRAT') => 'todo',
-                    __('individual.LITHOSTRAT') => 'todo',
-                    __('individual.ABSOLUTE_AGE') => 'todo',
-
-                    __('individual.EXCICCATI_SERIES') => 'todo',
-                    __('individual.MATERIAL_SAMPLES') => 'todo',
                 ] as $label => $value)
                 @if($label == __('imagelib_imgdetails.LOCALITY'))
                     <x-text-label :label="$label">{{ $value }}</x-text-label>
@@ -231,15 +225,43 @@ foreach($user_datasets as $datasets) {
                 @endif
                 @endforeach
 
-                <x-text-label :label="__('misc_collmetadata.LICENSE')">
-                    @if($occurrence->rights)
-                    <x-link :href="$occurrence->rights">
-                        {{ $occurrence->rights }}
-                    </x-link>
-                    @endif
-                </x-text-label>
+                {{-- EXSICCATE INFORMATION START --}}
+                <div>
+                TODO {{ __('individual.EXCICCATI_SERIES') }}
+                </div>
+                {{-- EXSICCATE INFORMATION END --}}
+
+                {{-- MATERIAL INFORMATION START --}}
+                <div>
+                TODO {{ __('individual.MATERIAL_SAMPLES') }}
+                </div>
+                {{-- MATERIAL INFORMATION END --}}
             </div>
             {{-- OCCURRENCE INFORMATION END --}}
+
+            {{-- PALEO INFORMATION START --}}
+            @if($paleo)
+            <div>
+                <div>
+                    <div class="font-bold text-lg">
+                        {{ __('collections_list.GEO_CONTEXT') }}
+                    </div>
+                    <hr />
+                </div>
+                @foreach([
+                    __('individual.CHRONOSTRAT') => format_range($paleo->earlyInterval, $paleo->lateInterval),
+                    __('collections_list.LATE_INT') => $paleo && $paleo->lateInterval && $paleo->lateIntervalHierarchy? $paleo->lateIntervalHierarchy: null,
+                    __('collections_list.EARLY_INT') => $paleo && $paleo->earlyInterval && $paleo->earlyIntervalHierarchy? $paleo->earlyIntervalHierarchy: null,
+                    __('individual.ABSOLUTE_AGE') => $occurrence->absoluteAge,
+                    __('LOCAL_STAGE') => $occurrence->localStage,
+                    __('individual.LITHOSTRAT') => 'todo',
+                    __('BASIS_OF_RECORD') => $collection->collType == "Fossil Specimens"? $occurrence->basisofrecord: null,
+                ] as $label => $value)
+                    <x-text-label :label="$label">{{ $value }}</x-text-label>
+                @endforeach
+            </div>
+            @endif
+            {{-- PALEO INFORMATION END --}}
 
             @if(count($determinations))
                 <div>
@@ -316,6 +338,14 @@ foreach($user_datasets as $datasets) {
                     <x-media.audio :item="$item" />
                 @endforeach
             </div>
+            @endif
+
+            @if($collection->rights)
+            <x-text-label :label="__('misc_collmetadata.LICENSE')">
+                <x-link :href="$collection->rights">
+                    {{ $collection->rights }}
+                </x-link>
+            </x-text-label>
             @endif
 
             <div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collection;
 use App\Models\Media;
 use App\Models\MediaType;
+use App\Models\Occurrence;
 use App\Models\OccurrenceComment;
 use App\Models\OccurrenceEdit;
 use App\Models\OccurrenceIdentification;
@@ -13,21 +14,14 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class OccurrenceController extends Controller {
-    private static function occurrenceProfileData(int $occid) {
-        return DB::table('omoccurrences as o')
-            ->join('omcollections as c', 'c.collID', 'o.collid')
-            ->where('o.occid', '=', $occid)
-            ->select('o.*', 'c.icon', 'c.collectionName', 'c.collectionName', 'c.institutionCode', 'c.contactJson', 'c.rights', 'c.colltype')
-            ->first();
-    }
-
     public static function profilePage(int $occid) {
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
         $collection = Collection::query()->where('collid', $occurrence->collid)->first();
         $media = Media::where('occid', $occid)->get();
         $determinations = OccurrenceIdentification::where('occid', $occid)->get();
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
         $comments = OccurrenceComment::getCommentsWithUsername($occurrence);
+        $paleo = $occurrence->paleo();
 
         $user_checklists = [];
         $user_datasets = [];
@@ -96,6 +90,7 @@ class OccurrenceController extends Controller {
             'linked_datasets' => $linked_datasets,
             'user_checklists' => $user_checklists,
             'user_datasets' => $user_datasets,
+            'paleo' => $paleo,
         ]);
     }
 
@@ -127,7 +122,7 @@ class OccurrenceController extends Controller {
             $new_comment->occid = $occid;
             $new_comment->save();
         }
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
 
         return view('pages/occurrence/profile', [
             'occurrence' => $occurrence,
@@ -137,7 +132,7 @@ class OccurrenceController extends Controller {
     }
 
     public static function deleteComment(int $occid, int $comid) {
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
         $comment = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->first();
         $user = request()->user();
 
@@ -153,8 +148,7 @@ class OccurrenceController extends Controller {
 
     private static function updateComment(int $occid, int $comid, array $fields) {
         $updated = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->update($fields);
-
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
 
         return view('pages/occurrence/profile', [
             'occurrence' => $occurrence,
@@ -183,7 +177,7 @@ class OccurrenceController extends Controller {
             ]);
         }
 
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
         $linked_checklists = DB::table('fmvouchers as v')
             ->join('fmchecklists as c', 'c.clid', 'v.clid')
             ->where('v.occid', $occid)
@@ -223,7 +217,7 @@ class OccurrenceController extends Controller {
             $user_datasets = $user->datasets();
         }
 
-        $occurrence = self::occurrenceProfileData($occid);
+        $occurrence = Occurrence::fromKey($occid);
 
         $linked_datasets = DB::table('omoccurdatasetlink as l')
             ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
@@ -238,6 +232,7 @@ class OccurrenceController extends Controller {
 
         return view('pages/occurrence/profile', [
             'occurrence' => $occurrence,
+            'collection' => $collection,
             'linked_checklists' => $linked_datasets,
             'user_checklists' => $user,
         ])->fragment('linked_datasets');
