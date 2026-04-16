@@ -89,15 +89,13 @@ async function verifyLoadFormCore(
     if (!unitname1?.value) {
         const msg = sciNameRankRequiredMessage;
         if (!silent) alert(msg);
-        document.getElementById("error-display").textContent =
-            processTextContent(msg);
+        setErrorDisplay(msg);
         return { isValid: false, message: msg };
     }
     if (!alpineData.rankid) {
         const msg = sciNameRankRequiredMessage;
         if (!silent) alert(msg);
-        document.getElementById("error-display").textContent =
-            processTextContent(msg);
+        setErrorDisplay(msg);
         return { isValid: false, message: msg };
     }
     const unitname2 = document.querySelector('[name="unitname2"]');
@@ -124,8 +122,7 @@ async function verifyLoadFormCore(
     console.log("deleteMe exists in verifyLoadFormCore is: " + exists);
     if (exists) {
         const msg = sciName + alreadyExistsMessage;
-        document.getElementById("error-display").textContent =
-            processTextContent(msg);
+        setErrorDisplay(msg);
         return { isValid: false, message: msg };
     }
     return { isValid: true, message: "" };
@@ -250,22 +247,19 @@ function validateFormInput(
     const unitname1 = document.querySelector('[name="unitname1"]');
     if (!unitname1?.value) {
         if (!silent) alert(sciNameRankRequiredMessage);
-        document.getElementById("error-display").textContent =
-            processTextContent(sciNameRankRequiredMessage);
+        setErrorDisplay(sciNameRankRequiredMessage);
         return { isValid: false, message: sciNameRankRequiredMessage };
     }
     const parentname = document.querySelector('[name="parentname"]');
     if (!parentname?.value && rankId > "10") {
         if (!silent) alert(parentTaxonRequiredMessage);
-        document.getElementById("error-display").textContent =
-            processTextContent(parentTaxonRequiredMessage);
+        setErrorDisplay(parentTaxonRequiredMessage);
         return { isValid: false, message: parentTaxonRequiredMessage };
     }
     const parenttid = document.querySelector('[name="parenttid"]');
     if (!parenttid?.value && rankId > "10") {
         if (!silent) alert(parentIdNotSetMessage);
-        document.getElementById("error-display").textContent =
-            processTextContent(parentIdNotSetMessage);
+        setErrorDisplay(parentIdNotSetMessage);
         return { isValid: false, message: parentIdNotSetMessage };
     }
     const notes = document.querySelector('[name="notes"]');
@@ -282,8 +276,7 @@ function validateFormInput(
         const acceptedstr = document.querySelector('[name="acceptedstr"]');
         if (!acceptedstr?.value) {
             if (!silent) alert(accNameNeedsValueMessage);
-            document.getElementById("error-display").textContent =
-                processTextContent(accNameNeedsValueMessage);
+            setErrorDisplay(accNameNeedsValueMessage);
             return {
                 isValid: false,
                 message: accNameNeedsValueMessage,
@@ -365,14 +358,18 @@ function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
 
     const isSame = fieldMatches.every(Boolean);
     if (isSame) {
-        document.getElementById("error-display").textContent =
-            processTextContent("");
+        setErrorDisplay("");
     }
     return isSame;
 }
 
 function processTextContent(content) {
     return content?.replace("undefined", "")?.trim();
+}
+
+function setErrorDisplay(text) {
+    const el = document.getElementById("error-display");
+    if (el) el.textContent = processTextContent(text);
 }
 
 const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
