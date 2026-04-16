@@ -248,17 +248,28 @@ foreach($user_datasets as $datasets) {
                     </div>
                     <hr />
                 </div>
-                @foreach([
-                    __('individual.CHRONOSTRAT') => format_range($paleo->earlyInterval, $paleo->lateInterval),
-                    __('collections_list.LATE_INT') => $paleo && $paleo->lateInterval && $paleo->lateIntervalHierarchy? $paleo->lateIntervalHierarchy: null,
-                    __('collections_list.EARLY_INT') => $paleo && $paleo->earlyInterval && $paleo->earlyIntervalHierarchy? $paleo->earlyIntervalHierarchy: null,
-                    __('individual.ABSOLUTE_AGE') => $occurrence->absoluteAge,
-                    __('LOCAL_STAGE') => $occurrence->localStage,
-                    __('individual.LITHOSTRAT') => 'todo',
-                    __('BASIS_OF_RECORD') => $collection->collType == "Fossil Specimens"? $occurrence->basisofrecord: null,
-                ] as $label => $value)
-                    <x-text-label :label="$label">{{ $value }}</x-text-label>
-                @endforeach
+                <x-text-label :label="__('BASIS_OF_RECORD')">
+                    {{ $collection->collType == "Fossil Specimens"? $occurrence->basisofrecord: null }}
+                </x-text-label>
+
+                <x-text-label :label="__('individual.CHRONOSTRAT')">
+                    {{ format_range($paleo->earlyInterval, $paleo->lateInterval) }}
+                    <x-text-label-list class="pl-4" :labels="[
+                        __('collections_list.LATE_INT') => $paleo && $paleo->lateInterval && $paleo->lateIntervalHierarchy? $paleo->lateIntervalHierarchy: null,
+                        __('collections_list.EARLY_INT') => $paleo && $paleo->earlyInterval && $paleo->earlyIntervalHierarchy? $paleo->earlyIntervalHierarchy: null,
+                        __('individual.ABSOLUTE_AGE') => $occurrence->absoluteAge,
+                        __('LOCAL_STAGE') => $occurrence->localStage,
+                    ]"/>
+                </x-text-label>
+
+                <x-text-label :label="__('individual.LITHOSTRAT')">
+                    <x-text-label-list class="pl-4" :labels="[
+                        __('includes_paleoinclude.LITHOGROUP_LABEL') => $paleo->lithogroup ,
+                        __('includes_paleoinclude.FORMATION_LABEL') => $paleo->formation,
+                        __('includes_paleoinclude.MEMBER_LABEL') => $paleo->member,
+                        __('includes_paleoinclude.BED_LABEL') => $paleo->bed,
+                    ]"/>
+                </x-text-label>
             </div>
             @endif
             {{-- PALEO INFORMATION END --}}
