@@ -21,4 +21,5 @@ return [
     'PARENT_TAXON_REQUIRED' => 'Taxon parent requis.',
     'PARENT_ID_NOT_SET' => 'ID du parent non défini.',
     'ALREADY_EXISTS' => ' existe déjà dans la base de données.',
+    'ACC_NAME_NEEDS_VALUE' => 'Le nom accepté doit avoir une valeur.'
 ];

@@ -21,4 +21,5 @@ return [
     'PARENT_TAXON_REQUIRED' => 'Taxón Padre Requerido.',
     'PARENT_ID_NOT_SET' => 'ID del Padre No Establecido.',
     'ALREADY_EXISTS' => ' ya existe en la base de datos.',
+    'ACC_NAME_NEEDS_VALUE' => 'El nombre aceptado necesita tener un valor.'
 ];
