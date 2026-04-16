@@ -71,7 +71,8 @@ async function verifyLoadFormCore(
     alreadyExistsMessage = null,
     parentTaxonRequiredMessage = null,
     parentIdNotSetMessage = null,
-    accNameNeedsValueMessage = null
+    accNameNeedsValueMessage = null,
+    missingRequiredTaxonFieldMessage = null
 ) {
     console.log("deleteMe verifyLoadFormCore entered and alpineData is: ");
     const { rankid, unit1Label, unit2Label, isValid, validationMessage } = alpineData;
@@ -87,7 +88,7 @@ async function verifyLoadFormCore(
     console.log("deleteMe unitname1 in verifyLoadFormCore is: ");
     console.log(unitname1);
     if (!unitname1?.value) {
-        const msg = sciNameRankRequiredMessage;
+        const msg = missingRequiredTaxonFieldMessage;
         if (!silent) alert(msg);
         setErrorDisplay(msg);
         return { isValid: false, message: msg };
@@ -102,7 +103,7 @@ async function verifyLoadFormCore(
     if(unit2nameIsRequired){
         const unit2nameIsMissing = !document.querySelector('[name="unitname2"]')?.value;
         if(unit2nameIsMissing){
-            const msg = sciNameRankRequiredMessage;
+            const msg = missingRequiredTaxonFieldMessage;
             if (!silent) alert(msg);
             setErrorDisplay(msg);
             return { isValid: false, message: msg };
@@ -113,7 +114,7 @@ async function verifyLoadFormCore(
     if(unit3nameIsRequired){
         const unit3nameIsMissing = !document.querySelector('[name="unitname3"]')?.value;
         if(unit3nameIsMissing){
-            const msg = sciNameRankRequiredMessage;
+            const msg = missingRequiredTaxonFieldMessage;
             if (!silent) alert(msg);
             setErrorDisplay(msg);
             return { isValid: false, message: msg };
@@ -151,12 +152,13 @@ async function validateTaxonForm(
     alpineData,
     preExistingTaxonInfo = null,
     alreadyExistsMessage = null,
+    missingRequiredTaxonFieldMessage = null,
 ) {
     console.log("deleteMe validateTaxonForm entered and alpineData is: ");
     console.log(alpineData);
     console.log(JSON.parse(JSON.stringify(alpineData)));
     if (preExistingTaxonInfo) {
-        return validateTaxonEditForm(preExistingTaxonInfo, alpineData);
+        return validateTaxonEditForm(preExistingTaxonInfo, alpineData, missingRequiredTaxonFieldMessage);
     }
     console.log("deleteMe SHOULD NOT GET HERE IN THE TAXONOMY EDITOR");
     console.log("deleteMe preExistingTaxonInfo is: ");
@@ -229,7 +231,8 @@ async function verifyLoadForm(
     alreadyExistsMessage,
     parentTaxonRequiredMessage,
     parentIdNotSetMessage,
-    accNameNeedsValueMessage
+    accNameNeedsValueMessage,
+    missingRequiredTaxonFieldMessage
 ) {
     const coreResult = await verifyLoadFormCore(
         alpineData,
@@ -239,7 +242,8 @@ async function verifyLoadForm(
         alreadyExistsMessage,
         parentTaxonRequiredMessage,
         parentIdNotSetMessage,
-        accNameNeedsValueMessage
+        accNameNeedsValueMessage,
+        missingRequiredTaxonFieldMessage
     );
     if (!coreResult.isValid) {
         return coreResult;
@@ -313,7 +317,8 @@ async function validateTaxonEditForm(
     alreadyExistsMessage,
     parentTaxonRequiredMessage = null,
     parentIdNotSetMessage = null,
-    accNameNeedsValueMessage = null
+    accNameNeedsValueMessage = null,
+    missingRequiredTaxonFieldMessage = null
 ) {
     return verifyLoadFormCore(
         alpineData,
@@ -323,7 +328,8 @@ async function validateTaxonEditForm(
         alreadyExistsMessage,
         parentTaxonRequiredMessage,
         parentIdNotSetMessage,
-        accNameNeedsValueMessage
+        accNameNeedsValueMessage,
+        missingRequiredTaxonFieldMessage
     );
 }
 
