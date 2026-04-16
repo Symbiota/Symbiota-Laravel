@@ -98,10 +98,29 @@ async function verifyLoadFormCore(
         setErrorDisplay(msg);
         return { isValid: false, message: msg };
     }
-    const unitname2 = document.querySelector('[name="unitname2"]');
-    console.log("deleteMe unitname2 in verifyLoadFormCore is: ");
-    console.log(unitname2);
-    const unitname3 = document.querySelector('[name="unitname3"]');
+    const unit2nameIsRequired = alpineData.rankid >= 220;
+    if(unit2nameIsRequired){
+        const unit2nameIsMissing = !document.querySelector('[name="unitname2"]')?.value;
+        if(unit2nameIsMissing){
+            const msg = sciNameRankRequiredMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
+    }
+
+    const unit3nameIsRequired = alpineData.rankid >= 230;
+    if(unit3nameIsRequired){
+        const unit3nameIsMissing = !document.querySelector('[name="unitname3"]')?.value;
+        if(unit3nameIsMissing){
+            const msg = sciNameRankRequiredMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
+    }
+    
+    const unitname3 = document.querySelector('[name="unitname3"]')?.value;
     console.log("deleteMe unitname3 in verifyLoadFormCore is: ");
     console.log(unitname3);
     const sciName = (
@@ -367,9 +386,10 @@ function processTextContent(content) {
     return content?.replace("undefined", "")?.trim();
 }
 
-function setErrorDisplay(text) {
-    const el = document.getElementById("error-display");
-    if (el) el.textContent = processTextContent(text);
+function setErrorDisplay(_text) { // @TODO refactor this/ ensure that errors are already handled by Alpine
+    // Validation messages are returned to Alpine's validate() which sets
+    // this.validationMessage — driving x-text="validationMessage" on #validationMessage.
+    // No direct DOM write needed here.
 }
 
 const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
