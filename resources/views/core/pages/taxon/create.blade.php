@@ -50,8 +50,9 @@
                         }
                     },
                     async validate() {
-                        if (window.validateTaxonForm) {
-                            const validationResult = await window.validateTaxonForm(this, @js($taxonInfo));
+                        if (window.verifyLoadForm && window.validateTaxonEditForm) {
+                            const targetValidationFunction = this.mode === 'create' ? window.verifyLoadForm : window.validateTaxonEditForm;
+                            const validationResult = await targetValidationFunction(this, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')));
                             console.log('deleteMe a1 validationResult is: ');
                             console.log(validationResult);
                             this.isValid = validationResult.isValid;
@@ -83,7 +84,7 @@
                 <form id="taxon-form"
                     class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
                     method="POST" action="{{ $mode === 'create' ? route('taxon.store') : route('taxon.update') }}"
-                    @change="validate(); updateScinameDisplay();">
+                    @change="validate(); '{{ $mode }}' === 'create' ? updateScinameDisplay() : null;">
                     @csrf
                     <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                     <div class="w-3/4">

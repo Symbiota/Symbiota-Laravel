@@ -63,7 +63,64 @@ async function checkNameExistence(
     return data.exists;
 }
 
-async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
+async function verifyLoadFormCore(
+    alpineData,
+    silent = false,
+    preExistingTaxonInfo = null,
+    sciNameRankRequiredMessage = null,
+    alreadyExistsMessage = null,
+) {
+    console.log("deleteMe verifyLoadFormCore entered and alpineData is: ");
+    console.log(alpineData);
+    console.log("deleteMe and preExistingTaxonInfo is: ");
+    console.log(preExistingTaxonInfo);
+    const entryHasNotChanged = isTheSameEntryAsItStarted(preExistingTaxonInfo);
+    console.log("deleteMe entryHasNotChanged is: " + entryHasNotChanged);
+    if (entryHasNotChanged) {
+        return { isValid: true, message: "" };
+    }
+    const unitname1 = document.querySelector('[name="unitname1"]');
+    console.log("deleteMe unitname1 in verifyLoadFormCore is: ");
+    console.log(unitname1);
+    if (!unitname1?.value) {
+        const msg = sciNameRankRequiredMessage;
+        if (!silent) alert(msg);
+        document.getElementById("error-display").textContent =
+            processTextContent(msg);
+        return { isValid: false, message: msg };
+    }
+    if (!alpineData.rankid) {
+        const msg = sciNameRankRequiredMessage;
+        if (!silent) alert(msg);
+        document.getElementById("error-display").textContent =
+            processTextContent(msg);
+        return { isValid: false, message: msg };
+    }
+    const unitname2 = document.querySelector('[name="unitname2"]');
+    const unitname3 = document.querySelector('[name="unitname3"]');
+    const sciName = (
+        (unitname1?.value || "") +
+        " " +
+        (unitname2?.value || "") +
+        " " +
+        (unitname3?.value || "")
+    ).trim();
+    const exists = await checkNameExistence(
+        sciName,
+        alpineData.rankid,
+        alpineData.author,
+        preExistingTaxonInfo,
+    );
+    if (exists) {
+        const msg = sciName + alreadyExistsMessage;
+        document.getElementById("error-display").textContent =
+            processTextContent(msg);
+        return { isValid: false, message: msg };
+    }
+    return { isValid: true, message: "" };
+}
+
+async function validateTaxonForm(alpineData, preExistingTaxonInfo = null, alreadyExistsMessage = null) {
     console.log("deleteMe validateTaxonForm entered and alpineData is: ");
     console.log(alpineData);
     console.log(JSON.parse(JSON.stringify(alpineData)));
@@ -127,54 +184,125 @@ async function validateTaxonForm(alpineData, preExistingTaxonInfo = null) {
         preExistingTaxonInfo,
     );
     if (exists) {
-        message = sciName + " already exists in the database.";
+        message = sciName + alreadyExistsMessage;
         return { isValid: false, message: message };
     }
     return { isValid: true, message: "" };
 }
 
-async function validateTaxonEditForm(preExistingTaxonInfo, alpineData) {
-    console.log("deleteMe validateTaxonEditForm entered");
-    const unitname1 = document.querySelector('[name="unitname1"]');
-    const unitname2 = document.querySelector('[name="unitname2"]');
-    const unitname3 = document.querySelector('[name="unitname3"]');
-    const authorEl = document.querySelector('[name="author"]');
-    const sciName = (
-        (unitname1?.value || "") +
-        " " +
-        (unitname2?.value || "") +
-        " " +
-        (unitname3?.value || "")
-    ).trim();
-    console.log("deleteMe about to run checkNameExistence in validateTaxonEditForm");
-    const isDuplicate = await checkNameExistence(
-        sciName,
-        alpineData.rankid,
-        authorEl?.value || "",
-        preExistingTaxonInfo,
-    );
-    if (isDuplicate) {
-        return { isValid: false, message: sciName + " already exists in the database." };
+async function verifyLoadForm(alpineData, silent = false, preExistingTaxonInfo = null, sciNameRankRequiredMessage, alreadyExistsMessage, parentTaxonRequiredMessage, parentIdNotSetMessage) {
+    const coreResult = await verifyLoadFormCore(alpineData, true, preExistingTaxonInfo, sciNameRankRequiredMessage, alreadyExistsMessage);
+    if (!coreResult.isValid) {
+        return coreResult;
     }
-    if (alpineData.unitname1?.trim() == "") {
-        // @TODO why is this necessary?
-        alert("Unitname 1 field must have a value"); // @TODO confirm
-        return { isValid: false, message: "Unitname 1 field must have a value" };
+    return validateFormInput(alpineData, silent, sciNameRankRequiredMessage, parentTaxonRequiredMessage, parentIdNotSetMessage);
+}
+
+function validateFormInput(alpineData, silent = false, sciNameRankRequiredMessage = null, parentTaxonRequiredMessage = null, parentIdNotSetMessage = null) {
+    const rankId = alpineData.rankid;
+    const unitname1 = document.querySelector('[name="unitname1"]');
+    if (!unitname1?.value) {
+        if (!silent) alert(sciNameRankRequiredMessage);
+        document.getElementById("error-display").textContent =
+            processTextContent(sciNameRankRequiredMessage);
+        return { isValid: false, message: sciNameRankRequiredMessage };
+    }
+    const parentname = document.querySelector('[name="parentname"]');
+    if (!parentname?.value && rankId > "10") {
+        if (!silent) alert(parentTaxonRequiredMessage);
+        document.getElementById("error-display").textContent =
+            processTextContent(parentTaxonRequiredMessage);
+        return { isValid: false, message: parentTaxonRequiredMessage };
+    }
+    const parenttid = document.querySelector('[name="parenttid"]');
+    if (!parenttid?.value && rankId > "10") {
+        if (!silent) alert(parentIdNotSetMessage);
+        document.getElementById("error-display").textContent =
+            processTextContent(parentIdNotSetMessage);
+        return { isValid: false, message: parentIdNotSetMessage };
+    }
+    const notes = document.querySelector('[name="notes"]');
+    const source = document.querySelector('[name="source"]');
+    if (
+        !validateFieldLength(notes, 250, silent) ||
+        !validateFieldLength(source, 250, silent)
+    )
+        return { isValid: false, message: "" };
+
+    //If name is not accepted, verify accepted name
+    const accStatusObj = document.querySelectorAll('[name="acceptstatus"]');
+    if (accStatusObj[0]?.checked === false) {
+        const acceptedstr = document.querySelector('[name="acceptedstr"]');
+        if (!acceptedstr?.value) {
+            if (!silent) alert(translations.ACC_NAME_NEEDS_VALUE);
+            document.getElementById("error-display").textContent =
+                processTextContent(translations.ACC_NAME_NEEDS_VALUE);
+            return { isValid: false, message: translations.ACC_NAME_NEEDS_VALUE };
+        }
     }
     return { isValid: true, message: "" };
 }
 
-function isTheSameEntryAsItStarted(f, originalForm) {
-    return new Promise((resolve) => {
-        if (f != null && originalForm != null && !hasChanged(f, originalForm)) {
-            document.getElementById("error-display").textContent =
-                processTextContent("");
-            resolve(true);
-            return;
-        } else {
-            resolve(false);
-        }
-    });
+async function validateTaxonEditForm(alpineData, preExistingTaxonInfo, ) {
+    return verifyLoadFormCore(alpineData, false, preExistingTaxonInfo);
+}
+
+function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
+    if (!preExistingTaxonInfo) {
+        return false;
+    }
+    const currentForm = document.getElementById("taxon-form");
+    if (!currentForm) {
+        return false;
+    }
+
+    const getFieldValue = (name) => {
+        const el = currentForm.querySelector(`[name="${name}"]`);
+        return el ? el.value : "";
+    };
+
+    const originalAcceptStatus =
+        preExistingTaxonInfo.tid == preExistingTaxonInfo.tidaccepted ? "1" : "0";
+    const acceptStatusEl = currentForm.querySelector(
+        "[name=\"acceptstatus\"]:checked",
+    );
+    const currentAcceptStatus = acceptStatusEl ? acceptStatusEl.value : "1";
+
+    const fieldMatches = [
+        getFieldValue("rankid") ==
+            (preExistingTaxonInfo.rankID ?? preExistingTaxonInfo.rankid ?? ""),
+        getFieldValue("unitind1") == (preExistingTaxonInfo.unitInd1 ?? ""),
+        getFieldValue("unitname1") == (preExistingTaxonInfo.unitName1 ?? ""),
+        getFieldValue("unitind2") == (preExistingTaxonInfo.unitInd2 ?? ""),
+        getFieldValue("unitname2") == (preExistingTaxonInfo.unitName2 ?? ""),
+        getFieldValue("unitind3") == (preExistingTaxonInfo.unitInd3 ?? ""),
+        getFieldValue("unitname3") == (preExistingTaxonInfo.unitName3 ?? ""),
+        getFieldValue("cultivarEpithet") ==
+            (preExistingTaxonInfo.cultivarEpithet ?? ""),
+        getFieldValue("tradeName") == (preExistingTaxonInfo.tradeName ?? ""),
+        getFieldValue("author") == (preExistingTaxonInfo.author ?? ""),
+        getFieldValue("parenttid") == (preExistingTaxonInfo.parenttid ?? ""),
+        getFieldValue("notes") == (preExistingTaxonInfo.notes ?? ""),
+        getFieldValue("source") == (preExistingTaxonInfo.source ?? ""),
+        getFieldValue("securitystatus") ==
+            (preExistingTaxonInfo.securityStatus ?? "0"),
+        currentAcceptStatus == originalAcceptStatus,
+        getFieldValue("tidaccepted") ==
+            (preExistingTaxonInfo.tidaccepted ?? ""),
+        getFieldValue("unacceptabilityreason") ==
+            (preExistingTaxonInfo.UnacceptabilityReason ?? ""),
+    ];
+
+    const isSame = fieldMatches.every(Boolean);
+    if (isSame) {
+        document.getElementById("error-display").textContent =
+            processTextContent("");
+    }
+    return isSame;
+}
+
+function processTextContent(content) {
+    return content?.replace("undefined", "")?.trim();
 }
 
 const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
@@ -421,6 +549,8 @@ async function parseName() {
 }
 
 window.updateLabels = updateLabels;
-window.validateTaxonForm = validateTaxonForm;
+// window.validateTaxonForm = validateTaxonForm;
 window.updateScinameDisplay = updateScinameDisplay;
 window.parseName = parseName;
+window.verifyLoadForm = verifyLoadForm;
+window.validateTaxonEditForm = validateTaxonEditForm;
