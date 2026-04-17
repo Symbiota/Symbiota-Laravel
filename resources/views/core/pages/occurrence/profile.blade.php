@@ -120,12 +120,12 @@ foreach($user_datasets as $datasets) {
     </div>
 
     @php
-        $tabs = ['Details'];
+        $tabs = [__('individual.DETAILS')];
         if($occurrence->decimalLatitude && $occurrence->decimalLongitude) {
-            $tabs[] = 'Map';
+            $tabs[] = __('header.H_MAP');
         }
 
-        $comment_tab_name = 'Comments';
+        $comment_tab_name = __('checklists_checklist.COMMENTS');
 
         if($count = count($comments)) {
             $comment_tab_name = $count . ' ' . $comment_tab_name;
@@ -134,11 +134,11 @@ foreach($user_datasets as $datasets) {
         $tabs = [
             ...$tabs,
             $comment_tab_name,
-            'Linked Resources'
+            __('individual.LINKED_RESOURCES')
         ];
 
         if($editHistory) {
-            $tabs[] = 'Edit History';
+            $tabs[] = __('individual.EDIT_HISTORY');
         }
     @endphp
     <x-tabs id="occurrence-tab" :tabs="$tabs" :active="0">
