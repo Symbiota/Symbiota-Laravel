@@ -252,7 +252,7 @@ async function verifyLoadForm(
     accNameNeedsValueMessage,
     missingRequiredTaxonFieldMessage
 ) {
-    const coreResult = await verifyLoadFormCore(
+    return verifyLoadFormCore(
         alpineData,
         true,
         preExistingTaxonInfo,
@@ -263,17 +263,28 @@ async function verifyLoadForm(
         accNameNeedsValueMessage,
         missingRequiredTaxonFieldMessage
     );
-    if (!coreResult.isValid) {
-        return coreResult;
-    }
-    return validateFormInput(
-        alpineData,
-        silent,
-        sciNameRankRequiredMessage,
-        parentTaxonRequiredMessage,
-        parentIdNotSetMessage,
-        accNameNeedsValueMessage
-    );
+    // const coreResult = await verifyLoadFormCore(
+    //     alpineData,
+    //     true,
+    //     preExistingTaxonInfo,
+    //     sciNameRankRequiredMessage,
+    //     alreadyExistsMessage,
+    //     parentTaxonRequiredMessage,
+    //     parentIdNotSetMessage,
+    //     accNameNeedsValueMessage,
+    //     missingRequiredTaxonFieldMessage
+    // );
+    // if (!coreResult.isValid) {
+    //     return coreResult;
+    // }
+    // return validateFormInput(
+    //     alpineData,
+    //     silent,
+    //     sciNameRankRequiredMessage,
+    //     parentTaxonRequiredMessage,
+    //     parentIdNotSetMessage,
+    //     accNameNeedsValueMessage
+    // );
 }
 
 function validateFormInput(

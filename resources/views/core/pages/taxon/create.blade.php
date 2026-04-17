@@ -18,7 +18,7 @@
                 'title' => 'Taxononmic Tree View',
                 'href' => legacy_url('/taxa/taxonomy/taxonomydisplay.php'),
             ],
-            ['title' => __('taxonomy_taxonomyloader.CREATE_TAXON')],
+            ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]" />
     </div>
     @if (!$canCreateOrEdit)
