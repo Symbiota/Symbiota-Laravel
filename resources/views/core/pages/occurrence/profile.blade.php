@@ -165,7 +165,7 @@ foreach($user_datasets as $datasets) {
                     @endif
                 </x-text-label>
 
-                @foreach([
+                <x-text-label-list :labels="[
                     __('individual.ID_QUALIFIER') => $occurrence->identificationQualifier,
                     __('taxa.FAMILY') => $occurrence->family,
                     __('individual.DETERMINER') => $occurrence->identifiedBy,
@@ -181,7 +181,23 @@ foreach($user_datasets as $datasets) {
                     __('individual.DATE') => format_range($occurrence->eventDate, $occurrence->eventDate2),
                     __('individual.VERBATIM_DATE') => $occurrence->verbatimEventDate,
                     __('individual.ADDITIONAL_COLLECTORS') => $occurrence->associatedCollectors,
-                    __('imagelib_imgdetails.LOCALITY') => getLocalityStr($occurrence),
+                ]"/>
+
+                <x-text-label :label="__('imagelib_imgdetails.LOCALITY')">{{ getLocalityStr($occurrence) }}</x-text-label>
+                @if($occurrence->recordSecurity)
+                <div class="font-bold bg-warning p-1 rounded-md text-warning-content">
+                    <div>
+                    {{ __('individual.DETAILS_PROTECTED') }}: {{ __('individual.PROTECTED_REASON') }}
+                    </div>
+                    <div>
+                    @can('SECURED_READER', $collection->collID)
+                    {{ __('individual.ACCESS_GRANTED') }}
+                    @endcan
+                    </div>
+                </div>
+                @endif
+
+                <x-text-label-list :labels="[
                     __('individual.LAT_LNG') => format_latlong_err($occurrence),
                     __('individual.VERBATIM_COORDINATES') => $occurrence->verbatimCoordinates,
                     __('individual.LOCATION_REMARKS') => $occurrence->locationRemarks,
@@ -205,25 +221,7 @@ foreach($user_datasets as $datasets) {
                     __('individual.PREPARATIONS') => $occurrence->preparations,
                     __('projects.NOTES') => implode(', ', format_notes($occurrence)),
                     __('individual.DISPOSITION') => $occurrence->disposition,
-                ] as $label => $value)
-                @if($label == __('imagelib_imgdetails.LOCALITY'))
-                    <x-text-label :label="$label">{{ $value }}</x-text-label>
-                    @if($occurrence->recordSecurity)
-                    <div class="font-bold bg-warning p-1 rounded-md text-warning-content">
-                        <div>
-                        {{ __('individual.DETAILS_PROTECTED') }}: {{ __('individual.PROTECTED_REASON') }}
-                        </div>
-                        <div>
-                        @can('SECURED_READER', $collection->collID)
-                        {{ __('individual.ACCESS_GRANTED') }}
-                        @endcan
-                        </div>
-                    </div>
-                    @endif
-                @else
-                    <x-text-label :label="$label">{{ $value }}</x-text-label>
-                @endif
-                @endforeach
+                ]"/>
 
                 {{-- EXSICCATE INFORMATION START --}}
                 <div>
@@ -382,6 +380,10 @@ foreach($user_datasets as $datasets) {
                     @endif
                 @endforeach
                 </span>
+            </div>
+            <div>
+                {{ __('individual.SEE_ERROR') }}
+                <x-link :href="url('occurrence/' . $occurrence->occid. '/edit')">{{ __('individual.OCCURRENCE_EDITOR')}}</x-link>
             </div>
         </div>
 
