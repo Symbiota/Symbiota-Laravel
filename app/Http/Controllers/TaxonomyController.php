@@ -164,11 +164,11 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function editTaxon($tid){
+    public static function editTaxon($tid) {
         $taxon = self::taxonData($tid);
-        if(!$taxon){
+        if (! $taxon) {
             // @TODO return a 404 not found page
-        } 
+        }
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $primaryKingdom = config('portal.primary_taxonomic_kingdom');
         $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
@@ -238,7 +238,7 @@ class TaxonomyController extends Controller {
         }
     }
 
-    public static function update(){
+    public static function update() {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
