@@ -52,7 +52,7 @@
                     async validate() {
                         if (window.verifyLoadForm && window.validateTaxonEditForm) {
                             const targetValidationFunction = this.mode === 'create' ? window.verifyLoadForm : window.validateTaxonEditForm;
-                            const validationResult = await targetValidationFunction(this, false, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')), @js(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')), @js(__('taxonomy_taxonomyloader.MISSING_REQUIRED_TAXON_FIELD')));
+                            const validationResult = await targetValidationFunction(this, true, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')), @js(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')), @js(__('taxonomy_taxonomyloader.MISSING_REQUIRED_TAXON_FIELD')));
                             console.log('deleteMe a1 validationResult is: ');
                             console.log(validationResult);
                             this.isValid = validationResult.isValid;
@@ -114,7 +114,7 @@
                         </legend>
 
                         <div class="w-3/4">
-                            <x-select
+                            <x-select class="font-bold"
                                 label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
                                 name="rankid" id="rankid" :defaultValue="$mode === 'edit' && $taxonInfo ? $taxonInfo->rankID : 220"
                                 onChange="rankid = $event.target.value"
@@ -131,7 +131,7 @@
                         <div id="unit1"
                             class="flex items-center gap-2 mb-4">
                             <div class="flex flex-col">
-                                <label class="text mb-1" for="unitind1-toggle"
+                                <label class="text font-bold mb-1" for="unitind1-toggle"
                                     x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                                 <x-select name="unitind1" id="unitind1"
                                     :items="$indContent" :default="0"
@@ -139,7 +139,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <label
-                                    class="text-base-content text-base text-bold mb-1"
+                                    class="text-base-content text-base font-bold mb-1"
                                     for="unitname1">
                                     <span
                                         x-text="unit1Label + ' {{ __('taxonomy_taxonomyloader.NAME') }}'"></span>
@@ -155,7 +155,7 @@
                         <div id="unit2" class="flex items-center gap-2 mb-4"
                             x-show="(!rankid || parseInt(rankid) >= 220)">
                             <div class="flex flex-col">
-                                <label class="text mb-1" for="unitind2-toggle"
+                                <label class="text mb-1 font-bold" for="unitind2-toggle"
                                     x-text="unit2Label + ' {{ __('taxonomy_taxonomyloader.DECORATOR') }}'"></label>
                                 <x-select name="unitind2" id="unitind2"
                                     :items="$indContent" :default="0"
@@ -163,7 +163,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <label
-                                    class="text-base-content text-base text-bold mb-1"
+                                    class="text-base-content text-base font-bold mb-1"
                                     for="unitname2">
                                     <div class="flex items-center gap-1">
                                         <span
@@ -187,7 +187,7 @@
                                 x-ref="unitind3" />
                             <div class="flex flex-col w-full">
                                 <label
-                                    class="text-base-content text-base text-bold mb-1"
+                                    class="text-base-content text-base font-bold mb-1"
                                     for="unitname3"><span
                                         x-text="'{{ __('taxonomy_taxonomyloader.INFRASPECIFIC_EPITHET') }}'"></span>
                                     <span
@@ -201,10 +201,18 @@
                         <div id="cultivarEpithet-div"
                             class="inline-flex items-center gap-2"
                             x-show="rankid && parseInt(rankid) >= 300">
-                            <x-input
-                                label="{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}"
-                                name="cultivarEpithet" id="cultivarEpithet"
-                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->cultivarEpithet ?? '') : '' }}" x-ref="cultivarEpithet" />
+                            <div class="flex flex-col w-full">
+                                <label
+                                    class="text-base-content text-base font-bold mb-1"
+                                    for="cultivarEpithet"><span
+                                        x-text="'{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}'"></span>
+                                    <span
+                                        class="vertical-align text-error italic pr-1">*</span>
+                                </label>
+                                <x-input
+                                    name="cultivarEpithet" id="cultivarEpithet"
+                                    value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->cultivarEpithet ?? '') : '' }}" x-ref="cultivarEpithet" />
+                            </div>
                         </div>
                         <div id="tradeName-div"
                             class="inline-flex items-center gap-2"
@@ -221,7 +229,7 @@
                                 value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->author ?? '') : '' }}" />
                         </div>
                         <div class="w-1/2">
-                            <x-taxa-search
+                            <x-taxa-search class="font-bold"
                                 label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
                                 required id="parentname" name="parentname"
                                 :tidName="'parenttid'" :hide_selector="true"
@@ -241,7 +249,7 @@
                                 value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->source ?? '') : '' }}" />
                         </div>
                         <div class="w-1/2">
-                            <x-select
+                            <x-select class="font-bold"
                                 label="{{ __('taxonomy_taxoneditor.LOC_SECURITY') }}"
                                 name="securitystatus" id="securitystatus"
                                 :defaultValue="$mode === 'edit' && $taxonInfo ? $taxonInfo->securityStatus : 0"
