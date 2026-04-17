@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div id="unit3"
-                            class="inline-flex items-center gap-2"
+                            class="flex items-center gap-2"
                             x-show="rankid && parseInt(rankid) >= 230">
                             <x-input label="Infraspecific designation"
                                 name="unitind3" id="unitind3"
@@ -198,29 +198,28 @@
                                     x-bind:required="rankid && parseInt(rankid) >= 230" />
                             </div>
                         </div>
-                        <div id="cultivarEpithet-div"
-                            class="inline-flex items-center gap-2"
+                        <div class="flex items-end gap-4"
                             x-show="rankid && parseInt(rankid) >= 300">
-                            <div class="flex flex-col w-full">
-                                <label
-                                    class="text-base-content text-base font-bold mb-1"
-                                    for="cultivarEpithet"><span
-                                        x-text="'{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}'"></span>
-                                    <span
-                                        class="vertical-align text-error italic pr-1">*</span>
-                                </label>
-                                <x-input
-                                    name="cultivarEpithet" id="cultivarEpithet"
-                                    value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->cultivarEpithet ?? '') : '' }}" x-ref="cultivarEpithet" />
+                            <div id="cultivarEpithet-div">
+                                <div class="flex flex-col w-full">
+                                    <label
+                                        class="text-base-content text-base font-bold mb-1"
+                                        for="cultivarEpithet"><span
+                                            x-text="'{{ __('taxonomy_taxonomyloader.CULTIVAR_EPITHET') }}'"></span>
+                                        <span
+                                            class="vertical-align text-error italic pr-1">*</span>
+                                    </label>
+                                    <x-input
+                                        name="cultivarEpithet" id="cultivarEpithet"
+                                        value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->cultivarEpithet ?? '') : '' }}" x-ref="cultivarEpithet" />
+                                </div>
                             </div>
-                        </div>
-                        <div id="tradeName-div"
-                            class="inline-flex items-center gap-2"
-                            x-show="rankid && parseInt(rankid) >= 300">
-                            <x-input
-                                label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
-                                name="tradeName" id="tradeName"
-                                value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->tradeName ?? '') : '' }}" x-ref="tradeName" />
+                            <div id="tradeName-div">
+                                <x-input
+                                    label="{{ __('fieldterms_occurrenceterms.TRADE_NAME') }}"
+                                    name="tradeName" id="tradeName"
+                                    value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->tradeName ?? '') : '' }}" x-ref="tradeName" />
+                            </div>
                         </div>
                         <div class="w-1/2">
                             <x-input
