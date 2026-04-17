@@ -11,7 +11,7 @@ use App\Models\OccurrenceEdit;
 use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class OccurrenceController extends Controller {
     public static function profilePage(int $occid) {
@@ -104,66 +104,6 @@ class OccurrenceController extends Controller {
 
         return view('pages/occurrence/editor', ['occurrence' => $occurrence]);
 
-    }
-
-    public static function postComment(int $occid) {
-        $user = request()->user();
-        $input = request()->input();
-        $errors = [];
-
-        $validator = Validator::make($input, [
-            'comment' => ['required', 'string'],
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-        } else {
-            $new_comment = new OccurrenceComment();
-            $new_comment->fill($input);
-            $new_comment->uid = $user->uid;
-            $new_comment->occid = $occid;
-            $new_comment->save();
-        }
-        $occurrence = Occurrence::fromKey($occid);
-
-        return view('pages/occurrence/profile', [
-            'occurrence' => $occurrence,
-            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
-            'comment_errors' => $errors,
-        ])->fragment('comments');
-    }
-
-    public static function deleteComment(int $occid, int $comid) {
-        $occurrence = Occurrence::fromKey($occid);
-        $comment = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->first();
-        $user = request()->user();
-
-        if ($user && $comment->uid === $user->uid || Gate::check('COLL_EDIT', $occurrence->collid)) {
-            $comment->delete();
-        }
-
-        return view('pages/occurrence/profile', [
-            'occurrence' => $occurrence,
-            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
-        ])->fragment('comments');
-    }
-
-    private static function updateComment(int $occid, int $comid, array $fields) {
-        $updated = OccurrenceComment::where('occid', $occid)->where('comid', $comid)->update($fields);
-        $occurrence = Occurrence::fromKey($occid);
-
-        return view('pages/occurrence/profile', [
-            'occurrence' => $occurrence,
-            'comments' => OccurrenceComment::getCommentsWithUsername($occurrence),
-        ])->fragment('comments');
-    }
-
-    public static function reportComment(int $occid, int $comid) {
-        return self::updateComment($occid, $comid, ['reviewstatus' => 2]);
-    }
-
-    public static function publicComment(int $occid, int $comid) {
-        return self::updateComment($occid, $comid, ['reviewstatus' => 1]);
     }
 
     public static function linkChecklist(int $occid) {
