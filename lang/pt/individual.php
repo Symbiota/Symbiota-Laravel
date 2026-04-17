@@ -141,4 +141,5 @@ return [
     'PRIVATE_STATUS' => 'estatuto privado',
     'UNABLE_TO_VERIFY_TARGET' => 'ERRO ao excluir voucher: não foi possível verificar a lista de verificação de destino do voucher',
     'PERMISSION_ERROR' => 'ERRO ao excluir voucher: erro de permissão',
+    'DETAILS' => 'Detalhes',
 ];

@@ -135,5 +135,6 @@ return [
     'CULT_STATUS' => 'Estado de Cultivo',
     'CULTIVATED' => 'Cultivado',
     'EVENT_ID' => 'Event ID',
-    'DETAILS_PROTECTED' => 'Detalles protegidos'
+    'DETAILS_PROTECTED' => 'Detalles protegidos',
+    'DETAILS' => 'Detalles',
 ];
