@@ -120,10 +120,27 @@ async function verifyLoadFormCore(
             return { isValid: false, message: msg };
         }
     }
+
+    const cultivarEpithetIsRequired = alpineData.rankid >= 300;
+    if(cultivarEpithetIsRequired){
+        const cultivarEpithetIsMissing = !document.querySelector('[name="cultivarEpithet"]')?.value;
+        if(cultivarEpithetIsMissing){
+            const msg = missingRequiredTaxonFieldMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
+    }
+
+    const parenttid = document.querySelector('[name="parenttid"]');
+    if (!parenttid?.value) {
+        const msg = parentIdNotSetMessage;
+        if (!silent) alert(msg);
+        setErrorDisplay(msg);
+        return { isValid: false, message: msg };
+    }
     
-    const unitname3 = document.querySelector('[name="unitname3"]')?.value;
-    console.log("deleteMe unitname3 in verifyLoadFormCore is: ");
-    console.log(unitname3);
+    
     const sciName = (
         (unitname1?.value || "") +
         " " +
@@ -131,6 +148,7 @@ async function verifyLoadFormCore(
         " " +
         (unitname3?.value || "")
     ).trim();
+
     console.log("deleteMe sciName in verifyLoadFormCore is: ");
     console.log(sciName);
     const exists = await checkNameExistence(
@@ -148,80 +166,80 @@ async function verifyLoadFormCore(
     return { isValid: true, message: "" };
 }
 
-async function validateTaxonForm(
-    alpineData,
-    preExistingTaxonInfo = null,
-    alreadyExistsMessage = null,
-    missingRequiredTaxonFieldMessage = null,
-) {
-    console.log("deleteMe validateTaxonForm entered and alpineData is: ");
-    console.log(alpineData);
-    console.log(JSON.parse(JSON.stringify(alpineData)));
-    if (preExistingTaxonInfo) {
-        return validateTaxonEditForm(preExistingTaxonInfo, alpineData, missingRequiredTaxonFieldMessage);
-    }
-    console.log("deleteMe SHOULD NOT GET HERE IN THE TAXONOMY EDITOR");
-    console.log("deleteMe preExistingTaxonInfo is: ");
-    console.log(preExistingTaxonInfo);
+// async function validateTaxonForm(
+//     alpineData,
+//     preExistingTaxonInfo = null,
+//     alreadyExistsMessage = null,
+//     missingRequiredTaxonFieldMessage = null,
+// ) {
+//     console.log("deleteMe validateTaxonForm entered and alpineData is: ");
+//     console.log(alpineData);
+//     console.log(JSON.parse(JSON.stringify(alpineData)));
+//     if (preExistingTaxonInfo) {
+//         return validateTaxonEditForm(preExistingTaxonInfo, alpineData, missingRequiredTaxonFieldMessage);
+//     }
+//     console.log("deleteMe SHOULD NOT GET HERE IN THE TAXONOMY EDITOR");
+//     console.log("deleteMe preExistingTaxonInfo is: ");
+//     console.log(preExistingTaxonInfo);
 
-    let message = "";
-    const parenttid = document.querySelector('[name="parenttid"]');
-    const unitname1 = document.querySelector('[name="unitname1"]');
-    const unitname2 = document.querySelector('[name="unitname2"]');
-    const unit2namevisible =
-        !alpineData.rankid || parseInt(alpineData.rankid) >= 220;
-    const unitname3 = document.querySelector('[name="unitname3"]');
-    const unit3namevisible = !!(
-        alpineData.rankid && parseInt(alpineData.rankid) >= 230
-    );
-    const cultivarEpithetVisible = !!(
-        alpineData.rankid && parseInt(alpineData.rankid) >= 300
-    );
-    const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
+//     let message = "";
+//     const parenttid = document.querySelector('[name="parenttid"]');
+//     const unitname1 = document.querySelector('[name="unitname1"]');
+//     const unitname2 = document.querySelector('[name="unitname2"]');
+//     const unit2namevisible =
+//         !alpineData.rankid || parseInt(alpineData.rankid) >= 220;
+//     const unitname3 = document.querySelector('[name="unitname3"]');
+//     const unit3namevisible = !!(
+//         alpineData.rankid && parseInt(alpineData.rankid) >= 230
+//     );
+//     const cultivarEpithetVisible = !!(
+//         alpineData.rankid && parseInt(alpineData.rankid) >= 300
+//     );
+//     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
 
-    if (!unitname1?.value) {
-        message = "Missing required field: " + alpineData.unit1Label + " Name";
-        return { isValid: false, message: message };
-    }
-    if (unit2namevisible && !unitname2?.value) {
-        message = "Missing required field: " + alpineData.unit2Label + " Name";
-        return { isValid: false, message: message };
-    }
-    if (unit3namevisible && !unitname3?.value) {
-        message = "Missing required field: Infraspecific Epithet Name";
-        return { isValid: false, message: message };
-    }
-    if (cultivarEpithetVisible && !cultivarEpithet?.value) {
-        message = "Missing required field: Cultivar Epithet";
-        return { isValid: false, message: message };
-    }
+//     if (!unitname1?.value) {
+//         message = "Missing required field: " + alpineData.unit1Label + " Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (unit2namevisible && !unitname2?.value) {
+//         message = "Missing required field: " + alpineData.unit2Label + " Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (unit3namevisible && !unitname3?.value) {
+//         message = "Missing required field: Infraspecific Epithet Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (cultivarEpithetVisible && !cultivarEpithet?.value) {
+//         message = "Missing required field: Cultivar Epithet";
+//         return { isValid: false, message: message };
+//     }
 
-    if (!parenttid?.value) {
-        message =
-            "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
-        return { isValid: false, message: message };
-    }
-    const sciName = (
-        unitname1.value +
-        " " +
-        unitname2.value +
-        " " +
-        unitname3.value
-    ).trim();
-    console.log("deleteMe sciName in validateTaxonForm is: ");
-    console.log(sciName);
-    const exists = await checkNameExistence(
-        sciName,
-        alpineData.rankid,
-        alpineData.author,
-        preExistingTaxonInfo,
-    );
-    if (exists) {
-        message = sciName + alreadyExistsMessage;
-        return { isValid: false, message: message };
-    }
-    return { isValid: true, message: "" };
-}
+//     if (!parenttid?.value) {
+//         message =
+//             "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
+//         return { isValid: false, message: message };
+//     }
+//     const sciName = (
+//         unitname1.value +
+//         " " +
+//         unitname2.value +
+//         " " +
+//         unitname3.value
+//     ).trim();
+//     console.log("deleteMe sciName in validateTaxonForm is: ");
+//     console.log(sciName);
+//     const exists = await checkNameExistence(
+//         sciName,
+//         alpineData.rankid,
+//         alpineData.author,
+//         preExistingTaxonInfo,
+//     );
+//     if (exists) {
+//         message = sciName + alreadyExistsMessage;
+//         return { isValid: false, message: message };
+//     }
+//     return { isValid: true, message: "" };
+// }
 
 async function verifyLoadForm(
     alpineData,
