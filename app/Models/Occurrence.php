@@ -300,11 +300,13 @@ SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid
     public function paleo() {
         $paleo = DB::table('omoccurpaleo')->where('occid', $this->occid)->first();
 
-        $paleo->earlyIntervalHierarchy = $paleo->earlyInterval?
-            self::getPaleoParents($paleo->earlyInterval): null;
+        if($paleo) {
+            $paleo->earlyIntervalHierarchy = $paleo->earlyInterval?
+                self::getPaleoParents($paleo->earlyInterval): null;
 
-        $paleo->lateIntervalHierarchy = $paleo->lateInterval?
-            self::getPaleoParents($paleo->lateInterval): null;
+            $paleo->lateIntervalHierarchy = $paleo->lateInterval?
+                self::getPaleoParents($paleo->lateInterval): null;
+        }
 
         return $paleo;
     }
