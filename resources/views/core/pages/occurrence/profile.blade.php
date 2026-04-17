@@ -651,22 +651,22 @@ foreach($user_datasets as $datasets) {
 
                     <div class="ml-4 flex flex-col gap-2">
                         @foreach ($editGroup['edits'] as $edit)
-                            {{--
-                            <x-text-label label="Field">{{ $edit->fieldName }}</x-text-label>
-                            <x-text-label allow_empty="true" label="Old Value">{{ $edit->fieldValueOld }}</x-text-label>
-                            <x-text-label label="New Value">{{ $edit->fieldValueNew }}</x-text-label>
-                            --}}
                             <div class="flex gap-2">
                                 <span class="bg-base-300 px-2 rounded-full">
                                     {{ (!$edit->fieldValueOld? 'Added': 'Updated') }}
                                 </span>
+                                {{-- TODO Solve lower case storage to new model keys issue to impl current tag --}}
                                 <x-text-label :label="$edit->fieldName">
                                     @if(!$edit->fieldValueOld)
                                         {{ $edit->fieldValueNew }}
                                     @else
                                         <span>{{ $edit->fieldValueOld }}</span>
                                         <i class="fa-solid fa-arrow-right"></i>
+                                        @if($edit->fieldValueNew)
                                         <span>{{ $edit->fieldValueNew }}</span>
+                                        @else
+                                        <span class="bg-base-300 px-2 rounded-full">None</span>
+                                        @endif
                                     @endif
                                 </x-text-label>
                             </div>
