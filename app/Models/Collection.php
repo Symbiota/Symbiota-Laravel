@@ -63,6 +63,10 @@ class Collection extends Model {
         return $results->count() ? true : false;
     }
 
+    public function isMaterialSampleEnabled(): bool {
+        return $this->dynamicProperties['editorProps']['modules-panel'][0]['matSample']['status'] ?? false;
+    }
+
     //collTypes
     const Specimens = 'Preserved Specimens';
 

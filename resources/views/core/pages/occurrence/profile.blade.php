@@ -13,11 +13,10 @@
     'user_datasets' => [],
     'paleo' => null,
     'exsiccati' => null,
-    'material_sample' => null,
+    'material_samples' => null,
 ])
 
 @php
-
 function getLocalityStr($occur) {
     $localityArr = [];
 
@@ -234,57 +233,62 @@ foreach($user_datasets as $datasets) {
                 @endif
                 {{-- EXSICCATE INFORMATION END --}}
 
-                {{-- MATERIAL INFORMATION START --}}
-                @if($material_sample)
-                <div>
-                    <div>
-                        <div class="font-bold text-lg">
-                            {{ __('individual.MATERIAL_SAMPLES') }}
-                        </div>
-                        <hr />
-                    </div>
-                    @foreach([
-                        'sampleType' => __('material_sample.SAMPLE_TYPE'),
-                        'catalogNumber' => __('material_sample.CATALOG_NUMBER'),
-                        'guid' => __('material_sample.GUID'),
-                        'sampleCondition' => __('material_sample.SAMPLE_CONDITION'),
-                        'disposition' => __('material_sample.DISPOSITION'),
-                        'preservationType' => __('material_sample.PRESERVATION_TYPE'),
-                        'preparationDetails' => __('material_sample.PREPARATION DETAILS'),
-                        'preparationDate' => __('material_sample.PREPARATION_DATE'),
-                        'preparedBy' => __('material_sample.PREPARED_BY'),
-                        'individualCount' => __('material_sample.INDIVIDUAL COUNT'),
-                        'sampleSize' => __('material_sample.SAMPLE_SIZE'),
-                        'storageLocation' => __('material_sample.STORAGE_LOCATION'),
-                        'remarks' => __('material_sample.REMARKS'),
-                        'concentration' => __('material_sample.CONCENTRATION'),
-                        'concentrationUnit' => __('material_sample.CONCENTRATION_UNIT'),
-                        'ratioOfAbsorbance260/230' => __('material_sample.RATIO_OF_ABSORBANCE_260/230'),
-                        'ratioOfAbsorbance260/230' => __('material_sample.RATIO_OF_ABSORBANCE_260/280'),
-                        'volume' => __('material_sample.VOLUME'),
-                        'weight' => __('material_sample.WEIGHT'),
-                        'weightMethod' => __('material_sample.WEIGHT_METHOD'),
-                        'purification Method' => __('material_sample.PURIFICATION_METHOD'),
-                        'quality' => __('material_sample.QUALITY'),
-                        'qualityRemarks' => __('material_sample.QUALITY_REMARKS'),
-                        'qualityCheckDate' => __('material_sample.QUALITY_CHECK_DATE'),
-                        'sampleSize' => __('material_sample.SAMPLE_SIZE'),
-                        'sieving' => __('material_sample.SIEVING'),
-                        'dnaHybridization' => __('material_sample.DNA_HYBRIDIZATION'),
-                        'dnaMeltingPoint' => __('material_sample.DNA_MELTING_POINT'),
-                        'estimatedSize' => __('material_sample.ESTIMATED_SIZE'),
-                        'poolDnaExtracts' => __('material_sample.POOL_DNA_EXTRACTS'),
-                        'sampleDesignation' => __('material_sample.SAMPLE_DESIGNATION')
-                    ] as $field => $label)
-                        <x-text-label :label="$label">
-                            {{ $material_sample[$field] }}
-                        </x-text-label>
-                    @endforeach
-                </div>
-                @endif
-                {{-- MATERIAL INFORMATION END --}}
             </div>
             {{-- OCCURRENCE INFORMATION END --}}
+
+            {{-- MATERIAL INFORMATION START --}}
+            @if($material_samples && count($material_samples) && $collection->isMaterialSampleEnabled())
+            <div>
+                <div>
+                    <div class="font-bold text-lg">
+                        {{ __('individual.MATERIAL_SAMPLES') }}
+                    </div>
+                    <hr />
+                </div>
+                @foreach($material_samples as $material_sample)
+                @foreach([
+                    'sampleType' => __('material_sample.SAMPLE_TYPE'),
+                    'catalogNumber' => __('material_sample.CATALOG_NUMBER'),
+                    'guid' => __('material_sample.GUID'),
+                    'sampleCondition' => __('material_sample.SAMPLE_CONDITION'),
+                    'disposition' => __('material_sample.DISPOSITION'),
+                    'preservationType' => __('material_sample.PRESERVATION_TYPE'),
+                    'preparationDetails' => __('material_sample.PREPARATION DETAILS'),
+                    'preparationDate' => __('material_sample.PREPARATION_DATE'),
+                    'preparedBy' => __('material_sample.PREPARED_BY'),
+                    'individualCount' => __('material_sample.INDIVIDUAL COUNT'),
+                    'sampleSize' => __('material_sample.SAMPLE_SIZE'),
+                    'storageLocation' => __('material_sample.STORAGE_LOCATION'),
+                    'remarks' => __('material_sample.REMARKS'),
+                    'concentration' => __('material_sample.CONCENTRATION'),
+                    'concentrationUnit' => __('material_sample.CONCENTRATION_UNIT'),
+                    'ratioOfAbsorbance260/230' => __('material_sample.RATIO_OF_ABSORBANCE_260/230'),
+                    'ratioOfAbsorbance260/230' => __('material_sample.RATIO_OF_ABSORBANCE_260/280'),
+                    'volume' => __('material_sample.VOLUME'),
+                    'weight' => __('material_sample.WEIGHT'),
+                    'weightMethod' => __('material_sample.WEIGHT_METHOD'),
+                    'purification Method' => __('material_sample.PURIFICATION_METHOD'),
+                    'quality' => __('material_sample.QUALITY'),
+                    'qualityRemarks' => __('material_sample.QUALITY_REMARKS'),
+                    'qualityCheckDate' => __('material_sample.QUALITY_CHECK_DATE'),
+                    'sampleSize' => __('material_sample.SAMPLE_SIZE'),
+                    'sieving' => __('material_sample.SIEVING'),
+                    'dnaHybridization' => __('material_sample.DNA_HYBRIDIZATION'),
+                    'dnaMeltingPoint' => __('material_sample.DNA_MELTING_POINT'),
+                    'estimatedSize' => __('material_sample.ESTIMATED_SIZE'),
+                    'poolDnaExtracts' => __('material_sample.POOL_DNA_EXTRACTS'),
+                    'sampleDesignation' => __('material_sample.SAMPLE_DESIGNATION')
+                ] as $field => $label)
+                    @isset($material_sample->{$field})
+                    <x-text-label :label="$label">
+                        {{ $material_sample->{$field} }}
+                    </x-text-label>
+                    @endisset
+                @endforeach
+                @endforeach
+            </div>
+            @endif
+            {{-- MATERIAL INFORMATION END --}}
 
             {{-- PALEO INFORMATION START --}}
             @if($paleo)

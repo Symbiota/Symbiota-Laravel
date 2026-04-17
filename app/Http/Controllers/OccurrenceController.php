@@ -22,6 +22,7 @@ class OccurrenceController extends Controller {
         $identifiers = DB::table('omoccuridentifiers')->where('occid', $occid)->get();
         $comments = OccurrenceComment::getCommentsWithUsername($occurrence);
         $paleo = $occurrence->paleo();
+        $material_samples = $occurrence->materialSamples();
 
         $user_checklists = [];
         $user_datasets = [];
@@ -91,6 +92,7 @@ class OccurrenceController extends Controller {
             'user_checklists' => $user_checklists,
             'user_datasets' => $user_datasets,
             'paleo' => $paleo,
+            'material_samples' => $material_samples
         ]);
     }
 
