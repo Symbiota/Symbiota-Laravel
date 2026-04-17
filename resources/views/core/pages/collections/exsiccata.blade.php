@@ -17,6 +17,10 @@
     $omenid = $omenid ?? null;
     $selectLookupArr = $selectLookupArr ?? [];
     $unableLocateRecord = $unableLocateRecord ?? false;
+    $exsTargetItems = itemize($selectLookupArr);
+    $collectionItems = itemize($collections);
+    $occAddCollectionItems = itemize($collections);
+    $occAddCollectionItems[] = item('occid', __('exsiccati.SYMB_PK_OCCID'));
 
     $query = array_filter([
         'searchterm' => $searchTerm,
@@ -62,26 +66,6 @@
 
 
 <script>
-    function toggle(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.classList.toggle('hidden');
-    }
-
-    //build and reuse the exsicati list for selects. Hack to render in blade instead of legacy JS
-    function buildExsSelect(selectObj) {
-        if (!selectObj || selectObj.dataset.loaded === 'true') return;
-
-        const template = document.getElementById('exs-select-template');
-        if (!template) return;
-
-        [...template.options].forEach(option => {
-            selectObj.add(new Option(option.text, option.value));
-        });
-
-        selectObj.dataset.loaded = 'true';
-    }
-
     function verifyExsAddForm(f) {
         if (f.title.value.trim() === '') {
             alert("{{ __('exsiccati.TITLE_CANNOT_EMPTY') }}");
@@ -135,23 +119,14 @@
     }
 </script>
 
-<x-layout>
+<x-margin-layout>
     <div class="mb-4">
         <x-breadcrumbs :items="$breadcrumbs" />
     </div>
 
-    <div class="exsiccata-page mx-auto max-w-screen-lg space-y-6">
-        @if($isDetailPage && ! empty($selectLookupArr))
-            {{--hidden select for copying the exsiccatae list--}}
-            <select id="exs-select-template" class="hidden" aria-hidden="true" tabindex="-1">
-                @foreach($selectLookupArr as $titleId => $titleStr)
-                    <option value="{{ $titleId }}">{{ $titleStr }}</option>
-                @endforeach
-            </select>
-        @endif
-
+    <div class="exsiccata-page space-y-6">
         @if(session('status'))
-            <div class="rounded border px-4 py-3 {{ session('statusType') === 'success' ? 'border-green-300 bg-green-50 text-green-800' : 'border-red-300 bg-red-50 text-red-800' }}">
+            <div class="rounded border px-4 py-3 {{ session('statusType') === 'success' ? ' text-success' : 'text-error' }}">
                 {{ session('status') }}
             </div>
         @endif
@@ -162,24 +137,24 @@
             </div>
         {{--Index Page--}}
         @elseif(!$isDetailPage)
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
-                <div class="flex-1">
+            <div class="flex items-start gap-6">
+                <div x-data="{ toggleName: false }" class="min-w-0 flex-1">
                     <div class="flex items-center justify-between gap-4">
                         <h1 class="text-2xl font-bold">{{ __('exsiccati.EXS') }}</h1>
 
                         @if($isEditor)
                             <button
                                 type="button"
-                                onclick="toggle('exsadddiv')"
+                                @click="toggleName = !toggleName"
                                 class="cursor-pointer px-3 py-2 font-bold leading-none"
                             >
-                            <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
+                                <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
                             </button>
                         @endif
                     </div>
 
                     @if($isEditor)
-                        <div id="exsadddiv" class="hidden mt-3 max-w-xl rounded border p-3">
+                        <div x-cloak x-show="toggleName" id="exsadddiv" class="mt-3 max-w-xl rounded border p-3">
                             <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsAddForm(this)" class="space-y-2">
                                 @csrf
                                 <div>
@@ -230,7 +205,7 @@
                         <div class="mb-3 text-lg font-semibold">{{ __('exsiccati.EXS_TITLES') }}</div>
 
                         @if(empty($titles))
-                            <div class="bg-white px-4 py-6 text-lg">
+                            <div class="bg-base-100 px-4 py-6 text-lg">
                                 {{ __('exsiccati.NO_EXS_MATCHING') }}
                             </div>
                         @else
@@ -251,7 +226,7 @@
                                         </div>
 
                                         @if(!empty($titleData['editor']) || !empty($titleData['exsrange']))
-                                            <div class="ml-4 text-sm text-slate-600">
+                                            <div class="ml-4 text-sm text-base-content/50">
                                                 {!! Purify::clean($titleData['editor'] ?? '') !!} {!! !empty($titleData['exsrange']) ? ' [' . Purify::clean($titleData['exsrange']) . ']' : '' !!}
                                             </div>
                                         @endif
@@ -262,88 +237,65 @@
                     </div>
                 </div>
 
-                <form method="GET" action="{{ route('exsiccata.index') }}" class="w-full rounded border bg-slate-50 p-4 lg:sticky lg:top-4 lg:w-80 lg:flex-none">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block font-semibold">{{ __('exsiccati.SEARCH') }}</label>
-                            <input
-                                type="text"
-                                name="searchterm"
-                                value="{{ $searchTerm }}"
-                                class="mt-1 w-full rounded border px-3 py-2"
-                                onchange="this.form.submit()"
-                            />
-                        </div>
+                <x-sticky-margin-container class="w-full max-w-[20rem] shrink-0 lg:h-auto lg:ml-0 lg:w-auto">
+                    <form method="GET" action="{{ route('exsiccata.index') }}" class="relative z-10 w-full rounded border bg-base-200 p-4">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block font-semibold">{{ __('exsiccati.SEARCH') }}</label>
+                                <input type="text" name="searchterm" value="{{ $searchTerm }}" class="mt-1 w-full rounded border px-3 py-2 bg-base-100" onchange="this.form.submit()"/>
+                            </div>
 
-                        <label class="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                name="specimenonly"
-                                value="1"
-                                {{ $specimenOnly ? 'checked' : '' }}
-                                onchange="this.form.submit()"
-                            />
-                            <span>{{ __('exsiccati.DISP_ONLY_W_SPECS') }}</span>
-                        </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="specimenonly" value="1" {{ $specimenOnly ? 'checked' : '' }} onchange="this.form.submit()"/>
+                                <span>{{ __('exsiccati.DISP_ONLY_W_SPECS') }}</span>
+                            </label>
 
-                        @if($specimenOnly)
-                            <div class="space-y-4 pl-6">
-                                <div>
-                                    <label class="block font-medium">{{ __('exsiccati.LIMIT_TO') }}</label>
-                                    <select name="collid" class="mt-1 w-full rounded border px-3 py-2" onchange="this.form.submit()">
-                                        <option value="">{{ __('exsiccati.ALL_COLLS') }}</option>
-                                        @foreach($collections as $id => $collection)
-                                            <option value="{{ $id }}" {{ (string) $collId === (string) $id ? 'selected' : '' }}>
-                                                {{ $collection }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            @if($specimenOnly)
+                                <div class="space-y-4 pl-6">
+                                    <div>
+                                        <label class="block font-medium">{{ __('exsiccati.LIMIT_TO') }}</label>
+                                        <x-select name="collid" class="mt-1 w-full" :items="$collectionItems":defaultValue="$collId ?: null" :onChange="'this.form.submit()'" :select_text="__('exsiccati.ALL_COLLS')"/>
+                                    </div>
+
+                                    <label class="flex items-center gap-2">
+                                        <input type="checkbox" name="imagesonly" value="1" {{ $imagesOnly ? 'checked' : '' }} onchange="this.form.submit()"/>
+                                        <span>{{ __('exsiccati.DISP_ONLY_W_IMGS') }}</span>
+                                    </label>
                                 </div>
+                            @else
+                                <input type="hidden" name="imagesonly" value="0" />
+                            @endif
 
-                                <label class="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        name="imagesonly"
-                                        value="1"
-                                        {{ $imagesOnly ? 'checked' : '' }}
-                                        onchange="this.form.submit()"
-                                    />
-                                    <span>{{ __('exsiccati.DISP_ONLY_W_IMGS') }}</span>
-                                </label>
-                            </div>
-                        @else
-                            <input type="hidden" name="imagesonly" value="0" />
-                        @endif
-
-                        <div class="flex flex-wrap items-center gap-4">
-                            <span class="font-bold">{{ __('exsiccati.DISP_SORT_BY') }}:</span>
                             <div class="flex flex-wrap items-center gap-4">
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="sortby" value="0" {{ $sortBy === 0 ? 'checked' : '' }} onchange="this.form.submit()" />
-                                    <span>{{ __('exsiccati.TITLE') }}</span>
-                                </label>
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="sortby" value="1" {{ $sortBy === 1 ? 'checked' : '' }} onchange="this.form.submit()" />
-                                    <span>{{ __('exsiccati.ABB') }}</span>
-                                </label>
+                                <span class="font-bold">{{ __('exsiccati.DISP_SORT_BY') }}:</span>
+                                <div class="flex flex-wrap items-center gap-4">
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="sortby" value="0" {{ $sortBy === 0 ? 'checked' : '' }} onchange="this.form.submit()" />
+                                        <span>{{ __('exsiccati.TITLE') }}</span>
+                                    </label>
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="sortby" value="1" {{ $sortBy === 1 ? 'checked' : '' }} onchange="this.form.submit()" />
+                                        <span>{{ __('exsiccati.ABB') }}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <x-button name="formsubmit" type="submit" value="dlexs_titleOnly" class="w-full justify-center text-sm">
+                                    <i class="fa-solid fa-download h-4 w-4"></i>
+                                    <span>{{ __('exsiccati.TITLES') }}</span>
+                                </x-button>
+                                <x-button name="formsubmit" type="submit" value="dlexs" class="w-full justify-center text-sm">
+                                    <i class="fa-solid fa-download h-4 w-4"></i>
+                                    <span>{{ __('exsiccati.OCCS') }}</span>
+                                </x-button>
+                                <x-button name="formsubmit" type="submit" value="rebuildList" class="w-full justify-center text-sm">
+                                    <span>{{ __('exsiccati.REBUILD_LIST') }}</span>
+                                </x-button>
                             </div>
                         </div>
-
-                        <div class="flex flex-col gap-2">
-                            <x-button name="formsubmit" type="submit" value="dlexs_titleOnly" class="w-full justify-center text-sm">
-                                <i class="fa-solid fa-download h-4 w-4"></i>
-                                <span>{{ __('exsiccati.TITLES') }}</span>
-                            </x-button>
-                            <x-button name="formsubmit" type="submit" value="dlexs" class="w-full justify-center text-sm">
-                                <i class="fa-solid fa-download h-4 w-4"></i>
-                                <span>{{ __('exsiccati.OCCS') }}</span>
-                            </x-button>
-                            <x-button name="formsubmit" type="submit" value="rebuildList" class="w-full justify-center text-sm">
-                                <span>{{ __('exsiccati.REBUILD_LIST') }}</span>
-                            </x-button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </x-sticky-margin-container>
             </div>
         @elseif(! $isOccurrencePage)
             @php
@@ -353,42 +305,43 @@
                     $indExsUrl = ['url' => $title['sourceidentifier'] ?? '', 'label' => 'IndExs #' . $matches[1]];
             @endphp
 
-            <div class="flex items-start justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold">{{ $title['title'] ?? '' }}</h1>
-                    @if($indExsUrl)
-                        <a href="{{ $indExsUrl['url'] }}" target="_blank" class="mt-1 inline-block text-link-darker underline underline-offset-2">
-                            {{ $indExsUrl['label'] }}
-                        </a>
-                    @endif
-                    @if(!empty($title['abbreviation']))
-                        <div class="mt-2">{{ __('exsiccati.ABB') }}: {{ $title['abbreviation'] }}</div>
-                    @endif
-                    @if(!empty($title['editor']))
-                        <div>{{ __('exsiccati.EDITOR') }}: {{ $title['editor'] }}</div>
-                    @endif
-                    @if(!empty($title['exsrange']))
-                        <div>{{ __('exsiccati.NUM_RANGE') }}: {{ $title['exsrange'] }}</div>
-                    @endif
-                    @if(!empty($title['notes']))
-                        <div>{{ __('exsiccati.NOTES') }}: {{ $title['notes'] }}</div>
+            <div x-data="{ exsEditOpen: false, numAddOpen: false }">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold">{{ $title['title'] ?? '' }}</h1>
+                        @if($indExsUrl)
+                            <a href="{{ $indExsUrl['url'] }}" target="_blank" class="mt-1 inline-block text-link-darker underline underline-offset-2">
+                                {{ $indExsUrl['label'] }}
+                            </a>
+                        @endif
+                        @if(!empty($title['abbreviation']))
+                            <div class="mt-2">{{ __('exsiccati.ABB') }}: {{ $title['abbreviation'] }}</div>
+                        @endif
+                        @if(!empty($title['editor']))
+                            <div>{{ __('exsiccati.EDITOR') }}: {{ $title['editor'] }}</div>
+                        @endif
+                        @if(!empty($title['exsrange']))
+                            <div>{{ __('exsiccati.NUM_RANGE') }}: {{ $title['exsrange'] }}</div>
+                        @endif
+                        @if(!empty($title['notes']))
+                            <div>{{ __('exsiccati.NOTES') }}: {{ $title['notes'] }}</div>
+                        @endif
+                    </div>
+
+                    @if($isEditor)
+                        <div class="flex gap-2">
+                            <button type="button" @click="exsEditOpen = !exsEditOpen" class="cursor-pointer px-3 py-2">
+                                <i class="fas fa-edit text-base-content hover:text-base-content/50"></i>
+                            </button>
+                            <button type="button" @click="numAddOpen = !numAddOpen" class="cursor-pointer px-3 py-2 text-lg leading-none font-bold">
+                                 <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
+                            </button>
+                        </div>
                     @endif
                 </div>
 
-                @if($isEditor)
-                    <div class="flex gap-2">
-                        <button type="button" onclick="toggle('exseditdiv')" class="cursor-pointer px-3 py-2">
-                            <i class="fas fa-edit text-base-content hover:text-base-content/50"></i>
-                        </button>
-                        <button type="button" onclick="toggle('numadddiv')" class="cursor-pointer px-3 py-2 text-lg leading-none font-bold">
-                             <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
-                        </button>
-                    </div>
-                @endif
-            </div>
-
             @if($isEditor)
-                <div id="exseditdiv" class="hidden space-y-4 rounded border p-4">
+                <div x-cloak x-show="exsEditOpen" id="exseditdiv" class="space-y-4 rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyExsAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -445,12 +398,7 @@
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
-                            <select name="targetometid" class="mt-1 w-full max-w-[90%] rounded border px-3 py-2">
-                                <option value="--------"></option>
-                                @foreach($selectLookupArr as $titleId => $titleStr)
-                                    <option value="{{ $titleId }}">{{ $titleStr }}</option>
-                                @endforeach
-                            </select>
+                            <x-select name="targetometid" class="mt-1" :items="$exsTargetItems" select_text="--------"/>
                         </div>
                         <x-button name="formsubmit" type="submit" value="Merge Exsiccatae" class="text-sm">
                             {{ __('exsiccati.MERGE_EXS') }}
@@ -458,7 +406,7 @@
                     </form>
                 </div>
 
-                <div id="numadddiv" class="hidden rounded border p-4">
+                <div x-cloak x-show="numAddOpen" id="numadddiv" class="rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -476,11 +424,12 @@
                     </form>
                 </div>
             @endif
+            </div>
 
             <hr class="border border-accent-lighter" />
 
             @if(empty($numbers))
-                <div class="bg-white text-lg font-semibold">
+                <div class="bg-base-100 text-lg font-semibold">
                     {{ __('exsiccati.NO_EXS_NUMS') }}
                 </div>
             @else
@@ -508,7 +457,7 @@
                             </div>
 
                             @if(!empty($numberData['notes']))
-                                <div class="ml-4 text-sm text-slate-600">{{ $numberData['notes'] }}</div>
+                                <div class="ml-4 text-sm text-base-content/50">{{ $numberData['notes'] }}</div>
                             @endif
                         </li>
                     @endforeach
@@ -522,54 +471,55 @@
                     $indExsUrl = ['url' => $number['sourceidentifier'] ?? '', 'label' => 'IndExs #' . $matches[1]];
             @endphp
 
-            <div class="flex items-start justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold">
-                        <a href="{{ route('exsiccata.index') . '?' . http_build_query(array_filter([
-                            'ometid' => $currentOmetid,
-                            'searchterm' => $searchTerm,
-                            'specimenonly' => $specimenOnly,
-                            'imagesonly' => $imagesOnly,
-                            'collid' => $collId,
-                            'sortby' => $sortBy,
-                        ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="text-link-darker underline underline-offset-2">
-                            {{ Purify::clean($title['title']) ?? '' }}
-                        </a>
-                        #{{ $number['exsnumber'] ?? '' }}
-                    </h1>
-                    <div class="mt-2 space-y-1">
-                        @if(!empty($title['abbreviation']))
-                            <div>{{ $title['abbreviation'] }}</div>
-                        @endif
-                        @if(!empty($title['editor']))
-                            <div>{{ $title['editor'] }}</div>
-                        @endif
-                        @if(!empty($title['exsrange']))
-                            <div>[{{ $title['exsrange'] }}]</div>
-                        @endif
-                        @if(!empty($number['notes']))
-                            <div>{{ $number['notes'] }}</div>
-                        @endif
-                        @if($indExsUrl)
-                            <a href="{{ $indExsUrl['url'] }}" target="_blank" class="inline-block text-link-darker underline underline-offset-2">
-                                {{ $indExsUrl['label'] }}
+            <div x-data="{ numEditOpen: false, occAddOpen: false }">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold">
+                            <a href="{{ route('exsiccata.index') . '?' . http_build_query(array_filter([
+                                'ometid' => $currentOmetid,
+                                'searchterm' => $searchTerm,
+                                'specimenonly' => $specimenOnly,
+                                'imagesonly' => $imagesOnly,
+                                'collid' => $collId,
+                                'sortby' => $sortBy,
+                            ], static fn ($value) => $value !== null && $value !== '' && $value !== 0 && $value !== '0')) }}" class="text-link-darker underline underline-offset-2">
+                                {{ Purify::clean($title['title']) ?? '' }}
                             </a>
-                        @endif
+                            #{{ $number['exsnumber'] ?? '' }}
+                        </h1>
+                        <div class="mt-2 space-y-1">
+                            @if(!empty($title['abbreviation']))
+                                <div>{{ $title['abbreviation'] }}</div>
+                            @endif
+                            @if(!empty($title['editor']))
+                                <div>{{ $title['editor'] }}</div>
+                            @endif
+                            @if(!empty($title['exsrange']))
+                                <div>[{{ $title['exsrange'] }}]</div>
+                            @endif
+                            @if(!empty($number['notes']))
+                                <div>{{ $number['notes'] }}</div>
+                            @endif
+                            @if($indExsUrl)
+                                <a href="{{ $indExsUrl['url'] }}" target="_blank" class="inline-block text-link-darker underline underline-offset-2">
+                                    {{ $indExsUrl['label'] }}
+                                </a>
+                            @endif
+                        </div>
                     </div>
+                    @if($isEditor)
+                        <div class="flex gap-2">
+                            <button type="button" @click="numEditOpen = !numEditOpen" class="cursor-pointer px-3 py-2">
+                                <i class="fas fa-edit text-base-content hover:text-base-content/50"></i>
+                            </button>
+                            <button type="button" @click="occAddOpen = !occAddOpen" class="cursor-pointer px-3 py-2 text-lg leading-none font-bold">
+                                <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
+                            </button>
+                        </div>
+                    @endif
                 </div>
-                @if($isEditor)
-                    <div class="flex gap-2">
-                        <button type="button" onclick="toggle('numeditdiv')" class="cursor-pointer px-3 py-2">
-                            <i class="fas fa-edit text-base-content hover:text-base-content/50"></i>
-                        </button>
-                        <button type="button" onclick="toggle('occadddiv')" class="cursor-pointer px-3 py-2 text-lg leading-none font-bold">
-                            <i class="fas fa-add text-base-content hover:text-base-content/50"></i>
-                        </button>
-                    </div>
-                @endif
-            </div>
             @if($isEditor)
-                <div id="numeditdiv" class="hidden border space-y-4 p-4">
+                <div x-cloak x-show="numEditOpen" id="numeditdiv" class="border space-y-4 p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyNumAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -602,9 +552,7 @@
                         <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
-                            <select name="targetometid" class="mt-1 w-full max-w-[90%] rounded border px-3 py-2" onfocus="buildExsSelect(this)">
-                                <option value="-----"></option>
-                            </select>
+                            <x-select name="targetometid" class="mt-1 w-full max-w-[90%]" :items="$exsTargetItems" select_text="-----"/>
                         </div>
                         <x-button name="formsubmit" type="submit" value="Transfer Number" class="text-sm">
                             {{ __('exsiccati.TRANSFER_NUM') }}
@@ -612,20 +560,14 @@
                     </form>
                 </div>
 
-                <div id="occadddiv" class="hidden rounded border p-4">
+                <div x-cloak x-show="occAddOpen" id="occadddiv" class="rounded border p-4">
                     <form method="POST" action="{{ $postAction }}" onsubmit="return verifyOccAddForm(this)" class="space-y-3">
                         @csrf
                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
                         <input type="hidden" name="omenid" value="{{ $omenid }}" />
                         <div>
                             <label class="block font-medium">{{ __('exsiccati.COLL') }}</label>
-                            <select name="occaddcollid" class="mt-1 w-full max-w-[420px] rounded border px-3 py-2">
-                                <option value="">{{ __('exsiccati.SEL_COLL') }}</option>
-                                @foreach($collections as $id => $collection)
-                                    <option value="{{ $id }}">{{ $collection }}</option>
-                                @endforeach
-                                <option value="occid">{{ __('exsiccati.SYMB_PK_OCCID') }}</option>
-                            </select>
+                            <x-select name="occaddcollid" class="mt-1 w-full max-w-[420px]" :items="$occAddCollectionItems" :select_text="__('exsiccati.SEL_COLL')"/>
                         </div>
                         <div class="grid gap-3 md:grid-cols-4">
                             <div>
@@ -656,17 +598,18 @@
                     </form>
                 </div>
             @endif
+            </div>
             <div class="my-4">
                 <hr class="border border-accent-lighter" >
             </div>
             @if(empty($occurrences))
-                <div class="bg-white px-4 py-6 font-semibold">
+                <div class="bg-base-100 px-4 py-6 font-semibold">
                     {{ __('exsiccati.NO_SPECS_WITH_EX_NUM') }}
                 </div>
             @else
                 <div class="mt-4">
                     @foreach($occurrences as $occid => $occ)
-                        <div>
+                        <div x-data="{ occEditOpen: false }">
                             <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                                 <div class="space-y-1">
                                     <div class="font-bold">{{ $occ['collname'] ?? '' }}</div>
@@ -707,7 +650,7 @@
                                     @endif
 
                                     @if($isEditor)
-                                        <button type="button" onclick="toggle('occeditdiv-{{ $occid }}')" class="px-3 py-2">
+                                        <button type="button" @click="occEditOpen = !occEditOpen" class="px-3 py-2">
                                             <i class="cursor-pointer fas fa-edit text-base-content hover:text-base-content/50"></i>
                                         </button>
                                     @endif
@@ -716,7 +659,7 @@
 
                             @if($isEditor)
                                 {{-- Occurrence link editing stays inline so each linked specimen can be adjusted without leaving the number page. --}}
-                                <div id="occeditdiv-{{ $occid }}" class="mt-4 hidden space-y-4 rounded border p-4">
+                                <div x-cloak x-show="occEditOpen" id="occeditdiv-{{ $occid }}" class="mt-4 space-y-4 rounded border p-4">
                                     <form method="POST" action="{{ $postAction }}" class="space-y-3">
                                         @csrf
                                         <input type="hidden" name="ometid" value="{{ $currentOmetid }}" />
@@ -752,9 +695,12 @@
                                         <input type="hidden" name="occid" value="{{ $occid }}" />
                                         <div>
                                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS') }}</label>
-                                            <select name="targetometid" class="mt-1 w-full max-w-[90%] rounded border px-3 py-2" onfocus="buildExsSelect(this)">
-                                                <option value="------"></option>
-                                            </select>
+                                            <x-select
+                                                name="targetometid"
+                                                class="mt-1 w-full max-w-[90%]"
+                                                :items="$exsTargetItems"
+                                                select_text="------"
+                                            />
                                         </div>
                                         <div>
                                             <label class="block font-medium">{{ __('exsiccati.TARGET_EXS_NUM') }}</label>
@@ -776,4 +722,4 @@
             @endif
         @endif
     </div>
-</x-layout>
+</x-margin-layout>

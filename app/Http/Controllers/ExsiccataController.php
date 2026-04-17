@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ExsiccataController extends Controller {
     //title list page
@@ -232,6 +232,7 @@ class ExsiccataController extends Controller {
 
     //get the exiccatae manager from legacy class
     private static function exsManager(string $type = 'readonly') {
+        global $SERVER_ROOT;
         include_once legacy_path('/classes/OccurrenceExsiccatae.php');
 
         return new \OccurrenceExsiccatae($type);
@@ -250,20 +251,12 @@ class ExsiccataController extends Controller {
 
     //check user, isEditor
     private static function isEditor(Request $request) {
-        $user = $request->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        //todo test if user not super admin and has collection editor permission
-        return $user->hasOneRoles([UserRole::SUPER_ADMIN]) || $user->roles()->where('role', UserRole::COLL_ADMIN)->exists();
+        return Gate::check('EXSICCATAE_ADMIN');
     }
 
     // check isEditor if attempted direct request (todo tes)
     private static function authorizeEdit(Request $request) {
-        //
-        if (! self::isEditor($request)) {
+        if (! Gate::check('EXSICCATAE_ADMIN')) {
             abort(403);
         }
     }

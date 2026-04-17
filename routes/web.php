@@ -200,14 +200,17 @@ Route::group(['prefix' => '/token'], function () {
 Route::group(['prefix' => '/exsiccata'], function () {
 
     Route::get('/', [ExsiccataController::class, 'index'])->name('exsiccata.index');
-    Route::post('/', [ExsiccataController::class, 'store'])->name('exsiccata.store');
+    Route::post('/', [ExsiccataController::class, 'store'])
+        ->name('exsiccata.store')
+        ->can('EXSICCATAE_ADMIN');
 
     Route::get('/{ometid}', [ExsiccataController::class, 'title'])
         ->name('exsiccata.title')
         ->whereNumber('ometid');
     Route::post('/{ometid}', [ExsiccataController::class, 'storeTitle'])
         ->name('exsiccata.title.store')
-        ->whereNumber('ometid');
+        ->whereNumber('ometid')
+        ->can('EXSICCATAE_ADMIN');
     Route::get('/{ometid}/{omenid}', [ExsiccataController::class, 'number'])
         ->name('exsiccata.number')
         ->whereNumber('ometid')
@@ -215,7 +218,8 @@ Route::group(['prefix' => '/exsiccata'], function () {
     Route::post('/{ometid}/{omenid}', [ExsiccataController::class, 'storeNumber'])
         ->name('exsiccata.number.store')
         ->whereNumber('ometid')
-        ->whereNumber('omenid');
+        ->whereNumber('omenid')
+        ->can('EXSICCATAE_ADMIN');
 });
 /*
 |--------------------------------------------------------------------------
