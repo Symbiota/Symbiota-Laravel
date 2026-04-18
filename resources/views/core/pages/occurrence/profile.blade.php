@@ -491,4 +491,4 @@ function format_latlong_err($occurrence) {
             />
         @endif
     </x-tabs>
-</x-layout>
+</x-margin-layout>
