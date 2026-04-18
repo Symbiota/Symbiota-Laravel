@@ -14,6 +14,28 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class OccurrenceController extends Controller {
+    private static function linked_datasets($occid, $user) {
+        return DB::table('omoccurdatasetlink as l')
+            ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
+            ->where('l.occid', $occid)
+            ->distinct()
+            ->where(function ($query) use ($user) {
+                $query->orWhere('isPublic', 1);
+                if($user) $query->orWhere('d.uid', $user->uid);
+            })
+            ->select('d.*')
+            ->get();
+    }
+
+    private static function linked_checklists($occid, $user) {
+        return DB::table('fmvouchers as v')
+            ->join('fmchecklists as c', 'c.clid', 'v.clid')
+            ->where('v.occid', $occid)
+            ->distinct()
+            ->select('c.*')
+            ->get();
+    }
+
     public static function profilePage(int $occid) {
         $occurrence = Occurrence::fromKey($occid);
         $collection = Collection::query()->where('collid', $occurrence->collid)->first();
@@ -24,33 +46,10 @@ class OccurrenceController extends Controller {
         $paleo = $occurrence->paleo();
         $material_samples = $occurrence->materialSamples();
 
-        $user_checklists = [];
-        $user_datasets = [];
-
         $user = request()->user();
 
-        if ($user) {
-            $user_checklists = $user->checklists();
-            $user_datasets = $user->datasets();
-        }
-
-        $linked_checklists = DB::table('fmvouchers as v')
-            ->join('fmchecklists as c', 'c.clid', 'v.clid')
-            ->where('v.occid', $occid)
-            ->distinct()
-            ->select('c.*')
-            ->get();
-
-        $linked_datasets = DB::table('omoccurdatasetlink as l')
-            ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
-            ->where('l.occid', $occid)
-            ->distinct()
-            ->where('isPublic', 1)
-            ->when($user, function ($query) use ($user) {
-                $query->orWhere('d.uid', $user->uid);
-            })
-            ->select('d.*')
-            ->get();
+        $linked_checklists = self::linked_checklists($occid, $user);
+        $linked_datasets = self::linked_datasets($occid, $user);
 
         $editHistory = [];
 
@@ -89,8 +88,8 @@ class OccurrenceController extends Controller {
             'editHistory' => $editHistory,
             'linked_checklists' => $linked_checklists,
             'linked_datasets' => $linked_datasets,
-            'user_checklists' => $user_checklists,
-            'user_datasets' => $user_datasets,
+            'user_checklists' => $user? $user->checklists(): [],
+            'user_datasets' => $user? $user->datasets(): [],
             'paleo' => $paleo,
             'material_samples' => $material_samples
         ]);
@@ -119,26 +118,15 @@ class OccurrenceController extends Controller {
             ]);
         }
 
-        $occurrence = Occurrence::fromKey($occid);
-        $linked_checklists = DB::table('fmvouchers as v')
-            ->join('fmchecklists as c', 'c.clid', 'v.clid')
-            ->where('v.occid', $occid)
-            ->distinct()
-            ->select('c.*')
-            ->get();
-
         $user = request()->user();
-        $user_checklists = [];
+        $occurrence = Occurrence::fromKey($occid);
+        $linked_checklists = self::linked_checklists($occid, $user);
 
-        if ($user) {
-            $user_checklists = $user->checklists();
-        }
-
-        return view('pages/occurrence/profile', [
+        return view('occurrence/checklists', [
             'occurrence' => $occurrence,
             'linked_checklists' => $linked_checklists,
-            'user_checklists' => $user,
-        ])->fragment('linked_checklists');
+            'user_checklists' => $user? $user->checklists(): [],
+        ]);
     }
 
     public static function linkDataset(int $occid) {
@@ -153,30 +141,13 @@ class OccurrenceController extends Controller {
         }
 
         $user = request()->user();
-        $user_datasets = [];
-
-        if ($user) {
-            $user_datasets = $user->datasets();
-        }
-
         $occurrence = Occurrence::fromKey($occid);
+        $linked_datasets = self::linked_datasets($occid, $user);
 
-        $linked_datasets = DB::table('omoccurdatasetlink as l')
-            ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
-            ->where('l.occid', $occid)
-            ->distinct()
-            ->where('isPublic', 1)
-            ->when($user, function ($query) use ($user) {
-                $query->orWhere('d.uid', $user->uid);
-            })
-            ->select('d.*')
-            ->get();
-
-        return view('pages/occurrence/profile', [
+        return view('occurrence/datasets', [
             'occurrence' => $occurrence,
-            'collection' => $collection,
-            'linked_checklists' => $linked_datasets,
-            'user_checklists' => $user,
-        ])->fragment('linked_datasets');
+            'linked_datasets' => $linked_datasets,
+            'user_datasets' => $user? $user->datasets(): [],
+        ]);
     }
 }

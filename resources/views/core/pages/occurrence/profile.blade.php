@@ -86,20 +86,6 @@ function format_latlong_err($occurrence) {
     return implode(' ', $arr);
 }
 
-$user_checklist_options = [];
-
-foreach($user_checklists as $checklist) {
-    if(count($linked_checklists) <= 0 || $linked_checklists->search(fn ($v) => $v->clid == $checklist->clid) > 0) {
-        $user_checklist_options[] = ['title' => $checklist->name, 'value' => $checklist->clid, 'disabled' => false ];
-    }
-}
-
-$user_dataset_options = [];
-foreach($user_datasets as $datasets) {
-    if(count($linked_datasets) <= 0 || $linked_datasets->search(fn ($v) => $v->datasetID == $datasets->datasetID) > 0) {
-        $user_dataset_options[] = ['title' => $datasets->name, 'value' => $datasets->datasetID, 'disabled' => false ];
-    }
-}
 @endphp
 <x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <div class="flex items-center gap-4 mb-4">
@@ -484,81 +470,17 @@ foreach($user_datasets as $datasets) {
 
         {{-- Linked Resources --}}
         <div class="flex flex-col gap-4">
-            @fragment('linked_checklists')
-            <div class="relative flex flex-col gap-2" x-data="{ checklist_link_open: false }">
-                <div>
-                    <span class="font-bold text-xl">
-                        Species Checklist Relationship
-                    </span>
-                    <hr/>
-                </div>
+            <x-occurrence.checklists
+                :occurrence="$occurrence"
+                :linked_checklists="$linked_checklists"
+                :user_checklists="$user_checklists"
+            />
 
-                @if(Gate::check('COLL_EDIT', $occurrence->collid) && count($user_checklist_options) > 0)
-                <i @click="checklist_link_open = true" class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i>
-                <form hx-put="{{url('occurrence/' . $occurrence->occid . '/link/checklist' )}}" x-show="checklist_link_open" class="flex flex-col gap-4">
-                    @csrf
-                    <x-select label="Checklist" name="clid" :items="$user_checklist_options" class="w-60"/>
-                    <x-input label="Notes" name="notes" />
-                    <x-input label="Editor Notes" name="editor_notes" />
-                    <input type="hidden" name="voucher_tid" value="{{ $occurrence->tidInterpreted}}"/>
-                    <div class="flex gap-2">
-                        <x-button>Link Voucher</x-button>
-                        <x-button type="button" variant="neutral">Cancel</x-button>
-                    </div>
-                </form>
-                @endif
-
-                <div>
-                    @if(count($linked_checklists))
-                        <ul>
-                        @foreach ($linked_checklists as $checklist)
-                            <li><x-link href="{{url('checklists') . $checklist->clid }}">{{ $checklist->name }}</x-link></li>
-                        @endforeach
-                        </ul>
-                    @else
-                        <p>This Occurrence has not been designated as a voucher for a species</p>
-                    @endif
-                </div>
-            </div>
-            @endfragment
-
-            @fragment('linked_datasets')
-            <div class="relative" x-data="{ dataset_link_open: false}">
-                <div>
-                    <span class="font-bold text-xl">
-                        Dataset Linkages
-                    </span>
-                    <hr/>
-                </div>
-
-                @if(!empty($user_dataset_options))
-
-                <i @click="dataset_link_open = true" class="text-lg absolute top-0 right-3 fa-solid fa-plus"></i>
-                <form hx-put="{{url('occurrence/' . $occurrence->occid . '/link/dataset' )}}" x-show="dataset_link_open" class="flex flex-col gap-4">
-                    @csrf
-                    <x-select label="Dataset" name="datasetID" :items="$user_dataset_options" class="w-60"/>
-                    <x-input label="Notes" name="notes" />
-                    <input type="hidden" name="voucher_tid" value="{{ $occurrence->tidInterpreted}}"/>
-                    <div class="flex gap-2">
-                        <x-button>Link to Dataset</x-button>
-                        <x-button type="button" variant="neutral">Cancel</x-button>
-                    </div>
-                </form>
-                @endif
-
-                <div>
-                    @if(count($linked_datasets))
-                        <ul>
-                        @foreach ($linked_datasets as $dataset)
-                            <li><x-link href="{{ legacy_url('/collections/datasets/public.php')}}?datasetid={{$dataset->datasetID}}">{{ $dataset->name }}</x-link></li>
-                        @endforeach
-                        </ul>
-                    @else
-                        <p>Occurrence is not linked to any datasets</p>
-                    @endif
-                </div>
-            </div>
-            @endfragment
+            <x-occurrence.datasets
+                :occurrence="$occurrence"
+                :linked_datasets="$linked_datasets"
+                :user_datasets="$user_datasets"
+            />
         </div>
 
         {{-- Edit History --}}
