@@ -6,7 +6,7 @@
     'collection_contacts' => [],
     'identifiers' => [],
     'determinations' => [],
-    'editHistory' => [],
+    'edit_history' => [],
     'linked_checklists' => [],
     'linked_datasets' => [],
     'user_checklists' => [],
@@ -123,7 +123,7 @@ function format_latlong_err($occurrence) {
             __('individual.LINKED_RESOURCES')
         ];
 
-        if($editHistory) {
+        if($edit_history) {
             $tabs[] = __('individual.EDIT_HISTORY');
         }
     @endphp
@@ -484,10 +484,10 @@ function format_latlong_err($occurrence) {
         </div>
 
         {{-- Edit History --}}
-        @if($editHistory)
+        @if($edit_history && count($edit_history))
             <x-occurrence.edit-history
                 :occurrence="$occurrence"
-                :editHistory="$editHistory"
+                :edit_history="$edit_history"
             />
         @endif
     </x-tabs>

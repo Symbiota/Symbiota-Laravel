@@ -51,11 +51,8 @@ class OccurrenceController extends Controller {
         $linked_checklists = self::linked_checklists($occid, $user);
         $linked_datasets = self::linked_datasets($occid, $user);
 
-        $editHistory = [];
-
-        if (Gate::check('COLL_EDIT', $occurrence->collid)) {
-            $editHistory = OccurrenceEdit::getGroupedByEdit($occid);
-        }
+        $edit_history = Gate::check('COLL_EDIT', $occurrence->collid)?
+            OccurrenceEdit::getGroupedByEdit($occid):[];
 
         $collection_contacts = false;
         try {
@@ -85,7 +82,7 @@ class OccurrenceController extends Controller {
             'collection_contacts' => $collection_contacts,
             'determinations' => $determinations,
             'comments' => $comments,
-            'editHistory' => $editHistory,
+            'edit_history' => $edit_history,
             'linked_checklists' => $linked_checklists,
             'linked_datasets' => $linked_datasets,
             'user_checklists' => $user? $user->checklists(): [],

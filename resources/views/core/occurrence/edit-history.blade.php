@@ -1,4 +1,4 @@
-@props(['occurrence', 'editHistory'])
+@props(['occurrence', 'edit_history'])
 <div>
     <x-text-label :label="__('editor_occurrencetabledisplay.RECORD_ENTERED_BY')">
         {{ $occurrence->recordEnteredBy ?? 'Not Recorded' }}
@@ -13,7 +13,7 @@
         {{ __('individual.INTERNAL_EDITS') }}
     </div>
     <hr/>
-    @foreach ($editHistory as $editGroup)
+    @foreach ($edit_history as $editGroup)
         <div class="border-b border-base-300 py-2 flex flex-col gap-2">
             <div>
                 <x-text-label :label="__('profile_usermanagement.EDITOR')">
