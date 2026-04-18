@@ -293,19 +293,20 @@ class Occurrence extends Model {
 SELECT * FROM omoccurpaleogts WHERE gtsterm = ? AND rankid > 10
 UNION ALL
 SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid AND c.rankid > 10
-) SELECT gtsterm from parents order by rankid', [ $term ]);
-        return implode('|', array_map(fn($p) => $p->gtsterm, $parents));
+) SELECT gtsterm from parents order by rankid', [$term]);
+
+        return implode('|', array_map(fn ($p) => $p->gtsterm, $parents));
     }
 
     public function paleo() {
         $paleo = DB::table('omoccurpaleo')->where('occid', $this->occid)->first();
 
-        if($paleo) {
-            $paleo->earlyIntervalHierarchy = $paleo->earlyInterval?
-                self::getPaleoParents($paleo->earlyInterval): null;
+        if ($paleo) {
+            $paleo->earlyIntervalHierarchy = $paleo->earlyInterval ?
+                self::getPaleoParents($paleo->earlyInterval) : null;
 
-            $paleo->lateIntervalHierarchy = $paleo->lateInterval?
-                self::getPaleoParents($paleo->lateInterval): null;
+            $paleo->lateIntervalHierarchy = $paleo->lateInterval ?
+                self::getPaleoParents($paleo->lateInterval) : null;
         }
 
         return $paleo;
@@ -314,8 +315,8 @@ SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid
     public function materialSamples() {
         $materialSample = DB::table('ommaterialsample as m')
             ->leftJoin('users as u', 'u.uid', 'm.preparedByUid')
-        ->select([
-                 'm.matSampleID', 'm.sampleType', 'm.catalogNumber', 'm.guid', 'm.sampleCondition', 'm.disposition', 'm.preservationType', 'm.preparationDetails', 'm.preparationDate', 'm.preparedByUid', DB::raw('CONCAT_WS(", ",u.lastname,u.firstname) as preparedBy'), 'm.individualCount', 'm.sampleSize', 'm.storageLocation', 'm.remarks', 'm.dynamicFields', 'm.recordID', 'm.initialTimestamp'])
+            ->select([
+                     'm.matSampleID', 'm.sampleType', 'm.catalogNumber', 'm.guid', 'm.sampleCondition', 'm.disposition', 'm.preservationType', 'm.preparationDetails', 'm.preparationDate', 'm.preparedByUid', DB::raw('CONCAT_WS(", ",u.lastname,u.firstname) as preparedBy'), 'm.individualCount', 'm.sampleSize', 'm.storageLocation', 'm.remarks', 'm.dynamicFields', 'm.recordID', 'm.initialTimestamp'])
             ->where('m.occid', $this->occid)
             ->get();
 
@@ -325,7 +326,6 @@ SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid
     public static function fromKey($occid) {
         return Occurrence::query()->where('occid', $occid)->first();
     }
-
 
     /* Produces DB query builder object based on a request for general purpose use
      * This Function's only depedency on eloquent is the protected variables

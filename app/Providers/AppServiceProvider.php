@@ -70,8 +70,8 @@ class AppServiceProvider extends ServiceProvider {
                 UserRole::SUPER_ADMIN,
                 UserRole::RARE_SPP_ADMIN,
                 UserRole::RARE_SPP_READER_ALL,
-                UserRole::COLL_ADMIN=> $collId,
-                UserRole::COLL_EDITOR=> $collId,
+                UserRole::COLL_ADMIN => $collId,
+                UserRole::COLL_EDITOR => $collId,
             ]);
         });
 

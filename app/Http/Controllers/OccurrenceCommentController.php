@@ -10,13 +10,9 @@ use Illuminate\Support\MessageBag;
 use Illuminate\View\View;
 
 class OccurrenceCommentController extends Controller {
-
     /**
      * Helper function to constrain comment view logic
      *
-     * @param Occurrence $occurrence
-     * @param MessageBag $errors
-     * @return View
      **/
     private static function view(Occurrence $occurrence, ?MessageBag $errors = null): View {
         return view('occurrence/comments', [
@@ -31,10 +27,6 @@ class OccurrenceCommentController extends Controller {
      *
      * Note this a helper don't pass in user input into fields.
      *
-     * @param int $occid
-     * @param int $comid
-     * @param array $fields
-     * @return View
      **/
     private static function updateComment(int $occid, int $comid, array $fields): View {
         $updated = OccurrenceComment::query()

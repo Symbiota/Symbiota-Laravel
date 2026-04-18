@@ -11,7 +11,6 @@ use App\Models\OccurrenceEdit;
 use App\Models\OccurrenceIdentification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\View\View;
 
 class OccurrenceController extends Controller {
     private static function linked_datasets($occid, $user) {
@@ -21,7 +20,9 @@ class OccurrenceController extends Controller {
             ->distinct()
             ->where(function ($query) use ($user) {
                 $query->orWhere('isPublic', 1);
-                if($user) $query->orWhere('d.uid', $user->uid);
+                if ($user) {
+                    $query->orWhere('d.uid', $user->uid);
+                }
             })
             ->select('d.*')
             ->get();
@@ -51,8 +52,8 @@ class OccurrenceController extends Controller {
         $linked_checklists = self::linked_checklists($occid, $user);
         $linked_datasets = self::linked_datasets($occid, $user);
 
-        $edit_history = Gate::check('COLL_EDIT', $occurrence->collid)?
-            OccurrenceEdit::getGroupedByEdit($occid):[];
+        $edit_history = Gate::check('COLL_EDIT', $occurrence->collid) ?
+            OccurrenceEdit::getGroupedByEdit($occid) : [];
 
         $collection_contacts = false;
         try {
@@ -85,10 +86,10 @@ class OccurrenceController extends Controller {
             'edit_history' => $edit_history,
             'linked_checklists' => $linked_checklists,
             'linked_datasets' => $linked_datasets,
-            'user_checklists' => $user? $user->checklists(): [],
-            'user_datasets' => $user? $user->datasets(): [],
+            'user_checklists' => $user ? $user->checklists() : [],
+            'user_datasets' => $user ? $user->datasets() : [],
             'paleo' => $paleo,
-            'material_samples' => $material_samples
+            'material_samples' => $material_samples,
         ]);
     }
 
@@ -122,7 +123,7 @@ class OccurrenceController extends Controller {
         return view('occurrence/checklists', [
             'occurrence' => $occurrence,
             'linked_checklists' => $linked_checklists,
-            'user_checklists' => $user? $user->checklists(): [],
+            'user_checklists' => $user ? $user->checklists() : [],
         ]);
     }
 
@@ -144,7 +145,7 @@ class OccurrenceController extends Controller {
         return view('occurrence/datasets', [
             'occurrence' => $occurrence,
             'linked_datasets' => $linked_datasets,
-            'user_datasets' => $user? $user->datasets(): [],
+            'user_datasets' => $user ? $user->datasets() : [],
         ]);
     }
 }
