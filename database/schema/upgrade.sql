@@ -323,6 +323,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (313,'2024_09_24_19
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (314,'2024_09_24_194125_add_foreign_keys_to_userlogin_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (315,'2024_09_24_194125_add_foreign_keys_to_userroles_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (316,'2024_12_04_205155_add_user_oauth_tokens', 0);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (317,'2024_09_24_194125_add_foreign_keys_to_usertaxonomy_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (318,'2026_03_23_194122_add_columns_and_modify_cascade_to_taxa_table',1);
 
 -- User Table Modifications
 ALTER TABLE users ADD COLUMN name varchar(255);
