@@ -448,20 +448,19 @@ const standardizeTradeName = (unstandardizedTradeName) => {
 };
 
 function updateScinameDisplay() {
-    const unitind1 = document.querySelector('[name="unitind1"]').value;
-    const unitname1 = document.querySelector('[name="unitname1"]').value;
+    console.log("deleteMe updateScinameDisplay entered");
+    const unitind1 = document.querySelector('[name="unitind1"]')?.value ?? "";
+    const unitname1 = document.querySelector('[name="unitname1"]')?.value ?? "";
 
-    const unitind2 = document.querySelector('[name="unitind2"]').value;
-    const unitname2 = document.querySelector('[name="unitname2"]').value;
+    const unitind2 = document.querySelector('[name="unitind2"]')?.value ?? "";
+    const unitname2 = document.querySelector('[name="unitname2"]')?.value ?? "";
     // const unit2namevisible =
     //     document.getElementById("unit2").style.display !== "none";
 
-    const unitname3 = document.querySelector('[name="unitname3"]').value;
-    const unitind3 = document.querySelector('[name="unitind3"]').value;
-    const cultivarEpithet = document.querySelector(
-        '[name="cultivarEpithet"]',
-    ).value;
-    const tradeName = document.querySelector('[name="tradeName"]').value;
+    const unitname3 = document.querySelector('[name="unitname3"]')?.value ?? "";
+    const unitind3 = document.querySelector('[name="unitind3"]')?.value ?? "";
+    const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]')?.value ?? "";
+    const tradeName = document.querySelector('[name="tradeName"]')?.value ?? "";
     // const unit3namevisible =
     //     document.getElementById("unit3").style.display !== "none";
     // const rankid = document.querySelector('[name="rankid"]');
@@ -476,8 +475,12 @@ function updateScinameDisplay() {
     if (tradeName) {
         sciname += " " + standardizeTradeName(tradeName);
     }
+    const trimmedSciname = sciname.trim();
+    console.log("deleteMe updateScinameDisplay computed sciname:", trimmedSciname, { unitind1, unitname1, unitind2, unitname2, unitname3, unitind3 });
     const target = document.getElementById("sciname-preview");
-    target.textContent = sciname.trim();
+    if (target) {
+        target.textContent = trimmedSciname;
+    }
     // return sciname;
 }
 

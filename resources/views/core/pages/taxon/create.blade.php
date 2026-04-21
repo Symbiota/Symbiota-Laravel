@@ -49,7 +49,7 @@
                             window.updateLabels(this);
                         }
                     },
-                    async validate() {
+                    async validate(mode = @js($mode)) {
                         if (window.verifyLoadForm && window.validateTaxonEditForm) {
                             const targetValidationFunction = this.mode === 'create' ? window.verifyLoadForm : window.validateTaxonEditForm;
                             const validationResult = await targetValidationFunction(this, true, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')), @js(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')), @js(__('taxonomy_taxonomyloader.MISSING_REQUIRED_TAXON_FIELD')));
@@ -57,6 +57,9 @@
                             console.log(validationResult);
                             this.isValid = validationResult.isValid;
                             this.validationMessage = validationResult.message;
+                            if (mode === 'create') {
+                                this.updateScinameDisplay();
+                            }
                         }
                     },
                     updateScinameDisplay() {
@@ -77,14 +80,14 @@
                     <div class="mt-4">
                         <h1 class="text-2xl font-bold">
                             {{ __('taxonomy_taxonomyloader.SCINAME_SAVED_AS') }}:
-                            <span id="sciname-preview" class="text-primary"></span>
+                            <span name="sciname-preview" id="sciname-preview" class="text-primary"></span>
                         </h1>
                     </div>
                 @endif
                 <form id="taxon-form"
                     class="mt-4 flex flex-col items-center gap-4 w-full max-w-4xl"
                     method="POST" action="{{ $mode === 'create' ? route('taxon.store') : route('taxon.update') }}"
-                    @change="validate(); '{{ $mode }}' === 'create' ? updateScinameDisplay() : null;">
+                    @change="await validate();">
                     @csrf
                     <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                     <div class="w-3/4">
