@@ -186,7 +186,7 @@ class TaxonomyController extends Controller {
             $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
         }
 
-        return view('pages/taxon/create', [
+        return view('pages/taxon/editTaxon', [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
             'kingdoms' => $kingdoms,
@@ -242,6 +242,44 @@ class TaxonomyController extends Controller {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
+        $editType = $postData['edit-type'] ?? null;
+
+        if ($editType === 'taxonedits') {
+            $statusStr = $taxonEditorObj->submitTaxonEdits($postData);
+        } elseif ($editType === 'updatetaxstatus') {
+            $statusStr = $taxonEditorObj->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
+        } elseif ($editType === "synonymedits") {
+            $statusStr = $taxonEditorObj->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
+        } elseif ($editType === 'linkToAccepted') {
+            $deleteOther = array_key_exists("deleteother", $postData) ? true : false;
+            $statusStr = $taxonEditorObj->submitAddAcceptedLink($postData["tidaccepted"], $deleteOther);
+        } elseif ($editType === 'deltidaccepted') {
+            $statusStr = $taxonEditorObj->removeAcceptedLink($postData['deltidaccepted']);
+        } elseif ($editType === "changetoaccepted") {
+            $tidAccepted = $postData["tidaccepted"];
+            $switchAcceptance = array_key_exists("switchacceptance", $postData) ? true : false;
+            $statusStr = $taxonEditorObj->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
+        } elseif ($editType === 'changeToNotAccepted') {
+            $tidAccepted = $postData["tidaccepted"];
+            $statusStr = $taxonEditorObj->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
+        } elseif ($editType == 'updatehierarchy') {
+            $statusStr = $taxonEditorObj->rebuildHierarchy($tid);
+        } elseif ($editType == 'remapTaxon') {
+            $remapStatus = $taxonEditorObj->transferResources($postData['remaptid']);
+            if ($taxonEditorObj->getWarningArr()) $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $taxonEditorObj->getWarningArr());
+            if ($remapStatus) {
+                $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
+                header('Location: taxonomydisplay.php?target=' . $postData["genusstr"] . '&statusstr=' . $statusStr);
+            } else $statusStr = $taxonEditorObj->getErrorMessage();
+        } elseif ($editType == 'deleteTaxon') {
+            $delStatus = $taxonEditorObj->deleteTaxon();
+            if ($taxonEditorObj->getWarningArr()) $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $taxonEditorObj->getWarningArr());
+            if ($delStatus) {
+                $statusStr = $LANG['SUCCESS_DELETING'] . ' ' . $statusStr;
+                header('Location: taxonomydisplay.php?statusstr=' . $statusStr);
+            } else $statusStr = $taxonEditorObj->getErrorMessage();
+        }
+        $taxonEditorObj->setTaxon();
         $status = $editorManager->submitTaxonEdits($postData); // @TODO check what's up with securitystatusstart
 
         if ($status === true) {

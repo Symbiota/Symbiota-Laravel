@@ -21,7 +21,30 @@
             ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]" />
     </div>
-    @fragment('taxon_editor')
-        @include('core.pages.taxon._core_taxon_create_and_edit')
-    @endfragment
+    <x-tabs :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
+        {{-- Editor --}}
+        <div>
+            @include('core.pages.taxon._core_taxon_create_and_edit')
+        </div>
+
+        {{-- Taxonomic Status --}}
+        <div>
+            <p> A1</p>
+        </div>
+
+        {{-- Hierarchy --}}
+        <div>
+           <p> A2</p>
+        </div>
+
+        {{-- Child Taxa --}}
+        <div>
+            <p> A3</p>
+        </div>
+
+        {{-- Delete --}}
+        <div>
+            <p> A4</p>
+        </div>
+    </x-tabs>
 </x-layout>
