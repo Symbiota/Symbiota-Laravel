@@ -9,6 +9,7 @@
     'taxonInfo' => null,
     'parentName' => '',
     'acceptedName' => '',
+    'securitystatusstart' => 0,
 ])
 <x-layout>
     <div class="mb-4">

@@ -1,5 +1,10 @@
 @props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links'])
 <x-layout class="grid grid-col-1 gap-4">
+    @if (session('success'))
+        <div class="alert alert-success">
+            <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
+        </div>
+    @endif
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">
             <i>{{ $taxon->sciName }}</i>

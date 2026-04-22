@@ -69,8 +69,9 @@
                 <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                 @if($mode === 'edit')
                     <x-input type="hidden" name="edit-type" id="edit-type" value="taxonedits" />
+
                 @endif
-                <x-input type="hidden" name="mode" id="mode" :value="$mode" />
+                <x-input type="hidden" name="securitystatusstart" id="securitystatusstart" :value="$securitystatusstart" />
                 <div class="w-3/4">
                     @if($mode === 'create')
                         <fieldset
