@@ -256,41 +256,50 @@ class TaxonomyController extends Controller {
             $statusStr = $editorManager->submitTaxonEdits($postData);
         } elseif ($editType === 'updatetaxstatus') {
             $statusStr = $editorManager->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
-        } elseif ($editType === "synonymedits") {
+        } elseif ($editType === 'synonymedits') {
             $statusStr = $editorManager->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
         } elseif ($editType === 'linkToAccepted') {
-            $deleteOther = array_key_exists("deleteother", $postData) ? true : false;
-            $statusStr = $editorManager->submitAddAcceptedLink($postData["tidaccepted"], $deleteOther);
+            $deleteOther = array_key_exists('deleteother', $postData) ? true : false;
+            $statusStr = $editorManager->submitAddAcceptedLink($postData['tidaccepted'], $deleteOther);
         } elseif ($editType === 'deltidaccepted') {
             $statusStr = $editorManager->removeAcceptedLink($postData['deltidaccepted']);
-        } elseif ($editType === "changetoaccepted") {
-            $tidAccepted = $postData["tidaccepted"];
-            $switchAcceptance = array_key_exists("switchacceptance", $postData) ? true : false;
+        } elseif ($editType === 'changetoaccepted') {
+            $tidAccepted = $postData['tidaccepted'];
+            $switchAcceptance = array_key_exists('switchacceptance', $postData) ? true : false;
             $statusStr = $editorManager->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
         } elseif ($editType === 'changeToNotAccepted') {
-            $tidAccepted = $postData["tidaccepted"];
+            $tidAccepted = $postData['tidaccepted'];
             $statusStr = $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
         } elseif ($editType == 'updatehierarchy') {
             $statusStr = $editorManager->rebuildHierarchy($tid);
         } elseif ($editType == 'remapTaxon') {
             $remapStatus = $editorManager->transferResources($postData['remaptid']);
-            if ($editorManager->getWarningArr()) $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            if ($editorManager->getWarningArr()) {
+                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            }
             if ($remapStatus) {
                 $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
-                header('Location: taxonomydisplay.php?target=' . $postData["genusstr"] . '&statusstr=' . $statusStr);
-            } else $statusStr = $editorManager->getErrorMessage();
+                header('Location: taxonomydisplay.php?target=' . $postData['genusstr'] . '&statusstr=' . $statusStr);
+            } else {
+                $statusStr = $editorManager->getErrorMessage();
+            }
         } elseif ($editType == 'deleteTaxon') {
             $delStatus = $editorManager->deleteTaxon();
-            if ($editorManager->getWarningArr()) $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            if ($editorManager->getWarningArr()) {
+                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            }
             if ($delStatus) {
                 $statusStr = $LANG['SUCCESS_DELETING'] . ' ' . $statusStr;
                 header('Location: taxonomydisplay.php?statusstr=' . $statusStr);
-            } else $statusStr = $editorManager->getErrorMessage();
+            } else {
+                $statusStr = $editorManager->getErrorMessage();
+            }
         }
-        
-        if ($statusStr === true || $statusStr === "") { // successful runs of the above return empty strings
+
+        if ($statusStr === true || $statusStr === '') { // successful runs of the above return empty strings
             // Redirect to the newly created taxon's page
             $tid = $postData['tidaccepted'] ?? null;
+
             return redirect()->route('taxon.view', ['tid' => $tid])->with('success', 'Taxon updated successfully!');
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
