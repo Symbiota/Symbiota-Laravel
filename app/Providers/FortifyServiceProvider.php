@@ -144,15 +144,20 @@ class FortifyServiceProvider extends ServiceProvider {
                 return $user;
             }
 
-            //Check Old Password
-            $old_check = User::query()
-                ->whereRaw('(password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?))))))', [$request->password])
-                ->where('email', $request->email)
-                ->select('uid')
-                ->first();
+            // Check password using old hashing algo if rollover is enabled
+            if(config('auth.rollover_old_passwords')) {
+                $old_check = User::query()
+                    ->whereRaw('(password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?))))))', [$request->password])
+                    ->where('email', $request->email)
+                    ->select('uid')
+                    ->first();
 
-            if ($user && $old_check) {
-                return $user;
+                if ($user && $old_check) {
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+
+                    return $user;
+                }
             }
         });
 

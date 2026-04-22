@@ -119,4 +119,14 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Rollover Old Passwords
+    |--------------------------------------------------------------------------
+    |
+    | Rolling over passwords means if a user logs in using an old password
+    | then system will rehash password under new algorithm.
+    |
+    */
+    'rollover_old_passwords' => env("AUTH_ROLLOVER_OLD_PASSWORDS", true),
 ];
