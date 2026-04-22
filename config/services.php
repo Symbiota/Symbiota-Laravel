@@ -33,6 +33,6 @@ return [
     'orcid' => [
         'client_id' => env('ORCID_CLIENT_ID'),
         'client_secret' => env('ORCID_CLIENT_SECRET'),
-        'redirect' => url('/auth/oauth/orcid'),
+        'redirect' => env('APP_URL') .  '/auth/oauth/orcid',
     ],
 ];
