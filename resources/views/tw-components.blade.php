@@ -21,14 +21,6 @@
             <x-button variant="secondary">Secondary</x-button>
             <x-button variant="neutral">Neutral</x-button>
             <x-button variant="accent">Accent</x-button>
-            <x-button variant="neutral">
-                <x-slot:icon>
-                    <div class="stroke-accent w-7 h-7">
-                        <x-icons.loading />
-                    </div>
-                    </x-slot>
-                    Async
-            </x-button>
         </div>
 
         <div class="flex gap-4">
