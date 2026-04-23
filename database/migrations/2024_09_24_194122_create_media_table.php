@@ -10,7 +10,7 @@ return new class() extends Migration {
      */
     public function up(): void {
         Schema::create('media', function (Blueprint $table) {
-            $table->increments('media_id');
+            $table->increments('mediaID');
             $table->unsignedInteger('tid')->nullable()->index('fk_media_taxa');
             $table->unsignedInteger('occid')->nullable()->index('fk_media_occid');
             $table->string('url', 250)->nullable();
@@ -22,7 +22,7 @@ return new class() extends Migration {
             $table->string('caption', 250)->nullable();
             $table->unsignedInteger('creatoruid')->nullable()->index('fk_creator_uid');
             $table->string('creator', 45)->nullable();
-            $table->string('media_type', 45)->nullable();
+            $table->string('mediaType', 45)->nullable();
             $table->string('imageType', 50)->nullable();
             $table->string('format', 45)->nullable();
             $table->string('owner', 250)->nullable();

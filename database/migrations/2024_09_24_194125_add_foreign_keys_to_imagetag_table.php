@@ -11,7 +11,7 @@ return new class() extends Migration {
     public function up(): void {
         Schema::table('imagetag', function (Blueprint $table) {
             $table->foreign(['keyvalue'], 'FK_imagetag_tagkey')->references(['tagkey'])->on('imagetagkey')->onUpdate('cascade')->onDelete('no action');
-            $table->foreign(['imgid'], 'imagetag_ibfk_1')->references(['media_id'])->on('media')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['imgid'], 'imagetag_ibfk_1')->references(['mediaID'])->on('media')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
