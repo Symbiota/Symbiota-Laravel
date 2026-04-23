@@ -17,29 +17,6 @@ if(isset($href) && $href) {
 }
 
 @endphp
-@pushOnce('js-scripts')
-<script type="text/javascript" defer>
-    document.addEventListener('alpine:init', e => {
-        Alpine.data('loadingUtils', () => ({
-            loading: false,
-            async load(el) {
-                console.log('load')
-                this.loading = true;
-                el.disabled = true;
-                await new Promise(resolve => setTimeout(resolve, 1000))
-                el.disabled = false;
-                this.loading = false;
-                return true;
-            }
-        }));
-    })
-</script>
-@endPushOnce
 <{{$tag}} @disabled($disabled) {{isset($href) && $href ? 'href=' . $href: ''}} {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge($base)}}>
     {{ $slot }}
-    @if(isset($icon) && !$icon->isEmpty())
-    <div x-cloak x-show="loading" >
-       {{ $icon }}
-    </div>
-    @endif
 </{{$tag}}>
