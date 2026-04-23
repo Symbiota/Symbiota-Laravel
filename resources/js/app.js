@@ -1,4 +1,4 @@
-import Alpine from 'alpinejs/src/index.js';
+import Alpine from 'alpinejs';
 import focus from '@alpinejs/focus'
 import './components/autocomplete-input';
 import './components/taxonomy-create';
