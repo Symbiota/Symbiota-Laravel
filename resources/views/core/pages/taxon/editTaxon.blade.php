@@ -10,6 +10,7 @@
     'parentName' => '',
     'acceptedName' => '',
     'securitystatusstart' => 0,
+    'verifyArr' => [],
 ])
 <x-layout>
     <div class="mb-4">

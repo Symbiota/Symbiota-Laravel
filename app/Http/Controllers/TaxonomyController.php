@@ -187,6 +187,11 @@ class TaxonomyController extends Controller {
             $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
         }
 
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $taxonEditorObj = new \TaxonomyEditorManager();
+        $taxonEditorObj->setTid($tid);
+        $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+
         return view('pages/taxon/editTaxon', [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
@@ -199,6 +204,7 @@ class TaxonomyController extends Controller {
             'parentName' => $parentName,
             'acceptedName' => $acceptedName,
             'securitystatusstart' => $securitystatusstart,
+            'verifyArr' => $verifyArr,
         ]);
     }
 
