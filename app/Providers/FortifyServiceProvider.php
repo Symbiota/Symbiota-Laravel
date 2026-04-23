@@ -145,7 +145,7 @@ class FortifyServiceProvider extends ServiceProvider {
             }
 
             // Check password using old hashing algo if rollover is enabled
-            if(config('auth.rollover_old_passwords')) {
+            if (config('auth.rollover_old_passwords')) {
                 $old_check = User::query()
                     ->whereRaw('(password = CONCAT(\'*\', UPPER(SHA1(UNHEX(SHA1(?))))))', [$request->password])
                     ->where('email', $request->email)

@@ -128,5 +128,5 @@ return [
     | then system will rehash password under new algorithm.
     |
     */
-    'rollover_old_passwords' => env("AUTH_ROLLOVER_OLD_PASSWORDS", true),
+    'rollover_old_passwords' => env('AUTH_ROLLOVER_OLD_PASSWORDS', true),
 ];
