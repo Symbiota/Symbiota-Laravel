@@ -22,15 +22,15 @@
             ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]" />
     </div>
-    <x-tabs :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
+    <x-tabs :tabs="['Editor', 'Synonyms', 'Hierarchy', 'Child Taxa', 'Delete']">
         {{-- Editor --}}
         <div>
             @include('core.pages.taxon._core_taxon_create_and_edit')
         </div>
 
-        {{-- Taxonomic Status --}}
+        {{-- Synonyms --}}
         <div>
-            <p> A1</p>
+            @include('core.pages.taxon.taxonomicSynonymEdit')
         </div>
 
         {{-- Hierarchy --}}
@@ -45,7 +45,7 @@
 
         {{-- Delete --}}
         <div>
-            <p> A4</p>
+            @include('core.pages.taxon.taxonomyDelete')
         </div>
     </x-tabs>
 </x-layout>
