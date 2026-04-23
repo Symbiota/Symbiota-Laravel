@@ -28,6 +28,10 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
+    gzip on;
+    gzip_types text/css application/javascript;
+    gzip_proxied no-cache no-store private expired auth;
+
     location / {
         proxy_pass http://web:${APP_PORT};
         proxy_set_header Host $host;
