@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
-    /** * Run the migrations. */ public function up(): void {
+    /** * Run the migrations. */
+    public function up(): void {
 
         Schema::table('imagetag', function (Blueprint $table) {
             $table->dropForeign('imagetag_ibfk_1');
@@ -24,7 +25,9 @@ return new class() extends Migration {
                 ->onDelete('restrict');
         });
     }
-    /** * Reverse the migrations. */ public function down(): void {
+
+    /** * Reverse the migrations. */
+    public function down(): void {
 
         Schema::table('imagetag', function (Blueprint $table) {
             $table->dropForeign('imagetag_ibfk_1');
