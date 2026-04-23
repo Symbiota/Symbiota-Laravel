@@ -4,6 +4,7 @@ use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\ExsiccataController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
@@ -192,6 +193,35 @@ Route::group(['prefix' => '/token'], function () {
     Route::delete('/delete/{id}', [PersonalAccessTokenController::class, 'delete']);
 });
 
+/*
+|--------------------------------------------------------------------------
+| Exsiccata Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => '/exsiccata'], function () {
+
+    Route::get('/', [ExsiccataController::class, 'index'])->name('exsiccata.index');
+    Route::post('/', [ExsiccataController::class, 'store'])
+        ->name('exsiccata.store')
+        ->can('EXSICCATAE_ADMIN');
+
+    Route::get('/{ometid}', [ExsiccataController::class, 'title'])
+        ->name('exsiccata.title')
+        ->whereNumber('ometid');
+    Route::post('/{ometid}', [ExsiccataController::class, 'storeTitle'])
+        ->name('exsiccata.title.store')
+        ->whereNumber('ometid')
+        ->can('EXSICCATAE_ADMIN');
+    Route::get('/{ometid}/{omenid}', [ExsiccataController::class, 'number'])
+        ->name('exsiccata.number')
+        ->whereNumber('ometid')
+        ->whereNumber('omenid');
+    Route::post('/{ometid}/{omenid}', [ExsiccataController::class, 'storeNumber'])
+        ->name('exsiccata.number.store')
+        ->whereNumber('ometid')
+        ->whereNumber('omenid')
+        ->can('EXSICCATAE_ADMIN');
+});
 /*
 |--------------------------------------------------------------------------
 | Auth Routes

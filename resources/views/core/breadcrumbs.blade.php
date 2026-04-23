@@ -13,16 +13,16 @@
 
             @if($loop->last)
                 <li class="text-base font-bold text-base-content">
-                    {{ is_array($item) ? $item['title']: $item }}
+                    {{ \Illuminate\Support\Str::limit(is_array($item) ? $item['title'] : $item, 50, '...') }}
                 </li>
             @else
                 @if(is_array($item) && isset($item['href']))
                     <x-link class="outline-none rounded-md px-1 focus:ring-accent focus:ring hover:text-base-content text-base-content/50 no-underline text-base" href="{{ $item['href'] }}">
-                        {{ $item['title'] }}
+                        {{ \Illuminate\Support\Str::limit($item['title'], 50, '...') }}
                     </x-link>
                 @else
                     <li class="text-base text-base-content/50 font-bold">
-                        {{ $item['title'] ?? $item }}
+                        {{ \Illuminate\Support\Str::limit($item['title'] ?? $item, 50, '...') }}
                     </li>
                 @endif
                 <x-icons.breadcrumb-seperator />
