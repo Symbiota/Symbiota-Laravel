@@ -110,11 +110,11 @@
         <h2 class="text-2xl text-primary font-bold">Dynamic Species Lists</h2>
         <ul class="list-disc pl-4">
             <li>
-                <x-link href="{{ legacy_url('/checklists/dynamicmap.php?interface=checklist') }}">
+                <x-link href="{{ url('checklists/dynamicmap?interface=checklist') }}">
                     Checklist </x-link> - dynamically build a checklist using georeferenced specimen records
             </li>
             <li>
-                <x-link href="{{ legacy_url('/checklists/dynamicmap.php?interface=key') }}">
+                <x-link href="{{ url('checklists/dynamicmap?interface=key') }}">
                     Dynamic Key </x-link> - dynamically build a key using georeferenced specimen records
             </li>
         </ul>
