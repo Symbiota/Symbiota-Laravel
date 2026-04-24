@@ -11,7 +11,8 @@ use Illuminate\Support\MessageBag;
 class ChecklistController extends Controller {
     private static function parseChecklistRequest($checklist): array {
         //Set Display Settings
-        $defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
+        $defaultSettings = json_decode($checklist->defaultSettings ?? '{}');
+
         return [
             'show_synonyms' => request('show_common') ?? $defaultSettings->dsynonyms ?? false,
             'show_common' => request('show_common') ?? $defaultSettings->dcommon ?? false,
@@ -27,7 +28,7 @@ class ChecklistController extends Controller {
 
     private static function getClManager($checklist) {
         global $SERVER_ROOT;
-        include_once(legacy_path('/classes/ChecklistManager.php'));
+        include_once legacy_path('/classes/ChecklistManager.php');
 
         $clManager = new \ChecklistManager();
         $clManager->setClid($checklist->clid);
