@@ -1,39 +1,23 @@
-@props(['checklist', 'taxons' => [], 'vouchers' => []])
+@props([
+    'checklist',
+    'clManager',
 
-@php
+    'taxaList' => [],
+    'voucherArr' => [],
+    'parent' => [],
+    'children' => [],
+    'exclusions' => [],
 
-global $SERVER_ROOT;
-include_once(legacy_path('/classes/ChecklistManager.php'));
-
-$defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
-$show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? false;
-$show_common = request('show_common') ?? $defaultSettings->dcommon ?? false;
-$show_notes_vouchers = request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false;
-$show_taxa_authors = request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false;
-$show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false;
-
-$clManager = new ChecklistManager();
-$clManager->setClid($checklist->clid);
-$clManager->setShowCommon(true);
-$clManager->setShowSynonyms(true);
-$clManager->setShowCommon(true);
-$clManager->setShowVouchers(true);
-
-if($show_taxa_authors) {
-    $clManager->setShowAuthors(true);
-}
-if($show_taxa_alphabetically) {
-    $clManager->setShowAlphaTaxa(true);
-}
-//$clManager->setShowSubgenera(true);
-
-$taxaList = $clManager->getTaxaList(1, 0);
-$voucherArr = $clManager->getVoucherArr();
-$parent = $clManager->getParentChecklist();
-$children = $clManager->getChildClidArr();
-$exclusions = $clManager->getExclusionChecklist();
-
-@endphp
+    'show_synonyms' => false,
+    'show_common' => false,
+    'show_notes_vouchers' => false,
+    'show_taxa_authors' => false,
+    'show_images' => false,
+    'show_taxa_alphabetically' => false,
+    'limit_voucher_images' => false,
+    'show_subgenera' => false,
+    'activate_key' => false,
+])
 
 <x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>

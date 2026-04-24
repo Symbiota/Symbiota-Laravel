@@ -9,6 +9,62 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
 class ChecklistController extends Controller {
+    private static function parseChecklistRequest($checklist): array {
+        //Set Display Settings
+        $defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
+        return [
+            'show_synonyms' => request('show_common') ?? $defaultSettings->dsynonyms ?? false,
+            'show_common' => request('show_common') ?? $defaultSettings->dcommon ?? false,
+            'show_notes_vouchers' => request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false,
+            'show_taxa_authors' => request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false,
+            'show_images' => request('show_images') ?? $defaultSettings->dimages ?? false,
+            'show_taxa_alphabetically' => request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false,
+            'limit_voucher_images' => request('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false,
+            'show_subgenera' => request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false,
+            'activate_key' => $defaultSettings->activateKey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false,
+        ];
+    }
+
+    private static function getClManager($checklist) {
+        global $SERVER_ROOT;
+        include_once(legacy_path('/classes/ChecklistManager.php'));
+
+        $clManager = new \ChecklistManager();
+        $clManager->setClid($checklist->clid);
+
+        return $clManager;
+    }
+
+    private static function getProfilePageData($checklist) {
+        $clManager = self::getClManager($checklist);
+        $page_data = self::parseChecklistRequest($checklist);
+
+        $clManager->setShowCommon($page_data['show_common']);
+        $clManager->setShowSynonyms($page_data['show_synonyms']);
+        $clManager->setShowVouchers($page_data['show_notes_vouchers']);
+        $clManager->setShowAuthors($page_data['show_taxa_authors']);
+        $clManager->setShowImages($page_data['show_images']);
+        $clManager->setShowAlphaTaxa($page_data['show_taxa_alphabetically']);
+        $clManager->setLimitImagesToVouchers($page_data['limit_voucher_images']);
+        $clManager->setShowSubgenera($page_data['show_subgenera']);
+
+        $page_data['checklist'] = $checklist;
+        $page_data['clManager'] = $clManager;
+
+        $page_data['taxaList'] = $clManager->getTaxaList(1, 0);
+        // Old call Rework after logic changes start
+        // $taxons = self::getChecklistTaxa($checklist);
+        $page_data['voucherArr'] = $clManager->getVoucherArr();
+        // Old call Rework after logic changes start
+        // $vouchers = self::getVouchers($checklist, $taxons);
+
+        $page_data['parent'] = $clManager->getParentChecklist();
+        $page_data['children'] = $clManager->getChildClidArr();
+        $page_data['exclusions'] = $clManager->getExclusionChecklist();
+
+        return $page_data;
+    }
+
     public static function getChecklistData(int $clid) {
 
         $user = request()->user();
@@ -98,14 +154,7 @@ class ChecklistController extends Controller {
             return view('pages/checklist/not-found');
         }
 
-        $taxons = self::getChecklistTaxa($checklist);
-        $vouchers = self::getVouchers($checklist, $taxons);
-
-        $page_data = [
-            'checklist' => $checklist,
-            'vouchers' => $vouchers,
-            'taxons' => $taxons,
-        ];
+        $page_data = self::getProfilePageData($checklist);
 
         if (request()->query('partial') === 'taxa-list') {
             return view('pages/checklist/profile', $page_data)->fragment('taxa-list');
@@ -121,14 +170,7 @@ class ChecklistController extends Controller {
             return view('pages/checklist/not-found');
         }
 
-        $taxons = self::getChecklistTaxa($checklist);
-        $vouchers = self::getVouchers($checklist, $taxons);
-
-        $page_data = [
-            'checklist' => $checklist,
-            'vouchers' => $vouchers,
-            'taxons' => $taxons,
-        ];
+        $page_data = self::getProfilePageData($checklist);
 
         return view('pages/checklist/printProfile', $page_data);
     }

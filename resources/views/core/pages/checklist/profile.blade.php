@@ -1,45 +1,34 @@
-@props(['checklist', 'taxons' => [], 'vouchers' => []])
+@props([
+    'checklist',
+    'clManager',
+
+    'taxaList' => [],
+    'voucherArr' => [],
+    'parent' => [],
+    'children' => [],
+    'exclusions' => [],
+
+    'show_synonyms' => false,
+    'show_common' => false,
+    'show_notes_vouchers' => false,
+    'show_taxa_authors' => false,
+    'show_images' => false,
+    'show_taxa_alphabetically' => false,
+    'limit_voucher_images' => false,
+    'show_subgenera' => false,
+    'activate_key' => false,
+])
 @php global $SERVER_ROOT;
 include_once(legacy_path('/classes/ChecklistManager.php'));
 
 $isClAdmin = Gate::check('CL_ADMIN', $checklist->clid);
 $statusStr = false;
 
-//Set Display Settings
-$defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
-$show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? false;
-$show_common = request('show_common') ?? $defaultSettings->dcommon ?? false;
-$show_notes_vouchers = request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false;
-$show_taxa_authors = request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false;
-$show_images = request('show_images') ?? $defaultSettings->dimages ?? false;
-$show_taxa_alphabetically = request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false;
-$limit_voucher_images = request('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false;
-$show_subgenera = request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false;
-$activate_key = $defaultSettings->activateKey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false;
-
-$clManager = new ChecklistManager();
-$clManager->setClid($checklist->clid);
-
 if($isClAdmin){
 	if(request('formsubmit') === 'AddSpecies'){
 		$statusStr = $clManager->addNewSpecies(request()->except('_token'));
 	}
 }
-
-$clManager->setShowCommon($show_common);
-$clManager->setShowSynonyms($show_synonyms);
-$clManager->setShowVouchers($show_notes_vouchers);
-$clManager->setShowAuthors($show_taxa_authors);
-$clManager->setShowImages($show_images);
-$clManager->setShowAlphaTaxa($show_taxa_alphabetically);
-$clManager->setLimitImagesToVouchers($limit_voucher_images);
-$clManager->setShowSubgenera($show_subgenera);
-
-$taxaList = $clManager->getTaxaList(1, 0);
-$voucherArr = $clManager->getVoucherArr();
-$parent = $clManager->getParentChecklist();
-$children = $clManager->getChildClidArr();
-$exclusions = $clManager->getExclusionChecklist();
 
 //Handling Dynamic Breadcrumbs
 $breadcrumbs = [
@@ -171,7 +160,7 @@ $breadcrumbs[] = $checklist->name;
                     />
                     <x-checkbox
                         :label="__('checklists_checklist.TAXONABC')"
-                        :checked="$defaultSettings->dalpha ?? false"
+                        :checked="$show_taxa_alphabetically"
                         name="show_taxa_alphabetically"
                     />
                     <input type="hidden" name="partial" value="taxa-list">
