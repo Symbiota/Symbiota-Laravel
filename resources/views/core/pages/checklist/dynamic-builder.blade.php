@@ -1,34 +1,28 @@
 @props(['errors'])
-@php
-global $LANG;
-include_once(legacy_path('/classes/utilities/Language.php'));
-
-Language::load([
-	'checklists/dynamicmap',
-	'checklists/checklist'
-]);
-
-@endphp
-
 <x-margin-layout>
     <x-breadcrumbs :items="[
-        ['title' => $LANG['HOME'], 'href' => url('')],
-        ['title' => $LANG['DYNAMIC_MAP']],
-        ]" />
+        ['title' => __('header.H_HOME'), 'href' => url('')],
+        ['title' => __('checklists_checklist.DYNAMIC_MAP')],
+    ]" />
 
-    <h1 class="sr-only">{{ $LANG['DYNAMIC_MAP'] }}></h1>
+    <h1 class="sr-only">{{ __('checklists_dynamicmap.DYNAMIC_MAP') }}></h1>
 
     <div class="flex flex-col gap-1" x-data="{'moreDetail': false}">
         <p>
-            {{ $LANG['CAPTURE_COORDS'] }}
+            {{ __('checklists_dynamicmap.CAPTURE_COORDS') }}
         <p/>
 
         <p x-show="moreDetail">
-            {{ $LANG['RADIUS_DESCRIPTION'] }}
+            {{ __('checklists_dynamicmap.RADIUS_DESCRIPTION') }}
         <p/>
+
         <x-button class="cursor-pointer" @click="moreDetail=!moreDetail">
-            <span x-show="moreDetail">{{ $LANG['LESS_DETAILS'] }}</span>
-            <span x-show="!moreDetail">{{ $LANG['MORE_DETAILS'] }}</span>
+            <span x-show="moreDetail">
+                {{ __('checklists_dynamicmap.LESS_DETAILS') }}
+            </span>
+            <span x-show="!moreDetail">
+                {{ __('checklists_dynamicmap.MORE_DETAILS') }}
+            </span>
         </x-button>
     </div>
     <form method="post" class="flex flex-col gap-4">
@@ -36,19 +30,19 @@ Language::load([
         <div class="flex flex-wrap items-center gap-2">
             <input type="hidden" name="interface" value="{{ request('interface') ?? 'checklist' }}" />
             <input type="hidden" name="buildChecklist" value="1" />
-            <div class="min-w-20 max-w-40 flex-grow"><x-input id="lat" label="Latitude" value=""/></div>
-            <div class="min-w-20 max-w-40 flex-grow"><x-input id="lng" label="Longitude" value=""/></div>
-            <div class="min-w-20 max-w-40 flex-grow"><x-input id="radius" label="Radius" type="number" /></div>
-            <x-select class="min-w-10 flex-grow" id="radiusunits" label="Units" default="0" :items="[
-            ['title' => $LANG['KM'], 'value' => 'km' ],
-            ['title' => $LANG['MILES'], 'value' => 'mi' ]
-        ]" />
+            <div class="min-w-20 max-w-40 flex-grow"><x-input id="lat" :label="__('tools_mapaids.MPR_LAT')" value=""/></div>
+            <div class="min-w-20 max-w-40 flex-grow"><x-input id="lng" :label="__('tools_mapaids.MPR_LNG')" value=""/></div>
+            <div class="min-w-20 max-w-40 flex-grow"><x-input id="radius" :label="__('checklists_dynamicmap.RADIUS')" type="number" /></div>
+            <x-select class="min-w-10 flex-grow" id="radiusunits" :label="__('checklists_dynamicmap.UNITS')" default="0" :items="[
+                item('km', __('checklists_dynamicmap.KM')),
+                item('mi', __('checklists_dynamicmap.MILES'))
+            ]"/>
         </div>
 
-        <x-taxa-search class="z-100" label="Taxon Filter" />
+        <x-taxa-search class="z-100" :label="__('checklists_dynamicmap.TAXON_FILTER')" />
 
         <div>
-            <x-button>{{ $LANG['BUILD_CHECKLIST'] }}</x-button>
+            <x-button>{{ __('checklists_dynamicmap.BUILD_CHECKLIST') }}</x-button>
         </div>
 
         <x-errors :errors="$errors" />
