@@ -6,15 +6,15 @@
 @php
     
 @endphp
-<x-taxon-linked-item :items="$verifyArr['child'] ?? []" title="Child Taxa" warning="Warning: children taxa exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="child taxa" />
-<x-taxon-linked-item :items="$verifyArr['syn'] ?? []" title="Synonym Links" warning="Warning: synonym links exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="synonym links" />
-<x-taxon-linked-item :items="$verifyArr['img'] ?? []" title="Image Links" warning="Warning: images exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="images" />
-<x-taxon-linked-item :items="$verifyArr['map'] ?? []" title="Taxon Maps" warning="Warning: taxon maps exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="taxon maps" />
-<x-taxon-linked-item :items="$verifyArr['vern'] ?? []" title="Vernaculars" warning="Warning: vernacular names exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="vernacular names" />
-<x-taxon-linked-item :items="$verifyArr['tdesc'] ?? []" title="Text Descriptions" warning="Warning: text descriptions exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked text descriptions" />
-<x-taxon-linked-item :items="$verifyArr['occur'] ?? []" title="Occurrence Records" warning="Warning: occurrence records exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked occurrence records" />
-<x-taxon-linked-item :items="$verifyArr['dets'] ?? []" title="Determinations" warning="Warning: determinations exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked determination records" />
-<x-taxon-linked-item :items="$verifyArr['cl'] ?? []" title="Checklists" warning="Warning: checklists exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked checklists" />
-<x-taxon-linked-item :items="$verifyArr['kmdesc'] ?? []" title="Morphological Character Key Descriptions" warning="Warning: morphological characters exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked morphological characters" />
-<x-taxon-linked-item :items="$verifyArr['link'] ?? []" title="Linked Resources" warning="Warning: linked resources exist for this taxon. They must be remapped before this taxon can be removed." item-name-plural="linked resources" />
+<x-taxon-linked-item :items="$verifyArr['child'] ?? []" :title="__('taxonomy_taxonomydelete.CHILD_TAXA')" :warning="__('taxonomy_taxonomydelete.CHILDREN_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.CHILD_TAXA_PLURAL')" />
+<x-taxon-linked-item :items="$verifyArr['syn'] ?? []" :title="__('taxonomy_taxonomydelete.SYN_LINKS')" :warning="__('taxonomy_taxonomydelete.SYN_EXISTS')" :item-name-plural="__('taxonomy_taxonomydelete.SYN_LINKS_PLURAL')" />
+<x-taxon-linked-item :items="$verifyArr['img'] ?? []" :title="__('taxonomy_taxonomydelete.IMAGE_LINKS')" :warning="__('taxonomy_taxonomydelete.IMGS_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.IMAGES')" />
+<x-taxon-linked-item :items="$verifyArr['map'] ?? []" :title="__('taxonomy_taxonomydelete.TAXON_MAPS')" :warning="__('taxonomy_taxonomydelete.MAPS_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.TAXON_MAPS_PLURAL')" />
+<x-taxon-linked-item :items="$verifyArr['vern'] ?? []" :title="__('taxonomy_taxonomydelete.VERNACULARS')" :warning="__('taxonomy_taxonomydelete.VERNACULARS_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.VERNACULAR_NAMES')" />
+<x-taxon-linked-item :items="$verifyArr['tdesc'] ?? []" :title="__('taxonomy_taxonomydelete.TEXT_DESCRIPTIONS')" :warning="__('taxonomy_taxonomydelete.TEXT_DESCS_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_TEXT_DESCS')" />
+<x-taxon-linked-item :items="$verifyArr['occur'] ?? []" :title="__('taxonomy_taxonomydelete.OCCURRENCE_RECORDS')" :warning="__('taxonomy_taxonomydelete.OCCS_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_OCCS')" />
+<x-taxon-linked-item :items="$verifyArr['dets'] ?? []" :title="__('taxonomy_taxonomydelete.DETERMINATIONS')" :warning="__('taxonomy_taxonomydelete.DETS_REMAPPED')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_DETS')" />
+<x-taxon-linked-item :items="$verifyArr['cl'] ?? []" :title="__('taxonomy_taxonomydelete.CHECKLISTS')" :warning="__('taxonomy_taxonomydelete.CHECKLISTS_REMAPPED')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_CHECKLISTS')" />
+<x-taxon-linked-item :items="$verifyArr['kmdesc'] ?? []" :title="__('taxonomy_taxonomydelete.MORPHO_KEY_DESC')" :warning="__('taxonomy_taxonomydelete.MORPHO_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_MORPHO')" />
+<x-taxon-linked-item :items="$verifyArr['link'] ?? []" :title="__('taxonomy_taxonomydelete.LINKED_RESOURCES')" :warning="__('taxonomy_taxonomydelete.LINKED_RES_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_RES_PLURAL')" />
 
