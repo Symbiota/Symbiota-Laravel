@@ -2,10 +2,8 @@
 
 @php
 
-global $SERVER_ROOT, $LANG;
+global $SERVER_ROOT;
 include_once(legacy_path('/classes/ChecklistManager.php'));
-include_once(legacy_path('/classes/utilities/Language.php'));
-Language::load('checklists/checklist');
 
 $defaultSettings = json_decode($checklist->defaultSettings ?? "{}");
 $show_synonyms = request('show_synonyms') ?? $defaultSettings->dsynonyms ?? false;
@@ -49,10 +47,10 @@ $exclusions = $clManager->getExclusionChecklist();
 
     <div class="flex items-center gap-2 w-full">
     @foreach([
-        $LANG['FAMILIES'] => $clManager->getFamilyCount(),
-        $LANG['GENERA'] => $clManager->getGenusCount(),
-        $LANG['SPECIES'] => $clManager->getSpeciesCount(),
-        $LANG['TOTAL_TAXA'] => $clManager->getTaxaCount(),
+        __('checklists_checklist.FAMILIES') => $clManager->getFamilyCount(),
+        __('checklists_checklist.GENERA') => $clManager->getGenusCount(),
+        __('checklists_checklist.SPECIES') => $clManager->getSpeciesCount(),
+        __('checklists_checklist.TOTAL_TAXA') => $clManager->getTaxaCount(),
     ] as $label => $value)
         <div><span class="font-bold">{{ $label }}: </span>{{ $value }}</div>
     @endforeach
