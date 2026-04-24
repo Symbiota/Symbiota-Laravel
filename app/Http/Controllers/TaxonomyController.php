@@ -192,6 +192,14 @@ class TaxonomyController extends Controller {
         $taxonEditorObj->setTid($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
 
+        if (!empty($verifyArr['child'])) {
+            $verifyArr['child'] = array_map(
+                fn($name, $url) => ['name' => $name, 'url' => $url],
+                $verifyArr['child'],
+                array_map(fn($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+            );
+        }
+
         return view('pages/taxon/editTaxon', [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
