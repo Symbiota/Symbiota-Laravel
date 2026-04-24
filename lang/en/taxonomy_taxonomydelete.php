@@ -66,4 +66,6 @@ return [
     'LINKED_DETS' => 'linked determination records',
     'LINKED_CHECKLISTS' => 'linked checklists',
     'LINKED_RES_PLURAL' => 'linked resources',
+    'DELETE_TAXON' => 'Delete Taxon',
+    'SUCCESS_DELETING' => 'Taxon successfully deleted',
 ];

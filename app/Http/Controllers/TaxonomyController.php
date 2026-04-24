@@ -319,4 +319,23 @@ class TaxonomyController extends Controller {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
     }
+
+    public static function delete() {
+        $tid = request()->all()['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+        $delStatus = $editorManager->deleteTaxon();
+        if ($editorManager->getWarningArr()) {
+            $statusStr = implode('; ', $editorManager->getWarningArr());
+        }
+        if ($delStatus) {
+            $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
+            return redirect()->route('taxon.createview')->with('success', $statusStr);
+        } else {
+            $statusStr = $editorManager->getErrorMessage();
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+        }
+    }
 }
