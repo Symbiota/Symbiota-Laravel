@@ -10,15 +10,16 @@
     $dynClid = array_key_exists('dynclid', $_REQUEST) ? filter_var($_REQUEST['dynclid'], FILTER_SANITIZE_NUMBER_INT) : 0;
 
     $taxonValue = request('taxon'); //array_key_exists('taxon',$_REQUEST)?$_REQUEST['taxon']:'';
-    $rv = array_key_exists('rv',$_REQUEST)?$_REQUEST['rv']:'';
-    $pid = array_key_exists('pid', $_REQUEST) ? filter_var($_REQUEST['pid'], FILTER_SANITIZE_NUMBER_INT) : '';
-    $langValue = array_key_exists('lang',$_REQUEST)?$_REQUEST['lang']:'';
-    $sortBy = array_key_exists('sortby', $_REQUEST) ? filter_var($_REQUEST['sortby'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $displayCommon = array_key_exists('displaycommon', $_REQUEST) ? filter_var($_REQUEST['displaycommon'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $displayImages = array_key_exists('displayimages', $_REQUEST) ? filter_var($_REQUEST['displayimages'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $action = array_key_exists('submitbutton',$_REQUEST)?$_REQUEST['submitbutton']:'';
-    if(!$action && array_key_exists('attr',$_REQUEST) && is_array($_REQUEST['attr'])){
-        $attrsValues = $_REQUEST['attr'];	//Array of: cid + '-' + cs (ie: 2-3)
+    $rv = request('rv') ?? '';
+    $pid = request('pid')? filter_var(request('pid'), FILTER_SANITIZE_NUMBER_INT) : '';
+    $langValue = request('lang') ?? '';
+    $sortBy = request('sortby')? filter_var(request('sortby'), FILTER_SANITIZE_NUMBER_INT) : 0;
+    $displayCommon = request('displaycommon') ? filter_var(request('displaycommon'), FILTER_SANITIZE_NUMBER_INT) : 0;
+    $displayImages = request('displayimages') ? filter_var(request('displayimages'), FILTER_SANITIZE_NUMBER_INT) : 0;
+    $action = request('submitbutton') ?? '';
+
+    if(!$action && is_array(request('attr'))) {
+        $attrsValues = request('attr');	//Array of: cid + '-' + cs (ie: 2-3)
     }
 
     //if(!$langValue) $langValue = $DEFAULT_LANG;
