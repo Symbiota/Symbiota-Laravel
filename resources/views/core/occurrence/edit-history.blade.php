@@ -40,7 +40,7 @@ foreach($occurrence->toArray() as $key => $value) {
                     @endphp
                     <div class="flex gap-2">
                         <span class="bg-base-300 px-2 rounded-full">
-                            {{ (!$edit->fieldValueOld? 'Added': 'Updated') }}
+                            {{ (!$edit->fieldValueOld? __('Added'): __('Updated')) }}
                         </span>
                         <x-text-label :label="$edit->fieldName">
                             @if(!$edit->fieldValueOld)
