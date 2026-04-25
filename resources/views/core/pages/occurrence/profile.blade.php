@@ -349,13 +349,11 @@ function format_latlong_err($occurrence) {
             @if(count($images))
             <div>
                 <div class="font-bold text-lg">
-                    {{-- todo move to media ligo --}}
                     {{ __('individual.SPECIMEN_IMAGES') }}
                 </div>
                 <hr />
             </div>
             <div class="w-fit flex flex-wrap gap-2">
-            {{-- TODO (Logan) lang for image resolutions --}}
                 @foreach ($images as $item)
                 <x-media.image :image="$item" :href="$item->url ?? $item->thumbnailUrl ?? $item->originalUrl">
                     <div class="flex flex-col gap-2">
@@ -435,7 +433,7 @@ function format_latlong_err($occurrence) {
             </div>
         </div>
 
-        {{-- Map (Only render if lat long data present)--}}
+        {{-- Map --}}
         @if($occurrence->decimalLatitude && $occurrence->decimalLongitude)
         <div>
             <div id="occurrence-map-data" data-lat="{{ $occurrence->decimalLatitude }}" data-lng="{{ $occurrence->decimalLongitude }}" data-error="{{ $occurrence->coordinateUncertaintyInMeters}}"></div>
