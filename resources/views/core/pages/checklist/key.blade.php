@@ -109,7 +109,6 @@
         @endif
     </div>
 
-
     {{-- Renders Plain Taxa list --}}
     @if($displayImages)
         <div id="photo-gallery" class="flex flex-wrap flex-row gap-3 mt-4">
