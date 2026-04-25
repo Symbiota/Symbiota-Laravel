@@ -1,4 +1,10 @@
 @props(['occurrence', 'edit_history'])
+@php
+$lower_case_lookup = [];
+foreach($occurrence->toArray() as $key => $value) {
+    $lower_case_lookup[strtolower($key)] = $value;
+}
+@endphp
 <div>
     <x-text-label :label="__('editor_occurrencetabledisplay.RECORD_ENTERED_BY')">
         {{ $occurrence->recordEnteredBy ?? 'Not Recorded' }}
@@ -29,16 +35,23 @@
 
             <div class="ml-4 flex flex-col gap-2">
                 @foreach ($editGroup['edits'] as $edit)
+                    @php
+                        $currentValue = $lower_case_lookup[$edit->fieldName] ?? $occurrence->{$edit->fieldName} ?? false;
+                    @endphp
                     <div class="flex gap-2">
                         <span class="bg-base-300 px-2 rounded-full">
                             {{ (!$edit->fieldValueOld? 'Added': 'Updated') }}
                         </span>
-                        {{-- TODO Solve lower case storage to new model keys issue to impl current tag --}}
                         <x-text-label :label="$edit->fieldName">
                             @if(!$edit->fieldValueOld)
                                 {{ $edit->fieldValueNew }}
                             @else
                                 <span>{{ $edit->fieldValueOld }}</span>
+                                @if($currentValue == $edit->fieldValueOld)
+                                <span class="bg-base-300 px-2 rounded-full capitalize">
+                                    {{ __('individual.CURRENT') }}
+                                </span>
+                                @endif
                                 <i class="fa-solid fa-arrow-right"></i>
                                 @if($edit->fieldValueNew)
                                 <span>{{ $edit->fieldValueNew }}</span>
@@ -47,6 +60,11 @@
                                     {{ __('None') }}
                                 </span>
                                 @endif
+                            @endif
+                            @if($currentValue == $edit->fieldValueNew)
+                            <span class="bg-base-300 px-2 rounded-full capitalize">
+                                {{ __('individual.CURRENT') }}
+                            </span>
                             @endif
                         </x-text-label>
                     </div>
