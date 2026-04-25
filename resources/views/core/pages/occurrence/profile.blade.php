@@ -145,10 +145,12 @@ function format_latlong_err($occurrence) {
 
                 <x-text-label :label="__('ident_key.TAXON')">
                     @if($occurrence->sciname)
+                    <x-link :href="url('taxon/' . $occurrence->tidInterpreted)">
                         <i class="font-italic">{{ $occurrence->sciname }}</i>
                         @if($occurrence->scientificNameAuthorship)
                             ({{$occurrence->scientificNameAuthorship}})
                         @endif
+                    </x-link>
                     @endif
                 </x-text-label>
 
@@ -321,10 +323,14 @@ function format_latlong_err($occurrence) {
                 <div class="flex flex-col gap-2">
                     @foreach ($determinations as $det)
                         <div>
-                            <span class="font-bold font-italic">{{ $det->sciname }}</span>
-                            @if($det->scientificNameAuthorship)
-                                ({{$det->scientificNameAuthorship}})
-                            @endif
+                            <x-link :href="url('taxon/' . $det->tidInterpreted)">
+                                <span class="font-italic">
+                                    {{ $det->sciname }}
+                                </span>
+                                @if($det->scientificNameAuthorship)
+                                    ({{$det->scientificNameAuthorship}})
+                                @endif
+                            </x-link>
                             <x-text-label :label="__('individual.DETERMINER')">
                                 {{ $det->identifiedBy }}
                             </x-text-label>
@@ -422,7 +428,10 @@ function format_latlong_err($occurrence) {
             </div>
             <div>
                 {{ __('individual.SEE_ERROR') }}
+
+                @can('COLL_EDIT', $occurrence->collid)
                 <x-link :href="url('occurrence/' . $occurrence->occid. '/edit')">{{ __('individual.OCCURRENCE_EDITOR')}}</x-link>
+                @endcan
             </div>
         </div>
 
