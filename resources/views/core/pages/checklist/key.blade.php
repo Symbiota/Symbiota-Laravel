@@ -42,7 +42,7 @@
     $taxaValues = $dataManager->getTaxaFilterList();
     $filterList = [];
     foreach($dataManager->getTaxaFilterList() as $idx => $value) {
-        $filterList[] = ['value' => trim($value), 'title' => $value, 'disabled' => false];
+        $filterList[] = item(trim($value), $value);
     }
 
     $isKeyEditor = Gate::check('KEY_EDITOR');
@@ -50,14 +50,14 @@
 
 <x-margin-layout>
     <x-breadcrumbs :items="[
-        ['title' => 'Home', 'href' => '/'],
+        ['title' => __('header.H_HOME'), 'href' => '/'],
         ['title' => $dataManager->getClName(), 'href' => url('/checklists/' . $clid) ],
-        ['title' => 'Identification Key' ]
+        ['title' => __('ident_key.NEW_ID_KEY')]
     ]" />
     <div class="relative block">
         <div class="text-4xl font-bold" >{{ $dataManager->getClName() }}</div>
     </div>
-    <x-accordion label="Filter/Display Options">
+    <x-accordion :label="__('ident_key.FILTER_OPTIONS')">
         <form
             class="bg-base-100 flex flex-col gap-4"
         >
@@ -66,53 +66,51 @@
                 class="min-w-72 w-full"
                 defaultValue="{{ $taxonValue ?? 'All Species' }}"
                 id="taxon"
-                label="Family/Genus Filter"
+                :label="__('ident_key.TAXON_SEARCH')"
                 :items="$filterList"
             />
             <x-select
                 class="min-w-72 w-full"
-                default="0" id="sortby" label="Sort By"
+                id="sortby"
+                :label="__('ident_key.SORT')"
+                default="0"
                 defaultValue="{{ $sortBy }}"
                 :items="[
-                     [
-                        'title' => 'Family/ScientificName',
-                        'value' => '0',
-                        'disabled' => false
-                     ],
-                     [
-                        'title' => 'ScientificName',
-                        'value' => '1',
-                        'disabled' => false
-                     ]
+                    item('0', __('ident_key.SORT_SCINAME_FAMILY')),
+                    item('1', __('ident_key.SORT_SCINAME'))
                 ]"
             />
             </div>
 
             <div class="flex items-center gap-2">
-            <x-checkbox id="displaycommon" label="Display Common Names" :checked="$displayCommon"/>
-            <x-checkbox id="displayimages" label="Display Images" :checked="$displayImages"/>
+            <x-checkbox id="displaycommon" :label="__('ident_key.DISPLAY_COMMON')" :checked="$displayCommon"/>
+            <x-checkbox id="displayimages" :label="__('ident_key.DISPLAY_IMAGES')" :checked="$displayImages"/>
             </div>
             <div class="flex gap-2">
-                <x-button type="submit">Filter</x-button>
-                <x-button href="{{ url()->current() }}" hx-boost="true">Reset</x-button>
+                <x-button type="submit">
+                    {{ __('checklists_checklist.BUILD_LIST') }}
+                </x-button>
+                <x-button href="{{ url()->current() }}" hx-boost="true">
+                    {{ __('map.RESET') }}
+                </x-button>
             </div>
         </form>
     </x-accordion>
 
     <div>
         @if($count)
-                <div class="text-xl"><span class="font-bold">Species Count:</span> {{ $count }}</div>
+            <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
         @endif
         @if($isKeyEditor || true)
         <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
             <x-icons.edit />
-            Edit Character Matrix
+            {{ __('ident_key.EDIT_CHAR_MATRIX') }}
         </x-link>
         @endif
     </div>
 
 
-    {{--rRenders Plain Taxa list --}}
+    {{-- Renders Plain Taxa list --}}
     @if($displayImages)
         <div id="photo-gallery" class="flex flex-wrap flex-row gap-3 mt-4">
         @foreach ($taxa as $taxaArr)
