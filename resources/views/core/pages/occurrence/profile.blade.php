@@ -384,7 +384,7 @@ function format_latlong_err($occurrence) {
 
             @if(count($audio))
             <div>
-                <div class="font-bold text-lg">Audio</div>
+                <div class="font-bold text-lg">{{ __('Audio') }}</div>
                 <hr />
             </div>
             <div class="w-fit">
