@@ -66,4 +66,7 @@ return [
     'LINKED_DETS' => 'enregistrements de détermination liés',
     'LINKED_CHECKLISTS' => 'listes de contrôle liées',
     'LINKED_RES_PLURAL' => 'ressources liées',
+    'DELETE_TAXON' => 'Supprimer le taxon',
+    'SUCCESS_DELETING' => 'Taxon supprimé avec succès',
+    'DELETE_TAXON_DISABLED' => 'Le taxon ne peut pas encore être supprimé',
 ];

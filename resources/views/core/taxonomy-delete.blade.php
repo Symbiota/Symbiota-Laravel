@@ -48,7 +48,7 @@
             x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
             color="danger"
             class="mt-2">
-            {{ __('taxonomy_taxonomydelete.DELETE_TAXON') }}
+            <span x-text="isDeleteValid ? @js(__('taxonomy_taxonomydelete.DELETE_TAXON')) : @js(__('taxonomy_taxonomydelete.DELETE_TAXON_DISABLED'))" />
         </x-button>
     </fieldset>
 </div>

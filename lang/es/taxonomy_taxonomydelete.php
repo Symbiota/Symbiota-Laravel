@@ -66,4 +66,7 @@ return [
     'LINKED_DETS' => 'registros de determinación enlazados',
     'LINKED_CHECKLISTS' => 'listados de especies enlazados',
     'LINKED_RES_PLURAL' => 'recursos enlazados',
+    'DELETE_TAXON' => 'Eliminar Taxón',
+    'SUCCESS_DELETING' => 'Taxón eliminado con éxito',
+    'DELETE_TAXON_DISABLED' => 'El taxón aún no puede ser eliminado',
 ];

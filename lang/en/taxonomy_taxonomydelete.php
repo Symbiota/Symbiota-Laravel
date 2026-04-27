@@ -68,4 +68,5 @@ return [
     'LINKED_RES_PLURAL' => 'linked resources',
     'DELETE_TAXON' => 'Delete Taxon',
     'SUCCESS_DELETING' => 'Taxon successfully deleted',
+    'DELETE_TAXON_DISABLED' => 'Taxon cannot yet be deleted'
 ];
