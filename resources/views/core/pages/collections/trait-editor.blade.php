@@ -229,11 +229,13 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 
             <input type="hidden" name="taxonfilter" value="{{ $taxonFilter }}" />
             <input type="hidden" name="tidfilter" value="{{ $tidFilter }}" />
+            <input type="hidden" name="localfilter" value="{{ $localFilter }}" />
+            <input type="hidden" name="traitid" value="{{ $traitID }}" />
+
             <input type="hidden" name="reviewuid" value="{{ $reviewUid }}" />
             <input type="hidden" name="reviewdate" value="{{ $reviewDate }}" />
             <input type="hidden" name="reviewstatus" value="{{ $reviewStatus }}" />
             <input type="hidden" name="sourcefilter" value="{{ $sourceFilter }}" />
-            <input type="hidden" name="localfilter" value="{{ $localFilter }}" />
             <input type="hidden" name="targetoccid" value="{{ $occid }}" />
 
             <div @cloak($mode !== $REVIEW) x-show="mode === {{ $REVIEW }}">
