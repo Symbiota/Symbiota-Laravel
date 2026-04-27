@@ -192,11 +192,11 @@ class TaxonomyController extends Controller {
         $taxonEditorObj->setTid($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
 
-        if (!empty($verifyArr['child'])) {
+        if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
-                fn($name, $url) => ['name' => $name, 'url' => $url],
+                fn ($name, $url) => ['name' => $name, 'url' => $url],
                 $verifyArr['child'],
-                array_map(fn($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
             );
         }
 
@@ -331,6 +331,7 @@ class TaxonomyController extends Controller {
         }
         if ($delStatus) {
             $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
+
             return redirect()->route('taxon.createview')->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
