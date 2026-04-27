@@ -33,19 +33,19 @@ async function checkNameExistence(
     author = "",
     preExistingTaxonInfo = null,
 ) {
-    console.log("deleteMe preExistingTaxonInfo in checkNameExistence is: ");
-    console.log(preExistingTaxonInfo);
-    console.log("deleteMe sciname in checkNameExistence is: " + sciname);
-    console.log("deleteMe rankid in checkNameExistence is: " + rankid);
-    console.log("deleteMe author in checkNameExistence is: " + author);
+    // console.log("deleteMe preExistingTaxonInfo in checkNameExistence is: ");
+    // console.log(preExistingTaxonInfo);
+    // console.log("deleteMe sciname in checkNameExistence is: " + sciname);
+    // console.log("deleteMe rankid in checkNameExistence is: " + rankid);
+    // console.log("deleteMe author in checkNameExistence is: " + author);
     const isTheSameAsPreExistingTaxon =
         preExistingTaxonInfo &&
         preExistingTaxonInfo.sciName === sciname &&
         (preExistingTaxonInfo.rankid ?? preExistingTaxonInfo.rankID) ==
             rankid &&
         preExistingTaxonInfo.author == author;
-    console.log("deleteMe isTheSameAsPreExistingTaxon is: ");
-    console.log(isTheSameAsPreExistingTaxon);
+    // console.log("deleteMe isTheSameAsPreExistingTaxon is: ");
+    // console.log(isTheSameAsPreExistingTaxon);
 
     if (isTheSameAsPreExistingTaxon) {
         return false;
@@ -72,21 +72,22 @@ async function verifyLoadFormCore(
     parentTaxonRequiredMessage = null,
     parentIdNotSetMessage = null,
     accNameNeedsValueMessage = null,
-    missingRequiredTaxonFieldMessage = null
+    missingRequiredTaxonFieldMessage = null,
 ) {
-    console.log("deleteMe verifyLoadFormCore entered and alpineData is: ");
-    const { rankid, unit1Label, unit2Label, isValid, validationMessage } = alpineData;
-    console.log({ rankid, unit1Label, unit2Label, isValid, validationMessage });
-    console.log("deleteMe and preExistingTaxonInfo is: ");
-    console.log(preExistingTaxonInfo);
+    // console.log("deleteMe verifyLoadFormCore entered and alpineData is: ");
+    const { rankid, unit1Label, unit2Label, isValid, validationMessage } =
+        alpineData;
+    // console.log({ rankid, unit1Label, unit2Label, isValid, validationMessage });
+    // console.log("deleteMe and preExistingTaxonInfo is: ");
+    // console.log(preExistingTaxonInfo);
     const entryHasNotChanged = isTheSameEntryAsItStarted(preExistingTaxonInfo);
-    console.log("deleteMe entryHasNotChanged is: " + entryHasNotChanged);
+    // console.log("deleteMe entryHasNotChanged is: " + entryHasNotChanged);
     if (entryHasNotChanged) {
         return { isValid: true, message: "" };
     }
     const unitname1 = document.querySelector('[name="unitname1"]');
-    console.log("deleteMe unitname1 in verifyLoadFormCore is: ");
-    console.log(unitname1);
+    // console.log("deleteMe unitname1 in verifyLoadFormCore is: ");
+    // console.log(unitname1);
     if (!unitname1?.value) {
         const msg = missingRequiredTaxonFieldMessage;
         if (!silent) alert(msg);
@@ -100,9 +101,10 @@ async function verifyLoadFormCore(
         return { isValid: false, message: msg };
     }
     const unit2nameIsRequired = alpineData.rankid >= 220;
-    if(unit2nameIsRequired){
-        const unit2nameIsMissing = !document.querySelector('[name="unitname2"]')?.value;
-        if(unit2nameIsMissing){
+    if (unit2nameIsRequired) {
+        const unit2nameIsMissing =
+            !document.querySelector('[name="unitname2"]')?.value;
+        if (unit2nameIsMissing) {
             const msg = missingRequiredTaxonFieldMessage;
             if (!silent) alert(msg);
             setErrorDisplay(msg);
@@ -111,9 +113,10 @@ async function verifyLoadFormCore(
     }
 
     const unit3nameIsRequired = alpineData.rankid >= 230;
-    if(unit3nameIsRequired){
-        const unit3nameIsMissing = !document.querySelector('[name="unitname3"]')?.value;
-        if(unit3nameIsMissing){
+    if (unit3nameIsRequired) {
+        const unit3nameIsMissing =
+            !document.querySelector('[name="unitname3"]')?.value;
+        if (unit3nameIsMissing) {
             const msg = missingRequiredTaxonFieldMessage;
             if (!silent) alert(msg);
             setErrorDisplay(msg);
@@ -122,9 +125,11 @@ async function verifyLoadFormCore(
     }
 
     const cultivarEpithetIsRequired = alpineData.rankid >= 300;
-    if(cultivarEpithetIsRequired){
-        const cultivarEpithetIsMissing = !document.querySelector('[name="cultivarEpithet"]')?.value;
-        if(cultivarEpithetIsMissing){
+    if (cultivarEpithetIsRequired) {
+        const cultivarEpithetIsMissing = !document.querySelector(
+            '[name="cultivarEpithet"]',
+        )?.value;
+        if (cultivarEpithetIsMissing) {
             const msg = missingRequiredTaxonFieldMessage;
             if (!silent) alert(msg);
             setErrorDisplay(msg);
@@ -139,8 +144,7 @@ async function verifyLoadFormCore(
         setErrorDisplay(msg);
         return { isValid: false, message: msg };
     }
-    
-    
+
     const sciName = (
         (unitname1?.value || "") +
         " " +
@@ -250,7 +254,7 @@ async function verifyLoadForm(
     parentTaxonRequiredMessage,
     parentIdNotSetMessage,
     accNameNeedsValueMessage,
-    missingRequiredTaxonFieldMessage
+    missingRequiredTaxonFieldMessage,
 ) {
     return verifyLoadFormCore(
         alpineData,
@@ -261,7 +265,7 @@ async function verifyLoadForm(
         parentTaxonRequiredMessage,
         parentIdNotSetMessage,
         accNameNeedsValueMessage,
-        missingRequiredTaxonFieldMessage
+        missingRequiredTaxonFieldMessage,
     );
     // const coreResult = await verifyLoadFormCore(
     //     alpineData,
@@ -293,7 +297,7 @@ function validateFormInput(
     sciNameRankRequiredMessage = null,
     parentTaxonRequiredMessage = null,
     parentIdNotSetMessage = null,
-    accNameNeedsValueMessage = null
+    accNameNeedsValueMessage = null,
 ) {
     const rankId = alpineData.rankid;
     const unitname1 = document.querySelector('[name="unitname1"]');
@@ -347,7 +351,7 @@ async function validateTaxonEditForm(
     parentTaxonRequiredMessage = null,
     parentIdNotSetMessage = null,
     accNameNeedsValueMessage = null,
-    missingRequiredTaxonFieldMessage = null
+    missingRequiredTaxonFieldMessage = null,
 ) {
     return verifyLoadFormCore(
         alpineData,
@@ -358,7 +362,7 @@ async function validateTaxonEditForm(
         parentTaxonRequiredMessage,
         parentIdNotSetMessage,
         accNameNeedsValueMessage,
-        missingRequiredTaxonFieldMessage
+        missingRequiredTaxonFieldMessage,
     );
 }
 
@@ -421,7 +425,8 @@ function processTextContent(content) {
     return content?.replace("undefined", "")?.trim();
 }
 
-function setErrorDisplay(_text) { // @TODO refactor this/ ensure that errors are already handled by Alpine
+function setErrorDisplay(_text) {
+    // @TODO refactor this/ ensure that errors are already handled by Alpine
     // Validation messages are returned to Alpine's validate() which sets
     // this.validationMessage — driving x-text="validationMessage" on #validationMessage.
     // No direct DOM write needed here.
@@ -459,7 +464,8 @@ function updateScinameDisplay() {
 
     const unitname3 = document.querySelector('[name="unitname3"]')?.value ?? "";
     const unitind3 = document.querySelector('[name="unitind3"]')?.value ?? "";
-    const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]')?.value ?? "";
+    const cultivarEpithet =
+        document.querySelector('[name="cultivarEpithet"]')?.value ?? "";
     const tradeName = document.querySelector('[name="tradeName"]')?.value ?? "";
     // const unit3namevisible =
     //     document.getElementById("unit3").style.display !== "none";
@@ -476,7 +482,11 @@ function updateScinameDisplay() {
         sciname += " " + standardizeTradeName(tradeName);
     }
     const trimmedSciname = sciname.trim();
-    console.log("deleteMe updateScinameDisplay computed sciname:", trimmedSciname, { unitind1, unitname1, unitind2, unitname2, unitname3, unitind3 });
+    console.log(
+        "deleteMe updateScinameDisplay computed sciname:",
+        trimmedSciname,
+        { unitind1, unitname1, unitind2, unitname2, unitname3, unitind3 },
+    );
     const target = document.getElementById("sciname-preview");
     if (target) {
         target.textContent = trimmedSciname;
@@ -673,9 +683,18 @@ async function parseName() {
     taxonForm.quickparser.value = "";
 }
 
+async function validateTaxonDelete(verifyArr) {
+    const verificationCriteria = Object.keys(verifyArr);
+    const isValid = verificationCriteria.every((criterion) => {
+        return verifyArr[criterion] === "0";
+    });
+    return isValid;
+}
+
 window.updateLabels = updateLabels;
 // window.validateTaxonForm = validateTaxonForm;
 window.updateScinameDisplay = updateScinameDisplay;
 window.parseName = parseName;
 window.verifyLoadForm = verifyLoadForm;
 window.validateTaxonEditForm = validateTaxonEditForm;
+window.validateTaxonDelete = validateTaxonDelete;

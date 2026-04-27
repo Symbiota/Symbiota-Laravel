@@ -30,10 +30,7 @@
                     if (window.verifyLoadForm && window.validateTaxonEditForm) {
                         const targetValidationFunction = this.mode === 'create' ? window.verifyLoadForm : window.validateTaxonEditForm;
                         const validationResult = await targetValidationFunction(this, true, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')), @js(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')), @js(__('taxonomy_taxonomyloader.MISSING_REQUIRED_TAXON_FIELD')));
-                        console.log('deleteMe a1 validationResult is: ');
-                        console.log(validationResult);
                         this.isValid = validationResult.isValid;
-                        this.validationMessage = validationResult.message;
                         if (mode === 'create') {
                             this.updateScinameDisplay();
                         }

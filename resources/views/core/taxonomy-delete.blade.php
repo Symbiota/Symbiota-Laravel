@@ -1,17 +1,19 @@
+@props(['verifyArr' => [], 'taxonInfo' => []])
 <script>
     window._taxonVerifyArr = {!! json_encode($verifyArr ?? [], JSON_HEX_TAG | JSON_HEX_AMP) ?: '{}' !!};
 </script>
-<div x-data="{
-    isValid: false,
-    verifyArr: window._taxonVerifyArr || {},
-    validate() {
-        console.log('deleteMe got here');
-        this.isValid = Object.keys(this.verifyArr).every(k => {
-            const val = this.verifyArr[k];
-            return !Array.isArray(val) || val.length === 0;
-        });
+<div id="taxonomy-delete" name="taxonomy-delete" x-data="{
+    isDeleteValid: false,
+    async validateDelete(){
+        if (window.validateTaxonDelete) {
+            const isDelable = await window.validateTaxonDelete(@js($verifyArr));
+            this.isDeleteValid = isDelable;
+        }
+    },
+    init() {
+        this.validateDelete();
     }
-}" x-init="validate()">
+}">
     <div id="evaluation-message" name="evaluation-message">
         <span>
             Taxon record first needs to be evaluated before it can be deleted from the system. The evaluation ensures that the deletion of this record will not interfere with data integrity.
@@ -40,7 +42,12 @@
     </fieldset>
     <fieldset>
         <legend class="font-bold text-lg">{{ __('taxonomy_taxonomydelete.DELETE_TAX_AND_RES') }}</legend>
-        <x-button x-bind:disabled="!isValid" :href="route('taxon.delete', ['tid' => $taxonInfo->tid])" color="danger" class="mt-2">
+        <x-button
+            @click.prevent="isDeleteValid && (window.location.href = '{{ route('taxon.delete', ['tid' => $taxonInfo->tid]) }}')"
+            x-bind:aria-disabled="!isDeleteValid"
+            x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
+            color="danger"
+            class="mt-2">
             {{ __('taxonomy_taxonomydelete.DELETE_TAXON') }}
         </x-button>
     </fieldset>
