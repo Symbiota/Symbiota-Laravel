@@ -207,7 +207,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
         <x-button type="button" @click="document.getElementById('filterform').submit()">{{ __('traitattr_occurattributes.SKIP')}} >></x-button>
     </div>
 
-    <form method="post" class="flex gap-2" x-data="{ activeImg: 0}">
+    <form method="post" class="flex gap-2" x-data="{ activeImg: 0, hasTrait: false}">
         @csrf
         @if(count($imgArr) > 1)
         <x-button type="button" @click="activeImg = activeImg + 1">Next</x-button>
@@ -220,7 +220,7 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
         @endforeach
 
         <div class="border border-base-300 flex-grow p-4 flex flex-col gap-4">
-            <x-trait-form :traits="$traitArr" :traitId="$traitID" />
+            <x-trait-form :traits="$traitArr" :traitId="$traitID" @change="hasTrait=event?.target?.name?.includes('traitid')"/>
             <x-input id="notes" :label="__('projects.NOTES')" />
             <x-select class="w-full" id="status"
                 :label="__('taxonomy_batchloader.STATUS')"
@@ -236,17 +236,17 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
             <input type="hidden" name="localfilter" value="{{ $localFilter }}" />
             <input type="hidden" name="targetoccid" value="{{ $occid }}" />
 
-            <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
+            <div @cloak($mode !== $REVIEW) x-show="mode === {{ $REVIEW }}">
                 <input type="hidden" name="submitform" value="Set Status and Save">
-                <x-button>
+                <input type="hidden" name="mode" value="{{ $REVIEW }}" />
+                <x-button x-bind:disabled="!hasTrait">
                     {{ __('traitattr_occurattributes.SET_STATUS_SAVE') }}
                 </x-button>
             </div>
-            <div @cloak($mode !== $REVIEW) x-show="mode === {{ $REVIEW }}">
+            <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
                 <input type="hidden" name="submitform" value="Save and Next">
                 <input type="hidden" name="mode" value="{{ $EDIT }}" />
-                {{-- TODO (Logan) toggle logic fro when this is not disabled --}}
-                <x-button :disabled="true">
+                <x-button x-bind:disabled="!hasTrait">
                     {{ __('traitattr_occurattributes.SAVE_NEXT') }}
                 </x-button>
             </div>

@@ -7,7 +7,7 @@ $type = $props? $props[0]->controlType: 'radio';
 @if($type === 'select')
 {{-- todo select part of traits --}}
 @else
-<div class="flex flex-col gap-2" x-data="{ radioValue: null}">
+<div x-data="{ radioValue: null}" {{ $attributes->twMerge('flex flex-col gap-2')}}>
     <div class="font-bold">{{$traits[$traitId]['name']}}</div>
     @foreach ($traits[$traitId]['states'] as $sid => $state)
     <div x-data="{ parentValue: null }">
