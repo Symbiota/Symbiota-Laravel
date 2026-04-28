@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
@@ -62,24 +61,29 @@ class CollectionTraitController extends Controller {
         ];
     }
 
-    private static function editorView($attrManager, $mode) {
+    public static function editor(int $collId) {
+        $attrManager = self::attributeManager($collId);
+        $mode = self::getMode($collId);
+
         return view('pages/collections/trait-editor',
             self::getPageData($attrManager, $mode)
         );
     }
 
-    public static function editor(int $collId) {
-        $attrManager = self::attributeManager($collId);
+    private static function getMode(int $collId) {
         $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
+        $canReview = Gate::check('COLL_ADMIN', $collId);
 
-        return view('pages/collections/trait-editor',
-            self::getPageData($attrManager, $mode)
-        );
+        if($mode === self::REVIEW && !$canReview) {
+            $mode = self::EDIT;
+        }
+
+        return $mode;
     }
 
     public static function getImages(int $collId) {
         $attrManager = self::attributeManager($collId);
-        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
+        $mode = self::getMode($collId);
 
         return view('traits/image-form',
             self::getPageData($attrManager, $mode)
@@ -89,13 +93,7 @@ class CollectionTraitController extends Controller {
     public static function save(int $collId) {
         $attrManager = self::attributeManager($collId);
         $attrManager->setOccid(request('targetoccid'));
-        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
-
-        $canReview = Gate::check('COLL_ADMIN', $collId);
-
-        if($mode === self::REVIEW && !$canReview) {
-            $mode = self::EDIT;
-        }
+        $mode = self::getMode($collId);
 
         if($mode === self::REVIEW) {
             $attrManager->editAttributes(request()->all());
