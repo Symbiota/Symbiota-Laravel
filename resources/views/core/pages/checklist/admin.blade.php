@@ -212,7 +212,7 @@ $TABS = [
 
 @endphp
 <x-layout class="p-0">
-    <div class="max-w-screen-lg px-10 pt-4">
+    <div class="max-w-screen-lg px-10 pt-4 mx-auto">
         <x-breadcrumbs :items="[
             ['title' => 'Home', 'href' => url('') ],
             ['title' => 'Return to Checklist', 'href' => url('checklists/' . $clid) ],
@@ -504,7 +504,6 @@ $TABS = [
                     <x-select id="targetclid" class="w-full" label="Target Checklist" :items="$userChecklists" />
                     <x-select id="parentclid" class="w-full" label="Parent Checklist" :items="$userChecklists" />
                     <x-select id="targetpid"  class="w-full" label="Add to project" :items="$userProjects" />
-                    </div>
                     <x-radio id="transmethod" :defaultValue="$transferMethod" name="transmethod" label="Transfer method" :options="[
                         ['label' => $LANG['TRANSFERTAXA'], 'value' => 0],
                         ['label' => $LANG['COPYTAXA'], 'value' => 1],
