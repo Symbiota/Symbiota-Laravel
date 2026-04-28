@@ -660,40 +660,7 @@ $TABS = [
 
         {{-- REPORTS START--}}
         <x-horizontal-nav.tab name="reports" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <div class="font-bold text-2xl">
-                  {{ $LANG['REPORTS'] }}
-                </div>
-                <hr/>
-                <p>{{ $LANG['ADDITIONAL'] }}</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullcsv&clid=' . $clid) }}">
-                    {{ $LANG['FULLSPECLIST'] }}
-                </x-link>
-                @if($vouchersExist = $clVoucherManager->vouchersExist())
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullvoucherscsv&clid=' . $clid) }}">
-                    {{ $LANG['FULLSPECLISTVOUCHER'] }}
-                </x-link>
-                <x-link target="_blank"
-                    href="{{ legacy_url('collections/download/index.php?searchvar=' . urlencode('clid=' . $clVoucherManager->getClidFullStr()) . '&noheader=1') }}">
-                    {{ $LANG['VOUCHERONLY'] }}
-                </x-link>
-                @endif
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=fullalloccurcsv&clid=' . $clid) }}">
-                    {{ $LANG['FULLSPECLISTALLOCCUR'] }}
-                </x-link>
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=pensoftxlsx&clid=' . $clid) }}">
-                    {{ $LANG['PENSOFT_XLSX_EXPORT'] }}
-                </x-link>
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=missingoccurcsv&clid=' . $clid) }}">
-                    {{ $LANG['SPECMISSTAXA'] }}
-                </x-link>
-                <x-link href="{{ legacy_url('voucherreporthandler.php?rtype=problemtaxacsv&clid=' . $clid) }}">
-                    {{ $LANG['SPECMISSPELLED'] }}
-                </x-link>
-            </div>
+            <x-checklist.reports :clid="$clid" :clVoucherManager="$clVoucherManager" />
         </x-horizontal-nav.tab>
         {{-- REPORTS END --}}
     </x-horizontal-nav.container>
