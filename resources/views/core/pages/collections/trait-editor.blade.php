@@ -87,6 +87,7 @@ if ($traitID) {
 	}
 }
 */
+$canReview = Gate::check('COLL_ADMIN', $collId);
 
 $traitItems = itemize($attrManager->getTraitNames());
 
@@ -146,6 +147,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
         </x-button>
     </div>
 
+    @if($canReview)
     <div @cloak($mode === $REVIEW) x-show="mode !== {{ $REVIEW }}">
         <x-button
             @click="mode = {{ $REVIEW }}"
@@ -153,6 +155,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
             {{ __('traitattr_occurattributes.REVIEW') }}
         </x-button>
     </div>
+    @endif
 
     <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
         <x-accordion :label="__('misc_sharedterms.FILTER')" :open="true" >
@@ -191,6 +194,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
         </x-accordion>
     </div>
 
+    @if($canReview)
     <div @cloak($mode !== $REVIEW) x-show="mode === {{ $REVIEW }}">
         <x-accordion :label="__('traitattr_occurattributes.REVIEWER')" :open="true">
             <fieldset>
@@ -226,6 +230,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
             </fieldset>
         </x-accordion>
     </div>
+    @endif
 
     <hr/>
 
