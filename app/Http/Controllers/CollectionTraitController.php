@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
 
@@ -57,7 +58,7 @@ class CollectionTraitController extends Controller {
             'images' => $imgArr,
             'occid' => $occid,
             'catNum' => $catNum,
-            'mode' => $mode === self::REVIEW? self::REVIEW: self::EDIT
+            'mode' => $mode == self::REVIEW? self::REVIEW: self::EDIT
         ];
     }
 
@@ -69,40 +70,43 @@ class CollectionTraitController extends Controller {
 
     public static function editor(int $collId) {
         $attrManager = self::attributeManager($collId);
+        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
+
         return view('pages/collections/trait-editor',
-            self::getPageData($attrManager, request('mode'))
+            self::getPageData($attrManager, $mode)
         );
     }
 
     public static function getImages(int $collId) {
         $attrManager = self::attributeManager($collId);
-
+        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
 
         return view('traits/image-form',
-            self::getPageData($attrManager, request('mode'))
+            self::getPageData($attrManager, $mode)
         );
     }
 
-    public static function saveEditNext(int $collId) {
+    public static function save(int $collId) {
         $attrManager = self::attributeManager($collId);
-
         $attrManager->setOccid(request('targetoccid'));
-        if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
-            $statusStr = $attrManager->getErrorMessage();
+        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
+
+        $canReview = Gate::check('COLL_ADMIN', $collId);
+
+        if($mode === self::REVIEW && !$canReview) {
+            $mode = self::EDIT;
+        }
+
+        if($mode === self::REVIEW) {
+            $attrManager->editAttributes(request()->all());
+        } else if($mode === self::EDIT) {
+            if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
+                $statusStr = $attrManager->getErrorMessage();
+            }
         }
 
         return view('traits/image-form',
-            self::getPageData($attrManager, self::EDIT)
-        );
-    }
-
-    public static function saveReviewNext(int $collId) {
-        $attrManager = self::attributeManager($collId);
-        $attrManager->setOccid(request('targetoccid'));
-        $attrManager->editAttributes(request()->all());
-
-        return view('traits/image-form',
-            self::getPageData($attrManager, self::REVIEW)
+            self::getPageData($attrManager, $mode)
         );
     }
 }

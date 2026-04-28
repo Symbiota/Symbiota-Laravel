@@ -1,21 +1,18 @@
+@php $REVIEW = 2; $EDIT = 1; @endphp
 @props([
     'attrManager',
     'traitID' => '',
     'images' => [],
     'occid' => 0,
     'catNum' => '',
-    'mode' => 1,
+    'mode' => request('mode') == $REVIEW? $REVIEW: $EDIT,
 ])
 
 @php global $SERVER_ROOT;
 include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 
-$REVIEW = 2;
-$EDIT = 1;
-
 $collId = request('collid');
 $submitForm = request('submitform') ?? '';
-$mode = request('mode') == $REVIEW? $REVIEW: $EDIT;
 $traitID = request('traitid') ?? '';
 $paneX = request('panex') ?? '575';
 $paneY = request('paney') ?? '550';
@@ -141,13 +138,20 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
 
     <hr/>
 
-
     <div @cloak($mode === $EDIT) x-show="mode !== {{ $EDIT }}">
-        <x-button @click="mode = {{ $EDIT }}">{{ __('projects.EDIT') }}</x-button>
+        <x-button
+            @click="mode = {{ $EDIT }}"
+        >
+            {{ __('projects.EDIT') }}
+        </x-button>
     </div>
 
     <div @cloak($mode === $REVIEW) x-show="mode !== {{ $REVIEW }}">
-        <x-button  @click="mode = {{ $REVIEW }}">{{ __('traitattr_occurattributes.REVIEW') }}</x-button>
+        <x-button
+            @click="mode = {{ $REVIEW }}"
+        >
+            {{ __('traitattr_occurattributes.REVIEW') }}
+        </x-button>
     </div>
 
     <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
@@ -175,7 +179,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
                         <x-select class="w-auto flex-grow" id="localfilter" default="0" :items="$countryItems"/>
                     </div>
                     <x-taxa-search />
-                    <input type="hidden" name="mode" value="{{ $EDIT }}" />
+                    <input type="hidden" name="mode" x-bind:value="mode" value="{{ $mode }}" />
                     <input type="hidden" name="submitform" value="Load Images">
                     <input id="panex1" name="panex" type="hidden" value="{{ $paneX }}" />
                     <input id="paney1" name="paney" type="hidden" value="{{ $paneY }}" />
@@ -194,7 +198,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
                     {{ __('traitattr_occurattributes.REVIEWER') }}
                 </legend>
                 <form
-                    hx-patch="{{ url()->current() }}"
+                    hx-post="{{ url()->current() }}"
                     hx-target="#trait-image-form"
                     hx-swap="outerHTML"
                     id="reviewform"
@@ -215,7 +219,7 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
                         <x-select class="w-auto flex-grow" id="localfilter" default="0" :items="$countryItems"/>
                         </div>
                     <x-taxa-search />
-                    <input type="hidden" name="mode" value="{{ $EDIT }}" />
+                    <input type="hidden" name="mode" x-bind:value="mode" value="{{ $mode }}" />
                     <input type="hidden" name="submitform" value="Get Images">
                     <x-button>{{ __('traitattr_occurattributes.GET_IMAGES') }}</x-button>
                 </form>
