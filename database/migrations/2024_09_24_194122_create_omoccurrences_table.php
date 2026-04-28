@@ -87,8 +87,8 @@ return new class() extends Migration {
             $table->string('county')->nullable()->index('index_county');
             $table->string('municipality')->nullable()->index('index_municipality');
             $table->text('locality')->nullable()->index('index_locality');
-            $table->integer('localitySecurity')->nullable()->default(0)->index('index_occur_localitysecurity')->comment('0 = no security; 1 = hidden locality');
-            $table->string('localitySecurityReason', 100)->nullable();
+            $table->integer('recordSecurity')->nullable()->default(0)->index('index_occur_recordsecurity')->comment('0 = no security; 1 = hidden locality');
+            $table->string('securityReason', 100)->nullable();
             $table->double('decimalLatitude')->nullable()->index('ix_occurrences_lat');
             $table->double('decimalLongitude')->nullable()->index('ix_occurrences_lng');
             $table->string('geodeticDatum')->nullable();
