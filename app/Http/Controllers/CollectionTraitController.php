@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class CollectionTraitController extends Controller {
+
+    private static function attributeManager(int $collId) {
+        global $SERVER_ROOT;
+        include_once(legacy_path('/classes/OccurrenceAttributes.php'));
+
+        $attrManager = new \OccurrenceAttributes();
+        $attrManager->setCollid($collId);
+        $attrManager->setFilterAttributes(request()->all());
+
+        $taxonFilter = $attrManager->getFilterAttribute('taxonfilter');
+        $tidFilter = $attrManager->getFilterAttribute('tidfilter');
+        $reviewUid = $attrManager->getFilterAttribute('reviewuid');
+        $reviewDate = $attrManager->getFilterAttribute('reviewdate');
+        $reviewStatus = $attrManager->getFilterAttribute('reviewstatus');
+        $sourceFilter = $attrManager->getFilterAttribute('sourcefilter');
+        $localFilter = $attrManager->getFilterAttribute('localfilter');
+
+        return $attrManager;
+    }
+
+    const EDIT = 1;
+    const REVIEW = 2;
+
+    private static function getPageData($attrManager, $mode) {
+        $traitID = request('traitid');
+        $imgArr = array();
+        $occid = 0;
+        $catNum = '';
+
+        if ($traitID) {
+            $imgRetArr = array();
+            if ($mode == self::EDIT) {
+                $imgRetArr = $attrManager->getImageUrls();
+                $imgArr = current($imgRetArr);
+            } elseif ($mode == self::REVIEW) {
+                $imgRetArr = $attrManager->getReviewUrls($traitID);
+                if ($imgRetArr) $imgArr = current($imgRetArr);
+            }
+            if ($imgRetArr) {
+                $catNum = $imgArr['catnum'];
+                unset($imgArr['catnum']);
+                $occid = key($imgRetArr);
+                if ($occid) $attrManager->setOccid($occid);
+            }
+        }
+
+        return [
+            'attrManager' => $attrManager,
+            'traitID' => $traitID,
+            'images' => $imgArr,
+            'occid' => $occid,
+            'catNum' => $catNum,
+            'mode' => $mode === self::REVIEW? self::REVIEW: self::EDIT
+        ];
+    }
+
+    private static function editorView($attrManager, $mode) {
+        return view('pages/collections/trait-editor',
+            self::getPageData($attrManager, $mode)
+        );
+    }
+
+    public static function editor(int $collId) {
+        $attrManager = self::attributeManager($collId);
+        return view('pages/collections/trait-editor',
+            self::getPageData($attrManager, request('mode'))
+        );
+    }
+
+    public static function getImages(int $collId) {
+        $attrManager = self::attributeManager($collId);
+
+
+        return view('traits/image-form',
+            self::getPageData($attrManager, request('mode'))
+        );
+    }
+
+    public static function saveEditNext(int $collId) {
+        $attrManager = self::attributeManager($collId);
+
+        $attrManager->setOccid(request('targetoccid'));
+        if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
+            $statusStr = $attrManager->getErrorMessage();
+        }
+
+        return view('traits/image-form',
+            self::getPageData($attrManager, self::EDIT)
+        );
+    }
+
+    public static function saveReviewNext(int $collId) {
+        $attrManager = self::attributeManager($collId);
+        $attrManager->setOccid(request('targetoccid'));
+        $attrManager->editAttributes(request()->all());
+
+        return view('traits/image-form',
+            self::getPageData($attrManager, self::REVIEW)
+        );
+    }
+}

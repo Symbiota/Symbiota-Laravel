@@ -1,9 +1,27 @@
+@props([
+    'attrManager',
+    'traitID' => '',
+    'images' => [],
+    'occid' => 0,
+    'catNum' => '',
+    'mode' => 1,
+])
+
 @php global $SERVER_ROOT;
-include_once(legacy_path('/classes/OccurrenceAttributes.php'));
 include_once(legacy_path('/classes/utilities/GeneralUtil.php'));
 
 $REVIEW = 2;
 $EDIT = 1;
+
+$collId = request('collid');
+$submitForm = request('submitform') ?? '';
+$mode = request('mode') == $REVIEW? $REVIEW: $EDIT;
+$traitID = request('traitid') ?? '';
+$paneX = request('panex') ?? '575';
+$paneY = request('paney') ?? '550';
+$imgRes = request('imgres') ?? 'med';
+
+/*include_once(legacy_path('/classes/OccurrenceAttributes.php'));
 
 $collid = request('collid');
 $submitForm = request('submitform') ?? '';
@@ -71,6 +89,7 @@ if ($traitID) {
 		if ($occid) $attrManager->setOccid($occid);
 	}
 }
+*/
 
 $traitItems = itemize($attrManager->getTraitNames());
 
@@ -88,10 +107,6 @@ $reviewStatusItems = [
     item(10, __('misc_commentlist.REVIEWED')),
 ];
 
-$editStatusItems = [
-    item(5, __('includes_traittab.EXPERT_NEEDED')),
-];
-
 $sourceItems = itemize_flat($attrManager->getSourceControlledArr(), [
     item('', __('traitattr_occurattributes.ALL_SOURCE_TYPE'))
 ]);
@@ -100,7 +115,6 @@ $countryItems = itemize_flat($attrManager->getLocalFilterOptions(), [
     item('', __('traitattr_occurattributes.ALL_COUNTRIES_STATES'))
 ]);
 
-$traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 @endphp
 
 <x-margin-layout x-data="{ mode: {{ $mode }} }">
@@ -142,7 +156,15 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
                 <legend class="text-lg font-bold">
                     {{ __('misc_sharedterms.FILTER') }}
                 </legend>
-                <form id="filterform" class="flex flex-col gap-4" name="filterform" method="post">
+                <form
+                    hx-post="{{ url()->current() }}"
+                    hx-target="#trait-image-form"
+                    hx-swap="outerHTML"
+                    id="filterform"
+                    class="flex flex-col gap-4"
+                    name="filterform"
+                    method="post"
+                >
                     @csrf
                     <x-select class="w-full flex-grow" id="traitid"
                         :defaultValue="$traitID"
@@ -171,7 +193,15 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
                 <legend class="text-lg font-bold">
                     {{ __('traitattr_occurattributes.REVIEWER') }}
                 </legend>
-                <form id="reviewform" class="flex flex-col gap-4" name="reviewform" method="post">
+                <form
+                    hx-patch="{{ url()->current() }}"
+                    hx-target="#trait-image-form"
+                    hx-swap="outerHTML"
+                    id="reviewform"
+                    class="flex flex-col gap-4"
+                    name="reviewform"
+                    method="post"
+                >
                     @csrf
 
                     <x-select class="w-full flex-grow" default="0" id="traitid" :items="$traitItems"
@@ -195,69 +225,11 @@ $traitArr = $attrManager->getTraitArr($traitID, ($mode == 2 ? true : false));
 
     <hr/>
 
-    @if(!empty($imgArr))
-    <div class="flex items-center gap-2">
-        <x-radio class="m-0" name="resradio" default_value="high" :options="[
-            [ 'value' => 'high', 'label' => __('traitattr_occurattributes.HIGH_RES') ],
-            [ 'value' => 'med', 'label' => __('traitattr_occurattributes.MED_RES') ],
-        ]" />
-        <span class="flex-grow">
-            <x-link href="{{ url('occurrence/' . $occid) }}">{{ $catNum ?? 'specimen details' }}</x-link>
-        </span>
-        <x-button type="button" @click="document.getElementById('filterform').submit()">{{ __('traitattr_occurattributes.SKIP')}} >></x-button>
-    </div>
-
-    <form method="post" class="flex gap-2" x-data="{ activeImg: 0, hasTrait: false}">
-        @csrf
-        @if(count($imgArr) > 1)
-        <x-button type="button" @click="activeImg = activeImg + 1">Next</x-button>
-        @endif
-
-        @foreach ($imgArr as $image)
-        <div class="mx-auto w-150 h-150 bg-base-300" x-show="activeImg === {{ $loop->index }}" @cloak(!$loop->first)>
-            <img class="w-150 h-150" src="{{ $image['web'] ?? $image['lg'] }}" loading="lazy" />
-        </div>
-        @endforeach
-
-        <div class="border border-base-300 flex-grow p-4 flex flex-col gap-4">
-            <x-trait-form :traits="$traitArr" :traitId="$traitID" @change="hasTrait=event?.target?.name?.includes('traitid')"/>
-            <x-input id="notes" :label="__('projects.NOTES')" />
-            <x-select class="w-full" id="status"
-                :label="__('taxonomy_batchloader.STATUS')"
-                :items="$editStatusItems"
-            />
-
-            <input type="hidden" name="taxonfilter" value="{{ $taxonFilter }}" />
-            <input type="hidden" name="tidfilter" value="{{ $tidFilter }}" />
-            <input type="hidden" name="localfilter" value="{{ $localFilter }}" />
-            <input type="hidden" name="traitid" value="{{ $traitID }}" />
-
-            <input type="hidden" name="reviewuid" value="{{ $reviewUid }}" />
-            <input type="hidden" name="reviewdate" value="{{ $reviewDate }}" />
-            <input type="hidden" name="reviewstatus" value="{{ $reviewStatus }}" />
-            <input type="hidden" name="sourcefilter" value="{{ $sourceFilter }}" />
-            <input type="hidden" name="targetoccid" value="{{ $occid }}" />
-
-            <div @cloak($mode !== $REVIEW) x-show="mode === {{ $REVIEW }}">
-                <input type="hidden" name="submitform" value="Set Status and Save">
-                <input type="hidden" name="mode" value="{{ $REVIEW }}" />
-                <x-button x-bind:disabled="!hasTrait">
-                    {{ __('traitattr_occurattributes.SET_STATUS_SAVE') }}
-                </x-button>
-            </div>
-            <div @cloak($mode !== $EDIT) x-show="mode === {{ $EDIT }}">
-                <input type="hidden" name="submitform" value="Save and Next">
-                <input type="hidden" name="mode" value="{{ $EDIT }}" />
-                <x-button x-bind:disabled="!hasTrait">
-                    {{ __('traitattr_occurattributes.SAVE_NEXT') }}
-                </x-button>
-            </div>
-        </div>
-    </form>
-
-    @elseif($submitForm)
-    <div class="font-bold">
-        {{ __('traitattr_occurattributes.NO_IMAGES_MATCHING_CRITERIA') }}
-    </div>
-    @endif
+    <x-traits.image-form
+        :images="$images"
+        :collId="$collId"
+        :traitID="$traitID"
+        :attrManager="$attrManager"
+        :mode="$mode"
+    />
 </x-margin-layout>
