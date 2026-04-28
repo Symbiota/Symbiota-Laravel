@@ -224,8 +224,6 @@ class Occurrence extends Model {
         'recordEnteredBy',
         'associatedOccurrences',
         'previousIdentifications',
-        'recordSecurity',
-        'securityReason',
         'verbatimCoordinateSystem',
         'coordinatePrecision',
         'footprintWKT',
