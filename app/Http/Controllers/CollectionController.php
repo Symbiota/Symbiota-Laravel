@@ -182,9 +182,6 @@ class CollectionController extends Controller {
     public static function comments() {
         return view('pages/collections/comments');
     }
-    public static function traitEditor() {
-        return view('pages/collections/trait-editor');
-    }
 }
 
 enum UploadTypes {
