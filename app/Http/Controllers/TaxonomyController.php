@@ -194,9 +194,9 @@ class TaxonomyController extends Controller {
 
         if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
-                fn ($name, $url) => ['name' => $name, 'url' => $url],
+                fn($name, $url) => ['name' => $name, 'url' => $url],
                 $verifyArr['child'],
-                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+                array_map(fn($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
             );
         }
 
@@ -321,7 +321,7 @@ class TaxonomyController extends Controller {
     }
 
     public static function delete() {
-        $tid = request()->all()['tid'] ?? null;
+        $tid = (int) request()->all()['tid'] ?? null;
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($tid);
@@ -331,11 +331,28 @@ class TaxonomyController extends Controller {
         }
         if ($delStatus) {
             $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
-
             return redirect()->route('taxon.createview')->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+        }
+    }
 
+    public static function remap() {
+        $requestData = request()->all();
+
+        $tid = (int) request()->all()['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+
+        $remapStatus = $editorManager->transferResources($requestData['remaptid']); // @TODO maybe just $requestData
+        if ($editorManager->getWarningArr()) $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+        if ($remapStatus) {
+            $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
+            TaxonomyController::delete();
+        } else {
+            $statusStr = $editorManager->getErrorMessage();
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }

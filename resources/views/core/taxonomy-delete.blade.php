@@ -1,7 +1,4 @@
 @props(['verifyArr' => [], 'taxonInfo' => []])
-<script>
-    window._taxonVerifyArr = {!! json_encode($verifyArr ?? [], JSON_HEX_TAG | JSON_HEX_AMP) ?: '{}' !!};
-</script>
 <div id="taxonomy-delete" name="taxonomy-delete" x-data="{
     isDeleteValid: false,
     async validateDelete(){
@@ -36,14 +33,40 @@
     <x-taxon-linked-item :items="$verifyArr['kmdesc'] ?? []" :title="__('taxonomy_taxonomydelete.MORPHO_KEY_DESC')" :warning="__('taxonomy_taxonomydelete.MORPHO_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_MORPHO')" />
     <x-taxon-linked-item :items="$verifyArr['link'] ?? []" :title="__('taxonomy_taxonomydelete.LINKED_RESOURCES')" :warning="__('taxonomy_taxonomydelete.LINKED_RES_EXIST')" :item-name-plural="__('taxonomy_taxonomydelete.LINKED_RES_PLURAL')" />
 
-    <fieldset>
+    <fieldset class="border border-base-300 rounded-md p-4 mb-4">
         <legend class="font-bold text-lg">{{ __('taxonomy_taxonomydelete.REMAP_RESOURCES') }}</legend>
         <span>{{__('taxonomy_taxonomydelete.WARNING_REMAP')}}</span>
+        <form id="remap-taxon-form" method="POST" action="{{ route('taxon.remap', ['tid' => $taxonInfo->tid]) }}">
+            @csrf
+            @method('POST')
+            <div class="mb-2">
+                <label class="font-bold text-lg" for="remapvalue">{{ __('checklists_clsppeditor.TARGET_TAXON') }}</label>
+            </div>
+            <x-taxa-search
+                class="font-bold"
+                required 
+                id="remapvalue" 
+                name="remapvalue"
+                :label="''"
+                :tidName="'remaptid'"
+                :hide_selector="true"
+                :hide_synonyms_checkbox="true"
+                :taxa_value="''"
+                :tid_value="''" />
+            <input name="tid" type="hidden" value="{{ $taxonInfo->tid }}" />
+            <x-button class="mt-3" color="primary" type="submit">
+                {{__('taxonomy_taxonomydelete.REMAP_TAXON')}}
+            </x-button>
+        </form>
     </fieldset>
-    <fieldset>
+    <fieldset class="border border-base-300 rounded-md p-4 mb-4"    >
         <legend class="font-bold text-lg">{{ __('taxonomy_taxonomydelete.DELETE_TAX_AND_RES') }}</legend>
+        <form id="delete-taxon-form" method="POST" action="{{ route('taxon.delete', ['tid' => $taxonInfo->tid]) }}">
+            @csrf
+            @method('DELETE')
+        </form>
         <x-button
-            @click.prevent="isDeleteValid && (window.location.href = '{{ route('taxon.delete', ['tid' => $taxonInfo->tid]) }}')"
+            @click.prevent="isDeleteValid && document.getElementById('delete-taxon-form').submit()"
             x-bind:aria-disabled="!isDeleteValid"
             x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
             color="danger"
