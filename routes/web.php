@@ -167,7 +167,7 @@ Route::group(['prefix' => '/collections'], function () {
     Route::match(['GET', 'POST'], '/{collid}/comments', [CollectionController::class, 'comments'])->can('COLL_ADMIN', 'collid')->where('collid', '[0-9+]');
     // Route::match(['GET', 'POST'], '/{collid}/traits/edit', [CollectionTraitController::class, 'editor'])->can('COLL_EDIT', 'collid');
 
-    Route::controller(CollectionTraitController::class)->group(function() {
+    Route::controller(CollectionTraitController::class)->group(function () {
         Route::get('/{collid}/traits/edit', 'editor')->can('COLL_EDIT', 'collid');
         Route::post('/{collid}/traits/edit', 'getImages')->can('COLL_EDIT', 'collid');
         Route::patch('/{collid}/traits/edit', 'save')->can('COLL_EDIT', 'collid');

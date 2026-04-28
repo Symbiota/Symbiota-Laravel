@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
-
     private static function attributeManager(int $collId) {
         global $SERVER_ROOT;
-        include_once(legacy_path('/classes/OccurrenceAttributes.php'));
+        include_once legacy_path('/classes/OccurrenceAttributes.php');
 
         $attrManager = new \OccurrenceAttributes();
         $attrManager->setCollid($collId);
@@ -27,28 +25,33 @@ class CollectionTraitController extends Controller {
     }
 
     const EDIT = 1;
+
     const REVIEW = 2;
 
     private static function getPageData($attrManager, $mode) {
         $traitID = request('traitid');
-        $imgArr = array();
+        $imgArr = [];
         $occid = 0;
         $catNum = '';
 
         if ($traitID) {
-            $imgRetArr = array();
+            $imgRetArr = [];
             if ($mode == self::EDIT) {
                 $imgRetArr = $attrManager->getImageUrls();
                 $imgArr = current($imgRetArr);
             } elseif ($mode == self::REVIEW) {
                 $imgRetArr = $attrManager->getReviewUrls($traitID);
-                if ($imgRetArr) $imgArr = current($imgRetArr);
+                if ($imgRetArr) {
+                    $imgArr = current($imgRetArr);
+                }
             }
             if ($imgRetArr) {
                 $catNum = $imgArr['catnum'];
                 unset($imgArr['catnum']);
                 $occid = key($imgRetArr);
-                if ($occid) $attrManager->setOccid($occid);
+                if ($occid) {
+                    $attrManager->setOccid($occid);
+                }
             }
         }
 
@@ -58,7 +61,7 @@ class CollectionTraitController extends Controller {
             'images' => $imgArr,
             'occid' => $occid,
             'catNum' => $catNum,
-            'mode' => $mode == self::REVIEW? self::REVIEW: self::EDIT
+            'mode' => $mode == self::REVIEW ? self::REVIEW : self::EDIT,
         ];
     }
 
@@ -72,10 +75,10 @@ class CollectionTraitController extends Controller {
     }
 
     private static function getMode(int $collId) {
-        $mode = request('mode') == self::REVIEW? self::REVIEW: self::EDIT;
+        $mode = request('mode') == self::REVIEW ? self::REVIEW : self::EDIT;
         $canReview = Gate::check('COLL_ADMIN', $collId);
 
-        if($mode === self::REVIEW && !$canReview) {
+        if ($mode === self::REVIEW && ! $canReview) {
             $mode = self::EDIT;
         }
 
@@ -99,14 +102,14 @@ class CollectionTraitController extends Controller {
         $errors = [];
 
         try {
-            if($mode === self::REVIEW) {
+            if ($mode === self::REVIEW) {
                 $attrManager->editAttributes(request()->all());
-            } else if($mode === self::EDIT) {
-                if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
+            } elseif ($mode === self::EDIT) {
+                if (! $attrManager->addAttributes(request()->all(), request()->user()->uid)) {
                     $errors = message_bag([$attrManager->getErrorMessage()]);
                 }
             }
-        } catch(\Throwable $th) {
+        } catch (\Throwable $th) {
             $errors = message_bag([$th->getMessage()]);
         }
 
