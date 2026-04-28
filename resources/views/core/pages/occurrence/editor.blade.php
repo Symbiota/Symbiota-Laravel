@@ -16,10 +16,10 @@ $occur->municipality,
 $locality_attributes = ['Locality' => implode(', ', $localityArr)];
 return implode(', ', $localityArr);
 
-if($occur->localitySecurity == 1) {
+if($occur->recordSecurity == 1) {
 // notice Locality details protected
 // Locality details protected
-$locality_attributes['protection typically due to rare or threatened status'] = $occurrence->localitySecurityReason;
+$locality_attributes['protection typically due to rare or threatened status'] = $occurrence->securityReason;
 //Current user has been granted access if $occur->localSecure
 }
 

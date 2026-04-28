@@ -93,8 +93,8 @@ return new class() extends Migration {
             $table->string('county')->nullable();
             $table->string('municipality')->nullable();
             $table->text('locality')->nullable();
-            $table->integer('localitySecurity')->nullable()->default(0)->comment('0 = display locality, 1 = hide locality');
-            $table->string('localitySecurityReason', 100)->nullable();
+            $table->integer('recordSecurity')->nullable()->default(0)->comment('0 = display locality, 1 = hide locality');
+            $table->string('securityReason', 100)->nullable();
             $table->double('decimalLatitude')->nullable();
             $table->double('decimalLongitude')->nullable();
             $table->string('geodeticDatum')->nullable();
