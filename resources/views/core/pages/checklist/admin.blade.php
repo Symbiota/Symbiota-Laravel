@@ -603,54 +603,7 @@ $TABS = [
 
         {{-- VOUCHER CONFLICTS START--}}
         <x-horizontal-nav.tab name="voucher-conflicts" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <div class="font-bold text-2xl">
-                    {{ $LANG['VOUCHCONF'] }}
-                </div>
-                <hr/>
-                <p>{{ $LANG['EXPLAIN_PARAGRAPH'] }}</p>
-            </div>
-
-            @if(count($conflictArr) > 0)
-            <div class="font-bold">{{ $LANG['CONFLICT_COUNT'] }}: {{ count($conflictArr) }}</div>
-            <form method="post" class="flex flex-col gap-4">
-                @csrf
-                <table class="w-full border-seperate text-sm">
-                    <thead class="bg-neutral text-neutral-content ">
-                        <th class="p-2 w-fit"><x-checkbox label="" onchange="document.querySelectorAll(`input[name='occid[]']`).forEach(v => v.checked=event.target.checked)"/></th>
-                        <th class="p-2">{{ $LANG['CHECK_ID'] }}</th>
-                        <th class="p-2">{{ $LANG['VOUCHER_SPEC'] }}</th>
-                        <th class="p-2">{{ $LANG['CORRECTED_ID'] }}</th>
-                        <th class="p-2">{{ $LANG['IDED_BY'] }}</th>
-                    </thead>
-                    <tbody>
-                        @foreach($conflictArr as $id => $conflict)
-                        <tr
-                        @class([
-                            'bg-base-200'=> $loop->even,
-                            'bg-base-300' => $loop->odd,
-                            'py-4',
-                        ])>
-                            <td @class(["p-2", "bg-neutral" => $loop->even, "bg-neutral-lighter" => $loop->odd])><x-checkbox name="occid[]" label="" value="{{ $conflict['occid'] }}"/></td>
-                            <td class="p-2"><x-link target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $conflict['tid'] .'&clid=' . $conflict['clid']) }}">{{ $conflict['listid'] }}</x-link></td>
-                            <td class="p-2">
-                                <x-link target="_blank" href="{{ url('occurrence/' . $conflict['occid']) }}">
-                                {{ $conflict['recordnumber'] }}
-                                </x-link>
-                            </td>
-                            <td class="p-2">{{ $conflict['specid'] }}</td>
-                            <td class="p-2">{{ $conflict['identifiedby'] }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <input name="submitaction" type="hidden" value="resolveconflicts" />
-                <x-checkbox id="removetaxa" :label="$LANG['REMOVE_TAXA']" :checked="true"/>
-                <div>{{ $LANG['BATCH_ACTION'] }}:</div>
-                <x-button>{{ $LANG['LINK_VOUCHERS'] }}</x-button>
-            </form>
-            <div>* {{ $LANG['CORRECTED_WILL_ADD'] }}</div>
-            @endif
+            <x-checklist.voucher-conflicts :conflicts="$conflictArr" />
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}
