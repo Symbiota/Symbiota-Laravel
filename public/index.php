@@ -97,7 +97,7 @@ $legacy_routes = [
 
     // Collections
     'collections/list.php' => '/collections/list',
-    'collections/misc/collprofiles.php' => '/collections/' . $_REQUEST['collid'],
+    'collections/misc/collprofiles.php' => fn () => '/collections/' . $_REQUEST['collid'] ?? '',
 
     // Media
     'imagelib/index.php' => '/media/library',
@@ -114,7 +114,11 @@ $legacy_routes = [
 /* Generate Legacy Redirects to Laravel */
 $legacy_black_list = [];
 foreach ($legacy_routes as $route => $redirect) {
-    $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect;
+    if (is_callable($redirect)) {
+        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect();
+    } else {
+        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect;
+    }
 }
 
 /* Parse URI */
