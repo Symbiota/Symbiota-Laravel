@@ -4,6 +4,7 @@
     'traitID',
     'attrManager',
     'mode' => 1,
+    'imgRes' => request('imgres') ?? 'med'
 ])
 @php
 
@@ -31,10 +32,10 @@ $editStatusItems = $mode === $REVIEW? [
 ];
 @endphp
 
-<div id="trait-image-form" class="flex flex-col gap-4" x-show="mode == {{ $mode }}">
+<div id="trait-image-form" class="flex flex-col gap-4" x-data="{ imgRes: '{{ $imgRes }}' }" x-show="mode == {{ $mode }}">
     @if(!empty($images))
     <div class="flex items-center gap-2">
-        <x-radio class="m-0" name="resradio" default_value="high" :options="[
+        <x-radio class="m-0" name="resradio" :default_value="$imgRes" :options="[
             [ 'value' => 'high', 'label' => __('traitattr_occurattributes.HIGH_RES') ],
             [ 'value' => 'med', 'label' => __('traitattr_occurattributes.MED_RES') ],
         ]" />
@@ -78,7 +79,11 @@ $editStatusItems = $mode === $REVIEW? [
 
         @foreach ($images as $image)
         <div class="mx-auto w-150 h-150 bg-base-300" x-show="activeImg === {{ $loop->index }}" @cloak(!$loop->first)>
-            <img class="w-150 h-150" src="{{ $image['web'] ?? $image['lg'] }}" loading="lazy" />
+            @if(isset($image['web']) && isset($img['lg']))
+                <img class="w-150 h-150" x-bind:src="imgRes == 'med'? '{{ $image['web'] }}': '{{ $image['lg'] }}'" loading="lazy" />
+            @else
+                <img class="w-150 h-150" src="{{ $image['web'] ?? $image['lg'] }}" loading="lazy" />
+            @endif
         </div>
         @endforeach
 
