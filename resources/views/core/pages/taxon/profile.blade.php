@@ -1,4 +1,4 @@
-@props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links'])
+@props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links', 'canEditTaxon' => Gate::check('TAXON_EDITOR'),])
 <x-layout class="grid grid-col-1 gap-4">
     @if (session('success'))
         <div class="alert alert-success">
@@ -21,9 +21,11 @@
             <a href="{{ url('/taxon/' . $taxon->tid . '/profileEdit') }}">
                 <x-icons.edit class="text-xl"/> Edit Taxon Profile
             </a>
-            <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
-                <x-icons.edit class="text-xl"/> Edit Taxon
-            </a>
+            @if($canEditTaxon)
+                <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
+                    <x-icons.edit class="text-xl"/> Edit Taxon
+                </a>
+            @endif
         </div>
     </div>
     <div class="flex-grow">
