@@ -24,7 +24,7 @@
         ]" />
     </div>
     <h1 class="text-center text-2xl font-bold mb-4">
-        {{ $taxonInfo->sciName }}
+        {{ $taxonInfo->sciName ?? '' }}
     </h1>
     <div id="taxon-edit-tabs-container" name="taxon-edit-tabs-container">
         <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Synonyms', 'Hierarchy', 'Child Taxa', 'Delete']">

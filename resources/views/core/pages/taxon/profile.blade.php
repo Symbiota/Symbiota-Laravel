@@ -7,7 +7,7 @@
     @endif
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">
-            <i>{{ $taxon->sciName }}</i>
+            <i>{{ $taxon->sciName ?? 'Name Missing' }}</i>
             @if ($taxon->author)
             {{ $taxon->author}}
             @endif
@@ -46,7 +46,7 @@
                     <div class="pl-1.5">
                         @endif
                         ->
-                        <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}">{{ $parent->sciName
+                        <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}">{{ $parent->sciName ?? 'Name Missing'
                             }} ({{ $parent->rankname }})</x-link>
                         @endforeach
                         @foreach($parents as $parent)
@@ -106,7 +106,7 @@
     @if(count($children))
     <div class="flex flex-wrap flex-row gap-3">
     @foreach ($children as $child)
-        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName" />
+        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName ?? 'Name Missing'" />
     @endforeach
     </div>
     @else

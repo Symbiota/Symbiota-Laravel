@@ -194,9 +194,9 @@ class TaxonomyController extends Controller {
 
         if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
-                fn ($name, $url) => ['name' => $name, 'url' => $url],
+                fn($name, $url) => ['name' => $name, 'url' => $url],
                 $verifyArr['child'],
-                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+                array_map(fn($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
             );
         }
 
@@ -348,16 +348,18 @@ class TaxonomyController extends Controller {
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($tid);
 
-        $remapStatus = $editorManager->transferResources($requestData['remaptid']); // @TODO maybe just $requestData
+        $remapStatus = $editorManager->transferResources((int)$requestData['remaptid']);
+        $statusStr = $requestData['taxa'] ?? '';
         if ($editorManager->getWarningArr()) {
-            $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         if ($remapStatus) {
-            $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
+            $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
             TaxonomyController::delete();
+            return redirect()->route('taxon.view', ['tid' => $requestData['remaptid']])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }

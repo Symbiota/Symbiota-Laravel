@@ -31,6 +31,8 @@
                         const targetValidationFunction = this.mode === 'create' ? window.verifyLoadForm : window.validateTaxonEditForm;
                         const validationResult = await targetValidationFunction(this, true, @js($taxonInfo), @js(__('taxonomy_taxonomyloader.SCI_NAME_RANK_REQUIRED')), @js(__('taxonomy_taxonomyloader.ALREADY_EXISTS')), @js(__('taxonomy_taxonomyloader.PARENT_TAXON_REQUIRED')), @js(__('taxonomy_taxonomyloader.PARENT_ID_NOT_SET')), @js(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')), @js(__('taxonomy_taxonomyloader.MISSING_REQUIRED_TAXON_FIELD')));
                         this.isValid = validationResult.isValid;
+                        console.log('Validation result:', validationResult);
+                        this.validationMessage = validationResult.message;
                         if (mode === 'create') {
                             this.updateScinameDisplay();
                         }
@@ -213,7 +215,8 @@
                         <x-taxa-search class="font-bold"
                             label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
                             required id="parentname" name="parentname"
-                            :tidName="'parenttid'" :hide_selector="true"
+                            :tidName="'parenttid'" 
+                            :hide_selector="true"
                             :hide_synonyms_checkbox="true"
                             :taxa_value="$mode === 'edit' && $taxonInfo ? $parentName : ''"
                             :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->parenttid ?? '') : ''" />

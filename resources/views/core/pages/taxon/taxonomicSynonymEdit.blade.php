@@ -1,4 +1,4 @@
-<form id="taxonomic-status-edit-form" method="POST" action="{{ route('taxon.update', ['tid' => $taxonInfo->tid]) }}">
+<form id="taxonomic-status-edit-form" method="POST" action="{{ route('taxon.update', ['tid' => $taxonInfo->tid ?? '']) }}">
     @csrf
     <x-input type="hidden" name="mode" id="mode" :value="$mode" />
     <x-input type="hidden" name="edit-type" id="edit-type" value="synonymedits" /> 
@@ -8,7 +8,7 @@
     </fieldset>
     <div class="flex items-center gap-4">
         <h1 class="text-2xl font-bold w-fit">
-            Edit Taxonomic Status for <i>{{ $taxonInfo->sciName }}</i>
+            Edit Taxonomic Status for: <i>{{ $taxonInfo->sciName ?? ' name missing' }}</i>
         </h1>
         <x-button type="submit">Save</x-button>
     </div>

@@ -53,7 +53,6 @@
                 :hide_synonyms_checkbox="true"
                 :taxa_value="''"
                 :tid_value="''" />
-            <input name="tid" type="hidden" value="{{ $taxonInfo->tid }}" />
             <x-button class="mt-3" color="primary" type="submit">
                 {{__('taxonomy_taxonomydelete.REMAP_TAXON')}}
             </x-button>
