@@ -3,7 +3,6 @@
 $props = json_decode($traits[$traitId]['props']);
 $type = $props? $props[0]->controlType: 'radio';
 
-
 $coded = [];
 foreach($traits[$traitId]['states'] as $sid => $state) {
     $isCoded = false;
@@ -28,7 +27,7 @@ foreach($traits[$traitId]['states'] as $sid => $state) {
     $isCoded = false;
     if(array_key_exists('coded', $state)) {
         $isCoded = is_numeric($state['coded'])?
-            $state['coded']: true;
+        $state['coded']: true;
     }
     @endphp
 
@@ -39,12 +38,20 @@ foreach($traits[$traitId]['states'] as $sid => $state) {
             @foreach($state['dependTraitID'] as $id)
                 <div>{{ $traits[$id]['name'] }}</div>
                 <div class="pl-4 flex  gap-2">
-                @foreach($traits[$id]['states'] as $subState)
+                @foreach($traits[$id]['states'] as $subId => $subState)
+                    @php
+                    $isChildCoded = false;
+                    if(array_key_exists('coded', $subState)) {
+                        $isChildCoded = is_numeric($subState['coded'])?
+                        $subState['coded']: true;
+                    }
+                    @endphp
                     <x-radio.item
                     x-effect="if(parentValue !== radioValue) $el.checked = false"
                     :label="$subState['name']"
                     :name="'traitid-' . $id  . '[]'"
-                    :value="$id"
+                    :value="$subId"
+                    :checked="$isChildCoded"
                     />
                 @endforeach
                 </div>

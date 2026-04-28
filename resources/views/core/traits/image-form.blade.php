@@ -4,7 +4,8 @@
     'traitID',
     'attrManager',
     'mode' => 1,
-    'imgRes' => request('imgres') ?? 'med'
+    'imgRes' => request('imgres') ?? 'med',
+    'errors' => null
 ])
 @php
 
@@ -31,7 +32,7 @@ $editStatusItems = $mode === $REVIEW? [
     item(5, __('includes_traittab.EXPERT_NEEDED')),
 ];
 @endphp
-
+<x-errors :errors="$errors" />
 <div id="trait-image-form" class="flex flex-col gap-4" x-data="{ imgRes: '{{ $imgRes }}' }" x-show="mode == {{ $mode }}">
     @if(!empty($images))
     <div class="flex items-center gap-2">
@@ -123,7 +124,7 @@ $editStatusItems = $mode === $REVIEW? [
                 <input type="hidden" name="mode" value="{{ $EDIT }}" />
                 <x-button
                     x-bind:disabled="!hasTrait"
-                    hx-post="{{ url('collections/' . $collId . '/edit') }}"
+                    hx-patch="{{ url('collections/' . $collId . '/traits/edit') }}"
                     hx-target="#trait-image-form"
                     hx-swap="outerHTML"
                 >
@@ -138,7 +139,7 @@ $editStatusItems = $mode === $REVIEW? [
 
                 <x-button
                     x-bind:disabled="!hasTrait"
-                    hx-post="{{ url('collections/' . $collId . '/review') }}"
+                    hx-patch="{{ url('collections/' . $collId . '/traits/edit') }}"
                     hx-target="#trait-image-form"
                     hx-swap="outerHTML"
                 >

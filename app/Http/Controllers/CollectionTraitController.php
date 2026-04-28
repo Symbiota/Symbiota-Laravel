@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
@@ -95,16 +96,23 @@ class CollectionTraitController extends Controller {
         $attrManager->setOccid(request('targetoccid'));
         $mode = self::getMode($collId);
 
-        if($mode === self::REVIEW) {
-            $attrManager->editAttributes(request()->all());
-        } else if($mode === self::EDIT) {
-            if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
-                $statusStr = $attrManager->getErrorMessage();
+        $errors = [];
+
+        try {
+            if($mode === self::REVIEW) {
+                $attrManager->editAttributes(request()->all());
+            } else if($mode === self::EDIT) {
+                if (!$attrManager->addAttributes(request()->all(), request()->user()->uid)) {
+                    $errors = message_bag([$attrManager->getErrorMessage()]);
+                }
             }
+        } catch(\Throwable $th) {
+            $errors = message_bag([$th->getMessage()]);
         }
 
-        return view('traits/image-form',
-            self::getPageData($attrManager, $mode)
-        );
+        $pageData = self::getPageData($attrManager, $mode);
+        $pageData['errors'] = $errors;
+
+        return view('traits/image-form', $pageData);
     }
 }
