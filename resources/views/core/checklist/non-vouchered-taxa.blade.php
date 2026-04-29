@@ -1,4 +1,4 @@
-@props(['nonVoucheredTaxa' => [], 'clVoucherReport'])
+@props(['nonVoucheredTaxa' => [], 'clVoucherReport', 'clid'])
 
 <div class="font-bold text-2xl">
   {{ __('checklists_voucheradmin.TAXWITHOUTVOUCH') }}: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>

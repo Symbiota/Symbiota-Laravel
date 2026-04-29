@@ -525,7 +525,7 @@ $TABS = [
 
         {{-- (TODO Logan possiblity rework feature?) NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="non-vouchered-taxa">
-            <x-checklist.non-vouchered-taxa :clVoucherReport="$clVoucherReport" :nonVoucheredTaxa="$nonVoucheredTaxa"/>
+            <x-checklist.non-vouchered-taxa :clVoucherReport="$clVoucherReport" :nonVoucheredTaxa="$nonVoucheredTaxa" :clid="$clid"/>
         </x-horizontal-nav.tab>
         {{-- NON-VOUCHERED TAXA END --}}
 
