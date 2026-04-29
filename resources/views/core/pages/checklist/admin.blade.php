@@ -519,84 +519,19 @@ $TABS = [
 
         {{-- ADD IMAGE VOUCHER START--}}
         <x-horizontal-nav.tab name="voucher-image" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <div class="font-bold text-2xl">
-                  {{ $LANG['ADDIMGVOUC'] }}
-                </div>
-                <hr/>
-                <p>{{ $LANG['FORMADDVOUCH'] }}</p>
-            </div>
-            {{-- Note: Should action collections/editor/observationsubmit.php --}}
-            <form class="flex flex-col gap-4" action="{{ legacy_url('collections/editor/observationsubmit.php') }}">
-                <x-select name="collid" class="w-full" default="0" :label="$LANG['SELECTVOUCPROJ']" :items="$voucherProjects" />
-                <x-button>{{ $LANG['ADDIMGVOUC'] }}</x-button>
-            </form>
+            <x-checklist.add-voucher-image :voucherProjects="$voucherProjects" />
         </x-horizontal-nav.tab>
         {{-- ADD IMAGE VOUCHER END --}}
 
         {{-- (TODO Logan possiblity rework feature?) NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="non-vouchered-taxa">
-            <div class="font-bold text-2xl">
-              {{ $LANG['TAXWITHOUTVOUCH'] }}: {{ $clVoucherReport->getNonVoucheredCnt() }} <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
-            </div>
-            <hr/>
-            <p>{{ $LANG['LISTEDBELOWARESPECINSTRUC'] }}</p>
-            <x-select label="Display Mode"/>
-            @if($nonVoucheredTaxa)
-            <div>
-            @foreach($nonVoucheredTaxa as $family => $taxa)
-            <div>
-                <div class="text-lg font-bold">{{ $family }}</div>
-                @foreach($taxa as $tid => $taxon)
-                <div class="pl-4">
-                    <x-link class="text-base" href="{{ url('taxon/' . $taxon['t']) }}">
-                        {{ $taxon['s'] }}
-                    </x-link>
-                    <a target="blank" href="{{ legacy_url('collections/list.php?usethes=1&reset=1&mode=voucher&taxa=' . $taxon['s'] . '&targetclid=' . $clid . '&targettid=' . $taxon['t']) }}">
-                        <i class="ml-4 fa-solid fa-list"></i>
-                    </a>
-                </div>
-                @endforeach
-            </div>
-            @endforeach
-            </div>
-            @else
-            <div class="font-bold text-xl">
-                {{ $LANG['ALLTAXACONTAINVOUCH'] }}
-            </div>
-            @endif
+            <x-checklist.non-vouchered-taxa :clVoucherReport="$clVoucherReport" :nonVoucheredTaxa="$nonVoucheredTaxa"/>
         </x-horizontal-nav.tab>
         {{-- NON-VOUCHERED TAXA END --}}
 
         {{-- (TODO Logan possiblity rework feature?) MISSING TAXA START--}}
         <x-horizontal-nav.tab name="missing-taxa">
-            <div class="font-bold text-2xl">
-              <span>
-              {{ $displayMode == 2? $LANG['PROBLEMS']: $LANG['POSS_MISSING'] }}:
-              </span>
-              <i class="text-xl fa-solid fa-arrow-rotate-right"></i>
-              {{ $clVoucherReport->getMissingTaxaCount() }}
-            </div>
-            <hr/>
-
-            <x-select label="Display Mode"/>
-            <p>
-            Listed below are taxon names not found in the checklist but are represented by one or more specimens that have a locality matching the above search term.
-            </p>
-
-            <div>
-                @foreach ([
-                'Somelong taxanomic (syn: Synonym)',
-                'Somelong taxanomic var. someother taxonomic (syn: Synonym)'
-                ] as $item)
-                    <div class="flex items-center gap-2">
-                        <x-link href="#">
-                            {{$item}}
-                        </x-link>
-                        <i class="fa-solid fa-link"></i>
-                    </div>
-                @endforeach
-            </div>
+            <x-checklist.missing-taxa :displayMode="$displayMode" :clVoucherReport="$clVoucherReport" />
         </x-horizontal-nav.tab>
         {{-- MISSING TAXA END --}}
 
