@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node build_theme.js && vite",
     "build": "node build_theme.js && vite build",
-    "format": "npx prettier --write resources",
+    "quick-format": "npx prettier --write resources && ./vendor/bin/pint --dirty",
+    "format": "npx prettier --write resources && ./vendor/bin/pint",
     "check-format": "prettier --check resources"
   },
   "devDependencies": {
