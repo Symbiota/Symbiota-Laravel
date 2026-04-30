@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,7 +30,7 @@ class TaxonomyController extends Controller {
         return $parent_tree;
     }
 
-    public static function getDirectChildren(int $tid) {
+    public static function getDirectChildren(int $tid, int $displayAuthor = 0) {
         $query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid')
             ->leftJoin('media as m', function (JoinClause $query) {
@@ -42,7 +43,7 @@ class TaxonomyController extends Controller {
             })->where('ts.taxauthid', 1)
             ->where('ts.parenttid', $tid)
             ->groupBy('t.tid')
-            ->select(['t.tid', 'sciName', 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]);
+            ->select(array_filter(['t.tid', 'sciName', $displayAuthor ? 't.author' : null, 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]));
 
         $direct_children = $query->get();
 
@@ -117,7 +118,7 @@ class TaxonomyController extends Controller {
         $parents = self::getParents($tid);
 
         $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid);
+        $children = self::getDirectChildren($tid, 1);
 
         $occurrence_count = self::getTaxonOccurrenceStats($tid);
         $taxa_descriptions = self::getTaxaDescriptions($tid);
@@ -140,7 +141,7 @@ class TaxonomyController extends Controller {
         $parents = self::getParents($tid);
 
         $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid);
+        $children = self::getDirectChildren($tid, 1);
 
         $occurrence_count = self::getTaxonOccurrenceStats($tid);
         $taxa_descriptions = self::getTaxaDescriptions($tid);
@@ -253,6 +254,54 @@ class TaxonomyController extends Controller {
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
+    }
+
+    public static function show(Request $request) {
+        $parents = [];
+        $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
+        $displayAuthor = $request->filled('displayauthor') ? (int) $request->input('displayauthor') : 0;
+        // if($displayAuthor){
+        //     include_once legacy_path('/classes/TaxonomyDisplayManager.php');
+        //     $taxonomyDisplayManager = new \TaxonomyDisplayManager();
+        //     $taxonomyDisplayManager->setDisplayAuthor($displayAuthor);
+
+        // }
+        if ($parentTid) {
+            $parents = self::getParents($parentTid);
+        }
+        // @TODO get each parent's children
+        foreach ($parents as $parent) {
+            $parent->children = self::getDirectChildren($parent->tid, $displayAuthor);
+        }
+
+        $rankMap = [
+            0 => 1, // non-ranked node
+            1 => 2, // organism
+            10 => 3, // kingdom
+            20 => 4, // subkingdom
+            30 => 5, // division
+            40 => 6, // subdivision
+            50 => 7, // superclass
+            60 => 8, // class
+            70 => 9, // subclass
+            100 => 10, // order
+            110 => 11, // suborder
+            140 => 12, // family
+            150 => 13, // subfamily
+            160 => 14, // tribe
+            170 => 15, // subtribe
+            180 => 16, // genus
+            190 => 17, // subgenus
+            200 => 18, // section
+            210 => 19, // subsection
+            220 => 20, // species
+            300 => 21, // infraspecies
+        ];
+
+        return view('pages/taxon/show', [
+            'parents' => $parents,
+            'rankMap' => $rankMap,
+        ]);
     }
 
     public static function update() {
