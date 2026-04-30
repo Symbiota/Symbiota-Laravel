@@ -1,6 +1,5 @@
 @props(['id'=> uniqid(), 'name', 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
 
-{{ $attributes['x-show'] }}
 <!-- resources/views/core/input.blade.php -->
 <div @class([
         'group text-base-content',
