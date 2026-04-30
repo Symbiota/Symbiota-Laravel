@@ -5,14 +5,17 @@ $projManager = new ImInventories('write');
 
 <x-margin-layout>
     <div>
-        <x-breadcrumbs :items="[
+        <x-breadcrumbs
+            :items="[
         ['title' => __('header.H_HOME'), 'href' => url('') ],
         ['title' => __('checklists.SPECIES_INVENTORIES'), 'href' => url('/checklists') ],
         __('projects.ADDNEWPR')
-    ]" /> </div>
+    ]"
+        />
+    </div>
     <fieldset class="flex flex-col gap-4">
         <div>
-            <h3 class="text-4xl font-bold text-primary">{{ __('projects.ADDNEWPR') }}</h3>
+            <h3 class="text-primary text-4xl font-bold">{{ __('projects.ADDNEWPR') }}</h3>
         </div>
 
         <form class="flex flex-col gap-4" hx-post="{{ url()->current() }}" method="post">

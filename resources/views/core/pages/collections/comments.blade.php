@@ -66,38 +66,49 @@ foreach($userArr as $id => $name) {
 @endphp
 
 <x-margin-layout>
-    <x-breadcrumbs :items="[
+    <x-breadcrumbs
+        :items="[
         ['title' => __('header.H_HOME'), 'href' => url('/') ],
         ['title' => __('datasets_datapublisher.COL_MANAGEMENT'), 'href' => url('collections/' . $collid) ],
         ['title' => __('misc_commentlist.OCC_COMMENTS_LISTING') ]
-    ]"/>
-    <h1 class="font-bold text-4xl">
-        <div class="sr-only">
-        {{ __('misc_commentlist.OCCUR_COMMENTS') }}
-        </div>
+    ]"
+    />
+    <h1 class="text-4xl font-bold">
+        <div class="sr-only">{{ __('misc_commentlist.OCCUR_COMMENTS') }}</div>
         {{ $collMeta['name'] }}
     </h1>
 
     <x-accordion :label="__('misc_commentlist.FILTER_OPT')" :open="true">
         <form class="flex flex-col gap-4">
-            <x-select name="uid" :defaultValue="$uid" :label="__('misc_commentlist.COMMENTER')" class="w-full" :items="$userItems"/>
+            <x-select
+                name="uid"
+                :defaultValue="$uid"
+                :label="__('misc_commentlist.COMMENTER')"
+                class="w-full"
+                :items="$userItems"
+            />
             <div class="flex gap-2">
-                <x-input :label="__('individual.DATE') . ' 1'" name="tsstart" type="date" :value="$tsStart"/>
-                <x-input :label="__('individual.DATE') . ' 2'" name="tsend" type="date" :value="$tsEnd"/>
+                <x-input :label="__('individual.DATE') . ' 1'" name="tsstart" type="date" :value="$tsStart" />
+                <x-input :label="__('individual.DATE') . ' 2'" name="tsend" type="date" :value="$tsEnd" />
             </div>
 
-            <x-radio :default_value="$rs" :label="__('misc_commentlist.COMMENT_TYPE')" name="rs" :options="[
+            <x-radio
+                :default_value="$rs"
+                :label="__('misc_commentlist.COMMENT_TYPE')"
+                name="rs"
+                :options="[
                 ['label' => __('projects.PUBLIC'), 'value' => 1, 'id' => 'public' ],
                 ['label' => __('misc_commentlist.NON-PUBLIC'), 'value' => 2, 'id' => 'non-public' ],
                 ['label' => __('misc_commentlist.REVIEWED'), 'value' => 3, 'id' => 'reviewed' ],
                 ['label' => __('misc_commentlist.ALL'), 'value' => 0, 'id' => 'all' ]
-            ]"/>
+            ]"
+            />
 
             <x-button>{{ __('loans_loan_langs.REFRESH_LIST') }}</x-button>
         </form>
     </x-accordion>
     @if($statusStr)
-    <x-errors :errors="message_bag([$statusStr])"/>
+        <x-errors :errors="message_bag([$statusStr])" />
     @endif
 
     @if(!empty($commentArr))
@@ -111,27 +122,28 @@ foreach($userArr as $id => $name) {
         @php
             $pages =  ceil($recCnt / $limit);
         @endphp
-
         <div class="inline-flex gap-2">
-            @for ($i = 1; $i <= $pages; $i++)
+            @for($i = 1; $i <= $pages; $i++)
                 @if($page === $i)
-                <span>{{ $i }}</span>
+                    <span>{{ $i }}</span>
                 @else
-                @php
+                    @php
                     $params = [
                         ...request()->except(['_token', 'page']),
                         'page' => $i,
                     ];
                 @endphp
-                <x-link :href="url()->current() . '?' . http_build_query($params)">{{ $i }}</x-link>
+                    <x-link :href="url()->current() . '?' . http_build_query($params)">{{ $i }}</x-link>
                 @endif
             @endfor
-            <span>{{$start + 1}}-{{$limit}} {{__('imagelib_search.OF')}} {{ $recCnt }} {{__('checklists_checklist.COMMENTS')}}</span>
+            <span
+                >{{ $start + 1 }}-{{ $limit }} {{ __('imagelib_search.OF') }} {{ $recCnt }} {{ __('checklists_checklist.COMMENTS') }}</span
+            >
         </div>
     @endif
 
     @foreach($commentArr as $commentId => $comment)
-    	<form method="post" class="p-4 border border-base-300 flex flex-col gap-2">
+        <form method="post" class="border-base-300 flex flex-col gap-2 border p-4">
             @csrf
             <x-link :href="url('occurrence/' . $comment['occid'])" target="_blank" rel="noopener">
                 {{-- TODO (Logan) look at pulling tags out of this entirely --}}
@@ -143,15 +155,13 @@ foreach($userArr as $id => $name) {
             </div>
 
             @if($comment['rs'] === 1 || $comment['rs'] === 2)
-            <div>{{ __('taxonomy_batchloader.STATUS') }}</div>
+                <div>{{ __('taxonomy_batchloader.STATUS') }}</div>
             @elseif($comment['rs'] === 3 )
-            <div>{{ __('projects.REVIEWED') }}</div>
+                <div>{{ __('projects.REVIEWED') }}</div>
             @endif
-            <p>
-                {{ $comment['str'] }}
-            </p>
+            <p>{{ $comment['str'] }}</p>
 
-			<input name="comid" type="hidden" value="{{ $commentId }}" />
+            <input name="comid" type="hidden" value="{{ $commentId }}" />
             <input name="collid" type="hidden" value="{{ $collid }}" />
             <input name="page" type="hidden" value="{{ $page }}" />
             <input name="limit" type="hidden" value="{{ $limit }}" />
@@ -161,26 +171,32 @@ foreach($userArr as $id => $name) {
             <input name="rs" type="hidden" value="{{ $rs }}" />
 
             @if($comment['rs'] == 2)
-            <x-button name="formsubmit" value="Make Comment Public">
-                {{ __('profile_userprofile.MAKE_PUBLIC') }}
-            </x-button>
+                <x-button name="formsubmit" value="Make Comment Public">
+                    {{ __('profile_userprofile.MAKE_PUBLIC') }}
+                </x-button>
             @else
-            <x-button name="formsubmit" value="Hide Comment from Public">
-                {{ __('misc_commentlist.HIDE_PUBLIC') }}
-            </x-button>
+                <x-button name="formsubmit" value="Hide Comment from Public">
+                    {{ __('misc_commentlist.HIDE_PUBLIC') }}
+                </x-button>
             @endif
 
             @if($comment['rs'] == 3)
-            <x-button name="formsubmit" value="Mark as Unreviewed">
-                {{ __('misc_commentlist.MARK_UNREVIEWED') }}
-            </x-button>
+                <x-button name="formsubmit" value="Mark as Unreviewed">
+                    {{ __('misc_commentlist.MARK_UNREVIEWED') }}
+                </x-button>
             @else
-            <x-button name="formsubmit" value="Mark as Reviewed">
-                {{ __('misc_commentlist.MARK_REVIEWED') }}
-            </x-button>
+                <x-button name="formsubmit" value="Mark as Reviewed">
+                    {{ __('misc_commentlist.MARK_REVIEWED') }}
+                </x-button>
             @endif
 
-            <x-button variant="error" name="formsubmit" type="submit" value="Delete Comment"  onclick="return confirm('{{ __('misc_commentlist.SURE_DELETE_COMMENT') }}')" >
+            <x-button
+                variant="error"
+                name="formsubmit"
+                type="submit"
+                value="Delete Comment"
+                onclick="return confirm('{{ __('misc_commentlist.SURE_DELETE_COMMENT') }}')"
+            >
                 {{ __('misc_commentlist.DEL_COMMENT') }}
             </x-button>
         </form>

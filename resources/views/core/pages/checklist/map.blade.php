@@ -22,32 +22,30 @@ $checklists = DB::table('fmchecklists as c')
 
     <template id="popup-template">
         <div class="font-bold" id="popup-title"></div>
-        <x-link hx-boost="true" id="popup-link" href="{{ url('checklists') }}/">
-            See Checklist
-        </x-link>
+        <x-link hx-boost="true" id="popup-link" href="{{ url('checklists') }}/"> See Checklist </x-link>
     </template>
 
     <script>
-        document.addEventListener('mapIntialized', function (e) {
-            const data_container = document.getElementById('checklist_data');
+        document.addEventListener("mapIntialized", function (e) {
+            const data_container = document.getElementById("checklist_data");
             let checklist_data = [];
 
             try {
-                let json = data_container.getAttribute('data-checklists');
+                let json = data_container.getAttribute("data-checklists");
                 checklist_data = JSON.parse(json);
-            } catch(error) {
+            } catch (error) {
                 checklist_data = [];
             }
 
-            const temp = document.getElementById('popup-template');
-            const temp_title = temp.content.getElementById('popup-title');
-            const temp_link = temp.content.getElementById('popup-link');
+            const temp = document.getElementById("popup-template");
+            const temp_title = temp.content.getElementById("popup-title");
+            const temp_link = temp.content.getElementById("popup-link");
             const base_url = temp_link.href;
 
-            let map = window.maps['map'];
+            let map = window.maps["map"];
             let markers = [];
 
-            for(let checklist of checklist_data) {
+            for (let checklist of checklist_data) {
                 temp_title.innerHTML = checklist.name;
                 temp_link.href = base_url + checklist.clid;
 
@@ -61,7 +59,7 @@ $checklists = DB::table('fmchecklists as c')
 
             const markerGroup = L.featureGroup(markers).addTo(map);
             map.fitBounds(markerGroup.getBounds());
-        })
+        });
     </script>
-    <x-map id="map"/>
+    <x-map id="map" />
 </x-layout>

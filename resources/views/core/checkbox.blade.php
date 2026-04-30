@@ -7,10 +7,10 @@
 'chip' => 'chip value',
 ])
 <div {{ $attributes->twMerge("flex group") }}>
-    <div class="relative w-6 h-6">
+    <div class="relative h-6 w-6">
         <input
             type="checkbox"
-            name="{{$name ?? $id}}"
+            name="{{ $name ?? $id }}"
             id="{{ $id }}"
             data-chip="{{ $chip }}"
             autocomplete="off"
@@ -18,22 +18,20 @@
             @bind(checked)
             @bind(disabled)
             @checked($checked)
-            class="
-            z-[5] w-6 h-6 peer/checkbox appearance-none before:content['']
-            border-2 border-accent rounded-full
-            checked:bg-accent cursor-pointer outline-none
-            "
-            >
+            class="peer/checkbox before:content[''] border-accent checked:bg-accent z-[5] h-6 w-6 cursor-pointer appearance-none rounded-full border-2 outline-none"
+        />
         <i
-            class="z-[5] absolute peer-checked/checkbox:opacity-100 opacity-0 text-accent-content transition-opacity pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 fa-solid fa-check"></i>
+            class="text-accent-content fa-solid fa-check pointer-events-none absolute top-2/4 left-2/4 z-[5] -translate-x-2/4 -translate-y-2/4 opacity-0 transition-opacity peer-checked/checkbox:opacity-100"
+        ></i>
 
-        <div class="z-0 pointer-events-none peer-focus/checkbox:bg-accent/30 group-hover:bg-accent/30 absolute bg-accent/0 w-8 h-8 rounded-full top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-        </div>
+        <div
+            class="peer-focus/checkbox:bg-accent/30 group-hover:bg-accent/30 bg-accent/0 pointer-events-none absolute top-2/4 left-2/4 z-0 h-8 w-8 -translate-x-2/4 -translate-y-2/4 rounded-full"
+        ></div>
     </div>
 
     @if($label)
-    <label class="ml-2 relative inline-block align-middle text-base-content select-none" for="{{ $id }}">
-        {{ $label}}
-    </label>
+        <label class="text-base-content relative ml-2 inline-block align-middle select-none" for="{{ $id }}">
+            {{ $label }}
+        </label>
     @endif
 </div>

@@ -1,10 +1,10 @@
 @props(['title'=>'Taxon-linked item', 'warning'=>'Warning!', 'items'=>[], 'itemNamePlural'=>'items'])
 @php $itemCount = is_countable($items) ? count($items) : (int)$items; @endphp
-<span class="font-bold text-lg">{{ $title }}</span>
+<span class="text-lg font-bold">{{ $title }}</span>
 @if($itemCount > 0)
-    <p class="mt-2 text-error-darker">{{ $warning }}</p>
+    <p class="text-error-darker mt-2">{{ $warning }}</p>
     @if(is_countable($items))
-        <ul class="list-disc list-inside mt-2">
+        <ul class="mt-2 list-inside list-disc">
             @foreach($items as $item)
                 @php
                     $itemUrl = is_array($item) ? $item['url'] : (is_string($item) ? $item : $item->url);
@@ -16,5 +16,5 @@
     @endif
 @endif
 @if($itemCount < 1)
-    <p class="mt-2 text-accent-darker">Approved: No {{ $itemNamePlural }} linked to this taxon.</p>
+    <p class="text-accent-darker mt-2">Approved: No {{ $itemNamePlural }} linked to this taxon.</p>
 @endif

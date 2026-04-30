@@ -1,4 +1,4 @@
-import htmx from 'htmx.org';
+import htmx from "htmx.org";
 
 /* Authors note:
  *
@@ -20,45 +20,48 @@ import htmx from 'htmx.org';
  */
 
 function swap_on_progress(xhr, target) {
-    xhr.onprogress = (e => {
+    xhr.onprogress = (e) => {
         const el = htmx.find(target);
         el.innerHTML = e.originalTarget.response;
-    })
+    };
 }
 
 function oob_swap_on_progess(xhr) {
     let seen = {};
-    xhr.onprogress = (e => {
-        const results = document.createElement('div');
-        results.innerHTML = e.originalTarget.response
+    xhr.onprogress = (e) => {
+        const results = document.createElement("div");
+        results.innerHTML = e.originalTarget.response;
 
-        for(let i = 0; i < results.children.length; i++) {
+        for (let i = 0; i < results.children.length; i++) {
             const child = results.children[i];
-            if(child && child.getAttribute('hx-swap-oob')) {
-                if(seen[child.id]) continue;
+            if (child && child.getAttribute("hx-swap-oob")) {
+                if (seen[child.id]) continue;
                 const el = document.getElementById(child.id);
 
-                console.log(el)
-                if(!el) continue;
+                console.log(el);
+                if (!el) continue;
 
-                child.id
-                el.innerHTML= child.innerHTML;
+                child.id;
+                el.innerHTML = child.innerHTML;
                 seen[child.id] = child.id;
             }
         }
-    })
+    };
 }
 
 window.swap_on_progress = swap_on_progress;
 
-htmx.defineExtension('hx-stream', {
-    onEvent: function(name, evt) {
-        if(name === 'htmx:beforeRequest') {
-            if(evt.target.getAttribute('hx-swap') === 'stream') {
-                swap_on_progress(evt.detail.xhr, evt.target.getAttribute('hx-target'));
-            } else if (evt.target.getAttribute('hx-swap-oob') === 'stream') {
-                oob_swap_on_progess(evt.detail.xhr)
+htmx.defineExtension("hx-stream", {
+    onEvent: function (name, evt) {
+        if (name === "htmx:beforeRequest") {
+            if (evt.target.getAttribute("hx-swap") === "stream") {
+                swap_on_progress(
+                    evt.detail.xhr,
+                    evt.target.getAttribute("hx-target"),
+                );
+            } else if (evt.target.getAttribute("hx-swap-oob") === "stream") {
+                oob_swap_on_progess(evt.detail.xhr);
             }
         }
-    }
+    },
 });

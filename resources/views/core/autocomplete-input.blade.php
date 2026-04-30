@@ -16,7 +16,11 @@
     'result' => new Illuminate\View\ComponentSlot(),
 ])
 {{-- See resouces/js/components/autocomplete-input.js for scripts --}}
-<div x-data="{el: $el, open: false, results: {{!$result->isEmpty()? 'true' :'false'}}}" x-init="autoSearchInit($el)" class="w-full">
+<div
+    x-data="{el: $el, open: false, results: {{ !$result->isEmpty()? 'true' :'false' }}}"
+    x-init="autoSearchInit($el)"
+    class="w-full"
+>
     <x-input
         value="{{ $value }}"
         autocomplete="off"
@@ -26,8 +30,8 @@
         hx-vals="{{ $vals }}"
         data-request-config="{{ $request_config }}"
         hx-trigger="input changed delay:700ms, search"
-        hx-indicator="#menu-loader-{{$id}}"
-        hx-target="#search-results-{{$id}}"
+        hx-indicator="#menu-loader-{{ $id }}"
+        hx-target="#search-results-{{ $id }}"
         hx-replace-url="false"
         hx-push-url="false"
         x-on:htmx:before-send.stop="results = false"
@@ -38,35 +42,39 @@
         @auto_input_select="{{ $input->attributes->get('@auto_input_select') }}"
         @input="{{ $input->attributes->get('@input') }}"
         :placeholder="$placeholder"
-        :name='$name'
+        :name="$name"
         :id="$id"
         :label="$label"
         :class="$input->attributes->get('class')"
     />
-    <div {{$menu->attributes->twMerge('relative w-full')}}>
-        <div id="menu-loader-{{$id}}" class="htmx-indicator" x-show="open" x-cloak>
-            <div {{$indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1')}}>
-                   @if ($indicator->isEmpty())
-                    <div class="flex items-center justify-center gap-1 text-base-content">
-                        <div class="stroke-accent w-8 h-8">
-                            <x-icons.loading/>
+    <div {{ $menu->attributes->twMerge('relative w-full') }}>
+        <div id="menu-loader-{{ $id }}" class="htmx-indicator" x-show="open" x-cloak>
+            <div {{ $indicator->attributes->twMerge('absolute w-full mt-1 bg-base-100 border-base-300 border p-1') }}>
+                @if($indicator->isEmpty())
+                    <div class="text-base-content flex items-center justify-center gap-1">
+                        <div class="stroke-accent h-8 w-8">
+                            <x-icons.loading />
                         </div>
                         Searching
                     </div>
-                   @else
-                        {{ $indicator }}
-                   @endif
+                @else
+                    {{ $indicator }}
+                @endif
             </div>
         </div>
         <div
-            x-on:htmx:after-swap="open = true; results = $el.children.length > 0"
+            x-on:htmx:after-swap="
+                open = true;
+                results = $el.children.length > 0;
+            "
             x-on:click="open = false"
             data-selected-index="0"
             x-cloak
             x-show="open && results"
             x-ref="menu"
-            id="search-results-{{$id}}"
-            {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 z-[1500] w-full border-base-300 border")}}>
+            id="search-results-{{ $id }}"
+            {{ $result->attributes->twMerge("mt-1 h-fit absolute bg-base-100 z-[1500] w-full border-base-300 border") }}
+        >
             {{ $result }}
         </div>
     </div>

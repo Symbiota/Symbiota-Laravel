@@ -2,17 +2,19 @@
 'external_links', 'media'])
 <x-layout>
     <div class="mb-4">
-        <x-breadcrumbs :items="[
+        <x-breadcrumbs
+            :items="[
             ['title' => 'Home', 'href' => url('') ],
             ['title' => 'Taxon Profile Public Display', 'href' => url('/taxon/' . $taxon->tid ) ],
             'Taxon Profile Editor'
-        ]" />
+        ]"
+        />
     </div>
 
     <h1 class="text-4xl font-bold"><i>{{ $taxon->sciName }}</i> {{ $taxon->author }}</h1>
     <div class="mb-4 flex">
         @if($taxon->family)
-        <h2 class="text-2xl font-bold">Family: {{ $taxon->family }}</h2>
+            <h2 class="text-2xl font-bold">Family: {{ $taxon->family }}</h2>
         @endif
     </div>
 
@@ -20,37 +22,41 @@
         {{-- Synonyms/Vernaculars --}}
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-                <div class="font-bold text-xl">Common Names</div>
+                <div class="text-xl font-bold">Common Names</div>
                 <x-button>Add</x-button>
             </div>
-            @foreach ($common_names as $name)
-            <div class="p-2 border border-base-300 relative">
-                <div class="absolute right-2 top-2 flex gap-2">
-                    <x-icons.edit />
-                    <x-icons.delete />
-                </div>
+            @foreach($common_names as $name)
+                <div class="border-base-300 relative border p-2">
+                    <div class="absolute top-2 right-2 flex gap-2">
+                        <x-icons.edit />
+                        <x-icons.delete />
+                    </div>
 
-                {{ $name->VernacularName }}
-                <x-select label="Language" name="language"
-                    :items="[['title' => 'English', 'value' => 1, 'disabled' =>false]]" :default="0" />
-                <x-input label="Notes" name="notes" value="{{ $name->notes }}" />
-                <x-input label="Source" name="source" value="{{ $name->Source }}" />
-                <x-input label="Sort Sequence" name="sortSequence" value="{{ $name->SortSequence }}" />
-            </div>
+                    {{ $name->VernacularName }}
+                    <x-select
+                        label="Language"
+                        name="language"
+                        :items="[['title' => 'English', 'value' => 1, 'disabled' =>false]]"
+                        :default="0"
+                    />
+                    <x-input label="Notes" name="notes" value="{{ $name->notes }}" />
+                    <x-input label="Source" name="source" value="{{ $name->Source }}" />
+                    <x-input label="Sort Sequence" name="sortSequence" value="{{ $name->SortSequence }}" />
+                </div>
             @endforeach
 
-            <div class="flex items-center gap-2 mb-2">
-                <div class="font-bold text-xl">Synonyms</div>
+            <div class="mb-2 flex items-center gap-2">
+                <div class="text-xl font-bold">Synonyms</div>
             </div>
             @if(count($synonyms))
-            @foreach ($synonyms as $name)
-            <div class="p-2">{{ $name }}</div>
-            @endforeach
+                @foreach($synonyms as $name)
+                    <div class="p-2">{{ $name }}</div>
+                @endforeach
             @else
-            <div>
-                No synonym links. Most of the synonym management must be done in the Taxonmic Thesaurus editing module
-                (see <x-link href="{{ url('/sitemap') }}">Sitemap</x-link> )
-            </div>
+                <div>
+                    No synonym links. Most of the synonym management must be done in the Taxonmic Thesaurus editing
+                    module (see <x-link href="{{ url('/sitemap') }}">Sitemap</x-link> )
+                </div>
             @endif
         </div>
 
@@ -60,7 +66,7 @@
             <x-button>Add</x-button>
             <div class="flex flex-wrap">
                 @foreach($media as $m)
-                <x-image-card src="{{$m->thumbnailUrl ?? $m->url}}" title="Image" />
+                    <x-image-card src="{{ $m->thumbnailUrl ?? $m->url }}" title="Image" />
                 @endforeach
             </div>
         </div>
@@ -71,10 +77,10 @@
                 <x-modal>
                     <x-slot:label>
                         Add Description Block
-                    </x-slot>
+                    </x-slot:label>
                     <x-slot:title class="text-2xl">
                         Add Description
-                    </x-slot>
+                    </x-slot:title>
                     <x-slot name="body">
                         <form class="flex flex-col gap-2">
                             <x-input label="Language" name="language" />
@@ -95,35 +101,33 @@
 
             <div class="flex flex-col gap-4">
                 @foreach($taxa_descriptions as $description)
-                <div class="flex flex-col gap-2 border border-base-300 p-2">
-                    <div class="text-xl font-bold">
-                        {{ $description['source'] }}
+                    <div class="border-base-300 flex flex-col gap-2 border p-2">
+                        <div class="text-xl font-bold">{{ $description['source'] }}</div>
+                        @foreach($description['statements'] as $heading => $statement)
+                            <div>
+                                <span>
+                                    <x-modal>
+                                        <x-slot:label class="h-fit border-0 p-0 text-2xl text-base">
+                                            <x-icons.edit />
+                                        </x-slot:label>
+                                        <x-slot:title class="text-2xl">
+                                            Edit Statement
+                                        </x-slot:title>
+                                        <x-slot name="body">
+                                            <form class="flex flex-col gap-2">
+                                                <x-input label="Heading" name="heading" value="{{ $heading }}" />
+                                                <x-input label="Statement" name="statement" :area="true" rows="4">
+                                                    {{ $statement }}
+                                                </x-input>
+                                            </form>
+                                        </x-slot>
+                                    </x-modal>
+                                </span>
+                                <span class="font-bold">{{ $heading }}:</span>
+                                <span>{{ $statement }}</span>
+                            </div>
+                        @endforeach
                     </div>
-                    @foreach($description['statements'] as $heading => $statement)
-                    <div>
-                        <span>
-                            <x-modal>
-                                <x-slot:label class="border-0 p-0 text-2xl text-base h-fit">
-                                    <x-icons.edit />
-                                </x-slot>
-                                <x-slot:title class="text-2xl">
-                                    Edit Statement
-                                </x-slot>
-                                <x-slot name="body">
-                                    <form class="flex flex-col gap-2">
-                                        <x-input label="Heading" name="heading" value="{{ $heading }}" />
-                                        <x-input label="Statement" name="statement" :area="true" rows="4">
-                                            {{ $statement }}
-                                        </x-input>
-                                    </form>
-                                </x-slot>
-                            </x-modal>
-                        </span>
-                        <span class="font-bold">{{$heading}}:</span>
-                        <span>{{$statement}}</span>
-                    </div>
-                    @endforeach
-                </div>
                 @endforeach
             </div>
         </div>

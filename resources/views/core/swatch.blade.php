@@ -1,17 +1,17 @@
-<div class="flex flex-row w-fit h-fit border-black border rounded-md bg-base-100">
-    <div class="flex flex-col w-12">
-        <div class="rounded-tl-md flex items-center justify-center text-base-content bg-base-200 h-[60%]">B2</div>
-        <div class="rounded-bl-md flex items-center justify-center text-base-content bg-base-300 h-[40%]">B3</div>
+<div class="bg-base-100 flex h-fit w-fit flex-row rounded-md border border-black">
+    <div class="flex w-12 flex-col">
+        <div class="text-base-content bg-base-200 flex h-[60%] items-center justify-center rounded-tl-md">B2</div>
+        <div class="text-base-content bg-base-300 flex h-[40%] items-center justify-center rounded-bl-md">B3</div>
     </div>
     <div class="m-2 flex flex-col">
-        <div class="text-xl text-base-content">
-            Theme
-        </div>
-        <div class="flex bg-base-100 gap-1">
-            <span class="flex bg-primary text-primary-content items-center justify-center w-8 h-8 rounded-md">P</span>
-            <span class="flex bg-secondary text-secondary-content items-center justify-center w-8 h-8 rounded-md">S</span>
-            <span class="flex bg-accent text-accent-content items-center justify-center w-8 h-8 rounded-md">A</span>
-            <span class="flex bg-neutral text-neutral-content items-center justify-center w-8 h-8 rounded-md">N</span>
+        <div class="text-base-content text-xl">Theme</div>
+        <div class="bg-base-100 flex gap-1">
+            <span class="bg-primary text-primary-content flex h-8 w-8 items-center justify-center rounded-md">P</span>
+            <span class="bg-secondary text-secondary-content flex h-8 w-8 items-center justify-center rounded-md"
+                >S</span
+            >
+            <span class="bg-accent text-accent-content flex h-8 w-8 items-center justify-center rounded-md">A</span>
+            <span class="bg-neutral text-neutral-content flex h-8 w-8 items-center justify-center rounded-md">N</span>
         </div>
     </div>
 </div>

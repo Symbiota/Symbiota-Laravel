@@ -90,19 +90,22 @@ function format_latlong_err($occurrence) {
 
 @endphp
 <x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
-    <div class="flex items-center gap-4 mb-4">
+    <div class="mb-4 flex items-center gap-4">
         @isset($collection->icon)
-        <img class="w-16" src="{{ $collection->icon }}">
+            <img class="w-16" src="{{ $collection->icon }}" />
         @endisset
-        <x-link href="{{ url('collections/' . $occurrence->collid) }}" class="text-2xl font-bold text-base-content hover:text-base-content/50">
+        <x-link
+            href="{{ url('collections/' . $occurrence->collid) }}"
+            class="text-base-content hover:text-base-content/50 text-2xl font-bold"
+        >
             {{ $collection->collectionName }} ({{ $collection->institutionCode }})
         </x-link>
 
         <div class="text-2xl font-bold">
             @can('COLL_EDIT', $occurrence->collid)
-            <x-nav-link hx-boost="true" href="{{url()->current() . '/edit'}}">
-                <x-icons.edit></x-icons.edit>
-            </x-nav-link>
+                <x-nav-link hx-boost="true" href="{{ url()->current() . '/edit' }}">
+                    <x-icons.edit></x-icons.edit>
+                </x-nav-link>
             @endcan
         </div>
     </div>
@@ -134,29 +137,39 @@ function format_latlong_err($occurrence) {
         <div class="relative flex flex-col gap-4">
             {{-- OCCURRENCE INFORMATION START--}}
             <div>
-                <x-text-label :label="__('collections_list.CATALOG_NUMBER') . ' #'">{{ $occurrence->catalogNumber }}</x-text-label>
-                <x-text-label :label="__('individual.OCCURRENCE_ID')">{{ $occurrence->occurrenceID}}</x-text-label>
+                <x-text-label
+                    :label="__('collections_list.CATALOG_NUMBER') . ' #'"
+                    >{{ $occurrence->catalogNumber }}</x-text-label
+                >
+                <x-text-label :label="__('individual.OCCURRENCE_ID')">{{ $occurrence->occurrenceID }}</x-text-label>
 
                 @if(is_array($identifiers) && count($identifiers))
-                    @foreach ($identifiers as $identifier)
-                        <x-text-label :label="$identifier->identifierName? $identifier->identifierName: __('OTHER_CATALOG_NUMBERS')">{{ $identifier->identifierValue }}</x-text-label>
+                    @foreach($identifiers as $identifier)
+                        <x-text-label
+                            :label="$identifier->identifierName? $identifier->identifierName: __('OTHER_CATALOG_NUMBERS')"
+                            >{{ $identifier->identifierValue }}</x-text-label
+                        >
                     @endforeach
                 @elseif($occurrence->otherCatalogNumbers)
-                    <x-text-label :label="__('individual.OTHER_CATALOG_NUMBERS')">{{ $occurrence->otherCatalogNumbers }}</x-text-label>
+                    <x-text-label
+                        :label="__('individual.OTHER_CATALOG_NUMBERS')"
+                        >{{ $occurrence->otherCatalogNumbers }}</x-text-label
+                    >
                 @endif
 
                 <x-text-label :label="__('ident_key.TAXON')">
                     @if($occurrence->sciname)
-                    <x-link :href="url('taxon/' . $occurrence->tidInterpreted)">
-                        <i class="font-italic">{{ $occurrence->sciname }}</i>
-                        @if($occurrence->scientificNameAuthorship)
-                            ({{$occurrence->scientificNameAuthorship}})
-                        @endif
-                    </x-link>
+                        <x-link :href="url('taxon/' . $occurrence->tidInterpreted)">
+                            <i class="font-italic">{{ $occurrence->sciname }}</i>
+                            @if($occurrence->scientificNameAuthorship)
+                                ({{ $occurrence->scientificNameAuthorship }})
+                            @endif
+                        </x-link>
                     @endif
                 </x-text-label>
 
-                <x-text-label-list :labels="[
+                <x-text-label-list
+                    :labels="[
                     __('individual.ID_QUALIFIER') => $occurrence->identificationQualifier,
                     __('taxa.FAMILY') => $occurrence->family,
                     __('individual.DETERMINER') => $occurrence->identifiedBy,
@@ -172,23 +185,26 @@ function format_latlong_err($occurrence) {
                     __('individual.DATE') => format_range($occurrence->eventDate, $occurrence->eventDate2),
                     __('individual.VERBATIM_DATE') => $occurrence->verbatimEventDate,
                     __('individual.ADDITIONAL_COLLECTORS') => $occurrence->associatedCollectors,
-                ]"/>
+                ]"
+                />
 
-                <x-text-label :label="__('imagelib_imgdetails.LOCALITY')">{{ getLocalityStr($occurrence) }}</x-text-label>
+                <x-text-label
+                    :label="__('imagelib_imgdetails.LOCALITY')"
+                    >{{ getLocalityStr($occurrence) }}</x-text-label
+                >
                 @if($occurrence->recordSecurity)
-                <div class="font-bold bg-warning p-1 rounded-md text-warning-content">
-                    <div>
-                    {{ __('individual.DETAILS_PROTECTED') }}: {{ __('individual.PROTECTED_REASON') }}
+                    <div class="bg-warning text-warning-content rounded-md p-1 font-bold">
+                        <div>{{ __('individual.DETAILS_PROTECTED') }}: {{ __('individual.PROTECTED_REASON') }}</div>
+                        <div>
+                            @can('SECURED_READER', $collection->collID)
+                                {{ __('individual.ACCESS_GRANTED') }}
+                            @endcan
+                        </div>
                     </div>
-                    <div>
-                    @can('SECURED_READER', $collection->collID)
-                    {{ __('individual.ACCESS_GRANTED') }}
-                    @endcan
-                    </div>
-                </div>
                 @endif
 
-                <x-text-label-list :labels="[
+                <x-text-label-list
+                    :labels="[
                     __('individual.LAT_LNG') => format_latlong_err($occurrence),
                     __('individual.VERBATIM_COORDINATES') => $occurrence->verbatimCoordinates,
                     __('individual.LOCATION_REMARKS') => $occurrence->locationRemarks,
@@ -212,31 +228,32 @@ function format_latlong_err($occurrence) {
                     __('individual.PREPARATIONS') => $occurrence->preparations,
                     __('projects.NOTES') => implode(', ', format_notes($occurrence)),
                     __('individual.DISPOSITION') => $occurrence->disposition,
-                ]"/>
+                ]"
+                />
 
                 {{-- EXSICCATE INFORMATION START --}}
                 @if($exsiccati)
                     <x-text-label :label="__('individual.EXCICCATI_SERIES')">
-                        <x-link :href="legacy_url('/exsiccati/index.php?omenid=' . $exsiccati->omenid)">{{ $exsiccati->title. ' #' . $exsiccati->exsnumber }}</x-link>
+                        <x-link
+                            :href="legacy_url('/exsiccati/index.php?omenid=' . $exsiccati->omenid)"
+                            >{{ $exsiccati->title. ' #' . $exsiccati->exsnumber }}</x-link
+                        >
                     </x-text-label>
-                </div>
-                @endif
-                {{-- EXSICCATE INFORMATION END --}}
-
             </div>
-            {{-- OCCURRENCE INFORMATION END --}}
+            @endif
+            {{-- EXSICCATE INFORMATION END --}}
+        </div>
+        {{-- OCCURRENCE INFORMATION END --}}
 
-            {{-- MATERIAL INFORMATION START --}}
-            @if($material_samples && count($material_samples) && $collection->isMaterialSampleEnabled())
+        {{-- MATERIAL INFORMATION START --}}
+        @if($material_samples && count($material_samples) && $collection->isMaterialSampleEnabled())
             <div>
                 <div>
-                    <div class="font-bold text-lg">
-                        {{ __('individual.MATERIAL_SAMPLES') }}
-                    </div>
+                    <div class="text-lg font-bold">{{ __('individual.MATERIAL_SAMPLES') }}</div>
                     <hr />
                 </div>
                 @foreach($material_samples as $material_sample)
-                @foreach([
+                    @foreach([
                     'sampleType' => __('material_sample.SAMPLE_TYPE'),
                     'catalogNumber' => __('material_sample.CATALOG_NUMBER'),
                     'guid' => __('material_sample.GUID'),
@@ -269,24 +286,20 @@ function format_latlong_err($occurrence) {
                     'poolDnaExtracts' => __('material_sample.POOL_DNA_EXTRACTS'),
                     'sampleDesignation' => __('material_sample.SAMPLE_DESIGNATION')
                 ] as $field => $label)
-                    @isset($material_sample->{$field})
-                    <x-text-label :label="$label">
-                        {{ $material_sample->{$field} }}
-                    </x-text-label>
-                    @endisset
-                @endforeach
+                        @isset($material_sample->{$field})
+                            <x-text-label :label="$label"> {{ $material_sample->{$field} }} </x-text-label>
+                        @endisset
+                    @endforeach
                 @endforeach
             </div>
-            @endif
-            {{-- MATERIAL INFORMATION END --}}
+        @endif
+        {{-- MATERIAL INFORMATION END --}}
 
-            {{-- PALEO INFORMATION START --}}
-            @if($paleo)
+        {{-- PALEO INFORMATION START --}}
+        @if($paleo)
             <div>
                 <div>
-                    <div class="font-bold text-lg">
-                        {{ __('collections_list.GEO_CONTEXT') }}
-                    </div>
+                    <div class="text-lg font-bold">{{ __('collections_list.GEO_CONTEXT') }}</div>
                     <hr />
                 </div>
                 <x-text-label :label="__('BASIS_OF_RECORD')">
@@ -295,181 +308,183 @@ function format_latlong_err($occurrence) {
 
                 <x-text-label :label="__('individual.CHRONOSTRAT')">
                     {{ format_range($paleo->earlyInterval, $paleo->lateInterval) }}
-                    <x-text-label-list class="pl-4" :labels="[
+                    <x-text-label-list
+                        class="pl-4"
+                        :labels="[
                         __('collections_list.LATE_INT') => $paleo && $paleo->lateInterval && $paleo->lateIntervalHierarchy? $paleo->lateIntervalHierarchy: null,
                         __('collections_list.EARLY_INT') => $paleo && $paleo->earlyInterval && $paleo->earlyIntervalHierarchy? $paleo->earlyIntervalHierarchy: null,
                         __('individual.ABSOLUTE_AGE') => $occurrence->absoluteAge,
                         __('LOCAL_STAGE') => $occurrence->localStage,
-                    ]"/>
+                    ]"
+                    />
                 </x-text-label>
 
                 <x-text-label :label="__('individual.LITHOSTRAT')">
-                    <x-text-label-list class="pl-4" :labels="[
+                    <x-text-label-list
+                        class="pl-4"
+                        :labels="[
                         __('includes_paleoinclude.LITHOGROUP_LABEL') => $paleo->lithogroup ,
                         __('includes_paleoinclude.FORMATION_LABEL') => $paleo->formation,
                         __('includes_paleoinclude.MEMBER_LABEL') => $paleo->member,
                         __('includes_paleoinclude.BED_LABEL') => $paleo->bed,
-                    ]"/>
+                    ]"
+                    />
                 </x-text-label>
             </div>
-            @endif
-            {{-- PALEO INFORMATION END --}}
+        @endif
+        {{-- PALEO INFORMATION END --}}
 
-            @if(count($determinations))
-                <div>
-                    <div class="font-bold text-lg">
-                        {{ __('individual.DET_HISTORY') }}
-                    </div>
-                    <hr />
-                </div>
-                <div class="flex flex-col gap-2">
-                    @foreach ($determinations as $det)
-                        <div>
-                            <x-link :href="url('taxon/' . $det->tidInterpreted)">
-                                <span class="font-italic">
-                                    {{ $det->sciname }}
-                                </span>
-                                @if($det->scientificNameAuthorship)
-                                    ({{$det->scientificNameAuthorship}})
-                                @endif
-                            </x-link>
-                            <x-text-label :label="__('individual.DETERMINER')">
-                                {{ $det->identifiedBy }}
-                            </x-text-label>
-                            <x-text-label :label="__('individual.DATE')">
-                                {{ $det->dateIdentified }}
-                            </x-text-label>
-                        </div>
-
-                        @if(count($determinations) > 0 && !$loop->last)
-                        <hr/>
-                        @endif
-                    @endforeach
-                </div>
-            @endif
-
-            @if(count($images))
+        @if(count($determinations))
             <div>
-                <div class="font-bold text-lg">
-                    {{ __('individual.SPECIMEN_IMAGES') }}
-                </div>
+                <div class="text-lg font-bold">{{ __('individual.DET_HISTORY') }}</div>
                 <hr />
             </div>
-            <div class="w-fit flex flex-wrap gap-2">
-                @foreach ($images as $item)
-                <x-media.image :image="$item" :href="$item->url ?? $item->thumbnailUrl ?? $item->originalUrl">
-                    <div class="flex flex-col gap-2">
-                        @if($item->url && $item->originalUrl != $item->url)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->url }}">
-                            {{ __('individual.OPEN_MEDIUM') }}
+            <div class="flex flex-col gap-2">
+                @foreach($determinations as $det)
+                    <div>
+                        <x-link :href="url('taxon/' . $det->tidInterpreted)">
+                            <span class="font-italic"> {{ $det->sciname }} </span>
+                            @if($det->scientificNameAuthorship)
+                                ({{ $det->scientificNameAuthorship }})
+                            @endif
                         </x-link>
-                        @endif
-
-                        @if($item->originalUrl)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->originalUrl }}">
-                            {{ __('individual.OPEN_LARGE') }}
-                        </x-link>
-                        @endif
-
-                        @if($item->sourceUrl)
-                        <x-link class="text-base-100" target="_blank" href="{{ $item->sourceUrl}}">
-                            {{ __("individual.OPEN_SOURCE") }}
-                        </x-link>
-                        @endif
+                        <x-text-label :label="__('individual.DETERMINER')"> {{ $det->identifiedBy }} </x-text-label>
+                        <x-text-label :label="__('individual.DATE')"> {{ $det->dateIdentified }} </x-text-label>
                     </div>
-                </x-media>
+                    @if(count($determinations) > 0 && !$loop->last)
+                        <hr />
+                    @endif
                 @endforeach
             </div>
-            @endif
+        @endif
 
-            @if(count($audio))
+        @if(count($images))
             <div>
-                <div class="font-bold text-lg">{{ __('Audio') }}</div>
+                <div class="text-lg font-bold">{{ __('individual.SPECIMEN_IMAGES') }}</div>
+                <hr />
+            </div>
+            <div class="flex w-fit flex-wrap gap-2">
+                @foreach($images as $item)
+                    <x-media.image :image="$item" :href="$item->url ?? $item->thumbnailUrl ?? $item->originalUrl">
+                        <div class="flex flex-col gap-2">
+                            @if($item->url && $item->originalUrl != $item->url)
+                                <x-link class="text-base-100" target="_blank" href="{{ $item->url }}">
+                                    {{ __('individual.OPEN_MEDIUM') }}
+                                </x-link>
+                            @endif
+
+                            @if($item->originalUrl)
+                                <x-link class="text-base-100" target="_blank" href="{{ $item->originalUrl }}">
+                                    {{ __('individual.OPEN_LARGE') }}
+                                </x-link>
+                            @endif
+
+                            @if($item->sourceUrl)
+                                <x-link class="text-base-100" target="_blank" href="{{ $item->sourceUrl }}">
+                                    {{ __("individual.OPEN_SOURCE") }}
+                                </x-link>
+                            @endif
+                        </div>
+                        </x-media>
+
+                @endforeach
+            </div>
+        @endif
+
+        @if(count($audio))
+            <div>
+                <div class="text-lg font-bold">{{ __('Audio') }}</div>
                 <hr />
             </div>
             <div class="w-fit">
-                @foreach ($audio as $item)
+                @foreach($audio as $item)
                     <x-media.audio :item="$item" />
                 @endforeach
             </div>
-            @endif
+        @endif
 
-            @if($collection->rights)
+        @if($collection->rights)
             <x-text-label :label="__('misc_collmetadata.LICENSE')">
-                <x-link :href="$collection->rights">
-                    {{ $collection->rights }}
-                </x-link>
+                <x-link :href="$collection->rights"> {{ $collection->rights }} </x-link>
             </x-text-label>
-            @endif
+        @endif
 
-            <div>
-                <span>{{ __('individual.ADDITIONAL_INFO') }}</span>
-                <span>
-                @foreach ($collection_contacts as $contact)
+        <div>
+            <span>{{ __('individual.ADDITIONAL_INFO') }}</span>
+            <span>
+                @foreach($collection_contacts as $contact)
                     @if($contact->firstName && $contact->firstName)
-                        {{ $contact->firstName . ' ' .  $contact->lastName}}
+                        {{ $contact->firstName . ' ' .  $contact->lastName }}
                     @elseif($contact->firstName)
                         {{ $contact->firstName }}
                     @elseif($contact->lastName)
                         {{ $contact->lastName }}
                     @endif
-
                     @if($contact->role ?? false)
                         ({{ $contact->role }})
                     @endif
-
                     @if($contact->email)
-                        <x-link href="mailto:{{ $contact->email }}">
-                            {{ $contact->email }}
-                        </x-link>
+                        <x-link href="mailto:{{ $contact->email }}"> {{ $contact->email }} </x-link>
                     @endif
                 @endforeach
-                </span>
-            </div>
-            <div>
-                {{ __('individual.SEE_ERROR') }}
+            </span>
+        </div>
+        <div>
+            {{ __('individual.SEE_ERROR') }}
 
-                @if($isEditor)
-                <x-link :href="url('occurrence/' . $occurrence->occid. '/edit')">{{ __('individual.OCCURRENCE_EDITOR')}}</x-link>
-                @endif
-            </div>
+            @if($isEditor)
+                <x-link
+                    :href="url('occurrence/' . $occurrence->occid. '/edit')"
+                    >{{ __('individual.OCCURRENCE_EDITOR') }}</x-link
+                >
+            @endif
+        </div>
         </div>
 
         {{-- Map --}}
         @if($occurrence->decimalLatitude && $occurrence->decimalLongitude)
-        <div>
-            <div id="occurrence-map-data" data-lat="{{ $occurrence->decimalLatitude }}" data-lng="{{ $occurrence->decimalLongitude }}" data-error="{{ $occurrence->coordinateUncertaintyInMeters}}"></div>
-            <script>
-                document.addEventListener('mapIntialized', function (e) {
-                    let map = window.maps['map'];
+            <div>
+                <div
+                    id="occurrence-map-data"
+                    data-lat="{{ $occurrence->decimalLatitude }}"
+                    data-lng="{{ $occurrence->decimalLongitude }}"
+                    data-error="{{ $occurrence->coordinateUncertaintyInMeters }}"
+                ></div>
+                <script>
+                    document.addEventListener("mapIntialized", function (e) {
+                        let map = window.maps["map"];
 
-                    const map_data_elem = document.getElementById('occurrence-map-data');
-                    let lat, lng, error;
+                        const map_data_elem = document.getElementById("occurrence-map-data");
+                        let lat, lng, error;
 
-                    try {
-                        lat = parseFloat(map_data_elem.getAttribute('data-lat'));
-                        lng = parseFloat(map_data_elem.getAttribute('data-lng'));
-                        error = parseFloat(map_data_elem.getAttribute('data-error'));
-                    } catch(error) {
-                        console.error('Failed to load occurrence map data');
-                    }
-
-                    if(lat <= 90 && lat >= -90 && lng <= 180 && lng >= -180) {
-                        map.setView([lat,lng], 8)
-                        L.marker([lat, lng]).addTo(map);
-                        if(error > 0) {
-                            L.circle([lat, lng]).addTo(map);
+                        try {
+                            lat = parseFloat(map_data_elem.getAttribute("data-lat"));
+                            lng = parseFloat(map_data_elem.getAttribute("data-lng"));
+                            error = parseFloat(map_data_elem.getAttribute("data-error"));
+                        } catch (error) {
+                            console.error("Failed to load occurrence map data");
                         }
-                    }
 
-                    // Needed for tiles to render because of dom controlled tab
-                    document.getElementById('occurrence-tab').addEventListener('tabChanged', function() {
-                        map._onResize();
-                    }, { once: true });
-                })
-            </script>
-            <x-map />
-        </div>
+                        if (lat <= 90 && lat >= -90 && lng <= 180 && lng >= -180) {
+                            map.setView([lat, lng], 8);
+                            L.marker([lat, lng]).addTo(map);
+                            if (error > 0) {
+                                L.circle([lat, lng]).addTo(map);
+                            }
+                        }
+
+                        // Needed for tiles to render because of dom controlled tab
+                        document.getElementById("occurrence-tab").addEventListener(
+                            "tabChanged",
+                            function () {
+                                map._onResize();
+                            },
+                            { once: true },
+                        );
+                    });
+                </script>
+                <x-map />
+            </div>
         @endif
 
         {{-- Comments --}}
@@ -494,10 +509,7 @@ function format_latlong_err($occurrence) {
 
         {{-- Edit History --}}
         @if($isEditor)
-            <x-occurrence.edit-history
-                :occurrence="$occurrence"
-                :edit_history="$edit_history"
-            />
+            <x-occurrence.edit-history :occurrence="$occurrence" :edit_history="$edit_history" />
         @endif
     </x-tabs>
 </x-margin-layout>

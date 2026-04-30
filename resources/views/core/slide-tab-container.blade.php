@@ -18,19 +18,27 @@
             return this.tabSelected == tabId;
         }
     }"
+    x-init="tabRepositionMarker($refs.tabButtons.firstElementChild)"
+    class="relative w-full"
+>
+    <div
+        x-ref="tabButtons"
+        class="text-base-content bg-base-200 relative flex h-10 w-full items-center rounded-lg p-1 select-none"
+    >
+        @foreach($tabs as $tab)
+            <button
+                :id="$id(tabId)"
+                @click="tabButtonClicked($el)"
+                type="button"
+                class="relative z-20 inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap transition-all"
+            >
+                {{ $tab }}
+            </button>
 
-    x-init="tabRepositionMarker($refs.tabButtons.firstElementChild);" class="relative w-full">
-
-    <div x-ref="tabButtons" class="relative flex items-center w-full h-10 p-1 text-base-content bg-base-200 rounded-lg select-none">
-    @foreach ($tabs as $tab)
-        <button :id="$id(tabId)" @click="tabButtonClicked($el);" type="button" class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">{{ $tab }}</button>
-
-    @endforeach
-        <div x-ref="tabMarker" class="absolute left-0 z-10 w-1/2 h-full duration-300 ease-out" x-cloak>
-            <div class="w-full h-full bg-base-100 rounded-md shadow-sm"></div>
+        @endforeach
+        <div x-ref="tabMarker" class="absolute left-0 z-10 h-full w-1/2 duration-300 ease-out" x-cloak>
+            <div class="bg-base-100 h-full w-full rounded-md shadow-sm"></div>
         </div>
     </div>
-    <div class="relative w-full mt-2 content">
-        {{ $slot }}
-    </div>
+    <div class="content relative mt-2 w-full">{{ $slot }}</div>
 </div>

@@ -1,0 +1,28 @@
+{
+  "printWidth": 80,
+  "useTabs": false,
+  "plugins": ["prettier-plugin-blade", "prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": ["*.blade.php"],
+      "options": {
+        "printWidth": 120,
+        "parser": "blade",
+        "htmlWhitespaceSensitivity": "css",
+        "bladePhpFormatting": "safe",
+        "bladePhpFormattingTargets": ["directiveArgs", "echo", "phpBlock", "phpTag"],
+        "bladeSyntaxPlugins": [],
+        "bladeDirectiveCase": "preserve",
+        "bladeDirectiveArgSpacing": "none",
+        "bladeDirectiveBlockStyle": "inline-if-short",
+        "bladeBlankLinesAroundDirectives": "preserve",
+        "bladeEchoSpacing": "space",
+        "bladeSlotClosingTag": "canonical",
+        "bladeInlineIntentElements": ["p", "svg", "svg:*"],
+        "bladeComponentPrefixes": ["x", "native"],
+        "bladeInsertOptionalClosingTags": false,
+        "bladeKeepHeadAndBodyAtRoot": true
+      }
+    }
+  ]
+}

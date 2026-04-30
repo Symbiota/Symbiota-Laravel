@@ -19,32 +19,39 @@ foreach($params as $key => $value) {
 {{-- @if(count($media) > 0) -- }}
 
 {{-- Render Media Items --}}
-@foreach ($media as $item)
-<a class="group flex" target="_blank"
-    href="{{ legacy_url('/collections/individual/index.php') . '?occid=' . $item->occid }}">
-    <div class="flex flex-col bg-base-200 w-48">
-        <img class="h-72 w-48 object-cover" loading="lazy" src="{{$item->thumbnailUrl ?? $item->url}}" />
-        <div
-            class="text-neutral-content w-full p-2 bg-neutral grow-1 text-sm">
-            <x-link class="text-neutral-content hover:text-neutral-content/50" href="{{ url('taxon/' . $item->tid) }}">
-                {{$item->sciName}}
-            </x-link>
-            @if($item->recordedBy)
-            <div>
-                {{ $item->recordedBy }}
+@foreach($media as $item)
+    <a
+        class="group flex"
+        target="_blank"
+        href="{{ legacy_url('/collections/individual/index.php') . '?occid=' . $item->occid }}"
+    >
+        <div class="bg-base-200 flex w-48 flex-col">
+            <img class="h-72 w-48 object-cover" loading="lazy" src="{{ $item->thumbnailUrl ?? $item->url }}" />
+            <div class="text-neutral-content bg-neutral w-full grow-1 p-2 text-sm">
+                <x-link
+                    class="text-neutral-content hover:text-neutral-content/50"
+                    href="{{ url('taxon/' . $item->tid) }}"
+                >
+                    {{ $item->sciName }}
+                </x-link>
+                @if($item->recordedBy)
+                    <div>{{ $item->recordedBy }}</div>
+                @endif
             </div>
-            @endif
         </div>
-    </div>
-</a>
+    </a>
 @endforeach
 
 {{-- Avoids call if there isn't anymore items --}}
 @if(count($media) >= 30 || $allow_empty_trigger)
-{{-- When the bottom is revealed then fetch more data --}}
-<div class="m-[-0.3rem]" hx-get="{{ url('/media/search') . '?' . http_build_query($query_params) }}" hx-swap="{{$allow_empty_trigger ? 'outerHTML':'afterend'}}"
-    hx-indicator="#scroll-loader" hx-trigger="revealed">
-</div>
+    {{-- When the bottom is revealed then fetch more data --}}
+    <div
+        class="m-[-0.3rem]"
+        hx-get="{{ url('/media/search') . '?' . http_build_query($query_params) }}"
+        hx-swap="{{ $allow_empty_trigger ? 'outerHTML':'afterend' }}"
+        hx-indicator="#scroll-loader"
+        hx-trigger="revealed"
+    ></div>
 @endif
 
 {{--@endif--}}

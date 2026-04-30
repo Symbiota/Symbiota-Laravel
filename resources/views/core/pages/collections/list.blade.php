@@ -12,15 +12,17 @@
 @endphp
 <x-margin-layout class="gap-4">
     <div>
-        <x-breadcrumbs :items="[
+        <x-breadcrumbs
+            :items="[
         ['title' => 'Home', 'href' => url('') ],
         ['title' => 'Search Criteria', 'href' => url('/collections/search/') ],
         'Specimen Records'
-    ]" />
+    ]"
+        />
     </div>
     <x-tabs :tabs="['Species List', 'Occurrence Records']" active="{{ request('active_tab') ?? 1 }}">
         {{-- Species --}}
-        <div class="flex items-center gap-4 h-60">
+        <div class="flex h-60 items-center gap-4">
             <x-button class="w-fit">
                 <a href="checklistsymbiota.php?taxatype=&taxa=&usethes=&taxonfilter=0&interface=checklist">
                     Open checklist Explorer
@@ -40,14 +42,14 @@
         </div>
 
         {{-- Occurrence Records --}}
-        <div id="occurrence_result" class="grid grid-col-1 gap-4">
+        <div id="occurrence_result" class="grid-col-1 grid gap-4">
             <div class="flex flex-wrap">
                 <div>
-                    <div><span class="font-bold">Dataset: </span>{{ $dataset_str ?? 'All collections'}}</div>
+                    <div><span class="font-bold">Dataset: </span>{{ $dataset_str ?? 'All collections' }}</div>
                     <div><span class="font-bold">Taxa: </span>{{ $taxa_str ?? '' }}</div>
                     <div><span class="font-bold">Search Criteria: </span>( TODO )</div>
                 </div>
-                <div class="flex items-center gap-2 grow justify-end">
+                <div class="flex grow items-center justify-end gap-2">
                     {{-- Todo make this the popover icon?
                     <x-tooltip text="Sort Results">
                         <x-button class="w-fit">
@@ -56,13 +58,20 @@
                     </x-tooltip>
                     --}}
                     <x-popover>
-                        <form hx-get="{{ url()->current() }}"
-                              hx-vals="{{ json_encode(request()->except(['sort', 'sortDirection'])) }}"
-                              hx-target="body" hx-push-url="true"
-                              class="flex flex-col gap-4"
-                              >
+                        <form
+                            hx-get="{{ url()->current() }}"
+                            hx-vals="{{ json_encode(request()->except(['sort', 'sortDirection'])) }}"
+                            hx-target="body"
+                            hx-push-url="true"
+                            class="flex flex-col gap-4"
+                        >
                             <input type="hidden" name="sortDirection" value="ASC" />
-                            <x-select label="Sort By" class="w-full" defaultValue="'{{ request('sort') }}'" name="sort" :items="[
+                            <x-select
+                                label="Sort By"
+                                class="w-full"
+                                defaultValue="'{{ request('sort') }}'"
+                                name="sort"
+                                :items="[
                                 ['title' => 'Collection', 'value' => 'collid', 'disabled' => false],
                                 ['title' => 'Catalog Number', 'value' => 'catalogNumber', 'disabled' => false],
                                 ['title' => 'Family', 'value' => 'family', 'disabled' => false],
@@ -74,49 +83,60 @@
                                 ['title' => 'State/Province', 'value' => 'stateProvince', 'disabled' => false],
                                 ['title' => 'County', 'value' => 'county', 'disabled' => false],
                                 ['title' => 'Elevation', 'value' => 'minimumElevationInMeters', 'disabled' => false],
-                            ]"/>
-                            <x-select label="Sort Direction" name="sortDirection" default="0" :items="[
+                            ]"
+                            />
+                            <x-select
+                                label="Sort Direction"
+                                name="sortDirection"
+                                default="0"
+                                :items="[
                                 ['title' => 'Ascending', 'value' => 'ASC', 'disabled' => false],
                                 ['title' => 'Descending', 'value' => 'DESC', 'disabled' => false],
-                            ]"/>
+                            ]"
+                            />
                             <x-button type="submit">Sort Results</x-button>
                         </form>
                     </x-popover>
 
                     <x-tooltip text="Display as Map">
-                        <x-button class="w-fit h-8" href="{{ legacy_url('/collections/map/index.php?') . http_build_query(request()->all()) }}" target="_blank">
-                            <i class="text-xl fa-solid fa-earth-americas"></i>
+                        <x-button
+                            class="h-8 w-fit"
+                            href="{{ legacy_url('/collections/map/index.php?') . http_build_query(request()->all()) }}"
+                            target="_blank"
+                        >
+                            <i class="fa-solid fa-earth-americas text-xl"></i>
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Create KML">
-                        <x-button class="w-fit h-8">
-                            KML
-                        </x-button>
+                        <x-button class="h-8 w-fit"> KML </x-button>
                     </x-tooltip>
 
                     <x-tooltip text="Display as Table">
-                        <x-button class="w-fit h-8">
-                            <i class="text-xl fa-solid fa-table-list"></i>
+                        <x-button class="h-8 w-fit">
+                            <i class="fa-solid fa-table-list text-xl"></i>
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Download Specimen Data">
-                        <x-button class="w-fit h-8" onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)">
-                            <i class="text-xl fa-solid fa-download"></i>
+                        <x-button
+                            class="h-8 w-fit"
+                            onclick="openWindow(`{{ url('collections/download') }}` + window.location.search)"
+                        >
+                            <i class="fa-solid fa-download text-xl"></i>
                         </x-button>
                     </x-tooltip>
                     <x-tooltip text="Copy Search Url to clipboard">
-                        <x-button class="w-fit h-8" onclick="copyUrl()">
-                            <i class="text-xl fa-regular fa-copy"></i>
+                        <x-button class="h-8 w-fit" onclick="copyUrl()">
+                            <i class="fa-regular fa-copy text-xl"></i>
                         </x-button>
                     </x-tooltip>
                 </div>
             </div>
 
-            <x-pagination :lengthAwarePaginator="$occurrences"/>
+            <x-pagination :lengthAwarePaginator="$occurrences" />
 
-            <div class="grid grid-col-1 gap-4">
-                @foreach ($occurrences as $occurrence)
-                <x-collections.list.item :occurrence="$occurrence" />
+            <div class="grid-col-1 grid gap-4">
+                @foreach($occurrences as $occurrence)
+                    <x-collections.list.item :occurrence="$occurrence" />
                 @endforeach
             </div>
 
@@ -124,4 +144,4 @@
         </div>
     </x-tabs>
 
-</x-layout>
+    </x-layout>

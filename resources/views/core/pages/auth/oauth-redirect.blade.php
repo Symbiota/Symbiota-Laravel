@@ -1,11 +1,7 @@
-<x-layout class="flex justify-center items-center" :hasHeader="false" :hasFooter="false" :hasNavbar="false">
-    <div class="h-fit p-4 border border-base-300">
-        <div class="text-xl">
-            Orcid Redirect
-        </div>
+<x-layout class="flex items-center justify-center" :hasHeader="false" :hasFooter="false" :hasNavbar="false">
+    <div class="border-base-300 h-fit border p-4">
+        <div class="text-xl">Orcid Redirect</div>
         Request From:
-        <x-link href="{{ request()->header('referer') }}">
-            {{ request()->header('referer') }}
-        </x-link>
+        <x-link href="{{ request()->header('referer') }}"> {{ request()->header('referer') }} </x-link>
     </div>
 </x-layout>

@@ -1,9 +1,10 @@
 //Custom Functions
-function openWindow(link = "", title = "", options = "resizable=0,width=900,height=630,left=20,top=20") {
-    let mapWindow = open(link,
-        title,
-        options,
-    );
+function openWindow(
+    link = "",
+    title = "",
+    options = "resizable=0,width=900,height=630,left=20,top=20",
+) {
+    let mapWindow = open(link, title, options);
     if (mapWindow.opener == null) mapWindow.opener = self;
     mapWindow.focus();
 }
@@ -11,7 +12,7 @@ function openWindow(link = "", title = "", options = "resizable=0,width=900,heig
 window.openWindow = openWindow;
 
 function copyUrl(urlOverride) {
-    const url = urlOverride ? urlOverride: window.location;
+    const url = urlOverride ? urlOverride : window.location;
     const type = "text/plain";
 
     const clipboardItemData = {
@@ -22,8 +23,8 @@ function copyUrl(urlOverride) {
 
     //Assumes toaster is setup
     navigator.clipboard.write([clipboardItem]).then(
-        res => window.toast('Url Copied!', {type: 'success'}),
-        error => window.toast('Failed to Copy Url!', {type: 'danger'})
+        (res) => window.toast("Url Copied!", { type: "success" }),
+        (error) => window.toast("Failed to Copy Url!", { type: "danger" }),
     );
 }
 window.copyUrl = copyUrl;

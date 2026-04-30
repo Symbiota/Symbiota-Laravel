@@ -17,6 +17,11 @@ if(isset($href) && $href) {
 }
 
 @endphp
-<{{$tag}} @disabled($disabled) {{isset($href) && $href ? 'href=' . $href: ''}} {{$async? 'x-data="loadingUtils" @click="() => load($el)"': ''}} {{ $attributes->class($variant_def)->twMerge($base)}}>
+<{{$tag}}
+    @disabled($disabled)
+    {{ isset($href) && $href ? 'href=' . $href: '' }}
+    {{ $async? 'x-data="loadingUtils" @click="() => load($el)"': '' }}
+    {{ $attributes->class($variant_def)->twMerge($base) }}
+>
     {{ $slot }}
 </{{$tag}}>

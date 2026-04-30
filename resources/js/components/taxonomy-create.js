@@ -494,8 +494,9 @@ function updateScinameDisplay() {
     // return sciname;
 }
 
-async function parseName() { //lightly modified from original function in old codebase
-    console.log('parseName internal called');
+async function parseName() {
+    //lightly modified from original function in old codebase
+    console.log("parseName internal called");
     const taxonForm = document.getElementById("taxon-form");
     if (!taxonForm.quickparser.value) {
         return;

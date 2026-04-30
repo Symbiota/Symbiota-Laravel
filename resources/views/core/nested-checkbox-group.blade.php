@@ -1,29 +1,35 @@
 @props(['id', 'label', 'name', 'open' => false])
 @pushOnce('js-scripts')
-<script type="text/javascript" defer>
-    function toggleNestedCheckboxes(event, id) {
-        event.stopImmediatePropagation()
-        //event.preventDefault()
-        const master = document.querySelector(`#${id}`);
+    <script type="text/javascript" defer>
+        function toggleNestedCheckboxes(event, id) {
+            event.stopImmediatePropagation();
+            //event.preventDefault()
+            const master = document.querySelector(`#${id}`);
 
-        const checkboxes = document.querySelectorAll(`#${id}-body input[type='checkbox']`);
-        for (let checkbox of checkboxes) {
-            checkbox.checked = master.checked;
+            const checkboxes = document.querySelectorAll(`#${id}-body input[type='checkbox']`);
+            for (let checkbox of checkboxes) {
+                checkbox.checked = master.checked;
+            }
         }
-    }
-</script>
+    </script>
 @endPushOnce
-<div class="w-full" x-data="{ menu_open: true, checked: true}">
+<div class="w-full" x-data="{ menu_open: true, checked: true }">
     <!-- Nested Checkbox Title --->
     <button @@click="menu_open = !menu_open" type="button" class="flex w-full outline-none">
-        <x-checkbox onclick="toggleNestedCheckboxes(event, '{{$id}}')" :open="$open" :id="$id" :label="$label" />
+        <x-checkbox onclick="toggleNestedCheckboxes(event, '{{ $id }}')" :open="$open" :id="$id" :label="$label" />
         <div class="flex flex-grow justify-end">
-            <i x-show="!menu_open" class="mr-5 fa-solid fa-angle-up"></i>
-            <i x-cloak x-show="menu_open" class="mr-5 fa-solid fa-angle-down"></i>
+            <i x-show="!menu_open" class="fa-solid fa-angle-up mr-5"></i>
+            <i x-cloak x-show="menu_open" class="fa-solid fa-angle-down mr-5"></i>
         </div>
     </button>
     <!-- Nested Checkbox Body --->
-    <div x-cloak x-show="menu_open" x-on:change="if(checked && !event.target.checked) { document.querySelector('#{{ $id }}').checked = false }" id="{{$id}}-body" class="flex flex-col gap-3 ml-7 mt-2">
+    <div
+        x-cloak
+        x-show="menu_open"
+        x-on:change="if(checked && !event.target.checked) { document.querySelector('#{{ $id }}').checked = false }"
+        id="{{ $id }}-body"
+        class="mt-2 ml-7 flex flex-col gap-3"
+    >
         {{ $slot }}
     </div>
 </div>

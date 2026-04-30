@@ -39,7 +39,6 @@ $grants= [
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -62,45 +61,39 @@ $grants= [
     manipulations but this did not work for repeated backwards and forwards history swapping.
     --}}
     <script>
-        document.addEventListener('htmx:beforeHistorySave', (evt) => {
-            document.querySelectorAll('[x-for]').forEach((item) => {
-                item._x_lookup && Object.values(item._x_lookup).forEach((el) => el.remove())
-            })
-            document.querySelectorAll('[x-if]').forEach((item) => {
-                item._x_currentIfEl && item._x_currentIfEl.remove()
-            })
+        document.addEventListener("htmx:beforeHistorySave", (evt) => {
+            document.querySelectorAll("[x-for]").forEach((item) => {
+                item._x_lookup && Object.values(item._x_lookup).forEach((el) => el.remove());
+            });
+            document.querySelectorAll("[x-if]").forEach((item) => {
+                item._x_currentIfEl && item._x_currentIfEl.remove();
+            });
 
-            document.querySelectorAll('[x-teleport]').forEach((item) => {
+            document.querySelectorAll("[x-teleport]").forEach((item) => {
                 item._x_teleport && item._x_teleport.remove();
-            })
+            });
 
-            if(window.tinymce_editor) {
+            if (window.tinymce_editor) {
                 window.tinymce_editor.remove();
             }
-        })
+        });
     </script>
 </head>
 
-<body
-    x-trap="true"
->
-    <div id="app-body" class="min-h-screen flex flex-col bg-base-100 text-base-content"
-        >
+<body x-trap="true">
+    <div id="app-body" class="bg-base-100 text-base-content flex min-h-screen flex-col">
         @if($hasHeader)
-        <x-header buttonVariant="primary"/>
+            <x-header buttonVariant="primary" />
         @endif
         @if($hasNavbar)
-        <x-navbar :navigations="$navigations" />
+            <x-navbar :navigations="$navigations" />
         @endif
         <x-toaster />
-        <div {{ $attributes->twMerge('flex-grow p-10') }} >
-            {{ $slot }}
-        </div>
+        <div {{ $attributes->twMerge('flex-grow p-10') }}> {{ $slot }}</div>
         @if($hasFooter)
-        <x-footer :logos="$logos" :grants="$grants" />
+            <x-footer :logos="$logos" :grants="$grants" />
         @endif
         @stack('js-scripts')
     </div>
 </body>
-
 </html>
