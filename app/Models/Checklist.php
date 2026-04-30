@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Checklist extends Model {
     protected $table = 'fmchecklists';
+
     protected $primaryKey = 'clid';
+
     public $timestamps = false;
 
     protected $fillable = [];
@@ -15,7 +17,7 @@ class Checklist extends Model {
 
     protected $casts = [
         'defaultSettings' => 'json',
-        'dynamicSql' => 'json'
+        'dynamicSql' => 'json',
     ];
 
     /**
@@ -48,8 +50,6 @@ class Checklist extends Model {
      *   public string $username;
      *   public string $assignedby
      * }
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function editors(): \Illuminate\Database\Eloquent\Collection {
         return User::query()
