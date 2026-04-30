@@ -163,6 +163,7 @@ Route::group(['prefix' => '/collections'], function () {
     Route::get('/{collid}/skeletal', [CollectionController::class, 'skeletalView'])->can('COLL_EDIT', 'collid');
     Route::post('/{collid}/skeletal', [CollectionController::class, 'skeletalAdd'])->can('COLL_EDIT', 'collid');
     Route::get('/{collid}', [CollectionController::class, 'collection']);
+    Route::match(['GET', 'POST'], '/{collid}/comments', [CollectionController::class, 'comments'])->can('COLL_ADMIN', 'collid')->where('collid', '[0-9+]');
 });
 
 /*
