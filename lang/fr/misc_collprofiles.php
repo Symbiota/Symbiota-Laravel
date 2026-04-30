@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'USAGE_POLICY' => 'Politique d\'Utilisation',
     'COLLEC_PROFILE' => 'Profil de Collection pour',
     'RSS_FEED' => 'Flux RSS',
     'COLLECTION_SEARCH' => 'Page de Recherche de Collections',
@@ -77,10 +78,12 @@ return [
     'GEOG_DIST_COUNTRIES' => 'Distribution Géographique - Pays',
     'COLLECTION_PROJECTS' => 'Collections d\'Histoire Naturelle et Projets d\'Observation',
     'ADVANCED_SEARCH_THIS_COLLECTION' => 'Recherche avancée dans cette collection',
-    'IMAGE_SEARCH_THIS_COLLECTION' => 'Multimédia Rechercher dans cette collection',
+    'MEDIA_SEARCH_THIS_COLLECTION' => 'Multimédia Rechercher dans cette collection',
     'IDENTIFIER_PLACEHOLDER_LIST' => 'Rechercher par numéro de catalogue, ID d\'occurrence ou ID d\'enregistrement.',
     'SEARCH_BY_TAXON' => 'Recherche par taxon',
     'OCCURENCE_IDENTIFIER' => 'Numéro de Catalogue',
     'INFO_ALT' => 'Icône d\'information indiquant un lien vers des informations sur l\'importation/mise à jour',
     'LAST_MODIFIED' => 'Dernière Modification',
+    'EML_FILE' => 'Fichier EML',
+    'TOTAL_TAXA_INCLUDING' => 'taxons totaux (y compris subsp. et var.)',
 ];

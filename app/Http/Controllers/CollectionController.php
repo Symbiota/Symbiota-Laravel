@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -9,21 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller {
     public static function collection(int $collid) {
-        $collection = DB::table('omcollections as c')->leftJoin('uploadspecparameters as usp', 'usp.collid', 'c.collid')->where('c.collid', $collid)->select('*')->first();
-
-        $collection_stats = DB::table('omcollectionstats as ocs')->where('collid', $collid)
-            ->select(['ocs.*',
-                DB::raw('DATE_FORMAT(uploaddate, "%D %M %Y") as uploaddate'),
-            ])
+        $collection = Collection::query()
+            ->where('omcollections.collID', $collid)
             ->first();
 
-        return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection_stats]);
-    }
-
-    public static function profileList() {
-        $collections = DB::table('omcollections as c')->select('*')->get();
-
-        return view('pages/collections/profile-list', ['collections' => $collections]);
+        return view('pages/collections/profile', ['collection' => $collection, 'stats' => $collection->stats()]);
     }
 
     public static function searchPage(Request $request) {
@@ -108,6 +99,17 @@ class CollectionController extends Controller {
 
     public static function mapSearchPage() {
         return view('pages/collections/map-search');
+    }
+
+    public static function updateStats(int $collId) {
+        global $SERVER_ROOT;
+        include_once legacy_path('/classes/OccurrenceCollectionProfile.php');
+        $collManager = new \OccurrenceCollectionProfile();
+        $collManager->setCollid($collId);
+
+        return response()->stream(function () use ($collManager) {
+            $collManager->updateStatistics(true);
+        }, 200, ['X-Accel-Buffering' => 'no']);
     }
 }
 

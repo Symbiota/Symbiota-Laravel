@@ -72,7 +72,7 @@ return [
     'USAGE_RIGHTS' => 'Droits d\'Utilisation',
     'RIGHTS_HOLDER' => 'Titulaire des Droits',
     'ACCESS_RIGHTS' => 'Droits d\'Accès',
-    'USAGE_POLICY' => 'Politique Générale d\'Utilisation des Données',
+    'GENERAL_DATA_USAGE_POLICY' => 'Politique Générale d\'Utilisation des Données',
     'SOURCE_RECORD' => 'Source d\'Enregistrement',
     'DATA_SOURCE' => 'Source de données',
     'SOURCE_MANAGEMENT' => 'Gestion des sources',

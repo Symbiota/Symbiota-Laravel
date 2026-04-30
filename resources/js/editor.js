@@ -33,11 +33,11 @@ import 'tinymce/skins/content/default/content.js';
 
 /* Initialize TinyMCE */
 
-export function remove () {
+function remove () {
   tinymce.remove();
 };
 
-export function render (selector) {
+function render (selector) {
     if(selector) {
         tinymce.init({
             selector: selector,
@@ -47,4 +47,9 @@ export function render (selector) {
             content_css: 'default',
         });
     }
+};
+
+window.tinymce_editor = {
+    remove: remove,
+    render: render
 };

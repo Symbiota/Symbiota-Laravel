@@ -21,30 +21,25 @@
             <x-button variant="secondary">Secondary</x-button>
             <x-button variant="neutral">Neutral</x-button>
             <x-button variant="accent">Accent</x-button>
-            <x-button variant="neutral">
-                <x-slot:icon>
-                    <div class="stroke-accent w-7 h-7">
-                        <x-icons.loading />
-                    </div>
-                    </x-slot>
-                    Async
-            </x-button>
         </div>
 
+        {{-- Note you need to be in alpine context to use @click otherwise just use onclick --}}
         <div class="flex gap-4">
-            <x-button @click="toast('Success Title', { description: 'Plain description' })">
+            <x-button onclick="toast('Success Title', { description: 'Plain description' })">
                 Toast Plain
             </x-button>
-            <x-button @click="toast('Success Title', {type: 'success', description: 'Success description'})">
+            <x-button onclick="toast('Success Title', {type: 'success', description: 'Success description'})">
                 Toast Success
             </x-button>
-            <x-button @click="toast('Error Title', {type: 'danger', description: 'Error description'})">
+            <x-button onclick="toast('Error Title', {type: 'danger', description: 'Error description'})">
                 Toast Error
             </x-button>
-            <x-button @click="toast('Error Title', {type: 'info', description: 'Info description'})">
+            <x-button onclick="toast('Error Title', {type: 'info', description: 'Info description'})">
                 Toast Info
             </x-button>
-            <x-button @click="toast('Warning Title', {type: 'warning', description:  'Warning description'})">
+
+            {{-- Example of working alpine context @click with toast --}}
+            <x-button x-init="" @click="toast('Warning Title', {type: 'warning', description:  'Warning description'})">
                 Toast Warning
             </x-button>
         </div>
@@ -207,7 +202,7 @@
                 Tab 3
             </x-slide-tab>
         </x-slide-tab-container>
-        <x-rich-editor label="Rich Text Description">
+        <x-rich-editor id="rich-editor" label="Rich Text Description">
             {!! Purify::clean('<p><em>Hello</em>, <span style="text-decoration: underline;"><strong>World!</strong></span><script>alert("bad")</script></p>') !!}
         </x-rich-editor>
     </div>
