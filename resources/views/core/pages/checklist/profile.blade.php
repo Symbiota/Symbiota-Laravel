@@ -229,7 +229,7 @@ $breadcrumbs[] = $checklist->name;
                         <x-input :label="__('checklists_checklist.FAMILYOVERRIDE')" id="familyOverride" />
                         <x-input :label="__('checklists_checklist.HABITAT')" id="habitat" />
                         <x-input :label="__('checklists_checklist.ABUNDANCE')" id="abundance" />
-                        <x-input :label="__('checklists_checklist.NOTES')" id="notes" />
+                        <x-input :label="__('projects.NOTES')" id="notes" />
                         <x-input :label="__('checklists_checklist.INTNOTES')" id="internalNotes" />
                         <x-input :label="__('checklists_checklist.SOURCE')" id="source" />
                         <x-button>{{ __('checklists_checklist.ADD_SPECIES') }}</x-button>
