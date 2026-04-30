@@ -77,6 +77,7 @@
     $fieldRowClass = 'my-2 flex flex-wrap items-center';
 @endphp
 
+@push('js-scripts')
 <script>
     function verifyCollectionForm(form) {
         if (form.managementType && form.managementType.value === 'Snapshot' && form.guidTarget.value === 'symbiotaUUID') {
@@ -344,6 +345,7 @@
         toggleFossilWarning();
     });
 </script>
+@endpush
 
 <x-margin-layout>
     <div class="mb-4">
