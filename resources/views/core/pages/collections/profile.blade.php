@@ -131,7 +131,7 @@ $isObservations = $collection->isObservations();
 
             $admin_links = [
                 __('profile_occurrencemenu.VIEW_COMMENTS') => colUrl('misc/commentlist.php'),
-                __('misc_collmetadata.EDIT_METADATA') => colUrl('misc/collmetadata.php'),
+                __('misc_collmetadata.EDIT_METADATA') => route('collections.collmetadata.edit', ['collid' => $collection->collID]),
                 __('misc_collprofiles.MANAGE_PERMISSIONS') => colUrl('misc/collpermissions.php'),
                 __('misc_collprofiles.PROCESSING_TOOLBOX') => tryColUrl('specprocessor/index.php', $isSpecimens && !$isAggregate),
                 __('misc_collprofiles.DARWIN_CORE_PUB') => tryColUrl('datasets/datapublisher.php', $isSpecimens && !$isAggregate),
