@@ -334,8 +334,7 @@
         {{-- Observations --}}
         <div>
             <h2 class="text-primary text-2xl font-bold">Observations</h2>
-            <p class="description">Data management for observation projects is handled in a similar manner to what is described in the Collections paragraph above. One difference is the General Observation project. This project serves two central purposes: 1) Allows registered users to submit a image voucherd field observation. 2) Allows collectors to enter their own collection data for label printing and to make the data available to the collections obtaining the physical specimens through donations or exchange. Visit the <x-link href="{{ docs_url('Collector_Observer_Guide') }}" target="_blank">Symbiota Documentation</x-link>
-            for more information on specimen processing capabilities. Note that observation projects are not activated on all Symbiota data portals.</p>
+            <p class="description">Data management for observation projects is handled in a similar manner to what is described in the Collections paragraph above. One difference is the General Observation project. This project serves two central purposes: 1) Allows registered users to submit a image voucherd field observation. 2) Allows collectors to enter their own collection data for label printing and to make the data available to the collections obtaining the physical specimens through donations or exchange. Visit the <x-link href="{{ docs_url('Collector_Observer_Guide') }}" target="_blank">Symbiota Documentation</x-link> for more information on specimen processing capabilities. Note that observation projects are not activated on all Symbiota data portals.</p>
             <h3 class="text-primary pt-2 text-xl font-bold">Observation Image Voucher submission</h3>
             <ul class="list-disc pl-4">
                 @foreach($user_collections as $collection)
