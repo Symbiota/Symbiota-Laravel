@@ -2,6 +2,7 @@
     'id' => uniqid(),
     'tidName' => 'tid',
     'taxa_value' => '' ,
+    'tid_value' => '',
     'use_thes_value' => false,
     'taxa_type_value' => '',
     'hide_selector' => false,
@@ -40,7 +41,7 @@
             </x-slot>
             <x-slot name="menu"></x-slot>
         </x-autocomplete-input>
-        <input id="{{ 'tid-' . $id }}" type="hidden" name="{{ $tidName }}" value="" />
+        <input id="{{ 'tid-' . $id }}" type="hidden" name="{{ $tidName }}" value="{{ $tid_value }}" />
     </div>
 
     @if(!$hide_synonyms_checkbox)

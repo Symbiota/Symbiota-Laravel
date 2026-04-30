@@ -17,4 +17,10 @@ return [
     'CREATE_TAXON' => 'Créer un taxon',
     'INFRASPECIFIC_EPITHET' => 'Épithète infraspécifique',
     'NO_PERMISSION_CREATE' => 'Vous n\'avez pas la permission de créer un nouveau taxon.',
+    'SCI_NAME_RANK_REQUIRED' => 'Nom/Rang du taxon requis.',
+    'PARENT_TAXON_REQUIRED' => 'Taxon parent requis.',
+    'PARENT_ID_NOT_SET' => 'ID du parent non défini.',
+    'ALREADY_EXISTS' => ' existe déjà dans la base de données.',
+    'ACC_NAME_NEEDS_VALUE' => 'Le nom accepté doit avoir une valeur.',
+    'MISSING_REQUIRED_TAXON_FIELD' => 'Champ de taxon requis manquant',
 ];

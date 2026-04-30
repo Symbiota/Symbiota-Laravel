@@ -134,7 +134,7 @@ class TaxonomyController extends Controller {
         ]);
     }
 
-    public static function taxonEdit(int $tid) {
+    public static function editTaxonProfile(int $tid) {
         $taxon = self::taxonData($tid);
 
         $parents = self::getParents($tid);
@@ -164,40 +164,206 @@ class TaxonomyController extends Controller {
         ]);
     }
 
+    public static function editTaxon($tid) {
+        $taxon = self::taxonData($tid);
+        $securitystatusstart = $taxon->securitystatus ?? 0;
+        if (! $taxon) {
+            // @TODO return a 404 not found page
+        }
+        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
+        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
+        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
+        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
+        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
+
+        $parentName = '';
+        if ($taxon && $taxon->parenttid) {
+            $parentName = DB::table('taxa')->where('tid', $taxon->parenttid)->value('sciName') ?? '';
+        }
+
+        $acceptedName = '';
+        if ($taxon && $taxon->tidaccepted && $taxon->tidaccepted != $taxon->tid) {
+            $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
+        }
+
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $taxonEditorObj = new \TaxonomyEditorManager();
+        $taxonEditorObj->setTid($tid);
+        $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+
+        if (! empty($verifyArr['child'])) {
+            $verifyArr['child'] = array_map(
+                fn ($name, $url) => ['name' => $name, 'url' => $url],
+                $verifyArr['child'],
+                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+            );
+        }
+
+        return view('pages/taxon/editTaxon', [
+            'mode' => 'edit',
+            'targetTid' => request()->route('tid'),
+            'kingdoms' => $kingdoms,
+            'allTaxonRanks' => $allTaxonRanks,
+            'indContent' => $indContent,
+            'securityOptions' => $securityOptions,
+            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
+            'taxonInfo' => $taxon,
+            'parentName' => $parentName,
+            'acceptedName' => $acceptedName,
+            'securitystatusstart' => $securitystatusstart,
+            'verifyArr' => $verifyArr,
+        ]);
+    }
+
     public static function createTaxon() {
         $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
         $primaryKingdom = config('portal.primary_taxonomic_kingdom');
-        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get(); // @TODO this shouldn't always be plantae and should vary by portal
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
         $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
         $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
         ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
 
         return view('pages/taxon/create', [
+            'mode' => 'create',
             'kingdoms' => $kingdoms,
             'allTaxonRanks' => $allTaxonRanks,
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
-            'canCreate' => Gate::check('TAXON_EDITOR'),
+            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
+            'securitystatusstart' => 0,
         ]);
     }
 
     public static function store() {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $loaderObj = new \TaxonomyEditorManager();
+        $editorManager = new \TaxonomyEditorManager();
 
-        // if (! $loaderObj->validateNewName($postData)) {
+        // if (! $editorManager->validateNewName($postData)) {
         //     // Redirect back with error message
         //     return redirect()->back()->withInput()->withErrors(['error' => 'Validation failed for the new taxon. Please check your input and try again.']);
         // } else { // @TODO to be fixed in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
-        $tidResult = $loaderObj->loadNewName($postData);
+        $tidResult = $editorManager->loadNewName($postData);
         // }
 
         if ($tidResult > 0) {
             // Redirect to the newly created taxon's page
-            return redirect()->route('taxon.createview', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+            return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
             return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+        }
+    }
+
+    public static function update() {
+        $postData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editType = $postData['edit-type'] ?? null;
+        $editorManager->setTaxon();
+        $editorManager->setTid($postData['tidaccepted'] ?? null);
+        $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
+        // $editorManager->setTaxAuthId($taxAuthId);
+        // $postData['securitystatusstart'] = $editorManager->getSecurityStatus();
+
+        if ($editType === 'taxonedits') {
+            $statusStr = $editorManager->submitTaxonEdits($postData);
+        } elseif ($editType === 'updatetaxstatus') {
+            $statusStr = $editorManager->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
+        } elseif ($editType === 'synonymedits') {
+            $statusStr = $editorManager->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
+        } elseif ($editType === 'linkToAccepted') {
+            $deleteOther = array_key_exists('deleteother', $postData) ? true : false;
+            $statusStr = $editorManager->submitAddAcceptedLink($postData['tidaccepted'], $deleteOther);
+        } elseif ($editType === 'deltidaccepted') {
+            $statusStr = $editorManager->removeAcceptedLink($postData['deltidaccepted']);
+        } elseif ($editType === 'changetoaccepted') {
+            $tidAccepted = $postData['tidaccepted'];
+            $switchAcceptance = array_key_exists('switchacceptance', $postData) ? true : false;
+            $statusStr = $editorManager->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
+        } elseif ($editType === 'changeToNotAccepted') {
+            $tidAccepted = $postData['tidaccepted'];
+            $statusStr = $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
+        } elseif ($editType == 'updatehierarchy') {
+            $statusStr = $editorManager->rebuildHierarchy($tid);
+        } elseif ($editType == 'remapTaxon') {
+            $remapStatus = $editorManager->transferResources($postData['remaptid']);
+            if ($editorManager->getWarningArr()) {
+                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            }
+            if ($remapStatus) {
+                $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
+                header('Location: taxonomydisplay.php?target=' . $postData['genusstr'] . '&statusstr=' . $statusStr);
+            } else {
+                $statusStr = $editorManager->getErrorMessage();
+            }
+        } elseif ($editType == 'deleteTaxon') {
+            $delStatus = $editorManager->deleteTaxon();
+            if ($editorManager->getWarningArr()) {
+                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
+            }
+            if ($delStatus) {
+                $statusStr = $LANG['SUCCESS_DELETING'] . ' ' . $statusStr;
+                header('Location: taxonomydisplay.php?statusstr=' . $statusStr);
+            } else {
+                $statusStr = $editorManager->getErrorMessage();
+            }
+        }
+
+        if ($statusStr === true || $statusStr === '') { // successful runs of the above return empty strings
+            // Redirect to the newly created taxon's page
+            $tid = $postData['tidaccepted'] ?? null;
+
+            return redirect()->route('taxon.view', ['tid' => $tid])->with('success', 'Taxon updated successfully!');
+        } else {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+        }
+    }
+
+    public static function delete() {
+        $tid = (int) request()->all()['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+        $delStatus = $editorManager->deleteTaxon();
+        if ($editorManager->getWarningArr()) {
+            $statusStr = implode('; ', $editorManager->getWarningArr());
+        }
+        if ($delStatus) {
+            $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
+
+            return redirect()->route('taxon.createview')->with('success', $statusStr);
+        } else {
+            $statusStr = $editorManager->getErrorMessage();
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+        }
+    }
+
+    public static function remap() {
+        $requestData = request()->all();
+
+        $tid = (int) request()->all()['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+
+        $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
+        $statusStr = $requestData['taxa'] ?? '';
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($remapStatus) {
+            $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
+            TaxonomyController::delete();
+
+            return redirect()->route('taxon.view', ['tid' => $requestData['remaptid']])->with('success', $statusStr);
+        } else {
+            $statusStr = $editorManager->getErrorMessage();
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }
 }
