@@ -42,4 +42,5 @@ return [
     'ERROR_NO_ID' => 'ERREUR : identifiant de collection non défini',
     'CLEAR' => 'Effacer le formulaire',
     'AUTHORSHIP' => 'Paternité',
+    'PROTECT_LOCALITY_DETAILS_FROM_PUBLIC' => 'Proteger detalles de localidad del público en general',
 ];

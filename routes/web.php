@@ -160,6 +160,8 @@ Route::group(['prefix' => '/collections'], function () {
     Route::get('/list', [CollectionController::class, 'listPage']);
     Route::get('/{collid}/import', [CollectionController::class, 'importPage']);
     Route::patch('/{collid}/stats', [CollectionController::class, 'updateStats']);
+    Route::get('/{collid}/skeletal', [CollectionController::class, 'skeletalView'])->can('COLL_EDIT', 'collid');
+    Route::post('/{collid}/skeletal', [CollectionController::class, 'skeletalAdd'])->can('COLL_EDIT', 'collid');
     Route::get('/{collid}', [CollectionController::class, 'collection']);
 });
 

@@ -46,4 +46,5 @@ return [
     'ERROR_NO_ID' => 'ERROR: collection identifier not set',
     'CLEAR' => 'Clear Form',
     'AUTHORSHIP' => 'Authorship',
+    'PROTECT_LOCALITY_DETAILS_FROM_PUBLIC' => 'Protect locality details from general public',
 ];

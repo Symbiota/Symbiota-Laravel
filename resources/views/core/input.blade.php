@@ -1,10 +1,13 @@
-@props(['id'=> uniqid(), 'name', 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false])
+@props(['id'=> uniqid(), 'name', 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
+
 <!-- resources/views/core/input.blade.php -->
 <div @class([
         'group text-base-content',
         'flex flex-wrap items-center gap-1' => $inline,
         'w-full' => !$inline
-    ])>
+    ])
+    @isset(${'x-show'})x-show="{{ ${'x-show'} }}"@endisset
+>
     @if($label)
     <label @class(['text-base-content text-base font-bold', 'mb-1' => !$inline, 'flex items-center' => $inline])>
         {{ $label }}
