@@ -303,6 +303,7 @@ class TaxonomyController extends Controller {
             'rankMap' => $rankMap,
         ]);
     }
+
     public static function update() {
         $postData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
