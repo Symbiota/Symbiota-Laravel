@@ -219,7 +219,7 @@ $TABS = [
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="admin" :items="$TABS">
+    <x-horizontal-nav.container default_active_tab="description" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -337,183 +337,28 @@ $TABS = [
                 {{ $LANG['EDITCHECKDET'] }}
             </div>
             <hr class="mb-2" />
-            <form class="flex flex-col gap-4">
-                <x-input :label="$LANG['CHECKNAME']" id="checklist_name" value="{{ $checklist->name }}"/>
-                <x-input :label="$LANG['AUTHORS']" id="checklist_authors" value="{{ $checklist->authors }}" />
-                <x-select class="w-full" id="type" :label="$LANG['CHECKTYPE']" :items="[
-                    ['value' => 'static', 'title' => $LANG['GENCHECK'], 'disabled' => false],
-                    ['value' => 'excludespp', 'title' => $LANG['EXCLUDESPP'], 'disabled' => !$userChecklists],
-                    ['value' => 'rarespp', 'title' => $LANG['RARETHREAT'], 'disabled' => !Gate::check('RARE_SPP_ADMIN')]
-                ]"/>
-                {{-- TODO (Logan) There is a an optional for excluding parent. Generally confusing not sure how to proceed--}}
-                <x-select class="w-full" :label="$LANG['EXTSERVICE']" id="externalservice" :items="[
-                    ['value' => 0, 'title' => 'None', 'disabled' => false],
-                    ['value' => 'iNaturalist', 'title' => 'iNaturalist', 'disabled' => false]
-                ]"/>
-
-                {{-- TODO (Logan) toggle this only when iNaturalist is selected --}}
-                <x-input :label="$LANG['EXTSERVICEID']" id="externalserviceid" />
-                <x-input :label="$LANG['EXTSERVICETAXON']" id="externalserviceiconictaxon" />
-
-                <x-input :label="$LANG['LOC']" id="checklist_locality" value="{{ $checklist->locality }}" />
-                <x-input :label="$LANG['CITATION']" id="checklist_citation" value="{{ $checklist->publication }}" />
-                <x-rich-editor :label="$LANG['LOC']" id="Abstract">
-                    {!! Purify::clean($checklist->abstract) !!}
-                </x-rich-editor>
-
-                <x-input :label="$LANG['NOTES']" id="checklist_notes" value="{{ $checklist->notes }}"/>
-
-				{{-- uses $refClArr = $clManager->getReferenceChecklists(); $id $name--}}
-                <x-select class="w-full" :label="$LANG['REFERENCE_CHECK']" :items="[
-                    ['value' => null, 'title' => 'None selected', 'disabled' => false]
-                ]"/>
-
-                {{-- TODO (Logan) point radius tool --}}
-                <x-input :label="$LANG['LATCENT']" id="checklist_latitude" value="{{ $checklist->latCentroid }}"/>
-                <x-input :label="$LANG['LONGCENT']" id="checklist_longitude" value="{{ $checklist->longCentroid }}"/>
-                <x-input :label="$LANG['POINTRAD']" id="checklist_point_radius" value="{{ $checklist->pointRadiusMeters }}" />
-
-                <div>
-                    <x-input area :label="$LANG['POLYFOOT']" id="footprintwkt" value="{{ $checklist->footprintGeoJson }}" />
-                    <x-button class="mt-2" @click="openWindow('{{ url('tools/map/coordaid') }}?strict=1&mode=polygon')">
-                        {{-- TODO (Logan) translation --}}
-                        Polygon Tool
-                    </x-button>
-                </div>
-
-                <div class="flex flex-col gap-2">
-                    <x-checkbox id="dsynonyms" :label="$LANG['DISPLAY_SYNONYMS']" :checked="$settings->dsynonyms ?? false"/>
-                    <x-checkbox id="dcommon" :label="$LANG['COMMON']" :checked="$settings->dcommon ?? false"/>
-                    <x-checkbox id="dimages" :label="$LANG['DISPLAYIMAGES']" :checked="$settings->dimages ?? false" />
-                    <x-checkbox id="dvoucherimages" :label="$LANG['DISPLAYVOUCHERIMAGES']" :checked="$settings->dvoucherimages ?? false"/>
-                    <x-checkbox id="ddetails" :label="$LANG['SHOWDETAILS']" :checked="$settings->ddetails ?? false"/>
-
-                    {{-- Display images needs these two to be false --}}
-                    <x-checkbox id="dvouchers" :label="$LANG['NOTESVOUC']" :checked="$settings->dvouchers ?? false"/>
-                    <x-checkbox id="dauthors" :label="$LANG['TAXONAUTHOR']" :checked="$settings->dauthors ?? false"/>
-
-                    <x-checkbox id="dalpha" :label="$LANG['TAXONABC']" :checked="$settings->dalpha ?? false"/>
-                    <x-checkbox id="dsubgenera" :label="$LANG['SHOWSUBGENERA']" :checked="$settings->dsubgenera ?? false" />
-                    <x-checkbox id="activatekey" :label="$LANG['ACTIVATEKEY']" :checked="$settings->activatekey ?? false" />
-                </div>
-
-                <x-input :label="$LANG['DEFAULT_SORT']" id="sortsequence" type="number" value="{{ $checklist->sortSequence }}"/>
-
-                <x-select id="access" class="w-64" :label="$LANG['ACCESS']" defaultValue="{{$checklist->access}}" :items="[
-                            [ 'title' => 'Private', 'value' => 'private', 'disabled' => false],
-                            [ 'title' => 'Can view with link', 'value' => 'view_with_link', 'disabled' => false],
-                            [ 'title' => 'Public', 'value' => 'public', 'disabled' => false],
-                        ]" />
-
-                <x-button type="submit">Save Edits</x-button>
-            </form>
+            <x-checklist.form :checklist="$checklist" :userChecklists="$userChecklists" />
         </x-horizontal-nav.tab>
         {{-- DESCRIPTION END --}}
 
         {{-- RELATED CHECKLISTS START--}}
         <x-horizontal-nav.tab name="related-checklists" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <div class="flex">
-                    <span class="font-bold text-2xl">
-                       {{ $LANG['CHILD_CHECKLIST'] }}
-                    </span>
+            <x-checklist.children
+                :clid="$clid"
+                :childChecklistsItems="$childChecklistsItems"
+                :childChecklists="$childChecklists"
+                :clManager="$clManager"
+            />
 
-                    <span class="flex flex-grow justify-end">
-                        <x-modal>
-                            <x-slot name="button">
-                                {{ $LANG['ADD_CHILD'] }}
-                            </x-slot>
-                            <x-slot name="title" class="text-2xl">
-                                {{ $LANG['ADD_CHILD'] }}
-                            </x-slot>
-                            <x-slot name="body">
-                                <form method="post" class="flex flex-col gap-4">
-                                    <x-select id="clidadd" class="w-full" label="Checklist" :items="$childChecklistsItems" />
-								    <input type="hidden" name="submitaction" value="addChildChecklist" aria-label="{{ $LANG['ADD_CHILD'] }}" />
+            <x-checklist.parents :clManager="$clManager" />
 
-                                    <div class="flex align-items gap-2">
-                                        <x-button type="submit">Add</x-button>
-                                        <x-button variant="error" type="button">Cancel</x-button>
-                                    </div>
-                                </form>
-                            </x-slot>
-                        </x-modal>
-                    </span>
-                </div>
-                <hr/>
-                <p>{{ $LANG['CHILD_DESCRIBE'] }}</p>
-                @if($childChecklists)
-                    @foreach ($childChecklists as $child_clid => $child)
-                    <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
-                        <span class="flex-grow">
-                            <x-link target="_blank" href="{{ url('checklists/' . $child_clid) }}">
-                                {{ $child['name']}}
-                            </x-link>
-                        </span>
-                        <form method="post">
-                            @csrf
-                            <input name="cliddel" type="hidden" value="{{ $child_clid }}" />
-                            <input name="submitaction" type="hidden" value="delchild" />
-                            <button type="submit">
-                                <x-icons.delete class="cursor-pointer" />
-                            <button>
-                        </form>
-                    </div>
-                    @endforeach
-                @else
-                <p>{{ $LANG['NO_CHILDREN'] }}</p>
-                @endif
-
-                <x-link href="{{ legacy_url('/profile/viewprofile.php?excludeparent=' . $clid) }}">
-                    {{ $LANG['CREATE_EXCLUSION_LIST'] }}
-                </x-link>
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <div class="font-bold text-2xl">
-                    {{ $LANG['PARENTS'] }}
-                </div>
-                <hr/>
-                @if($parents = $clManager->getParentChecklists())
-                <div class="pl-4">
-                    @foreach($parents as $parent_clid => $name)
-                    <li>
-                        <x-link target="_blank" href="{{ url('checklists/' . $parent_clid) }}">
-                            {{ $name }}
-                        </x-link>
-                    </li>
-                    @endforeach
-                </div>
-                @else
-                    <p>{{ $LANG['NO_PARENTS'] }}</p>
-                @endif
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <div class="font-bold text-2xl">
-                   {{ $LANG['BATCH_PARSE_SP_LIST'] }}
-                </div>
-                <hr/>
-                <p>{{ $LANG['BATCH_PARSE_DESCRIBE'] }}</p>
-                <form class="flex flex-col gap-4">
-                    <div class="flex gap-4">
-                        {{-- TODO (Logan) replace with taxon search? --}}
-                        <x-input required id="taxon" :label="$LANG['TAXONOMICNODE']"/>
-                        <x-input required id="parsetid" :label="$LANG['PARSETID']"/>
-                    </div>
-                    <x-select id="targetclid" class="w-full" label="Target Checklist" :items="$userChecklists" />
-                    <x-select id="parentclid" class="w-full" label="Parent Checklist" :items="$userChecklists" />
-                    <x-select id="targetpid"  class="w-full" label="Add to project" :items="$userProjects" />
-                    <x-radio id="transmethod" :defaultValue="$transferMethod" name="transmethod" label="Transfer method" :options="[
-                        ['label' => $LANG['TRANSFERTAXA'], 'value' => 0],
-                        ['label' => $LANG['COPYTAXA'], 'value' => 1],
-                    ]" />
-                    <x-checkbox id="parentclid" :label="$LANG['COPYPERMISSIONANDGENERAL']" :checked="$copyAttributes"/>
-                    <input name="submitaction" type="hidden" value="parseChecklist" />
-                    <x-button>{{ $LANG['PARSE_CHECKLIST'] }}</x-button>
-                    <x-link target="_blank" href="{{ legacy_url('/taxa/taxonomy/taxonomydisplay.php') }}">{{ $LANG['OPEN_TAX_THES_EXPLORE'] }}</x-link>
-                </form>
-            </div>
+            <x-checklist.batch-parse-species
+                :childChecklistsItems="$clManager"
+                :transferMethod="$transferMethod"
+                :copyAttributes="$copyAttributes"
+                :userChecklists="$userChecklists"
+                :userProjects="$userProjects"
+            />
         </x-horizontal-nav.tab>
         {{-- RELATED CHECKLISTS END --}}
 
