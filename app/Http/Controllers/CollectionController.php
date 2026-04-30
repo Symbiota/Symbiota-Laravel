@@ -112,6 +112,7 @@ class CollectionController extends Controller {
             $collManager->updateStatistics(true);
         }, 200, ['X-Accel-Buffering' => 'no']);
     }
+
     public static function skeletalView(int $collId) {
         return view('pages/collections/skeletal-submit', [
             'collection' => Collection::query()->where('collid', $collId)->first(),
