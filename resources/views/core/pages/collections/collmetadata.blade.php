@@ -16,7 +16,7 @@
     $tabIndex = $tabIndex ?? 0;
     $isNewCollection = ! $collid;
     $displayValue = static fn ($value) => is_string($value)
-        ? html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8')
+        ? Purify::clean($value)
         : $value;
 
     $collectionName = old('collectionName', $displayValue($collection['collectionname'] ?? ''));
