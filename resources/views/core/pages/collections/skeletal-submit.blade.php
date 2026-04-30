@@ -126,7 +126,7 @@
         <x-input name="scientificnameauthorship" :label="__('editor_skeletalsubmit.AUTHORSHIP')" x-show="show_authorship"/>
         @can('TAXONOMY')
         <x-button :href="url('taxon/create')">
-            {{ __('lang_sitemap.ADDTAXANAME')}}
+            {{ __('sitemap.ADDTAXANAME')}}
         </x-button>
         @endcan
         <x-input name="family" :label="__('taxa.FAMILY')" x-show="show_family"/>
@@ -183,7 +183,7 @@
 
         <div class="flex gap-2">
             <x-button>
-                {{ __('editor_skeletalsubmit.ADD_RECORD')}}
+                {{ __('profile_occurrencemenu.ADD_RECORD')}}
             </x-button>
 
             <x-button type="button" variant="neutral" @click="form.reset()">
