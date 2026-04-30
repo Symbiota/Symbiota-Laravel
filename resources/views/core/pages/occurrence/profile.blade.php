@@ -17,6 +17,8 @@
 ])
 
 @php
+$isEditor = Gate::check('COLL_EDIT', $occurrence->collid);
+
 function getLocalityStr($occur) {
     $localityArr = [];
 
@@ -123,7 +125,7 @@ function format_latlong_err($occurrence) {
             __('individual.LINKED_RESOURCES')
         ];
 
-        if($edit_history) {
+        if($isEditor) {
             $tabs[] = __('individual.EDIT_HISTORY');
         }
     @endphp
@@ -427,9 +429,9 @@ function format_latlong_err($occurrence) {
             <div>
                 {{ __('individual.SEE_ERROR') }}
 
-                @can('COLL_EDIT', $occurrence->collid)
+                @if($isEditor)
                 <x-link :href="url('occurrence/' . $occurrence->occid. '/edit')">{{ __('individual.OCCURRENCE_EDITOR')}}</x-link>
-                @endcan
+                @endif
             </div>
         </div>
 
@@ -491,7 +493,7 @@ function format_latlong_err($occurrence) {
         </div>
 
         {{-- Edit History --}}
-        @if($edit_history && count($edit_history))
+        @if($isEditor)
             <x-occurrence.edit-history
                 :occurrence="$occurrence"
                 :edit_history="$edit_history"
