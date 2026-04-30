@@ -3,6 +3,7 @@
 return [
     'COLL_PROFILE' => 'Collection Profile',
     'MAILING_ADD' => 'Mailing Address',
+    'CAT_NUM' => 'Catalog Number',
     'NEED_INST_CODE' => 'Institution Code must have a value',
     'NEED_COLL_VALUE' => 'Collection Name must have a value',
     'CANNOT_GUID' => 'The Symbiota Generated GUID option cannot be selected for a collection that is managed locally outside of the data portal (e.g. Snapshot management type). In this case, the GUID must be generated within the source collection database and delivered to the data portal as part of the upload process.',

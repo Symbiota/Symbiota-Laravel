@@ -3,6 +3,7 @@
 return [
     'COLL_PROFILE' => 'Perfil de Colección',
     'MAILING_ADD' => 'Dirección Postal',
+    'CAT_NUM' => 'Número de Catálogo',
     'NEED_INST_CODE' => 'El Código de Institución debe tener un valor',
     'NEED_COLL_VALUE' => 'Nombre de Colección debe tener un valor',
     'CANNOT_GUID' => 'El GUID Generado por Symbiota no puede ser seleccionado para una colección que es manejada localmente fuera de este portal (e.g. manejo tipo Snapshot). En este caso, el GUID debe ser generado en la base de datos de origen e ingresado en el portal como parte del proceso de importación de datos.',

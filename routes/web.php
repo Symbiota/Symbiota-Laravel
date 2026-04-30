@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollMetadataController;
 use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ExsiccataController;
@@ -150,6 +151,20 @@ Route::group(['prefix' => '/collections'], function () {
 
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
+    Route::get('/collmetadata', [CollMetadataController::class, 'create'])
+        ->name('collections.collmetadata.create')
+        ->can('SUPER_ADMIN');
+    Route::post('/collmetadata', [CollMetadataController::class, 'store'])
+        ->name('collections.collmetadata.store')
+        ->can('SUPER_ADMIN');
+    Route::get('/collmetadata/{collid}', [CollMetadataController::class, 'edit'])
+        ->name('collections.collmetadata.edit')
+        ->whereNumber('collid')
+        ->can('COLL_ADMIN', 'collid');
+    Route::post('/collmetadata/{collid}', [CollMetadataController::class, 'update'])
+        ->name('collections.collmetadata.update')
+        ->whereNumber('collid')
+        ->can('COLL_ADMIN', 'collid');
     Route::get('/{collid}/import', [CollectionController::class, 'importPage']);
     Route::patch('/{collid}/stats', [CollectionController::class, 'updateStats']);
     Route::get('/{collid}', [CollectionController::class, 'collection']);

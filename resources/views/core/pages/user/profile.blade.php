@@ -148,7 +148,7 @@ $datasets = $user->datasets();
                 <div class="text-2xl font-bold">Collections</div>
                 <div class="flex flex-grow justify-end">
                     @can('SUPER_ADMIN')
-                    <x-button href="{{ legacy_url('/collections/misc/collmetadata.php') }}">
+                    <x-button href="{{ route('collections.collmetadata.create') }}">
                         Create Collection
                     </x-button>
                     @endcan

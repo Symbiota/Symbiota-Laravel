@@ -38,7 +38,7 @@ $SERVER_HOST = getenv('APP_URL');
 $CLIENT_ROOT = getenv('PORTAL_USE_CLIENT_ROOT') === 'true' ? '/' . getenv('PORTAL_NAME') : '';
 
 // Full path to Symbiota project root folder
-$SERVER_ROOT = '/var/www/html/' . getenv('PORTAL_NAME');
+$SERVER_ROOT = '~/Sites/Symbiota-Laravel/' . getenv('PORTAL_NAME');
 
 // Must be writable by Apache; will use system default if not specified
 $TEMP_DIR_ROOT = $SERVER_ROOT . '/temp';
