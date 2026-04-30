@@ -22,9 +22,9 @@ return [
     'OPTIONS' => 'Options',
     'DISPLAY_SYNONYMS' => 'Display Synonyms',
     'SYNON' => 'Synonyms',
-    'FILTER' => 'Taxonomic Filter',
+    'TAXONOMIC_FILTER' => 'Taxonomic Filter',
     'OGCHECK' => 'Original Checklist',
-    'NOTESVOUC' => 'Notes &amp; Vouchers',
+    'NOTESVOUC' => 'Notes & Vouchers',
     'TAXONAUTHOR' => 'Taxon Authors',
     'TAXONABC' => 'Show Taxa Alphabetically',
     'SHOWSUBGENERA' => 'Show subgeneric ranking within scientific name',
@@ -88,4 +88,5 @@ return [
     'SELECT_TAXON' => 'Please select a taxon from the list',
     'NAME_BLANK' => 'Scientific name field is blank',
     'ERROR_GEN_CHECK' => 'ERROR generating checklist',
+    'SOURCE' => 'Source',
 ];

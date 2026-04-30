@@ -9,6 +9,63 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
 class ChecklistController extends Controller {
+    private static function parseChecklistRequest($checklist): array {
+        //Set Display Settings
+        $defaultSettings = json_decode($checklist->defaultSettings ?? '{}');
+
+        return [
+            'show_synonyms' => request('show_common') ?? $defaultSettings->dsynonyms ?? false,
+            'show_common' => request('show_common') ?? $defaultSettings->dcommon ?? false,
+            'show_notes_vouchers' => request('show_notes_vouchers') ?? $defaultSettings->dvouchers ?? false,
+            'show_taxa_authors' => request('show_taxa_authors') ?? $defaultSettings->dauthors ?? false,
+            'show_images' => request('show_images') ?? $defaultSettings->dimages ?? false,
+            'show_taxa_alphabetically' => request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false,
+            'limit_voucher_images' => request('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false,
+            'show_subgenera' => request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false,
+            'activate_key' => $defaultSettings->activateKey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false,
+        ];
+    }
+
+    private static function getClManager($checklist) {
+        global $SERVER_ROOT;
+        include_once legacy_path('/classes/ChecklistManager.php');
+
+        $clManager = new \ChecklistManager();
+        $clManager->setClid($checklist->clid);
+
+        return $clManager;
+    }
+
+    private static function getProfilePageData($checklist) {
+        $clManager = self::getClManager($checklist);
+        $page_data = self::parseChecklistRequest($checklist);
+
+        $clManager->setShowCommon($page_data['show_common']);
+        $clManager->setShowSynonyms($page_data['show_synonyms']);
+        $clManager->setShowVouchers($page_data['show_notes_vouchers']);
+        $clManager->setShowAuthors($page_data['show_taxa_authors']);
+        $clManager->setShowImages($page_data['show_images']);
+        $clManager->setShowAlphaTaxa($page_data['show_taxa_alphabetically']);
+        $clManager->setLimitImagesToVouchers($page_data['limit_voucher_images']);
+        $clManager->setShowSubgenera($page_data['show_subgenera']);
+
+        $page_data['checklist'] = $checklist;
+        $page_data['clManager'] = $clManager;
+
+        $page_data['taxaList'] = $clManager->getTaxaList(1, 0);
+        // Old call Rework after logic changes start
+        // $taxons = self::getChecklistTaxa($checklist);
+        $page_data['voucherArr'] = $clManager->getVoucherArr();
+        // Old call Rework after logic changes start
+        // $vouchers = self::getVouchers($checklist, $taxons);
+
+        $page_data['parent'] = $clManager->getParentChecklist();
+        $page_data['children'] = $clManager->getChildClidArr();
+        $page_data['exclusions'] = $clManager->getExclusionChecklist();
+
+        return $page_data;
+    }
+
     public static function getChecklistData(int $clid) {
 
         $user = request()->user();
@@ -18,7 +75,7 @@ class ChecklistController extends Controller {
             ->leftJoin('fmprojects as p', 'p.pid', 'cpl.pid')
             ->where('c.clid', $clid)
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
-            ->select('c.*', 'p.*');
+            ->select('c.*', 'c.notes', 'p.projname', 'p.pid');
 
         if (! $user || ! $user->canViewChecklist($clid)) {
             $checklists_query
@@ -30,25 +87,19 @@ class ChecklistController extends Controller {
         return $checklists_query->first();
     }
 
-    public static function checklist(int $clid) {
-        $checklist = self::getChecklistData($clid);
-
-        if (empty($checklist)) {
-            return view('pages/checklist/not-found');
-        }
-
+    public static function getChecklistTaxa($checklist) {
         $taxon_query = DB::table('taxa as t')
             ->join('taxstatus as ts', 'ts.tid', 't.tid');
 
         // Selects taxa associated to a given checklist
-        $sub_query = DB::table('fmchklsttaxalink')->where('clid', $clid)->select('tid');
+        $sub_query = DB::table('fmchklsttaxalink')->where('clid', $checklist->clid)->select('tid');
 
         // Optionally grabs
         if ($checklist->type != 'rarespp') {
             $parent_query = DB::table('fmchklsttaxalink as ctl')
                 ->join('taxstatus as ts', 'ts.tid', 'ctl.tid')
                 ->join('taxa as t', 't.tid', 'ts.tid')
-                ->where('clid', $clid)
+                ->where('clid', $checklist->clid)
                 ->whereNotNull('ts.parenttid')
                 ->where('t.rankId', '>', 220)->select('ts.parenttid as tid');
 
@@ -81,28 +132,48 @@ class ChecklistController extends Controller {
             ->distinct()
             ->get();
 
-        $vouchers = DB::table('fmvouchers as fm')
+        return $taxons;
+    }
+
+    public static function getVouchers($checklist, $taxons) {
+        return DB::table('fmvouchers as fm')
             ->select('fmt.tid', 'fm.occid', 'fm.tid', 'fm.notes', 'fm.editornotes', 'o.recordedBy', 'o.recordNumber', 'c.institutionCode')
             ->join('fmchklsttaxalink as fmt', 'fmt.clTaxaID', 'fm.clTaxaID')
             ->join('omoccurrences as o', 'o.occid', 'fm.occid')
             ->join('omcollections as c', 'o.collid', 'c.collid')
-            ->where('fm.clid', $clid)
+            ->where('fm.clid', $checklist->clid)
             ->orderBy('c.collid')
             ->whereIn('fmt.tid', $taxons->map(fn ($t) => $t->tid))
             ->distinct()
             ->get();
+    }
 
-        $page_data = [
-            'checklist' => $checklist,
-            'vouchers' => $vouchers,
-            'taxons' => $taxons,
-        ];
+    public static function checklist(int $clid) {
+        $checklist = self::getChecklistData($clid);
+
+        if (empty($checklist)) {
+            return view('pages/checklist/not-found');
+        }
+
+        $page_data = self::getProfilePageData($checklist);
 
         if (request()->query('partial') === 'taxa-list') {
             return view('pages/checklist/profile', $page_data)->fragment('taxa-list');
         }
 
         return view('pages/checklist/profile', $page_data);
+    }
+
+    public static function browserPrint(int $clid) {
+        $checklist = self::getChecklistData($clid);
+
+        if (empty($checklist)) {
+            return view('pages/checklist/not-found');
+        }
+
+        $page_data = self::getProfilePageData($checklist);
+
+        return view('pages/checklist/printProfile', $page_data);
     }
 
     public static function getChecklistsData(Request $request) {

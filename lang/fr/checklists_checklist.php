@@ -22,9 +22,9 @@ return [
     'OPTIONS' => 'Options',
     'DISPLAY_SYNONYMS' => 'Afficher Synonymes',
     'SYNON' => 'Synonymes',
-    'FILTER' => 'Filtre Taxonomique',
+    'TAXONOMIC_FILTER' => 'Filtre Taxonomique',
     'OGCHECK' => 'Liste Originale',
-    'NOTESVOUC' => 'Notes &amp; Échantillons',
+    'NOTESVOUC' => 'Notes & Échantillons',
     'TAXONAUTHOR' => 'Auteurs de Taxon',
     'TAXONABC' => 'Afficher Taxons par ordre Alphabétique',
     'SHOWSUBGENERA' => 'Afficher le classement sous-générique dans le nom scientifique',
@@ -88,4 +88,5 @@ return [
     'SELECT_TAXON' => 'Veuillez sélectionner un taxon dans la liste',
     'NAME_BLANK' => 'Le champ du nom scientifique est vide',
     'ERROR_GEN_CHECK' => 'ERREUR lors de la génération de la liste',
+    'SOURCE' => 'Source',
 ];

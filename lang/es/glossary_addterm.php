@@ -15,7 +15,6 @@ return [
     'ADD_LANG' => 'Añada un Idioma',
     'AUTHOR' => 'Autor',
     'TRANSLATOR' => 'Traductor',
-    'SOURCE' => 'Fuente',
     'RES_URL' => 'URL de Recurso',
     'PLEASE_TAXON_2' => 'Por favor introduzca el grupo taxonómico (arriba de familia) al cual este término aplica <b>O</b> vincule el nuevo término a un término relacionado existente',
     'TAX_GROUP' => 'Grupo Taxonómico',

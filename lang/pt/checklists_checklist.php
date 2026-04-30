@@ -23,7 +23,7 @@ return [
     'DISPLAY_SYNONYMS' => 'Exibir Sinônimos',
     'COMMON' => 'Nomes Comuns',
     'SYNON' => 'Sinônimos',
-    'FILTER' => 'Filtro Taxonômico',
+    'TAXONOMIC_FILTER' => 'Filtro Taxonômico',
     'OGCHECK' => 'Inventário Taxonômico Original',
     'NOTESVOUC' => 'Notas e Vouchers',
     'TAXONAUTHOR' => 'Autores do Táxon',
