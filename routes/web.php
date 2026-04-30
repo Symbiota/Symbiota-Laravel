@@ -8,6 +8,7 @@ use App\Http\Controllers\ExsiccataController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OccurrenceCommentController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
@@ -117,13 +118,15 @@ Route::group(['prefix' => '/projects'], function () {
 */
 Route::group(['prefix' => '/occurrence'], function () {
     Route::get('/{occid}', [OccurrenceController::class, 'profilePage']);
-    Route::post('/{occid}/comment', [OccurrenceController::class, 'postComment']);
+    Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
+    /* Linked Resources */
     Route::put('/{occid}/link/checklist', [OccurrenceController::class, 'linkChecklist']);
     Route::put('/{occid}/link/dataset', [OccurrenceController::class, 'linkDataset']);
-    Route::delete('/{occid}/comment/{comid}', [OccurrenceController::class, 'deleteComment']);
-    Route::patch('/{occid}/comment/{comid}/report', [OccurrenceController::class, 'reportComment']);
-    Route::patch('/{occid}/comment/{comid}/public', [OccurrenceController::class, 'publicComment']);
-    Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
+    /* Comments */
+    Route::post('/{occid}/comment', [OccurrenceCommentController::class, 'post']);
+    Route::delete('/{occid}/comment/{comid}', [OccurrenceCommentController::class, 'delete']);
+    Route::patch('/{occid}/comment/{comid}/report', [OccurrenceCommentController::class, 'report']);
+    Route::patch('/{occid}/comment/{comid}/public', [OccurrenceCommentController::class, 'public']);
 });
 
 /*

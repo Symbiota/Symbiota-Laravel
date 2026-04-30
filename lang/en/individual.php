@@ -133,4 +133,7 @@ return [
     'PERMISSION_ERROR' => 'ERROR deleting voucher: permission error',
     'CULT_STATUS' => 'Cultivation Status',
     'CULTIVATED' => 'Cultivated',
+    'EVENT_ID' => 'Event ID',
+    'DETAILS_PROTECTED' => 'Details protected',
+    'DETAILS' => 'Details',
 ];
