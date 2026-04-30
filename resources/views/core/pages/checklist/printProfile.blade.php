@@ -21,25 +21,30 @@
 
 <x-margin-layout :hasHeader="false" :hasFooter="false" :hasNavbar="false">
     <h1 class="text-4xl font-bold">{{ $checklist->name }}</h1>
-    <hr/>
+    <hr />
 
     <div class="flex flex-col">
-        <x-checklist.metadata :checklist="$checklist" :parent="$parent" :children="$children" :exclusions="$exclusions"/>
+        <x-checklist.metadata
+            :checklist="$checklist"
+            :parent="$parent"
+            :children="$children"
+            :exclusions="$exclusions"
+        />
     </div>
 
-    <hr/>
+    <hr />
 
-    <div class="flex items-center gap-2 w-full">
-    @foreach([
+    <div class="flex w-full items-center gap-2">
+        @foreach([
         __('checklists_checklist.FAMILIES') => $clManager->getFamilyCount(),
         __('checklists_checklist.GENERA') => $clManager->getGenusCount(),
         __('checklists_checklist.SPECIES') => $clManager->getSpeciesCount(),
         __('checklists_checklist.TOTAL_TAXA') => $clManager->getTaxaCount(),
     ] as $label => $value)
-        <div><span class="font-bold">{{ $label }}: </span>{{ $value }}</div>
-    @endforeach
+            <div><span class="font-bold">{{ $label }}: </span>{{ $value }}</div>
+        @endforeach
     </div>
-    <hr/>
+    <hr />
     <x-checklist.taxa-list
         :taxa="$taxaList"
         :taxa_vouchers="$voucherArr"

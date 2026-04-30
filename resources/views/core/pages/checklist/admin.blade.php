@@ -212,12 +212,14 @@ $TABS = [
 
 @endphp
 <x-layout class="p-0">
-    <div class="max-w-screen-lg px-10 pt-4 mx-auto">
-        <x-breadcrumbs :items="[
+    <div class="mx-auto max-w-screen-lg px-10 pt-4">
+        <x-breadcrumbs
+            :items="[
             ['title' => 'Home', 'href' => url('') ],
             ['title' => 'Return to Checklist', 'href' => url('checklists/' . $clid) ],
             ['title' => 'Checklist Administration' ]
-        ]"/>
+        ]"
+        />
     </div>
     <x-horizontal-nav.container default_active_tab="admin" :items="$TABS">
         {{-- ADMIN START--}}
@@ -232,9 +234,7 @@ $TABS = [
 
         {{-- DESCRIPTION START--}}
         <x-horizontal-nav.tab name="description">
-            <div class="font-bold text-2xl mb-2">
-                {{ __('checklists_checklistadmin.EDITCHECKDET') }}
-            </div>
+            <div class="mb-2 text-2xl font-bold">{{ __('checklists_checklistadmin.EDITCHECKDET') }}</div>
             <hr class="mb-2" />
             <x-checklist.form :checklist="$checklist" :userChecklists="$userChecklists" />
         </x-horizontal-nav.tab>
@@ -269,7 +269,11 @@ $TABS = [
 
         {{-- (TODO Logan possiblity rework feature?) NON-VOUCHERED TAXA START--}}
         <x-horizontal-nav.tab name="non-vouchered-taxa">
-            <x-checklist.non-vouchered-taxa :clVoucherReport="$clVoucherReport" :nonVoucheredTaxa="$nonVoucheredTaxa" :clid="$clid"/>
+            <x-checklist.non-vouchered-taxa
+                :clVoucherReport="$clVoucherReport"
+                :nonVoucheredTaxa="$nonVoucheredTaxa"
+                :clid="$clid"
+            />
         </x-horizontal-nav.tab>
         {{-- NON-VOUCHERED TAXA END --}}
 
@@ -286,7 +290,7 @@ $TABS = [
 
         {{-- REPORTS START--}}
         <x-horizontal-nav.tab name="external-vouchers" class="flex flex-col gap-4">
-        todo external vouchers
+            todo external vouchers
         </x-horizontal-nav.tab>
 
         {{-- REPORTS START--}}

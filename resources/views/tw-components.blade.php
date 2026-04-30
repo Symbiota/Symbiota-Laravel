@@ -1,17 +1,15 @@
 <x-layout>
-    <div class="flex flex-col w-[90%] max-w-screen-lg gap-y-4 mx-auto">
-        <h1 class="text-4xl my-3 font-bold font-sans text-primary">
-            Tailwind Components
-        </h1>
-        <h1 class="text-4xl font-bold font-sans">H1</h1>
-        <h2 class="text-3xl font-bold font-sans">H2</h2>
-        <h3 class="text-2xl font-bold font-sans">H3</h3>
-        <h4 class="text-lg font-bold font-sans">Subheading</h4>
+    <div class="mx-auto flex w-[90%] max-w-screen-lg flex-col gap-y-4">
+        <h1 class="text-primary my-3 font-sans text-4xl font-bold">Tailwind Components</h1>
+        <h1 class="font-sans text-4xl font-bold">H1</h1>
+        <h2 class="font-sans text-3xl font-bold">H2</h2>
+        <h3 class="font-sans text-2xl font-bold">H3</h3>
+        <h4 class="font-sans text-lg font-bold">Subheading</h4>
         <p class="font-sans">Paragraph</p>
-        <span class="text-sm font-sans">Small Text</span>
+        <span class="font-sans text-sm">Small Text</span>
 
-        <div class="flex gap-x-4 items-center">
-            <div class="bg-primary rounded-md w-32">
+        <div class="flex items-center gap-x-4">
+            <div class="bg-primary w-32 rounded-md">
                 <x-brand />
             </div>
             <x-swatch />
@@ -25,30 +23,34 @@
 
         {{-- Note you need to be in alpine context to use @click otherwise just use onclick --}}
         <div class="flex gap-4">
-            <x-button onclick="toast('Success Title', { description: 'Plain description' })">
-                Toast Plain
-            </x-button>
-            <x-button onclick="toast('Success Title', {type: 'success', description: 'Success description'})">
+            <x-button onclick="toast('Success Title', { description: 'Plain description' })"> Toast Plain </x-button>
+            <x-button onclick="toast('Success Title', { type: 'success', description: 'Success description' })">
                 Toast Success
             </x-button>
-            <x-button onclick="toast('Error Title', {type: 'danger', description: 'Error description'})">
+            <x-button onclick="toast('Error Title', { type: 'danger', description: 'Error description' })">
                 Toast Error
             </x-button>
-            <x-button onclick="toast('Error Title', {type: 'info', description: 'Info description'})">
+            <x-button onclick="toast('Error Title', { type: 'info', description: 'Info description' })">
                 Toast Info
             </x-button>
 
             {{-- Example of working alpine context @click with toast --}}
-            <x-button x-init="" @click="toast('Warning Title', {type: 'warning', description:  'Warning description'})">
+            <x-button
+                x-init=""
+                @click="toast('Warning Title', { type: 'warning', description: 'Warning description' })"
+            >
                 Toast Warning
             </x-button>
         </div>
 
         <x-input required :id="'input'" :label="'Text Input'" />
         <x-input required type="number" :id="'input'" :label="'Number Input'" />
-        <x-radio :default_value="2"
+        <x-radio
+            :default_value="2"
             :options="[ ['label' => 'Option 1', 'value' => '2'], ['label' => 'Option 2', 'value' => 1]]"
-            label="Symb Radio" name="radio_options" />
+            label="Symb Radio"
+            name="radio_options"
+        />
         <x-checkbox :id="'checkbox'" :label="'Checkbox'" />
         <x-nested-checkbox-group :id="'nested-checkbox'" :label="'All Options'">
             <x-checkbox :id="'optional-1'" :label="'Optional 1'" />
@@ -67,8 +69,10 @@
         </x-accordion>
 
         <x-autocomplete-input name="taxa" :label="'Auto Complete Input'" id="test-search" search="/api/taxa/search">
-            <x-slot:input class="w-full"></x-slot>
-                <x-slot:menu>Menu</x-slot>
+            <x-slot:input class="w-full"></x-slot:input>
+            <x-slot:menu>
+                Menu
+            </x-slot:menu>
         </x-autocomplete-input>
         <x-taxa-search />
 
@@ -99,33 +103,30 @@
         <div class="w-fit">
             <x-popover>
                 <div class="flex flex-col gap-4">
-
                     <div class="text-xl">Title</div>
                     <x-input label="Height" id="Something" />
                     <x-input label="Width" id="Other thing" />
                 </div>
             </x-popover>
-
-
         </div>
         <div class="w-fit">
-            <x-breadcrumbs :items="[
+            <x-breadcrumbs
+                :items="[
                 ['title' => 'Home', 'href' => '#_'],
                 ['title' => 'Collections', 'href' => '#_'],
                 ['title' => 'Collection Profile', 'href' => '#_'],
-            ]" />
+            ]"
+            />
         </div>
 
-        <x-context-menu>
-            Right Click Here
-        </x-context-menu>
+        <x-context-menu> Right Click Here </x-context-menu>
 
         <x-modal>
             <x-slot name="button">
                 Open Modal
             </x-slot>
             <x-slot name="title" class="text-2xl">
-                    Title
+                Title
             </x-slot>
             <x-slot name="body">
                 <form class="flex flex-col gap-2">
@@ -136,11 +137,12 @@
             </x-slot>
         </x-modal>
 
-        <x-tooltip text="Tooltip">
-            Tooltip
-        </x-tooltip>
+        <x-tooltip text="Tooltip"> Tooltip </x-tooltip>
 
-        <x-select label="Groceries" :default="1" :items="[
+        <x-select
+            label="Groceries"
+            :default="1"
+            :items="[
             [
                 'title' => 'Milk',
                 'value' => 'milk',
@@ -186,21 +188,18 @@
                 'value' => 'salt',
                 'disabled' => false
             ],
-        ]" />
-        <x-image-card src="https://collections.nmnh.si.edu/media/?i=10333969&width=300"
-            title="Pinus albicaulis Engelm." />
+        ]"
+        />
+        <x-image-card
+            src="https://collections.nmnh.si.edu/media/?i=10333969&width=300"
+            title="Pinus albicaulis Engelm."
+        />
         <x-slide-tab-container :tabs="['Tab 1', 'Tab 2', 'Tab 3']">
-            <x-slide-tab class="border rounded-lg shadow-sm bg-card text-base-content p-4">
-                Tab 1
-            </x-slide-tab>
+            <x-slide-tab class="bg-card text-base-content rounded-lg border p-4 shadow-sm"> Tab 1 </x-slide-tab>
 
-            <x-slide-tab class="border rounded-lg shadow-sm bg-card text-base-content p-4">
-                Tab 2
-            </x-slide-tab>
+            <x-slide-tab class="bg-card text-base-content rounded-lg border p-4 shadow-sm"> Tab 2 </x-slide-tab>
 
-            <x-slide-tab class="border rounded-lg shadow-sm bg-card text-base-content p-4">
-                Tab 3
-            </x-slide-tab>
+            <x-slide-tab class="bg-card text-base-content rounded-lg border p-4 shadow-sm"> Tab 3 </x-slide-tab>
         </x-slide-tab-container>
         <x-rich-editor id="rich-editor" label="Rich Text Description">
             {!! Purify::clean('<p><em>Hello</em>, <span style="text-decoration: underline;"><strong>World!</strong></span><script>alert("bad")</script></p>') !!}

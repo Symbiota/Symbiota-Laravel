@@ -91,23 +91,23 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 @endphp
 <x-layout>
     <div class="mb-4 flex">
-        <x-breadcrumbs :items="[
+        <x-breadcrumbs
+            :items="[
         ['title' => 'Home', 'href' => url('')],
         ['title' => 'Collection Management', 'href' => legacy_url('/collections/misc/collprofiles.php?collid=' . $occurrence->collid)],
         ['title' => 'Public Display', 'href' => url('occurrence/' . $occurrence->occid)],
         ['title' => 'Occurrence Editor']
-        ]" />
+        ]"
+        />
         <x-button class="ml-auto">New Record</x-button>
     </div>
 
-    <div class="flex items-center gap-4 mb-4">
-        <img class="w-16" src="https://cch2.org/portal/content/collicon/blmar.jpg">
-        <div class="text-2xl font-bold">
-            BLMAR - BLM Arcata Field Office Herbarium (BLMAR)
-        </div>
+    <div class="mb-4 flex items-center gap-4">
+        <img class="w-16" src="https://cch2.org/portal/content/collicon/blmar.jpg" />
+        <div class="text-2xl font-bold">BLMAR - BLM Arcata Field Office Herbarium (BLMAR)</div>
 
         <div class="text-2xl font-bold">
-            <x-nav-link href="{{url('occurrence/' . $occurrence->occid)}}">
+            <x-nav-link href="{{ url('occurrence/' . $occurrence->occid) }}">
                 <x-tooltip text="Public View">
                     <i class="fas fa-globe"></i>
                 </x-tooltip>
@@ -115,17 +115,17 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
         </div>
     </div>
 
-    <x-tabs :tabs="['Occurrence Data', 'Determination History', 'Images', 'Linked Resources', 'Traits', 'Admin']"
-        :active="5">
+    <x-tabs
+        :tabs="['Occurrence Data', 'Determination History', 'Images', 'Linked Resources', 'Traits', 'Admin']"
+        :active="5"
+    >
         {{-- Occurrence Data --}}
-        <div class="flex gap-4 flex-col">
+        <div class="flex flex-col gap-4">
             {{-- Collector Info--}}
             <div>
                 <h3 class="text-xl font-bold">Collector Info</h3>
                 <x-input label="Catalog Number" />
-                <div>
-
-                </div>
+                <div></div>
                 <x-input label="Collector/Observer" />
                 <x-input label="Number" />
                 <x-input label="Date" />
@@ -156,7 +156,10 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                 <x-input label="Location ID" />
                 <x-input area label="Locality" />
                 <x-input label="Location Remarks" />
-                <x-select name="locality_security" label="Locality Security" :items="[
+                <x-select
+                    name="locality_security"
+                    label="Locality Security"
+                    :items="[
                     [
                         'title' => 'Security Applied',
                         'value' => 'Security Applied',
@@ -167,7 +170,8 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                         'value' => 'Security Not Applied',
                         'disabled' => false
                     ],
-                ]" />
+                ]"
+                />
                 <x-checkbox label="Deactivate Locality Lookup" />
             </div>
 
@@ -205,7 +209,10 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                 <x-input label="Collection Code" />
                 <x-input label="Owner Code" />
                 <x-input label="Code" />
-                <x-select class="w-60" label="Basis of Record" :items="[
+                <x-select
+                    class="w-60"
+                    label="Basis of Record"
+                    :items="[
                     [
                         'title' => 'Fossil Specimen',
                         'value' => 'FossilSpecimen',
@@ -231,47 +238,64 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                         'value' => 'MachineObservation',
                         'disabled' => false
                     ],
-                ]" />
-                <x-select label="Processing Status" :items="[
+                ]"
+                />
+                <x-select
+                    label="Processing Status"
+                    :items="[
                     [
                         'title' => 'No Set Status',
                         'value' => 'No Set Status',
                         'disabled' => false
                     ],
-                ]" />
+                ]"
+                />
                 <x-input label="Data Generalizations" />
-                <div class="flex mt-4">
-                    <div class="flex-auto">Key: {{$occurrence->occid}}</div>
-                    <div class="flex-auto">Modified: {{ $occurrence->dateLastModified}}</div>
-                    <div class="flex-auto">Entered By: {{$occurrence->recordEnteredBy ?? 'not recorded'}} {{
-                        $occurrence->dateEntered?'['
-                        . $occurrence->dateEntered . ']': ''}}</div>
+                <div class="mt-4 flex">
+                    <div class="flex-auto">Key: {{ $occurrence->occid }}</div>
+                    <div class="flex-auto">Modified: {{ $occurrence->dateLastModified }}</div>
+                    <div class="flex-auto">
+                        Entered By: {{ $occurrence->recordEnteredBy ?? 'not recorded' }} {{
+$occurrence->dateEntered?'['
+                        . $occurrence->dateEntered . ']': ''
+}}
+                    </div>
                 </div>
             </div>
 
             {{-- Options shoudl be the same as proccessing Status--}}
-            <x-select label="Status Auto-Set" :items="[
+            <x-select
+                label="Status Auto-Set"
+                :items="[
                 [
                     'title' => 'No Set Status',
                     'value' => 'No Set Status',
                     'disabled' => false
                 ],
-            ]" />
+            ]"
+            />
             <div>
                 <h3 class="text-xl font-bold">Record Cloning</h3>
 
-                <x-radio :default_value="2" :options="[
+                <x-radio
+                    :default_value="2"
+                    :options="[
                         ['label' => 'Collection Event Fields', 'value' => 'CollectionEventFields'],
                         ['label' => 'All Fields', 'value' => 'AllFields']
-                    ]" label="Carry Over" name="cloning-type" />
+                    ]"
+                    label="Carry Over"
+                    name="cloning-type"
+                />
                 {{-- TODO (Logan) Load Options for Cloning --}}
-                <x-select :items="[
+                <x-select
+                    :items="[
                     [
                         'title' => 'Undefined',
                         'value' => null,
                         'disabled' => false
                     ],
-                ]" />
+                ]"
+                />
                 {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
                 <x-button> Create Record(s)</x-button>
             </div>
@@ -281,7 +305,9 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
         {{-- Determination History --}}
         <div class="flex flex-col gap-4">
             Determination History
-            <x-select class="w-40" :items="[
+            <x-select
+                class="w-40"
+                :items="[
                 [
                     'title' => '0 - Unlikely',
                     'value' => 0,
@@ -337,7 +363,8 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                     'value' => 10,
                     'disabled' => false
                 ],
-            ]" />
+            ]"
+            />
             <x-input label="notes" />
             <x-button>Submit Verification Edits</x-button>
 
@@ -355,27 +382,26 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                         <i class="fas fa-plus"></i>
                     </div>
                 </div>
-                <hr class="mb-4 mt-1 h-1 border-none bg-base-300" />
+                <hr class="bg-base-300 mt-1 mb-4 h-1 border-none" />
 
-
-                @foreach ($determinations as $determination)
-                <div class="border p-2">
-                    <div>
-                        <span>{{$determination['sciname']}} {{$determination['author']}}</span>
-                        @if($determination['isCurrent'])
-                        <span class="text-error uppercase">Current Determination</span>
-                        @endif
-                        <x-icons.edit />
-                    </div>
-                    <div class="flex gap-4">
+                @foreach($determinations as $determination)
+                    <div class="border p-2">
                         <div>
-                            <span>Determiner:{{$determination['determiner']}}<span>
+                            <span>{{ $determination['sciname'] }} {{ $determination['author'] }}</span>
+                            @if($determination['isCurrent'])
+                                <span class="text-error uppercase">Current Determination</span>
+                            @endif
+                            <x-icons.edit />
                         </div>
-                        <div>
-                            <span>Date: {{$determination['date']}}<span>
+                        <div class="flex gap-4">
+                            <div>
+                                <span>Determiner:{{ $determination['determiner'] }}<span>
+                            </div>
+                            <div>
+                                <span>Date: {{ $determination['date'] }}<span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
@@ -400,67 +426,63 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
             ];
             @endphp
 
-            @foreach ($media as $m)
-            <div class="flex flex-row gap-4 border p-4">
-                <div>
-                    <a href="{{ $m['thumbnail_url']}}">
-                        <img src="{{ $m['thumbnail_url']}}">
-                    </a>
-                </div>
-                <div>
-                    <div class="flex justify-end text-xl">
-                        {{-- TODO (Logan) get edit form outline --}}
-                        <x-icons.edit />
+            @foreach($media as $m)
+                <div class="flex flex-row gap-4 border p-4">
+                    <div>
+                        <a href="{{ $m['thumbnail_url'] }}">
+                            <img src="{{ $m['thumbnail_url'] }}" />
+                        </a>
                     </div>
-                    <div>Caption: {{ $m['caption'] }}</div>
-                    <div>Creator: {{ $m['creator'] }}</div>
-                    <div>Notes: {{ $m['notes'] }}</div>
-                    <div>Tags: {{ $m['tags'] }}</div>
-                    <div>Source Webpage: {{ $m['source_url'] }}</div>
-                    <div>Web URL: {{ $m['url'] }}</div>
-                    <div>Large URL: {{ $m['original_url'] }}</div>
-                    <div>Thumbnail URL: {{ $m['thumbnail_url'] }}</div>
-                    <div>Sort: {{ $m['sort'] }}</div>
+                    <div>
+                        <div class="flex justify-end text-xl">
+                            {{-- TODO (Logan) get edit form outline --}}
+                            <x-icons.edit />
+                        </div>
+                        <div>Caption: {{ $m['caption'] }}</div>
+                        <div>Creator: {{ $m['creator'] }}</div>
+                        <div>Notes: {{ $m['notes'] }}</div>
+                        <div>Tags: {{ $m['tags'] }}</div>
+                        <div>Source Webpage: {{ $m['source_url'] }}</div>
+                        <div>Web URL: {{ $m['url'] }}</div>
+                        <div>Large URL: {{ $m['original_url'] }}</div>
+                        <div>Thumbnail URL: {{ $m['thumbnail_url'] }}</div>
+                        <div>Sort: {{ $m['sort'] }}</div>
+                    </div>
                 </div>
-            </div>
             @endforeach
         </div>
 
         {{-- Linked Resources --}}
         <div class="flex flex-col gap-4">
-            <div class="p-4 border">
+            <div class="border p-4">
                 <div class="flex">
                     <h3 class="text-lg font-bold">Asssociated Occurrences</h3>
-                    <i class="ml-auto fas fa-plus"></i>
+                    <i class="fas fa-plus ml-auto"></i>
                 </div>
-                <div>
-                    No associations have been established
-                </div>
+                <div>No associations have been established</div>
             </div>
 
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <div>
                     <div class="flex">
                         <h3 class="text-lg font-bold">Checklist Voucher Linkages</h3>
                     </div>
-                    <div>
-                        No voucher linkages have been established
-                    </div>
+                    <div>No voucher linkages have been established</div>
                 </div>
-                <x-select :items="[
+                <x-select
+                    :items="[
                     ['title' => 'Select a Checklist', 'value'=> null, 'disabled' => false ]
-                ]" />
+                ]"
+                />
                 <x-button>Link to Checklist as Voucher</x-button>
             </div>
 
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <div>
                     <div class="flex">
                         <h3 class="text-lg font-bold">Genetic Resources</h3>
                     </div>
-                    <div>
-                        No genetic linkages have been established
-                    </div>
+                    <div>No genetic linkages have been established</div>
                 </div>
 
                 <div class="font-bold">Add New Resource</div>
@@ -475,7 +497,7 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 
         {{-- Traits --}}
         <div class="flex flex-col gap-4">
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <div>
                     <div class="flex">
                         <h3 class="text-lg font-bold">Anglosperm Phenolgical Traits</h3>
@@ -483,26 +505,37 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                 </div>
 
                 {{-- TODO (Logan) Update this to have nested attribute tree--}}
-                <x-radio name="pheno-traits" :options="[
+                <x-radio
+                    name="pheno-traits"
+                    :options="[
                     ['label' => 'Reproductive', 'value' => 'reproductive'],
                     ['label' => 'Sterile', 'value' => 'sterile'],
                     ['label' => 'Not Scorable', 'value' => 'not-scorable']
-                ]" />
+                ]"
+                />
 
                 <div class="font-bold">Add New Resource</div>
                 <x-input label="Notes" />
-                <x-select class="w-60" label="Source" :items="[
+                <x-select
+                    class="w-60"
+                    label="Source"
+                    :items="[
                     ['title' => 'Machine Learning', 'value' => 'machine_learning', 'disabled' => false],
                     ['title' => 'Physical Specimen', 'value' => 'physical_specimen', 'disabled' => false],
                     ['title' => 'Viewing Image', 'value' => 'viewing_image', 'disabled' => false],
                     ['title' => 'Verbatim Text Mining', 'value' => 'verbatim_text_mining', 'disabled' => false],
-                ]" />
+                ]"
+                />
 
-                <x-select class="w-60" label="Status" :items="[
+                <x-select
+                    class="w-60"
+                    label="Status"
+                    :items="[
                     ['title' => 'Not Reviewed', 'value' => 'not_reviewed', 'disabled' => false],
                     ['title' => 'Expert Needed', 'value' => 'expert_needed', 'disabled' => false],
                     ['title' => 'Reviewed', 'value' => 'reviewed', 'disabled' => false],
-                ]" />
+                ]"
+                />
                 <x-button>Save Edits</x-button>
                 <x-button variant="error">Delete Coding</x-button>
             </div>
@@ -510,7 +543,7 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 
         {{-- Admin --}}
         <div class="flex flex-col gap-4">
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <h3 class="text-lg font-bold">History of Interal Edits</h3>
                 @php
                 // For Putting of Skeleton Only
@@ -552,45 +585,41 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
                 ];
                 @endphp
 
-                @foreach ($edits as $edit)
-                <div>
-                    <div class="flex gap-4">
-                        <div>
-                            Editor: {{$edit['editor']}}
-                        </div>
-                        <div>
-                            Date: {{$edit['date']}}
-                        </div>
-                    </div>
+                @foreach($edits as $edit)
                     <div>
-                        Applied Status: {{$edit['applied_status']}}
-                    </div>
-                    <div>
-                        @foreach ($edit['fields_edited'] as $field)
-                        <div class="p-2">
-                            <div>Field: {{$field['name']}}</div>
-                            <div>Old Value: {{$field['old_value']}}</div>
-                            <div>New Value: {{$field['new_value']}}</div>
+                        <div class="flex gap-4">
+                            <div>Editor: {{ $edit['editor'] }}</div>
+                            <div>Date: {{ $edit['date'] }}</div>
                         </div>
-                        @endforeach
+                        <div>Applied Status: {{ $edit['applied_status'] }}</div>
+                        <div>
+                            @foreach($edit['fields_edited'] as $field)
+                                <div class="p-2">
+                                    <div>Field: {{ $field['name'] }}</div>
+                                    <div>Old Value: {{ $field['old_value'] }}</div>
+                                    <div>New Value: {{ $field['new_value'] }}</div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-
-                <hr class="mb-4 mt-1 h-1 border-none bg-base-300" />
+                    <hr class="bg-base-300 mt-1 mb-4 h-1 border-none" />
                 @endforeach
             </div>
 
             {{-- Transfer Record --}}
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <h3 class="text-lg font-bold">Transfer Specimen</h3>
-                <x-select label="Target Collection" :items="[
+                <x-select
+                    label="Target Collection"
+                    :items="[
                     ['title' => 'Select Collection', 'value' => null, 'disabled' => false]
-                ]"/>
+                ]"
+                />
                 <x-button>Transfer Record</x-button>
             </div>
 
             {{-- Delete Occurrence Record --}}
-            <div class="p-4 border flex flex-col gap-4">
+            <div class="flex flex-col gap-4 border p-4">
                 <h3 class="text-lg font-bold">Delete Occurrence Record</h3>
                 <p>Record first needs to be evaluated before it can be deleted from the system. The evaluation ensures that the deletion of this record will not interfere with the integrity of other linked data. Note that all determination and comments for this occurrence will be automatically deleted. Links to images, and checklist vouchers will have to be individually addressed before can be deleted.</p>
                 <x-button variant="error">Evaluate Record for Deletion</x-button>

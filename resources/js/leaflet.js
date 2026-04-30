@@ -1,6 +1,6 @@
-import L from 'leaflet';
-import 'leaflet-draw';
-import 'leaflet.markercluster';
+import L from "leaflet";
+import "leaflet-draw";
+import "leaflet.markercluster";
 
 window.L = L;
 window.type = true;

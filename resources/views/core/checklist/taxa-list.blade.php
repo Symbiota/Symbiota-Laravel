@@ -14,24 +14,23 @@
 {{-- @fragment('taxa-list') --}}
 <div id="taxa-list">
     @if(count($taxa) <= 0)
-        <div class="text-2xl font-bold">
-            {{ __('checklists_checklist.NOTAXA') }}
-        </div>
+        <div class="text-2xl font-bold">{{ __('checklists_checklist.NOTAXA') }}</div>
     @endif
 
     @php $previous = null @endphp
     @foreach($taxa as $tid => $taxon)
         @if($show_taxa_alphabetically)
             @if($loop->first || ($previous && $previous['taxongroup'] !== $taxon['taxongroup']))
-                <div @class(['text-lg font-bold', 'mt-4' => !$loop->first])>{!! Purify::clean($taxon['taxongroup']) !!}</div>
+                <div @class(['text-lg font-bold', 'mt-4' => !$loop->first])
+                    >{!! Purify::clean($taxon['taxongroup']) !!}
+                </div>
             @endif
         @else
             @if($loop->first || ($previous && $previous['family'] !== $taxon['family']) )
                 <div @class(['text-lg font-bold uppercase', 'mt-4' => !$loop->first])>{{ $taxon['family'] }}</div>
             @endif
         @endif
-
-        <div class="pl-4 pb-1">
+        <div class="pb-1 pl-4">
             <x-link class="text-base" href="{{ url('taxon/' . $tid) }}">
                 @if(isset($taxon['sciname']))
                     {{ $taxon['sciname'] }}
@@ -39,52 +38,59 @@
                     {!! Purify::clean($taxon['taxongroup']) !!}
                 @endif
                 @if($show_taxa_authors && isset($taxon['author']))
-                {{ $taxon['author'] }}
+                    {{ $taxon['author'] }}
                 @endif
             </x-link>
 
             @if($show_common && isset($taxon['vern']))
-            <span> - {{ $taxon['vern']}}</span>
+                <span> - {{ $taxon['vern'] }}</span>
             @endif
 
-            <span class="ml-1 inline-flex w-fit gap-2 items-center">
-            <x-nav-link target="_blank" href="{{url('collections/list')}}?usethes=1&clid={{$checklist->clid}}&taxa={{$tid}}">
-                <i class="fa-solid fa-list hover:text-base-content/50"></i>
-            </x-nav-link>
+            <span class="ml-1 inline-flex w-fit items-center gap-2">
+                <x-nav-link
+                    target="_blank"
+                    href="{{ url('collections/list') }}?usethes=1&clid={{ $checklist->clid }}&taxa={{ $tid }}"
+                >
+                    <i class="fa-solid fa-list hover:text-base-content/50"></i>
+                </x-nav-link>
 
-            @if(isset($taxon['clid']) && $sppEditToggle)
-                @foreach(explode(',',$taxon['clid']) as $id)
-                @php
+                @if(isset($taxon['clid']) && $sppEditToggle)
+                    @foreach(explode(',',$taxon['clid']) as $id)
+                        @php
                 $editTitle = array_key_exists($id, $children)? $children[$id]: $checklist->name;
                 @endphp
-                <a x-cloak x-show="{{ $sppEditToggle }}" target="_blank" href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}" title="{{ __('checklists_checklist.EDIT_DETAILS') . ': ' . $editTitle }}">
-                    <x-icons.edit />
-                </a>
-                @endforeach
-            @endif
+                        <a
+                            x-cloak
+                            x-show="{{ $sppEditToggle }}"
+                            target="_blank"
+                            href="{{ legacy_url('checklists/clsppeditor.php?tid=' . $tid . '&clid='. $id) }}"
+                            title="{{ __('checklists_checklist.EDIT_DETAILS') . ': ' . $editTitle }}"
+                        >
+                            <x-icons.edit />
+                        </a>
+                    @endforeach
+                @endif
             </span>
 
             @if($show_synonyms && isset($taxon['syn']))
-            <div class="pl-4">
-                <span class="font-bold">{{ __('taxa.SYNONYMS') }}:</span>
-                {!! Purify::clean($taxon['syn']) !!}
-            </div>
+                <div class="pl-4">
+                    <span class="font-bold">{{ __('taxa.SYNONYMS') }}:</span>
+                    {!! Purify::clean($taxon['syn']) !!}
+                </div>
             @endif
 
             @if($show_notes_vouchers && array_key_exists($tid, $taxa_vouchers))
-            <div class="pl-4">
-			    @if(isset($taxon['notes']))
-                {!! Purify::clean($taxon['notes']) !!}
-			    @endif
-                @foreach ($taxa_vouchers[$tid] as $occid => $collName)
-                <span>
-                <x-link target="_blank" href="{{ url('occurrence/' . $occid) }}">
-                    {{ $collName }}
-                </x-link>
-                @if (!$loop->last) , @endif
-                @endforeach
-                </span>
-            </div>
+                <div class="pl-4">
+                    @if(isset($taxon['notes']))
+                        {!! Purify::clean($taxon['notes']) !!}
+                    @endif
+                    @foreach($taxa_vouchers[$tid] as $occid => $collName)
+                        <span>
+                            <x-link target="_blank" href="{{ url('occurrence/' . $occid) }}"> {{ $collName }} </x-link>
+                            @if(!$loop->last) , @endif
+                    @endforeach
+                    </span>
+                </div>
             @endif
         </div>
         @php $previous=$taxon @endphp

@@ -39,9 +39,13 @@ $sections = [
 @endphp
 
 <?xml version="1.0" encoding="UTF-8"?>
-<archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://rs.tdwg.org/dwc/text/   http://rs.tdwg.org/dwc/text/tdwg_dwc_text.xsd">
-    @foreach ($sections as $section)
+<archive
+    xmlns="http://rs.tdwg.org/dwc/text/"
+    metadata="eml.xml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://rs.tdwg.org/dwc/text/   http://rs.tdwg.org/dwc/text/tdwg_dwc_text.xsd"
+>
+    @foreach($sections as $section)
         <{{ $section['schema']::$metaType }}
             dateFormat="{{ $dateFormat }}"
             encoding="{{ $encoding }}"
@@ -54,11 +58,11 @@ $sections = [
             <files>
                 <location>{{ $section['file'] }}</location>
             </files>
-            @foreach ($section['schema']::$terms as $term => $base_url)
+            @foreach($section['schema']::$terms as $term => $base_url)
                 @empty($base_url)
-                <{{ $term }} index="{{ $loop->index }}" />
-                @else
-                <field index="{{ $loop->index }}" term="{{ $base_url . $term }}" />
+                    <{{ $term }} index="{{ $loop->index }}" />
+                    @else
+                    <field index="{{ $loop->index }}" term="{{ $base_url . $term }}" />
                 @endempty
             @endforeach
         </{{ $section['schema']::$metaType }}>

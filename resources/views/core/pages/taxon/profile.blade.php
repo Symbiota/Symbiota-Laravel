@@ -1,122 +1,117 @@
 @props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links', 'canEditTaxon' => Gate::check('TAXON_EDITOR'),])
-<x-layout class="grid grid-col-1 gap-4">
-    @if (session('success'))
+<x-layout class="grid-col-1 grid gap-4">
+    @if(session('success'))
         <div class="alert alert-success">
             <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
         </div>
     @endif
     <div class="flex items-center">
-        <h1 class="text-2xl font-bold w-fit">
+        <h1 class="w-fit text-2xl font-bold">
             <i>{{ $taxon->sciName ?? 'Name Missing' }}</i>
-            @if ($taxon->author)
-            {{ $taxon->author}}
+            @if($taxon->author)
+                {{ $taxon->author }}
             @endif
         </h1>
-        <div class="flex justify-end items-center flex-grow gap-2">
+        <div class="flex flex-grow items-center justify-end gap-2">
             <x-nav-link hx-boost="true" href="{{ url('collections/list') . '?taxa=' . $taxon->tid }}" hx-target="body">
-                <x-button class="text-sm rounded-full">
-                    {{ $occurrence_count }} Records
-                </x-button>
+                <x-button class="rounded-full text-sm"> {{ $occurrence_count }} Records </x-button>
             </x-nav-link>
             <a href="{{ url('/taxon/' . $taxon->tid . '/profileEdit') }}">
-                <x-icons.edit class="text-xl"/> Edit Taxon Profile
+                <x-icons.edit class="text-xl" /> Edit Taxon Profile
             </a>
             @if($canEditTaxon)
-                <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
-                    <x-icons.edit class="text-xl"/> Edit Taxon
-                </a>
+                <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}"> <x-icons.edit class="text-xl" /> Edit Taxon </a>
             @endif
         </div>
     </div>
     <div class="flex-grow">
-        <x-tabs :tabs="['Taxonomy', 'Synonyms/Vernaculars', 'Traits', 'About', 'Resources']" >
+        <x-tabs :tabs="['Taxonomy', 'Synonyms/Vernaculars', 'Traits', 'About', 'Resources']">
             {{-- Taxonomy Information --}}
             <div class="min-h-72">
                 <div class="flex items-center gap-2">
                     <h2 class="text-xl">Taxonomy</h2>
-                    <x-link class="text-base"
-                        href="{{legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358')}}">
+                    <x-link
+                        class="text-base"
+                        href="{{ legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358') }}"
+                    >
                         See full taxonomic tree
                     </x-link>
                 </div>
                 @foreach($parents as $parent)
-                @if($loop->first)
-                <div>
-                    @else
-                    <div class="pl-1.5">
-                        @endif
-                        ->
-                        <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}">{{ $parent->sciName ?? 'Name Missing'
-                            }} ({{ $parent->rankname }})</x-link>
-                        @endforeach
-                        @foreach($parents as $parent)
-                    </div>
-                    @endforeach
-                </div>
-
-                {{-- Synonyms and Comon Names --}}
-                <div class="min-h-72">
-
-                    @isset($common_names)
-                    @foreach($common_names as $common_name) {{$common_name->VernacularName}} @endforeach
-                    @endisset
-                    <div class="font-bold">Synonyms:</div>
-                    <div>[ Synonyms ]</div>
-
-                </div>
-
-                {{-- Trait Plots --}}
-                <div class="min-h-72">
-                    Todo Traits
-                </div>
-
-                {{-- About --}}
-                <div class="flex flex-col gap-4 min-h-72">
-                    @foreach ($taxa_descriptions as $description)
-                    <div class="flex flex-col gap-2">
-                        <div class="flex gap-2 item-center">
-                            <span class="text-xl font-bold">{{ $description['source'] }}</span>
-                            <x-link href="{{$description['sourceUrl']}}" target="_blank">See more</x-link>
-                        </div>
-                        @foreach ($description['statements'] as $heading => $statement)
+                    @if($loop->first)
                         <div>
-                            <span class="font-bold">{{ $heading }}</span>: {{$statement}}
+                    @else
+                        <div class="pl-1.5">
+                    @endif
+                    ->
+                    <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}"
+                        >{{ $parent->sciName ?? 'Name Missing' }} ({{ $parent->rankname }})</x-link
+                    >
+                @endforeach
+                @foreach($parents as $parent)
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Synonyms and Comon Names --}}
+            <div class="min-h-72">
+                @isset($common_names)
+                    @foreach($common_names as $common_name) {{ $common_name->VernacularName }} @endforeach
+                @endisset
+                <div class="font-bold">Synonyms:</div>
+                <div>[ Synonyms ]</div>
+            </div>
+
+            {{-- Trait Plots --}}
+            <div class="min-h-72">Todo Traits</div>
+
+            {{-- About --}}
+            <div class="flex min-h-72 flex-col gap-4">
+                @foreach($taxa_descriptions as $description)
+                    <div class="flex flex-col gap-2">
+                        <div class="item-center flex gap-2">
+                            <span class="text-xl font-bold">{{ $description['source'] }}</span>
+                            <x-link href="{{ $description['sourceUrl'] }}" target="_blank">See more</x-link>
                         </div>
+                        @foreach($description['statements'] as $heading => $statement)
+                            <div><span class="font-bold">{{ $heading }}</span>: {{ $statement }}</div>
                         @endforeach
                     </div>
-                    @endforeach
-                </div>
+                @endforeach
+            </div>
 
-                {{-- Resources --}}
-                <div class="min-h-72">
-                    @if(count($external_links))
+            {{-- Resources --}}
+            <div class="min-h-72">
+                @if(count($external_links))
                     <div class="text-xl font-bold">External Resources</div>
-                    @foreach ($external_links as $link)
+                    @foreach($external_links as $link)
                         <li>
-                            <x-link href="{{ $link->url }}" target="_blank">
-                                {{ $link->sourcename }}
-                            </x-link>
+                            <x-link href="{{ $link->url }}" target="_blank"> {{ $link->sourcename }} </x-link>
                         </li>
-                    @endforeach @endif
-                </div>
+                    @endforeach
+                @endif
+            </div>
         </x-tabs>
     </div>
 
-
     @if(count($children))
-    <div class="flex flex-wrap flex-row gap-3">
-    @foreach ($children as $child)
-        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName ?? 'Name Missing'" />
-    @endforeach
-    </div>
+        <div class="flex flex-row flex-wrap gap-3">
+            @foreach($children as $child)
+                <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName ?? 'Name Missing'" />
+            @endforeach
+        </div>
     @else
-    <div class="flex flex-wrap flex-row gap-3">
-        <x-media.item :allow_empty_trigger="true" :fixed_start="0" :params="['tid' => $taxon->tid, 'taxon_sort_order' => true]"/>
-        <div id="scroll-loader" class="htmx-indicator">
-            <div class="stroke-accent w-full h-16 flex justify-center">
-                <x-icons.loading />
+        <div class="flex flex-row flex-wrap gap-3">
+            <x-media.item
+                :allow_empty_trigger="true"
+                :fixed_start="0"
+                :params="['tid' => $taxon->tid, 'taxon_sort_order' => true]"
+            />
+            <div id="scroll-loader" class="htmx-indicator">
+                <div class="stroke-accent flex h-16 w-full justify-center">
+                    <x-icons.loading />
+                </div>
             </div>
         </div>
-    </div>
     @endif
 </x-layout>
