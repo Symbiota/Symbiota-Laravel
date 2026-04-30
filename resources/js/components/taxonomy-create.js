@@ -27,8 +27,31 @@ function updateLabels(alpineData) {
     }
 }
 
-async function checkNameExistence(sciname, rankid, author = "") {
+async function checkNameExistence(
+    sciname,
+    rankid,
+    author = "",
+    preExistingTaxonInfo = null,
+) {
+    // console.log("deleteMe preExistingTaxonInfo in checkNameExistence is: ");
+    // console.log(preExistingTaxonInfo);
+    // console.log("deleteMe sciname in checkNameExistence is: " + sciname);
+    // console.log("deleteMe rankid in checkNameExistence is: " + rankid);
+    // console.log("deleteMe author in checkNameExistence is: " + author);
+    const isTheSameAsPreExistingTaxon =
+        preExistingTaxonInfo &&
+        preExistingTaxonInfo.sciName === sciname &&
+        (preExistingTaxonInfo.rankid ?? preExistingTaxonInfo.rankID) ==
+            rankid &&
+        preExistingTaxonInfo.author == author;
+    // console.log("deleteMe isTheSameAsPreExistingTaxon is: ");
+    // console.log(isTheSameAsPreExistingTaxon);
+
+    if (isTheSameAsPreExistingTaxon) {
+        return false;
+    }
     if (!sciname || !rankid) {
+        // editing unit names will be disabled in edit mode, so we should skip the existence check in that case since the sciname will already exist in the database
         return false;
     }
     const params = new URLSearchParams({ sciname, rankid });
@@ -40,60 +63,373 @@ async function checkNameExistence(sciname, rankid, author = "") {
     return data.exists;
 }
 
-async function validateTaxonForm(alpineData) {
-    let message = "";
-    const parenttid = document.querySelector('[name="parenttid"]');
+async function verifyLoadFormCore(
+    alpineData,
+    silent = false,
+    preExistingTaxonInfo = null,
+    sciNameRankRequiredMessage = null,
+    alreadyExistsMessage = null,
+    parentTaxonRequiredMessage = null,
+    parentIdNotSetMessage = null,
+    accNameNeedsValueMessage = null,
+    missingRequiredTaxonFieldMessage = null,
+) {
+    // console.log("deleteMe verifyLoadFormCore entered and alpineData is: ");
+    const { rankid, unit1Label, unit2Label, isValid, validationMessage } =
+        alpineData;
+    // console.log({ rankid, unit1Label, unit2Label, isValid, validationMessage });
+    // console.log("deleteMe and preExistingTaxonInfo is: ");
+    // console.log(preExistingTaxonInfo);
+    const entryHasNotChanged = isTheSameEntryAsItStarted(preExistingTaxonInfo);
+    // console.log("deleteMe entryHasNotChanged is: " + entryHasNotChanged);
+    if (entryHasNotChanged) {
+        return { isValid: true, message: "" };
+    }
     const unitname1 = document.querySelector('[name="unitname1"]');
-    const unitname2 = document.querySelector('[name="unitname2"]');
-    const unit2namevisible =
-        document.getElementById("unit2").style.display !== "none";
-    const unitname3 = document.querySelector('[name="unitname3"]');
-    const unit3namevisible =
-        document.getElementById("unit3").style.display !== "none";
-    const rankid = document.querySelector('[name="rankid"]');
-    const author = document.querySelector('[name="author"]');
-    const cultivarEpithetVisible =
-        document.getElementById("cultivarEpithet-div").style.display !== "none";
-    const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
-
+    // console.log("deleteMe unitname1 in verifyLoadFormCore is: ");
+    // console.log(unitname1);
     if (!unitname1?.value) {
-        message = "Missing required field: " + alpineData.unit1Label + " Name";
-        return { isValid: false, message: message };
+        const msg = missingRequiredTaxonFieldMessage;
+        if (!silent) alert(msg);
+        setErrorDisplay(msg);
+        return { isValid: false, message: msg };
     }
-    if (unit2namevisible && !unitname2?.value) {
-        message = "Missing required field: " + alpineData.unit2Label + " Name";
-        return { isValid: false, message: message };
+    if (!alpineData.rankid) {
+        const msg = sciNameRankRequiredMessage;
+        if (!silent) alert(msg);
+        setErrorDisplay(msg);
+        return { isValid: false, message: msg };
     }
-    if (unit3namevisible && !unitname3?.value) {
-        message = "Missing required field: Infraspecific Epithet Name";
-        return { isValid: false, message: message };
+    const unit2nameIsRequired = alpineData.rankid >= 220;
+    if (unit2nameIsRequired) {
+        const unit2nameIsMissing =
+            !document.querySelector('[name="unitname2"]')?.value;
+        if (unit2nameIsMissing) {
+            const msg = missingRequiredTaxonFieldMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
     }
-    if (cultivarEpithetVisible && !cultivarEpithet?.value) {
-        message = "Missing required field: Cultivar Epithet";
-        return { isValid: false, message: message };
+
+    const unit3nameIsRequired = alpineData.rankid >= 230;
+    if (unit3nameIsRequired) {
+        const unit3nameIsMissing =
+            !document.querySelector('[name="unitname3"]')?.value;
+        if (unit3nameIsMissing) {
+            const msg = missingRequiredTaxonFieldMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
     }
+
+    const cultivarEpithetIsRequired = alpineData.rankid >= 300;
+    if (cultivarEpithetIsRequired) {
+        const cultivarEpithetIsMissing = !document.querySelector(
+            '[name="cultivarEpithet"]',
+        )?.value;
+        if (cultivarEpithetIsMissing) {
+            const msg = missingRequiredTaxonFieldMessage;
+            if (!silent) alert(msg);
+            setErrorDisplay(msg);
+            return { isValid: false, message: msg };
+        }
+    }
+
+    const parenttid = document.querySelector('[name="parenttid"]');
     if (!parenttid?.value) {
-        message =
-            "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
-        return { isValid: false, message: message };
+        const msg = parentIdNotSetMessage;
+        if (!silent) alert(msg);
+        setErrorDisplay(msg);
+        return { isValid: false, message: msg };
     }
+
     const sciName = (
-        unitname1.value +
+        (unitname1?.value || "") +
         " " +
-        unitname2.value +
+        (unitname2?.value || "") +
         " " +
-        unitname3.value
+        (unitname3?.value || "")
     ).trim();
+
+    console.log("deleteMe sciName in verifyLoadFormCore is: ");
+    console.log(sciName);
     const exists = await checkNameExistence(
         sciName,
-        rankid?.value,
-        author?.value,
+        alpineData.rankid,
+        alpineData.author,
+        preExistingTaxonInfo,
     );
+    console.log("deleteMe exists in verifyLoadFormCore is: " + exists);
     if (exists) {
-        message = sciName + " already exists in the database.";
-        return { isValid: false, message: message };
+        const msg = sciName + alreadyExistsMessage;
+        setErrorDisplay(msg);
+        return { isValid: false, message: msg };
     }
     return { isValid: true, message: "" };
+}
+
+// async function validateTaxonForm(
+//     alpineData,
+//     preExistingTaxonInfo = null,
+//     alreadyExistsMessage = null,
+//     missingRequiredTaxonFieldMessage = null,
+// ) {
+//     console.log("deleteMe validateTaxonForm entered and alpineData is: ");
+//     console.log(alpineData);
+//     console.log(JSON.parse(JSON.stringify(alpineData)));
+//     if (preExistingTaxonInfo) {
+//         return validateTaxonEditForm(preExistingTaxonInfo, alpineData, missingRequiredTaxonFieldMessage);
+//     }
+//     console.log("deleteMe SHOULD NOT GET HERE IN THE TAXONOMY EDITOR");
+//     console.log("deleteMe preExistingTaxonInfo is: ");
+//     console.log(preExistingTaxonInfo);
+
+//     let message = "";
+//     const parenttid = document.querySelector('[name="parenttid"]');
+//     const unitname1 = document.querySelector('[name="unitname1"]');
+//     const unitname2 = document.querySelector('[name="unitname2"]');
+//     const unit2namevisible =
+//         !alpineData.rankid || parseInt(alpineData.rankid) >= 220;
+//     const unitname3 = document.querySelector('[name="unitname3"]');
+//     const unit3namevisible = !!(
+//         alpineData.rankid && parseInt(alpineData.rankid) >= 230
+//     );
+//     const cultivarEpithetVisible = !!(
+//         alpineData.rankid && parseInt(alpineData.rankid) >= 300
+//     );
+//     const cultivarEpithet = document.querySelector('[name="cultivarEpithet"]');
+
+//     if (!unitname1?.value) {
+//         message = "Missing required field: " + alpineData.unit1Label + " Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (unit2namevisible && !unitname2?.value) {
+//         message = "Missing required field: " + alpineData.unit2Label + " Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (unit3namevisible && !unitname3?.value) {
+//         message = "Missing required field: Infraspecific Epithet Name";
+//         return { isValid: false, message: message };
+//     }
+//     if (cultivarEpithetVisible && !cultivarEpithet?.value) {
+//         message = "Missing required field: Cultivar Epithet";
+//         return { isValid: false, message: message };
+//     }
+
+//     if (!parenttid?.value) {
+//         message =
+//             "Parent taxon is not valid. Make sure to select a parent taxon from the dropdown.";
+//         return { isValid: false, message: message };
+//     }
+//     const sciName = (
+//         unitname1.value +
+//         " " +
+//         unitname2.value +
+//         " " +
+//         unitname3.value
+//     ).trim();
+//     console.log("deleteMe sciName in validateTaxonForm is: ");
+//     console.log(sciName);
+//     const exists = await checkNameExistence(
+//         sciName,
+//         alpineData.rankid,
+//         alpineData.author,
+//         preExistingTaxonInfo,
+//     );
+//     if (exists) {
+//         message = sciName + alreadyExistsMessage;
+//         return { isValid: false, message: message };
+//     }
+//     return { isValid: true, message: "" };
+// }
+
+async function verifyLoadForm(
+    alpineData,
+    silent = false,
+    preExistingTaxonInfo = null,
+    sciNameRankRequiredMessage,
+    alreadyExistsMessage,
+    parentTaxonRequiredMessage,
+    parentIdNotSetMessage,
+    accNameNeedsValueMessage,
+    missingRequiredTaxonFieldMessage,
+) {
+    return verifyLoadFormCore(
+        alpineData,
+        true,
+        preExistingTaxonInfo,
+        sciNameRankRequiredMessage,
+        alreadyExistsMessage,
+        parentTaxonRequiredMessage,
+        parentIdNotSetMessage,
+        accNameNeedsValueMessage,
+        missingRequiredTaxonFieldMessage,
+    );
+    // const coreResult = await verifyLoadFormCore(
+    //     alpineData,
+    //     true,
+    //     preExistingTaxonInfo,
+    //     sciNameRankRequiredMessage,
+    //     alreadyExistsMessage,
+    //     parentTaxonRequiredMessage,
+    //     parentIdNotSetMessage,
+    //     accNameNeedsValueMessage,
+    //     missingRequiredTaxonFieldMessage
+    // );
+    // if (!coreResult.isValid) {
+    //     return coreResult;
+    // }
+    // return validateFormInput(
+    //     alpineData,
+    //     silent,
+    //     sciNameRankRequiredMessage,
+    //     parentTaxonRequiredMessage,
+    //     parentIdNotSetMessage,
+    //     accNameNeedsValueMessage
+    // );
+}
+
+function validateFormInput(
+    alpineData,
+    silent = false,
+    sciNameRankRequiredMessage = null,
+    parentTaxonRequiredMessage = null,
+    parentIdNotSetMessage = null,
+    accNameNeedsValueMessage = null,
+) {
+    const rankId = alpineData.rankid;
+    const unitname1 = document.querySelector('[name="unitname1"]');
+    if (!unitname1?.value) {
+        if (!silent) alert(sciNameRankRequiredMessage);
+        setErrorDisplay(sciNameRankRequiredMessage);
+        return { isValid: false, message: sciNameRankRequiredMessage };
+    }
+    const parentname = document.querySelector('[name="parentname"]');
+    if (!parentname?.value && rankId > "10") {
+        if (!silent) alert(parentTaxonRequiredMessage);
+        setErrorDisplay(parentTaxonRequiredMessage);
+        return { isValid: false, message: parentTaxonRequiredMessage };
+    }
+    const parenttid = document.querySelector('[name="parenttid"]');
+    if (!parenttid?.value && rankId > "10") {
+        if (!silent) alert(parentIdNotSetMessage);
+        setErrorDisplay(parentIdNotSetMessage);
+        return { isValid: false, message: parentIdNotSetMessage };
+    }
+    const notes = document.querySelector('[name="notes"]');
+    const source = document.querySelector('[name="source"]');
+    if (
+        !validateFieldLength(notes, 250, silent) ||
+        !validateFieldLength(source, 250, silent)
+    )
+        return { isValid: false, message: "" };
+
+    //If name is not accepted, verify accepted name
+    const accStatusObj = document.querySelectorAll('[name="acceptstatus"]');
+    if (accStatusObj[0]?.checked === false) {
+        const acceptedstr = document.querySelector('[name="acceptedstr"]');
+        if (!acceptedstr?.value) {
+            if (!silent) alert(accNameNeedsValueMessage);
+            setErrorDisplay(accNameNeedsValueMessage);
+            return {
+                isValid: false,
+                message: accNameNeedsValueMessage,
+            };
+        }
+    }
+    return { isValid: true, message: "" };
+}
+
+async function validateTaxonEditForm(
+    alpineData,
+    silent = false,
+    preExistingTaxonInfo,
+    sciNameRankRequiredMessage,
+    alreadyExistsMessage,
+    parentTaxonRequiredMessage = null,
+    parentIdNotSetMessage = null,
+    accNameNeedsValueMessage = null,
+    missingRequiredTaxonFieldMessage = null,
+) {
+    return verifyLoadFormCore(
+        alpineData,
+        silent,
+        preExistingTaxonInfo,
+        sciNameRankRequiredMessage,
+        alreadyExistsMessage,
+        parentTaxonRequiredMessage,
+        parentIdNotSetMessage,
+        accNameNeedsValueMessage,
+        missingRequiredTaxonFieldMessage,
+    );
+}
+
+function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
+    if (!preExistingTaxonInfo) {
+        return false;
+    }
+    const currentForm = document.getElementById("taxon-form");
+    if (!currentForm) {
+        return false;
+    }
+
+    const getFieldValue = (name) => {
+        const el = currentForm.querySelector(`[name="${name}"]`);
+        return el ? el.value : "";
+    };
+
+    const originalAcceptStatus =
+        preExistingTaxonInfo.tid == preExistingTaxonInfo.tidaccepted
+            ? "1"
+            : "0";
+    const acceptStatusEl = currentForm.querySelector(
+        '[name="acceptstatus"]:checked',
+    );
+    const currentAcceptStatus = acceptStatusEl ? acceptStatusEl.value : "1";
+
+    const fieldMatches = [
+        getFieldValue("rankid") ==
+            (preExistingTaxonInfo.rankID ?? preExistingTaxonInfo.rankid ?? ""),
+        getFieldValue("unitind1") == (preExistingTaxonInfo.unitInd1 ?? ""),
+        getFieldValue("unitname1") == (preExistingTaxonInfo.unitName1 ?? ""),
+        getFieldValue("unitind2") == (preExistingTaxonInfo.unitInd2 ?? ""),
+        getFieldValue("unitname2") == (preExistingTaxonInfo.unitName2 ?? ""),
+        getFieldValue("unitind3") == (preExistingTaxonInfo.unitInd3 ?? ""),
+        getFieldValue("unitname3") == (preExistingTaxonInfo.unitName3 ?? ""),
+        getFieldValue("cultivarEpithet") ==
+            (preExistingTaxonInfo.cultivarEpithet ?? ""),
+        getFieldValue("tradeName") == (preExistingTaxonInfo.tradeName ?? ""),
+        getFieldValue("author") == (preExistingTaxonInfo.author ?? ""),
+        getFieldValue("parenttid") == (preExistingTaxonInfo.parenttid ?? ""),
+        getFieldValue("notes") == (preExistingTaxonInfo.notes ?? ""),
+        getFieldValue("source") == (preExistingTaxonInfo.source ?? ""),
+        getFieldValue("securitystatus") ==
+            (preExistingTaxonInfo.securityStatus ?? "0"),
+        currentAcceptStatus == originalAcceptStatus,
+        getFieldValue("tidaccepted") ==
+            (preExistingTaxonInfo.tidaccepted ?? ""),
+        getFieldValue("unacceptabilityreason") ==
+            (preExistingTaxonInfo.UnacceptabilityReason ?? ""),
+    ];
+
+    const isSame = fieldMatches.every(Boolean);
+    if (isSame) {
+        setErrorDisplay("");
+    }
+    return isSame;
+}
+
+function processTextContent(content) {
+    return content?.replace("undefined", "")?.trim();
+}
+
+function setErrorDisplay(_text) {
+    // @TODO refactor this/ ensure that errors are already handled by Alpine
+    // Validation messages are returned to Alpine's validate() which sets
+    // this.validationMessage — driving x-text="validationMessage" on #validationMessage.
+    // No direct DOM write needed here.
 }
 
 const standardizeCultivarEpithet = (unstandardizedCultivarEpithet) => {
@@ -117,20 +453,20 @@ const standardizeTradeName = (unstandardizedTradeName) => {
 };
 
 function updateScinameDisplay() {
-    const unitind1 = document.querySelector('[name="unitind1"]').value;
-    const unitname1 = document.querySelector('[name="unitname1"]').value;
+    console.log("deleteMe updateScinameDisplay entered");
+    const unitind1 = document.querySelector('[name="unitind1"]')?.value ?? "";
+    const unitname1 = document.querySelector('[name="unitname1"]')?.value ?? "";
 
-    const unitind2 = document.querySelector('[name="unitind2"]').value;
-    const unitname2 = document.querySelector('[name="unitname2"]').value;
+    const unitind2 = document.querySelector('[name="unitind2"]')?.value ?? "";
+    const unitname2 = document.querySelector('[name="unitname2"]')?.value ?? "";
     // const unit2namevisible =
     //     document.getElementById("unit2").style.display !== "none";
 
-    const unitname3 = document.querySelector('[name="unitname3"]').value;
-    const unitind3 = document.querySelector('[name="unitind3"]').value;
-    const cultivarEpithet = document.querySelector(
-        '[name="cultivarEpithet"]',
-    ).value;
-    const tradeName = document.querySelector('[name="tradeName"]').value;
+    const unitname3 = document.querySelector('[name="unitname3"]')?.value ?? "";
+    const unitind3 = document.querySelector('[name="unitind3"]')?.value ?? "";
+    const cultivarEpithet =
+        document.querySelector('[name="cultivarEpithet"]')?.value ?? "";
+    const tradeName = document.querySelector('[name="tradeName"]')?.value ?? "";
     // const unit3namevisible =
     //     document.getElementById("unit3").style.display !== "none";
     // const rankid = document.querySelector('[name="rankid"]');
@@ -145,8 +481,16 @@ function updateScinameDisplay() {
     if (tradeName) {
         sciname += " " + standardizeTradeName(tradeName);
     }
+    const trimmedSciname = sciname.trim();
+    console.log(
+        "deleteMe updateScinameDisplay computed sciname:",
+        trimmedSciname,
+        { unitind1, unitname1, unitind2, unitname2, unitname3, unitind3 },
+    );
     const target = document.getElementById("sciname-preview");
-    target.textContent = sciname.trim();
+    if (target) {
+        target.textContent = trimmedSciname;
+    }
     // return sciname;
 }
 
@@ -339,7 +683,18 @@ async function parseName() { //lightly modified from original function in old co
     taxonForm.quickparser.value = "";
 }
 
+async function validateTaxonDelete(verifyArr) {
+    const verificationCriteria = Object.keys(verifyArr);
+    const isValid = verificationCriteria.every((criterion) => {
+        return verifyArr[criterion] === "0";
+    });
+    return isValid;
+}
+
 window.updateLabels = updateLabels;
-window.validateTaxonForm = validateTaxonForm;
+// window.validateTaxonForm = validateTaxonForm;
 window.updateScinameDisplay = updateScinameDisplay;
 window.parseName = parseName;
+window.verifyLoadForm = verifyLoadForm;
+window.validateTaxonEditForm = validateTaxonEditForm;
+window.validateTaxonDelete = validateTaxonDelete;

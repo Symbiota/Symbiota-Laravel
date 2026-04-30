@@ -1,8 +1,13 @@
-@props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links'])
+@props(['taxon', 'parents', 'common_names', 'children' => [], 'taxa_descriptions', 'external_links', 'canEditTaxon' => Gate::check('TAXON_EDITOR'),])
 <x-layout class="grid grid-col-1 gap-4">
+    @if (session('success'))
+        <div class="alert alert-success">
+            <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
+        </div>
+    @endif
     <div class="flex items-center">
         <h1 class="text-2xl font-bold w-fit">
-            <i>{{ $taxon->sciName }}</i>
+            <i>{{ $taxon->sciName ?? 'Name Missing' }}</i>
             @if ($taxon->author)
             {{ $taxon->author}}
             @endif
@@ -13,9 +18,14 @@
                     {{ $occurrence_count }} Records
                 </x-button>
             </x-nav-link>
-            <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
-                <x-icons.edit class="text-xl"/>
+            <a href="{{ url('/taxon/' . $taxon->tid . '/profileEdit') }}">
+                <x-icons.edit class="text-xl"/> Edit Taxon Profile
             </a>
+            @if($canEditTaxon)
+                <a href="{{ url('/taxon/' . $taxon->tid . '/edit') }}">
+                    <x-icons.edit class="text-xl"/> Edit Taxon
+                </a>
+            @endif
         </div>
     </div>
     <div class="flex-grow">
@@ -36,7 +46,7 @@
                     <div class="pl-1.5">
                         @endif
                         ->
-                        <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}">{{ $parent->sciName
+                        <x-link class="text-base-content" href="{{ url('taxon/' . $parent->tid) }}">{{ $parent->sciName ?? 'Name Missing'
                             }} ({{ $parent->rankname }})</x-link>
                         @endforeach
                         @foreach($parents as $parent)
@@ -96,7 +106,7 @@
     @if(count($children))
     <div class="flex flex-wrap flex-row gap-3">
     @foreach ($children as $child)
-        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName" />
+        <x-image-card :src="$child->thumbnailUrl" :title="$child->sciName ?? 'Name Missing'" />
     @endforeach
     </div>
     @else
