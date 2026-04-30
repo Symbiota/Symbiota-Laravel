@@ -68,7 +68,7 @@ $clVoucherReport->setClid($clid);
 $statusStr = '';
 
 $clAdmin = Gate::check('CL_ADMIN', $clid);
-$settings = $checklist->defaultSettings? json_decode($checklist->defaultSettings): [];
+$settings = $checklist->defaultSettings;
 $dynamicProperties = $checklist->dynamicProperties? json_decode($checklist->dynamicProperties): [];
 
 // TODO (Logan) move this?
@@ -219,7 +219,7 @@ $TABS = [
             ['title' => 'Checklist Administration' ]
         ]"/>
     </div>
-    <x-horizontal-nav.container default_active_tab="description" :items="$TABS">
+    <x-horizontal-nav.container default_active_tab="admin" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
             <x-checklist.editor-management :users="$users" :editors="$editors" :pid="$pid" />
