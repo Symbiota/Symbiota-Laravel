@@ -222,119 +222,18 @@ $TABS = [
     <x-horizontal-nav.container default_active_tab="description" :items="$TABS">
         {{-- ADMIN START--}}
         <x-horizontal-nav.tab name="admin" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <div class="flex">
-                    <span class="font-bold text-2xl">
-                        {{ $LANG['CURREDIT'] }}
-                    </span>
+            <x-checklist.editor-management :users="$users" :editors="$editors" :pid="$pid" />
 
-                    <span class="flex flex-grow justify-end">
-                        <x-modal>
-                            <x-slot name="button">
-                                {{ $LANG['ADDEDITOR'] }}
-                            </x-slot>
-                            <x-slot name="title" class="text-2xl">
-                                {{ $LANG['ADDNEWUSER'] }}
-                            </x-slot>
-                            <x-slot name="body">
-                                <form class="flex flex-col gap-4">
-                                    <x-select id="editoruid" class="w-full" label="Select User" :items="$users" />
-								    <input type="hidden" name="submitaction" value="addEditor" aria-label="{{ $LANG['ADDEDITOR'] }}" />
+            <x-checklist.projects :userProjects="$userProjects" :projects="$projects" :pid="$pid" />
 
-                                    <div class="flex align-items gap-2">
-                                        <x-button type="submit">Add</x-button>
-                                        <x-button variant="error" type="button">Cancel</x-button>
-                                    </div>
-                                </form>
-                            </x-slot>
-                        </x-modal>
-                    </span>
-                </div>
-                <hr />
-                <div class="flex flex-col gap-2">
-                    @foreach ($editors as $uid => $editor)
-                        <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
-                            <span class="flex-grow">{{ $editor['name'] }}</span>
-                            <form method="post">
-                                @csrf
-								<input name="pid" type="hidden" value="{{ $pid }}" />
-								<input name="deleteuid" type="hidden" value="{{ $uid }}" />
-								<input name="submitaction" type="hidden" value="DeleteEditor" />
-                                <button type="submit">
-                                    <x-icons.delete class="cursor-pointer" />
-                                <button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-4">
-                <div class="flex">
-                    <span class="font-bold text-2xl">
-                        {{ $LANG['INVENTORYPROJECTS'] }}
-                    </span>
-
-                    <span class="flex flex-grow justify-end">
-                        <x-modal>
-                            <x-slot name="button" :disabled="count($userProjects) === 0" >
-                                Add Project
-                            </x-slot>
-                            <x-slot name="title" class="text-2xl">
-                                {{ $LANG['LINKTOPROJECT'] }}
-                            </x-slot>
-                            <x-slot name="body">
-                                <form class="flex flex-col gap-4">
-                                    <x-select id="pid" class="w-full" label="Select a Project" :items="$userProjects" />
-								    <input type="hidden" name="submitaction" value="addToProject" aria-label="{{ $LANG['SUBMIT_BUTTON'] }}" />
-
-                                    <div class="flex align-items gap-2">
-                                        <x-button type="submit">Add</x-button>
-                                        <x-button variant="error" type="button">Cancel</x-button>
-                                    </div>
-                                </form>
-                            </x-slot>
-                        </x-modal>
-                    </span>
-                </div>
-                <hr />
-                @foreach($projects as $linked_pid => $name)
-                <div class="flex items-center gap-2 border p-2 border-base-300 bg-base-200 rounded-md">
-                    <span class="flex-grow">
-                        <x-link href="{{ url('projects/' . $pid) }}">{{ $name }}</x-link>
-                    </span>
-                    @can('PROJ_ADMIN', $linked_pid)
-                    <form method="post">
-                        @csrf
-                        <input name="pid" type="hidden" value="{{ $linked_pid }}" />
-                        <input name="submitaction" type="hidden" value="deleteProject" />
-                        <button type="submit">
-                            <x-icons.delete class="cursor-pointer" />
-                        <button>
-                    </form>
-                    @endcan
-                </div>
-                @endforeach
-            </div>
-
-            <div class="flex flex-col gap-4">
-                <div class="font-bold text-2xl">
-                    {{ $LANG['PERMREMOVECHECK'] }}
-                </div>
-                <hr />
-                <p>{{ $LANG['REMOVEUSERCHECK'] }}</p>
-                <p class="font-bold text-lg text-warning">{{ $LANG['WARNINGNOUN'] }}</p>
-                <x-button :disabled="count($projects) > 0 || count($editors) > 0" >
-                    {{ $LANG['DELETECHECK'] }}
-                </x-button>
-            </div>
+            <x-checklist.delete-form :disabled="count($projects) > 0 || count($editors) > 0" />
         </x-horizontal-nav.tab>
         {{-- ADMIN END --}}
 
         {{-- DESCRIPTION START--}}
         <x-horizontal-nav.tab name="description">
             <div class="font-bold text-2xl mb-2">
-                {{ $LANG['EDITCHECKDET'] }}
+                {{ __('checklists_checklistadmin.EDITCHECKDET') }}
             </div>
             <hr class="mb-2" />
             <x-checklist.form :checklist="$checklist" :userChecklists="$userChecklists" />
