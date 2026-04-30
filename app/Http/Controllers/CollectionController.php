@@ -178,6 +178,7 @@ class CollectionController extends Controller {
             );
         }
     }
+
     public static function comments() {
         return view('pages/collections/comments');
     }
