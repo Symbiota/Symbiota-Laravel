@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollectionTraitController;
 use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ExsiccataController;
@@ -164,6 +165,12 @@ Route::group(['prefix' => '/collections'], function () {
     Route::post('/{collid}/skeletal', [CollectionController::class, 'skeletalAdd'])->can('COLL_EDIT', 'collid');
     Route::get('/{collid}', [CollectionController::class, 'collection']);
     Route::match(['GET', 'POST'], '/{collid}/comments', [CollectionController::class, 'comments'])->can('COLL_ADMIN', 'collid')->where('collid', '[0-9+]');
+
+    Route::controller(CollectionTraitController::class)->group(function () {
+        Route::get('/{collid}/traits/edit', 'editor')->can('COLL_EDIT', 'collid');
+        Route::post('/{collid}/traits/edit', 'getImages')->can('COLL_EDIT', 'collid');
+        Route::patch('/{collid}/traits/edit', 'save')->can('COLL_EDIT', 'collid');
+    });
 });
 
 /*

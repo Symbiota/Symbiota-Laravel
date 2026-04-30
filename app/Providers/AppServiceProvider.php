@@ -142,6 +142,10 @@ class AppServiceProvider extends ServiceProvider {
             return '<?php echo $attributes["x-bind:" . "' . $expression . '"] ? \'x-bind:\'. "' . $expression . '" . \'="\' . $attributes["x-bind:" . "' . $expression . '"] . \'"\': "" ?>';
         });
 
+        Blade::directive('cloak', function ($expression) {
+            return "<?= $expression? 'x-cloak': '' ?>";
+        });
+
         /**
          * Add Query logs For Local Enviroments.
          */

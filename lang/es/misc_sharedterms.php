@@ -2,6 +2,7 @@
 
 return [
     'COLL_PROFILE' => 'Perfil de Colección',
+    'FILTER' => 'Filtro',
     'MAILING_ADD' => 'Dirección Postal',
     'NEED_INST_CODE' => 'El Código de Institución debe tener un valor',
     'NEED_COLL_VALUE' => 'Nombre de Colección debe tener un valor',
