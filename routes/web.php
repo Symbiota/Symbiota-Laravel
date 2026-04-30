@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChecklistAdminController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionTraitController;
@@ -76,8 +77,16 @@ Route::group(['prefix' => 'checklists'], function () {
     Route::post('/create', [ChecklistController::class, 'createChecklist']);
     Route::match(['GET', 'POST'], '/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
     Route::get('/{clid}/pdf', [ChecklistController::class, 'browserPrint']);
-    Route::match(['GET', 'POST'], '/{clid}', [ChecklistController::class, 'checklist']);
+    Route::match(['GET', 'POST'], '/{clid}', [ChecklistController::class, 'checklist'])->where('clid', '[0-9]+');
     Route::view('/{clid}/key', 'pages/checklist/key');
+
+    Route::controller(ChecklistAdminController::class)->group(function () {
+        Route::get('/{clid}/admin', 'getAdminPage')->where('clid', '[0-9]+');
+        Route::post('/{clid}/admin', 'getAdminPage')->where('clid', '[0-9]+');
+        Route::post('/{clid}/editor/{uid}', 'addEditor')->where('clid', '[0-9]+');
+        Route::post('/{clid}/project/{pid}', 'addProject')->where('clid', '[0-9]+');
+        Route::delete('/{clid}', 'delete')->where('clid', '[0-9]+');
+    });
 });
 
 /*
