@@ -127,8 +127,6 @@ class CollectionController extends Controller {
         $occurrenceEditor->setCollId($collId);
         $occurrence = request()->all();
         $occurrence['collid'] = $collId;
-        $isEditor = true;
-        // $responseArr = [];
 
         $occid = true;
         $status = true;
@@ -144,7 +142,8 @@ class CollectionController extends Controller {
                 $status = false;
                 $error = 'dupeCatalogNumber';
             } elseif (request('addaction') == '2') {
-                if (! $occurrenceEditor->editOccurrence($occurrence, $isEditor)) {
+                // Editor is always an editor because route has auth middleware for editors
+                if (! $occurrenceEditor->editOccurrence($occurrence, true)) {
                     $error = $occurrenceEditor->getErrorStr();
                 }
             }
