@@ -17,7 +17,7 @@
             ['title' => 'Home', 'href' => url('')],
             [
                 'title' => 'Taxononmic Tree View',
-                'href' => legacy_url('/taxa/taxonomy/taxonomydisplay.php'),
+                'href' => url('/taxon/'),
             ],
             ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]"

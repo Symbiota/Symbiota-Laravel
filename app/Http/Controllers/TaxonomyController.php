@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Taxonomy;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -256,7 +257,13 @@ class TaxonomyController extends Controller {
         }
     }
 
-    public static function show(Request $request) {
+    public static function show(Request $request, $tid = null) {
+        $targetTid = $tid ?? null;
+        $taxonName = null;
+        if($targetTid) {
+            $taxon = Taxonomy::findOrFail($targetTid);
+            $taxonName = $taxon->sciName;
+        }
         $parents = [];
         $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
         $displayAuthor = $request->filled('displayauthor') ? (int) $request->input('displayauthor') : 0;
@@ -301,6 +308,8 @@ class TaxonomyController extends Controller {
         return view('pages/taxon/show', [
             'parents' => $parents,
             'rankMap' => $rankMap,
+            'targetTid' => $targetTid,
+            'taxonName' => $taxonName,
         ]);
     }
 

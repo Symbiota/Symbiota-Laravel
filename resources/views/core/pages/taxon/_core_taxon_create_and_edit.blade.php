@@ -275,7 +275,7 @@
                     </div>
                     <div class="w-1/2">
                         <x-input
-                            label="{{ __('glossary_addterm.SOURCE') }}"
+                            label="{{ __('checklists_checklist.SOURCE') }}"
                             name="source"
                             id="source"
                             value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->source ?? '') : '' }}"

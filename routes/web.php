@@ -60,6 +60,7 @@ Route::group(['prefix' => 'taxon'], function () {
     Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->name('taxon.view');
     Route::get('/{tid}/profileEdit', [TaxonomyController::class, 'editTaxonProfile'])->name('taxon.profileEdit')->middleware('auth'); // @TODO gate
     Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->name('taxon.editview')->middleware('auth'); // @TODO gate
+    Route::get('/{tid}/tree', [TaxonomyController::class, 'show']);
     Route::delete('/delete', [TaxonomyController::class, 'delete'])->name('taxon.delete')->middleware('auth'); // @TODO gate
     Route::post('/remap', [TaxonomyController::class, 'remap'])->name('taxon.remap')->middleware('auth'); // @TODO gate
 });
