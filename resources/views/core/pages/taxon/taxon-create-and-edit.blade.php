@@ -1,3 +1,14 @@
+@props([
+    'mode' => 'create',
+    'canCreateOrEdit' => false,
+    'allTaxonRanks' => collect(),
+    'indContent' => [],
+    'securityOptions' => [],
+    'securitystatusstart' => 0,
+    'taxonInfo' => null,
+    'parentName' => '',
+    'acceptedName' => '',
+])
 @if(!$canCreateOrEdit)
     <div class="mb-4 flex flex-col items-center justify-center">
         <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>

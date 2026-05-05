@@ -1,17 +1,17 @@
-@props([
-    'mode' => 'create',
-    'kingdoms' => [],
-    'allTaxonRanks' => [],
-    'indContent' => [],
-    'securityOptions' => [],
-    'errors' => [],
-    'canCreateOrEdit' => false,
-    'taxonInfo' => null,
-    'parentName' => '',
-    'acceptedName' => '',
-    'securitystatusstart' => 0,
-    'verifyArr' => [],
-])
+@php
+    $mode = $mode ?? 'create';
+    $kingdoms = $kingdoms ?? [];
+    $allTaxonRanks = $allTaxonRanks ?? [];
+    $indContent = $indContent ?? [];
+    $securityOptions = $securityOptions ?? [];
+    $errors = $errors ?? [];
+    $canCreateOrEdit = $canCreateOrEdit ?? false;
+    $taxonInfo = $taxonInfo ?? null;
+    $parentName = $parentName ?? '';
+    $acceptedName = $acceptedName ?? '';
+    $securitystatusstart = $securitystatusstart ?? 0;
+    $verifyArr = $verifyArr ?? [];
+@endphp
 <x-layout>
     <div class="mb-4">
         <x-breadcrumbs
@@ -30,12 +30,22 @@
         <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Synonyms', 'Hierarchy', 'Child Taxa', 'Delete']">
             {{-- Editor --}}
             <div>
-                @include('core.pages.taxon._core_taxon_create_and_edit')
+                <x-pages.taxon.taxon-create-and-edit
+                    :mode="$mode ?? 'edit'"
+                    :canCreateOrEdit="$canCreateOrEdit ?? false"
+                    :allTaxonRanks="$allTaxonRanks ?? collect()"
+                    :indContent="$indContent ?? []"
+                    :securityOptions="$securityOptions ?? []"
+                    :securitystatusstart="$securitystatusstart ?? 0"
+                    :taxonInfo="$taxonInfo ?? null"
+                    :parentName="$parentName ?? ''"
+                    :acceptedName="$acceptedName ?? ''"
+                />
             </div>
 
             {{-- Synonyms --}}
             <div>
-                @include('core.pages.taxon.taxonomicSynonymEdit')
+                <x-taxonomy-synonym-edit :synonyms="$taxonInfo->synonyms ?? []" :mode="$mode" :taxonInfo="$taxonInfo" />
             </div>
 
             {{-- Hierarchy --}}

@@ -168,6 +168,7 @@ class TaxonomyController extends Controller {
 
     public static function editTaxon($tid) {
         $taxon = self::taxonData($tid);
+        $taxonInfo = $taxon;
         $securitystatusstart = $taxon->securitystatus ?? 0;
         if (! $taxon) {
             // @TODO return a 404 not found page
@@ -193,6 +194,7 @@ class TaxonomyController extends Controller {
         $taxonEditorObj = new \TaxonomyEditorManager();
         $taxonEditorObj->setTid($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+        $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
 
         if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
@@ -210,7 +212,7 @@ class TaxonomyController extends Controller {
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
             'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
-            'taxonInfo' => $taxon,
+            'taxonInfo' => $taxonInfo,
             'parentName' => $parentName,
             'acceptedName' => $acceptedName,
             'securitystatusstart' => $securitystatusstart,
