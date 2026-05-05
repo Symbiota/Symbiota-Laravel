@@ -30,9 +30,7 @@
             <div class="min-h-72">
                 <div class="flex items-center gap-2">
                     <h2 class="text-xl">Taxonomy</h2>
-                    <x-link href="{{ url('/taxon/' . $taxon->tid . '/tree') }}">
-                        See full taxonomic tree
-                    </x-link>
+                    <x-link href="{{ url('/taxon/' . $taxon->tid . '/tree') }}"> See full taxonomic tree </x-link>
                 </div>
                 @foreach($parents as $parent)
                     @if($loop->first)

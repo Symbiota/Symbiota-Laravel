@@ -262,7 +262,7 @@ class TaxonomyController extends Controller {
     public static function show(Request $request, $tid = null) {
         $targetTid = $tid ?? null;
         $taxonName = null;
-        if($targetTid) {
+        if ($targetTid) {
             $taxon = Taxonomy::findOrFail($targetTid);
             $taxonName = $taxon->sciName;
         }
