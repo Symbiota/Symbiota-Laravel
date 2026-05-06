@@ -11,13 +11,19 @@
     'hide_synonyms_checkbox' => false,
     'label' => 'Search Taxa',
 ])
+@php
+$use_thes_id = 'usethes-' . $id;
+$taxa_type_id = 'taxa-type-' . $id;
+$includes = !$hide_synonyms_checkbox? ['#' . $use_thes_id]: [];
+@endphp
 <div>
     <label class="text-lg" for="{{ $id }}">{{ $label }}</label>
     <div class="group flex items-center">
         @if(!$hide_selector)
+            @php $includes[] = '#' . $taxa_type_id @endphp
             <x-select
                 name="taxa-type"
-                id="taxa-type-{{ $id }}"
+                :id="$taxa_type_id"
                 :default="0"
                 class="mr-1"
                 class:button="rounded-r-none"
@@ -35,7 +41,7 @@
             :value="$taxa_value"
             placeholder="Type to search..."
             search="{{ url('/api/taxa/search') }}"
-            include="#usethes-{{ $id }}, #taxa-type-{{ $id }}"
+            :include="implode(',', $includes)"
         >
             <x-slot
                 name="input"
@@ -51,7 +57,7 @@
 
     @if(!$hide_synonyms_checkbox)
         <x-checkbox
-            :id="'usethes-' . $id"
+            :id="$use_thes_id"
             :checked="$use_thes_value === 1"
             class="mt-2"
             name="usethes"
