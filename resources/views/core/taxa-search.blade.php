@@ -29,13 +29,19 @@
             />
         @endif
 
+        @php
+            $includeSelectors = collect([
+                !$hide_synonyms_checkbox ? "#usethes-{$id}" : null,
+                !$hide_selector ? "#taxa-type-{$id}" : null,
+            ])->filter()->implode(', ');
+        @endphp
         <x-autocomplete-input
             :name="$name"
             :id="$id"
             :value="$taxa_value"
             placeholder="Type to search..."
             search="{{ url('/api/taxa/search') }}"
-            include="#usethes-{{ $id }}, #taxa-type-{{ $id }}"
+            include="{{ $includeSelectors }}"
         >
             <x-slot
                 name="input"
