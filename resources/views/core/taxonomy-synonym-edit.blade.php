@@ -10,7 +10,7 @@
             this.validateAcceptedStatusForm();
         },
         async validateAcceptedStatusForm() {
-            this.acceptedstr = this.$el.querySelector('#acceptedstr')?.value ?? '';
+            this.acceptedstr = this.$el.querySelector('#synonym-acceptedstr')?.value ?? '';
             this.tidaccepted = this.$el.querySelector('[name=tidaccepted]')?.value ?? '';
             console.log('Validating form with acceptedstr:', this.acceptedstr, 'and tidaccepted:', this.tidaccepted);
             if (this.acceptedstr && this.tidaccepted) {
@@ -46,7 +46,7 @@
                 class="font-bold"
                 label="{{ __('taxonomy_taxoneditor.ACCEPTED_NAME') }}"
                 required
-                id="acceptedstr"
+                id="synonym-acceptedstr"
                 name="acceptedstr"
                 tidName="tidaccepted"
                 hide_selector="true"
