@@ -41,6 +41,7 @@
                 name="input"
                 @auto_input_select="document.querySelector('#{{ 'tid-' . $id }}').value = event.detail.selection.id"
                 @input="document.querySelector('#{{ 'tid-' . $id }}').value = ''"
+                hx-on:htmx:config-request="event.detail.parameters.taxa = this.value"
                 class="peer-input z-20 rounded-l-none"
             ></x-slot>
             <x-slot name="menu"></x-slot>
