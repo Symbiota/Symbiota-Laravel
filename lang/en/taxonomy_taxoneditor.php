@@ -55,7 +55,7 @@ return [
     'QUERY_HIERARCHY' => 'Quick Query Taxonomic Hierarchy',
     'REBUILD_HIERARCHY' => 'Rebuild Hierarchy',
     'EMPTY' => 'Empty',
-    'TARGET_TAXON_MISSING' => 'Target Taxon missing',
+    'TARGET_TAXON_MISSING' => 'Target taxon missing',
     'GENUS_NAME' => 'Genus Name',
     'QUICK_PARSER_LABEL' => 'Optional Quick Parser',
 ];

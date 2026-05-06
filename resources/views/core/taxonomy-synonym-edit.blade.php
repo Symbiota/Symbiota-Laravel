@@ -4,6 +4,7 @@
     name="taxonomy-synonym-container"
     x-data="{
         isValid: false,
+        errorMessage: '',
         acceptedstr: '',
         tidaccepted: '',
         init() {
@@ -17,6 +18,7 @@
                 this.isValid = true;
             } else {
                 this.isValid = false;
+                this.errorMessage = '* {{ __('taxonomy_taxoneditor.TARGET_TAXON_MISSING') }}';
             }
         },
     }"
@@ -65,6 +67,7 @@
                 x-text=" isValid ? '{{ $taxonInfo->isAccepted ? __('taxonomy_taxoneditor.CHANGE_STAT_NOT_ACCEPT') : __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
             >
             </x-button>
+            <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
             <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
         </x-fieldset>
     </form>

@@ -35,13 +35,6 @@ $includes = !$hide_synonyms_checkbox? ['#' . $use_thes_id]: [];
             />
         @endif
 
-        @php
-            $includeSelectors = collect([
-                !$hide_synonyms_checkbox ? "#usethes-{$id}" : null,
-                !$hide_selector ? "#taxa-type-{$id}" : null,
-            ])->filter()->implode(', ');
-            $vals = $name !== 'taxa' ? 'js:{"taxa": (document.getElementById("' . $id . '")?.value ?? "")}' : '';
-        @endphp
         <x-autocomplete-input
             :name="$name"
             :id="$id"
