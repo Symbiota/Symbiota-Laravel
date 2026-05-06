@@ -34,6 +34,7 @@
                 !$hide_synonyms_checkbox ? "#usethes-{$id}" : null,
                 !$hide_selector ? "#taxa-type-{$id}" : null,
             ])->filter()->implode(', ');
+            $vals = $name !== 'taxa' ? 'js:{"taxa": (document.getElementById("' . $id . '")?.value ?? "")}' : '';
         @endphp
         <x-autocomplete-input
             :name="$name"
@@ -42,6 +43,7 @@
             placeholder="Type to search..."
             search="{{ url('/api/taxa/search') }}"
             include="{{ $includeSelectors }}"
+            :vals="$vals"
         >
             <x-slot
                 name="input"

@@ -269,9 +269,9 @@
                             required
                             id="parentname"
                             name="parentname"
-                            :tidName="'parenttid'"
-                            :hide_selector="true"
-                            :hide_synonyms_checkbox="true"
+                            tidName="parenttid"
+                            hide_selector="true"
+                            hide_synonyms_checkbox="true"
                             :taxa_value="$mode === 'edit' && $taxonInfo ? $parentName : ''"
                             :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->parenttid ?? '') : ''"
                         />

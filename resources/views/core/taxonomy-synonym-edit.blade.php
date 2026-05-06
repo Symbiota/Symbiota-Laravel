@@ -44,9 +44,9 @@
                 required
                 id="acceptedstr"
                 name="acceptedstr"
-                :tidName="'tidaccepted'"
-                :hide_selector="true"
-                :hide_synonyms_checkbox="true"
+                tidName="tidaccepted"
+                hide_selector="true"
+                hide_synonyms_checkbox="true"
             />
             <x-input name="unacceptabilityreason" id="unacceptabilityreason" label="{{ __('taxonomy_taxoneditor.REASON') }}" />
             <x-input name="notes" id="notes" label="{{ __('projects.NOTES') }}" />
