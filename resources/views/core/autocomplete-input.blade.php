@@ -41,6 +41,7 @@
         x-on:click="open = true"
         @auto_input_select="{{ $input->attributes->get('@auto_input_select') }}"
         @input="{{ $input->attributes->get('@input') }}"
+        hx-on:htmx:config-request="{{ $input->attributes->get('hx-on:htmx:config-request') }}"
         :placeholder="$placeholder"
         :name="$name"
         :id="$id"
