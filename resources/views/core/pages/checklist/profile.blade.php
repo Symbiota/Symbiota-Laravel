@@ -105,7 +105,7 @@ $breadcrumbs[] = $checklist->name;
                 >
                     <x-taxa-search />
                     @if($activate_key)
-                        <x-link href="{{ legacy_url('/ident/key.php') }}?dynclid={{ 0 }}&clid={{ $checklist->clid }}">
+                        <x-link href="{{ url('checklists/' . $checklist->clid .'/key') }}">
                             {{ __('checklists_checklist.OPEN_KEY') }}
                         </x-link>
                     @endif

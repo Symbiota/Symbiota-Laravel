@@ -22,7 +22,7 @@ class ChecklistController extends Controller {
             'show_taxa_alphabetically' => request('show_taxa_alphabetically') ?? $defaultSettings->dalpha ?? false,
             'limit_voucher_images' => request('limit_voucher_images') ?? $defaultSettings->dvoucherimages ?? false,
             'show_subgenera' => request('show_subgenera') ?? $defaultSettings->dsubgenera ?? false,
-            'activate_key' => $defaultSettings->activateKey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false,
+            'activate_key' => $defaultSettings->activatekey ?? $GLOBALS['KEY_MOD_IS_ACTIVE'] ?? false,
         ];
     }
 
