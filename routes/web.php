@@ -135,11 +135,14 @@ Route::group(['prefix' => '/occurrence'], function () {
     /* Linked Resources */
     Route::put('/{occid}/link/checklist', [OccurrenceController::class, 'linkChecklist']);
     Route::put('/{occid}/link/dataset', [OccurrenceController::class, 'linkDataset']);
+
     /* Comments */
-    Route::post('/{occid}/comment', [OccurrenceCommentController::class, 'post']);
-    Route::delete('/{occid}/comment/{comid}', [OccurrenceCommentController::class, 'delete']);
-    Route::patch('/{occid}/comment/{comid}/report', [OccurrenceCommentController::class, 'report']);
-    Route::patch('/{occid}/comment/{comid}/public', [OccurrenceCommentController::class, 'public']);
+    Route::controller(OccurrenceCommentController::class)->prefix('/{occid}/comment')->group(function () {
+        Route::post('/', 'post');
+        Route::delete('/{comid}', 'delete');
+        Route::patch('/{comid}/report', 'report');
+        Route::patch('/{comid}/public', 'public');
+    });
 });
 
 /*
