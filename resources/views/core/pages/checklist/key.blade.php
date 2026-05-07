@@ -59,6 +59,11 @@
     <div class="relative block">
         <x-page-title>{{ $dataManager->getClName() }}</x-page-title>
     </div>
+
+    @if(!$dynClid && ($authors = $dataManager->getClAuthors()))
+        <div>{{ $authors }}</div>
+    @endif
+
     <x-accordion :label="__('ident_key.FILTER_OPTIONS')">
         <form class="bg-base-100 flex flex-col gap-4">
             <div class="flex items-center gap-2">
