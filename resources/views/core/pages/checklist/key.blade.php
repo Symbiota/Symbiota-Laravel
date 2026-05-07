@@ -98,15 +98,17 @@
         </form>
     </x-accordion>
 
-    <div>
+    <div class="flex gap-4 items-center flex-wrap">
         @if($count)
-            <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
+            <span class="flex-grow">
+                <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
+            </span>
         @endif
-        @if($isKeyEditor || true)
-            <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
-                <x-icons.edit />
+        @if($isKeyEditor)
+            <x-button href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
+                <x-icons.edit class="text-inherit hover:text-inherit" />
                 {{ __('ident_key.EDIT_CHAR_MATRIX') }}
-            </x-link>
+            </x-button>
         @endif
     </div>
 
