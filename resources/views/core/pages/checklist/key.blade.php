@@ -66,7 +66,7 @@
 
     <x-accordion :label="__('ident_key.FILTER_OPTIONS')">
         <form class="bg-base-100 flex flex-col gap-4">
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <x-select
                     class="w-full min-w-72"
                     defaultValue="{{ $taxonValue ?? 'All Species' }}"
@@ -87,11 +87,11 @@
                 />
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <x-checkbox id="displaycommon" :label="__('ident_key.DISPLAY_COMMON')" :checked="$displayCommon" />
                 <x-checkbox id="displayimages" :label="__('ident_key.DISPLAY_IMAGES')" :checked="$displayImages" />
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
                 <x-button type="submit"> {{ __('checklists_checklist.BUILD_LIST') }} </x-button>
                 <x-button href="{{ url()->current() }}" hx-boost="true"> {{ __('map.RESET') }} </x-button>
             </div>
