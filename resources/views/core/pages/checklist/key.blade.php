@@ -98,7 +98,7 @@
         </form>
     </x-accordion>
 
-    <div class="flex gap-4 items-center flex-wrap">
+    <div class="flex flex-wrap items-center gap-4">
         @if($count)
             <span class="flex-grow">
                 <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
