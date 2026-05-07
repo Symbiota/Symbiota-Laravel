@@ -57,7 +57,7 @@
     ]"
     />
     <div class="relative block">
-        <div class="text-4xl font-bold">{{ $dataManager->getClName() }}</div>
+        <x-page-title>{{ $dataManager->getClName() }}</x-page-title>
     </div>
     <x-accordion :label="__('ident_key.FILTER_OPTIONS')">
         <form class="bg-base-100 flex flex-col gap-4">
