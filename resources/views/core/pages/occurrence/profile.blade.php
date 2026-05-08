@@ -179,9 +179,8 @@ function format_latlong_err($occurrence) {
                     __('individual.ID_REMARKS') => $occurrence->identificationRemarks,
                     __('individual.TYPE_STATUS') => $occurrence->typeStatus,
                     __('individual.EVENT_ID') => $occurrence->eventID,
-                    __('individual.OBSERVER') => $occurrence->recordedBy,
-                    //Todo fix conflicting lang tag
-                    __('collections_list.NUMBER') => $occurrence->recordNumber,
+                    ($collection->collType === \App\Models\Collection::Specimens?__('collections_list.COLLECTOR'): __('individual.OBSERVER')) => $occurrence->recordedBy,
+                    ($collection->collType === \App\Models\Collection::Specimens?__('collections_list.NUMBER'): __('individual.OBSERVER_NUMBER')) => $occurrence->recordNumber,
                     __('individual.DATE') => format_range($occurrence->eventDate, $occurrence->eventDate2),
                     __('individual.VERBATIM_DATE') => $occurrence->verbatimEventDate,
                     __('individual.ADDITIONAL_COLLECTORS') => $occurrence->associatedCollectors,

@@ -25,6 +25,7 @@ return [
     'DATE_DET' => 'Date Determined',
     'TYPE_STATUS' => 'Type Status',
     'OBSERVER' => 'Observer',
+    'OBSERVER_NUMBER' => 'Observer Number',
     'VERBATIM_DATE' => 'Verbatim Date',
     'ADDITIONAL_COLLECTORS' => 'Additional Collectors',
     'ACCESS_GRANTED' => 'Current user has been granted access',
