@@ -215,7 +215,6 @@ function format_latlong_err($occurrence) {
                     __('individual.INFO_WITHHELD') => $occurrence->informationWithheld,
                     __('checklists_checklist.HABITAT') => $occurrence->habitat,
                     __('individual.SUBSTRATE') => $occurrence->substrate,
-                    // TODO fix lang conflict
                     __('individual.ASSOCIATED_TAXA') => $occurrence->associatedTaxa,
                     __('taxa.DESCRIPTION') => $occurrence->verbatimAttributes,
                     __('individual.DYNAMIC_PROPERTIES') => $occurrence->dynamicProperties,
