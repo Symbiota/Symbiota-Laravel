@@ -6,15 +6,27 @@ foreach($user_datasets as $datasets) {
         $user_dataset_options[] = item($datasets->datasetID, $datasets->name);
     }
 }
+$user = request()->user();
+$user_dataset_options = [];
 @endphp
 <div id="linked_datasets" class="relative" x-data="{ dataset_link_open: false }">
     <div>
-        <span class="text-xl font-bold"> {{ __('individual_linkedresources.DATASETLINKAGES') }} </span>
+        <span class="flex items-center gap-4">
+            <span class="grow text-xl font-bold"> {{ __('individual_linkedresources.DATASETLINKAGES') }}</span>
+            <span>
+                @if($user)
+                    <i
+                        @click="dataset_link_open = true"
+                        class="fa-solid fa-plus mr-3 cursor-pointer text-lg"
+                        title="{{ __('individual_linkedresources.LINKTO') }}"
+                    ></i>
+                @endif
+            </span>
+        </span>
         <hr />
     </div>
 
-    @if(!empty($user_dataset_options))
-        <i @click="dataset_link_open = true" class="fa-solid fa-plus absolute top-0 right-3 text-lg"></i>
+    @if($user)
         <form
             hx-put="{{ url('occurrence/' . $occurrence->occid . '/link/dataset' ) }}"
             hx-target="#linked_datasets"
@@ -36,7 +48,7 @@ foreach($user_datasets as $datasets) {
 
     <div>
         @if(count($linked_datasets))
-            <ul>
+            <ul class="list-disc p-4">
                 @foreach($linked_datasets as $dataset)
                     <li>
                         <x-link
@@ -44,6 +56,9 @@ foreach($user_datasets as $datasets) {
                         >
                             {{ $dataset->name }}
                         </x-link>
+                        @if($dataset->notes)
+                            <span> - {{ $dataset->notes }}<span>
+                        @endif
                     </li>
                 @endforeach
             </ul>

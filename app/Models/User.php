@@ -161,10 +161,15 @@ class User extends Authenticatable {
             ->get();
     }
 
-    public function datasets() {
+    /**
+     * Gets list of datasets that user has permissions over
+     *
+     * @throws conditon
+     **/
+    public function datasets(): \Illuminate\Support\Collection {
         $query = DB::table('omoccurdatasets');
 
-        if(!Gate::check('SUPER_ADMIN')) {
+        if (! Gate::check('SUPER_ADMIN')) {
             $query->where('uid', $this->uid)
                 ->orWhereIn('datasetID',
                     UserRole::query()

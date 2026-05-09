@@ -6,15 +6,25 @@ foreach($user_checklists as $checklist) {
         $user_checklist_options[] = item($checklist->clid, $checklist->name);
     }
 }
+
+$is_editor = Gate::check('COLL_EDIT', $occurrence->collid);
 @endphp
 <div id="linked_checklists" class="relative flex flex-col gap-2" x-data="{ checklist_link_open: false }">
     <div>
-        <span class="text-xl font-bold"> {{ __('individual_linkedresources.SPCHECKREL') }} </span>
+        <span class="flex items-center gap-4">
+            <span class="grow text-xl font-bold"> {{ __('individual_linkedresources.SPCHECKREL') }} </span>
+            @if($is_editor)
+                <i
+                    @click="checklist_link_open = true"
+                    class="fa-solid fa-plus mr-3 cursor-pointer text-lg"
+                    title="{{ __('individual_linkedresources.ADDVOUCHERCHECK') }}"
+                ></i>
+            @endif
+        </span>
         <hr />
     </div>
 
-    @if(Gate::check('COLL_EDIT', $occurrence->collid) && count($user_checklist_options) > 0)
-        <i @click="checklist_link_open = true" class="fa-solid fa-plus absolute top-0 right-3 text-lg"></i>
+    @if($is_editor)
         <form
             hx-put="{{ url('occurrence/' . $occurrence->occid . '/link/checklist' ) }}"
             hx-target="#linked_checklists"
@@ -40,7 +50,7 @@ foreach($user_checklists as $checklist) {
 
     <div>
         @if(count($linked_checklists))
-            <ul>
+            <ul class="list-disc p-4">
                 @foreach($linked_checklists as $checklist)
                     <li><x-link href="{{ url('checklists') . $checklist->clid }}">{{ $checklist->name }}</x-link></li>
                 @endforeach
