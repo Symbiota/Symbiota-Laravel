@@ -14,61 +14,119 @@
             this.acceptedstr = this.$el.querySelector('#synonym-acceptedstr')?.value ?? '';
             this.tidaccepted = this.$el.querySelector('[name=tidaccepted]')?.value ?? '';
             console.log('Validating form with acceptedstr:', this.acceptedstr, 'and tidaccepted:', this.tidaccepted);
-            if (this.acceptedstr && this.tidaccepted) {
-                this.isValid = true;
-            } else {
+            if(this.tidaccepted === '{{ $taxonInfo->tid }}'){
+                this.isValid = false;
+                this.errorMessage = '* {{ __('taxonomy_taxoneditor.CANNOT_BE_OWN_ACCEPTED') }}';
+                return;
+            }
+            if(!this.acceptedstr || !this.tidaccepted){
                 this.isValid = false;
                 this.errorMessage = '* {{ __('taxonomy_taxoneditor.TARGET_TAXON_MISSING') }}';
+                return;
             }
+            this.isValid = true;
         },
     }"
 >
     <form
         id="taxonomic-status-edit-form"
         method="POST"
-        action="{{ route('taxon.update', ['tid' => $taxonInfo->tid ?? '']) }}"
+        action="{{ route('taxon.changeAccepted') }}"
         @change="await validateAcceptedStatusForm()"
     >
         @csrf
         <x-input type="hidden" name="mode" id="mode" :value="$mode" />
         <x-input type="hidden" name="edit-type" id="edit-type" value="synonymedits" />
+        <x-input type="hidden" name="tid" id="tid" :value="$taxonInfo->tid ?? ''" />
+        <x-fieldset>
+            <legend class="text-lg font-bold">{{ $taxonInfo->sciname ?? __('taxonomy_taxoneditor.ACCEPTANCE_STATUS') }}</legend>
+            @if ($taxonInfo->isAccepted ?? false)
+                <span class="text-success-darker">{{ __('taxonomy_taxoneditor.ACCEPTED')}}</span>
+            @else
+                <span class="text-error-darker">{{ __('taxonomy_taxoneditor.SYNONYM')}}</span>    
+            @endif
+        </x-fieldset>
         @if(count($taxonInfo->synonyms ?? []) < 1)
             <span>{{ __('taxonomy_taxoneditor.NO_SYN_LINKED_TAXON') }}</span>
         @else
-            @foreach($taxonInfo->synonyms as $synonym)
-                <div class="mb-2 flex items-center gap-2 rounded border p-2">
-                    <span>{{ $synonym->sciName ?? 'Name missing' }}</span>
-                </div>
-            @endforeach
+            <x-fieldset>
+                <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.SYNONYMS') }}</legend>
+                <ul>
+                @foreach($taxonInfo->synonyms as $synonym)
+                    <li>
+                        <div class="flex items-center">
+                            <span>{{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}</span>
+                            <x-button
+                                type="button"
+                                class="ml-2 text-sm"
+                                @click="
+                                console.log('Clicked here. @TODO implement a small editor form');
+                                "
+                            >{{ __('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}</x-button>
+                        </div>
+                    </li>
+                @endforeach
+                </ul>
+            </x-fieldset>
         @endif
-        <x-fieldset>
-            <legend class="text-lg font-bold">Edit Taxonomic Status</legend>
-            <span>Status: {{ $taxonInfo->isAccepted ? 'Accepted' : 'Synonym' }}</span>
-            <x-taxa-search
-                class="font-bold"
-                label="{{ __('taxonomy_taxoneditor.ACCEPTED_NAME') }}"
-                required
-                id="synonym-acceptedstr"
-                name="acceptedstr"
-                tidName="tidaccepted"
-                hide_selector="true"
-                hide_synonyms_checkbox="true"
-            />
-            <x-input
-                name="unacceptabilityreason"
-                id="unacceptabilityreason"
-                label="{{ __('taxonomy_taxoneditor.REASON') }}"
-            />
-            <x-input name="notes" id="notes" label="{{ __('projects.NOTES') }}" />
-            <x-button
-                x-bind:disabled="!isValid"
-                type="submit"
-                class="mt-4"
-                x-text=" isValid ? '{{ $taxonInfo->isAccepted ? __('taxonomy_taxoneditor.CHANGE_STAT_NOT_ACCEPT') : __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
-            >
-            </x-button>
-            <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
-            <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
-        </x-fieldset>
+        @if($taxonInfo->isAccepted ?? false)
+            <x-fieldset>
+                <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.CONVERT_TO_SYNONYM') }}</legend>
+                <x-taxa-search
+                    class="font-bold"
+                    label="{{ __('taxonomy_taxoneditor.ACCEPTED_NAME') }}"
+                    required
+                    id="synonym-acceptedstr"
+                    name="acceptedstr"
+                    tidName="tidaccepted"
+                    hide_selector="true"
+                    hide_synonyms_checkbox="true"
+                />
+                <x-input
+                    name="unacceptabilityreason"
+                    id="unacceptabilityreason"
+                    label="{{ __('taxonomy_taxoneditor.REASON') }}"
+                />
+                <x-input name="notes" id="notes" label="{{ __('projects.NOTES') }}" />
+                <x-button
+                    x-bind:disabled="!isValid"
+                    type="submit"
+                    class="mt-4"
+                    x-text=" isValid ? '{{ __('taxonomy_taxoneditor.CHANGE_STAT_NOT_ACCEPT')}}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
+                >
+                </x-button>
+                <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
+                <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
+            </x-fieldset>
+        @else
+            <x-fieldset>
+                <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.CONVERT_TO_SYNONYM') }}</legend>
+                <x-taxa-search
+                    class="font-bold"
+                    label="{{ __('taxonomy_taxoneditor.ACCEPTED_NAME') }}"
+                    required
+                    id="synonym-acceptedstr"
+                    name="acceptedstr"
+                    tidName="tidaccepted"
+                    hide_selector="true"
+                    hide_synonyms_checkbox="true"
+                />
+                <x-input
+                    name="unacceptabilityreason"
+                    id="unacceptabilityreason"
+                    label="{{ __('taxonomy_taxoneditor.REASON') }}"
+                />
+                <x-input name="notes" id="notes" label="{{ __('projects.NOTES') }}" />
+                <x-button
+                    x-bind:disabled="!isValid"
+                    type="submit"
+                    class="mt-4"
+                    x-text=" isValid ? '{{ __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
+                >
+                </x-button>
+                <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
+                <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
+            </x-fieldset>
+        @endif   
     </form>
 </div>

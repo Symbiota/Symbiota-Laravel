@@ -58,4 +58,13 @@ return [
     'TARGET_TAXON_MISSING' => 'Target taxon missing',
     'GENUS_NAME' => 'Genus Name',
     'QUICK_PARSER_LABEL' => 'Optional Quick Parser',
+    'CANNOT_BE_OWN_ACCEPTED' => 'A taxon cannot be its own synonym',
+    'SYNONYM_SUCCESS' => 'Synonym successfully updated',
+    'SYNONYMS' => 'Synonyms',
+    'NAME_MISSING' => 'Name missing',
+    'ARE_YOU_SURE' => 'Are you sure you want to change the current taxon to accepted and make this taxon its synonym?',
+    'ACCEPTANCE_STATUS' => 'Acceptance Status',
+    'SYNONYM' => 'Synonym',
+    'CONVERT_TO_SYNONYM' => 'Convert to Synonym of Another Taxon',
+    'EDIT_SYNONYM_LINKS' => 'Edit Synonym Details',
 ];

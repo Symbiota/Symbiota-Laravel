@@ -194,6 +194,7 @@ class TaxonomyController extends Controller {
         $taxonEditorObj = new \TaxonomyEditorManager();
         $taxonEditorObj->setTid($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+        $taxonEditorObj->setTaxon();
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
         $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
 
@@ -425,6 +426,27 @@ class TaxonomyController extends Controller {
             $statusStr = $editorManager->getErrorMessage();
 
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+        }
+    }
+
+    public static function changeAccepted() {
+        $requestData = request()->all();
+        $oldTid = (int) request()->all()['tid'] ?? null;
+        $targetTid = (int) request()->all()['tidaccepted'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($oldTid);
+		$statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr) {
+            $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
+            return redirect()->route('taxon.profileEdit', ['tid' => $oldTid])->with('success', $statusStr);
+        } else {
+            $statusStr = $editorManager->getErrorMessage();
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
     }
 }
