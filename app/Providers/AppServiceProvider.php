@@ -106,6 +106,14 @@ class AppServiceProvider extends ServiceProvider {
                 UserRole::COLL_EDITOR => $collid,
             ]);
         });
+        //An example for edit rights with no collection specified (?)
+        Gate::define('COLL_EDIT_ANY', function (User $user) {
+            return $user->hasOneRoles([
+                UserRole::SUPER_ADMIN,
+                UserRole::COLL_ADMIN,
+                UserRole::COLL_EDITOR,
+            ]);
+        });
 
         Gate::define('COLL_ADMIN', function (User $user, $collid) {
             return $user->hasOneRoles([

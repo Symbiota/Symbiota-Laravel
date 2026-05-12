@@ -126,7 +126,7 @@ $isObservations = $collection->isObservations();
 
             $trait_links = [
                 __('misc_collprofiles.TRAIT_CODING') => colUrl('traitattr/occurattributes.php'),
-                __('misc_collprofiles.TRAIT_MINING') => colUrl('traitattr/attributemining.php'),
+                __('misc_collprofiles.TRAIT_MINING') => url('collections/' . $collection->collID . '/traits/mining'),
             ];
 
             $admin_links = [
