@@ -205,7 +205,7 @@ Route::group(['prefix' => '/media'], function () {
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => '/user'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => '/user'], function () {
     Route::get('/profile', [UserProfileController::class, 'getProfile']);
     Route::put('/profile/metadata', [UserProfileController::class, 'updateProfileMetadata']);
     Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
@@ -218,7 +218,7 @@ Route::group(['prefix' => '/user'], function () {
 | User Token Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => '/token'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => '/token'], function () {
     Route::post('/create', [PersonalAccessTokenController::class, 'create']);
     Route::delete('/delete/{id}', [PersonalAccessTokenController::class, 'delete']);
 });
