@@ -117,7 +117,9 @@ class AppServiceProvider extends ServiceProvider {
 
         Gate::define('COLL_GENERAL_OBSERVATION_ADMIN', function (User $user, $collid) {
             $collection = Collection::get($collid);
-            if(!$collection) return false;
+            if (! $collection) {
+                return false;
+            }
 
             $roles = [
                 UserRole::SUPER_ADMIN,
