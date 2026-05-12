@@ -29,7 +29,8 @@
 @layer components {
     /* Custom CSS for Single HTML Tag components goes here */
 
-    .x-link, .markdown a {
+    .x-link,
+    .markdown a {
         @apply text-link-darker hover:text-link-lighter inline w-fit font-medium underline hover:brightness-100;
     }
 
