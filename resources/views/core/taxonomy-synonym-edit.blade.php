@@ -47,7 +47,31 @@
             @endif
         </x-fieldset>
         @if(count($taxonInfo->synonyms ?? []) < 1)
-            <span>{{ __('taxonomy_taxoneditor.NO_SYN_LINKED_TAXON') }}</span>
+            <x-fieldset>
+                <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}</legend>
+                <ul>
+                @foreach ($taxonInfo->acceptedArr ?? [] as $tidAccepted => $linkedTaxonArr)
+                    <li id="acclink-{{ $tidAccepted }}">
+                        <x-link href="{{url('/taxon/' . $tidAccepted)}}">
+                            <i>{{ $linkedTaxonArr["sciname"] }}</i>
+                        </x-link>
+                        {{ $linkedTaxonArr["author"] ?? '' }}
+                        @if (count($taxonInfo->acceptedArr ?? []) > 1)
+                            <span class="hidden">
+                                <a href="{{ url('/taxon/' . $tid) }}">
+                                {{-- @TODO add delete icon --}}
+                                </a>
+                            </span>
+                        @endif
+                        @if ($linkedTaxonArr["usagenotes"])
+                            <div>
+                                <u>Notes</u>: {{ $linkedTaxonArr["usagenotes"] }}
+                            </div>
+                        @endif
+                    </li>
+                @endforeach
+                </ul>
+            </x-fieldset>
         @else
             <x-fieldset>
                 <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.SYNONYMS') }}</legend>
@@ -99,34 +123,24 @@
                 <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
             </x-fieldset>
         @else
-            <x-fieldset>
-                <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.CONVERT_TO_SYNONYM') }}</legend>
-                <x-taxa-search
-                    class="font-bold"
-                    label="{{ __('taxonomy_taxoneditor.ACCEPTED_NAME') }}"
-                    required
-                    id="synonym-acceptedstr"
-                    name="acceptedstr"
-                    tidName="tidaccepted"
-                    hide_selector="true"
-                    hide_synonyms_checkbox="true"
-                />
-                <x-input
-                    name="unacceptabilityreason"
-                    id="unacceptabilityreason"
-                    label="{{ __('taxonomy_taxoneditor.REASON') }}"
-                />
-                <x-input name="notes" id="notes" label="{{ __('projects.NOTES') }}" />
-                <x-button
-                    x-bind:disabled="!isValid"
-                    type="submit"
-                    class="mt-4"
-                    x-text=" isValid ? '{{ __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
-                >
-                </x-button>
-                <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
-                <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
-            </x-fieldset>
+            <form>
+                <x-fieldset>
+                    <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.CHANGE_TO_ACCEPTED') }}</legend>
+                    <x-radio
+                        name="switchacceptance"
+                        id="switchacceptance"
+                        label="{{ __('taxonomy_taxoneditor.SWITCH_ACCEPTANCE') }}"
+                        :options="[['value' => '1', 'label' => __('taxonomy_taxoneditor.YES')], ['value' => '0', 'label' => __('taxonomy_taxoneditor.NO')]]"
+                        required
+                    />
+                    <x-button
+                        type="submit"
+                        class="mt-4"
+                        x-text="'{{ __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}'"
+                    >
+                    </x-button>
+                </x-fieldset>
+            </form>
         @endif   
     </form>
 </div>

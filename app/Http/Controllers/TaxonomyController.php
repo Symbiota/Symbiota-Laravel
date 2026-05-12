@@ -197,6 +197,10 @@ class TaxonomyController extends Controller {
         $taxonEditorObj->setTaxon();
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
         $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
+        $taxonInfo->acceptedArr = [];
+        if ($taxonEditorObj->getIsAccepted() <> 1) {
+            $taxonInfo->acceptedArr = $taxonEditorObj->getAcceptedArr();
+        }
 
         if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
