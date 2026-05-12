@@ -1,4 +1,4 @@
-@props(['hasHeader' => true, 'hasNavbar' => true, 'hasFooter' => true])
+@props(['hasHeader' => true, 'hasNavbar' => true, 'hasFooter' => true, 'hasToaster' => false])
 @php
 $navigations = [
     ["title" => __("header.H_HOME"), "link" => url('/'), "htmx" => true],
@@ -54,46 +54,29 @@ $grants= [
     @stack('css-styles')
     {{-- Note This stack should only be used if navigating without partial load. Currently only dev documentation --}}
     @stack('js-libs')
-
-    {{--
-    This Script cleans up alpine dom manipulations before htmx snapshots the page.
-    Note other was have have been tried such as snapshotting before alpine does the dom
-    manipulations but this did not work for repeated backwards and forwards history swapping.
-    --}}
-    <script>
-        document.addEventListener("htmx:beforeHistorySave", (evt) => {
-            document.querySelectorAll("[x-for]").forEach((item) => {
-                item._x_lookup && Object.values(item._x_lookup).forEach((el) => el.remove());
-            });
-            document.querySelectorAll("[x-if]").forEach((item) => {
-                item._x_currentIfEl && item._x_currentIfEl.remove();
-            });
-
-            document.querySelectorAll("[x-teleport]").forEach((item) => {
-                item._x_teleport && item._x_teleport.remove();
-            });
-
-            if (window.tinymce_editor) {
-                window.tinymce_editor.remove();
-            }
-        });
-    </script>
 </head>
 
-<body x-trap="true">
-    <div id="app-body" class="bg-base-100 text-base-content flex min-h-screen flex-col">
-        @if($hasHeader)
-            <x-header buttonVariant="primary" />
+<body x-trap="true" class="bg-base-100 text-base-content flex min-h-screen flex-col">
+    @if($hasHeader)
+        <x-header buttonVariant="primary" />
+    @endif
+
+    @if($hasNavbar)
+        <x-navbar :navigations="$navigations" />
+    @endif
+
+    <main id="app-body" {{ $attributes->twMerge('flex-grow p-10') }}>
+        {{ $slot }}
+
+        @if($hasToaster)
+            <x-toaster />
         @endif
-        @if($hasNavbar)
-            <x-navbar :navigations="$navigations" />
-        @endif
-        <x-toaster />
-        <div {{ $attributes->twMerge('flex-grow p-10') }}> {{ $slot }}</div>
-        @if($hasFooter)
-            <x-footer :logos="$logos" :grants="$grants" />
-        @endif
-        @stack('js-scripts')
-    </div>
+    </main>
+
+    @if($hasFooter)
+        <x-footer :logos="$logos" :grants="$grants" />
+    @endif
+
+    @stack('js-scripts')
 </body>
 </html>
