@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Collection;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\UserRole;
@@ -112,6 +113,22 @@ class AppServiceProvider extends ServiceProvider {
                 UserRole::SUPER_ADMIN,
                 UserRole::COLL_ADMIN => $collid,
             ]);
+        });
+
+        Gate::define('COLL_GENERAL_OBSERVATION_ADMIN', function (User $user, $collid) {
+            $collection = Collection::get($collid);
+            if(!$collection) return false;
+
+            $roles = [
+                UserRole::SUPER_ADMIN,
+                UserRole::COLL_ADMIN => $collid,
+            ];
+
+            if ($collection->collType == Collection::GeneralObservations) {
+                $roles[UserRole::COLL_EDITOR] = $collid;
+            }
+
+            return $user->hasOneRoles($roles);
         });
 
         Gate::define('EXSICCATAE_ADMIN', function (User $user) {

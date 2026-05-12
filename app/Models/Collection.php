@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Collection extends Model {
@@ -80,5 +81,11 @@ class Collection extends Model {
 
     public function isObservations() {
         return $this->collType === self::GeneralObservations || $this->collType === self::Observations;
+    }
+
+    public static function get(int $collId) {
+        return Cache::remember('collection-' . $collId, now()->addMinutes(1), function () use ($collId) {
+            return self::query()->where('collid', $collId)->first();
+        });
     }
 }
