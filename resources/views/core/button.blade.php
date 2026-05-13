@@ -1,4 +1,4 @@
-@props(['variant' => 'primary', 'href', 'async' => false, 'disabled' => false])
+@props(['variant' => 'primary', 'href', 'disabled' => false])
 @php
 $variant_def = match($variant) {
  "neutral" => ['bg-neutral', 'text-neutral-content', 'hover:bg-neutral-lighter', 'active:bg-neutral-darker'],
@@ -20,7 +20,6 @@ if(isset($href) && $href) {
 <{{$tag}}
     @disabled($disabled)
     {{ isset($href) && $href ? 'href=' . $href: '' }}
-    {{ $async? 'x-data="loadingUtils" @click="() => load($el)"': '' }}
     {{ $attributes->class($variant_def)->twMerge($base) }}
 >
     {{ $slot }}
