@@ -90,4 +90,4 @@ foreach($checklists as $checklist) {
             </li>
         @endforeach
     </div>
-    </x-layout>
+</x-margin-layout>
