@@ -4,8 +4,10 @@ import "./htmx-extensions/html-streaming";
 window.htmx = htmx;
 
 /* This Script cleans up alpine dom manipulations before htmx snapshots the page.
- * Note other was have have been tried such as snapshotting before alpine does the dom
- * manipulations but this did not work for repeated backwards and forwards history swapping.
+ * Note Other solutions that were tried
+ *
+ * 1. Snapshotting before alpine does the dom manipulations.
+ *  - Sort of worked, but htmx history failed
  */
 document.addEventListener("htmx:beforeHistorySave", (evt) => {
     document.querySelectorAll("[x-for]").forEach((item) => {
