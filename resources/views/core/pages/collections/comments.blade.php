@@ -121,6 +121,8 @@ foreach($userArr as $id => $name) {
     @if($recCnt > 0)
         @php
             $pages =  ceil($recCnt / $limit);
+            $calcEnd = $start + $limit;
+            $end = $calcEnd > $recCnt? $recCnt: $calcEnd;
         @endphp
         <div class="inline-flex gap-2">
             @for($i = 1; $i <= $pages; $i++)
@@ -137,7 +139,7 @@ foreach($userArr as $id => $name) {
                 @endif
             @endfor
             <span
-                >{{ $start + 1 }}-{{ $limit }} {{ __('imagelib_search.OF') }} {{ $recCnt }} {{ __('checklists_checklist.COMMENTS') }}</span
+                >{{ $start + 1 }}-{{ $end }} {{ __('imagelib_search.OF') }} {{ $recCnt }} {{ __('checklists_checklist.COMMENTS') }}</span
             >
         </div>
     @endif
