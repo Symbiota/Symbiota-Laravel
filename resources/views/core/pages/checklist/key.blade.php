@@ -57,11 +57,16 @@
     ]"
     />
     <div class="relative block">
-        <div class="text-4xl font-bold">{{ $dataManager->getClName() }}</div>
+        <x-page-title>{{ $dataManager->getClName() }}</x-page-title>
     </div>
+
+    @if(!$dynClid && ($authors = $dataManager->getClAuthors()))
+        <div>{{ $authors }}</div>
+    @endif
+
     <x-accordion :label="__('ident_key.FILTER_OPTIONS')">
         <form class="bg-base-100 flex flex-col gap-4">
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <x-select
                     class="w-full min-w-72"
                     defaultValue="{{ $taxonValue ?? 'All Species' }}"
@@ -82,26 +87,28 @@
                 />
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <x-checkbox id="displaycommon" :label="__('ident_key.DISPLAY_COMMON')" :checked="$displayCommon" />
                 <x-checkbox id="displayimages" :label="__('ident_key.DISPLAY_IMAGES')" :checked="$displayImages" />
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
                 <x-button type="submit"> {{ __('checklists_checklist.BUILD_LIST') }} </x-button>
                 <x-button href="{{ url()->current() }}" hx-boost="true"> {{ __('map.RESET') }} </x-button>
             </div>
         </form>
     </x-accordion>
 
-    <div>
+    <div class="flex flex-wrap items-center gap-4">
         @if($count)
-            <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
+            <span class="flex-grow">
+                <x-text-label class="text-xl" :label="__('ident_key.SPECCOUNT')">{{ $count }}</x-text-label>
+            </span>
         @endif
-        @if($isKeyEditor || true)
-            <x-link href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
-                <x-icons.edit />
+        @if($isKeyEditor)
+            <x-button href="{{ legacy_url('/ident/tools/matrixeditor.php?clid=' . $clid) }}">
+                <x-icons.edit class="text-inherit hover:text-inherit" />
                 {{ __('ident_key.EDIT_CHAR_MATRIX') }}
-            </x-link>
+            </x-button>
         @endif
     </div>
 
