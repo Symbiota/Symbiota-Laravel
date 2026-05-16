@@ -54,7 +54,7 @@ class OccurrenceController extends Controller {
 
         $linked_checklists = self::linked_checklists($occid, $user);
 
-        $user_datasets = $user ? $user->datasets() : [];
+        $user_datasets = $user ? $user->datasets() : new \Illuminate\Support\Collection();
         $linked_datasets = self::linked_datasets($occid, $user_datasets);
 
         $edit_history = Gate::check('COLL_EDIT', $occurrence->collid) ?
@@ -145,7 +145,7 @@ class OccurrenceController extends Controller {
 
         $user = request()->user();
         $occurrence = Occurrence::fromKey($occid);
-        $user_datasets = $user ? $user->datasets() : [];
+        $user_datasets = $user ? $user->datasets() : new \Illuminate\Support\Collection();
         $linked_datasets = self::linked_datasets($occid, $user_datasets);
 
         return view('occurrence/datasets', [
