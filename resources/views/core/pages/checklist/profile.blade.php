@@ -286,7 +286,7 @@ $breadcrumbs[] = $checklist->name;
     <div class="relative pt-4">
         <div id="checklist-loader" class="htmx-indicator">
             <div class="bg-base-100 absolute h-full w-full opacity-70"></div>
-            <div class="stroke-accent absolute top-30 right-0 left-0 mx-auto h-30 w-30 opacity-100">
+            <div class="stroke-accent absolute top-30 right-0 left-0 mx-auto h-20 w-20 opacity-100 lg:h-30 lg:w-30">
                 <x-icons.loading />
             </div>
         </div>
