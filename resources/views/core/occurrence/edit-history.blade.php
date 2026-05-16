@@ -28,15 +28,15 @@ foreach($occurrence->toArray() as $key => $value) {
                     @php
                         $currentValue = $lower_case_lookup[$edit->fieldName] ?? $occurrence->{$edit->fieldName} ?? false;
                     @endphp
-                    <div class="flex gap-2">
+                    <div class="flex items-center gap-2">
                         <span class="bg-base-300 rounded-full px-2">
                             {{ (!$edit->fieldValueOld? __('Added'): __('Updated')) }}
                         </span>
                         <x-text-label :label="$edit->fieldName">
                             @if(!$edit->fieldValueOld)
-                                {{ $edit->fieldValueNew }}
+                                <span class="wrap-anywhere">{{ $edit->fieldValueNew }}</span>
                             @else
-                                <span>{{ $edit->fieldValueOld }}</span>
+                                <span class="wrap-anywhere">{{ $edit->fieldValueOld }}</span>
                                 @if($currentValue == $edit->fieldValueOld)
                                     <span class="bg-base-300 rounded-full px-2 capitalize">
                                         {{ __('individual.CURRENT') }}
@@ -44,7 +44,7 @@ foreach($occurrence->toArray() as $key => $value) {
                                 @endif
                                 <i class="fa-solid fa-arrow-right"></i>
                                 @if($edit->fieldValueNew)
-                                    <span>{{ $edit->fieldValueNew }}</span>
+                                    <span class="wrap-anywhere">{{ $edit->fieldValueNew }}</span>
                                 @else
                                     <span class="bg-base-300 rounded-full px-2"> {{ __('None') }} </span>
                                 @endif

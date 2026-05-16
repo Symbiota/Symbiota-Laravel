@@ -13,15 +13,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class OccurrenceController extends Controller {
-    private static function linked_datasets($occid, $user) {
+    private static function linked_datasets(int $occid, \Illuminate\Support\Collection $user_datasets) {
         return DB::table('omoccurdatasetlink as l')
             ->join('omoccurdatasets as d', 'd.datasetID', 'l.datasetID')
             ->where('l.occid', $occid)
             ->distinct()
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($user_datasets) {
                 $query->orWhere('isPublic', 1);
-                if ($user) {
-                    $query->orWhere('d.uid', $user->uid);
+                if ($user_datasets) {
+                    $query->orWhereIn(
+                        'd.datasetID',
+                        $user_datasets->map(fn ($v) => $v->datasetID)
+                    );
                 }
             })
             ->select('d.*')
@@ -50,7 +53,9 @@ class OccurrenceController extends Controller {
         $user = request()->user();
 
         $linked_checklists = self::linked_checklists($occid, $user);
-        $linked_datasets = self::linked_datasets($occid, $user);
+
+        $user_datasets = $user ? $user->datasets() : new \Illuminate\Support\Collection();
+        $linked_datasets = self::linked_datasets($occid, $user_datasets);
 
         $edit_history = Gate::check('COLL_EDIT', $occurrence->collid) ?
             OccurrenceEdit::getGroupedByEdit($occid) : [];
@@ -87,7 +92,7 @@ class OccurrenceController extends Controller {
             'linked_checklists' => $linked_checklists,
             'linked_datasets' => $linked_datasets,
             'user_checklists' => $user ? $user->checklists() : [],
-            'user_datasets' => $user ? $user->datasets() : [],
+            'user_datasets' => $user_datasets,
             'paleo' => $paleo,
             'material_samples' => $material_samples,
         ]);
@@ -140,12 +145,13 @@ class OccurrenceController extends Controller {
 
         $user = request()->user();
         $occurrence = Occurrence::fromKey($occid);
-        $linked_datasets = self::linked_datasets($occid, $user);
+        $user_datasets = $user ? $user->datasets() : new \Illuminate\Support\Collection();
+        $linked_datasets = self::linked_datasets($occid, $user_datasets);
 
         return view('occurrence/datasets', [
             'occurrence' => $occurrence,
             'linked_datasets' => $linked_datasets,
-            'user_datasets' => $user ? $user->datasets() : [],
+            'user_datasets' => $user_datasets,
         ]);
     }
 }

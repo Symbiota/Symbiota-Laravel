@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -160,9 +161,25 @@ class User extends Authenticatable {
             ->get();
     }
 
-    public function datasets() {
-        return DB::table('omoccurdatasets')
-            ->where('uid', $this->uid)
-            ->get();
+    /**
+     * Gets list of datasets that user has permissions over
+     *
+     * @throws conditon
+     **/
+    public function datasets(): \Illuminate\Support\Collection {
+        $query = DB::table('omoccurdatasets');
+
+        if (! Gate::check('SUPER_ADMIN')) {
+            $query->where('uid', $this->uid)
+                ->orWhereIn('datasetID',
+                    UserRole::query()
+                        ->where('uid', $this->uid)
+                        ->where('tablename', 'omoccurdatasets')
+                        ->whereIn('role', [UserRole::DATASET_ADMIN, UserRole::DATASET_EDITOR])
+                        ->select('tablepk')
+                );
+        }
+
+        return $query->get();
     }
 }

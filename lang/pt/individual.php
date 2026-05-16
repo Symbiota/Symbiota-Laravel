@@ -26,6 +26,7 @@ return [
     'DATE' => 'Data',
     'TYPE_STATUS' => 'Tipo Status',
     'OBSERVER' => 'Observador',
+    'OBSERVER_NUMBER' => 'Número do Observador',
     'VERBATIM_DATE' => 'Data literal',
     'ADDITIONAL_COLLECTORS' => 'Colecionadores Adicionais',
     'ACCESS_GRANTED' => 'O usuário atual recebeu acesso',
