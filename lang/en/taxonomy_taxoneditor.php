@@ -68,5 +68,5 @@ return [
     'EDIT_SYNONYM_LINKS' => 'Edit Synonym Details',
     'YES' => 'Yes',
     'NO' => 'No',
-    'CHANGE_STAT_ACCEPT' => 'Change Status to Accepted',
+    'ACCEPTANCE_STATUS_CHANGE_SUCCESS' => 'Acceptance status successfully updated',
 ];

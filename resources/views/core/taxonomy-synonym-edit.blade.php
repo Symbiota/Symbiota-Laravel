@@ -122,8 +122,11 @@
                 <span x-show="!isValid" class="text-red-500" id="error-container" name="error-container" x-text="errorMessage"></span>
                 <span>*{{ __('taxonomy_taxoneditor.SYNONYMS_TRANSFERRED') }}</span>
             </x-fieldset>
+        </form>
         @else
-            <form>
+            </form>
+            <form method="POST" action="{{ route('taxon.changeToNotAccepted') }}">
+                @csrf
                 <x-fieldset>
                     <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.CHANGE_TO_ACCEPTED') }}</legend>
                     <x-radio
@@ -136,9 +139,14 @@
                     <x-button
                         type="submit"
                         class="mt-4"
-                        x-text="'{{ __('taxonomy_taxoneditor.CHANGE_STAT_ACCEPT') }}'"
+                        x-text="'{{ __('taxonomy_taxoneditor.CHANGE_STATUS_ACCEPTED') }}'"
                     >
                     </x-button>
+                    <x-input type="hidden" name="tid" id="tid" :value="$taxonInfo->tid ?? ''" />
+                    @php
+                        $firstKey = array_keys($taxonInfo->acceptedArr)[0]; // @TODO fix this
+                    @endphp
+                    <x-input type="hidden" name="new-tid" id="new-tid" :value="$firstKey ?? ''" />
                 </x-fieldset>
             </form>
         @endif   

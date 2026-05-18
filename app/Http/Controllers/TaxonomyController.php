@@ -445,12 +445,30 @@ class TaxonomyController extends Controller {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
-        if ($statusStr) {
-            $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
-            return redirect()->route('taxon.profileEdit', ['tid' => $oldTid])->with('success', $statusStr);
-        } else {
-            $statusStr = $editorManager->getErrorMessage();
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        } 
+        $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
+        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
+    }
+
+    public static function changeToNotAccepted() {
+        $requestData = request()->all();
+        $oldTid = (int) request()->all()['tid'] ?? null;
+        $targetTid = (int) request()->all()['new-tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($oldTid);
+		$switchAcceptance = array_key_exists("switchacceptance", $_REQUEST) ? true : false;
+		$statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
+        if($statusStr = $editorManager->getErrorMessage()){
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
+        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
 }
