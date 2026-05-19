@@ -25,6 +25,11 @@
         ]"
         />
     </div>
+    @if(session('success'))
+        <div class="alert alert-success">
+            <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
+        </div>
+    @endif
     <h1 class="mb-4 text-center text-2xl font-bold">{{ $taxonInfo->sciName ?? '' }}</h1>
     <div id="taxon-edit-tabs-container" name="taxon-edit-tabs-container">
         <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
