@@ -68,19 +68,40 @@
             <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.SYNONYMS') }}</legend>
             <ul>
                 @foreach($taxonInfo->synonyms as $tid => $synonym)
-                    <li>
-                        <div class="mb-2 flex items-center">
+                    <li x-data id="synlink-{{ $tid }}">
+                        <div class="mb-2 flex items-center gap-2">
                             <x-link href="{{ url('/taxon/' . $tid) }}">
                                 <span>{{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}</span>
                             </x-link>
-                            <x-button
-                                type="button"
-                                class="ml-2 text-sm"
-                                @click="
-                            console.log('Clicked here. @TODO implement a small editor form');
-                            "
-                                >{{ __('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}</x-button
-                            >
+                            <x-modal>
+                                <x-slot name="button">
+                                    {{ __('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}
+                                </x-slot>
+                                <x-slot name="title" class="text-2xl">
+                                    {{__('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}: {{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}
+                                </x-slot>
+                                <x-slot name="body">
+                                    <form method="POST" action="{{ route('taxon.updateSynonymLink') }}">
+                                        @csrf
+                                        <x-input type="hidden" name="current-tid" id="current-tid" :value="$taxonInfo->tid ?? ''" />
+                                        <x-input type="hidden" name="tidsyn" id="tidsyn" :value="$tid ?? ''" />
+                                        <x-input
+                                            name="unacceptabilityreason"
+                                            id="unacceptabilityreason"
+                                            label="{{ __('taxonomy_taxoneditor.REASON') }}"
+                                            :value="$synonym['unacceptabilityreason'] ?? ''"
+                                        />
+                                        <x-input
+                                            name="notes"
+                                            id="notes"
+                                            label="{{ __('taxonomy_taxoneditor.USAGE_NOTES') }}"
+                                            :value="$synonym['usagenotes'] ?? ''"
+                                        />
+                                        <x-input type="number" name="sortsequence" id="sortsequence" label="{{ __('ident.SORT_SQNCE') }}" :value="$synonym['sortsequence'] ?? ''" />
+                                        <x-button type="submit" class="mt-4">{{ __('tools_matrixeditor.SUBMIT') }}</x-button>
+                                    </form>
+                                </x-slot>
+                            </x-modal>
                         </div>
                     </li>
                 @endforeach

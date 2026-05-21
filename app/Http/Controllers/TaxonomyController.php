@@ -475,4 +475,24 @@ class TaxonomyController extends Controller {
 
         return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
+
+    public static function updateSynonymLink(){
+        $requestData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $currentTid = (int) $requestData['current-tid'] ?? null;
+        $editorManager->setTid($currentTid);
+        $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.SYNONYM_UPDATE_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $currentTid])->with('success', $statusStr);
+    }
 }

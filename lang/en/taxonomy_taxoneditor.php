@@ -42,7 +42,7 @@ return [
     'CHANGE_TO_ACCEPTED' => 'Change to Accepted',
     'SWITCH_ACCEPTANCE' => 'Switch Acceptance with Currently Accepted Name',
     'CHANGE_STATUS_ACCEPTED' => 'Change Status to Accepted',
-    'REASON' => 'Reason',
+    'REASON' => 'Unacceptability Reason',
     'SYN_LINK_EDITOR' => 'Synonym Link Editor',
     'UNACCEPT_REASON' => 'Unacceptability Reason',
     'SORT_SEQ' => 'Sort Sequence',
@@ -69,4 +69,7 @@ return [
     'YES' => 'Yes',
     'NO' => 'No',
     'ACCEPTANCE_STATUS_CHANGE_SUCCESS' => 'Acceptance status successfully updated',
+    'SYNONYM_UPDATE_SUCCESS' => 'Synonym details successfully updated',
+    'USAGE_NOTES' => 'Usage Notes',
+
 ];
