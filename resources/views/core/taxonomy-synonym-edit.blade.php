@@ -103,6 +103,20 @@
                                 </x-slot>
                             </x-modal>
                         </div>
+                        <div id="synlink-details-{{ $tid }}" class="ml-4 mb-3">
+                            <div class="mb-1">
+                                @if ($synonym['unacceptabilityreason'] ?? false)
+                                    <em class="font-semibold">{{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}: </em>
+                                    <span class="text-gray-500">{{ $synonym['unacceptabilityreason'] }}</span>
+                                @endif
+                            </div>
+                            <div class="mb-1">
+                                @if ($synonym['notes'] ?? false)
+                                    <em class="font-semibold">{{ __('taxonomy_taxoneditor.USAGE_NOTES') }}: </em>
+                                    <span class="text-gray-500">{{ $synonym['notes'] }}</span>
+                                @endif
+                            </div>
+                        </div>
                     </li>
                 @endforeach
             </ul>
