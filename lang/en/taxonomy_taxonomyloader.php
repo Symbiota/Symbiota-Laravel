@@ -23,4 +23,5 @@ return [
     'ALREADY_EXISTS' => ' already exists in the database.',
     'ACC_NAME_NEEDS_VALUE' => 'Accepted name needs to have a value.',
     'MISSING_REQUIRED_TAXON_FIELD' => 'Missing required taxon field',
+    'ACCEPTED_NAME' => 'Accepted Name',
 ];

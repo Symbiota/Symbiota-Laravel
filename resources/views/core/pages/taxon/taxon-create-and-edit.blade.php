@@ -1,3 +1,14 @@
+@props([
+    'mode' => 'create',
+    'canCreateOrEdit' => false,
+    'allTaxonRanks' => collect(),
+    'indContent' => [],
+    'securityOptions' => [],
+    'securitystatusstart' => 0,
+    'taxonInfo' => null,
+    'parentName' => '',
+    'acceptedName' => '',
+])
 @if(!$canCreateOrEdit)
     <div class="mb-4 flex flex-col items-center justify-center">
         <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>
@@ -258,9 +269,9 @@
                             required
                             id="parentname"
                             name="parentname"
-                            :tidName="'parenttid'"
-                            :hide_selector="true"
-                            :hide_synonyms_checkbox="true"
+                            tidName="parenttid"
+                            hide_selector="true"
+                            hide_synonyms_checkbox="true"
                             :taxa_value="$mode === 'edit' && $taxonInfo ? $parentName : ''"
                             :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->parenttid ?? '') : ''"
                         />
@@ -275,7 +286,7 @@
                     </div>
                     <div class="w-1/2">
                         <x-input
-                            label="{{ __('glossary_addterm.SOURCE') }}"
+                            label="{{ __('checklists_checklist.SOURCE') }}"
                             name="source"
                             id="source"
                             value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->source ?? '') : '' }}"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Taxonomy;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -167,6 +168,7 @@ class TaxonomyController extends Controller {
 
     public static function editTaxon($tid) {
         $taxon = self::taxonData($tid);
+        $taxonInfo = $taxon;
         $securitystatusstart = $taxon->securitystatus ?? 0;
         if (! $taxon) {
             // @TODO return a 404 not found page
@@ -192,6 +194,13 @@ class TaxonomyController extends Controller {
         $taxonEditorObj = new \TaxonomyEditorManager();
         $taxonEditorObj->setTid($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+        $taxonEditorObj->setTaxon();
+        $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
+        $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
+        $taxonInfo->acceptedArr = [];
+        if ($taxonEditorObj->getIsAccepted() != 1) {
+            $taxonInfo->acceptedArr = $taxonEditorObj->getAcceptedArr();
+        }
 
         if (! empty($verifyArr['child'])) {
             $verifyArr['child'] = array_map(
@@ -209,7 +218,7 @@ class TaxonomyController extends Controller {
             'indContent' => $indContent,
             'securityOptions' => $securityOptions,
             'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
-            'taxonInfo' => $taxon,
+            'taxonInfo' => $taxonInfo,
             'parentName' => $parentName,
             'acceptedName' => $acceptedName,
             'securitystatusstart' => $securitystatusstart,
@@ -256,7 +265,13 @@ class TaxonomyController extends Controller {
         }
     }
 
-    public static function show(Request $request) {
+    public static function show(Request $request, $tid = null) {
+        $targetTid = $tid ?? null;
+        $taxonName = null;
+        if ($targetTid) {
+            $taxon = Taxonomy::findOrFail($targetTid);
+            $taxonName = $taxon->sciName;
+        }
         $parents = [];
         $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
         $displayAuthor = $request->filled('displayauthor') ? (int) $request->input('displayauthor') : 0;
@@ -301,6 +316,8 @@ class TaxonomyController extends Controller {
         return view('pages/taxon/show', [
             'parents' => $parents,
             'rankMap' => $rankMap,
+            'targetTid' => $targetTid,
+            'taxonName' => $taxonName,
         ]);
     }
 
@@ -414,5 +431,68 @@ class TaxonomyController extends Controller {
 
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
+    }
+
+    public static function changeAccepted() {
+        $requestData = request()->all();
+        $oldTid = (int) request()->all()['tid'] ?? null;
+        $targetTid = (int) request()->all()['tidaccepted'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($oldTid);
+        $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
+    }
+
+    public static function changeToNotAccepted() {
+        $requestData = request()->all();
+        $oldTid = (int) request()->all()['tid'] ?? null;
+        $targetTid = (int) request()->all()['new-tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($oldTid);
+        $switchAcceptance = request()->input('switchacceptance') === '1';
+        $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
+    }
+
+    public static function updateSynonymLink(){
+        $requestData = request()->all();
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $currentTid = (int) $requestData['current-tid'] ?? null;
+        $editorManager->setTid($currentTid);
+        $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.SYNONYM_UPDATE_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $currentTid])->with('success', $statusStr);
     }
 }
