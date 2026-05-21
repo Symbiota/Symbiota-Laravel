@@ -46,7 +46,7 @@
                 <span class="text-error-darker">{{ __('taxonomy_taxoneditor.SYNONYM')}}</span>    
             @endif
         </x-fieldset>
-        @if(count($taxonInfo->synonyms ?? []) < 1)
+        @if(count($taxonInfo->acceptedArr ?? []) > 0)
             <x-fieldset>
                 <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}</legend>
                 <ul>
@@ -72,14 +72,17 @@
                 @endforeach
                 </ul>
             </x-fieldset>
-        @else
+        @endif
+        @if(count($taxonInfo->synonyms ?? []) > 0)
             <x-fieldset>
                 <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.SYNONYMS') }}</legend>
                 <ul>
-                @foreach($taxonInfo->synonyms as $synonym)
+                @foreach($taxonInfo->synonyms as $tid => $synonym)
                     <li>
-                        <div class="flex items-center">
-                            <span>{{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}</span>
+                        <div class="flex items-center mb-2">
+                            <x-link href="{{ url('/taxon/' . $tid) }}">
+                                <span>{{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}</span>
+                            </x-link>
                             <x-button
                                 type="button"
                                 class="ml-2 text-sm"

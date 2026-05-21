@@ -459,7 +459,7 @@ class TaxonomyController extends Controller {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($oldTid);
-		$switchAcceptance = array_key_exists("switchacceptance", $_REQUEST) ? true : false;
+        $switchAcceptance = request()->input('switchacceptance') === '1';
 		$statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
@@ -471,4 +471,14 @@ class TaxonomyController extends Controller {
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
         return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
+
+    public static function getSynonyms(Int $tid) {
+		$synonymResult = DB::table('taxstatus as ts')
+			->join('taxstatus as s', 'ts.tidaccepted', '=', 's.tidaccepted')
+			->where('ts.tid', $tid)
+			->where('ts.taxauthid', 1)
+			->where('s.taxauthid', 1)
+			->pluck('s.tid');
+		return $synonymResult->toArray();
+	}
 }
