@@ -198,7 +198,7 @@ class TaxonomyController extends Controller {
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
         $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
         $taxonInfo->acceptedArr = [];
-        if ($taxonEditorObj->getIsAccepted() <> 1) {
+        if ($taxonEditorObj->getIsAccepted() != 1) {
             $taxonInfo->acceptedArr = $taxonEditorObj->getAcceptedArr();
         }
 
@@ -440,15 +440,17 @@ class TaxonomyController extends Controller {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($oldTid);
-		$statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
+        $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         if ($statusStr = $editorManager->getErrorMessage()) {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        } 
+        }
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
+
         return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
 
@@ -460,25 +462,17 @@ class TaxonomyController extends Controller {
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($oldTid);
         $switchAcceptance = request()->input('switchacceptance') === '1';
-		$statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
+        $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
-        if($statusStr = $editorManager->getErrorMessage()){
+        if ($statusStr = $editorManager->getErrorMessage()) {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
+
         return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
-
-    public static function getSynonyms(Int $tid) {
-		$synonymResult = DB::table('taxstatus as ts')
-			->join('taxstatus as s', 'ts.tidaccepted', '=', 's.tidaccepted')
-			->where('ts.tid', $tid)
-			->where('ts.taxauthid', 1)
-			->where('s.taxauthid', 1)
-			->pluck('s.tid');
-		return $synonymResult->toArray();
-	}
 }
