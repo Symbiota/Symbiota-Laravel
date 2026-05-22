@@ -53,6 +53,13 @@ class UserRole extends Model {
 
     public const GLOSSARY_EDITOR = 'GlossaryEditor';
 
+    public const PERSONAL_OBS_ADMIN = 'PersonalObsAdmin';
+
+    public const PERSONAL_OBS_EDITOR = 'PersonalObsEditor';
+
+    public const PERSONAL_OBS_READER = 'PersonalObsReader';
+
+
     public function user() {
         return $this->belongsTo(User::class, 'uid', 'uid');
     }
