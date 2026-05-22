@@ -17,6 +17,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxonomyController;
+use App\Http\Controllers\UserPermissonsController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -220,6 +221,12 @@ Route::group(['prefix' => '/user'], function () {
     Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
     Route::post('/profile/dataset', [DatasetController::class, 'createDataset']);
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
+
+    Route::controller(UserPermissonsController::class)->middleware('can:SUPER_ADMIN')->group(function () {
+        Route::get('/permissions', 'adminSearchPage');
+        Route::get('/{uid}/permissions', 'permissionsProfile')->whereNumber('uid');
+        Route::delete('/{uid}/permissions/{role}', 'deletePermission')->whereNumber('uid');
+    });
 });
 
 /*

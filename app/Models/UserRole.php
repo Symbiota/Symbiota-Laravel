@@ -59,7 +59,6 @@ class UserRole extends Model {
 
     public const PERSONAL_OBS_READER = 'PersonalObsReader';
 
-
     public function user() {
         return $this->belongsTo(User::class, 'uid', 'uid');
     }
