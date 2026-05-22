@@ -45,4 +45,5 @@ return [
     'CREATE_NEW_USER' => 'Create new user',
     'USER_CREATED_SUCCESSFULLY' => 'Successfully created user: ',
     'USERS' => 'Users',
+    'LAST_LOGIN_DATE' => 'Last Login Date',
 ];
