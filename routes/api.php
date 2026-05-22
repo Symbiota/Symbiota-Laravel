@@ -9,6 +9,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceAnnotationController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\TaxonomyController;
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,27 @@ Route::get('/taxa/search', function (Request $request) {
         return view(
             'core/autocomplete/result',
             ['data' => $result, 'label' => 'sciname', 'value' => 'tid']
+        );
+    }
+});
+
+Route::get('/collections/search', function (Request $request) {
+    $name = $request->query('name');
+    $format = strtolower($request->query('format', 'html'));
+    $query = Collection::query();
+
+    if ($name) {
+        $query->whereLike('collectionName', '%' . $name . '%');
+    }
+
+    $collections = $query->get();
+
+    if ($format === 'json') {
+        return $collections;
+    } else {
+        return view(
+            'core/autocomplete/result',
+            ['data' => $collections, 'label' => 'collectionName', 'value' => 'collId']
         );
     }
 });
