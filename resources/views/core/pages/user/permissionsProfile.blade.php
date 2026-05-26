@@ -51,7 +51,7 @@ function collectionLabel($v) {
 
     <x-user.KeyedPermissions :permissions="$permissions" />
 
-    <form method="POST">
+    <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.SPEC_COLS') }}</div>
         <x-select
@@ -74,7 +74,7 @@ function collectionLabel($v) {
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
-    <form method="POST">
+    <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.OBS_PROJECTS') }}</div>
         <x-select
@@ -98,7 +98,7 @@ function collectionLabel($v) {
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
-    <form method="POST">
+    <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.PERS_SP_MGMNT') }}</div>
         <x-select
@@ -120,7 +120,7 @@ function collectionLabel($v) {
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
-    <form method="POST">
+    <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.INV_MGMNT') }}</div>
         <x-select id="spec" name="tablePk" label="Project" :items="itemize($projects)" class="w-full" />
@@ -128,7 +128,7 @@ function collectionLabel($v) {
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
-    <form method="POST">
+    <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
         <x-select id="spec" name="tablePk" label="Checklist" :items="itemize($checklists)" class="w-full" />
