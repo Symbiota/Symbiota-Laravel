@@ -2,7 +2,12 @@
 @php
 use App\Models\UserRole;
 @endphp
-<form class="flex flex-col gap-4" method="POST" hx-put="{{ route('user.permissions.update', [ 'uid' => request('uid') ]) }}" hx-swap="outerHTML">
+<form
+    class="flex flex-col gap-4"
+    method="POST"
+    hx-put="{{ route('user.permissions.update', [ 'uid' => request('uid') ]) }}"
+    hx-swap="outerHTML"
+>
     @method('PUT')
     @csrf
     <div class="flex flex-col gap-1">
@@ -16,7 +21,12 @@ use App\Models\UserRole;
         UserRole::KEY_EDITOR => __('profile_usermanagement.ID_KEY_EDITOR'),
         UserRole::CL_CREATE => __('profile_usermanagement.CL_CREATE'),
     ] as $permission => $label)
-            <x-checkbox :label="$label" name="{{ $permission }}" :value="$permission" :checked="array_key_exists($permission, $permissions)" />
+            <x-checkbox
+                :label="$label"
+                name="{{ $permission }}"
+                :value="$permission"
+                :checked="array_key_exists($permission, $permissions)"
+            />
         @endforeach
     </div>
 
@@ -26,7 +36,12 @@ use App\Models\UserRole;
         UserRole::RARE_SPP_ADMIN => __('profile_usermanagement.RARE_SP_ADMIN_2'),
         UserRole::RARE_SPP_READER_ALL => __('profile_usermanagement.CAN_READ'),
         ] as $permission => $label)
-            <x-checkbox :label="$label" name="{{ $permission }}" :value="$permission" :checked="array_key_exists($permission, $permissions)" />
+            <x-checkbox
+                :label="$label"
+                name="{{ $permission }}"
+                :value="$permission"
+                :checked="array_key_exists($permission, $permissions)"
+            />
         @endforeach
     </div>
 

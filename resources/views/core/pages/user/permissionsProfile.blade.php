@@ -52,7 +52,7 @@ function collectionLabel($v) {
         {{ __('profile_usermanagement.AS_USER') }}
     </div>
 
-    <x-user.GeneralPermissionsForm :permissions="$permissions" :info="$info ?? []"/>
+    <x-user.GeneralPermissionsForm :permissions="$permissions" :info="$info ?? []" />
 
     <x-user.KeyedPermissions :permissions="$permissions" />
 
@@ -66,11 +66,15 @@ function collectionLabel($v) {
             :items="itemize_assoc($specimen_collections, 'collectionLabel')"
             class="w-full"
         />
-        <x-radio label="Permission" name="role" :options="[
+        <x-radio
+            label="Permission"
+            name="role"
+            :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
             [ 'value' => UserRole::RARE_SPP_READER, 'label' => __('profile_usermanagement.RARE') ],
-        ]" />
+        ]"
+        />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
@@ -84,11 +88,15 @@ function collectionLabel($v) {
             :items="itemize_assoc($observation_collections, 'collectionLabel')"
             class="w-full"
         />
-        <x-radio label="Permission" name="role" :options="[
+        <x-radio
+            label="Permission"
+            name="role"
+            :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
             [ 'value' => UserRole::RARE_SPP_READER, 'label' => __('profile_usermanagement.RARE') ],
-        ]" />
+        ]"
+        />
 
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
@@ -103,38 +111,30 @@ function collectionLabel($v) {
             :items="itemize_assoc($personal_observation_collections, 'collectionLabel')"
             class="w-full"
         />
-        <x-radio label="Permission" name="role" :options="[
+        <x-radio
+            label="Permission"
+            name="role"
+            :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
-        ]" />
+        ]"
+        />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
     <form method="POST">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.INV_MGMNT') }}</div>
-        <x-select
-            id="spec"
-            name="tablePk"
-            label="Project"
-            :items="itemize($projects)"
-            class="w-full"
-        />
-        <input type="hidden" name="role" value="{{ UserRole::PROJ_ADMIN }}">
+        <x-select id="spec" name="tablePk" label="Project" :items="itemize($projects)" class="w-full" />
+        <input type="hidden" name="role" value="{{ UserRole::PROJ_ADMIN }}" />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 
     <form method="POST">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
-        <x-select
-            id="spec"
-            name="tablePk"
-            label="Checklist"
-            :items="itemize($checklists)"
-            class="w-full"
-        />
-        <input type="hidden" name="role" value="{{ UserRole::CL_ADMIN }}">
+        <x-select id="spec" name="tablePk" label="Checklist" :items="itemize($checklists)" class="w-full" />
+        <input type="hidden" name="role" value="{{ UserRole::CL_ADMIN }}" />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
 </x-margin-layout>

@@ -12,6 +12,7 @@ class UserPermissonsController extends Controller {
         include_once legacy_path('/classes/PermissionsManager.php');
 
         $userManager = new \PermissionsManager();
+
         return $userManager;
     }
 
@@ -21,7 +22,7 @@ class UserPermissonsController extends Controller {
         $userManager = self::getPermissionsManager();
         $users = $userManager->getUsers($searchterm);
 
-        if($request->header('hx-request') && $request->header('hx-target')) {
+        if ($request->header('hx-request') && $request->header('hx-target')) {
             return view('pages/user/permissions', ['users' => $users])->fragment('user-list');
         }
 
@@ -33,7 +34,7 @@ class UserPermissonsController extends Controller {
         $userManager->deletePermission($uid, $role, request('tablePk'));
 
         //return $this->permissionsProfile($uid);
-        if(request()->header('hx-request')) {
+        if (request()->header('hx-request')) {
             $pageData = [
                 'permissions' => $userManager->getUserPermissions($uid),
             ];
@@ -71,23 +72,25 @@ class UserPermissonsController extends Controller {
             UserRole::RARE_SPP_READER_ALL,
         ] as $role) {
             $hasRole = $permissions[$role] ?? false;
-            if(request($role) && !$hasRole) {
+            if (request($role) && ! $hasRole) {
                 $status = $userManager->addPermission($uid, $role, null);
-                if($status) $errors[] = $status;
-            } else if(!request($role) && $hasRole) {
+                if ($status) {
+                    $errors[] = $status;
+                }
+            } elseif (! request($role) && $hasRole) {
                 $userManager->deletePermission($uid, $role, null);
             }
         }
 
-        if(request()->header('hx-request')) {
+        if (request()->header('hx-request')) {
             $pageData = [
                 'permissions' => $userManager->getUserPermissions($uid),
             ];
 
-            if(count($errors)) {
-               $pageData['errors'] = message_bag($errors);
+            if (count($errors)) {
+                $pageData['errors'] = message_bag($errors);
             } else {
-               $pageData['info'] = message_bag(['Successfully updated user permissions']);
+                $pageData['info'] = message_bag(['Successfully updated user permissions']);
             }
 
             return view('user/GeneralPermissionsForm', $pageData);
@@ -99,24 +102,24 @@ class UserPermissonsController extends Controller {
         }
     }
 
-/*
-    public function addPermissions(int $uid) {
-        $userManager = self::getPermissionsManager();
+    /*
+        public function addPermissions(int $uid) {
+            $userManager = self::getPermissionsManager();
 
-        foreach (request('p') as $value) {
-            $roleParts= explode('-', $value);
-            $role = $roleParts[0];
-            $tablePk = $roleParts[1] ?? null;
+            foreach (request('p') as $value) {
+                $roleParts= explode('-', $value);
+                $role = $roleParts[0];
+                $tablePk = $roleParts[1] ?? null;
 
-            if(in_array($role, UserRole::roles())) {
-                $userManager->addPermission($uid, $role, $tablePk);
+                if(in_array($role, UserRole::roles())) {
+                    $userManager->addPermission($uid, $role, $tablePk);
+                }
             }
+
+            return redirect('/user/' . $uid . '/permissions/');
         }
 
-        return redirect('/user/' . $uid . '/permissions/');
-    }
-
-*/
+    */
 
     public function addPermission(int $uid) {
         $userManager = self::getPermissionsManager();
@@ -136,7 +139,7 @@ class UserPermissonsController extends Controller {
         $observation_collections = $userManager->getCollectionMetadata(
             Collection::Observations
         );
-        if(array_key_exists(UserRole::COLL_ADMIN, $permissions)) {
+        if (array_key_exists(UserRole::COLL_ADMIN, $permissions)) {
             $observation_collections = array_diff_key($observation_collections, $permissions[UserRole::COLL_ADMIN]);
             $specimen_collections = array_diff_key($specimen_collections, $permissions[UserRole::COLL_ADMIN]);
         }
@@ -144,7 +147,7 @@ class UserPermissonsController extends Controller {
         $personal_observation_collections = $userManager->getCollectionMetadata(
             Collection::GeneralObservations
         );
-        if(array_key_exists(UserRole::PERSONAL_OBS_ADMIN, $permissions)) {
+        if (array_key_exists(UserRole::PERSONAL_OBS_ADMIN, $permissions)) {
             $personal_observation_collections = array_diff_key($personal_observation_collections, $permissions[UserRole::PERSONAL_OBS_ADMIN]);
         }
 

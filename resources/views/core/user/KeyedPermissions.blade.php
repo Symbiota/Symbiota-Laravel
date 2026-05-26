@@ -19,16 +19,16 @@
             @foreach($permissions[$permission] as $key => $sub_permission)
                 <div class="bg-base-200 border-base-300 flex items-center rounded-md border p-1 px-2">
                     <span class="grow">{{ $sub_permission['name'] ?? 'unknown' }} {{ $key }}</span>
-                        <form
-                            method="POST"
-                            hx-delete="{{ route('user.permissions.delete', ['uid' => request('uid'), 'role' => $permission]) }}"
-                            hx-target="#key-permissons"
-                        >
-                            @csrf
-                            <input type="hidden" name="tablePk" value="{{ $key }}">
-                            <button>
-                                <x-icons.delete />
-                            </button>
+                    <form
+                        method="POST"
+                        hx-delete="{{ route('user.permissions.delete', ['uid' => request('uid'), 'role' => $permission]) }}"
+                        hx-target="#key-permissons"
+                    >
+                        @csrf
+                        <input type="hidden" name="tablePk" value="{{ $key }}" />
+                        <button>
+                            <x-icons.delete />
+                        </button>
                     </form>
                 </div>
             @endforeach
