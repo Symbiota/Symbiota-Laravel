@@ -96,6 +96,21 @@ class UserPermissonsController extends Controller {
 
     public function addPermission(int $uid) {
         $userManager = self::getPermissionsManager();
+
+        $requires_table_pk = [
+            UserRole::COLL_ADMIN,
+            UserRole::COLL_EDITOR,
+            UserRole::RARE_SPP_READER,
+            UserRole::PROJ_ADMIN,
+            UserRole::CL_ADMIN,
+        ];
+
+        if (! request('role')) {
+            return redirect('/user/' . $uid . '/permissions/')->withErrors('You must select a role for this permission');
+        } elseif (! request('tablePk') && in_array(request('role'), $requires_table_pk)) {
+            return redirect('/user/' . $uid . '/permissions/')->withErrors('You must select an option for this permisson');
+        }
+
         $userManager->addPermission($uid, request('role'), request('tablePk'));
 
         return redirect('/user/' . $uid . '/permissions/');

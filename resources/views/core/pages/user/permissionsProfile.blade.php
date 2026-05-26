@@ -69,6 +69,7 @@ function collectionLabel($v) {
         <x-radio
             label="Permission"
             name="role"
+            required
             :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
@@ -91,6 +92,7 @@ function collectionLabel($v) {
         <x-radio
             label="Permission"
             name="role"
+            required
             :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
@@ -114,6 +116,7 @@ function collectionLabel($v) {
         <x-radio
             label="Permission"
             name="role"
+            required
             :options="[
             [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
             [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
