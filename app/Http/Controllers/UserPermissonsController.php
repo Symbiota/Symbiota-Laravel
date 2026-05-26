@@ -33,22 +33,14 @@ class UserPermissonsController extends Controller {
         $userManager = self::getPermissionsManager();
         $userManager->deletePermission($uid, $role, request('tablePk'));
 
-        //return $this->permissionsProfile($uid);
         if (request()->header('hx-request')) {
             $pageData = [
                 'permissions' => $userManager->getUserPermissions($uid),
             ];
 
-            // if(count($errors)) {
-            //    $pageData['errors'] = message_bag($errors);
-            // } else {
-            //    $pageData['info'] = message_bag(['Successfully updated user permissions']);
-            // }
-
             return view('user/KeyedPermissions', $pageData);
         } else {
             $pageData = $this->getPermissionsProfileInfo($uid);
-            // $pageData['info'] = message_bag(['Successfully deleted user permissions']);
 
             return view('pages/user/permissionsProfile', $pageData);
         }
@@ -101,25 +93,6 @@ class UserPermissonsController extends Controller {
             return view('pages/user/permissionsProfile', $pageData);
         }
     }
-
-    /*
-        public function addPermissions(int $uid) {
-            $userManager = self::getPermissionsManager();
-
-            foreach (request('p') as $value) {
-                $roleParts= explode('-', $value);
-                $role = $roleParts[0];
-                $tablePk = $roleParts[1] ?? null;
-
-                if(in_array($role, UserRole::roles())) {
-                    $userManager->addPermission($uid, $role, $tablePk);
-                }
-            }
-
-            return redirect('/user/' . $uid . '/permissions/');
-        }
-
-    */
 
     public function addPermission(int $uid) {
         $userManager = self::getPermissionsManager();
