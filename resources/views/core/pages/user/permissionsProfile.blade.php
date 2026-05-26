@@ -20,11 +20,6 @@ function collectionLabel($v) {
         <div class="text-2xl font-bold">
             {{ $user['firstname'] . ' ' . $user['lastname'] . ' (#' . $user['uid'] . ')' }}
         </div>
-        {{--
-        <x-link class="text-2xl" href="#">
-            <x-icons.edit />
-        </x-link>
-        --}}
     </div>
 
     <div>
