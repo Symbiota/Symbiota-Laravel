@@ -6,15 +6,14 @@
         <x-button> {{ __('profile_usermanagement.CREATE_NEW_USER') }} </x-button>
     </div>
 
-    <x-input id="searchterm" :label="__('profile_usermanagement.LAST_OR_LOGIN')" />
-    <x-button> {{ __('profile_usermanagement.SEARCH_BOX') }} </x-button>
+    <form method="GET" hx-get="{{ url()->current() }}" hx-target="#user-list">
+        <x-input id="searchterm" :label="__('profile_usermanagement.LAST_OR_LOGIN')" />
+        <x-button> {{ __('profile_usermanagement.SEARCH_BOX') }} </x-button>
+    </form>
 
+    <div id="user-list">
+    @fragment('user-list')
     @if(!empty($users))
-        {{--
-        @foreach ($users as $user)
-        <x-link :href="url('user/' .  $user->uid . '/permissions')"></x-link>
-        @endforeach
-        --}}
         <div class="flex flex-col">
             @foreach($users as $uid => $label)
                 <x-link :href="url('user/' .  $uid . '/permissions')"> {{ $label }} </x-link>
@@ -23,4 +22,6 @@
     @else
         <div>TODO EMPTY CASE</div>
     @endif
+    @endfragment
+    </div>
 </x-margin-layout>

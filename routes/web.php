@@ -20,6 +20,7 @@ use App\Http\Controllers\TaxonomyController;
 use App\Http\Controllers\UserPermissonsController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -224,8 +225,19 @@ Route::group(['prefix' => '/user'], function () {
 
     Route::controller(UserPermissonsController::class)->middleware('can:SUPER_ADMIN')->group(function () {
         Route::get('/permissions', 'adminSearchPage');
-        Route::get('/{uid}/permissions', 'permissionsProfile')->whereNumber('uid');
-        Route::delete('/{uid}/permissions/{role}', 'deletePermission')->whereNumber('uid');
+        Route::get('/{uid}/permissions', 'permissionsProfile')
+            ->whereNumber('uid')
+            ->name('user.permissions');
+        Route::put('/{uid}/permissions', 'updatePermissions')
+            ->whereNumber('uid')
+            ->name('user.permissions.update');
+        Route::delete('/{uid}/permissions/{role}', 'deletePermisson')
+            ->whereNumber('uid')
+            ->whereIn('role', UserRole::roles())
+            ->name('user.permissions.delete');
+        Route::post('/{uid}/permissions', 'addPermission')
+            ->whereNumber(['uid'])
+            ->name('user.permissions.add');
     });
 });
 

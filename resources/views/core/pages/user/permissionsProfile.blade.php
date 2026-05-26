@@ -7,7 +7,11 @@
     'projects',
 ])
 
-@php use App\Models\UserRole; @endphp
+@php use App\Models\UserRole;
+function collectionLabel($v) {
+    return $v['collectionname'] . ' (' . $v['institutioncode'].')';
+}
+@endphp
 
 <x-margin-layout>
     <x-page-title> {{ __('profile_usermanagement.USER_MNGMT') }} </x-page-title>
@@ -16,7 +20,11 @@
         <div class="text-2xl font-bold">
             {{ $user['firstname'] . ' ' . $user['lastname'] . ' (#' . $user['uid'] . ')' }}
         </div>
-        <x-link href="#">TODO EDIT</x-link>
+        {{--
+        <x-link class="text-2xl" href="#">
+            <x-icons.edit />
+        </x-link>
+        --}}
     </div>
 
     <div>
@@ -44,140 +52,89 @@
         {{ __('profile_usermanagement.AS_USER') }}
     </div>
 
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.PERMISSIONS') }}</div>
+    <x-user.GeneralPermissionsForm :permissions="$permissions" :info="$info ?? []"/>
 
-    @if(!empty($permissions))
-        @foreach([
-        UserRole::SUPER_ADMIN => __('profile_usermanagement.SUPERADMIN'),
-        UserRole::TAXONOMY => __('profile_usermanagement.TAX_EDITOR'),
-        UserRole::TAXON_PROFILE => __('profile_tpeditor.TAX_PROF_EDITOR'),
-        UserRole::GLOSSARY_EDITOR => __('profile_usermanagement.GLOSSARY_EDITOR'),
-        UserRole::KEY_ADMIN => __('profile_usermanagement.ID_KEY_ADMIN'),
-        UserRole::KEY_EDITOR => __('profile_usermanagement.ID_KEY_EDITOR'),
-        UserRole::CL_CREATE => __('profile_usermanagement.CL_CREATE'),
-        UserRole::RARE_SPP_ADMIN => __('profile_usermanagement.RARE_SP_ADMIN'),
-        UserRole::RARE_SPP_READER_ALL => __('profile_usermanagement.RARE_SP_VIEWER'),
-    ] as $permission => $label)
-            @if(array_key_exists($permission, $permissions))
-                <div class="bg-base-200 border-base-300 flex items-center rounded-md border p-1 px-2">
-                    <span class="grow" title="{{ $permissions[$permission]["aby"] ?? "" }}">{{ $label }}</span>
-                    <button hx-delete="{{ url('user/' . $user['uid'] . '/permissions/' . $permission) }}">
-                        <x-icons.delete />
-                    </button>
-                </div>
-            @endif
-        @endforeach
-        {{-- With sub permissions --}}
-        @foreach([
-        UserRole::COLL_ADMIN => __('profile_usermanagement.ADMIN_FOR'),
-        UserRole::COLL_EDITOR => __('profile_usermanagement.CL_CREATE'),
-        UserRole::RARE_SPP_READER => __('profile_usermanagement.CL_CREATE'),
-        UserRole::PERSONAL_OBS_ADMIN => __('profile_usermanagement.CL_CREATE'),
-        UserRole::PERSONAL_OBS_EDITOR => __('profile_usermanagement.CL_CREATE'),
-        UserRole::PERSONAL_OBS_READER => __('profile_usermanagement.CL_CREATE'),
-        UserRole::PROJ_ADMIN => __('profile_usermanagement.CL_CREATE'),
-        UserRole::CL_ADMIN => __('profile_usermanagement.CL_CREATE'),
-    ] as $permission => $label)
-            @if(array_key_exists($permission, $permissions))
-                <div class="text-lg font-bold">{{ $label }}</div>
-                @foreach($permissions[$permission] as $key => $sub_permission)
-                    <div class="bg-base-200 border-base-300 flex items-center rounded-md border p-1 px-2">
-                        <span class="flex-grow">{{ $sub_permission['name'] ?? 'no name' }} {{ $key }}</span>
-                        <button hx-delete="{{ url('user/' . $user['uid'] . '/permissions/' . $permission) }}">
-                            <x-icons.delete />
-                        </button>
-                    </div>
-                @endforeach
-            @endif
-        @endforeach
+    <x-user.KeyedPermissions :permissions="$permissions" />
 
-    @else
-        <div>{{ __('profile_usermanagement.NO_PERMISSIONS') }}</div>
-    @endif
+    <form method="POST">
+        @csrf
+        <div class="text-xl font-bold">{{ __('profile_usermanagement.SPEC_COLS') }}</div>
+        <x-select
+            id="obs_projects"
+            name="tablePk"
+            label="Collection"
+            :items="itemize_assoc($specimen_collections, 'collectionLabel')"
+            class="w-full"
+        />
+        <x-radio label="Permission" name="role" :options="[
+            [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
+            [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
+            [ 'value' => UserRole::RARE_SPP_READER, 'label' => __('profile_usermanagement.RARE') ],
+        ]" />
+        <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    </form>
 
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.ASSIGN_NEW') }}</div>
+    <form method="POST">
+        @csrf
+        <div class="text-xl font-bold">{{ __('profile_usermanagement.OBS_PROJECTS') }}</div>
+        <x-select
+            id="obs_projects"
+            name="tablePk"
+            label="Collection"
+            :items="itemize_assoc($observation_collections, 'collectionLabel')"
+            class="w-full"
+        />
+        <x-radio label="Permission" name="role" :options="[
+            [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
+            [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
+            [ 'value' => UserRole::RARE_SPP_READER, 'label' => __('profile_usermanagement.RARE') ],
+        ]" />
 
-    <div>
-        @foreach([
-        UserRole::SUPER_ADMIN => __('profile_usermanagement.SUPERADMIN'),
-        UserRole::TAXONOMY => __('profile_usermanagement.TAX_EDITOR'),
-        UserRole::TAXON_PROFILE => __('profile_tpeditor.TAX_PROF_EDITOR'),
-        UserRole::GLOSSARY_EDITOR => __('profile_usermanagement.GLOSSARY_EDITOR'),
-        UserRole::KEY_ADMIN => __('profile_usermanagement.ID_KEY_ADMIN'),
-        UserRole::KEY_EDITOR => __('profile_usermanagement.ID_KEY_EDITOR'),
-        UserRole::CL_CREATE => __('profile_usermanagement.CL_CREATE'),
-        UserRole::RARE_SPP_ADMIN => __('profile_usermanagement.RARE_SP_ADMIN'),
-        UserRole::RARE_SPP_READER_ALL => __('profile_usermanagement.RARE_SP_VIEWER'),
-    ] as $permission => $label)
-            @if(!array_key_exists($permission, $permissions))
-                <x-checkbox :label="$label" name="name" />
-            @endif
-        @endforeach
-    </div>
+        <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    </form>
 
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.OCCURRENCE_PROTECT') }}</div>
+    <form method="POST">
+        @csrf
+        <div class="text-xl font-bold">{{ __('profile_usermanagement.PERS_SP_MGMNT') }}</div>
+        <x-select
+            id="spec"
+            name="tablePk"
+            label="Collection"
+            :items="itemize_assoc($personal_observation_collections, 'collectionLabel')"
+            class="w-full"
+        />
+        <x-radio label="Permission" name="role" :options="[
+            [ 'value' => UserRole::COLL_ADMIN, 'label' => __('profile_usermanagement.ADMIN') ],
+            [ 'value' => UserRole::COLL_EDITOR, 'label' => __('profile_usermanagement.EDITOR') ],
+        ]" />
+        <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    </form>
 
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.SPEC_COLS') }}</div>
+    <form method="POST">
+        @csrf
+        <div class="text-xl font-bold">{{ __('profile_usermanagement.INV_MGMNT') }}</div>
+        <x-select
+            id="spec"
+            name="tablePk"
+            label="Project"
+            :items="itemize($projects)"
+            class="w-full"
+        />
+        <input type="hidden" name="role" value="{{ UserRole::PROJ_ADMIN }}">
+        <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    </form>
 
-    <div>
-        @foreach($specimen_collections as $collId => $collection)
-            <div>
-                <x-checkbox
-                    :label="$collection['collectionname'] . ' (' . $collection['institutioncode'].')'"
-                    :id="$collId"
-                />
-            </div>
-        @endforeach
-    </div>
-
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.OBS_PROJECTS') }}</div>
-
-    <div>
-        @foreach($observation_collections as $collId => $collection)
-            <div>
-                <x-checkbox
-                    :label="$collection['collectionname'] . ' (' . $collection['institutioncode'].')'"
-                    :id="$collId"
-                />
-            </div>
-        @endforeach
-    </div>
-
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.PERS_SP_MGMNT') }}</div>
-
-    <x-autocomplete-input search="{{ url('api/collections/search') }}">
-        <x-slot name="input" />
-    </x-autocomplete-input>
-
-    <div>
-        @foreach($personal_observation_collections as $collId => $collection)
-            <div class="flex items-center gap-2">
-                <x-checkbox label="" :id="$collId" />
-                <x-checkbox
-                    :label="$collection['collectionname'] . ' (' . $collection['institutioncode'].')'"
-                    :id="$collId"
-                />
-            </div>
-        @endforeach
-    </div>
-
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.INV_MGMNT') }}</div>
-
-    <div>
-        @foreach($projects as $pid => $project)
-            <div>
-                <x-checkbox :label="$project" :id="$pid" />
-            </div>
-        @endforeach
-    </div>
-
-    <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
-
-    <div>
-        @foreach($checklists as $clid => $checklist)
-            <div>
-                <x-checkbox :label="$checklist" :id="$clid" />
-            </div>
-        @endforeach
-    </div>
+    <form method="POST">
+        @csrf
+        <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
+        <x-select
+            id="spec"
+            name="tablePk"
+            label="Checklist"
+            :items="itemize($checklists)"
+            class="w-full"
+        />
+        <input type="hidden" name="role" value="{{ UserRole::CL_ADMIN }}">
+        <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    </form>
 </x-margin-layout>
