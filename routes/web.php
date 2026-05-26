@@ -224,7 +224,7 @@ Route::group(['prefix' => '/user'], function () {
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
 
     Route::controller(UserPermissonsController::class)->middleware('can:SUPER_ADMIN')->group(function () {
-        Route::get('/permissions', 'adminSearchPage');
+        Route::get('/permissions', 'adminSearchPage')->name('user.management');
         Route::get('/{uid}/permissions', 'permissionsProfile')
             ->whereNumber('uid')
             ->name('user.permissions');
