@@ -42,11 +42,6 @@ function collectionLabel($v) {
         </x-text-label>
     </div>
 
-    <div>
-        <x-link> {{ __('header.H_LOGIN') }} </x-link>
-        {{ __('profile_usermanagement.AS_USER') }}
-    </div>
-
     <x-user.GeneralPermissionsForm :permissions="$permissions" :info="$info ?? []" />
 
     <x-user.KeyedPermissions :permissions="$permissions" />
