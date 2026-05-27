@@ -70,23 +70,29 @@ Route::group(['prefix' => 'taxon'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'checklists'], function () {
-    Route::get('/', [ChecklistController::class, 'checklists']);
-    Route::get('/dynamicmap', [ChecklistController::class, 'dynamicMapPage']);
-    Route::post('/dynamicmap', [ChecklistController::class, 'buildDynChecklist']);
-    Route::get('/map', [ChecklistController::class, 'mapPage']);
-    Route::post('/create', [ChecklistController::class, 'createChecklist']);
-    Route::match(['GET', 'POST'], '/{clid}/admin', [ChecklistController::class, 'getAdminPage']);
-    Route::get('/{clid}/pdf', [ChecklistController::class, 'browserPrint']);
-    Route::match(['GET', 'POST'], '/{clid}', [ChecklistController::class, 'checklist'])->where('clid', '[0-9]+');
+    Route::controller(ChecklistController::class)->group(function () {
+        Route::get('/', 'checklists');
+        Route::get('/map', 'mapPage');
+        Route::get('/dynamicmap', 'dynamicMapPage');
+        Route::post('/dynamicmap', 'buildDynChecklist');
+        Route::get('/{clid}/pdf', 'browserPrint')->whereNumber('clid');
+        Route::match(['GET', 'POST'], '/{clid}', 'checklist')->whereNumber('clid');
+        Route::post('/create', 'createChecklist');
+    });
+
     Route::view('/{clid}/key', 'pages/checklist/key');
 
-    Route::controller(ChecklistAdminController::class)->group(function () {
-        Route::get('/{clid}/admin', 'getAdminPage')->where('clid', '[0-9]+');
-        Route::post('/{clid}/admin', 'getAdminPage')->where('clid', '[0-9]+');
-        Route::post('/{clid}/editor/{uid}', 'addEditor')->where('clid', '[0-9]+');
-        Route::post('/{clid}/project/{pid}', 'addProject')->where('clid', '[0-9]+');
-        Route::delete('/{clid}', 'delete')->where('clid', '[0-9]+');
-    });
+    Route::controller(ChecklistAdminController::class)
+        ->prefix('/{clid}/')
+        ->middleware('can:CL_ADMIN,clid')
+        ->whereNumber(['clid'])
+        ->group(function () {
+            Route::get('admin', 'getAdminPage');
+            Route::post('admin', 'getAdminPage');
+            Route::post('editor/{uid}', 'addEditor')->whereNumber('uid');
+            Route::post('project/{pid}', 'addProject')->whereNumber('pid');
+            Route::delete('/', 'delete');
+        });
 });
 
 /*
