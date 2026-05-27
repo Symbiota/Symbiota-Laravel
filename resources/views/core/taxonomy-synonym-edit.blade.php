@@ -68,7 +68,7 @@
             <legend class="text-lg font-bold">{{ __('taxonomy_taxoneditor.SYNONYMS') }}</legend>
             <ul>
                 @foreach($taxonInfo->synonyms as $tid => $synonym)
-                    <li x-data id="synlink-{{ $tid }}">
+                    <li x-data id="synlink-{{ $tid }}" class="mt-2">
                         <div class="mb-2 flex items-center gap-2">
                             <x-link href="{{ url('/taxon/' . $tid) }}">
                                 <span>{{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}</span>
@@ -117,6 +117,7 @@
                                 @endif
                             </div>
                         </div>
+                        <hr>
                     </li>
                 @endforeach
             </ul>
