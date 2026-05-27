@@ -50,14 +50,14 @@ function collectionLabel($v) {
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.SPEC_COLS') }}</div>
         <x-select
+            :label="__('collections_list.COLLECTION')"
             id="obs_projects"
             name="tablePk"
-            label="Collection"
             :items="itemize_assoc($specimen_collections, 'collectionLabel')"
             class="w-full"
         />
         <x-radio
-            label="Permission"
+            :label="__('profile_usermanagement.Permission')"
             name="role"
             required
             :options="[
@@ -73,14 +73,14 @@ function collectionLabel($v) {
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.OBS_PROJECTS') }}</div>
         <x-select
+            :label="__('collections_list.COLLECTION')"
             id="obs_projects"
             name="tablePk"
-            label="Collection"
             :items="itemize_assoc($observation_collections, 'collectionLabel')"
             class="w-full"
         />
         <x-radio
-            label="Permission"
+            :label="__('profile_usermanagement.Permission')"
             name="role"
             required
             :options="[
@@ -97,14 +97,14 @@ function collectionLabel($v) {
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.PERS_SP_MGMNT') }}</div>
         <x-select
+            :label="__('collections_list.COLLECTION')"
             id="spec"
             name="tablePk"
-            label="Collection"
             :items="itemize_assoc($personal_observation_collections, 'collectionLabel')"
             class="w-full"
         />
         <x-radio
-            label="Permission"
+            :label="__('profile_usermanagement.Permission')"
             name="role"
             required
             :options="[
@@ -118,7 +118,7 @@ function collectionLabel($v) {
     <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.INV_MGMNT') }}</div>
-        <x-select id="spec" name="tablePk" label="Project" :items="itemize($projects)" class="w-full" />
+        <x-select id="spec" name="tablePk" :label="__('projects.INVPROJ')" :items="itemize($projects)" class="w-full" />
         <input type="hidden" name="role" value="{{ UserRole::PROJ_ADMIN }}" />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
@@ -126,7 +126,7 @@ function collectionLabel($v) {
     <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
-        <x-select id="spec" name="tablePk" label="Checklist" :items="itemize($checklists)" class="w-full" />
+        <x-select id="spec" name="tablePk" :label="__('sitemap.CHECKLIST')" :items="itemize($checklists)" class="w-full" />
         <input type="hidden" name="role" value="{{ UserRole::CL_ADMIN }}" />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>

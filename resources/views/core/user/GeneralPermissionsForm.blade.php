@@ -48,5 +48,5 @@ use App\Models\UserRole;
     <x-alerts class="bg-info text-info-content" :messages="$info" />
     <x-errors :errors="$errors" />
 
-    <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
+    <x-button>{{ __('profile_usermanagement.UPDATE_PERMISSIONS') }}</x-button>
 </form>
