@@ -143,5 +143,4 @@
             <x-pagination :lengthAwarePaginator="$occurrences" jumpId="#tab-body" />
         </div>
     </x-tabs>
-
-    </x-layout>
+</x-margin-layout>

@@ -121,4 +121,4 @@
             </div>
         </div>
     </fieldset>
-    </x-layout>
+</x-margin-layout>

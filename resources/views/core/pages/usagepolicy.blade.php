@@ -53,5 +53,4 @@
     <br />
 
     <p><span class="font-bold">Disclaimer:</span> This data portal may contain specimens and historical records that are culturally sensitive. The collections include specimens dating back over 200 years collected from all around the world. Some records may also include offensive language. These records do not reflect the portal community's current viewpoint but rather the social attitudes and circumstances of the time period when specimens were collected or cataloged.</p>
-
-    </x-layout>
+</x-margin-layout>

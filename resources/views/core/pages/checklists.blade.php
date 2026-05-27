@@ -58,4 +58,4 @@
             </div>
         @endforeach
     </div>
-    </x-layout>
+</x-margin-layout>
