@@ -126,7 +126,13 @@ function collectionLabel($v) {
     <form method="POST" class="flex flex-col gap-2">
         @csrf
         <div class="text-xl font-bold">{{ __('profile_usermanagement.CHECKLIST_MGMNT') }}</div>
-        <x-select id="spec" name="tablePk" :label="__('sitemap.CHECKLIST')" :items="itemize($checklists)" class="w-full" />
+        <x-select
+            id="spec"
+            name="tablePk"
+            :label="__('sitemap.CHECKLIST')"
+            :items="itemize($checklists)"
+            class="w-full"
+        />
         <input type="hidden" name="role" value="{{ UserRole::CL_ADMIN }}" />
         <x-button>{{ __('profile_usermanagement.ADD_PERMISSION') }}</x-button>
     </form>
