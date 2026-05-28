@@ -52,6 +52,6 @@ return [
         'Do not create shared/group user accounts.',
         'For security reasons, every individual should have their own unique login and password.',
         'Create a password that is unique to this portal.',
-        'Do not reuse a password from another website, your email, etc.'
+        'Do not reuse a password from another website, your email, etc.',
     ],
 ];

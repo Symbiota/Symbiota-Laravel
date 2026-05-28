@@ -51,6 +51,6 @@ return [
         'No cree cuentas de usuario compartidas/grupales.',
         'Por motivos de seguridad, cada persona debe tener su propio nombre de usuario y contraseña únicos.',
         'Cree una contraseña que sea exclusiva para este portal.',
-        'No reutilice una contraseña de otro sitio web, su correo electrónico, etc.'
+        'No reutilice una contraseña de otro sitio web, su correo electrónico, etc.',
     ],
 ];

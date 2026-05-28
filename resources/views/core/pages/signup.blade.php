@@ -1,15 +1,9 @@
 <x-margin-layout>
     @fragment('form')
-        <form
-            hx-post="{{ url('/register') }}"
-            hx-swap="outerHTML"
-            hx-target="this"
-        >
+        <form hx-post="{{ url('/register') }}" hx-swap="outerHTML" hx-target="this">
             @csrf
             <fieldset class="grid w-full grid-cols-1 gap-4 p-4">
-                <legend class="text-primary text-2xl font-bold">
-                    {{ __('profile_newprofile.CREATE_NEW') }}
-                </legend>
+                <legend class="text-primary text-2xl font-bold">{{ __('profile_newprofile.CREATE_NEW') }}</legend>
 
                 <x-user.form-fields
                     :username="old('username')"
@@ -20,11 +14,9 @@
                 />
 
                 @if(is_array(__('profile_newprofile.PASSWORD_RULES')))
-                @foreach(__('profile_newprofile.PASSWORD_RULES') as $rule)
-                <div class="text-error">
-                     {{ $rule }}
-                </div>
-                @endforeach
+                    @foreach(__('profile_newprofile.PASSWORD_RULES') as $rule)
+                        <div class="text-error">{{ $rule }}</div>
+                    @endforeach
 
                 @endif
                 <x-button class="w-fit" type="submit"> {{ __('profile_newprofile.CREATE_NEW') }} </x-button>

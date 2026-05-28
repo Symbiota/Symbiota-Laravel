@@ -33,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers {
         $firstName = null;
         $lastName = $input['name'];
         $name_parts = explode(' ', $input['name']);
-        if(count($name_parts) > 1) {
+        if (count($name_parts) > 1) {
             $firstName = trim($name_parts[0]);
             $lastName = trim($name_parts[1]);
         }

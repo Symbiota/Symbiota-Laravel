@@ -51,6 +51,6 @@ return [
         'Ne créez pas de comptes utilisateurs partagés/de groupe.',
         'Pour des raisons de sécurité, chaque personne doit disposer d\'un identifiant et d\'un mot de passe uniques.',
         'Créez un mot de passe unique pour ce portail.',
-        'Ne réutilisez pas un mot de passe utilisé sur un autre site web, pour votre messagerie électronique, etc.'
+        'Ne réutilisez pas un mot de passe utilisé sur un autre site web, pour votre messagerie électronique, etc.',
     ],
 ];
