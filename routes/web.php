@@ -225,6 +225,11 @@ Route::group(['prefix' => '/user'], function () {
 
     Route::controller(UserPermissonsController::class)->middleware('can:SUPER_ADMIN')->group(function () {
         Route::get('/permissions', 'adminSearchPage')->name('user.management');
+
+        if(app()->environment('local')) {
+            Route::get('/loginas/{uid}', 'loginAs')->name('user.admin.login.as');
+        }
+
         Route::get('/{uid}/permissions', 'permissionsProfile')
             ->whereNumber('uid')
             ->name('user.permissions');

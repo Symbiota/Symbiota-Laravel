@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserPermissonsController extends Controller {
     private static function getPermissionsManager() {
@@ -14,6 +16,15 @@ class UserPermissonsController extends Controller {
         $userManager = new \PermissionsManager();
 
         return $userManager;
+    }
+
+    public function loginAs(int $uid) {
+        if($user = User::query()->where('uid', $uid)->first()) {
+            Auth::login($user);
+            return redirect()->route('home');
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function adminSearchPage(Request $request) {

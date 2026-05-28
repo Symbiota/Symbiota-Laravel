@@ -22,6 +22,15 @@ function collectionLabel($v) {
         </div>
     </div>
 
+    @if(app()->environment('local'))
+        <span>
+            <x-link :href="route('user.admin.login.as', ['uid' => $user['uid']])">
+                {{ __("header.H_LOGIN") }}
+            </x-link>
+            {{ __('profile_usermanagement.AS_USER') }}
+        </span>
+    @endif
+
     <div>
         @foreach([
             'title' => __('exsiccati.TITLE') ,
