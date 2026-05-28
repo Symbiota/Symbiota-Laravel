@@ -19,8 +19,9 @@ class UserPermissonsController extends Controller {
     }
 
     public function loginAs(int $uid) {
-        if($user = User::query()->where('uid', $uid)->first()) {
+        if ($user = User::query()->where('uid', $uid)->first()) {
             Auth::login($user);
+
             return redirect()->route('home');
         } else {
             return redirect()->back();

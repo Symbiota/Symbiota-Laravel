@@ -24,9 +24,7 @@ function collectionLabel($v) {
 
     @if(app()->environment('local'))
         <span>
-            <x-link :href="route('user.admin.login.as', ['uid' => $user['uid']])">
-                {{ __("header.H_LOGIN") }}
-            </x-link>
+            <x-link :href="route('user.admin.login.as', ['uid' => $user['uid']])"> {{ __("header.H_LOGIN") }} </x-link>
             {{ __('profile_usermanagement.AS_USER') }}
         </span>
     @endif
