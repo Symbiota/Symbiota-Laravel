@@ -18,8 +18,6 @@
                         <x-link :href="url('user/' .  $uid . '/permissions')"> {{ $label }} </x-link>
                     @endforeach
                 </div>
-            @else
-                <div>TODO EMPTY CASE</div>
             @endif
         @endfragment
     </div>
