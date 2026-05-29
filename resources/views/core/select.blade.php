@@ -35,8 +35,13 @@ event fires.
 @endphp
 
 <div {{ $attributes->withoutTwMergeClasses()->twMerge("w-fit h-fit") }}>
-    @if($label ?? false)
-        <label class="text" id="{{ $id }}-label" for="{{ $id }}-toggle">{{ $label }}</label>
+    @if($label)
+        <x-form-label
+            :label="$label"
+            :for="$id . '-toggle'"
+            :id="$id . '-label'"
+            :required="$attributes['aria-required'] || $attributes['required']"
+        />
     @endif
     <div
         x-data="{
