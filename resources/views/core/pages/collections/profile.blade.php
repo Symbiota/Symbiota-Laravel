@@ -78,11 +78,7 @@ $isObservations = $collection->isObservations();
                         class="flex flex-col gap-2"
                     >
                         <input type="hidden" name="collid" value="{{ $collection->collID }}" />
-                        <x-input
-                            name="catalogNumber"
-                            autofocus
-                            label="Catalog Number"
-                        />
+                        <x-input name="catalogNumber" autofocus label="Catalog Number" />
                         <x-taxa-search />
 
                         <div class="flex items-center">
