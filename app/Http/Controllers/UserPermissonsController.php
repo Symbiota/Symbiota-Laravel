@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Models\Collection;
 use App\Models\User;
 use App\Models\UserRole;
@@ -16,6 +17,22 @@ class UserPermissonsController extends Controller {
         $userManager = new \PermissionsManager();
 
         return $userManager;
+    }
+
+    public function adminUserRegister(Request $request) {
+        return view('pages/signup');
+    }
+
+    public function adminCreateUser(Request $request) {
+        $action = new CreateNewUser();
+
+        try {
+            $user = $action->create($request->all());
+            dd($user);
+            return redirect()->route('home');
+        } catch(\Throwable $th) {
+            $th->getMessage();
+        }
     }
 
     public function loginAs(int $uid) {

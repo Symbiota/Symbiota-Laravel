@@ -230,6 +230,13 @@ Route::group(['prefix' => '/user'], function () {
             Route::get('/loginas/{uid}', 'loginAs')->name('user.admin.login.as');
         }
 
+        Route::get('/create', 'adminUserRegister')
+            ->whereNumber('uid')
+            ->name('user.admin.create');
+        Route::post('/create', 'adminCreateUser')
+            ->whereNumber('uid')
+            ->name('user.admin.create');
+
         Route::get('/{uid}/permissions', 'permissionsProfile')
             ->whereNumber('uid')
             ->name('user.permissions');

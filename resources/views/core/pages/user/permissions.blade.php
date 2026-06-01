@@ -2,7 +2,7 @@
 <x-margin-layout>
     <div class="flex items-center gap-2">
         <x-page-title class="flex-grow"> {{ __('profile_usermanagement.USER_MNGMT') }}</x-page-title>
-        <x-button> {{ __('profile_usermanagement.CREATE_NEW_USER') }} </x-button>
+        <x-button :href="route('user.admin.create')"> {{ __('profile_usermanagement.CREATE_NEW_USER') }} </x-button>
     </div>
 
     <form method="GET" hx-get="{{ route('user.management') }}" hx-target="#user-list">
