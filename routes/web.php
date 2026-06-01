@@ -180,6 +180,10 @@ Route::group(['prefix' => '/collections'], function () {
     Route::post('/{collid}/skeletal', [CollectionController::class, 'skeletalAdd'])->can('COLL_EDIT', 'collid');
     Route::get('/{collid}', [CollectionController::class, 'collection']);
     Route::match(['GET', 'POST'], '/{collid}/comments', [CollectionController::class, 'comments'])->can('COLL_GENERAL_OBSERVATION_ADMIN', 'collid')->whereNumber('collid');
+    Route::get('/{collid}/batchdeterminations', [CollectionController::class, 'batchDeterminations'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations', [CollectionController::class, 'storeBatchDeterminations'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations/records', [CollectionController::class, 'batchDeterminationRecords'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations/verify-taxon', [CollectionController::class, 'verifyBatchDeterminationTaxon'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
 
     Route::controller(CollectionTraitController::class)->group(function () {
         Route::get('/{collid}/traits/edit', 'editor')->can('COLL_EDIT', 'collid');
