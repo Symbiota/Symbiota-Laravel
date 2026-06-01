@@ -1,4 +1,4 @@
-@props(['id'=> uniqid(), 'name' => $id, 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
+@props(['id'=> uniqid(), 'name' => $id ?? null, 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
 
 <!-- resources/views/core/input.blade.php -->
 <div
