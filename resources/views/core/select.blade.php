@@ -20,7 +20,8 @@ event fires.
     'id' => uniqid(),
     'bind_id' => false,
     'labeledBy' => null,
-    'select_text' => 'Select Item'
+    'select_text' => 'Select Item',
+    'inline' => false
 ])
 @php
     if($defaultValue !== null && !$default) {
@@ -34,9 +35,19 @@ event fires.
     }
 @endphp
 
-<div {{ $attributes->withoutTwMergeClasses()->twMerge("w-fit h-fit") }}>
-    @if($label ?? false)
-        <label class="text" id="{{ $id }}-label" for="{{ $id }}-toggle">{{ $label }}</label>
+<div {{
+$attributes->withoutTwMergeClasses()->twMerge("w-fit h-fit",
+$inline? 'flex flex-wrap items-center gap-1': ''
+)
+}}>
+    @if($label)
+        <x-form-label
+            :label="$label"
+            :for="$id . '-toggle'"
+            :id="$id . '-label'"
+            :inline="$inline"
+            :required="$attributes['aria-required'] || $attributes['required']"
+        />
     @endif
     <div
         x-data="{
