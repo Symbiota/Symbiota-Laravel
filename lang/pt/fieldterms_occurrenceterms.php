@@ -38,7 +38,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Observações de georreferenciação',
     'GEOREFERENCE_PROTOCOL' => 'Protocolo de Georreferenciação',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Status de verificação Georef',
-    'FOOTPRINT_WKT' => 'Polígono de pegada',
+    'FOOTPRINT_POLYGON' => 'Polígono de pegada',
     'HOST' => 'Hospedar',
     'VERBATIM_ATTRIBUTES' => 'Descrição',
     'OCCURRENCE_REMARKS' => 'Notas (observações de ocorrência)',

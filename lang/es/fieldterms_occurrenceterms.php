@@ -28,6 +28,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Observaciones de georreferencia',
     'GEOREFERENCE_PROTOCOL' => 'Protocolo de georreferencia',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Estado de verificación de georreferencia',
+    'FOOTPRINT_POLYGON' => 'Polígono de huella',
     'HOST' => 'Host',
     'VERBATIM_ATTRIBUTES' => 'Descripción',
     'OCCURRENCE_REMARKS' => 'Notas (Observaciones de ocurrencia)',
