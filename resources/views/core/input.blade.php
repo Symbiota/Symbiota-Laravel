@@ -1,4 +1,4 @@
-@props(['id'=> uniqid(), 'name', 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
+@props(['id'=> uniqid(), 'name' => $id ?? null, 'label' => false, 'error_text', 'assistive_text', 'area' => false, 'inline' => false, 'x-show'])
 
 <!-- resources/views/core/input.blade.php -->
 <div
@@ -10,34 +10,25 @@
     @isset(${'x-show'}) x-show="{{ ${'x-show'} }}"@endisset
 >
     @if($label)
-        <label @class(['text-base-content text-base font-bold', 'mb-1' => !$inline, 'flex items-center' => $inline])>
-            {{ $label }}
-            @if($attributes['aria-required'] || $attributes['required'])
-                <span class="vertical-align text-error pr-1 italic">*</span>
-            @endif
-            @if($inline)
-                <span>:</span>
-            @endif
-        </label>
-        <span data-label="{{ $label }}"></span>
+        <x-form-label
+            :label="$label"
+            :for="$id"
+            :required="$attributes['aria-required'] || $attributes['required']"
+            :inline="$inline"
+        />
     @endif
 
+    @php
+        $inputStyles = [
+            'px-1 py-0.25 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none',
+            $inline? 'grow': 'w-full'
+        ];
+    @endphp
+
     @if($area)
-        <textarea
-            name="{{ $name?? $id }}"
-            id="{{ $id }}"
-            {{ $attributes->twMerge('px-1 py-0.25 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full') }}
-            >{{ $slot }}</textarea
-        >
+        <textarea name="{{ $name }}" id="{{ $id }}" {{ $attributes->twMerge($inputStyles) }}>{{ $slot }}</textarea>
     @else
-        <input
-            {{
-$attributes->twMerge('px-1 py-0.25 border-base-300 border rounded-md focus:ring-accent focus:ring-2 focus:outline-none w-full
-        ')
-}}
-            name="{{ $name ?? $id }}"
-            id="{{ $id }}"
-        />
+        <input {{ $attributes->twMerge($inputStyles) }} name="{{ $name }}" id="{{ $id }}" />
     @endif
 
     @if(isset($error_text))
