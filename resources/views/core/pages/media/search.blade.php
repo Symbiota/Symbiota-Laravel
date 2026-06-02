@@ -37,7 +37,7 @@
             />
 
             <div>
-                <label id="media-tag-label" class="text-lg">Multimedia Tags</label>
+                <x-form-label label="Multimedia Tags" id="media-tag-label" />
                 <div class="flex gap-1">
                     <x-select
                         labeledBy="media-tag-label"

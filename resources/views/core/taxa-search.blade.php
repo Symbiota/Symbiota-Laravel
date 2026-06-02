@@ -17,7 +17,7 @@ $taxa_type_id = 'taxa-type-' . $id;
 $includes = !$hide_synonyms_checkbox? ['#' . $use_thes_id]: [];
 @endphp
 <div>
-    <label class="text-lg" for="{{ $id }}">{{ $label }}</label>
+    <x-form-label :label="$label" :for="$id" :required="$attributes['aria-required'] || $attributes['required']" />
     <div class="group flex items-center">
         @if(!$hide_selector)
             @php $includes[] = '#' . $taxa_type_id @endphp
