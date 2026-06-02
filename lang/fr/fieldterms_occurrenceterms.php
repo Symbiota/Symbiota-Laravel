@@ -28,6 +28,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Remarques sur le géoréférencemen',
     'GEOREFERENCE_PROTOCOL' => 'Protocole de géoréférencement',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Georef Statut de vérification',
+    'FOOTPRINT_POLYGON' => 'Polygone d\'empreinte',
     'HOST' => 'Host',
     'VERBATIM_ATTRIBUTES' => 'Description',
     'OCCURRENCE_REMARKS' => 'Notes (Occurrence Remarks)',
