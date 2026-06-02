@@ -87,4 +87,6 @@ return [
     'GEO_CONTEXT_ID' => 'Identificador de contexto geológico',
     'SLIDE_PROP' => 'Propiedades de la diapositiva',
     'STAGE' => 'Etapa',
+    'IDENTIFICATION_REMARKS' => 'Comentarios de Identificación',
+    'IDENTIFICATION_REFERENCES' => 'Referencias de Identificación',
 ];
