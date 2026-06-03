@@ -92,11 +92,9 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
 <x-layout :hasHeader="false" :hasNavbar="false" :hasFooter="false">
     <div class="mb-4 flex items-center gap-2">
         @if($collection->icon)
-        <img class="w-10" src="{{ $collection->icon }}" />
+            <img class="w-10" src="{{ $collection->icon }}" />
         @endif
-        <div class="text-2xl font-bold">
-            {{ $collection->collectionName }}
-        </div>
+        <div class="text-2xl font-bold">{{ $collection->collectionName }}</div>
 
         <div class="text-2xl font-bold">
             <x-nav-link href="{{ url('occurrence/' . $occurrence->occid) }}">
@@ -114,9 +112,7 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
         ['title' => __('editor_occurrenceeditor.OCCEDITOR')]
         ]"
         />
-        <x-button class="ml-auto">
-            {{ __('editor_occurrenceeditor.NEW_REC') }}
-        </x-button>
+        <x-button class="ml-auto"> {{ __('editor_occurrenceeditor.NEW_REC') }} </x-button>
     </div>
 
     <x-tabs
