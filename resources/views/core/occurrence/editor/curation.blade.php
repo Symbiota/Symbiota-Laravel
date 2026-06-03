@@ -1,30 +1,32 @@
 @props(['occurrence'])
 <x-fieldset :legend="__('editor_occurrenceeditor.CURATION')">
     <div class="flex items-center gap-2">
-        <x-input :label="__('individual.TYPE_STATUS')" />
-        <x-input :label="__('individual.DISPOSITION')" />
-        <x-input :label="__('individual.OCCURRENCE_ID')" />
-        <x-input :label="__('includes_queryform.FIELD_NUMBER')" />
+        <x-input :value="$occurrence->typeStatus" :label="__('individual.TYPE_STATUS')" />
+        <x-input :value="$occurrence->disposition" :label="__('individual.DISPOSITION')" />
+        <x-input class="bg-base-200" :value="$occurrence->occurrenceID" :label="__('individual.OCCURRENCE_ID')" />
+        <x-input :value="$occurrence->fieldNumber" :label="__('includes_queryform.FIELD_NUMBER')" />
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input :label="__('glossary_addterm.LANGUAGE')" />
-        <x-input :label="__('includes_queryform.LAB_PROJECT')" />
-        <x-input :label="__('fieldterms_occurrenceterms.DUPLICATE_COUNT')" />
+        <x-input :value="$occurrence->language" :label="__('glossary_addterm.LANGUAGE')" />
+        {{-- TODO (Logan) figure out the source --}}
+        <x-input :value="$occurrence->labelproject" :label="__('includes_queryform.LAB_PROJECT')" />
+        <x-input :value="$occurrence->duplicateQuantity" :label="__('fieldterms_occurrenceterms.DUPLICATE_COUNT')" />
     </div>
 
-    <x-input :label="__('fieldterms_occurrenceterms.DATA_GENERALIZATIONS')" />
+    <x-input :value="$occurrence->dataGeneralizations" :label="__('fieldterms_occurrenceterms.DATA_GENERALIZATIONS')" />
 
     <div class="flex items-center gap-2">
-        <x-input :label="__('fieldterms_occurrenceterms.INST_CODE_OVERRIDE')" />
-        <x-input :label="__('includes_queryform.COL_CODE')" />
-        <x-input :label="__('fieldterms_occurrenceterms.OWNER_INSTITUTION_CODE')" />
+        <x-input :value="$occurrence->institutionCode" :label="__('fieldterms_occurrenceterms.INST_CODE_OVERRIDE')" />
+        <x-input :value="$occurrence->collectionCode" :label="__('includes_queryform.COL_CODE')" />
+        <x-input :value="$occurrence->ownerInstitutionCode" :label="__('fieldterms_occurrenceterms.OWNER_INSTITUTION_CODE')" />
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input :label="__('fieldterms_occurrenceterms.STORAGELOCATION_CODE')" />
+        <x-input :value="$occurrence->storageLocation" :label="__('fieldterms_occurrenceterms.STORAGELOCATION_CODE')" />
         <x-select
             class="min-w-60"
+            :value="$occurrence->basisOfRecord"
             :label="__('editor_occurrencetabledisplay.BASIS_REC')"
             :items="[
             [
@@ -55,7 +57,9 @@
         ]"
         />
 
+        {{-- TODO (Logan) processingStatus values --}}
         <x-select
+            :value="$occurrence->processingStatus"
             :label="__('editor_occurrencetabledisplay.PROCESS_STATUS')"
             class="min-w-50"
             :items="[
