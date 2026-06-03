@@ -108,4 +108,17 @@ return [
     | relavent for herabrium collections
     */
     'activate_duplicates' => env('PORTAL_ACTIVATE_DUPLICATES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Media Constants
+    |--------------------------------------------------------------------------
+    |
+    | Activates Specimen Duplicate listings and support features. Mainly
+    | relavent for herabrium collections
+    */
+    'img_lg_width_px' => 3200,
+    'img_web_width_px' => 1400,
+    'img_tn_width_px' => 200,
+    'media_file_size_limit' => 300000,
 ];
