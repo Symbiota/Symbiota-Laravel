@@ -12,6 +12,7 @@ use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceCommentController;
 use App\Http\Controllers\OccurrenceController;
+use App\Http\Controllers\OccurrenceEditorController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RssController;
@@ -137,7 +138,7 @@ Route::group(['prefix' => '/projects'], function () {
 */
 Route::group(['prefix' => '/occurrence'], function () {
     Route::get('/{occid}', [OccurrenceController::class, 'profilePage']);
-    Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
+    Route::get('/{occid}/edit', [OccurrenceEditorController::class, 'editPage']);
     /* Linked Resources */
     Route::put('/{occid}/link/checklist', [OccurrenceController::class, 'linkChecklist']);
     Route::put('/{occid}/link/dataset', [OccurrenceController::class, 'linkDataset']);
