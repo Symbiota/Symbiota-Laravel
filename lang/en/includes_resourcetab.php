@@ -32,4 +32,6 @@ return [
     'DEL_GEN_RES' => 'Delete Genetic Resource',
     'DEL_RES' => 'Delete Resource',
     'NO_GENETIC_RESOURCES' => 'No genetics linkages have been established',
+    'NO_CHECKLISTS_LINKAGES' => 'No checklist voucher linkages have been established',
+    'CHECKLIST_VOUCHER_LINKAGES' => 'Checklist Voucher Linkages',
 ];

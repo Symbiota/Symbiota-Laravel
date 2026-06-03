@@ -32,4 +32,6 @@ return [
     'DEL_GEN_RES' => 'Supprimer Ressource Génétique',
     'DEL_RES' => 'Supprimer Ressource',
     'NO_GENETIC_RESOURCES' => 'Aucun lien génétique n’a été établi',
+    'NO_CHECKLISTS_LINKAGES' => 'Aucun lien entre les bons de vérification et les listes de contrôle n\'a été établi',
+    'CHECKLIST_VOUCHER_LINKAGES' => 'Liens avec échantillons de liste',
 ];
