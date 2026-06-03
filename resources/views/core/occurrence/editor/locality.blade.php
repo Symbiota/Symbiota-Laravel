@@ -41,7 +41,10 @@
     <div class="flex items-center gap-2">
         <x-input :value="$occurrence->decimalLatitude" class="min-w-22" :label="__('search.LATITUDE')" />
         <x-input :value="$occurrence->decmialLongitude" class="min-w-22" :label="__('search.LONGITUDE')" />
-        <x-input :value="$occurrence->coordinateUncertaintyInMeters" :label="__('fieldterms_occurrenceterms.COORDINATE_UNCERTAINITY_IN_METERS')" />
+        <x-input
+            :value="$occurrence->coordinateUncertaintyInMeters"
+            :label="__('fieldterms_occurrenceterms.COORDINATE_UNCERTAINITY_IN_METERS')"
+        />
         <div class="mt-5 flex w-fit items-center gap-2">
             <a href="#" onclick="openWindow('{{ url('/tools/map/pointaid') }}')">
                 <x-icons.map />
@@ -56,7 +59,11 @@
 
         <x-input :value="$occurrence->geodeticDatum" :label="__('fieldterms_occurrenceterms.GEODETIC_DATUM')" />
         <div class="mt-5"><<</div>
-        <x-input :value="$occurrence->verbatimCoordinates" class="min-w-45" :label="__('editor_occurrencetabledisplay.VERB_COORDINATES')" />
+        <x-input
+            :value="$occurrence->verbatimCoordinates"
+            class="min-w-45"
+            :label="__('editor_occurrencetabledisplay.VERB_COORDINATES')"
+        />
     </div>
 
     <div class="flex items-center gap-2">
@@ -86,13 +93,25 @@
 
     <div class="flex items-center gap-2">
         <x-input :value="$occurrence->georeferencedBy" :label="__('fieldterms_occurrenceterms.GEOREFERENCED_BY')" />
-        <x-input :value="$occurrence->georeferenceSources" :label="__('fieldterms_occurrenceterms.GEOREFERENCE_SOURCES')" />
-        <x-input :value="$occurrence->georeferenceRemarks" :label="__('fieldterms_occurrenceterms.GEOREFERENCE_REMARKS')" />
+        <x-input
+            :value="$occurrence->georeferenceSources"
+            :label="__('fieldterms_occurrenceterms.GEOREFERENCE_SOURCES')"
+        />
+        <x-input
+            :value="$occurrence->georeferenceRemarks"
+            :label="__('fieldterms_occurrenceterms.GEOREFERENCE_REMARKS')"
+        />
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input :value="$occurrence->georeferenceProtocol" :label="__('fieldterms_occurrenceterms.GEOREFERENCE_PROTOCOL')" />
-        <x-input :value="$occurrence->georeferenceVerificationStatus" :label="__('fieldterms_occurrenceterms.GEOREFERENCE_VERIFICATION_STATUS')" />
+        <x-input
+            :value="$occurrence->georeferenceProtocol"
+            :label="__('fieldterms_occurrenceterms.GEOREFERENCE_PROTOCOL')"
+        />
+        <x-input
+            :value="$occurrence->georeferenceVerificationStatus"
+            :label="__('fieldterms_occurrenceterms.GEOREFERENCE_VERIFICATION_STATUS')"
+        />
     </div>
 
     {{-- TODO (Logan) Is this deprecated? --}}

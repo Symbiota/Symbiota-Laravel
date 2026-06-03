@@ -9,15 +9,30 @@
         <x-input :value="$occurrence->lifeStage" :label="__('individual.LIFE_STAGE')" />
         <x-input :value="$occurrence->sex" :label="__('individual.SEX')" />
         <x-input :value="$occurrence->individualCount" class="min-w-35" :label="__('individual.INDIVIDUAL_COUNT')" />
-        <x-input :value="$occurrence->samplingProtocol" class="min-w-37" :label="__('fieldterms_occurrenceterms.SAMPLING_PROTOCOL')" />
+        <x-input
+            :value="$occurrence->samplingProtocol"
+            class="min-w-37"
+            :label="__('fieldterms_occurrenceterms.SAMPLING_PROTOCOL')"
+        />
     </div>
     <x-input area rows="1" :label="__('individual.PREPARATIONS')" />
 
     <div class="flex items-center gap-2">
-        <x-input class="min-w-50" :value="$occurrence->reproductiveCondition" :label="__('individual.REPRODUCTIVE_CONDITION')" />
+        <x-input
+            class="min-w-50"
+            :value="$occurrence->reproductiveCondition"
+            :label="__('individual.REPRODUCTIVE_CONDITION')"
+        />
         <x-input :value="$occurrence->behavior" :label="__('includes_queryform.BEHAVIOR')" />
         <x-input :value="$occurrence->vitality" :label="__('fieldterms_occurrenceterms.VITALITY')" />
-        <x-input class="min-w-50" :value="$occurrence->establishmentMeans" :label="__('fieldterms_occurrenceterms.ESTABLISHMENT_MEANS')" />
+        <x-input
+            class="min-w-50"
+            :value="$occurrence->establishmentMeans"
+            :label="__('fieldterms_occurrenceterms.ESTABLISHMENT_MEANS')"
+        />
     </div>
-    <x-checkbox :checked="$occurrence->cultivationStatus" :label="__('fieldterms_occurrenceterms.CULTIVATION_STATUS')" />
+    <x-checkbox
+        :checked="$occurrence->cultivationStatus"
+        :label="__('fieldterms_occurrenceterms.CULTIVATION_STATUS')"
+    />
 </x-fieldset>

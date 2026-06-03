@@ -19,7 +19,10 @@
     <div class="flex items-center gap-2">
         <x-input :value="$occurrence->institutionCode" :label="__('fieldterms_occurrenceterms.INST_CODE_OVERRIDE')" />
         <x-input :value="$occurrence->collectionCode" :label="__('includes_queryform.COL_CODE')" />
-        <x-input :value="$occurrence->ownerInstitutionCode" :label="__('fieldterms_occurrenceterms.OWNER_INSTITUTION_CODE')" />
+        <x-input
+            :value="$occurrence->ownerInstitutionCode"
+            :label="__('fieldterms_occurrenceterms.OWNER_INSTITUTION_CODE')"
+        />
     </div>
 
     <div class="flex items-center gap-2">

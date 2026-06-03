@@ -46,8 +46,14 @@
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input :value="$occurrence->associatedCollectors" :label="__('fieldterms_occurrenceterms.ASSOCIATED_COLLECTORS')" />
-        <x-input :value="$occurrence->verbatimEventDate" :label="__('fieldterms_occurrenceterms.VERBATIM_EVENT_DATE')" />
+        <x-input
+            :value="$occurrence->associatedCollectors"
+            :label="__('fieldterms_occurrenceterms.ASSOCIATED_COLLECTORS')"
+        />
+        <x-input
+            :value="$occurrence->verbatimEventDate"
+            :label="__('fieldterms_occurrenceterms.VERBATIM_EVENT_DATE')"
+        />
         <x-input :value="$occurrence->eventTime" :label="__('collections_list.EVENT_TIME')" />
     </div>
     {{-- todo pipe ex data --}}
