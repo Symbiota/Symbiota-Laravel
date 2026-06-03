@@ -119,4 +119,16 @@ return [
     'module_checklist_key' => env('MODULE_CHECKLIST_KEY', true),
     'module_occurrence' => env('MODULE_OCCURRENCE', true),
     'module_flora' => env('MODULE_FLORA', true),
+    /*
+    |--------------------------------------------------------------------------
+    | Media Constants
+    |--------------------------------------------------------------------------
+    |
+    | Activates Specimen Duplicate listings and support features. Mainly
+    | relavent for herabrium collections
+    */
+    'img_lg_width_px' => 3200,
+    'img_web_width_px' => 1400,
+    'img_tn_width_px' => 200,
+    'media_file_size_limit' => 300000,
 ];

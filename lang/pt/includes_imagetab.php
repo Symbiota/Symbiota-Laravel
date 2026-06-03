@@ -10,9 +10,9 @@ return [
     'ENTER_URL_EXPLAIN' => 'Insira a URL de um recurso já localizado em um servidor web.
 	Se houver apenas uma versão do recurso disponível, insira no campo superior e deixe os outros campos em branco.
 	Se as versões em miniatura e média não estiverem disponíveis, uma imagem derivada local será criada.',
-    'IMG_URL' => 'URL da mídia (obrigatório)',
-    'MED_VERS' => 'Versão média (opcional',
-    'THUMB_VERS' => 'Versão em miniatura (opcional',
+    'MEDIA_URL' => 'URL da mídia',
+    'MED_VERS' => 'Versão média',
+    'THUMB_VERS' => 'Versão em miniatura',
     'COPY_TO_SERVER' => 'Copiar mídia para o servidor (se não for marcada, serão usados os URLs de origem)',
     'DO_NOT_MAP_LARGE' => 'Não mapear versão grande da imagem (quando aplicável)',
     'DISPLAY_CREATOR_OVER' => 'Exibir campo de substituição do criador',
@@ -47,4 +47,6 @@ return [
     'DISASSOCIATE_IMG' => 'Desassociar Recurso',
     'IMG_FROM_TAXON' => 'O recurso estará disponível apenas na página Perfil do Táxon',
     'MAKE_REQUEST' => 'Fazer uma solicitação de imagem',
+    'SORT' => 'Sortem',
+    'ADD_NEW_RESOURCE' => 'Add a New Resource',
 ];

@@ -4,8 +4,9 @@ return [
     'NOT_WEB_OPTIMIZED' => 'Input file must be a web-optimized image (e.g. jpg). File appears to be an archival image (e.g. tif, png, dng, etc)',
     'CONFIRM_IMAGE_DELETE' => 'Are you sure you want to delete this resource? Note that the physical resource will be deleted from the server if checkbox is selected',
     'SELECT_IMG' => 'Select a media file located on your computer that you want to upload',
-    'MED_VERS' => 'Medium version (optional',
-    'THUMB_VERS' => 'Thumbnail version (optional',
+    'MEDIA_URL' => 'Media URL',
+    'MED_VERS' => 'Medium version',
+    'THUMB_VERS' => 'Thumbnail version',
     'COPY_TO_SERVER' => 'Copy over media to server (if left unchecked, source URLs will be used)',
     'DO_NOT_MAP_LARGE' => 'Do not map large version of image (when applicable)',
     'DISPLAY_CREATOR_OVER' => 'Display creator override field',
@@ -39,4 +40,6 @@ return [
     'DISASSOCIATE_IMG' => 'Disassociate Resource',
     'IMG_FROM_TAXON' => 'Resource will only be available from Taxon Profile page',
     'MAKE_REQUEST' => 'Make an imaging request',
+    'SORT' => 'Sort',
+    'ADD_NEW_RESOURCE' => 'Add a New Resource',
 ];
