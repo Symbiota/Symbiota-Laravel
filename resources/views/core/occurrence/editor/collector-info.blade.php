@@ -1,7 +1,8 @@
+@props(['occurrence'])
 <x-fieldset :legend="__('editor_occurrenceeditor.COLLECTOR_INFO')">
     <div class="flex gap-4">
         <div class="w-50">
-            <x-input :label="__('collections_list.CATALOG_NUMBER')" />
+            <x-input value="{{ $occurrence->catalogNumber }}" :label="__('collections_list.CATALOG_NUMBER')" />
         </div>
         <table class="bg-base-300 border-base-300 grow border-separate rounded-md border">
             <thead class="bg-base-200">
@@ -34,10 +35,10 @@
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input class="w-50" :label="__('fieldterms_occurrenceterms.RECORDED_BY')" />
-        <x-input :label="__('fieldterms_occurrenceterms.RECORD_NUMBER')" />
-        <x-input class="shrink" :label="__('individual.DATE')" />
-        <x-input :label="__('fieldterms_occurrenceterms.EVENT_DATE2')" />
+        <x-input :value="$occurrence->recordedBy" class="w-50" :label="__('fieldterms_occurrenceterms.RECORDED_BY')" />
+        <x-input :value="$occurrence->recordNumber" :label="__('fieldterms_occurrenceterms.RECORD_NUMBER')" />
+        <x-input :value="$occurrence->eventDate" class="shrink" :label="__('individual.DATE')" />
+        <x-input :value="$occurrence->eventDate2" :label="__('fieldterms_occurrenceterms.EVENT_DATE2')" />
         <div class="mt-5">
             <x-button> {{ __('individual.DUPLICATES') }} </x-button>
             {{-- TODO (Logan) auto search --}}
@@ -45,10 +46,11 @@
     </div>
 
     <div class="flex items-center gap-2">
-        <x-input :label="__('fieldterms_occurrenceterms.ASSOCIATED_COLLECTORS')" />
-        <x-input :label="__('fieldterms_occurrenceterms.VERBATIM_EVENT_DATE')" />
-        <x-input :label="__('fieldterms_occurrenceterms.RECORD_NUMBER')" />
+        <x-input :value="$occurrence->associatedCollectors" :label="__('fieldterms_occurrenceterms.ASSOCIATED_COLLECTORS')" />
+        <x-input :value="$occurrence->verbatimEventDate" :label="__('fieldterms_occurrenceterms.VERBATIM_EVENT_DATE')" />
+        <x-input :value="$occurrence->eventTime" :label="__('collections_list.EVENT_TIME')" />
     </div>
+    {{-- todo pipe ex data --}}
     <div class="flex items-center gap-2">
         <x-input class="grow" :label="__('editor_occurrenceeditor.EXS_TITLE')" />
         <div class="w-20">
