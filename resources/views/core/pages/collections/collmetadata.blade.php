@@ -1,19 +1,22 @@
+@props([
+    'collection' => [],
+    'collid' => null,
+    'fullCatArr' => [],
+    'selectedCategories' => [],
+    'resourceLinks' => [],
+    'contacts' => [],
+    'resourceJson' => '',
+    'contactJson' => '',
+    'address' => [],
+    'institutionOptions' => [],
+    'languageCodes' => ['en'],
+    'rightsTerms' => [],
+    'rightsState' => ['selected' => '', 'hasOrphan' => false],
+    'showGbifPublishing' => false,
+    'tabIndex' => 0,
+])
+
 @php
-    $collection = $collection ?? [];
-    $collid = $collid ?? null;
-    $fullCatArr = $fullCatArr ?? [];
-    $selectedCategories = $selectedCategories ?? [];
-    $resourceLinks = $resourceLinks ?? [];
-    $contacts = $contacts ?? [];
-    $resourceJson = $resourceJson ?? '';
-    $contactJson = $contactJson ?? '';
-    $address = $address ?? [];
-    $institutionOptions = $institutionOptions ?? [];
-    $languageCodes = $languageCodes ?? ['en'];
-    $rightsTerms = $rightsTerms ?? [];
-    $rightsState = $rightsState ?? ['selected' => '', 'hasOrphan' => false];
-    $showGbifPublishing = $showGbifPublishing ?? false;
-    $tabIndex = $tabIndex ?? 0;
     $isNewCollection = ! $collid;
     $displayValue = static fn ($value) => is_string($value)
         ? Purify::clean($value)
@@ -390,7 +393,12 @@
                         {{-- Keep the main form close to the legacy field order so the old manager can handle the payload. --}}
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="institutionCode">{{ __('misc_collmetadata.INST_CODE') }}:</label>
+                                <x-form-label
+                                    :label="__('misc_collmetadata.INST_CODE')"
+                                    for="institutionCode"
+                                    :required="true"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -424,7 +432,7 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="collectionCode">{{ __('misc_collmetadata.COLL_CODE') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.COLL_CODE')" for="collectionCode" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -456,9 +464,12 @@
                         </div>
 
                         <div class="my-3">
-                            <label for="collectionName" class="block font-bold"
-                                >{{ __('misc_collmetadata.COLL_NAME') }}:</label
-                            >
+                            <x-form-label
+                                :label="__('misc_collmetadata.COLL_NAME')"
+                                for="collectionName"
+                                :required="true"
+                                inline
+                            />
                             <input
                                 id="collectionName"
                                 name="collectionName"
@@ -470,9 +481,9 @@
                         </div>
 
                         <div class="{{ $fieldRowClass }}">
-                            <label for="full-description" class="{{ $labelClass }}"
-                                >{{ __('misc_collmetadata.DESC') }}:</label
-                            >
+                            <div class="{{ $labelClass }}">
+                                <x-form-label :label="__('misc_collmetadata.DESC')" for="full-description" inline />
+                            </div>
                             <x-rich-editor
                                 id="full-description"
                                 name="fullDescription"
@@ -482,9 +493,9 @@
                         </div>
 
                         <div class="{{ $fieldRowClass }}">
-                            <label for="latitudeDecimal" class="{{ $labelClass }}"
-                                >{{ __('misc_collmetadata.LAT') }}:</label
-                            >
+                            <div class="{{ $labelClass }}">
+                                <x-form-label :label="__('misc_collmetadata.LAT')" for="latitudeDecimal" inline />
+                            </div>
                             <div class="flex max-w-full items-start gap-2">
                                 <input
                                     id="latitudeDecimal"
@@ -504,9 +515,9 @@
                         </div>
 
                         <div class="{{ $fieldRowClass }}">
-                            <label for="longitudeDecimal" class="{{ $labelClass }}"
-                                >{{ __('misc_collmetadata.LONG') }}:</label
-                            >
+                            <div class="{{ $labelClass }}">
+                                <x-form-label :label="__('misc_collmetadata.LONG')" for="longitudeDecimal" inline />
+                            </div>
                             <input
                                 id="longitudeDecimal"
                                 name="longitudeDecimal"
@@ -518,9 +529,9 @@
 
                         @if($fullCatArr)
                             <div class="{{ $fieldRowClass }}">
-                                <label for="ccpk" class="{{ $labelClass }}"
-                                    >{{ __('misc_collmetadata.CATEGORY') }}:</label
-                                >
+                                <div class="{{ $labelClass }}">
+                                    <x-form-label :label="__('misc_collmetadata.CATEGORY')" for="ccpk" inline />
+                                </div>
                                 <select id="ccpk" name="ccpk" class="{{ $inputMediumClass }}">
                                     <option value="">{{ __('misc_collmetadata.NO_CATEGORY') }}</option>
                                     <option value="">-------------------------------------------</option>
@@ -537,7 +548,11 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="publicEdits">{{ __('misc_collmetadata.ALLOW_PUBLIC_EDITS') }}:</label>
+                                <x-form-label
+                                    :label="__('misc_collmetadata.ALLOW_PUBLIC_EDITS')"
+                                    for="publicEdits"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <label class="inline-flex items-center gap-2">
@@ -567,7 +582,7 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="rights">{{ __('misc_collmetadata.LICENSE') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.LICENSE')" for="rights" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 @if($rightsTerms)
@@ -615,7 +630,7 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="rightsHolder">{{ __('misc_collmetadata.RIGHTS_HOLDER') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.RIGHTS_HOLDER')" for="rightsHolder" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -648,7 +663,7 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="accessRights">{{ __('misc_collmetadata.ACCESS_RIGHTS') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.ACCESS_RIGHTS')" for="accessRights" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -682,7 +697,12 @@
                         @can('SUPER_ADMIN')
                             <div class="{{ $fieldRowClass }}">
                                 <div class="{{ $labelClass }}">
-                                    <label for="collType">{{ __('misc_collmetadata.DATASET_TYPE') }}:</label>
+                                    <x-form-label
+                                        :label="__('misc_collmetadata.DATASET_TYPE')"
+                                        for="collType"
+                                        :required="$isNewCollection"
+                                        inline
+                                    />
                                 </div>
                                 <div class="flex max-w-full flex-wrap items-start gap-2">
                                     <select
@@ -839,7 +859,11 @@
                         @if($showGbifPublishing)
                             <div class="{{ $fieldRowClass }}">
                                 <div class="{{ $labelClass }}">
-                                    <label for="publishToGbif">{{ __('misc_collmetadata.PUBLISH_TO_AGGS') }}:</label>
+                                    <x-form-label
+                                        :label="__('misc_collmetadata.PUBLISH_TO_AGGS')"
+                                        for="publishToGbif"
+                                        inline
+                                    />
                                 </div>
                                 <div class="flex max-w-full flex-wrap items-start gap-2">
                                     <label class="inline-flex items-center gap-2">
@@ -874,7 +898,7 @@
                             class="{{ $fieldRowClass }} sourceurl-div {{ $managementType === 'Live Data' ? 'hidden' : '' }}"
                         >
                             <div class="{{ $labelClass }}">
-                                <label for="individualUrl">{{ __('misc_collmetadata.SOURCE_REC_URL') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.SOURCE_REC_URL')" for="individualUrl" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -902,7 +926,7 @@
 
                         <div class="{{ $fieldRowClass }}" x-data="{ iconMode: '{{ $iconMode }}' }">
                             <div class="{{ $labelClass }}">
-                                <label for="iconFile">{{ __('misc_collmetadata.ICON_URL') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.ICON_URL')" for="iconFile" inline />
                             </div>
 
                             <div class="flex max-w-full flex-wrap items-start gap-2">
@@ -955,7 +979,7 @@
                         @can('SUPER_ADMIN')
                             <div class="{{ $fieldRowClass }}">
                                 <div class="{{ $labelClass }}">
-                                    <label for="sortSeq">{{ __('misc_collmetadata.SORT_SEQUENCE') }}:</label>
+                                    <x-form-label :label="__('misc_collmetadata.SORT_SEQUENCE')" for="sortSeq" inline />
                                 </div>
                                 <div class="flex max-w-full flex-wrap items-start gap-2">
                                     <input
@@ -984,7 +1008,7 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <label for="collectionID">{{ __('misc_collmetadata.COLLECTION_ID') }}:</label>
+                                <x-form-label :label="__('misc_collmetadata.COLLECTION_ID')" for="collectionID" inline />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -1124,7 +1148,9 @@
 
                             <form name="linkForm" onsubmit="return false;" class="space-y-3">
                                 <div class="flex flex-wrap items-center">
-                                    <label for="resource-url" class="{{ $labelClass }}">URL:</label>
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label label="URL" for="resource-url" :required="true" inline />
+                                    </div>
                                     <input
                                         id="resource-url"
                                         name="url"
@@ -1136,10 +1162,15 @@
 
                                 @foreach($languageCodes as $code)
                                     <div class="flex flex-wrap items-center">
-                                        <label class="{{ $labelClass }}"
-                                            >{{ __('misc_collmetaresources.CAPTION_OVERRIDE') }} ({{ $languageLabelMap[$code] ?? strtoupper($code) }}):</label
-                                        >
+                                        <div class="{{ $labelClass }}">
+                                            <x-form-label
+                                                :label="__('misc_collmetaresources.CAPTION_OVERRIDE') . ' (' . ($languageLabelMap[$code] ?? strtoupper($code)) . ')'"
+                                                for="title-{{ $code }}"
+                                                inline
+                                            />
+                                        </div>
                                         <input
+                                            id="title-{{ $code }}"
                                             name="title-{{ $code }}"
                                             type="text"
                                             value="{{ $code === 'en' ? 'Homepage' : '' }}"
@@ -1258,9 +1289,14 @@
                                 <input type="hidden" name="contactIndex" value="" />
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-first-name" class="{{ $labelClass }}"
-                                        >{{ __('misc_collmetaresources.FIRST_NAME') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label
+                                            :label="__('misc_collmetaresources.FIRST_NAME')"
+                                            for="contact-first-name"
+                                            :required="true"
+                                            inline
+                                        />
+                                    </div>
                                     <input
                                         id="contact-first-name"
                                         name="firstName"
@@ -1271,9 +1307,14 @@
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-last-name" class="{{ $labelClass }}"
-                                        >{{ __('misc_collmetaresources.LAST_NAME') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label
+                                            :label="__('misc_collmetaresources.LAST_NAME')"
+                                            for="contact-last-name"
+                                            :required="true"
+                                            inline
+                                        />
+                                    </div>
                                     <input
                                         id="contact-last-name"
                                         name="lastName"
@@ -1284,16 +1325,16 @@
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-role" class="{{ $labelClass }}"
-                                        >{{ __('misc_collmetaresources.ROLE') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label :label="__('misc_collmetaresources.ROLE')" for="contact-role" inline />
+                                    </div>
                                     <input id="contact-role" name="role" type="text" class="{{ $inputShortClass }}" />
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-email" class="{{ $labelClass }}"
-                                        >{{ __('misc_collmetaresources.EMAIL') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label :label="__('misc_collmetaresources.EMAIL')" for="contact-email" inline />
+                                    </div>
                                     <input id="contact-email" name="email" type="text" class="{{ $inputShortClass }}" />
                                 </div>
 
@@ -1306,9 +1347,9 @@
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-phone" class="{{ $labelClass }}"
-                                        >{{ __('misc_collmetaresources.PHONE') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label :label="__('misc_collmetaresources.PHONE')" for="contact-phone" inline />
+                                    </div>
                                     <input
                                         id="contact-phone"
                                         name="phone"
@@ -1318,7 +1359,9 @@
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="contact-orcid" class="{{ $labelClass }}">ORCID:</label>
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label label="ORCID" for="contact-orcid" inline />
+                                    </div>
                                     <input
                                         id="contact-orcid"
                                         name="orcid"
@@ -1424,9 +1467,14 @@
                                 <input type="hidden" name="action" value="linkAddress" />
 
                                 <div class="flex flex-wrap items-center">
-                                    <label for="iid" class="{{ $labelClass }}"
-                                        >{{ __('misc_sharedterms.SEL_ADDRESS') }}:</label
-                                    >
+                                    <div class="{{ $labelClass }}">
+                                        <x-form-label
+                                            :label="__('misc_sharedterms.SEL_ADDRESS')"
+                                            for="iid"
+                                            :required="true"
+                                            inline
+                                        />
+                                    </div>
                                     <select id="iid" name="iid" class="{{ $inputMediumClass }}" required>
                                         <option value="">{{ __('misc_sharedterms.SEL_ADDRESS') }}</option>
                                         <option value="">------------------------------------</option>
