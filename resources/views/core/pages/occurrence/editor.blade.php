@@ -52,45 +52,55 @@
 
             <x-occurrence.editor.curation :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-            <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
-                <x-radio
-                    :default_value="1"
-                    :options="[
-                        ['label' => 'Collection Event Fields', 'value' => 1],
-                        ['label' => 'All Fields', 'value' => 0]
-                    ]"
-                    :label="__('editor_occurrenceeditor.CARRY_OVER')"
-                    name="cloning-type"
-                />
-                <x-checkbox label="Carry over media" />
-                {{-- TODO (Logan) Load Options for Cloning --}}
+
+            <div class="flex gap-4">
+                {{-- Options should be the same as proccessing Status--}}
+                <div class="grow">
                 <x-select
+                    label="Status Auto-Set"
+                    :inline="true"
                     :items="[
                     [
-                        'title' => 'Undefined',
-                        'value' => null,
+                        'title' => 'No Set Status',
+                        'value' => 'No Set Status',
                         'disabled' => false
                     ],
                 ]"
                 />
-                <x-input value="1" label="Number of Records" />
-                {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
-                <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
-            </x-fieldset>
+                <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
+                </div>
 
-            {{-- Options should be the same as proccessing Status--}}
-            <x-select
-                label="Status Auto-Set"
-                :items="[
-                [
-                    'title' => 'No Set Status',
-                    'value' => 'No Set Status',
-                    'disabled' => false
-                ],
-            ]"
-            />
+                <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
+                    <x-radio
+                        :default_value="1"
+                        :options="[
+                            ['label' => 'Collection Event Fields', 'value' => 1],
+                            ['label' => 'All Fields', 'value' => 0]
+                        ]"
+                        :label="__('editor_occurrenceeditor.CARRY_OVER')"
+                        name="cloning-type"
+                    />
+                    <x-checkbox label="Carry over media" />
+                    {{-- TODO (Logan) Load Options for Cloning --}}
+                    <x-select
+                        :inline="true"
+                        :label="__('glossary_addterm.REL')"
+                        :items="[
+                        [
+                            'title' => 'Undefined',
+                            'value' => null,
+                            'disabled' => false
+                        ],
+                    ]"
+                    />
+                    <x-input :inline="true" value="1" label="Number of Records" />
+                    <x-link href="#">{{ __('editor_occurrenceeditor.PRE_POPULATE') }}</x-link>
+                    <x-input name="clonecatnum[]" value="{{ $occurrence->catalogNumber }}" :label="__('collections_list.CATALOG_NUMBER') . ' 1'" />
 
-            <x-button> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
+                    {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
+                    <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
+                </x-fieldset>
+            </div>
         </form>
 
         <x-occurrence.editor.determination-history {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
