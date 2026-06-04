@@ -54,5 +54,6 @@ return [
     'INSTITUTION_CODE' => 'Código da Instituição (substituir)',
     'COLLECTION_CODE' => 'Código de coleção (substituir)',
     'OWNER_INSTITUTION_CODE' => 'Código do proprietário (substituir)',
+    'INST_CODE_OVERRIDE' => 'Código da Instituição (substituir)',
     'STORAGELOCATION_CODE' => 'Storage Location',
 ];
