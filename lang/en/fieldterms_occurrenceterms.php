@@ -40,5 +40,6 @@ return [
     'DATA_GENERALIZATIONS' => 'Data Generalizations',
     'COLLECTION_CODE' => 'Collection Code (override)',
     'OWNER_INSTITUTION_CODE' => 'Owner Code (override)',
+    'INST_CODE_OVERRIDE' => 'Institution Code (override)',
     'STORAGELOCATION_CODE' => 'Storage Location',
 ];
