@@ -4,7 +4,7 @@ return [
     'SAMPLE_TYPE' => 'Type d\'Échantillon',
     'SAMPLE_CONDITION' => 'État',
     'PRESERVATION_TYPE' => 'Type de Conservation',
-    'PREPARATION DETAILS' => 'Détails de la Préparation',
+    'PREPARATION_DETAILS' => 'Détails de la Préparation',
     'PREPARATION_DATE' => 'Date de Préparation',
     'PREPARED_BY' => 'Préparé par',
     'INDIVIDUAL COUNT' => 'Nombre d\'Unités',

@@ -4,7 +4,7 @@ return [
     'SAMPLE_TYPE' => 'Tipo de Muestra',
     'SAMPLE_CONDITION' => 'Condición',
     'PRESERVATION_TYPE' => 'Tipo de Conservación',
-    'PREPARATION DETAILS' => 'Detalles de la Preparación',
+    'PREPARATION_DETAILS' => 'Detalles de la Preparación',
     'PREPARATION_DATE' => 'Fecha de Preparación',
     'PREPARED_BY' => 'Preparado por',
     'INDIVIDUAL COUNT' => 'Recuento Individual',
