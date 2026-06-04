@@ -4,6 +4,7 @@
     <x-input area rows="1" :label="__('editor_observationsubmit.ASSOC_TAXA')" />
     <x-input :value="$occurrence->verbatimAttributes" :label="__('fieldterms_occurrenceterms.VERBATIM_ATTRIBUTES')" />
     <x-input :value="$occurrence->occurrenceRemarks" :label="__('projects.NOTES')" />
+    <x-input :value="$occurrence->dynamicProperties" :label="__('individual.DYNAMIC_PROPERTIES')" />
 
     <div class="flex items-center gap-2">
         <x-input :value="$occurrence->lifeStage" :label="__('individual.LIFE_STAGE')" />
