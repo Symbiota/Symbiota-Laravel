@@ -120,8 +120,8 @@ $occurrence->cultivationStatus? 'Cultivated or Captive' : '']),
         :active="5"
     >
         {{-- Occurrence Data --}}
-        <div class="flex flex-col gap-4">
-            <x-occurrence.editor.collector-info :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
+        <form class="flex flex-col gap-4">
+            <x-occurrence.editor.collector-info :occurrence="$occurrence" :identifiers="$identifiers" />
 
             <x-occurrence.editor.latest-identification :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 

@@ -1,4 +1,4 @@
-@props(['occurrence'])
+@props(['occurrence', 'identifiers' => []])
 <x-fieldset :legend="__('editor_occurrenceeditor.COLLECTOR_INFO')">
     <div class="flex gap-4">
         <div class="w-50">
@@ -12,16 +12,33 @@
             </thead>
 
             <tbody class="bg-base-100">
-                @foreach([1, 2 ] as $catalogNumber)
+                @for($i=0; $i < count($identifiers) + 1; $i++)
+                    @php
+                        $ident_name = $identifiers[$i]->identifierName ?? '';
+                        $ident_id = $identifiers[$i]->idomoccuridentifiers ?? null;
+                        $ident_value = $identifiers[$i]->identifierValue ?? '';
+                    @endphp
                     <tr class="bg-base-100">
                         <td>
                             <input type="hidden" name="idkey[]" value="" />
-                            <input name="idname[]" class="w-full" type="text" />
+                            <x-input
+                                name="idname[]"
+                                class="w-full rounded-none"
+                                type="text"
+                                value="{{ $ident_name }}"
+                            />
                         </td>
-                        <td><input name="idvalue[]" class="w-full" type="text" /></td>
+                        <td>
+                            <x-input
+                                name="idvalue[]"
+                                class="w-full rounded-none"
+                                type="text"
+                                value="{{ $ident_value }}"
+                            />
+                        </td>
                         <td>
                             <span class="flex">
-                                @if($loop->last)
+                                @if($i >= count($identifiers))
                                     <span class="px-2 text-center"><i class="fa fa-plus"></i></span>
                                 @else
                                     <span class="px-2 text-center"><i class="fa fa-trash"></i></span>
@@ -29,7 +46,7 @@
                             </span>
                         </td>
                     </tr>
-                @endforeach
+                @endfor
             </tbody>
         </table>
     </div>
