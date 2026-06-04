@@ -27,4 +27,5 @@ return [
     'ESTIMATED_SIZE' => 'Estimated Size',
     'POOL_DNA_EXTRACTS' => 'Pool DNA Extracts',
     'SAMPLE_DESIGNATION' => 'Sample Designation',
+    'MATERIAL_SAMPLE_GUID' => 'Material Sample ID (GUID)',
 ];
