@@ -29,7 +29,7 @@
         @for($i = 0; $i < count($tabs); $i++)
             <div
                 :class="active === {{ $i }}? 'bg-base-100': 'bg-base-200/50'"
-                class="flex bg-base-100 border-base-300 border-x border-t relative grow "
+                class="bg-base-100 border-base-300 relative flex grow border-x border-t"
             >
                 <input
                     class="ring-accent absolute h-full w-full cursor-pointer appearance-none outline-none focus:ring"
@@ -40,9 +40,7 @@
                     name="tab"
                 />
                 <label class="my-auto" for="tab-{{ $i }}">
-                    <div class="px-4 py-2 text-base text-nowrap">
-                        {{ $tabs[$i] }}
-                    </div>
+                    <div class="px-4 py-2 text-base text-nowrap">{{ $tabs[$i] }}</div>
                 </label>
                 <div class="bg-accent absolute bottom-0 w-full" :class="active === {{ $i }} && 'h-1'"></div>
             </div>
