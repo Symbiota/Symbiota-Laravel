@@ -22,7 +22,18 @@
         ['title' => __('editor_occurrenceeditor.OCCEDITOR')]
         ]"
         />
-        <x-button class="ml-auto"> {{ __('editor_occurrenceeditor.NEW_REC') }} </x-button>
+
+        <span class="border-base-300 ml-auto flex gap-3 rounded-md border px-2 py-1">
+            <x-link href="#"><</x-link>
+            <x-link href="#"><<</x-link>
+            <span class="font-bold"> |1 of ... | </span>
+            <x-link href="#">>></x-link>
+            <x-link href="#">></x-link>
+        </span>
+        <x-button href="{{ url('collections/table?collid=' . $occurrence->collid) }}" class="h-8">
+            <x-icons.search />
+        </x-button>
+        <x-button> {{ __('editor_occurrenceeditor.NEW_REC') }} </x-button>
     </div>
 
     <x-tabs
