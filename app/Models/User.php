@@ -25,6 +25,7 @@ class User extends Authenticatable {
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
         'firstName',
         'title',
@@ -181,5 +182,34 @@ class User extends Authenticatable {
         }
 
         return $query->get();
+    }
+
+    /**
+     * Gets list of datasets that user has permissions over
+     *
+     * @param  string  $name
+     *
+     * This is needed, for however long it takes to migrate
+     * to only using the name field. Older tools rely on
+     * firstName and lastName user fields to search and
+     * select etc.
+     *
+     * @returns array
+     **/
+    public static function parseFirstLast(string $name): array {
+        $parsedName = [
+            'firstName' => null,
+            'lastName' => $name,
+        ];
+        $MAX_FIELD_LENGTH = 45;
+
+        $name_parts = explode(' ', $name);
+        if (count($name_parts) > 1) {
+            $parsedName['firstName'] = substr(trim($name_parts[0]), 0, $MAX_FIELD_LENGTH);
+            $parsedName['lastName'] = count($name_parts) > 2 ? implode(' ', array_slice($name_parts, 1)) : trim($name_parts[1]);
+            $parsedName['lastName'] = substr($parsedName['lastName'], 0, $MAX_FIELD_LENGTH);
+        }
+
+        return $parsedName;
     }
 }

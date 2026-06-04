@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -28,6 +29,10 @@ class UserProfileController extends Controller {
         } else {
             $params['dynamicProperties']['accessibilityPref'] = false;
         }
+
+        $parsedName = User::parseFirstLast($params['name']);
+        $params['firstName'] = $parsedName['firstName'];
+        $params['lastName'] = $parsedName['lastName'];
 
         $user->update($params);
 
