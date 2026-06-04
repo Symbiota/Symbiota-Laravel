@@ -60,7 +60,7 @@ $isObservations = $collection->isObservations();
 
         <div class="flex flex-grow items-center gap-2 md:justify-end">
             <x-modal>
-                <x-slot name="button" class="flex-grow-1" variant="clear-primary">
+                <x-slot name="button" class="flex" variant="clear-primary">
                     {{ __('profile_usermanagement.QUICK_SEARCH') }}
                 </x-slot>
 
@@ -78,11 +78,7 @@ $isObservations = $collection->isObservations();
                         class="flex flex-col gap-2"
                     >
                         <input type="hidden" name="collid" value="{{ $collection->collID }}" />
-                        <x-input
-                            name="catalogNumber"
-                            x-effect="if (modalOpen) $focus.focus($el);"
-                            label="Catalog Number"
-                        />
+                        <x-input name="catalogNumber" autofocus label="Catalog Number" />
                         <x-taxa-search />
 
                         <div class="flex items-center">
