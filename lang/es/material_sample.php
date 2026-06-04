@@ -27,4 +27,5 @@ return [
     'ESTIMATED_SIZE' => 'Tamaño Estimado',
     'POOL_DNA_EXTRACTS' => 'Extractos de ADN del Pool',
     'SAMPLE_DESIGNATION' => 'Designación de la Muestra',
+    'MATERIAL_SAMPLE_GUID' => 'ID de Muestra de Material (GUID)',
 ];
