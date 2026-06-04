@@ -97,7 +97,7 @@
 
         <x-occurrence.editor.media {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-        <div>Material Sample WIP</div>
+        <x-occurrence.editor.material-sample {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
         <x-occurrence.editor.linked-resources />
 
