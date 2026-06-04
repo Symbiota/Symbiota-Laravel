@@ -4,7 +4,7 @@ return [
     'SAMPLE_TYPE' => 'Sample Type',
     'SAMPLE_CONDITION' => 'Condition',
     'PRESERVATION_TYPE' => 'Preservation type',
-    'PREPARATION DETAILS' => 'Preparation details',
+    'PREPARATION_DETAILS' => 'Preparation details',
     'PREPARATION_DATE' => 'Preparation date',
     'PREPARED_BY' => 'Prepared by',
     'INDIVIDUAL COUNT' => 'Individual count',
