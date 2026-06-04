@@ -201,11 +201,13 @@ class User extends Authenticatable {
             'firstName' => null,
             'lastName' => $name,
         ];
+        $MAX_FIELD_LENGTH = 45;
 
         $name_parts = explode(' ', $name);
         if (count($name_parts) > 1) {
-            $parsedName['firstName'] = trim($name_parts[0]);
+            $parsedName['firstName'] = substr(trim($name_parts[0]), 0, $MAX_FIELD_LENGTH);
             $parsedName['lastName'] = count($name_parts) > 2 ? implode(' ', array_slice($name_parts, 1)) : trim($name_parts[1]);
+            $parsedName['lastName'] = substr($parsedName['lastName'], 0, $MAX_FIELD_LENGTH);
         }
 
         return $parsedName;
