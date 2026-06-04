@@ -14,7 +14,7 @@
             </x-nav-link>
         </div>
     </div>
-    <div class="mb-4 flex">
+    <div class="mb-4 flex items-center gap-2">
         <x-breadcrumbs
             :items="[
         ['title' => __('header.H_HOME'), 'href' => route('home') ],
@@ -38,7 +38,7 @@
 
     <x-tabs
         :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
-        :active="5"
+        :active="0"
     >
         {{-- Occurrence Data --}}
         <form class="flex flex-col gap-4">
@@ -52,26 +52,14 @@
 
             <x-occurrence.editor.curation :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-            {{-- Options should be the same as proccessing Status--}}
-            <x-select
-                label="Status Auto-Set"
-                :items="[
-                [
-                    'title' => 'No Set Status',
-                    'value' => 'No Set Status',
-                    'disabled' => false
-                ],
-            ]"
-            />
-
             <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
                 <x-radio
-                    :default_value="2"
+                    :default_value="1"
                     :options="[
-                        ['label' => 'Collection Event Fields', 'value' => 'CollectionEventFields'],
-                        ['label' => 'All Fields', 'value' => 'AllFields']
+                        ['label' => 'Collection Event Fields', 'value' => 1],
+                        ['label' => 'All Fields', 'value' => 0]
                     ]"
-                    label="Carry Over"
+                    :label="__('editor_occurrenceeditor.CARRY_OVER')"
                     name="cloning-type"
                 />
                 <x-checkbox label="Carry over media" />
@@ -85,13 +73,25 @@
                     ],
                 ]"
                 />
-                <x-input label="Number of Records" />
+                <x-input value="1" label="Number of Records" />
                 {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
-                <x-button> Create Record(s)</x-button>
+                <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
             </x-fieldset>
 
-            <x-button>Save Edits</x-button>
-        </div>
+            {{-- Options should be the same as proccessing Status--}}
+            <x-select
+                label="Status Auto-Set"
+                :items="[
+                [
+                    'title' => 'No Set Status',
+                    'value' => 'No Set Status',
+                    'disabled' => false
+                ],
+            ]"
+            />
+
+            <x-button> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
+        </form>
 
         <x-occurrence.editor.determination-history {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
@@ -103,6 +103,6 @@
 
         <x-occurrence.editor.traits />
 
-        <x-occurrence.editor.admin :occurrence="$occurrence" :occurrence="$occurrence" />
+        <x-occurrence.editor.admin :occurrence="$occurrence" />
     </x-tabs>
 </x-layout>
