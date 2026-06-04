@@ -19,6 +19,7 @@ class OccurrenceEditorController extends Controller {
         return view('pages/occurrence/editor', [
             'occurrence' => $occurrence,
             'collection' => $collection,
+            'identifiers' => $occurrence->getIdentifiers(),
             'creators' => \Media::getCreatorArray(),
             'tags' => \Media::getMediaTagKeys(),
             'media' => $media,
