@@ -9,8 +9,12 @@
         {{ $button }}
     </x-button>
 @endif
-<dialog id="{{ $id }}" class="m-auto  bg-transparent backdrop:bg-black/40" onclick="event.target.id == '{{ $id }}'? event.target.close(): null">
-    <div class="border border-base-300 rounded-md p-4 bg-base-100 ">
+<dialog
+    id="{{ $id }}"
+    class="m-auto bg-transparent backdrop:bg-black/40"
+    onclick="event.target.id == '{{ $id }}'? event.target.close(): null"
+>
+    <div class="border-base-300 bg-base-100 rounded-md border p-4">
         <div class="flex items-center">
             @isset($title)
                 <div {{ $title->attributes->twMerge('font-bold') }}>{{ $title }}</div>
