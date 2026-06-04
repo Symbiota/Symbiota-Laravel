@@ -95,7 +95,7 @@
                                             name="notes"
                                             id="notes"
                                             label="{{ __('taxonomy_taxoneditor.USAGE_NOTES') }}"
-                                            :value="$synonym['usagenotes'] ?? ''"
+                                            :value="$synonym['notes'] ?? ''"
                                         />
                                         <x-input type="number" name="sortsequence" id="sortsequence" label="{{ __('ident.SORT_SQNCE') }}" :value="$synonym['sortsequence'] ?? ''" />
                                         <x-button type="submit" class="mt-4">{{ __('tools_matrixeditor.SUBMIT') }}</x-button>
