@@ -1,3 +1,14 @@
+
+@php global $SERVER_ROOT;
+
+include_once(legacy_path('/classes/OccurrenceAttributes.php'));
+
+$attrManager = new OccurrenceAttributes();
+$attrManager->setOccid($occurrence->occid);
+
+$traitArr = $attrManager->getTraitArr();
+// $attrManager->getSourceControlledArr($source)
+@endphp
 @props(['occurrence'])
 <x-layout :hasHeader="false" :hasNavbar="false" :hasFooter="false">
     <div class="mb-4 flex items-center gap-2">
@@ -38,7 +49,7 @@
 
     <x-tabs
         :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
-        :active="0"
+        :active="5"
     >
         {{-- Occurrence Data --}}
         <form class="flex flex-col gap-4">
@@ -95,7 +106,7 @@
                     />
                     <x-input :inline="true" value="1" label="Number of Records" />
                     <x-link href="#">{{ __('editor_occurrenceeditor.PRE_POPULATE') }}</x-link>
-                    <x-input name="clonecatnum[]" value="{{ $occurrence->catalogNumber }}" :label="__('collections_list.CATALOG_NUMBER') . ' 1'" />
+                    <x-input name="clonecatnum[]" :label="__('collections_list.CATALOG_NUMBER') . ' 1'" />
 
                     {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
                     <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
@@ -111,7 +122,7 @@
 
         <x-occurrence.editor.linked-resources />
 
-        <x-occurrence.editor.traits />
+        <x-occurrence.editor.traits :occurrence="$occurrence" :traits="$traitArr"/>
 
         <x-occurrence.editor.admin :occurrence="$occurrence" />
     </x-tabs>
