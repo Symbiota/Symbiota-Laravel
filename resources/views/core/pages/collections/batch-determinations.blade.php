@@ -253,7 +253,7 @@ $batchDeterminationConfig = [
                 </div>
 
                 <div class="flex max-w-lg flex-wrap items-center gap-2">
-                    <label class="font-bold" for="nomsciname">{{ __('editor_batchdeterminations.TAXON') }}:</label>
+                    <x-form-label :label="__('editor_batchdeterminations.TAXON')" for="nomsciname" inline />
                     <div class="min-w-72 flex-1">
                         <x-autocomplete-input
                             id="nomsciname"
@@ -345,9 +345,10 @@ $batchDeterminationConfig = [
 
                     <div class="flex flex-wrap gap-4">
                         <span class="font-bold">{{ __('editor_batchdeterminations.ANNOTATION_TYPE') }}:</span>
-                        <label class="flex items-center gap-1">
+                        <div class="flex items-center gap-1">
                             <input
                                 class="accent-accent cursor-pointer"
+                                id="annotype-id"
                                 name="annotype"
                                 type="radio"
                                 value="id"
@@ -355,19 +356,20 @@ $batchDeterminationConfig = [
                                 @change="annotationTypeChanged()"
                                 checked
                             />
-                            {{ __('editor_batchdeterminations.ID_ADJUST') }}
-                        </label>
-                        <label class="flex items-center gap-1">
+                            <label for="annotype-id">{{ __('editor_batchdeterminations.ID_ADJUST') }}</label>
+                        </div>
+                        <div class="flex items-center gap-1">
                             <input
                                 class="accent-accent cursor-pointer"
+                                id="annotype-na"
                                 name="annotype"
                                 type="radio"
                                 value="na"
                                 x-model="annotationType"
                                 @change="annotationTypeChanged()"
                             />
-                            {{ __('editor_batchdeterminations.NOM_ADJUST') }}
-                        </label>
+                            <label for="annotype-na">{{ __('editor_batchdeterminations.NOM_ADJUST') }}</label>
+                        </div>
                     </div>
 
                     <hr />
@@ -375,6 +377,7 @@ $batchDeterminationConfig = [
                     <div class="space-y-3">
                         <x-input
                             inline
+                            id="identificationqualifier"
                             name="identificationqualifier"
                             :label="__('editor_batchdeterminations.ID_QUALIFIER')"
                             class="w-40"
@@ -382,9 +385,12 @@ $batchDeterminationConfig = [
                         />
 
                         <div class="flex max-w-2xl flex-wrap items-center gap-2">
-                            <label class="font-bold" for="det-sciname">
-                                {{ __('editor_batchdeterminations.SCINAME') }}:<span class="text-error">*</span>
-                            </label>
+                            <x-form-label
+                                :label="__('editor_batchdeterminations.SCINAME')"
+                                for="det-sciname"
+                                :required="true"
+                                inline
+                            />
                             <div class="min-w-80 flex-1">
                                 <x-autocomplete-input
                                     id="det-sciname"
@@ -402,15 +408,14 @@ $batchDeterminationConfig = [
 
                         <x-input
                             inline
+                            id="scientificnameauthorship"
                             name="scientificnameauthorship"
                             :label="__('editor_batchdeterminations.AUTHOR')"
                             class="w-52"
                         />
 
                         <div class="flex flex-wrap items-center gap-2" x-show="annotationType === 'id'">
-                            <label class="font-bold" for="confidenceranking">
-                                {{ __('editor_batchdeterminations.CONFIDENCE') }}:
-                            </label>
+                            <x-form-label :label="__('editor_batchdeterminations.CONFIDENCE')" for="confidenceranking" inline />
                             <select
                                 class="border-base-300 rounded border px-1 py-0.25"
                                 id="confidenceranking"
@@ -442,6 +447,7 @@ $batchDeterminationConfig = [
 
                         <x-input
                             inline
+                            id="identificationreferences"
                             name="identificationreferences"
                             :label="__('editor_batchdeterminations.REFERENCE')"
                             class="w-96"
@@ -449,6 +455,7 @@ $batchDeterminationConfig = [
 
                         <x-input
                             inline
+                            id="identificationremarks"
                             name="identificationremarks"
                             :label="__('editor_batchdeterminations.NOTES')"
                             class="w-96"
