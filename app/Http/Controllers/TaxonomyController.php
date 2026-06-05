@@ -13,8 +13,23 @@ class TaxonomyController extends Controller {
         $taxon = DB::table('taxa as t')
             ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
             ->where('t.tid', $tid)
-            ->where('taxauthid', 1)
-            ->select('*')
+            ->where('ts.taxauthid', 1)
+            ->select(
+                't.*',
+                'ts.tidaccepted',
+                'ts.taxauthid',
+                'ts.parenttid',
+                'ts.family',
+                'ts.taxonomicStatus',
+                'ts.taxonomicSource',
+                'ts.sourceIdentifier',
+                'ts.UnacceptabilityReason',
+                'ts.notes as statusNotes',
+                'ts.SortSequence',
+                'ts.modifiedUid as statusModifiedUid',
+                'ts.modifiedTimestamp as statusModifiedTimestamp',
+                'ts.initialtimestamp as statusInitialTimestamp'
+            )
             ->first();
 
         return $taxon;
