@@ -17,19 +17,25 @@ foreach($traits[$traitId]['states'] as $sid => $state) {
 }
 @endphp
 
+
 @if($type === 'select')
     {{-- todo select part of traits --}}
 @else
-    <div x-data="{ radioValue: {{ $coded[0] ?? 'null' }} }" {{ $attributes->twMerge('flex flex-col gap-2') }}>
-        <div class="font-bold">{{ $traits[$traitId]['name'] }}</div>
+    <div onchange="console.log(event)" x-data="{ radioValue: {{ $coded[0] ?? 'null' }} }" {{ $attributes->twMerge('flex flex-col gap-2') }}>
+        {{-- <div class="font-bold">{{ $traits[$traitId]['name'] }}</div> --}}
+        <x-traits.form-input :traits="$traits" :traitId="$traitId" />
+
+            {{--
         @foreach($traits[$traitId]['states'] as $sid => $state)
+            <x-traits.form-input :traits="$traits" :traitId="$traitId" :sid="$sid" :state="$state" />
             @php
-    $isCoded = false;
-    if(array_key_exists('coded', $state)) {
-        $isCoded = is_numeric($state['coded'])?
-        $state['coded']: true;
-    }
-    @endphp
+            $isCoded = false;
+            if(array_key_exists('coded', $state)) {
+                $isCoded = is_numeric($state['coded'])?
+                $state['coded']: true;
+            }
+            @endphp
+
             <div x-data="{ parentValue: {{ $isCoded? $sid:'null' }} }">
                 <x-radio.item
                     :checked="$isCoded"
@@ -66,5 +72,6 @@ foreach($traits[$traitId]['states'] as $sid => $state) {
                 @endisset
             </div>
         @endforeach
+            --}}
     </div>
 @endif

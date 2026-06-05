@@ -1,5 +1,13 @@
+@props(['occurrence', 'traits' => []])
 <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4 border p-4">
+        @foreach($traits as $traitID => $traitData)
+        @php if(isset($traitData['dependentTrait'])) continue @endphp
+        <x-fieldset :legend="$traitData['name']">
+            {{-- Numerical --}}
+            <x-traits.form-input :traits="$traits" :traitId="$traitID" />
+        </x-fieldset>
+        @endforeach
         <div>
             <div class="flex">
                 <h3 class="text-lg font-bold">Anglosperm Phenolgical Traits</h3>
