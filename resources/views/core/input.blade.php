@@ -37,7 +37,5 @@
         <span class="assistive-text">{{ $assistive_text }}</span>
     @endif
 
-    @if($slot->isNotEmpty())
-        {{ $slot }}
-    @endif
+    @if($slot->isNotEmpty()) {{ $slot }} @endif
 </div>
