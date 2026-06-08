@@ -47,7 +47,7 @@
     $submitAction ??= $collid ? 'saveEdits' : 'newCollection';
     $submitLabel ??= $collid ? __('misc_collmetadata.SAVE_EDITS') : __('misc_collmetadata.CREATE_COLL_2');
 
-    $infoIconClass = 'h-auto w-auto border-0 text-link-darker mt-1';
+    $infoIconClass = 'h-auto w-auto border-0 text-link-darker';
     $inputBaseClass = 'max-w-full rounded border bg-base-100 px-1 py-1.5';
     $inputWideClass = 'w-[42rem] ' . $inputBaseClass;
     $inputMediumClass = 'w-[25rem] ' . $inputBaseClass;
