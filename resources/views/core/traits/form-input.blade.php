@@ -24,7 +24,7 @@
     @endphp
     <x-select :defaultValue="$default" :label="$traits[$traitId]['name']" :items="$state_items" :inline="true"/>
 @elseif($depth < 3)
-<div x-data="{ sid: false }" class="flex flex-col gap-2 pl-4">
+<div x-data="{ sid: false }" @class(["flex flex-col gap-2", 'pl-4' => !$root])>
     @if(!$root)
         <div>{{ $traits[$traitId]['name'] }}</div>
     @endif
