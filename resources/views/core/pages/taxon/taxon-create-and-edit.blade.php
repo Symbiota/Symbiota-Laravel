@@ -262,7 +262,7 @@
                             value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->author ?? '') : '' }}"
                         />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-1/2 {{ $mode === 'edit' ? 'hidden' : '' }}">
                         <x-taxa-search
                             class="font-bold"
                             label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
