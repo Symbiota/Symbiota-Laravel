@@ -36,4 +36,8 @@
     @elseif(!empty($assistive_text))
         <span class="assistive-text">{{ $assistive_text }}</span>
     @endif
+
+    @if($slot->isNotEmpty())
+        {{ $slot }}
+    @endif
 </div>
