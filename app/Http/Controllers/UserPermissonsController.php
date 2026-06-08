@@ -20,7 +20,7 @@ class UserPermissonsController extends Controller {
     }
 
     public function adminUserRegister(Request $request) {
-        return view('pages/signup', ['post_route' => route('user.admin.create') ]);
+        return view('pages/signup', ['post_route' => route('user.admin.create')]);
     }
 
     public function adminCreateUser(Request $request) {
