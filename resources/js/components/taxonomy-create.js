@@ -666,9 +666,6 @@ async function parseName() {
     if (parentName !== "") {
         const taxaSearchInput =
             taxonForm.querySelector('input#parentname[name="parentname"]');
-            //  ||
-            // taxonForm.querySelector('input#parentname') ||
-            // taxonForm.querySelector('input[name="parentname"]');
         if (taxaSearchInput) taxaSearchInput.value = parentName;
 
         try {
