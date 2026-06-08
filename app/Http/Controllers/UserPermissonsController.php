@@ -20,7 +20,7 @@ class UserPermissonsController extends Controller {
     }
 
     public function adminUserRegister(Request $request) {
-        return view('pages/signup');
+        return view('pages/signup', ['post_route' => route('user.admin.create') ]);
     }
 
     public function adminCreateUser(Request $request) {
@@ -28,11 +28,14 @@ class UserPermissonsController extends Controller {
 
         try {
             $user = $action->create($request->all());
-            dd($user);
+            $url = route('user.permissions', $user->uid);
 
-            return redirect()->route('home');
+            return response($url)
+                ->header('HX-Retarget', 'body')
+                ->header('HX-Location', $url)
+                ->header('HX-Boosted', 'true');
         } catch (\Throwable $th) {
-            $th->getMessage();
+            return view('pages/signup', ['post_route' => route('user.admin.create'), 'errors' => message_bag([$th->getMessage()])])->fragment('form');
         }
     }
 
