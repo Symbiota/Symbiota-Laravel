@@ -48,27 +48,6 @@ Route::get('/taxa/search', function (Request $request) {
     }
 });
 
-Route::get('/collections/search', function (Request $request) {
-    $name = $request->query('name');
-    $format = strtolower($request->query('format', 'html'));
-    $query = Collection::query();
-
-    if ($name) {
-        $query->whereLike('collectionName', '%' . $name . '%');
-    }
-
-    $collections = $query->get();
-
-    if ($format === 'json') {
-        return $collections;
-    } else {
-        return view(
-            'core/autocomplete/result',
-            ['data' => $collections, 'label' => 'collectionName', 'value' => 'collId']
-        );
-    }
-});
-
 Route::get('/geographic/search', function (Request $request) {
     $geo_term = $request->query('geoterm');
     $geo_level = $request->query('geolevel');
