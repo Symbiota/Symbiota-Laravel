@@ -630,7 +630,11 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <x-form-label :label="__('misc_collmetadata.RIGHTS_HOLDER')" for="rightsHolder" inline />
+                                <x-form-label
+                                    :label="__('misc_collmetadata.RIGHTS_HOLDER')"
+                                    for="rightsHolder"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -663,7 +667,11 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <x-form-label :label="__('misc_collmetadata.ACCESS_RIGHTS')" for="accessRights" inline />
+                                <x-form-label
+                                    :label="__('misc_collmetadata.ACCESS_RIGHTS')"
+                                    for="accessRights"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -898,7 +906,11 @@
                             class="{{ $fieldRowClass }} sourceurl-div {{ $managementType === 'Live Data' ? 'hidden' : '' }}"
                         >
                             <div class="{{ $labelClass }}">
-                                <x-form-label :label="__('misc_collmetadata.SOURCE_REC_URL')" for="individualUrl" inline />
+                                <x-form-label
+                                    :label="__('misc_collmetadata.SOURCE_REC_URL')"
+                                    for="individualUrl"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -1008,7 +1020,11 @@
 
                         <div class="{{ $fieldRowClass }}">
                             <div class="{{ $labelClass }}">
-                                <x-form-label :label="__('misc_collmetadata.COLLECTION_ID')" for="collectionID" inline />
+                                <x-form-label
+                                    :label="__('misc_collmetadata.COLLECTION_ID')"
+                                    for="collectionID"
+                                    inline
+                                />
                             </div>
                             <div class="flex max-w-full flex-wrap items-start gap-2">
                                 <input
@@ -1326,14 +1342,22 @@
 
                                 <div class="flex flex-wrap items-center">
                                     <div class="{{ $labelClass }}">
-                                        <x-form-label :label="__('misc_collmetaresources.ROLE')" for="contact-role" inline />
+                                        <x-form-label
+                                            :label="__('misc_collmetaresources.ROLE')"
+                                            for="contact-role"
+                                            inline
+                                        />
                                     </div>
                                     <input id="contact-role" name="role" type="text" class="{{ $inputShortClass }}" />
                                 </div>
 
                                 <div class="flex flex-wrap items-center">
                                     <div class="{{ $labelClass }}">
-                                        <x-form-label :label="__('misc_collmetaresources.EMAIL')" for="contact-email" inline />
+                                        <x-form-label
+                                            :label="__('misc_collmetaresources.EMAIL')"
+                                            for="contact-email"
+                                            inline
+                                        />
                                     </div>
                                     <input id="contact-email" name="email" type="text" class="{{ $inputShortClass }}" />
                                 </div>
@@ -1348,7 +1372,11 @@
 
                                 <div class="flex flex-wrap items-center">
                                     <div class="{{ $labelClass }}">
-                                        <x-form-label :label="__('misc_collmetaresources.PHONE')" for="contact-phone" inline />
+                                        <x-form-label
+                                            :label="__('misc_collmetaresources.PHONE')"
+                                            for="contact-phone"
+                                            inline
+                                        />
                                     </div>
                                     <input
                                         id="contact-phone"
