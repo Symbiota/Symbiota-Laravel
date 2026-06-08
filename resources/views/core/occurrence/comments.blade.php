@@ -16,6 +16,10 @@
 
 <x-errors :errors="$comment_errors ?? []" />
 
+@php
+    $user = request()->user();
+    $isEditor = Gate::check('COLL_EDIT', [$occurrence->collid]);
+@endphp
 @if(count($comments))
     <div class="flex flex-col gap-4">
         @foreach($comments as $comment)
@@ -24,32 +28,31 @@
                     <span class="font-medium">{{ $comment->username }}</span>
                     <span class="text-base-content/50">posted {{ $comment->initialtimestamp }}</span>
                     <span class="flex flex-grow justify-end gap-2">
-                        {{-- TODO (Logan) report functionality --}}
-
-                        @if($comment->reviewstatus != 2)
-                            <form
-                                hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/report') }}"
-                                hx-target="#comment-tab"
-                                hx-swap="innerHTML"
-                            >
-                                @csrf
-                                <x-button variant="error"> {{ __('individual.REPORT') }} </x-button>
-                            </form>
-                        @endif
-
-                        @php $user = request()->user(); @endphp
                         @if($user)
-                            @if($user && $user->uid == $comment->uid || Gate::check('COLL_EDIT', [$occurrence->collid]))
-                                @if($comment->reviewstatus == 2)
-                                    <form
-                                        hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/public') }}"
-                                        hx-target="#comment-tab"
-                                        hx-swap="innerHTML"
-                                    >
-                                        @csrf
-                                        <x-button> {{ __('individual.MAKE_COMMENT_PUBLIC') }} </x-button>
-                                    </form>
-                                @endif
+                            @php
+                                $userComment = $user->uid == $comment->uid;
+                            @endphp
+                            @if($comment->reviewstatus != 2)
+                                <form
+                                    hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/report') }}"
+                                    hx-target="#comment-tab"
+                                    hx-swap="innerHTML"
+                                >
+                                    @csrf
+                                    <x-button variant="error"> {{ __('individual.REPORT') }} </x-button>
+                                </form>
+                            @endif
+                            @if($comment->reviewstatus == 2 && $isEditor)
+                                <form
+                                    hx-patch="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid . '/public') }}"
+                                    hx-target="#comment-tab"
+                                    hx-swap="innerHTML"
+                                >
+                                    @csrf
+                                    <x-button> {{ __('individual.MAKE_COMMENT_PUBLIC') }} </x-button>
+                                </form>
+                            @endif
+                            @if($userComment || $isEditor)
                                 <form
                                     hx-delete="{{ url('occurrence/' . $occurrence->occid . '/comment/' . $comment->comid) }}"
                                     hx-target="#comment-tab"

@@ -404,4 +404,4 @@
             Recommended Symbiota schema version differs from the database schema
         </div>
     @endif
-    </x-layout>
+</x-margin-layout>

@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :hasToaster="true">
     <div class="mx-auto flex w-[90%] max-w-screen-lg flex-col gap-y-4">
         <h1 class="text-primary my-3 font-sans text-4xl font-bold">Tailwind Components</h1>
         <h1 class="font-sans text-4xl font-bold">H1</h1>
@@ -22,6 +22,7 @@
         </div>
 
         {{-- Note you need to be in alpine context to use @click otherwise just use onclick --}}
+        {{-- Note you must enable the toaster within the layout for any of these to function --}}
         <div class="flex gap-4">
             <x-button onclick="toast('Success Title', { description: 'Plain description' })"> Toast Plain </x-button>
             <x-button onclick="toast('Success Title', { type: 'success', description: 'Success description' })">

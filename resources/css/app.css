@@ -29,6 +29,11 @@
 @layer components {
     /* Custom CSS for Single HTML Tag components goes here */
 
+    .x-link,
+    .markdown a {
+        @apply text-link-darker hover:text-link-lighter inline w-fit font-medium underline hover:brightness-100;
+    }
+
     /* Style Markdown components */
     .markdown {
         h1,
@@ -72,14 +77,6 @@
             color: theme("colors.base.content");
             border-radius: theme("borderRadius.full");
             padding: 0 theme("padding.2");
-        }
-
-        a {
-            color: theme("colors.link.DEFAULT");
-
-            &:hover {
-                color: theme("colors.link.lighter");
-            }
         }
 
         ul ul {

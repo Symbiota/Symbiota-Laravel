@@ -47,5 +47,10 @@ return [
     'ACCESSIBILITY_PREF' => 'Préférences d\'accessibilité',
     'ACCESSIBILITY_PREF_DESC' => 'Cochez pour indiquer une préférence pour les styles optimisés pour l\'accessibilité',
     'PROFILE_CREATION_DISABLED' => 'La création d\'utilisateurs publics a été désactivée sur ce portail.',
-    'PASSWORD_WARNING' => 'Ne créez pas de comptes utilisateurs partagés/de groupe.<br><br>Pour des raisons de sécurité, chaque personne doit disposer d\'un identifiant et d\'un mot de passe uniques.<br><br>Créez un mot de passe unique pour ce portail.<br><br>Ne réutilisez pas un mot de passe utilisé sur un autre site web, pour votre messagerie électronique, etc.',
+    'PASSWORD_RULES' => [
+        'Ne créez pas de comptes utilisateurs partagés/de groupe.',
+        'Pour des raisons de sécurité, chaque personne doit disposer d\'un identifiant et d\'un mot de passe uniques.',
+        'Créez un mot de passe unique pour ce portail.',
+        'Ne réutilisez pas un mot de passe utilisé sur un autre site web, pour votre messagerie électronique, etc.',
+    ],
 ];

@@ -26,6 +26,7 @@ return [
     'DATE_DET' => 'Fecha determina',
     'TYPE_STATUS' => 'Estado de Tipo',
     'OBSERVER' => 'Observador',
+    'OBSERVER_NUMBER' => 'Número de Observador',
     'VERBATIM_DATE' => 'Fecha Literal',
     'ADDITIONAL_COLLECTORS' => 'Colectores Adicionales',
     'ACCESS_GRANTED' => 'Acceso concedido al usuario actual',
