@@ -50,7 +50,7 @@
     $infoIconClass = 'h-auto w-auto border-0 text-link-darker';
     $inputBaseClass = 'max-w-full rounded border bg-base-100 px-1 py-1.5';
     $inputWideClass = 'w-[42rem] ' . $inputBaseClass;
-    $inputMediumClass = 'w-[25rem] ' . $inputBaseClass;
+    $inputMediumClass = 'w-[25rem] grow-0 ' . $inputBaseClass;
     $inputShortClass = 'w-[15rem] ' . $inputBaseClass;
     $labelClass = 'inline-flex mr-[1rem] items-center gap-1 font-bold';
     $fieldRowClass = 'my-2 flex flex-wrap items-center';
