@@ -52,4 +52,7 @@ return [
     'CREATE_NEW_USER' => 'Créer un nouvel utilisateur',
     'USER_CREATED_SUCCESSFULLY' => 'Utilisateur créé avec succès :',
     'USERS' => 'Utilisateurs',
+    'Successfully updated user permissions' => 'Autorisations utilisateur mises à jour avec succès',
+    'You must select a role for this permission' => 'Vous devez sélectionner un rôle pour cette autorisation',
+    'You must select an option for this permisson' => 'Vous devez sélectionner une option pour cette autorisation',
 ];

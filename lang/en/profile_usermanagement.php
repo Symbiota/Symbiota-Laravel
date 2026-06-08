@@ -52,4 +52,7 @@ return [
     'USER_CREATED_SUCCESSFULLY' => 'Successfully created user: ',
     'USERS' => 'Users',
     'LAST_LOGIN_DATE' => 'Last Login Date',
+    'Successfully updated user permissions' => 'Successfully updated user permissions',
+    'You must select a role for this permission' => 'You must select a role for this permission',
+    'You must select an option for this permisson' => 'Vous devez sélectionner une option pour cette autorisation',
 ];

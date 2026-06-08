@@ -29,8 +29,9 @@ class UserPermissonsController extends Controller {
         try {
             $user = $action->create($request->all());
             dd($user);
+
             return redirect()->route('home');
-        } catch(\Throwable $th) {
+        } catch (\Throwable $th) {
             $th->getMessage();
         }
     }
@@ -111,13 +112,13 @@ class UserPermissonsController extends Controller {
             if (count($errors)) {
                 $pageData['errors'] = message_bag($errors);
             } else {
-                $pageData['info'] = message_bag(['Successfully updated user permissions']);
+                $pageData['info'] = message_bag([__('Successfully updated user permissions')]);
             }
 
             return view('user/GeneralPermissionsForm', $pageData);
         } else {
             $pageData = $this->getPermissionsProfileInfo($uid);
-            $pageData['info'] = message_bag(['Successfully updated user permissions']);
+            $pageData['info'] = message_bag([__('Successfully updated user permissions')]);
 
             return view('pages/user/permissionsProfile', $pageData);
         }
@@ -135,9 +136,9 @@ class UserPermissonsController extends Controller {
         ];
 
         if (! request('role')) {
-            return redirect('/user/' . $uid . '/permissions/')->withErrors('You must select a role for this permission');
+            return redirect('/user/' . $uid . '/permissions/')->withErrors(__('You must select a role for this permission'));
         } elseif (! request('tablePk') && in_array(request('role'), $requires_table_pk)) {
-            return redirect('/user/' . $uid . '/permissions/')->withErrors('You must select an option for this permisson');
+            return redirect('/user/' . $uid . '/permissions/')->withErrors(__('You must select an option for this permisson'));
         }
 
         $userManager->addPermission($uid, request('role'), request('tablePk'));

@@ -51,4 +51,7 @@ return [
     'CREATE_NEW_USER' => 'Crear nuevo usuario',
     'USER_CREATED_SUCCESSFULLY' => 'Usuario creado con éxito:',
     'USERS' => 'Usuarios',
+    'Successfully updated user permissions' => 'Permisos de usuario actualizados correctamente',
+    'You must select a role for this permission' => 'Debes seleccionar un rol para este permiso',
+    'You must select an option for this permisson' => 'Debe seleccionar una opción para este permiso',
 ];
