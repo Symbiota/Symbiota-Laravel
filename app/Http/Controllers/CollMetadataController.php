@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 
 class CollMetadataController extends Controller {
     public static function create(Request $request) {
-        return view('pages.collections.collmetadata', self::pageData($request));
+        return view('pages.collections.collmetadata.create', self::createPageData($request));
     }
 
     public static function store(Request $request) {
@@ -48,7 +48,7 @@ class CollMetadataController extends Controller {
     }
 
     public static function edit(Request $request, int $collid) {
-        return view('pages.collections.collmetadata', self::pageData($request, $collid));
+        return view('pages.collections.collmetadata.edit', self::editPageData($request, $collid));
     }
 
     public static function update(Request $request, int $collid) {
@@ -114,45 +114,48 @@ class CollMetadataController extends Controller {
         return self::redirectParams($collid);
     }
 
-    private static function pageData(Request $request, ?int $collid = null): array {
+    private static function createPageData(Request $request): array {
         $collmanager = self::collmetadataManager('readonly', $request);
-        $collection = [];
-        $selectedCategories = [];
-        $resourceLinks = [];
-        $contacts = [];
-        $address = [];
         $rightsTerms = self::rightsTerms();
 
-        if ($collid) {
-            $collmanager->setCollid($collid);
-            $collection = current($collmanager->getCollectionMetadata()) ?: [];
+        return [
+            'collid' => null,
+            'collection' => [],
+            'fullCatArr' => $collmanager->getCategoryArr(),
+            'selectedCategories' => [],
+            'rightsTerms' => $rightsTerms,
+            'rightsState' => self::rightsState(null, $rightsTerms),
+            'showGbifPublishing' => self::gbifPublishingEnabled(),
+        ];
+    }
 
-            if (! $collection) {
-                abort(404);
-            }
+    private static function editPageData(Request $request, int $collid): array {
+        $collmanager = self::collmetadataManager('readonly', $request);
+        $rightsTerms = self::rightsTerms();
 
-            $selectedCategories = $collmanager->getCollectionCategories();
-            $resourceLinks = self::decodeJsonArray($collection['resourcejson'] ?? '');
-            $contacts = self::decodeJsonArray($collection['contactjson'] ?? '');
-            $address = $collmanager->getAddress();
+        $collmanager->setCollid($collid);
+        $collection = current($collmanager->getCollectionMetadata()) ?: [];
+
+        if (! $collection) {
+            abort(404);
         }
 
         return [
             'collid' => $collid,
             'collection' => $collection,
             'fullCatArr' => $collmanager->getCategoryArr(),
-            'selectedCategories' => $selectedCategories,
-            'resourceLinks' => $resourceLinks,
-            'contacts' => $contacts,
+            'selectedCategories' => $collmanager->getCollectionCategories(),
+            'resourceLinks' => self::decodeJsonArray($collection['resourcejson'] ?? ''),
+            'contacts' => self::decodeJsonArray($collection['contactjson'] ?? ''),
             'resourceJson' => $collection['resourcejson'] ?? '',
             'contactJson' => $collection['contactjson'] ?? '',
-            'address' => $address,
+            'address' => $collmanager->getAddress(),
             'institutionOptions' => $collmanager->getInstitutionArr(),
             'languageCodes' => self::languageCodes(),
             'rightsTerms' => $rightsTerms,
             'rightsState' => self::rightsState($collection['rights'] ?? null, $rightsTerms),
             'showGbifPublishing' => self::gbifPublishingEnabled(),
-            'tabIndex' => $collid ? min((int) $request->query('tabindex', 0), 1) : 0,
+            'tabIndex' => min((int) $request->query('tabindex', 0), 1),
         ];
     }
 
