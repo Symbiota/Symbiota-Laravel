@@ -33,7 +33,9 @@
         <x-button href="{{ url('collections/table?collid=' . $occurrence->collid) }}" class="h-8">
             <x-icons.search />
         </x-button>
-        <x-button> {{ __('editor_occurrenceeditor.NEW_REC') }} </x-button>
+        <x-button title="__('editor_occurrenceeditor.NEW_REC')" class="h-8">
+            <x-icons.add />
+        </x-button>
     </div>
 
     <x-tabs
