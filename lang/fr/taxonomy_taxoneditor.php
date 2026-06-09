@@ -58,4 +58,5 @@ return [
     'TARGET_TAXON_MISSING' => 'Taxon cible manquant',
     'GENUS_NAME' => 'Nom du genre',
     'QUICK_PARSER_LABEL' => 'Analyseur rapide facultatif',
+    'HIERARCHY_REBUILD_SUCCESS' => 'Hiérarchie reconstruite avec succès',
 ];

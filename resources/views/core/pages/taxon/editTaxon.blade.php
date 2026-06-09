@@ -58,7 +58,11 @@
             {{-- Hierarchy --}}
             <div id="taxon-tree">
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
-                <x-button href="{{ url('taxon/reconstructHierarchy?tid=' . $taxonInfo->tid) }}" class="w-fit mt-4">{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button>
+                <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
+                    @csrf
+                    <input type="hidden" name="tid" value="{{ $taxonInfo->tid ?? '' }}">
+                    <x-button type="submit" class="w-fit mt-4">{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button>
+                </form>
             </div>
 
             {{-- Child Taxa --}}

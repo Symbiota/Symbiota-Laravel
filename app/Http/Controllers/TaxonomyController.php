@@ -367,7 +367,7 @@ class TaxonomyController extends Controller {
             $tidAccepted = $postData['tidaccepted'];
             $statusStr = $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
         } elseif ($editType == 'updatehierarchy') {
-            $statusStr = $editorManager->rebuildHierarchy($tid);
+            $editorManager->rebuildHierarchy($tid);
         } elseif ($editType == 'remapTaxon') {
             $remapStatus = $editorManager->transferResources($postData['remaptid']);
             if ($editorManager->getWarningArr()) {

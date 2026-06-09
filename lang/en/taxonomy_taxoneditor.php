@@ -71,5 +71,6 @@ return [
     'ACCEPTANCE_STATUS_CHANGE_SUCCESS' => 'Acceptance status successfully updated',
     'SYNONYM_UPDATE_SUCCESS' => 'Synonym details successfully updated',
     'USAGE_NOTES' => 'Usage Notes',
+    'HIERARCHY_REBUILD_SUCCESS' => 'Hierarchy successfully rebuilt',
 
 ];
