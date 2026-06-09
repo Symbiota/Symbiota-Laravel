@@ -23,4 +23,5 @@ return [
     'ALREADY_EXISTS' => ' ya existe en la base de datos.',
     'ACC_NAME_NEEDS_VALUE' => 'El nombre aceptado necesita tener un valor.',
     'MISSING_REQUIRED_TAXON_FIELD' => 'Falta el campo de taxón requerido',
+    'REBUILD_HIERARCHY' => 'Reconstruir Jerarquía',
 ];

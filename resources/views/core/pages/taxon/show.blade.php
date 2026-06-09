@@ -37,6 +37,6 @@
     <ul>
         <div id="taxon-tree">
             <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
-            <div>
+        </div>
     </ul>
 </x-layout>

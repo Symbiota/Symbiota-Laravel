@@ -2,6 +2,7 @@
     $mode = $mode ?? 'create';
     $kingdoms = $kingdoms ?? [];
     $allTaxonRanks = $allTaxonRanks ?? [];
+    $rankMap = $rankMap ?? [];
     $indContent = $indContent ?? [];
     $securityOptions = $securityOptions ?? [];
     $errors = $errors ?? [];
@@ -11,6 +12,7 @@
     $acceptedName = $acceptedName ?? '';
     $securitystatusstart = $securitystatusstart ?? 0;
     $verifyArr = $verifyArr ?? [];
+    $parents = $parents ?? [];
 @endphp
 <x-layout>
     <div class="mb-4">
@@ -54,8 +56,9 @@
             </div>
 
             {{-- Hierarchy --}}
-            <div>
-                <p>A2</p>
+            <div id="taxon-tree">
+                <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
+                <x-button href="{{ url('taxon/reconstructHierarchy?tid=' . $taxonInfo->tid) }}" class="w-fit mt-4">{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button>
             </div>
 
             {{-- Child Taxa --}}

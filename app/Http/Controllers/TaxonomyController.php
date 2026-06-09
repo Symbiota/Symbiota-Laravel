@@ -9,6 +9,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
+    private static $rankMap = [
+            0 => 1, // non-ranked node
+            1 => 2, // organism
+            10 => 3, // kingdom
+            20 => 4, // subkingdom
+            30 => 5, // division
+            40 => 6, // subdivision
+            50 => 7, // superclass
+            60 => 8, // class
+            70 => 9, // subclass
+            100 => 10, // order
+            110 => 11, // suborder
+            140 => 12, // family
+            150 => 13, // subfamily
+            160 => 14, // tribe
+            170 => 15, // subtribe
+            180 => 16, // genus
+            190 => 17, // subgenus
+            200 => 18, // section
+            210 => 19, // subsection
+            220 => 20, // species
+            300 => 21, // infraspecies
+        ];
     public static function taxonData(int $tid) {
         $taxon = DB::table('taxa as t')
             ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
@@ -238,6 +261,8 @@ class TaxonomyController extends Controller {
             'acceptedName' => $acceptedName,
             'securitystatusstart' => $securitystatusstart,
             'verifyArr' => $verifyArr,
+            'parents' => self::getParents($tid),
+            'rankMap' => self::$rankMap,
         ]);
     }
 
@@ -304,33 +329,9 @@ class TaxonomyController extends Controller {
             $parent->children = self::getDirectChildren($parent->tid, $displayAuthor);
         }
 
-        $rankMap = [
-            0 => 1, // non-ranked node
-            1 => 2, // organism
-            10 => 3, // kingdom
-            20 => 4, // subkingdom
-            30 => 5, // division
-            40 => 6, // subdivision
-            50 => 7, // superclass
-            60 => 8, // class
-            70 => 9, // subclass
-            100 => 10, // order
-            110 => 11, // suborder
-            140 => 12, // family
-            150 => 13, // subfamily
-            160 => 14, // tribe
-            170 => 15, // subtribe
-            180 => 16, // genus
-            190 => 17, // subgenus
-            200 => 18, // section
-            210 => 19, // subsection
-            220 => 20, // species
-            300 => 21, // infraspecies
-        ];
-
         return view('pages/taxon/show', [
             'parents' => $parents,
-            'rankMap' => $rankMap,
+            'rankMap' => self::$rankMap,
             'targetTid' => $targetTid,
             'taxonName' => $taxonName,
         ]);
@@ -509,5 +510,24 @@ class TaxonomyController extends Controller {
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_UPDATE_SUCCESS') . ' ' . $statusStr;
 
         return redirect()->route('taxon.editview', ['tid' => $currentTid])->with('success', $statusStr);
+    }
+
+    public static function reconstructHierarchy() {
+        $tid = (int) request()->all()['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+        $editorManager->rebuildHierarchy($tid);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
     }
 }
