@@ -1,14 +1,3 @@
-
-@php global $SERVER_ROOT;
-
-include_once(legacy_path('/classes/OccurrenceAttributes.php'));
-
-$attrManager = new OccurrenceAttributes();
-$attrManager->setOccid($occurrence->occid);
-
-$traitArr = $attrManager->getTraitArr();
-// $attrManager->getSourceControlledArr($source)
-@endphp
 @props(['occurrence'])
 <x-layout :hasHeader="false" :hasNavbar="false" :hasFooter="false">
     <div class="mb-4 flex items-center gap-2">
@@ -122,7 +111,7 @@ $traitArr = $attrManager->getTraitArr();
 
         <x-occurrence.editor.linked-resources />
 
-        <x-occurrence.editor.traits :occurrence="$occurrence" :traits="$traitArr"/>
+        <x-occurrence.editor.traits :occurrence="$occurrence"/>
 
         <x-occurrence.editor.admin :occurrence="$occurrence" />
     </x-tabs>
