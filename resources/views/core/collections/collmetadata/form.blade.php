@@ -47,10 +47,10 @@
     $submitAction ??= $collid ? 'saveEdits' : 'newCollection';
     $submitLabel ??= $collid ? __('misc_collmetadata.SAVE_EDITS') : __('misc_collmetadata.CREATE_COLL_2');
 
-    $infoIconClass = 'h-auto w-auto border-0 text-link-darker mt-1';
+    $infoIconClass = 'h-auto w-auto border-0 text-link-darker';
     $inputBaseClass = 'max-w-full rounded border bg-base-100 px-1 py-1.5';
     $inputWideClass = 'w-[42rem] ' . $inputBaseClass;
-    $inputMediumClass = 'w-[25rem] ' . $inputBaseClass;
+    $inputMediumClass = 'w-[25rem] grow-0 ' . $inputBaseClass;
     $inputShortClass = 'w-[15rem] ' . $inputBaseClass;
     $labelClass = 'inline-flex mr-[1rem] items-center gap-1 font-bold';
     $fieldRowClass = 'my-2 flex flex-wrap items-center';
@@ -210,44 +210,34 @@
         @csrf
 
         {{-- Keep the main form close to the legacy field order so the old manager can handle the payload. --}}
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label
-                    :label="__('misc_collmetadata.INST_CODE')"
-                    for="institutionCode"
-                    :required="true"
-                    inline
-                />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="institutionCode"
-                    name="institutionCode"
-                    type="text"
-                    value="{{ $institutionCode }}"
-                    required
-                    class="{{ $inputMediumClass }}"
-                />
-                <x-popover class="w-[26rem] text-sm">
-                    <x-slot
-                        name="icon"
-                        class="{{ $infoIconClass }}"
-                        title="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
-                        aria-label="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
-                    >
-                        <i class="fa-regular fa-circle-question"></i>
-                    </x-slot>
-                    <div class="text-base-content">
-                        {!! Purify::clean(__('misc_collmetadata.NAME_ONE')) !!}
-                        <x-link
-                            href="http://rs.tdwg.org/dwc/terms/index.htm#institutionCode"
-                            target="_blank"
-                            >{{ __('misc_collmetadata.DWC_DEF') }}</x-link
-                        >.
-                    </div>
-                </x-popover>
-            </div>
-        </div>
+        <x-input
+            id="institutionCode"
+            :label="__('misc_collmetadata.INST_CODE')"
+            :inline="true"
+            type="text"
+            :value="$institutionCode"
+            required
+            class="{{ $inputMediumClass }}"
+        >
+            <x-popover class="w-[26rem] text-sm">
+                <x-slot
+                    name="icon"
+                    class="{{ $infoIconClass }}"
+                    title="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
+                    aria-label="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
+                >
+                    <i class="fa-regular fa-circle-question"></i>
+                </x-slot>
+                <div class="text-base-content">
+                    {!! Purify::clean(__('misc_collmetadata.NAME_ONE')) !!}
+                    <x-link
+                        href="http://rs.tdwg.org/dwc/terms/index.htm#institutionCode"
+                        target="_blank"
+                        >{{ __('misc_collmetadata.DWC_DEF') }}</x-link
+                    >.
+                </div>
+            </x-popover>
+        </x-input>
 
         <div class="{{ $fieldRowClass }}">
             <div class="{{ $labelClass }}">
