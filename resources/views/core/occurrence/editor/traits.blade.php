@@ -33,42 +33,38 @@ if($traits) {
 
 <div class="flex flex-col gap-4">
     @foreach($traits as $traitID => $traitData)
-    @php if(isset($traitData['dependentTrait'])) continue @endphp
-    <form method="POST">
-        @csrf
-        <x-fieldset :legend="$traitData['name']">
-            {{-- Numerical --}}
-            <x-traits.form-input :traits="$traits" :traitId="$traitID" />
-            <x-input name="notes" :inline="true" label="Notes" />
-            <x-select
-                class="w-60"
-                name="source"
-                :label="__('exsiccati.SOURCE')"
-                :inline="true"
-                :items="$source_items"
-            />
+        @php if(isset($traitData['dependentTrait'])) continue @endphp
+        <form method="POST">
+            @csrf
+            <x-fieldset :legend="$traitData['name']">
+                {{-- Numerical --}}
+                <x-traits.form-input :traits="$traits" :traitId="$traitID" />
+                <x-input name="notes" :inline="true" label="Notes" />
+                <x-select
+                    class="w-60"
+                    name="source"
+                    :label="__('exsiccati.SOURCE')"
+                    :inline="true"
+                    :items="$source_items"
+                />
 
-            <x-select
-                class="w-60"
-                name="setstatus"
-                :label="__('taxonomy_batchloader.STATUS')"
-                default="0"
-                :inline="true"
-                :items="[
+                <x-select
+                    class="w-60"
+                    name="setstatus"
+                    :label="__('taxonomy_batchloader.STATUS')"
+                    default="0"
+                    :inline="true"
+                    :items="[
                     item(0, __('includes_traittab.NOT_REVIEWED')),
                     item(5, __('includes_traittab.EXPERT_NEEDED')),
                     item(10, __('misc_commentlist.REVIEWED')),
             ]"
-            />
-            <div class="flex gap-2">
-                <x-button>
-                    {{ __('geothesaurus.SAVE_EDITS') }}
-                </x-button>
-                <x-button class="ml-auto" variant="error">
-                    {{ __('includes_traittab.DEL_CODING') }}
-                </x-button>
-            </div>
-        </x-fieldset>
-    </form>
+                />
+                <div class="flex gap-2">
+                    <x-button> {{ __('geothesaurus.SAVE_EDITS') }} </x-button>
+                    <x-button class="ml-auto" variant="error"> {{ __('includes_traittab.DEL_CODING') }} </x-button>
+                </div>
+            </x-fieldset>
+        </form>
     @endforeach
 </div>
