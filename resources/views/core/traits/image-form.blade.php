@@ -104,7 +104,7 @@ $editStatusItems = $mode === $REVIEW? [
             @endforeach
 
             <div class="border-base-300 flex flex-grow flex-col gap-4 border p-4">
-                <x-traits.form
+                <x-traits.form-input
                     :traits="$traitArr"
                     :traitId="$traitID"
                     @change="hasTrait = event?.target?.name?.includes('traitid')"
