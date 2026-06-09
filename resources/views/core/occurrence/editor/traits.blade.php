@@ -1,4 +1,4 @@
-@props(['occurrence' ])
+@props(['occurrence'])
 
 @php global $SERVER_ROOT;
 
