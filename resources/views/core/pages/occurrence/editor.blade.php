@@ -52,22 +52,21 @@
 
             <x-occurrence.editor.curation :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-
             <div class="flex gap-4">
                 {{-- Options should be the same as proccessing Status--}}
                 <div class="grow">
-                <x-select
-                    label="Status Auto-Set"
-                    :inline="true"
-                    :items="[
+                    <x-select
+                        label="Status Auto-Set"
+                        :inline="true"
+                        :items="[
                     [
                         'title' => 'No Set Status',
                         'value' => 'No Set Status',
                         'disabled' => false
                     ],
                 ]"
-                />
-                <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
+                    />
+                    <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
                 </div>
 
                 <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
@@ -111,7 +110,7 @@
 
         <x-occurrence.editor.linked-resources />
 
-        <x-occurrence.editor.traits :occurrence="$occurrence"/>
+        <x-occurrence.editor.traits :occurrence="$occurrence" />
 
         <x-occurrence.editor.admin :occurrence="$occurrence" />
     </x-tabs>
