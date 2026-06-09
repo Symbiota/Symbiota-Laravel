@@ -28,3 +28,11 @@ function copyUrl(urlOverride) {
     );
 }
 window.copyUrl = copyUrl;
+
+function setDisabledAll(el, selector, value) {
+    for(let node of el.querySelectorAll(selector)) {
+        node.disabled = value;
+        console.log(node);
+    }
+}
+window.setDisabledAll = setDisabledAll;
