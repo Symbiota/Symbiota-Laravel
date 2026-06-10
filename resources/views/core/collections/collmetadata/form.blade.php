@@ -49,9 +49,9 @@
 
     $infoIconClass = 'h-auto w-auto border-0 text-link-darker';
     $inputBaseClass = 'max-w-full rounded border bg-base-100 px-1 py-1.5';
-    $inputWideClass = 'w-[42rem] ' . $inputBaseClass;
+    $inputWideClass = 'w-[42rem] grow-0 ' . $inputBaseClass;
     $inputMediumClass = 'w-[25rem] grow-0 ' . $inputBaseClass;
-    $inputShortClass = 'w-[15rem] ' . $inputBaseClass;
+    $inputShortClass = 'w-[15rem] grow-0 ' . $inputBaseClass;
     $labelClass = 'inline-flex mr-[1rem] items-center gap-1 font-bold';
     $fieldRowClass = 'my-2 flex flex-wrap items-center';
 @endphp
@@ -208,49 +208,44 @@
         onsubmit="return verifyCollectionForm(this);"
     >
         @csrf
+        <div class="flex flex-col gap-2">
+            <x-input
+                id="institutionCode"
+                :label="__('misc_collmetadata.INST_CODE')"
+                :inline="true"
+                type="text"
+                :value="$institutionCode"
+                required
+                class="{{ $inputMediumClass }}"
+            >
+                <x-popover class="w-[26rem] text-sm">
+                    <x-slot
+                        name="icon"
+                        class="{{ $infoIconClass }}"
+                        title="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
+                        aria-label="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
+                    >
+                        <i class="fa-regular fa-circle-question"></i>
+                    </x-slot>
+                    <div class="text-base-content">
+                        {!! Purify::clean(__('misc_collmetadata.NAME_ONE')) !!}
+                        <x-link
+                            href="http://rs.tdwg.org/dwc/terms/index.htm#institutionCode"
+                            target="_blank"
+                            >{{ __('misc_collmetadata.DWC_DEF') }}</x-link
+                        >.
+                    </div>
+                </x-popover>
+            </x-input>
 
-        {{-- Keep the main form close to the legacy field order so the old manager can handle the payload. --}}
-        <x-input
-            id="institutionCode"
-            :label="__('misc_collmetadata.INST_CODE')"
-            :inline="true"
-            type="text"
-            :value="$institutionCode"
-            required
-            class="{{ $inputMediumClass }}"
-        >
-            <x-popover class="w-[26rem] text-sm">
-                <x-slot
-                    name="icon"
-                    class="{{ $infoIconClass }}"
-                    title="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
-                    aria-label="{{ __('misc_collmetadata.MORE_INST_CODE') }}"
-                >
-                    <i class="fa-regular fa-circle-question"></i>
-                </x-slot>
-                <div class="text-base-content">
-                    {!! Purify::clean(__('misc_collmetadata.NAME_ONE')) !!}
-                    <x-link
-                        href="http://rs.tdwg.org/dwc/terms/index.htm#institutionCode"
-                        target="_blank"
-                        >{{ __('misc_collmetadata.DWC_DEF') }}</x-link
-                    >.
-                </div>
-            </x-popover>
-        </x-input>
-
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.COLL_CODE')" for="collectionCode" inline />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="collectionCode"
-                    name="collectionCode"
-                    type="text"
-                    value="{{ $collectionCode }}"
-                    class="{{ $inputMediumClass }}"
-                />
+            <x-input
+                id="collectionCode"
+                :label="__('misc_collmetadata.COLL_CODE')"
+                :inline="true"
+                type="text"
+                :value="$collectionCode"
+                class="{{ $inputMediumClass }}"
+            >
                 <x-popover class="w-[26rem] text-sm">
                     <x-slot
                         name="icon"
@@ -269,16 +264,14 @@
                         >.
                     </div>
                 </x-popover>
-            </div>
-        </div>
+            </x-input>
 
-        <div class="my-3">
-            <x-form-label :label="__('misc_collmetadata.COLL_NAME')" for="collectionName" :required="true" inline />
-            <input
+            <x-input
                 id="collectionName"
-                name="collectionName"
+                :label="__('misc_collmetadata.COLL_NAME')"
+                :inline="true"
                 type="text"
-                value="{{ $collectionName }}"
+                :value="$collectionName"
                 required
                 class="{{ $inputWideClass }}"
             />
@@ -296,18 +289,15 @@
             >
         </div>
 
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.LAT')" for="latitudeDecimal" inline />
-            </div>
-            <div class="flex max-w-full items-start gap-2">
-                <input
-                    id="latitudeDecimal"
-                    name="latitudeDecimal"
-                    type="text"
-                    value="{{ $latitudeDecimal }}"
-                    class="{{ $inputShortClass }}"
-                />
+        <div class="flex flex-col gap-2">
+            <x-input
+                id="latitudeDecimal"
+                :label="__('misc_collmetadata.LAT')"
+                :inline="true"
+                type="text"
+                :value="$latitudeDecimal"
+                class="{{ $inputShortClass }}"
+            >
                 <a
                     href="{{ legacy_url('/collections/tools/mappointaid.php?errmode=0') }}"
                     target="_blank"
@@ -315,18 +305,14 @@
                 >
                     <i class="fas fa-globe"></i>
                 </a>
-            </div>
-        </div>
+            </x-input>
 
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.LONG')" for="longitudeDecimal" inline />
-            </div>
-            <input
+            <x-input
                 id="longitudeDecimal"
-                name="longitudeDecimal"
+                :label="__('misc_collmetadata.LONG')"
+                :inline="true"
                 type="text"
-                value="{{ $longitudeDecimal }}"
+                :value="$longitudeDecimal"
                 class="{{ $inputShortClass }}"
             />
         </div>
@@ -389,11 +375,12 @@
                         @endif
                     </select>
                 @else
-                    <input
+                    <x-input
                         id="rights"
                         name="rights"
+                        :inline="true"
                         type="text"
-                        value="{{ $rightsValue }}"
+                        :value="$rightsValue"
                         class="{{ $inputWideClass }}"
                     />
                 @endif
@@ -417,19 +404,15 @@
                 </x-popover>
             </div>
         </div>
-
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.RIGHTS_HOLDER')" for="rightsHolder" inline />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="rightsHolder"
-                    name="rightsHolder"
-                    type="text"
-                    value="{{ $rightsHolder }}"
-                    class="{{ $inputWideClass }}"
-                />
+        <div class="flex flex-col gap-2">
+            <x-input
+                id="rightsHolder"
+                :label="__('misc_collmetadata.RIGHTS_HOLDER')"
+                :inline="true"
+                type="text"
+                :value="$rightsHolder"
+                class="{{ $inputWideClass }}"
+            >
                 <x-popover class="w-[28rem] text-sm">
                     <x-slot
                         name="icon"
@@ -448,21 +431,16 @@
                         >.
                     </div>
                 </x-popover>
-            </div>
-        </div>
+            </x-input>
 
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.ACCESS_RIGHTS')" for="accessRights" inline />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="accessRights"
-                    name="accessRights"
-                    type="text"
-                    value="{{ $accessRights }}"
-                    class="{{ $inputWideClass }}"
-                />
+            <x-input
+                id="accessRights"
+                :label="__('misc_collmetadata.ACCESS_RIGHTS')"
+                :inline="true"
+                type="text"
+                :value="$accessRights"
+                class="{{ $inputWideClass }}"
+            >
                 <x-popover class="w-[28rem] text-sm">
                     <x-slot
                         name="icon"
@@ -481,7 +459,7 @@
                         >.
                     </div>
                 </x-popover>
-            </div>
+            </x-input>
         </div>
 
         @can('SUPER_ADMIN')
@@ -672,18 +650,15 @@
             </div>
         @endif
 
-        <div class="{{ $fieldRowClass }} sourceurl-div {{ $managementType === 'Live Data' ? 'hidden' : '' }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.SOURCE_REC_URL')" for="individualUrl" inline />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="individualUrl"
-                    name="individualUrl"
-                    type="text"
-                    value="{{ $individualUrl }}"
-                    class="{{ $inputWideClass }}"
-                />
+        <div class="sourceurl-div {{ $managementType === 'Live Data' ? 'hidden' : '' }}">
+            <x-input
+                id="individualUrl"
+                :label="__('misc_collmetadata.SOURCE_REC_URL')"
+                :inline="true"
+                type="text"
+                :value="$individualUrl"
+                class="{{ $inputWideClass }}"
+            >
                 <x-popover class="w-[32rem] text-sm">
                     <x-slot
                         name="icon"
@@ -697,7 +672,7 @@
                         {!! Purify::clean(__('misc_collmetadata.ADVANCE_SETTING')) !!}:http://swbiodiversity.org/seinet/collections/individual/index.php?occid=--DBPK--" {!! Purify::clean(__('misc_collmetadata.ADVANCE_SETTING_2')) !!} "http://www.inaturalist.org/observations/--DBPK--" {!! Purify::clean(__('misc_collmetadata.ADVANCE_SETTING_3')) !!}
                     </div>
                 </x-popover>
-            </div>
+            </x-input>
         </div>
 
         <div class="{{ $fieldRowClass }}" x-data="{ iconMode: '{{ $iconMode }}' }">
@@ -718,12 +693,13 @@
                 </div>
 
                 <div x-cloak x-show="iconMode === 'url'">
-                    <input
+                    <x-input
                         id="iconUrl"
                         name="iconUrl"
                         type="text"
-                        value="{{ $iconUrl }}"
+                        :value="$iconUrl"
                         onchange="verifyIconURL(this.form)"
+                        :inline="true"
                         class="{{ $inputWideClass }}"
                     />
                 </div>
@@ -749,20 +725,16 @@
                 </button>
             </div>
         </div>
-
-        @can('SUPER_ADMIN')
-            <div class="{{ $fieldRowClass }}">
-                <div class="{{ $labelClass }}">
-                    <x-form-label :label="__('misc_collmetadata.SORT_SEQUENCE')" for="sortSeq" inline />
-                </div>
-                <div class="flex max-w-full flex-wrap items-start gap-2">
-                    <input
-                        id="sortSeq"
-                        name="sortSeq"
-                        type="text"
-                        value="{{ $sortSeq }}"
-                        class="{{ $inputShortClass }}"
-                    />
+        <div class="flex flex-col gap-2">
+            @can('SUPER_ADMIN')
+                <x-input
+                    id="sortSeq"
+                    :label="__('misc_collmetadata.SORT_SEQUENCE')"
+                    :inline="true"
+                    type="text"
+                    :value="$sortSeq"
+                    class="{{ $inputShortClass }}"
+                >
                     <x-popover class="w-[28rem] text-sm">
                         <x-slot
                             name="icon"
@@ -776,22 +748,17 @@
                             {!! Purify::clean(__('misc_collmetadata.LEAVE_IF_ALPHABET')) !!}
                         </div>
                     </x-popover>
-                </div>
-            </div>
-        @endcan
+                </x-input>
+            @endcan
 
-        <div class="{{ $fieldRowClass }}">
-            <div class="{{ $labelClass }}">
-                <x-form-label :label="__('misc_collmetadata.COLLECTION_ID')" for="collectionID" inline />
-            </div>
-            <div class="flex max-w-full flex-wrap items-start gap-2">
-                <input
-                    id="collectionID"
-                    name="collectionID"
-                    type="text"
-                    value="{{ $collectionIdValue }}"
-                    class="{{ $inputMediumClass }}"
-                />
+            <x-input
+                id="collectionID"
+                :label="__('misc_collmetadata.COLLECTION_ID')"
+                :inline="true"
+                type="text"
+                :value="$collectionIdValue"
+                class="{{ $inputMediumClass }}"
+            >
                 <x-popover class="w-[32rem] text-sm">
                     <x-slot
                         name="icon"
@@ -810,7 +777,7 @@
                         >): {!! Purify::clean(__('misc_collmetadata.EXPLAIN_COLLID_2')) !!}
                     </div>
                 </x-popover>
-            </div>
+            </x-input>
         </div>
 
         @if($collid)

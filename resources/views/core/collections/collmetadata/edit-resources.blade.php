@@ -22,9 +22,9 @@
         'pr' => __('misc_collmetaresources.PORTUGUESE'),
     ];
     $inputBaseClass = 'max-w-full rounded border bg-base-100 px-1 py-1.5';
-    $inputWideClass = 'w-[42rem] ' . $inputBaseClass;
-    $inputMediumClass = 'w-[25rem] ' . $inputBaseClass;
-    $inputShortClass = 'w-[15rem] ' . $inputBaseClass;
+    $inputWideClass = 'w-[42rem] grow-0 ' . $inputBaseClass;
+    $inputMediumClass = 'w-[25rem] grow-0 ' . $inputBaseClass;
+    $inputShortClass = 'w-[15rem] grow-0 ' . $inputBaseClass;
     $labelClass = 'inline-flex mr-[1rem] items-center gap-1 font-bold';
 @endphp
 
@@ -245,30 +245,26 @@
             <h3 class="text-lg font-bold">{{ __('misc_collmetaresources.ADD_EDIT_LINK') }}</h3>
 
             <form name="linkForm" onsubmit="return false;" class="space-y-3">
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label label="URL" for="resource-url" :required="true" inline />
-                    </div>
-                    <input id="resource-url" name="url" type="text" class="{{ $inputWideClass }}" required />
-                </div>
+                <x-input
+                    id="resource-url"
+                    name="url"
+                    label="URL"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputWideClass }}"
+                    required
+                />
 
                 @foreach($languageCodes as $code)
-                    <div class="flex flex-wrap items-center">
-                        <div class="{{ $labelClass }}">
-                            <x-form-label
-                                :label="__('misc_collmetaresources.CAPTION_OVERRIDE') . ' (' . ($languageLabelMap[$code] ?? strtoupper($code)) . ')'"
-                                for="title-{{ $code }}"
-                                inline
-                            />
-                        </div>
-                        <input
-                            id="title-{{ $code }}"
-                            name="title-{{ $code }}"
-                            type="text"
-                            value="{{ $code === 'en' ? 'Homepage' : '' }}"
-                            class="{{ $inputShortClass }}"
-                        />
-                    </div>
+                    <x-input
+                        id="title-{{ $code }}"
+                        name="title-{{ $code }}"
+                        :label="__('misc_collmetaresources.CAPTION_OVERRIDE') . ' (' . ($languageLabelMap[$code] ?? strtoupper($code)) . ')'"
+                        :inline="true"
+                        type="text"
+                        value="{{ $code === 'en' ? 'Homepage' : '' }}"
+                        class="{{ $inputShortClass }}"
+                    />
                 @endforeach
 
                 <div id="add-link-div">
@@ -378,49 +374,43 @@
                 <input type="hidden" name="action" value="saveContact" />
                 <input type="hidden" name="contactIndex" value="" />
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label
-                            :label="__('misc_collmetaresources.FIRST_NAME')"
-                            for="contact-first-name"
-                            :required="true"
-                            inline
-                        />
-                    </div>
-                    <input
-                        id="contact-first-name"
-                        name="firstName"
-                        type="text"
-                        class="{{ $inputShortClass }}"
-                        required
-                    />
-                </div>
+                <x-input
+                    id="contact-first-name"
+                    name="firstName"
+                    :label="__('misc_collmetaresources.FIRST_NAME')"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputShortClass }}"
+                    required
+                />
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label
-                            :label="__('misc_collmetaresources.LAST_NAME')"
-                            for="contact-last-name"
-                            :required="true"
-                            inline
-                        />
-                    </div>
-                    <input id="contact-last-name" name="lastName" type="text" class="{{ $inputShortClass }}" required />
-                </div>
+                <x-input
+                    id="contact-last-name"
+                    name="lastName"
+                    :label="__('misc_collmetaresources.LAST_NAME')"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputShortClass }}"
+                    required
+                />
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label :label="__('misc_collmetaresources.ROLE')" for="contact-role" inline />
-                    </div>
-                    <input id="contact-role" name="role" type="text" class="{{ $inputShortClass }}" />
-                </div>
+                <x-input
+                    id="contact-role"
+                    name="role"
+                    :label="__('misc_collmetaresources.ROLE')"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputShortClass }}"
+                />
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label :label="__('misc_collmetaresources.EMAIL')" for="contact-email" inline />
-                    </div>
-                    <input id="contact-email" name="email" type="text" class="{{ $inputShortClass }}" />
-                </div>
+                <x-input
+                    id="contact-email"
+                    name="email"
+                    :label="__('misc_collmetaresources.EMAIL')"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputShortClass }}"
+                />
 
                 <div class="flex flex-wrap items-center">
                     <span class="inline-flex min-h-9 min-w-40 items-center gap-1"></span>
@@ -430,19 +420,23 @@
                     </label>
                 </div>
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label :label="__('misc_collmetaresources.PHONE')" for="contact-phone" inline />
-                    </div>
-                    <input id="contact-phone" name="phone" type="text" class="{{ $inputMediumClass }}" />
-                </div>
+                <x-input
+                    id="contact-phone"
+                    name="phone"
+                    :label="__('misc_collmetaresources.PHONE')"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputMediumClass }}"
+                />
 
-                <div class="flex flex-wrap items-center">
-                    <div class="{{ $labelClass }}">
-                        <x-form-label label="ORCID" for="contact-orcid" inline />
-                    </div>
-                    <input id="contact-orcid" name="orcid" type="text" class="{{ $inputMediumClass }}" />
-                </div>
+                <x-input
+                    id="contact-orcid"
+                    name="orcid"
+                    label="ORCID"
+                    :inline="true"
+                    type="text"
+                    class="{{ $inputMediumClass }}"
+                />
 
                 <div class="flex flex-wrap gap-2">
                     <x-button type="submit">

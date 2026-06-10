@@ -29,6 +29,10 @@
         <textarea name="{{ $name }}" id="{{ $id }}" {{ $attributes->twMerge($inputStyles) }}>{{ $slot }}</textarea>
     @else
         <input {{ $attributes->twMerge($inputStyles) }} name="{{ $name }}" id="{{ $id }}" />
+
+        @if($slot->isNotEmpty())
+            {{ $slot }}
+        @endif
     @endif
 
     @if(isset($error_text))
@@ -36,6 +40,4 @@
     @elseif(!empty($assistive_text))
         <span class="assistive-text">{{ $assistive_text }}</span>
     @endif
-
-    @if($slot->isNotEmpty()) {{ $slot }} @endif
 </div>
