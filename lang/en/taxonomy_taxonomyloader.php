@@ -24,5 +24,11 @@ return [
     'ACC_NAME_NEEDS_VALUE' => 'Accepted name needs to have a value.',
     'MISSING_REQUIRED_TAXON_FIELD' => 'Missing required taxon field',
     'ACCEPTED_NAME' => 'Accepted Name',
+    'FAMILY' => 'Family',
+    'PARENT_TAXON' => 'Parent Taxon',
+    'SUBMIT_UPPER_EDITS' => 'Submit Upper Taxonomy Edits',
     'REBUILD_HIERARCHY' => 'Rebuild Hierarchy',
+    'TAXON_NOT_FOUND' => 'Taxon information not found',
+    'UPPER_TAXONOMY_UPDATE_SUCCESS' => 'Upper taxonomy updated successfully',
+    'CURRENT_PARENT_TAXON' => 'Current Parent Taxon',
 ];

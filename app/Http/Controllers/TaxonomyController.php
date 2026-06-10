@@ -247,6 +247,7 @@ class TaxonomyController extends Controller {
                 array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
             );
         }
+        $upperTaxonomyEditInfo = self::prepareUpperTaxonomyEditInfo($taxonEditorObj);
 
         return view('pages/taxon/editTaxon', [
             'mode' => 'edit',
@@ -263,7 +264,36 @@ class TaxonomyController extends Controller {
             'verifyArr' => $verifyArr,
             'parents' => self::getParents($tid),
             'rankMap' => self::$rankMap,
+            'upperTaxonomyEditInfo' => $upperTaxonomyEditInfo,
         ]);
+    }
+    
+    private static function prepareUpperTaxonomyEditInfo($taxonEditorObj){
+        $upperTaxonomyEditInfo = [];
+        // if ($taxonEditorObj->getIsAccepted() == 1) {
+        $upperTaxonomyEditInfo['acceptedArr'] = $taxonEditorObj->getAcceptedArr();
+        $upperTaxonomyEditInfo['tid'] = $taxonEditorObj->getTid();
+        $upperTaxonomyEditInfo['isAccepted'] = $taxonEditorObj->getIsAccepted();
+        $upperTaxonomyEditInfo['parentNameFull'] = strip_tags(html_entity_decode((string) ($taxonEditorObj->getParentNameFull() ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $upperTaxonomyEditInfo['rankId'] = $taxonEditorObj->getRankId();
+        $upperTaxonomyEditInfo['family'] = $taxonEditorObj->getFamily();
+        $upperTaxonomyEditInfo['parentTid'] = $taxonEditorObj->getParentTid();
+        $upperTaxonomyEditInfo['parentName'] = $taxonEditorObj->getParentName();
+        $upperTaxonomyEditInfo['taxauthid'] = $taxonEditorObj->getTaxauthid();
+
+        //     $upperTaxonomyEditInfo['acceptedName'] = DB::table('taxa')->where('tid', $taxonEditorObj->getTid())->value('sciName') ?? '';
+        //     $upperTaxonomyEditInfo['acceptedRankId'] = DB::table('taxa')->where('tid', $taxonEditorObj->getTid())->value('rankID') ?? null;
+        // } else {
+        //     $acceptedArr = $taxonEditorObj->getAcceptedArr();
+        //     if (! empty($acceptedArr)) {
+        //         $acceptedTid = $acceptedArr[0]['tidaccepted'] ?? null;
+        //         $upperTaxonomyEditInfo['acceptedTid'] = $acceptedTid;
+        //         $upperTaxonomyEditInfo['acceptedName'] = DB::table('taxa')->where('tid', $acceptedTid)->value('sciName') ?? '';
+        //         $upperTaxonomyEditInfo['acceptedRankId'] = DB::table('taxa')->where('tid', $acceptedTid)->value('rankID') ?? null;
+            // }
+        // }
+
+        return $upperTaxonomyEditInfo;
     }
 
     public static function createTaxon() {
@@ -527,6 +557,26 @@ class TaxonomyController extends Controller {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $statusStr = __('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS') . ' ' . $statusStr;
+
+        return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
+    }
+
+    public static function updateUpperTaxonomy(){
+        $requestData = request()->all();
+        $tid = (int) $requestData['tid'] ?? null;
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $editorManager = new \TaxonomyEditorManager();
+        $editorManager->setTid($tid);
+        $statusStr = $editorManager->submitTaxonEdits($requestData);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        }
+        $statusStr = __('taxonomy_taxoneditor.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr;
 
         return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
     }

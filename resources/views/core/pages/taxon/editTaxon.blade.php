@@ -13,6 +13,7 @@
     $securitystatusstart = $securitystatusstart ?? 0;
     $verifyArr = $verifyArr ?? [];
     $parents = $parents ?? [];
+    $upperTaxonomyEditInfo = $upperTaxonomyEditInfo ?? [];
 @endphp
 <x-layout>
     <div class="mb-4">
@@ -56,6 +57,7 @@
             </div>
 
             {{-- Hierarchy --}}
+            <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
             <div id="taxon-tree">
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
                 <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">

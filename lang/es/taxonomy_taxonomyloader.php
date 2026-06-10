@@ -23,5 +23,12 @@ return [
     'ALREADY_EXISTS' => ' ya existe en la base de datos.',
     'ACC_NAME_NEEDS_VALUE' => 'El nombre aceptado necesita tener un valor.',
     'MISSING_REQUIRED_TAXON_FIELD' => 'Falta el campo de taxón requerido',
+    'ACCEPTED_NAME' => 'Nombre Aceptado',
+    'FAMILY' => 'Familia',
+    'PARENT_TAXON' => 'Taxón Superior',
+    'SUBMIT_UPPER_EDITS' => 'Enviar Ediciones de Taxonomía Superior',
     'REBUILD_HIERARCHY' => 'Reconstruir Jerarquía',
+    'TAXON_NOT_FOUND' => 'Información del taxón no encontrada',
+    'UPPER_TAXONOMY_UPDATE_SUCCESS' => 'Taxonomía superior actualizada con éxito',
+    'CURRENT_PARENT_TAXON' => 'Taxón Padre Actual',
 ];

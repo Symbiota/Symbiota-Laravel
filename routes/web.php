@@ -67,6 +67,7 @@ Route::group(['prefix' => 'taxon'], function () {
     Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->name('taxon.editview')->middleware('auth'); // @TODO gate
     Route::get('/{tid}/tree', [TaxonomyController::class, 'show']);
     Route::post('/reconstructHierarchy', [TaxonomyController::class, 'reconstructHierarchy'])->name('taxon.reconstructHierarchy')->middleware('auth'); // @TODO gate
+    Route::post('/updateUpperTaxonomy', [TaxonomyController::class, 'updateUpperTaxonomy'])->name('taxon.updateUpperTaxonomy')->middleware('auth'); // @TODO gate
 });
 
 /*
