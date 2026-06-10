@@ -1,3 +1,4 @@
+@props(['image'])
 <x-fieldset class="w-fit" :legend="__('includes_imgprocessor.LABEL_PROCESSING')">
     <div class="flex items-center gap-2">
         <x-link> {{ __('includes_imgprocessor.ZOOM') }} </x-link>
@@ -27,8 +28,8 @@
         />
     </div>
 
-    <div class="bg-base-300 mx-auto h-100 w-100">
-        {{-- TODO (Logan) image --}}
+    <div class="bg-base-300 mx-auto flex h-100">
+        <img class="my-auto h-100" src="{{ $image['url'] }}" />
     </div>
 
     <x-fieldset :legend="__('includes_imgprocessor.TESSERACT_OCR')">
