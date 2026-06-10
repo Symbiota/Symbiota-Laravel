@@ -49,34 +49,33 @@ $mediaTags = \Media::getMediaTagKeys();
     @foreach($media as $m)
         <div class="border-base-300 flex flex-row gap-4 border p-4">
             <div class="my-auto">
-                <a href="{{ $m['thumbnail_url'] }}">
-                    <img src="{{ $m['thumbnail_url'] }}" />
+                <a href="{{ $m['thumbnailUrl'] }}">
+                    <img src="{{ $m['thumbnailUrl'] }}" />
                 </a>
             </div>
             <div>
-                <div class="flex justify-end text-xl">
-                    {{-- TODO (Logan) get edit form outline --}}
-                    <x-icons.edit />
-                </div>
-
                 @foreach([
                     'caption' => __('imagelib_imgdetails.CAPTION'),
                     'creator' => __('taxa.CREATOR'),
                     'notes' => __('projects.NOTES'),
-                    'source_url' => __('includes_imagetab.SOURCE_WEBPAGE'),
+                    'sourceUrl' => __('includes_imagetab.SOURCE_WEBPAGE'),
                     'url' => __('includes_imagetab.WEB_URL'),
-                    'original_url' => __('includes_imagetab.LARGE_IMG_URL'),
-                    'thumbnail_url' => __('includes_imagetab.THUMB_URL'),
+                    'originalUrl' => __('includes_imagetab.LARGE_IMG_URL'),
+                    'thumbnailUrl' => __('includes_imagetab.THUMB_URL'),
                     'sort' => __('includes_imagetab.SORT'),
                 ] as $field => $label)
                     <x-text-label :label="$label">
-                        @if(($url = $m[$field] ?? false) && in_array($field, ['url', 'original_url', 'thumbnail_url', 'source_url']))
+                        @if(($url = $m[$field] ?? false) && in_array($field, ['url', 'originalUrl', 'thumbnailUrl', 'sourceUrl']))
                             <x-link :href="$url">{{ $url }}</x-link>
                         @else
                             {{ $m[$field] ?? '' }}
                         @endif
                     </x-text-label>
                 @endforeach
+            </div>
+            <div class="ml-auto">
+                {{-- TODO (Logan) get edit form outline --}}
+                <x-icons.edit />
             </div>
         </div>
     @endforeach

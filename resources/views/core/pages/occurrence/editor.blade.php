@@ -122,7 +122,7 @@ if($add_status && $occurrence_status !== 'isnull') {
 
             <x-occurrence.editor.determination-history {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-            <x-occurrence.editor.media {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
+            <x-occurrence.editor.media :media="$media" />
 
             <x-occurrence.editor.material-sample :occurrence="$occurrence" />
 
