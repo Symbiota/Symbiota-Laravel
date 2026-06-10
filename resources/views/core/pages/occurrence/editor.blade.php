@@ -56,76 +56,85 @@ if($add_status && $occurrence_status !== 'isnull') {
         </x-button>
     </div>
 
-    <x-tabs
-        :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
-        :active="0"
-    >
-        {{-- Occurrence Data --}}
-        <form class="flex flex-col gap-4">
-            <x-occurrence.editor.collector-info :occurrence="$occurrence" :identifiers="$identifiers" />
+    <div class="flex gap-4">
+        <x-tabs
+            :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
+            :active="0"
+        >
+            {{-- Occurrence Data --}}
+            <form class="flex flex-col gap-4">
+                <x-occurrence.editor.collector-info :occurrence="$occurrence" :identifiers="$identifiers" />
 
-            <x-occurrence.editor.latest-identification :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
+                <x-occurrence.editor.latest-identification
+                    :occurrence="$occurrence"
+                    {{-- TODO (Logan) Data piping --}}
+                />
 
-            <x-occurrence.editor.locality :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
+                <x-occurrence.editor.locality :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-            <x-occurrence.editor.misc :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
+                <x-occurrence.editor.misc :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-            <x-occurrence.editor.curation :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
+                <x-occurrence.editor.curation :occurrence="$occurrence" {{-- TODO (Logan) Data piping --}} />
 
-            <div class="flex gap-4">
-                {{-- Options should be the same as proccessing Status--}}
-                <div class="grow">
-                    <x-select
-                        :label="__('editor_occurrenceeditor.STATUS_AUTO_SET')"
-                        :inline="true"
-                        :items="$processing_status"
-                    />
-                    <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
-                </div>
+                <div class="flex gap-4">
+                    {{-- Options should be the same as proccessing Status--}}
+                    <div class="grow">
+                        <x-select
+                            :label="__('editor_occurrenceeditor.STATUS_AUTO_SET')"
+                            :inline="true"
+                            :items="$processing_status"
+                        />
+                        <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
+                    </div>
 
-                <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
-                    <x-radio
-                        :default_value="1"
-                        :options="[
-                            ['label' => 'Collection Event Fields', 'value' => 1],
-                            ['label' => 'All Fields', 'value' => 0]
+                    <x-fieldset :legend="__('editor_occurrenceeditor.RECORD_CLONING')">
+                        <x-radio
+                            :default_value="1"
+                            :options="[
+                                ['label' => 'Collection Event Fields', 'value' => 1],
+                                ['label' => 'All Fields', 'value' => 0]
+                            ]"
+                            :label="__('editor_occurrenceeditor.CARRY_OVER')"
+                            name="cloning-type"
+                        />
+                        <x-checkbox label="Carry over media" />
+                        {{-- TODO (Logan) Load Options for Cloning --}}
+                        <x-select
+                            :inline="true"
+                            :label="__('glossary_addterm.REL')"
+                            :items="[
+                            [
+                                'title' => 'Undefined',
+                                'value' => null,
+                                'disabled' => false
+                            ],
                         ]"
-                        :label="__('editor_occurrenceeditor.CARRY_OVER')"
-                        name="cloning-type"
-                    />
-                    <x-checkbox label="Carry over media" />
-                    {{-- TODO (Logan) Load Options for Cloning --}}
-                    <x-select
-                        :inline="true"
-                        :label="__('glossary_addterm.REL')"
-                        :items="[
-                        [
-                            'title' => 'Undefined',
-                            'value' => null,
-                            'disabled' => false
-                        ],
-                    ]"
-                    />
-                    <x-input :inline="true" value="1" label="Number of Records" />
-                    <x-link href="#">{{ __('editor_occurrenceeditor.PRE_POPULATE') }}</x-link>
-                    <x-input name="clonecatnum[]" :label="__('collections_list.CATALOG_NUMBER') . ' 1'" />
+                        />
+                        <x-input :inline="true" value="1" label="Number of Records" />
+                        <x-link href="#">{{ __('editor_occurrenceeditor.PRE_POPULATE') }}</x-link>
+                        <x-input name="clonecatnum[]" :label="__('collections_list.CATALOG_NUMBER') . ' 1'" />
 
-                    {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
-                    <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
-                </x-fieldset>
-            </div>
-        </form>
+                        {{-- TODO (Logan) Prepopulate Catalog numbers work --}}
+                        <x-button> {{ __('editor_occurrenceeditor.CREATE_RECORD') }} </x-button>
+                    </x-fieldset>
+                </div>
+            </form>
 
-        <x-occurrence.editor.determination-history {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
+            <x-occurrence.editor.determination-history {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-        <x-occurrence.editor.media {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
+            <x-occurrence.editor.media {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-        <x-occurrence.editor.material-sample {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
+            <x-occurrence.editor.material-sample {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-        <x-occurrence.editor.linked-resources />
+            <x-occurrence.editor.linked-resources />
 
-        <x-occurrence.editor.traits :occurrence="$occurrence" />
+            <x-occurrence.editor.traits :occurrence="$occurrence" />
 
-        <x-occurrence.editor.admin :occurrence="$occurrence" />
-    </x-tabs>
+            <x-occurrence.editor.admin :occurrence="$occurrence" />
+        </x-tabs>
+
+        <div class="h-fit">
+            <x-occurrence.editor.label-processing clas="h-fit" />
+        </div>
+    </div>
 </x-layout>
