@@ -32,6 +32,7 @@ class TaxonomyController extends Controller {
             220 => 20, // species
             300 => 21, // infraspecies
         ];
+
     public static function taxonData(int $tid) {
         $taxon = DB::table('taxa as t')
             ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
@@ -267,8 +268,8 @@ class TaxonomyController extends Controller {
             'upperTaxonomyEditInfo' => $upperTaxonomyEditInfo,
         ]);
     }
-    
-    private static function prepareUpperTaxonomyEditInfo($taxonEditorObj){
+
+    private static function prepareUpperTaxonomyEditInfo($taxonEditorObj) {
         $upperTaxonomyEditInfo = [];
         // if ($taxonEditorObj->getIsAccepted() == 1) {
         $upperTaxonomyEditInfo['acceptedArr'] = $taxonEditorObj->getAcceptedArr();
@@ -290,7 +291,7 @@ class TaxonomyController extends Controller {
         //         $upperTaxonomyEditInfo['acceptedTid'] = $acceptedTid;
         //         $upperTaxonomyEditInfo['acceptedName'] = DB::table('taxa')->where('tid', $acceptedTid)->value('sciName') ?? '';
         //         $upperTaxonomyEditInfo['acceptedRankId'] = DB::table('taxa')->where('tid', $acceptedTid)->value('rankID') ?? null;
-            // }
+        // }
         // }
 
         return $upperTaxonomyEditInfo;
@@ -522,7 +523,7 @@ class TaxonomyController extends Controller {
         return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
     }
 
-    public static function updateSynonymLink(){
+    public static function updateSynonymLink() {
         $requestData = request()->all();
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
@@ -561,7 +562,7 @@ class TaxonomyController extends Controller {
         return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
     }
 
-    public static function updateUpperTaxonomy(){
+    public static function updateUpperTaxonomy() {
         $requestData = request()->all();
         $tid = (int) $requestData['tid'] ?? null;
         include_once legacy_path('/classes/TaxonomyEditorManager.php');

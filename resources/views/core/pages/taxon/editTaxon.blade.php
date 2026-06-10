@@ -58,12 +58,16 @@
 
             {{-- Hierarchy --}}
             <div id="hierarchy-tab" name="hierarchy-tab">
-            <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
+                <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
                 <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
                     @csrf
-                    <input type="hidden" name="tid" value="{{ $taxonInfo->tid ?? '' }}">
-                    <x-button type="submit" class="w-fit mt-4">{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button>
+                    <input type="hidden" name="tid" value="{{ $taxonInfo->tid ?? '' }}" />
+                    <x-button
+                        type="submit"
+                        class="mt-4 w-fit"
+                        >{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button
+                    >
                 </form>
             </div>
 

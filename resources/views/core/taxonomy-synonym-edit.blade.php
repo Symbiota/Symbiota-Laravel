@@ -78,12 +78,17 @@
                                     {{ __('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}
                                 </x-slot>
                                 <x-slot name="title" class="text-2xl">
-                                    {{__('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}: {{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}
+                                    {{ __('taxonomy_taxoneditor.EDIT_SYNONYM_LINKS') }}: {{ $synonym['sciname'] ?? __('taxonomy_taxoneditor.NAME_MISSING') }}
                                 </x-slot>
                                 <x-slot name="body">
                                     <form method="POST" action="{{ route('taxon.updateSynonymLink') }}">
                                         @csrf
-                                        <x-input type="hidden" name="current-tid" id="current-tid" :value="$taxonInfo->tid ?? ''" />
+                                        <x-input
+                                            type="hidden"
+                                            name="current-tid"
+                                            id="current-tid"
+                                            :value="$taxonInfo->tid ?? ''"
+                                        />
                                         <x-input type="hidden" name="tidsyn" id="tidsyn" :value="$tid ?? ''" />
                                         <x-input
                                             name="unacceptabilityreason"
@@ -97,27 +102,37 @@
                                             label="{{ __('taxonomy_taxoneditor.USAGE_NOTES') }}"
                                             :value="$synonym['notes'] ?? ''"
                                         />
-                                        <x-input type="number" name="sortsequence" id="sortsequence" label="{{ __('ident.SORT_SQNCE') }}" :value="$synonym['sortsequence'] ?? ''" />
-                                        <x-button type="submit" class="mt-4">{{ __('tools_matrixeditor.SUBMIT') }}</x-button>
+                                        <x-input
+                                            type="number"
+                                            name="sortsequence"
+                                            id="sortsequence"
+                                            label="{{ __('ident.SORT_SQNCE') }}"
+                                            :value="$synonym['sortsequence'] ?? ''"
+                                        />
+                                        <x-button
+                                            type="submit"
+                                            class="mt-4"
+                                            >{{ __('tools_matrixeditor.SUBMIT') }}</x-button
+                                        >
                                     </form>
                                 </x-slot>
                             </x-modal>
                         </div>
-                        <div id="synlink-details-{{ $tid }}" class="ml-4 mb-3">
+                        <div id="synlink-details-{{ $tid }}" class="mb-3 ml-4">
                             <div class="mb-1">
-                                @if ($synonym['unacceptabilityreason'] ?? false)
+                                @if($synonym['unacceptabilityreason'] ?? false)
                                     <em class="font-semibold">{{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}: </em>
                                     <span class="text-gray-500">{{ $synonym['unacceptabilityreason'] }}</span>
                                 @endif
                             </div>
                             <div class="mb-1">
-                                @if ($synonym['notes'] ?? false)
+                                @if($synonym['notes'] ?? false)
                                     <em class="font-semibold">{{ __('taxonomy_taxoneditor.USAGE_NOTES') }}: </em>
                                     <span class="text-gray-500">{{ $synonym['notes'] }}</span>
                                 @endif
                             </div>
                         </div>
-                        <hr>
+                        <hr />
                     </li>
                 @endforeach
             </ul>
