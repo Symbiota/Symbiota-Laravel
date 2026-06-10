@@ -11,7 +11,15 @@ foreach($occurrence->toArray() as $key => $value) {
     </x-text-label>
     <x-text-label :label="__('reports_labelmanager.DATE_ENTER')"> {{ $occurrence->dateEntered }} </x-text-label>
     <x-text-label :label="__('reports_labelmanager.DATE_MOD')"> {{ $occurrence->dateLastModified }} </x-text-label>
-    <div class="mt-4 text-xl font-bold">{{ __('individual.INTERNAL_EDITS') }}</div>
+    <div class="mt-4 flex text-xl font-bold">
+        <span>{{ __('individual.INTERNAL_EDITS') }}</span>
+        <a
+            class="ml-auto"
+            href="{{ legacy_url('collections/editor/editreviewer.php?collid=' . $occurrence->collid .'&occid=' . $occurrence->occid) }}"
+        >
+            <x-icons.edit title="{{ __('includes_admintab.MANAGE_HISTORY') }}" />
+        </a>
+    </div>
     <hr />
     @foreach($edit_history as $editGroup)
         <div class="border-base-300 flex flex-col gap-2 border-b py-2">
