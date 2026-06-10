@@ -140,6 +140,6 @@ return [
         'pending review',
         'expert required',
         'reviewed',
-        'closed'
-    ]
+        'closed',
+    ],
 ];
