@@ -567,7 +567,7 @@ class TaxonomyController extends Controller {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $editorManager = new \TaxonomyEditorManager();
         $editorManager->setTid($tid);
-        $statusStr = $editorManager->submitTaxonEdits($requestData);
+        $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
 
@@ -576,7 +576,7 @@ class TaxonomyController extends Controller {
         if ($statusStr = $editorManager->getErrorMessage()) {
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
-        $statusStr = __('taxonomy_taxoneditor.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr;
+        $statusStr = __('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr;
 
         return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
     }

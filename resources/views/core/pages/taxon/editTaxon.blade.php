@@ -57,8 +57,8 @@
             </div>
 
             {{-- Hierarchy --}}
+            <div id="hierarchy-tab" name="hierarchy-tab">
             <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
-            <div id="taxon-tree">
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
                 <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
                     @csrf
