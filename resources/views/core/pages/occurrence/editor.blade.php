@@ -67,7 +67,7 @@ if($add_status && $occurrence_status !== 'isnull') {
 
     <div class="flex gap-4">
         <x-tabs
-            class="md:min-w-full"
+            class="md:min-w-[100%] lg:min-w-[70%]"
             :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
             :active="0"
         >
