@@ -131,4 +131,25 @@ return [
     'img_web_width_px' => 1400,
     'img_tn_width_px' => 200,
     'media_file_size_limit' => 300000,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Processing Status
+    |--------------------------------------------------------------------------
+    |
+    | List of processing status options to be used in drop downs. Values not in
+    | this list is list will still/should get added to the drop down
+    */
+    'processing_status' => [
+        'unprocessed',
+        'unprocessed/NLP',
+        'stage 1',
+        'stage 2',
+        'stage 3',
+        'pending review-nfn',
+        'pending review',
+        'expert required',
+        'reviewed',
+        'closed'
+    ]
 ];

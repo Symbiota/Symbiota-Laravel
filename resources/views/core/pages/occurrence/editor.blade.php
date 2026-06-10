@@ -1,4 +1,22 @@
 @props(['occurrence'])
+
+@php
+$processing_status = [];
+
+$occurrence_status = strtolower($occurrence->processingStatus);
+$add_status = true;
+foreach(config('portal.processing_status') as $status) {
+    if($status === $occurrence_status) {
+        $add_status = false;
+    }
+
+    $processing_status[] = item($status, ucwords($status));
+}
+if($add_status && $occurrence_status !== 'isnull') {
+    $processing_status[] = item($occurrence_status, ucwords($occurrence_status));
+}
+
+@endphp
 <x-layout :hasHeader="false" :hasNavbar="false" :hasFooter="false">
     <div class="mb-4 flex items-center gap-2">
         @if($collection->icon)
@@ -40,7 +58,7 @@
 
     <x-tabs
         :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
-        :active="5"
+        :active="0"
     >
         {{-- Occurrence Data --}}
         <form class="flex flex-col gap-4">
@@ -58,15 +76,9 @@
                 {{-- Options should be the same as proccessing Status--}}
                 <div class="grow">
                     <x-select
-                        label="Status Auto-Set"
+                        :label="__('editor_occurrenceeditor.STATUS_AUTO_SET')"
                         :inline="true"
-                        :items="[
-                    [
-                        'title' => 'No Set Status',
-                        'value' => 'No Set Status',
-                        'disabled' => false
-                    ],
-                ]"
+                        :items="$processing_status"
                     />
                     <x-button :disabled="true"> {{ __('exsiccati.SAVE_EDITS') }} </x-button>
                 </div>
