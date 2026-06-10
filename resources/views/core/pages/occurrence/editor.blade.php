@@ -1,4 +1,13 @@
-@props(['occurrence'])
+@props([
+    'occurrence',
+    'collection',
+    'identifiers',
+    'creators',
+    'tags',
+    'media' => [],
+    'media_tags' => [],
+    'label_image',
+])
 
 @php
 $processing_status = [];
@@ -58,6 +67,7 @@ if($add_status && $occurrence_status !== 'isnull') {
 
     <div class="flex gap-4">
         <x-tabs
+            class="md:min-w-full"
             :tabs="[__('editor_occurrenceeditor.OCC_DATA'), __('individual.DET_HISTORY'), __('header.H_MEDIA'), __('includes_materialsampleinclude.MAT_SAMP'), __('individual.LINKED_RESOURCES'), __('individual.TRAITS'), __('Admin')]"
             :active="0"
         >
@@ -133,8 +143,10 @@ if($add_status && $occurrence_status !== 'isnull') {
             <x-occurrence.editor.admin :occurrence="$occurrence" />
         </x-tabs>
 
-        <div class="h-fit">
-            <x-occurrence.editor.label-processing clas="h-fit" />
-        </div>
+        @isset($label_image)
+            <div class="h-fit md:pr-4">
+                <x-occurrence.editor.label-processing clas="h-fit" :image="$label_image" />
+            </div>
+        @endisset
     </div>
 </x-layout>
