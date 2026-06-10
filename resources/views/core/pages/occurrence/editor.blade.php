@@ -124,7 +124,7 @@ if($add_status && $occurrence_status !== 'isnull') {
 
             <x-occurrence.editor.media {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
 
-            <x-occurrence.editor.material-sample {{-- TODO (Logan) Prepopulate Catalog numbers work --}} />
+            <x-occurrence.editor.material-sample :occurrence="$occurrence" />
 
             <x-occurrence.editor.linked-resources />
 
