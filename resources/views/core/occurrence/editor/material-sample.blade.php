@@ -13,7 +13,7 @@
     $controlTermArr = $materialSampleManager->getMSTypeControlValues();
 @endphp
 
-<div>
+<div class="flex flex-col gap-4">
     <x-fieldset :legend="__('includes_materialsampleinclude.ADD_SAMPLE')">
         <div class="flex items-center gap-2">
             <x-input :label="__('material_sample.SAMPLE_TYPE')" />
