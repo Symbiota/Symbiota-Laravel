@@ -39,7 +39,7 @@
             class="font-bold"
             label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
             required
-            id="parentname"
+            id="upper-parentname"
             name="parentname"
             tidName="parenttid"
             hide_selector="true"
