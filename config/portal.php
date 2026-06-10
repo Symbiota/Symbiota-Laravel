@@ -121,6 +121,7 @@ return [
     'img_web_width_px' => 1400,
     'img_tn_width_px' => 200,
     'media_file_size_limit' => 300000,
+    'media_domain' => env('MEDIA_DOMAIN') ?? env('APP_URL'),
 
     /*
     |--------------------------------------------------------------------------
