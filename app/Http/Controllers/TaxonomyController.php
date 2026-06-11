@@ -43,6 +43,153 @@ class TaxonomyController extends Controller {
         return $taxonEditorObj;
     }
 
+    private static function buildTaxonViewData(int $tid, bool $includeMedia = false): array {
+        $viewData = [
+            'taxon' => self::taxonData($tid),
+            'parents' => self::getParents($tid),
+            'common_names' => self::getCommonNames($tid),
+            'occurrence_count' => self::getTaxonOccurrenceStats($tid),
+            'children' => self::getDirectChildren($tid, 1),
+            'taxa_descriptions' => self::getTaxaDescriptions($tid),
+            'external_links' => self::getExternalLinks($tid),
+        ];
+
+        if ($includeMedia) {
+            $viewData['media'] = DB::table('media')
+                ->where('tid', $tid)
+                ->select('*')
+                ->orderBy('sortSequence')
+                ->get();
+        }
+
+        return $viewData;
+    }
+
+    private static function buildTaxonFormOptions(): array {
+        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
+        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
+        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
+        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
+        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
+        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null;
+
+        return [
+            'kingdoms' => $kingdoms,
+            'allTaxonRanks' => $allTaxonRanks,
+            'indContent' => $indContent,
+            'securityOptions' => $securityOptions,
+            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
+        ];
+    }
+
+    private static function redirectBackWithError(string $error) {
+        return redirect()->back()->withInput()->withErrors(['error' => $error]);
+    }
+
+    private static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __($warningTranslationKey) . ': ' . implode(';', $editorManager->getWarningArr());
+
+            return self::redirectBackWithError($statusStr);
+        }
+
+        if ($statusStr = $editorManager->getErrorMessage()) {
+            return self::redirectBackWithError($statusStr);
+        }
+
+        return null;
+    }
+
+    private static function handleTaxonEditsAction($editorManager, array $postData) {
+        return $editorManager->submitTaxonEdits($postData);
+    }
+
+    private static function handleUpdateTaxStatusAction($editorManager, array $postData) {
+        return $editorManager->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
+    }
+
+    private static function handleSynonymEditsAction($editorManager, array $postData) {
+        $tid = $postData['tid'] ?? null;
+
+        return $editorManager->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
+    }
+
+    private static function handleLinkToAcceptedAction($editorManager, array $postData) {
+        $deleteOther = array_key_exists('deleteother', $postData);
+
+        return $editorManager->submitAddAcceptedLink($postData['tidaccepted'], $deleteOther);
+    }
+
+    private static function handleDeleteAcceptedLinkAction($editorManager, array $postData) {
+        return $editorManager->removeAcceptedLink($postData['deltidaccepted']);
+    }
+
+    private static function handleChangeToAcceptedAction($editorManager, array $postData) {
+        $tid = $postData['tid'] ?? null;
+        $tidAccepted = $postData['tidaccepted'];
+        $switchAcceptance = array_key_exists('switchacceptance', $postData);
+
+        return $editorManager->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
+    }
+
+    private static function handleChangeToNotAcceptedAction($editorManager, array $postData) {
+        $tid = $postData['tid'] ?? null;
+        $tidAccepted = $postData['tidaccepted'];
+
+        return $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
+    }
+
+    private static function handleUpdateHierarchyAction($editorManager, array $postData) {
+        $tid = $postData['tid'] ?? null;
+        $editorManager->rebuildHierarchy($tid);
+
+        return true;
+    }
+
+    private static function handleRemapTaxonAction($editorManager, array $postData) {
+        $statusStr = '';
+        $remapStatus = $editorManager->transferResources($postData['remaptid']);
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+        }
+
+        if ($remapStatus) {
+            return __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
+        }
+
+        return $editorManager->getErrorMessage();
+    }
+
+    private static function handleDeleteTaxonAction($editorManager) {
+        $statusStr = '';
+        $delStatus = $editorManager->deleteTaxon();
+        if ($editorManager->getWarningArr()) {
+            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+        }
+
+        if ($delStatus) {
+            return __('taxonomy_taxonomydelete.SUCCESS_DELETING') . ' ' . $statusStr;
+        }
+
+        return $editorManager->getErrorMessage();
+    }
+
+    private static function processUpdateAction(string $editType, $editorManager, array $postData) {
+        return match ($editType) {
+            'taxonedits' => self::handleTaxonEditsAction($editorManager, $postData),
+            'updatetaxstatus' => self::handleUpdateTaxStatusAction($editorManager, $postData),
+            'synonymedits' => self::handleSynonymEditsAction($editorManager, $postData),
+            'linkToAccepted' => self::handleLinkToAcceptedAction($editorManager, $postData),
+            'deltidaccepted' => self::handleDeleteAcceptedLinkAction($editorManager, $postData),
+            'changetoaccepted' => self::handleChangeToAcceptedAction($editorManager, $postData),
+            'changeToNotAccepted' => self::handleChangeToNotAcceptedAction($editorManager, $postData),
+            'updatehierarchy' => self::handleUpdateHierarchyAction($editorManager, $postData),
+            'remapTaxon' => self::handleRemapTaxonAction($editorManager, $postData),
+            'deleteTaxon' => self::handleDeleteTaxonAction($editorManager),
+            default => 'Unsupported edit type',
+        };
+    }
+
     public static function taxonData(int $tid) {
         $taxon = DB::table('taxa as t')
             ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
@@ -163,56 +310,11 @@ class TaxonomyController extends Controller {
     }
 
     public static function taxon(int $tid) {
-        $taxon = self::taxonData($tid);
-
-        $parents = self::getParents($tid);
-
-        $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid, 1);
-
-        $occurrence_count = self::getTaxonOccurrenceStats($tid);
-        $taxa_descriptions = self::getTaxaDescriptions($tid);
-        $external_links = self::getExternalLinks($tid);
-
-        return view('pages/taxon/profile', [
-            'taxon' => $taxon,
-            'parents' => $parents,
-            'common_names' => $common_names,
-            'occurrence_count' => $occurrence_count,
-            'children' => $children,
-            'taxa_descriptions' => $taxa_descriptions,
-            'external_links' => $external_links,
-        ]);
+        return view('pages/taxon/profile', self::buildTaxonViewData($tid));
     }
 
     public static function editTaxonProfile(int $tid) {
-        $taxon = self::taxonData($tid);
-
-        $parents = self::getParents($tid);
-
-        $common_names = self::getCommonNames($tid);
-        $children = self::getDirectChildren($tid, 1);
-
-        $occurrence_count = self::getTaxonOccurrenceStats($tid);
-        $taxa_descriptions = self::getTaxaDescriptions($tid);
-        $external_links = self::getExternalLinks($tid);
-
-        $taxa_media = DB::table('media')
-            ->where('tid', $tid)
-            ->select('*')
-            ->orderBy('sortSequence')
-            ->get();
-
-        return view('pages/taxon/edit', [
-            'taxon' => $taxon,
-            'parents' => $parents,
-            'common_names' => $common_names,
-            'occurrence_count' => $occurrence_count,
-            'children' => $children,
-            'taxa_descriptions' => $taxa_descriptions,
-            'external_links' => $external_links,
-            'media' => $taxa_media,
-        ]);
+        return view('pages/taxon/edit', self::buildTaxonViewData($tid, true));
     }
 
     public static function editTaxon($tid) {
@@ -222,12 +324,7 @@ class TaxonomyController extends Controller {
         if (! $taxon) {
             // @TODO return a 404 not found page
         }
-        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
-        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
-        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
-        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
-        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
-        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
+        $formOptions = self::buildTaxonFormOptions();
 
         $parentName = '';
         if ($taxon && $taxon->parenttid) {
@@ -258,14 +355,9 @@ class TaxonomyController extends Controller {
         }
         $upperTaxonomyEditInfo = self::prepareUpperTaxonomyEditInfo($taxonEditorObj);
 
-        return view('pages/taxon/editTaxon', [
+        return view('pages/taxon/editTaxon', array_merge($formOptions, [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
-            'kingdoms' => $kingdoms,
-            'allTaxonRanks' => $allTaxonRanks,
-            'indContent' => $indContent,
-            'securityOptions' => $securityOptions,
-            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
             'taxonInfo' => $taxonInfo,
             'parentName' => $parentName,
             'acceptedName' => $acceptedName,
@@ -274,12 +366,11 @@ class TaxonomyController extends Controller {
             'parents' => self::getParents($tid),
             'rankMap' => self::$rankMap,
             'upperTaxonomyEditInfo' => $upperTaxonomyEditInfo,
-        ]);
+        ]));
     }
 
     private static function prepareUpperTaxonomyEditInfo($taxonEditorObj) {
         $upperTaxonomyEditInfo = [];
-        // if ($taxonEditorObj->getIsAccepted() == 1) {
         $upperTaxonomyEditInfo['acceptedArr'] = $taxonEditorObj->getAcceptedArr();
         $upperTaxonomyEditInfo['tid'] = $taxonEditorObj->getTid();
         $upperTaxonomyEditInfo['isAccepted'] = $taxonEditorObj->getIsAccepted();
@@ -289,39 +380,14 @@ class TaxonomyController extends Controller {
         $upperTaxonomyEditInfo['parentTid'] = $taxonEditorObj->getParentTid();
         $upperTaxonomyEditInfo['parentName'] = $taxonEditorObj->getParentName();
         $upperTaxonomyEditInfo['taxauthid'] = $taxonEditorObj->getTaxauthid();
-
-        //     $upperTaxonomyEditInfo['acceptedName'] = DB::table('taxa')->where('tid', $taxonEditorObj->getTid())->value('sciName') ?? '';
-        //     $upperTaxonomyEditInfo['acceptedRankId'] = DB::table('taxa')->where('tid', $taxonEditorObj->getTid())->value('rankID') ?? null;
-        // } else {
-        //     $acceptedArr = $taxonEditorObj->getAcceptedArr();
-        //     if (! empty($acceptedArr)) {
-        //         $acceptedTid = $acceptedArr[0]['tidaccepted'] ?? null;
-        //         $upperTaxonomyEditInfo['acceptedTid'] = $acceptedTid;
-        //         $upperTaxonomyEditInfo['acceptedName'] = DB::table('taxa')->where('tid', $acceptedTid)->value('sciName') ?? '';
-        //         $upperTaxonomyEditInfo['acceptedRankId'] = DB::table('taxa')->where('tid', $acceptedTid)->value('rankID') ?? null;
-        // }
-        // }
-
         return $upperTaxonomyEditInfo;
     }
 
     public static function createTaxon() {
-        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
-        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
-        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
-        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
-        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
-        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null; // @TODO confirm that GLOBALS can be accessed this way
-
-        return view('pages/taxon/create', [
+        return view('pages/taxon/create', array_merge(self::buildTaxonFormOptions(), [
             'mode' => 'create',
-            'kingdoms' => $kingdoms,
-            'allTaxonRanks' => $allTaxonRanks,
-            'indContent' => $indContent,
-            'securityOptions' => $securityOptions,
-            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
             'securitystatusstart' => 0,
-        ]);
+        ]));
     }
 
     public static function store() {
@@ -335,7 +401,7 @@ class TaxonomyController extends Controller {
         $tidResult = $editorManager->loadNewName($postData);
         // }
 
-        if ($tidResult > 0) {
+        if ($tidResult > 0) { // @TODO use redirectBackWithManagerIssues here after some massaging
             // Redirect to the newly created taxon's page
             return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
@@ -378,61 +444,10 @@ class TaxonomyController extends Controller {
     public static function update() {
         $postData = request()->all();
         $editorManager = self::getTaxonomyEditorManager($postData['tid'] ?? null);
-        $editType = $postData['edit-type'] ?? null;
+        $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
-
-        if ($editType === 'taxonedits') {
-            $statusStr = $editorManager->submitTaxonEdits($postData);
-        } elseif ($editType === 'updatetaxstatus') {
-            $statusStr = $editorManager->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
-        } elseif ($editType === 'synonymedits') {
-            $statusStr = $editorManager->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
-        } elseif ($editType === 'linkToAccepted') {
-            $deleteOther = array_key_exists('deleteother', $postData) ? true : false;
-            $statusStr = $editorManager->submitAddAcceptedLink($postData['tidaccepted'], $deleteOther);
-        } elseif ($editType === 'deltidaccepted') {
-            $statusStr = $editorManager->removeAcceptedLink($postData['deltidaccepted']);
-        } elseif ($editType === 'changetoaccepted') {
-            $tidAccepted = $postData['tidaccepted'];
-            $switchAcceptance = array_key_exists('switchacceptance', $postData) ? true : false;
-            $statusStr = $editorManager->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
-        } elseif ($editType === 'changeToNotAccepted') {
-            $tidAccepted = $postData['tidaccepted'];
-            $statusStr = $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
-        } elseif ($editType == 'updatehierarchy') {
-            $editorManager->rebuildHierarchy($tid);
-        } elseif ($editType == 'remapTaxon') {
-            $remapStatus = $editorManager->transferResources($postData['remaptid']);
-            if ($editorManager->getWarningArr()) {
-                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
-            }
-            if ($remapStatus) {
-                $statusStr = $LANG['SUCCESS_REMAPPING'] . ' ' . $statusStr;
-                header('Location: taxonomydisplay.php?target=' . $postData['genusstr'] . '&statusstr=' . $statusStr);
-            } else {
-                $statusStr = $editorManager->getErrorMessage();
-            }
-        } elseif ($editType == 'deleteTaxon') {
-            $delStatus = $editorManager->deleteTaxon();
-            if ($editorManager->getWarningArr()) {
-                $statusStr = $LANG['FOLLOWING_WARNINGS'] . ': ' . implode(';', $editorManager->getWarningArr());
-            }
-            if ($delStatus) {
-                $statusStr = $LANG['SUCCESS_DELETING'] . ' ' . $statusStr;
-                header('Location: taxonomydisplay.php?statusstr=' . $statusStr);
-            } else {
-                $statusStr = $editorManager->getErrorMessage();
-            }
-        }
-
-        if ($statusStr === true || $statusStr === '') { // successful runs of the above return empty strings
-            // Redirect to the newly created taxon's page
-            $tid = $postData['tidaccepted'] ?? null;
-
-            return redirect()->route('taxon.view', ['tid' => $tid])->with('success', 'Taxon updated successfully!');
-        } else {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
-        }
+        $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
+        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $postData['tid'] ?? null]);
     }
 
     public static function delete() {
@@ -455,26 +470,21 @@ class TaxonomyController extends Controller {
 
     public static function remap() {
         $requestData = request()->all();
-
         $tid = (int) $requestData['tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($tid);
 
         $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
         $statusStr = $requestData['taxa'] ?? '';
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+        if ($response = self::redirectBackWithManagerIssues($editorManager)) { // @TODO is there a way to use handleStatusReportingAndRouting here?
+            return $response;
         }
         if ($remapStatus) {
             $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
             TaxonomyController::delete();
-
             return redirect()->route('taxon.view', ['tid' => $requestData['remaptid']])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+            return self::redirectBackWithError($statusStr); // @TODO fix this in issue
         }
     }
 
@@ -484,17 +494,8 @@ class TaxonomyController extends Controller {
         $targetTid = (int) $requestData['tidaccepted'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
-
-        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
+        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $targetTid]);
     }
 
     public static function changeToNotAccepted() {
@@ -504,17 +505,8 @@ class TaxonomyController extends Controller {
         $editorManager = self::getTaxonomyEditorManager($oldTid);
         $switchAcceptance = $requestData['switchacceptance'] === '1';
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
-
-        return redirect()->route('taxon.editview', ['tid' => $oldTid])->with('success', $statusStr);
+        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $oldTid]);
     }
 
     public static function updateSynonymLink() {
@@ -522,34 +514,14 @@ class TaxonomyController extends Controller {
         $currentTid = (int) $requestData['current-tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        $statusStr = __('taxonomy_taxoneditor.SYNONYM_UPDATE_SUCCESS') . ' ' . $statusStr;
-
-        return redirect()->route('taxon.editview', ['tid' => $currentTid])->with('success', $statusStr);
+        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
     }
 
     public static function reconstructHierarchy() {
         $tid = (int) request()->all()['tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        $statusStr = __('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS') . ' ' . $statusStr;
-
-        return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
+        return self::handleStatusReportingAndRouting(__('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS'), $editorManager, 'taxon.editview', ['tid' => $tid]);
     }
 
     public static function updateUpperTaxonomy() {
@@ -557,16 +529,13 @@ class TaxonomyController extends Controller {
         $tid = (int) $requestData['tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
+        return self::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
+    }
 
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
+    public static function handleStatusReportingAndRouting($statusStr, $editorManager, $redirectRoute, $redirectParams = []) {
+        if ($response = self::redirectBackWithManagerIssues($editorManager)) {
+            return $response;
         }
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
-        }
-        $statusStr = __('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr;
-
-        return redirect()->route('taxon.editview', ['tid' => $tid])->with('success', $statusStr);
+        return redirect()->route($redirectRoute, $redirectParams)->with('success', $statusStr);
     }
 }
