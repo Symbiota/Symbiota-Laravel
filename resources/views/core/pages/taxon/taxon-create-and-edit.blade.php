@@ -78,7 +78,7 @@
             @endif
             <form
                 id="taxon-form"
-                class="mt-4 flex w-full max-w-4xl flex-col items-center gap-4"
+                class="mx-auto mt-4 flex w-full flex-col items-stretch"
                 method="POST"
                 action="{{ $mode === 'create' ? route('taxon.store') : route('taxon.update') }}"
                 @change="await validate()"
@@ -95,7 +95,7 @@
                     id="securitystatusstart"
                     :value="$securitystatusstart"
                 />
-                <div class="w-3/4">
+                <div class="w-full">
                     @if($mode === 'create')
                         <x-fieldset :legend="__('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER')">
                             <x-input
@@ -122,8 +122,8 @@
                         </x-fieldset>
                     @endif
                 </div>
-                <x-fieldset :legend="($editorTitle ?? __('taxonomy_taxoneditor.TAXONOMY_EDITOR'))">
-                    <div class="w-3/4">
+                <x-fieldset class="w-full" :legend="($editorTitle ?? __('taxonomy_taxoneditor.TAXONOMY_EDITOR'))">
+                    <div id="taxon-rank-container" name="taxon-rank-container" class="w-1/2">
                         <x-select
                             class="font-bold"
                             label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
@@ -142,7 +142,7 @@
                                 ->toArray()"
                         />
                     </div>
-                    <div id="unit1" class="mb-4 flex items-center gap-2">
+                    <div id="unit1" class="mb-4 flex w-1/2 items-center gap-2">
                         <div class="flex flex-col">
                             <label
                                 class="text mb-1 font-bold"
@@ -172,7 +172,7 @@
                         </div>
                     </div>
 
-                    <div id="unit2" class="mb-4 flex items-center gap-2" x-show="!rankid || parseInt(rankid) >= 220">
+                    <div id="unit2" class="mb-4 flex w-1/2 items-center gap-2" x-show="!rankid || parseInt(rankid) >= 220">
                         <div class="flex flex-col">
                             <label
                                 class="text mb-1 font-bold"
@@ -299,10 +299,7 @@
                             :items="$securityOptions"
                         />
                     </div>
-                    <fieldset class="border-base-300 mb-4 rounded-md border p-4">
-                        <legend class="text-2xl font-semibold">
-                            {{ __('taxonomy_taxonomyloader.ACCEPT_STATUS') }}
-                        </legend>
+                    <x-fieldset id="acceptence-status" name="acceptence-status" :legend="__('taxonomy_taxoneditor.ACCEPTANCE_STATUS')">
                         {{-- blade-formatter-disable --}}
                         <x-radio
                             name="acceptstatus"
@@ -321,7 +318,7 @@
                             :default_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->tid == $taxonInfo->tidaccepted ? 1 : 0) : 1"
                         />
                         {{-- blade-formatter-enable --}}
-                    </fieldset>
+                    </x-fieldset>
                     <div
                         id="accdiv"
                         class="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? '' : 'hidden' }}"
@@ -364,20 +361,20 @@
                             >* = {{ __('taxonomy_taxonomyloader.REQUIRED') }} Field</span
                         >
                     </div>
-                    <x-button
-                        name="submitButton"
-                        id="submitButton"
-                        class="mt-2"
-                        x-bind:disabled="!isValid"
-                        x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
-                    ></x-button>
-                    <p>
+                    <div id="submit-container" name="submit-container" class="w-1/2">
+                        <x-button
+                            name="submitButton"
+                            id="submitButton"
+                            class="mt-2"
+                            x-bind:disabled="!isValid"
+                            x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
+                        ></x-button>
                         <span
                             id="validationMessage"
                             class="text-sm text-red-700 italic"
                             x-text="validationMessage"
                         ></span>
-                    </p>
+                    </div>
                 </x-fieldset>
             </form>
         </div>
