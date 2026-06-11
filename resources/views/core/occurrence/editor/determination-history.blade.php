@@ -1,10 +1,18 @@
-@props(['determinations' => [
-    ['sciname' => 'Pinus aristata', 'author' => 'Engelm.', 'date'=> 's.d.', 'determiner' =>
-    'unknown','isCurrent' => true],
-    ['sciname' => 'Pinus aristata', 'author' => 'Engelm.', 'date'=> 's.d.', 'determiner' =>
-    'unknown','isCurrent' => false]
-]])
-@php
+@props(['occurrence'])
+@php global $SERVER_ROOT;
+include_once(legacy_path('/classes/OccurrenceEditorDeterminations.php'));
+
+$occManager = new OccurrenceEditorDeterminations();
+$occManager->setOccId($occurrence->occid);
+
+$identBy = request('identby');
+$dateIdent = request('dateident');
+$sciName = request('sciname');
+
+$determinations = $occManager->getDetMap($identBy, $dateIdent, $sciName);
+$idRanking = $occManager->getIdentificationRanking();
+$specImgArr = $occManager->getImageMap();  // find out if there are images in order to show/hide the button to display/hide images.
+
 $confidence_options = [
     item(0, '0 - ' . __('includes_determinationtab.UNLIKELY')),
     item(1, '1 - ' . __('editor_batchdeterminations.LOW')),
@@ -17,7 +25,8 @@ $confidence_options = [
     item(8, '8 - ' . __('editor_batchdeterminations.HIGH')),
     item(9, '9 - ' . __('editor_batchdeterminations.HIGH')),
     item(10, '10 - ' . __('includes_determinationtab.ABSOLUTE')),
-]
+];
+
 @endphp
 <div class="flex flex-col gap-4">
     <x-fieldset :legend="__('includes_determinationtab.ID_CONFIDENCE')">
@@ -55,17 +64,17 @@ $confidence_options = [
         @foreach($determinations as $determination)
             <div class="p-2">
                 <div>
-                    <span>{{ $determination['sciname'] }} {{ $determination['author'] }}</span>
-                    @if($determination['isCurrent'])
+                    <span>{{ $determination['sciname'] }} {{ $determination['scientificnameauthorship'] }}</span>
+                    @if($determination['iscurrent'])
                         <span class="text-error">{{ __('includes_determinationtab.CURRENT_DET') }}</span>
                     @endif
                     <x-icons.edit />
                 </div>
                 <div class="flex gap-4">
                     <x-text-label :label="__('individual.DETERMINER')">
-                        {{ $determination['determiner'] }}
+                        {{ $determination['identifiedby'] }}
                     </x-text-label>
-                    <x-text-label :label="__('individual.DATE')"> {{ $determination['date'] }} </x-text-label>
+                    <x-text-label :label="__('individual.DATE')"> {{ $determination['dateidentified'] }} </x-text-label>
                 </div>
             </div>
             @if(!$loop->last)
