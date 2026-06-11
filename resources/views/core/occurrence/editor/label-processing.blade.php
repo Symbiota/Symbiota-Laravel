@@ -12,25 +12,26 @@
             <i class="fa-solid fa-anchor"></i>
         </span>
 
-        <x-text-label :label="__('includes_imgprocessor.ROTATE')">
+        <x-text-label class="ml-auto" :label="__('includes_imgprocessor.ROTATE')">
             <x-link>L</x-link>
             <span><></span>
             <x-link>R</x-link>
         </x-text-label>
-
-        <x-radio
-            id="imgres"
-            default_value="med"
-            name="imgres"
-            :options="[
-            ['label' => __('traitattr_occurattributes.MED_RES'), 'value' => 'med'], ['label' => __('traitattr_occurattributes.HIGH_RES'), 'value' => 'lg']
-        ]"
-        />
     </div>
 
     <div class="bg-base-300 mx-auto flex h-100">
         <img class="my-auto h-100" src="{{ $image['url'] }}" />
     </div>
+
+    <x-radio
+        id="imgres"
+        default_value="med"
+        :label="__('includes_imgprocessor.Image Resolution')"
+        name="imgres"
+        :options="[
+        ['label' => __('traitattr_occurattributes.MED_RES'), 'value' => 'med'], ['label' => __('traitattr_occurattributes.HIGH_RES'), 'value' => 'lg']
+    ]"
+    />
 
     <x-fieldset :legend="__('includes_imgprocessor.TESSERACT_OCR')">
         <x-checkbox :label="__('includes_imgprocessor.OCR_WHOLE_IMG')" />
