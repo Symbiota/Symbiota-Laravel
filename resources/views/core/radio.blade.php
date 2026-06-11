@@ -14,6 +14,7 @@
             :name="$name"
             :value="$option['value']"
             :checked="$default_value == $option['value']"
+            :required="$required"
         />
     @endforeach
 </fieldset>

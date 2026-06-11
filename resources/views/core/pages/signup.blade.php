@@ -1,14 +1,15 @@
+@props(['post_route' => url('/register') ])
 <x-margin-layout>
     @fragment('form')
-        <form hx-post="{{ url('/register') }}" hx-swap="outerHTML" hx-target="this">
+        <form hx-post="{{ $post_route }}" hx-swap="outerHTML" hx-target="this">
             @csrf
             <fieldset class="grid w-full grid-cols-1 gap-4 p-4">
                 <legend class="text-primary text-2xl font-bold">{{ __('profile_newprofile.CREATE_NEW') }}</legend>
 
                 <x-user.form-fields
-                    :username="old('username')"
-                    :name="old('name')"
-                    :email="old('email')"
+                    :username="old('username', request('username'))"
+                    :name="old('name', request('name'))"
+                    :email="old('email', request('email'))"
                     :password="old('password')"
                     :include_passwords="true"
                 />
