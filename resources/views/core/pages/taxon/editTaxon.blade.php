@@ -38,6 +38,7 @@
         <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
             {{-- Editor --}}
             <div>
+                <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
                 <x-pages.taxon.taxon-create-and-edit
                     :mode="$mode ?? 'edit'"
                     :canCreateOrEdit="$canCreateOrEdit ?? false"
@@ -48,6 +49,8 @@
                     :taxonInfo="$taxonInfo ?? null"
                     :parentName="$parentName ?? ''"
                     :acceptedName="$acceptedName ?? ''"
+                    :includeTitle="false"
+                    :editorTitle="__('taxonomy_taxoneditor.EDIT_OTHER_TAXONOMIC_INFO')"
                 />
             </div>
 
@@ -58,7 +61,6 @@
 
             {{-- Hierarchy --}}
             <div id="hierarchy-tab" name="hierarchy-tab">
-                <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
                 <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
                     @csrf

@@ -31,4 +31,6 @@ return [
     'TAXON_NOT_FOUND' => 'Taxon information not found',
     'UPPER_TAXONOMY_UPDATE_SUCCESS' => 'Upper taxonomy updated successfully',
     'CURRENT_PARENT_TAXON' => 'Current Parent Taxon',
+    'TAXONOMIC_TREE_VIEWER' => 'Taxonomic Tree Viewer',
+    'EDIT_UPPER_TAXONOMY' => 'Edit Upper Taxonomy',
 ];

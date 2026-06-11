@@ -8,6 +8,8 @@
     'taxonInfo' => null,
     'parentName' => '',
     'acceptedName' => '',
+    'includeTitle' => false,
+    'editorTitle' => null,
 ])
 @if(!$canCreateOrEdit)
     <div class="mb-4 flex flex-col items-center justify-center">
@@ -61,9 +63,11 @@
                 },
             }"
         >
-            <h1 class="text-4xl font-bold">
-                {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
-            </h1>
+            @if ($includeTitle)
+                <h1 class="text-4xl font-bold">
+                    {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
+                </h1>
+            @endif
             @if($mode === 'create')
                 <div class="mt-4">
                     <h1 class="text-2xl font-bold">
@@ -93,10 +97,7 @@
                 />
                 <div class="w-3/4">
                     @if($mode === 'create')
-                        <fieldset class="border-base-300 mb-4 rounded-md border p-4">
-                            <legend class="text-2xl font-semibold">
-                                {{ __('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER') }}
-                            </legend>
+                        <x-fieldset :legend="__('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER')">
                             <x-input
                                 :label="__(
                                 'taxonomy_taxonomyloader.QUICK_PARSER',
@@ -118,14 +119,10 @@
                                 class="mt-2"
                                 >{{ __('taxonomy_taxonomyloader.RUN_QUICK_PARSE') }}</x-button
                             >
-                        </fieldset>
+                        </x-fieldset>
                     @endif
                 </div>
-                <fieldset class="border-base-300 mb-4 w-full rounded-md border p-4">
-                    <legend class="text-2xl font-semibold">
-                        {{ $mode === 'create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
-                    </legend>
-
+                <x-fieldset :legend="($editorTitle ?? __('taxonomy_taxoneditor.TAXONOMY_EDITOR'))">
                     <div class="w-3/4">
                         <x-select
                             class="font-bold"
@@ -381,7 +378,7 @@
                             x-text="validationMessage"
                         ></span>
                     </p>
-                </fieldset>
+                </x-fieldset>
             </form>
         </div>
     @endif

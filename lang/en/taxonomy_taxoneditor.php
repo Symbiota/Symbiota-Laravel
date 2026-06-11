@@ -5,7 +5,7 @@ return [
     'SUCCESS_REMAPPING' => 'Success remapping taxon!',
     'SUCCESS_DELETING' => 'Success deleting taxon!',
     'TAX_TREE_VIEW' => 'Taxonomy Tree Viewer',
-    'TAXONOMY_EDITOR' => 'Taxonomy Editor',
+    'TAXONOMY_EDITOR' => 'Create Taxon',
     'SUCCESS' => 'SUCCESS',
     'GO_TAX_DISPLAY' => 'Go to taxonomy display',
     'ADD_NEW_TAXON' => 'Add New Taxon',
@@ -72,5 +72,5 @@ return [
     'SYNONYM_UPDATE_SUCCESS' => 'Synonym details successfully updated',
     'USAGE_NOTES' => 'Usage Notes',
     'HIERARCHY_REBUILD_SUCCESS' => 'Hierarchy successfully rebuilt',
-
+    'EDIT_OTHER_TAXONOMIC_INFO' => 'Edit Other Taxonomic Information',
 ];
