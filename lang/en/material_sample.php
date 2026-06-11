@@ -4,7 +4,7 @@ return [
     'SAMPLE_TYPE' => 'Sample Type',
     'SAMPLE_CONDITION' => 'Condition',
     'PRESERVATION_TYPE' => 'Preservation type',
-    'PREPARATION DETAILS' => 'Preparation details',
+    'PREPARATION_DETAILS' => 'Preparation details',
     'PREPARATION_DATE' => 'Preparation date',
     'PREPARED_BY' => 'Prepared by',
     'INDIVIDUAL COUNT' => 'Individual count',
@@ -27,4 +27,5 @@ return [
     'ESTIMATED_SIZE' => 'Estimated Size',
     'POOL_DNA_EXTRACTS' => 'Pool DNA Extracts',
     'SAMPLE_DESIGNATION' => 'Sample Designation',
+    'MATERIAL_SAMPLE_GUID' => 'Material Sample ID (GUID)',
 ];

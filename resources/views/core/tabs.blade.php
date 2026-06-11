@@ -25,11 +25,11 @@
     {{ $attributes->twMerge('w-full') }}
 >
     {{-- Tab Menu --}}
-    <div {{ $attributes->twMergeFor('head', 'flex gap-1') }}>
+    <div {{ $attributes->twMergeFor('head', 'flex gap-x-1 flex-wrap') }}>
         @for($i = 0; $i < count($tabs); $i++)
             <div
                 :class="active === {{ $i }}? 'bg-base-100': 'bg-base-200/50'"
-                class="bg-base-100 border-base-300 relative border-x border-t"
+                class="bg-base-100 border-base-300 relative flex grow border-x border-t"
             >
                 <input
                     class="ring-accent absolute h-full w-full cursor-pointer appearance-none outline-none focus:ring"
@@ -39,8 +39,8 @@
                     type="radio"
                     name="tab"
                 />
-                <label for="tab-{{ $i }}">
-                    <div class="px-4 py-2 text-lg">{{ $tabs[$i] }}</div>
+                <label class="my-auto" for="tab-{{ $i }}">
+                    <div class="px-4 py-2 text-base text-nowrap">{{ $tabs[$i] }}</div>
                 </label>
                 <div class="bg-accent absolute bottom-0 w-full" :class="active === {{ $i }} && 'h-1'"></div>
             </div>

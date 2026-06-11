@@ -28,6 +28,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Observaciones de georreferencia',
     'GEOREFERENCE_PROTOCOL' => 'Protocolo de georreferencia',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Estado de verificación de georreferencia',
+    'FOOTPRINT_POLYGON' => 'Polígono de huella',
     'HOST' => 'Host',
     'VERBATIM_ATTRIBUTES' => 'Descripción',
     'OCCURRENCE_REMARKS' => 'Notas (Observaciones de ocurrencia)',
@@ -39,5 +40,6 @@ return [
     'DATA_GENERALIZATIONS' => 'Generalizaciones de datos',
     'COLLECTION_CODE' => 'Código de colección (anulación)',
     'OWNER_INSTITUTION_CODE' => 'Código de propietario (anulación)',
+    'INST_CODE_OVERRIDE' => 'Código de institución (anulación)',
     'STORAGELOCATION_CODE' => 'Ubicación de almacenamiento',
 ];

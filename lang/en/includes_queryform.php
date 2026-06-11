@@ -87,4 +87,6 @@ return [
     'GEO_CONTEXT_ID' => 'Geological Context ID',
     'SLIDE_PROP' => 'Slide Properties',
     'STAGE' => 'Stage',
+    'IDENTIFICATION_REMARKS' => 'Identification Remark',
+    'IDENTIFICATION_REFERENCES' => 'Identification References',
 ];
