@@ -33,6 +33,16 @@ class TaxonomyController extends Controller {
             300 => 21, // infraspecies
         ];
 
+    private static function getTaxonomyEditorManager($tid = null) {
+        include_once legacy_path('/classes/TaxonomyEditorManager.php');
+        $taxonEditorObj = new \TaxonomyEditorManager();
+        if($tid) {
+            $taxonEditorObj->setTid($tid);
+            $taxonEditorObj->setTaxon();
+        }
+        return $taxonEditorObj;
+    }
+
     public static function taxonData(int $tid) {
         $taxon = DB::table('taxa as t')
             ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
@@ -229,9 +239,7 @@ class TaxonomyController extends Controller {
             $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
         }
 
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $taxonEditorObj = new \TaxonomyEditorManager();
-        $taxonEditorObj->setTid($tid);
+        $taxonEditorObj = self::getTaxonomyEditorManager($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
         $taxonEditorObj->setTaxon();
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
@@ -318,8 +326,7 @@ class TaxonomyController extends Controller {
 
     public static function store() {
         $postData = request()->all();
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
+        $editorManager = self::getTaxonomyEditorManager();
 
         // if (! $editorManager->validateNewName($postData)) {
         //     // Redirect back with error message
@@ -370,14 +377,9 @@ class TaxonomyController extends Controller {
 
     public static function update() {
         $postData = request()->all();
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
+        $editorManager = self::getTaxonomyEditorManager($postData['tid'] ?? null);
         $editType = $postData['edit-type'] ?? null;
-        $editorManager->setTaxon();
-        $editorManager->setTid($postData['tidaccepted'] ?? null);
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
-        // $editorManager->setTaxAuthId($taxAuthId);
-        // $postData['securitystatusstart'] = $editorManager->getSecurityStatus();
 
         if ($editType === 'taxonedits') {
             $statusStr = $editorManager->submitTaxonEdits($postData);
@@ -435,9 +437,7 @@ class TaxonomyController extends Controller {
 
     public static function delete() {
         $tid = (int) request()->all()['tid'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($tid);
+        $editorManager = self::getTaxonomyEditorManager($tid);
         $delStatus = $editorManager->deleteTaxon();
         if ($editorManager->getWarningArr()) {
             $statusStr = implode('; ', $editorManager->getWarningArr());
@@ -456,10 +456,8 @@ class TaxonomyController extends Controller {
     public static function remap() {
         $requestData = request()->all();
 
-        $tid = (int) request()->all()['tid'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($tid);
+        $tid = (int) $requestData['tid'] ?? null;
+        $editorManager = self::getTaxonomyEditorManager($tid);
 
         $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
         $statusStr = $requestData['taxa'] ?? '';
@@ -482,11 +480,9 @@ class TaxonomyController extends Controller {
 
     public static function changeAccepted() {
         $requestData = request()->all();
-        $oldTid = (int) request()->all()['tid'] ?? null;
-        $targetTid = (int) request()->all()['tidaccepted'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($oldTid);
+        $oldTid = (int) $requestData['tid'] ?? null;
+        $targetTid = (int) $requestData['tidaccepted'] ?? null;
+        $editorManager = self::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
@@ -503,12 +499,10 @@ class TaxonomyController extends Controller {
 
     public static function changeToNotAccepted() {
         $requestData = request()->all();
-        $oldTid = (int) request()->all()['tid'] ?? null;
-        $targetTid = (int) request()->all()['new-tid'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($oldTid);
-        $switchAcceptance = request()->input('switchacceptance') === '1';
+        $oldTid = (int) $requestData['tid'] ?? null;
+        $targetTid = (int) $requestData['new-tid'] ?? null;
+        $editorManager = self::getTaxonomyEditorManager($oldTid);
+        $switchAcceptance = $requestData['switchacceptance'] === '1';
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
@@ -525,10 +519,8 @@ class TaxonomyController extends Controller {
 
     public static function updateSynonymLink() {
         $requestData = request()->all();
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
         $currentTid = (int) $requestData['current-tid'] ?? null;
-        $editorManager->setTid($currentTid);
+        $editorManager = self::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
@@ -545,9 +537,7 @@ class TaxonomyController extends Controller {
 
     public static function reconstructHierarchy() {
         $tid = (int) request()->all()['tid'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($tid);
+        $editorManager = self::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
@@ -565,9 +555,7 @@ class TaxonomyController extends Controller {
     public static function updateUpperTaxonomy() {
         $requestData = request()->all();
         $tid = (int) $requestData['tid'] ?? null;
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $editorManager = new \TaxonomyEditorManager();
-        $editorManager->setTid($tid);
+        $editorManager = self::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
         if ($editorManager->getWarningArr()) {
             $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
