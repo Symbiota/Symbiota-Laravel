@@ -22,4 +22,5 @@ return [
     'VV_TRANSCRIPTION_MODEL' => 'Transcription Model',
     'VV_TRANSCRIPTION_PROMPT' => 'Transcription Prompt',
     'TESSERACT_OCR' => 'Tesseract OCR',
+    'Image Resolution' => 'Resolución de imagen',
 ];
