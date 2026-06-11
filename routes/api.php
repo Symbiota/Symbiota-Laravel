@@ -9,6 +9,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceAnnotationController;
 use App\Http\Controllers\OccurrenceController;
 use App\Http\Controllers\TaxonomyController;
+use App\Models\Collection;
 use App\Models\Occurrence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

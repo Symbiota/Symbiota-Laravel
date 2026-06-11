@@ -75,6 +75,8 @@ class Collection extends Model {
 
     const Observations = 'Observations';
 
+    const FossilSpecimens = 'Fossil Specimens';
+
     public function isSpecimens() {
         return $this->collType === self::Specimens;
     }

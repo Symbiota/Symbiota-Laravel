@@ -17,8 +17,10 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxonomyController;
+use App\Http\Controllers\UserPermissonsController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -220,6 +222,35 @@ Route::group(['prefix' => '/user'], function () {
     Route::post('/profile/password', [UserProfileController::class, 'updatePassword']);
     Route::post('/profile/dataset', [DatasetController::class, 'createDataset']);
     Route::delete('/profile', [UserProfileController::class, 'deleteProfile']);
+
+    Route::controller(UserPermissonsController::class)->middleware('can:SUPER_ADMIN')->group(function () {
+        Route::get('/permissions', 'adminSearchPage')->name('user.management');
+
+        if (app()->environment('local')) {
+            Route::get('/loginas/{uid}', 'loginAs')->name('user.admin.login.as');
+        }
+
+        Route::get('/create', 'adminUserRegister')
+            ->whereNumber('uid')
+            ->name('user.admin.create');
+        Route::post('/create', 'adminCreateUser')
+            ->whereNumber('uid')
+            ->name('user.admin.create');
+
+        Route::get('/{uid}/permissions', 'permissionsProfile')
+            ->whereNumber('uid')
+            ->name('user.permissions');
+        Route::put('/{uid}/permissions', 'updatePermissions')
+            ->whereNumber('uid')
+            ->name('user.permissions.update');
+        Route::delete('/{uid}/permissions/{role}', 'deletePermisson')
+            ->whereNumber('uid')
+            ->whereIn('role', UserRole::roles())
+            ->name('user.permissions.delete');
+        Route::post('/{uid}/permissions', 'addPermission')
+            ->whereNumber(['uid'])
+            ->name('user.permissions.add');
+    });
 });
 
 /*

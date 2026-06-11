@@ -62,6 +62,17 @@ if (! function_exists('itemize')) {
     }
 }
 
+if (! function_exists('itemize_assoc')) {
+    function itemize_assoc(array $values, callable $map_fn, array $defaults = []): array {
+        $items = $defaults;
+        foreach ($values as $key => $assoc) {
+            $items[] = item($key, $map_fn($assoc));
+        }
+
+        return $items;
+    }
+}
+
 if (! function_exists('itemize_flat')) {
     function itemize_flat(array $values, array $defaults = []): array {
         $items = $defaults;
