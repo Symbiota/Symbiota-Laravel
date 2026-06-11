@@ -182,6 +182,79 @@ class CollectionController extends Controller {
     public static function comments() {
         return view('pages/collections/comments');
     }
+
+    public static function batchDeterminations(int $collId) {
+        $detManager = self::batchDeterminationManager($collId);
+
+        return view('pages/collections/batch-determinations', [
+            'collid' => $collId,
+            'collectionName' => $detManager->getCollName(),
+        ]);
+    }
+
+    public static function storeBatchDeterminations(Request $request, int $collId) {
+        $detManager = self::batchDeterminationManager($collId);
+        $occids = array_filter((array) $request->input('occid', []), 'is_numeric');
+        $status = '';
+
+        if ($request->input('formsubmit') === 'Add New Determinations') {
+            if (! $occids) {
+                $status = __('editor_batchdeterminations.SELECT_ONE');
+            } else {
+                foreach ($occids as $occid) {
+                    $detManager->setOccId((int) $occid);
+                    $detManager->addDetermination($request->all(), 1);
+                }
+                $status = 'SUCCESS: ' . count($occids) . ' annotations submitted';
+            }
+        }
+
+        return redirect(url('collections/' . $collId . '/batchdeterminations'))
+            ->with('status', $status)
+            ->with('statusType', str_starts_with($status, 'SUCCESS') ? 'success' : 'error');
+    }
+
+    public static function batchDeterminationRecords(Request $request, int $collId) {
+        $detManager = self::batchDeterminationManager($collId);
+
+        return response()->json(
+            $detManager->getNewDetItem(
+                (string) $request->input('catalognumber', ''),
+                (string) $request->input('sciname', ''),
+                $request->boolean('allcatnum') ? 1 : 0,
+            )
+        );
+    }
+
+    public static function verifyBatchDeterminationTaxon(Request $request, int $collId) {
+        $term = trim((string) $request->input('term', ''));
+
+        if (! $term) {
+            return response()->json(null);
+        }
+
+        return response()->json(self::rpcOccurrenceEditor()->getTaxonArr($term) ?: null);
+    }
+
+    // helper function for building determination manager
+    private static function batchDeterminationManager(int $collId) {
+        global $SERVER_ROOT;
+        include_once legacy_path('/classes/OccurrenceEditorDeterminations.php');
+
+        $detManager = new \OccurrenceEditorDeterminations();
+        $detManager->setCollId($collId);
+        $detManager->getCollMap();
+
+        return $detManager;
+    }
+
+    //helper function to call legacy rpc occurrence editor
+    private static function rpcOccurrenceEditor() {
+        global $SERVER_ROOT;
+        include_once legacy_path('/classes/RpcOccurrenceEditor.php');
+
+        return new \RpcOccurrenceEditor();
+    }
 }
 
 enum UploadTypes {
