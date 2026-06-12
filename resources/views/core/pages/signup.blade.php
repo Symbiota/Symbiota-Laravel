@@ -1,32 +1,26 @@
-@props(['name', 'email', 'password'])
-<x-layout>
+@props(['post_route' => url('/register') ])
+<x-margin-layout>
     @fragment('form')
-        <form
-            hx-post="{{ url('/register') }}"
-            hx-swap="outerHTML"
-            hx-target="this"
-            class="m-auto mt-5 flex max-w-screen-sm flex-col justify-center"
-        >
+        <form hx-post="{{ $post_route }}" hx-swap="outerHTML" hx-target="this">
             @csrf
             <fieldset class="grid w-full grid-cols-1 gap-4 p-4">
-                <legend class="text-primary text-2xl font-bold">Signup</legend>
-                <x-input required label="Name" id="name" value="{{ $name ?? old('name') }}" />
-                <x-input required label="Email" id="email" type="email" value="{{ $email ?? old('email') }}" />
-                <x-input
-                    required
-                    label="Password"
-                    id="password"
-                    type="password"
-                    value="{{ $password ?? old('password') }}"
+                <legend class="text-primary text-2xl font-bold">{{ __('profile_newprofile.CREATE_NEW') }}</legend>
+
+                <x-user.form-fields
+                    :username="old('username', request('username'))"
+                    :name="old('name', request('name'))"
+                    :email="old('email', request('email'))"
+                    :password="old('password')"
+                    :include_passwords="true"
                 />
-                <x-input
-                    required
-                    label="Password Confirmation"
-                    id="password_confirmation"
-                    type="password"
-                    value="{{ $password ?? old('password_confirmation') }}"
-                />
-                <x-button class="w-fit" type="submit"> Sign Up </x-button>
+
+                @if(is_array(__('profile_newprofile.PASSWORD_RULES')))
+                    @foreach(__('profile_newprofile.PASSWORD_RULES') as $rule)
+                        <div class="text-error">{{ $rule }}</div>
+                    @endforeach
+
+                @endif
+                <x-button class="w-fit" type="submit"> {{ __('profile_newprofile.CREATE_NEW') }} </x-button>
             </fieldset>
 
             @if(count($errors) > 0)
@@ -38,4 +32,4 @@
             @endif
         </form>
     @endfragment
-</x-layout>
+</x-margin-layout>

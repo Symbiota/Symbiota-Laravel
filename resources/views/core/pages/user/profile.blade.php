@@ -44,20 +44,19 @@ $datasets = $user->datasets();
             @fragment('profile')
                 <form hx-put="{{ url('user/profile/metadata') }}" class="flex flex-col gap-4" hx-swap="outerHTML">
                     @csrf
-                    <x-input label="Name" id="name" value="{{ $user->name }}" />
-                    <x-input label="Email" id="email" value="{{ $user->email }}" />
-                    <x-checkbox
-                        label="Accessibility Preference"
-                        id="accessibilityPref"
-                        :checked="$user->dynamicProperties['accessibilityPref'] ?? false"
+                    <x-user.form-fields
+                        :username="$user->username"
+                        :name="$user->name"
+                        :email="$user->email"
+                        :accessibilityPref="$user->dynamicProperties['accessibilityPref'] ?? false"
+                        :guid="$user->guid"
+                        :title="$user->title"
+                        :institution="$user->institution"
+                        :city="$user->city"
+                        :state="$user->state"
+                        :zip="$user->zip"
+                        :country="$user->country"
                     />
-                    <x-input label="ORCID or other GUID" value="{{ $user->guid }}" />
-                    <x-input label="Title" id="title" value="{{ $user->title }}" />
-                    <x-input label="Institution" id="institution" value="{{ $user->institution }}" />
-                    <x-input label="City" id="city" value="{{ $user->city }}" />
-                    <x-input label="State" id="state" value="{{ $user->state }}" />
-                    <x-input label="Zip Code" id="zip" value="{{ $user->zip }}" />
-                    <x-input label="Country" id="country" value="{{ $user->country }}" />
 
                     <x-button type="submit">Update Profile</x-button>
                     <x-button

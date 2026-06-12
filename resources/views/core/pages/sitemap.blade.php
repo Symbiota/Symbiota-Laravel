@@ -136,7 +136,7 @@
                 <h2 class="text-primary text-2xl font-bold">Administrative Functions (Super Admins only)</h2>
                 <ul class="list-disc pl-4">
                     <li>
-                        <x-link href="{{ legacy_url('/profile/usermanagement.php') }}">User Permissions</x-link>
+                        <x-link href="{{ route('user.management') }}">User Permissions</x-link>
                     </li>
                     <li>
                         <x-link href="{{ route('collections.collmetadata.create') }}">

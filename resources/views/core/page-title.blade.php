@@ -1,1 +1,1 @@
-<div class="text-4xl font-bold">{{ $slot }}</div>
+<div {{ $attributes->twMerge("text-4xl font-bold") }}>{{ $slot }}</div>
