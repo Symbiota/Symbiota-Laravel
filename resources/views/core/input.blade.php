@@ -29,6 +29,9 @@
         <textarea name="{{ $name }}" id="{{ $id }}" {{ $attributes->twMerge($inputStyles) }}>{{ $slot }}</textarea>
     @else
         <input {{ $attributes->twMerge($inputStyles) }} name="{{ $name }}" id="{{ $id }}" />
+        @if($slot->isNotEmpty())
+            {{ $slot }}
+        @endif
     @endif
 
     @if(isset($error_text))
