@@ -62,7 +62,13 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 (new IlluminateLoadEnvironmentVariables())->bootstrap($app);
 //(new LoadConfiguration)->bootstrap($app);
 
-$SYMBINI_PATH = __DIR__ . '/../' . $_ENV['PORTAL_NAME'] . '/config/symbini.php';
+$env = static function (string $key, $default = null) {
+    $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+
+    return $value === false ? $default : $value;
+};
+
+$SYMBINI_PATH = __DIR__ . '/../' . $env('PORTAL_NAME', 'Portal') . '/config/symbini.php';
 
 if (file_exists($SYMBINI_PATH)) {
     include_once $SYMBINI_PATH;
@@ -115,9 +121,9 @@ $legacy_routes = [
 $legacy_black_list = [];
 foreach ($legacy_routes as $route => $redirect) {
     if (is_callable($redirect)) {
-        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect();
+        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $env('APP_URL', '') . $redirect();
     } else {
-        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $_ENV['APP_URL'] . $redirect;
+        $legacy_black_list[$GLOBALS['CLIENT_ROOT'] . '/' . $route] = $env('APP_URL', '') . $redirect;
     }
 }
 
@@ -133,7 +139,7 @@ $query = $query_pos ?
 
 /* Clean out host url if present */
 $https = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
-$app_url = str_replace([$https, $_SERVER['HTTP_HOST']], '', $_ENV['APP_URL']);
+$app_url = str_replace([$https, $_SERVER['HTTP_HOST']], '', $env('APP_URL', ''));
 if ($app_url) {
     $uri = str_replace($app_url, '', $uri);
 }
@@ -240,13 +246,15 @@ if (isset($legacy_black_list[$uri]) && $blacklist_redirect = $legacy_black_list[
             // its facades behind within the kernal which will break the legacy application.
             class LegacyProfile extends ProfileManager {
                 public function authenticate($pwd = '') {
-                    $session_name = str_replace([' ', '-'], '_', strtolower($_ENV['APP_NAME'])) . '_session';
+                    global $env;
+
+                    $session_name = str_replace([' ', '-'], '_', strtolower($env('APP_NAME', 'laravel'))) . '_session';
                     $session = $_COOKIE[$session_name];
                     if (! $session) {
                         return;
                     }
 
-                    $key = base64_decode(Str::after($_ENV['APP_KEY'], 'base64:'));
+                    $key = base64_decode(Str::after((string) $env('APP_KEY', ''), 'base64:'));
 
                     if (! $key) {
                         error_log('No encryption key for legacy application');
