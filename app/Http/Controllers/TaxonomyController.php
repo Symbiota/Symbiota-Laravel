@@ -390,8 +390,72 @@ class TaxonomyController extends Controller {
         ]));
     }
 
+    private static function normalizeOptionalInt(mixed $value): ?int {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_string($value) && trim($value) === '') {
+            return null;
+        }
+
+        return is_numeric($value) ? (int) $value : null;
+    }
+
+    private static function normalizeCreatePayload(array $postData): array {
+        $normalized = $postData;
+
+        $stringFields = [
+            'author',
+            'unitind1',
+            'unitname1',
+            'unitind2',
+            'unitname2',
+            'unitind3',
+            'unitname3',
+            'cultivarEpithet',
+            'tradeName',
+            'source',
+            'notes',
+            'parentname',
+            'acceptedstr',
+            'unacceptabilityreason',
+        ];
+
+        foreach ($stringFields as $field) {
+            $normalized[$field] = trim((string) ($normalized[$field] ?? ''));
+        }
+
+        $normalized['acceptstatus'] = ((int) ($normalized['acceptstatus'] ?? 1) === 1) ? 1 : 0;
+        $normalized['rankid'] = self::normalizeOptionalInt($normalized['rankid'] ?? null) ?? 0;
+        $normalized['securitystatus'] = self::normalizeOptionalInt($normalized['securitystatus'] ?? null) ?? 0;
+
+        $normalizedParentTid = self::normalizeOptionalInt($normalized['parenttid'] ?? null);
+        if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
+            $normalizedParentTid = DB::table('taxa')
+                ->where('sciName', $normalized['parentname'])
+                ->value('tid');
+        }
+        $normalized['parenttid'] = $normalizedParentTid;
+
+        $normalizedTidAccepted = self::normalizeOptionalInt($normalized['tidaccepted'] ?? null);
+        if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
+            $normalizedTidAccepted = DB::table('taxa')
+                ->where('sciName', $normalized['acceptedstr'])
+                ->value('tid');
+        }
+        $normalized['tidaccepted'] = $normalizedTidAccepted;
+
+        return $normalized;
+    }
+
     public static function store() {
-        $postData = request()->all();
+        $postData = self::normalizeCreatePayload(request()->all());
+
+        if ($postData['acceptstatus'] === 0 && ! $postData['tidaccepted']) {
+            return self::redirectBackWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
+        }
+
         $editorManager = self::getTaxonomyEditorManager();
 
         // if (! $editorManager->validateNewName($postData)) {
