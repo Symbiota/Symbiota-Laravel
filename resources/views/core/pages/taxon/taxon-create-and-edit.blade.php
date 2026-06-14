@@ -1,3 +1,16 @@
+@props([
+    'mode' => 'create',
+    'canCreateOrEdit' => false,
+    'allTaxonRanks' => collect(),
+    'indContent' => [],
+    'securityOptions' => [],
+    'securitystatusstart' => 0,
+    'taxonInfo' => null,
+    'parentName' => '',
+    'acceptedName' => '',
+    'includeTitle' => false,
+    'editorTitle' => null,
+])
 @if(!$canCreateOrEdit)
     <div class="mb-4 flex flex-col items-center justify-center">
         <p>{{ __('taxonomy_taxonomyloader.NO_PERMISSION_CREATE') }}</p>
@@ -11,6 +24,7 @@
                 unit1Label: 'Genus',
                 unit2Label: 'Species',
                 rankid: @js($mode === 'edit' && $taxonInfo ? (int)$taxonInfo->rankID : 220),
+                acceptstatus: @js($mode === 'edit' && $taxonInfo ? ($taxonInfo->tid == $taxonInfo->tidaccepted ? 1 : 0) : 1),
                 isValid: false,
                 validationMessage: '',
                 allTaxonRanks: @js($allTaxonRanks),
@@ -50,9 +64,11 @@
                 },
             }"
         >
-            <h1 class="text-4xl font-bold">
-                {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
-            </h1>
+            @if ($includeTitle)
+                <h1 class="text-4xl font-bold">
+                    {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
+                </h1>
+            @endif
             @if($mode === 'create')
                 <div class="mt-4">
                     <h1 class="text-2xl font-bold">
@@ -63,7 +79,7 @@
             @endif
             <form
                 id="taxon-form"
-                class="mt-4 flex w-full max-w-4xl flex-col items-center gap-4"
+                class="mx-auto mt-4 flex w-full flex-col items-stretch"
                 method="POST"
                 action="{{ $mode === 'create' ? route('taxon.store') : route('taxon.update') }}"
                 @change="await validate()"
@@ -80,12 +96,9 @@
                     id="securitystatusstart"
                     :value="$securitystatusstart"
                 />
-                <div class="w-3/4">
+                <div class="w-full">
                     @if($mode === 'create')
-                        <fieldset class="border-base-300 mb-4 rounded-md border p-4">
-                            <legend class="text-2xl font-semibold">
-                                {{ __('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER') }}
-                            </legend>
+                        <x-fieldset :legend="__('taxonomy_taxonomyloader.OPTIONAL_QUICK_PARSER')">
                             <x-input
                                 :label="__(
                                 'taxonomy_taxonomyloader.QUICK_PARSER',
@@ -107,15 +120,11 @@
                                 class="mt-2"
                                 >{{ __('taxonomy_taxonomyloader.RUN_QUICK_PARSE') }}</x-button
                             >
-                        </fieldset>
+                        </x-fieldset>
                     @endif
                 </div>
-                <fieldset class="border-base-300 mb-4 w-full rounded-md border p-4">
-                    <legend class="text-2xl font-semibold">
-                        {{ $mode === 'create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
-                    </legend>
-
-                    <div class="w-3/4">
+                <x-fieldset class="w-full" :legend="($editorTitle ?? __('taxonomy_taxoneditor.TAXONOMY_EDITOR'))">
+                    <div id="taxon-rank-container" name="taxon-rank-container" class="w-1/2">
                         <x-select
                             class="font-bold"
                             label="{{ __('taxonomy_taxonomyloader.TAXON_RANK') }}"
@@ -134,7 +143,7 @@
                                 ->toArray()"
                         />
                     </div>
-                    <div id="unit1" class="mb-4 flex items-center gap-2">
+                    <div id="unit1" class="mb-4 flex w-1/2 items-center gap-2">
                         <div class="flex flex-col">
                             <label
                                 class="text mb-1 font-bold"
@@ -164,7 +173,7 @@
                         </div>
                     </div>
 
-                    <div id="unit2" class="mb-4 flex items-center gap-2" x-show="!rankid || parseInt(rankid) >= 220">
+                    <div id="unit2" class="mb-4 flex w-1/2 items-center gap-2" x-show="!rankid || parseInt(rankid) >= 220">
                         <div class="flex flex-col">
                             <label
                                 class="text mb-1 font-bold"
@@ -251,16 +260,16 @@
                             value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->author ?? '') : '' }}"
                         />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-1/2 {{ $mode === 'edit' ? 'hidden' : '' }}">
                         <x-taxa-search
                             class="font-bold"
                             label="{{ __('taxonomy_taxoneditor.PARENT_TAXON') }}"
                             required
                             id="parentname"
                             name="parentname"
-                            :tidName="'parenttid'"
-                            :hide_selector="true"
-                            :hide_synonyms_checkbox="true"
+                            tidName="parenttid"
+                            hide_selector="true"
+                            hide_synonyms_checkbox="true"
                             :taxa_value="$mode === 'edit' && $taxonInfo ? $parentName : ''"
                             :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->parenttid ?? '') : ''"
                         />
@@ -275,7 +284,7 @@
                     </div>
                     <div class="w-1/2">
                         <x-input
-                            label="{{ __('glossary_addterm.SOURCE') }}"
+                            label="{{ __('checklists_checklist.SOURCE') }}"
                             name="source"
                             id="source"
                             value="{{ $mode === 'edit' && $taxonInfo ? ($taxonInfo->source ?? '') : '' }}"
@@ -291,10 +300,12 @@
                             :items="$securityOptions"
                         />
                     </div>
-                    <fieldset class="border-base-300 mb-4 rounded-md border p-4">
-                        <legend class="text-2xl font-semibold">
-                            {{ __('taxonomy_taxonomyloader.ACCEPT_STATUS') }}
-                        </legend>
+                    <x-fieldset
+                        id="acceptence-status"
+                        name="acceptence-status"
+                        :legend="__('taxonomy_taxoneditor.ACCEPTANCE_STATUS')"
+                        x-on:change="if ($event.target.name === 'acceptstatus') { acceptstatus = parseInt($event.target.value); }"
+                    >
                         {{-- blade-formatter-disable --}}
                         <x-radio
                             name="acceptstatus"
@@ -313,40 +324,28 @@
                             :default_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->tid == $taxonInfo->tidaccepted ? 1 : 0) : 1"
                         />
                         {{-- blade-formatter-enable --}}
-                    </fieldset>
+                    </x-fieldset>
                     <div
                         id="accdiv"
-                        class="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? '' : 'hidden' }}"
+                        x-show="parseInt(acceptstatus) === 0"
                     >
                         <div>
-                            <div class="left-column">
-                                <label for="acceptedstr"> {{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}: </label>
-                            </div>
-                            <input
+                            <x-taxa-search
+                                label="{{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}"
                                 id="acceptedstr"
                                 name="acceptedstr"
-                                type="text"
-                                class="search-bar-long"
-                                value="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? $acceptedName : '' }}"
-                            />
-                            <input
-                                id="tidaccepted"
-                                name="tidaccepted"
-                                type="hidden"
-                                value="{{ $mode === 'edit' && $taxonInfo ? $taxonInfo->tidaccepted : '' }}"
+                                tidName="tidaccepted"
+                                hide_selector="true"
+                                hide_synonyms_checkbox="true"
+                                :taxa_value="$mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? $acceptedName : ''"
+                                :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->tidaccepted ?? '') : ''"
                             />
                         </div>
                         <div>
-                            <div class="left-column">
-                                <label for="unacceptabilityreason">
-                                    {{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}:
-                                </label>
-                            </div>
-                            <input
-                                type="text"
+                            <x-input
+                                label="{{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}"
                                 id="unacceptabilityreason"
                                 name="unacceptabilityreason"
-                                class="search-bar-long"
                                 value='{{ $mode === "edit" && $taxonInfo ? ($taxonInfo->UnacceptabilityReason ?? "") : "" }}'
                             />
                         </div>
@@ -356,21 +355,21 @@
                             >* = {{ __('taxonomy_taxonomyloader.REQUIRED') }} Field</span
                         >
                     </div>
-                    <x-button
-                        name="submitButton"
-                        id="submitButton"
-                        class="mt-2"
-                        x-bind:disabled="!isValid"
-                        x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
-                    ></x-button>
-                    <p>
+                    <div id="submit-container" name="submit-container" class="w-1/2">
+                        <x-button
+                            name="submitButton"
+                            id="submitButton"
+                            class="mt-2"
+                            x-bind:disabled="!isValid"
+                            x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
+                        ></x-button>
                         <span
                             id="validationMessage"
                             class="text-sm text-red-700 italic"
                             x-text="validationMessage"
                         ></span>
-                    </p>
-                </fieldset>
+                    </div>
+                </x-fieldset>
             </form>
         </div>
     @endif

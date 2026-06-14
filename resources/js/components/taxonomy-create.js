@@ -606,6 +606,9 @@ async function parseName() {
                 rankId = 100;
             }
         }
+        if (rankId == "") {
+            rankId = 180;
+        }
     } else {
         rankId = 220;
         if (taxonForm.unitname3.value != "") {
@@ -637,7 +640,12 @@ async function parseName() {
         }
     }
     const rankidEl = document.getElementById("rankid");
-    if (rankidEl) rankidEl.value = rankId;
+    if (rankidEl) {
+        rankidEl.value = rankId;
+        // Ensure Alpine receives the programmatic change to keep x-data in sync.
+        rankidEl.dispatchEvent(new Event("input", { bubbles: true }));
+        rankidEl.dispatchEvent(new Event("change", { bubbles: true }));
+    }
     if (unitName1.substring(0, 1) == "×" || unitName1.substring(0, 1) == "†") {
         const unitind1El = document.getElementById("unitind1");
         if (!unitind1El?.value) {
@@ -665,7 +673,7 @@ async function parseName() {
     }
     if (parentName !== "") {
         const taxaSearchInput = taxonForm.querySelector(
-            'input#parentname[name="taxa"]',
+            'input#parentname[name="parentname"]',
         );
         if (taxaSearchInput) taxaSearchInput.value = parentName;
 
