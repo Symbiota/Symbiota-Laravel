@@ -24,6 +24,7 @@
                 unit1Label: 'Genus',
                 unit2Label: 'Species',
                 rankid: @js($mode === 'edit' && $taxonInfo ? (int)$taxonInfo->rankID : 220),
+                acceptstatus: @js($mode === 'edit' && $taxonInfo ? ($taxonInfo->tid == $taxonInfo->tidaccepted ? 1 : 0) : 1),
                 isValid: false,
                 validationMessage: '',
                 allTaxonRanks: @js($allTaxonRanks),
@@ -299,7 +300,12 @@
                             :items="$securityOptions"
                         />
                     </div>
-                    <x-fieldset id="acceptence-status" name="acceptence-status" :legend="__('taxonomy_taxoneditor.ACCEPTANCE_STATUS')">
+                    <x-fieldset
+                        id="acceptence-status"
+                        name="acceptence-status"
+                        :legend="__('taxonomy_taxoneditor.ACCEPTANCE_STATUS')"
+                        x-on:change="if ($event.target.name === 'acceptstatus') { acceptstatus = parseInt($event.target.value); }"
+                    >
                         {{-- blade-formatter-disable --}}
                         <x-radio
                             name="acceptstatus"
@@ -321,37 +327,25 @@
                     </x-fieldset>
                     <div
                         id="accdiv"
-                        class="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? '' : 'hidden' }}"
+                        x-show="parseInt(acceptstatus) === 0"
                     >
                         <div>
-                            <div class="left-column">
-                                <label for="acceptedstr"> {{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}: </label>
-                            </div>
-                            <input
+                            <x-taxa-search
+                                label="{{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}"
                                 id="acceptedstr"
                                 name="acceptedstr"
-                                type="text"
-                                class="search-bar-long"
-                                value="{{ $mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? $acceptedName : '' }}"
-                            />
-                            <input
-                                id="tidaccepted"
-                                name="tidaccepted"
-                                type="hidden"
-                                value="{{ $mode === 'edit' && $taxonInfo ? $taxonInfo->tidaccepted : '' }}"
+                                tidName="tidaccepted"
+                                hide_selector="true"
+                                hide_synonyms_checkbox="true"
+                                :taxa_value="$mode === 'edit' && $taxonInfo && $taxonInfo->tid != $taxonInfo->tidaccepted ? $acceptedName : ''"
+                                :tid_value="$mode === 'edit' && $taxonInfo ? ($taxonInfo->tidaccepted ?? '') : ''"
                             />
                         </div>
                         <div>
-                            <div class="left-column">
-                                <label for="unacceptabilityreason">
-                                    {{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}:
-                                </label>
-                            </div>
-                            <input
-                                type="text"
+                            <x-input
+                                label="{{ __('taxonomy_taxoneditor.UNACCEPT_REASON') }}"
                                 id="unacceptabilityreason"
                                 name="unacceptabilityreason"
-                                class="search-bar-long"
                                 value='{{ $mode === "edit" && $taxonInfo ? ($taxonInfo->UnacceptabilityReason ?? "") : "" }}'
                             />
                         </div>
