@@ -71,7 +71,10 @@
         <ul class="list-disc pl-4">
             <li><x-link href="{{ legacy_url('/glossary/index.php') }}">Glossary</x-link></li>
             <li>
-                <x-link href="{{ route('taxon.index') }}">{{ __('taxonomy_taxonomyloader.TAXONOMIC_TREE_VIEWER') }}</x-link>
+                <x-link
+                    href="{{ route('taxon.index') }}"
+                    >{{ __('taxonomy_taxonomyloader.TAXONOMIC_TREE_VIEWER') }}</x-link
+                >
             </li>
             <li>
                 <x-link href="{{ legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php') }}">Taxonomy Explorer</x-link>

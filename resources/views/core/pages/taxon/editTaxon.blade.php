@@ -74,8 +74,8 @@
             </div>
 
             {{-- Child Taxa --}}
-            <div>
-                <p>A3</p>
+            <div id="child-taxa-tab" name="child-taxa-tab">
+                <x-child-taxa :tid="$taxonInfo->tid ?? ''" :taxAuthId="$taxonInfo->taxAuthId ?? ''" />
             </div>
 
             {{-- Delete --}}

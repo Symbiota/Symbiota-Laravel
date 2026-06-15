@@ -36,10 +36,11 @@ class TaxonomyController extends Controller {
     private static function getTaxonomyEditorManager($tid = null) {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $taxonEditorObj = new \TaxonomyEditorManager();
-        if($tid) {
+        if ($tid) {
             $taxonEditorObj->setTid($tid);
             $taxonEditorObj->setTaxon();
         }
+
         return $taxonEditorObj;
     }
 
@@ -97,7 +98,6 @@ class TaxonomyController extends Controller {
             return self::redirectBackWithError($statusStr);
         }
 
-        return null;
     }
 
     private static function handleTaxonEditsAction($editorManager, array $postData) {
@@ -356,6 +356,7 @@ class TaxonomyController extends Controller {
         }
         $upperTaxonomyEditInfo = self::prepareUpperTaxonomyEditInfo($taxonEditorObj);
 
+        // @TODO condense props into taxonInfo and maybe upperTaxonomyEditInfo
         return view('pages/taxon/editTaxon', array_merge($formOptions, [
             'mode' => 'edit',
             'targetTid' => request()->route('tid'),
@@ -381,6 +382,7 @@ class TaxonomyController extends Controller {
         $upperTaxonomyEditInfo['parentTid'] = $taxonEditorObj->getParentTid();
         $upperTaxonomyEditInfo['parentName'] = $taxonEditorObj->getParentName();
         $upperTaxonomyEditInfo['taxauthid'] = $taxonEditorObj->getTaxauthid();
+
         return $upperTaxonomyEditInfo;
     }
 
@@ -512,6 +514,7 @@ class TaxonomyController extends Controller {
         $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
         $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
+
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $postData['tid'] ?? null]);
     }
 
@@ -546,9 +549,11 @@ class TaxonomyController extends Controller {
         if ($remapStatus) {
             $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
             TaxonomyController::delete();
+
             return redirect()->route('taxon.view', ['tid' => $requestData['remaptid']])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
+
             return self::redirectBackWithError($statusStr); // @TODO fix this in issue
         }
     }
@@ -560,6 +565,7 @@ class TaxonomyController extends Controller {
         $editorManager = self::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
+
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $targetTid]);
     }
 
@@ -571,6 +577,7 @@ class TaxonomyController extends Controller {
         $switchAcceptance = $requestData['switchacceptance'] === '1';
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
+
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $oldTid]);
     }
 
@@ -579,6 +586,7 @@ class TaxonomyController extends Controller {
         $currentTid = (int) $requestData['current-tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
+
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
     }
 
@@ -586,6 +594,7 @@ class TaxonomyController extends Controller {
         $tid = (int) request()->all()['tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
+
         return self::handleStatusReportingAndRouting(__('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS'), $editorManager, 'taxon.editview', ['tid' => $tid]);
     }
 
@@ -594,6 +603,7 @@ class TaxonomyController extends Controller {
         $tid = (int) $requestData['tid'] ?? null;
         $editorManager = self::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
+
         return self::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
     }
 
@@ -601,6 +611,7 @@ class TaxonomyController extends Controller {
         if ($response = self::redirectBackWithManagerIssues($editorManager)) {
             return $response;
         }
+
         return redirect()->route($redirectRoute, $redirectParams)->with('success', $statusStr);
     }
 }

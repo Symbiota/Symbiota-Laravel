@@ -72,5 +72,5 @@ return [
     'SYNONYM_UPDATE_SUCCESS' => 'Detalhes do sinônimo atualizados com sucesso',
     'USAGE_NOTES' => 'Notas de Uso',
     'HIERARCHY_REBUILD_SUCCESS' => 'Hierarquia reconstruída com sucesso',
-    'EDIT_OTHER_TAXONOMIC_INFO' => 'Editar Outras Informações Taxonômicas', 
+    'EDIT_OTHER_TAXONOMIC_INFO' => 'Editar Outras Informações Taxonômicas',
 ];

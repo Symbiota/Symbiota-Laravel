@@ -64,7 +64,7 @@
                 },
             }"
         >
-            @if ($includeTitle)
+            @if($includeTitle)
                 <h1 class="text-4xl font-bold">
                     {{ $mode==='create' ? __('taxonomy_taxonomyloader.TAXON_LOADER') : __('profile_tpeditor.EDIT_TAXON') }}
                 </h1>
@@ -173,7 +173,11 @@
                         </div>
                     </div>
 
-                    <div id="unit2" class="mb-4 flex w-1/2 items-center gap-2" x-show="!rankid || parseInt(rankid) >= 220">
+                    <div
+                        id="unit2"
+                        class="mb-4 flex w-1/2 items-center gap-2"
+                        x-show="!rankid || parseInt(rankid) >= 220"
+                    >
                         <div class="flex flex-col">
                             <label
                                 class="text mb-1 font-bold"
@@ -304,7 +308,11 @@
                         id="acceptence-status"
                         name="acceptence-status"
                         :legend="__('taxonomy_taxoneditor.ACCEPTANCE_STATUS')"
-                        x-on:change="if ($event.target.name === 'acceptstatus') { acceptstatus = parseInt($event.target.value); }"
+                        x-on:change="
+                            if ($event.target.name === 'acceptstatus') {
+                                acceptstatus = parseInt($event.target.value);
+                            }
+                        "
                     >
                         {{-- blade-formatter-disable --}}
                         <x-radio
@@ -325,10 +333,7 @@
                         />
                         {{-- blade-formatter-enable --}}
                     </x-fieldset>
-                    <div
-                        id="accdiv"
-                        x-show="parseInt(acceptstatus) === 0"
-                    >
+                    <div id="accdiv" x-show="parseInt(acceptstatus) === 0">
                         <div>
                             <x-taxa-search
                                 label="{{ __('taxonomy_taxoneditor.ACCEPTED_TAXON') }}"
