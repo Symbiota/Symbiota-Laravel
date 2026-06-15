@@ -90,7 +90,7 @@ return [
     'TOACCESS' => 'para acessar ferramentas de edição.',
     'CONTACTPORTAL' => 'Entre em contato com um administrador do portal para obter permissões de edição',
     'ABOUT' => 'Sobre Simbiota',
-    'CODE' => 'Versão do Código',
+    'CODE_VERSION' => 'Versão do Código',
     'SCHEMA' => 'Versão do Esquema ',
     'AUTHO' => 'Você está autorizado a acessar o',
     'VERNAC_COM' => 'Editar Nomes Vernáculos/Comuns',
