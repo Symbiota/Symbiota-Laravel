@@ -20,8 +20,8 @@ return [
     'DARWIN_GUIDE_LINK' => 'DwC Quick Reference Guide',
     'TAXONOMIC_RESOLUTION' => 'Taxonomic Resolution',
     'ACCEPTED_NAME_USAGE' => 'Include Accepted Scientific Name and Authorship',
-    'TAXONOMIC_RESOLUTION_GUIDE' => 'Checking this box will add three fields to your occurrences file: acceptedNameUsage, acceptedNameUsageAuthorship, 
-    and acceptedNameUsageID. These fields will contain the name, authorship, and taxonID of the "accepted" taxon name of the record\'s scientific name 
+    'TAXONOMIC_RESOLUTION_GUIDE' => 'Checking this box will add three fields to your occurrences file: acceptedNameUsage, acceptedNameUsageAuthorship,
+    and acceptedNameUsageID. These fields will contain the name, authorship, and taxonID of the "accepted" taxon name of the record\'s scientific name
     according to the portal\'s taxonomic thesaurus at time of download.',
     'DATA_EXTS' => 'Data Extensions',
     'INCLUDE_HISTORY' => 'include Determination History',
@@ -40,5 +40,4 @@ return [
     'COMPRESSED_ZIP' => 'Compressed ZIP file',
     'DOWNLOAD_DATA' => 'Download Data',
     'LIMIT_NOTE' => '* There is a 1,000,000 record limit to occurrence downloads',
-    'INCLUDE_ASSOCIATIONS' => 'include Resource Relationships (associations & linked resources)',
 ];

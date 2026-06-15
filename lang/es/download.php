@@ -20,8 +20,8 @@ return [
     'DARWIN_GUIDE_LINK' => 'Guía de referencia rápida de DwC',
     'TAXONOMIC_RESOLUTION' => 'Resolución taxonómica',
     'ACCEPTED_NAME_USAGE' => 'Incluya el nombre científico y la autoría aceptados',
-    'TAXONOMIC_RESOLUTION_GUIDE' => 'Al marcar esta casilla, se añadirán tres campos a su 
-    archivo de ocurrencias: acceptNameUsage, acceptNameUsageAuthorship y acceptNameUsageID. Estos campos contendrán el nombre, la autoría y el 
+    'TAXONOMIC_RESOLUTION_GUIDE' => 'Al marcar esta casilla, se añadirán tres campos a su
+    archivo de ocurrencias: acceptNameUsage, acceptNameUsageAuthorship y acceptNameUsageID. Estos campos contendrán el nombre, la autoría y el
     taxonID del nombre de taxón "aceptado" del nombre científico del registro, según el tesauro taxonómico del portal en el momento de la descarga.',
     'DATA_EXTS' => 'Extensiones de datos',
     'INCLUDE_HISTORY' => 'incluir Historial de Determinación',
@@ -40,5 +40,4 @@ return [
     'COMPRESSED_ZIP' => 'Archivo ZIP comprimido',
     'DOWNLOAD_DATA' => 'Descargar datos',
     'LIMIT_NOTE' => '* Hay un límite de 1.000.000 de registros para descargas de ocurrencias',
-    'INCLUDE_ASSOCIATIONS' => 'incluir Relaciones de Recursos (asociaciones y recursos vinculados)',
 ];
