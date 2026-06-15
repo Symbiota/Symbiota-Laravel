@@ -31,7 +31,7 @@
                 label="Display only taxa linked to occurrences"
                 name="display-only-occurrence-linked"
             />
-            <x-button type="submit" class="w-fit">Display Taxon Tree</x-button>
+            <x-button type="submit" class="w-fit">{{ __('taxonomy_taxonomydisplay.DISP_TAX_TREE') }}</x-button>
         </x-fieldset>
     </form>
     <ul>

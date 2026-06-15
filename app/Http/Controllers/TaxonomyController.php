@@ -318,6 +318,7 @@ class TaxonomyController extends Controller {
     }
 
     public static function editTaxon($tid) {
+        $tid = (int) $tid;
         $taxon = self::taxonData($tid);
         $taxonInfo = $taxon;
         $securitystatusstart = $taxon->securitystatus ?? 0;
