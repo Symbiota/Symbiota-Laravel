@@ -89,7 +89,7 @@ return [
     'TOACCESS' => ' pour accéder aux outils d\'édition.',
     'CONTACTPORTAL' => 'Contactez un administrateur de portail pour obtenir des autorisations de modification',
     'ABOUT' => 'À Propos de Symbiota',
-    'CODE' => 'Version du Dodes',
+    'CODE_VERSION' => 'Version du Dodes',
     'SCHEMA' => 'Version du Schéma',
     'AUTHO' => 'Vous êtes autorisé à accéder au',
     'VERNAC_COM' => 'Modifier Noms Vernaculaires/Communs',

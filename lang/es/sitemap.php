@@ -89,7 +89,7 @@ return [
     'TOACCESS' => 'para acceder las herramientas de edición.',
     'CONTACTPORTAL' => 'Contactar al administrador del portal para obtener derechos individuales para editar páginas específicas.',
     'ABOUT' => 'Acerca de Symbiota',
-    'CODE' => 'Versión del código',
+    'CODE_VERSION' => 'Versión del código',
     'SCHEMA' => 'Versión del esquema',
     'AUTHO' => 'Usted esta autorizado/a para el acceso a los siguientes paginas',
     'VERNAC_COM' => 'Editar Nombres Vernáculos/Comunes',
