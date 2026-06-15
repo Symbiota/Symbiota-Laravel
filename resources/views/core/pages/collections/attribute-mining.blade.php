@@ -63,83 +63,83 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
         }
 
         function attributeMiningRoot(elem) {
-            return elem.closest('#traitdiv') || document.getElementById('traitdiv');
+            return elem.closest("#traitdiv") || document.getElementById("traitdiv");
         }
 
         window.traitChanged = function traitChanged(elem) {
-            const elemType = elem.getAttribute('type');
-            const elemName = elem.getAttribute('name') || '';
+            const elemType = elem.getAttribute("type");
+            const elemName = elem.getAttribute("name") || "";
             const traitID = elemName.substring(8, elemName.length - 2);
             const root = attributeMiningRoot(elem);
 
-            attributeMiningInputs(elem.form, `traitid-${traitID}[]`).forEach(input => {
+            attributeMiningInputs(elem.form, `traitid-${traitID}[]`).forEach((input) => {
                 if (!input.checked) {
-                    root.querySelectorAll(`input.child-${input.value}`).forEach(child => {
+                    root.querySelectorAll(`input.child-${input.value}`).forEach((child) => {
                         child.checked = false;
                     });
                 }
             });
 
-            if ((elemType === 'text' && elem.value.trim() !== '') || elem.checked) {
+            if ((elemType === "text" && elem.value.trim() !== "") || elem.checked) {
                 let parent = elem.parentElement;
-                while (parent && parent.id !== 'traitdiv') {
-                    const input = Array.from(parent.children).find(child => child.matches?.('input'));
+                while (parent && parent.id !== "traitdiv") {
+                    const input = Array.from(parent.children).find((child) => child.matches?.("input"));
                     if (input) input.checked = true;
                     parent = parent.parentElement;
                 }
             }
 
-            if (!sessionStorage.attributeTree || sessionStorage.attributeTree === '0') {
-                attributeMiningInputs(elem.form, `traitid-${traitID}[]`).forEach(input => {
-                    root.querySelectorAll(`div.child-${input.value}`).forEach(child => {
-                        const hasValue = elemType === 'text' && elem.value.trim() !== '';
-                        child.style.display = hasValue || input.checked ? 'block' : 'none';
+            if (!sessionStorage.attributeTree || sessionStorage.attributeTree === "0") {
+                attributeMiningInputs(elem.form, `traitid-${traitID}[]`).forEach((input) => {
+                    root.querySelectorAll(`div.child-${input.value}`).forEach((child) => {
+                        const hasValue = elemType === "text" && elem.value.trim() !== "";
+                        child.style.display = hasValue || input.checked ? "block" : "none";
                     });
                 });
             }
 
-            elem.form?.querySelectorAll('button[name="submitform"]').forEach(button => {
+            elem.form?.querySelectorAll('button[name="submitform"]').forEach((button) => {
                 button.disabled = false;
             });
         };
 
         window.setAttributeTree = function setAttributeTree(triggerElem) {
-            let treeOpen = sessionStorage.attributeTree === '1';
+            let treeOpen = sessionStorage.attributeTree === "1";
             if (triggerElem) treeOpen = !treeOpen;
 
-            const root = triggerElem?.closest('fieldset') || document.getElementById('traitdiv');
+            const root = triggerElem?.closest("fieldset") || document.getElementById("traitdiv");
             if (!root) return;
 
-            root.querySelectorAll('div[class^="child"]').forEach(child => {
-                child.style.display = treeOpen ? 'block' : 'none';
+            root.querySelectorAll('div[class^="child"]').forEach((child) => {
+                child.style.display = treeOpen ? "block" : "none";
             });
-            root.querySelectorAll('.triangledown').forEach(icon => {
-                icon.style.display = treeOpen ? 'inline' : 'none';
+            root.querySelectorAll(".triangledown").forEach((icon) => {
+                icon.style.display = treeOpen ? "inline" : "none";
             });
-            root.querySelectorAll('.triangleright').forEach(icon => {
-                icon.style.display = treeOpen ? 'none' : 'inline';
+            root.querySelectorAll(".triangleright").forEach((icon) => {
+                icon.style.display = treeOpen ? "none" : "inline";
             });
 
-            sessionStorage.attributeTree = treeOpen ? '1' : '0';
+            sessionStorage.attributeTree = treeOpen ? "1" : "0";
         };
 
         function initAttributeMiningTree() {
             window.setAttributeTree(null);
 
-            document.querySelectorAll('#traitdiv .trianglediv').forEach(toggle => {
-                const root = toggle.closest('fieldset');
+            document.querySelectorAll("#traitdiv .trianglediv").forEach((toggle) => {
+                const root = toggle.closest("fieldset");
                 if (!root?.querySelector('div[class^="child"]')) {
-                    toggle.style.display = 'none';
+                    toggle.style.display = "none";
                 }
             });
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initAttributeMiningTree);
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initAttributeMiningTree);
         } else {
             initAttributeMiningTree();
         }
-        document.addEventListener('htmx:afterSwap', initAttributeMiningTree);
+        document.addEventListener("htmx:afterSwap", initAttributeMiningTree);
     </script>
 @endPushOnce
 
@@ -176,7 +176,6 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
                 </button>
             </fieldset>
         @endif
-
         <div class="max-w-[700px] space-y-4">
             <div x-data="{ showDetails: false }">
                 <p>
@@ -231,13 +230,18 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
-                        <label class="w-48" for="stringfilter">{{ __('traitattr_attributemining.FILTER_BY_TEXT') }}</label>
-                        <input
-                            class="border-base-300 focus:ring-accent w-72 rounded-md border px-1 py-0.25 focus:ring-2 focus:outline-none"
+                        <label
+                            class="w-48"
+                            for="stringfilter"
+                            >{{ __('traitattr_attributemining.FILTER_BY_TEXT') }}</label
+                        >
+                        <x-input
+                            class="w-72 grow-0"
                             id="stringfilter"
                             name="stringfilter"
                             type="text"
-                            value="{{ $stringFilter }}"
+                            :value="$stringFilter"
+                            inline
                         />
                     </div>
 
@@ -264,28 +268,22 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
                 </form>
             </fieldset>
         </div>
-
         @if($traitID && $fieldName)
             <div id="traitdiv" class="max-w-[700px]">
                 <fieldset class="border-base-300 rounded-md border p-4">
                     <legend class="px-1 text-lg font-bold">{{ $fieldArr[$fieldName] }}</legend>
-                    <form
-                        method="POST"
-                        action="{{ $currentUrl }}"
-                        class="space-y-4"
-                    >
+                    <form method="POST" action="{{ $currentUrl }}" class="space-y-4">
                         @csrf
                         <div>
                             <div class="font-bold">
                                 {{ __('traitattr_attributemining.SELECT_SOURCE_FIELD_VALUES') }}
-                                <span class="font-normal">{{ __('traitattr_attributemining.HOLD_DOWN_BUTTONS_TO_SELECT') }}</span>
+                                <span
+                                    class="font-normal"
+                                    >{{ __('traitattr_attributemining.HOLD_DOWN_BUTTONS_TO_SELECT') }}</span
+                                >
                             </div>
                             <div class="border-base-content m-1 h-52 resize overflow-auto border-2">
-                                <select
-                                    name="fieldvalue[]"
-                                    multiple
-                                    class="h-full w-full cursor-pointer"
-                                >
+                                <select name="fieldvalue[]" multiple class="h-full w-full cursor-pointer">
                                     @foreach($fieldValues as $value)
                                         @if($value)
                                             <option value="{{ $value }}">{{ $value }}</option>
@@ -297,9 +295,7 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
 
                         @if($legacyTraitForm)
                             <div class="flex items-start gap-4">
-                                <div>
-                                    {!! $legacyTraitForm !!}
-                                </div>
+                                <div>{!! $legacyTraitForm !!}</div>
                                 <div class="trianglediv ml-5">
                                     <button
                                         type="button"
@@ -324,12 +320,7 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
 
                         <div class="flex flex-wrap items-center gap-2">
                             <label class="w-24" for="notes">{{ __('projects.NOTES') }}:</label>
-                            <input
-                                class="border-base-300 focus:ring-accent w-64 rounded-md border px-1 py-0.25 focus:ring-2 focus:outline-none"
-                                id="notes"
-                                name="notes"
-                                type="text"
-                            />
+                            <x-input class="w-64 grow-0" id="notes" name="notes" type="text" inline />
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
@@ -344,11 +335,7 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
                             <input name="traitid" type="hidden" value="{{ $traitID }}" />
                             <input name="fieldname" type="hidden" value="{{ $fieldName }}" />
                             <input name="collid" type="hidden" value="{{ $collid }}" />
-                            <x-button
-                                name="submitform"
-                                type="submit"
-                                value="Batch Assign State(s)"
-                            >
+                            <x-button name="submitform" type="submit" value="Batch Assign State(s)">
                                 {{ __('traitattr_attributemining.BATCH_ASSIGN_STATE') }}
                             </x-button>
                             <x-button type="reset" variant="secondary">
@@ -382,12 +369,12 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
             @foreach($collArr as $id => $collName)
                 <label class="flex w-fit cursor-pointer items-center gap-2">
                     <input
-                        name="collid[]"
+                        name="collids[]"
                         type="checkbox"
                         value="{{ $id }}"
                         class="accent-accent h-5 w-5 cursor-pointer"
                         x-bind:checked="selectAll"
-                        @change="if (!$el.checked) selectAll = false"
+                        @change="if (!$el.checked) selectAll = false;"
                     />
                     {{ $collName }}
                 </label>

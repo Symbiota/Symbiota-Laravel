@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
-    private static function attributeManager($collId) {
+    private static function attributeManager(int|string $collId) {
         global $SERVER_ROOT;
         include_once legacy_path('/classes/OccurrenceAttributes.php');
 
@@ -99,14 +99,14 @@ class CollectionTraitController extends Controller {
 
         $isAdmin = Gate::check('SUPER_ADMIN');
         $editableIds = self::editableCollectionIds();
-        $requestedCollid = request('collid', '');
+        $requestedCollid = request('collids', request('collid', ''));
 
         if (! $isAdmin && count($editableIds) === 1 && ! $requestedCollid && ! request('selectall')) {
             return (string) current($editableIds);
         }
 
         if (request('selectall') || $requestedCollid === 'all') {
-            return 'all';
+            return $isAdmin ? 'all' : implode(',', $editableIds);
         }
 
         $selectedIds = is_array($requestedCollid) ? $requestedCollid : explode(',', (string) $requestedCollid);
