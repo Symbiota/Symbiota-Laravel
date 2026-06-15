@@ -73,7 +73,6 @@ return [
     'SEL_DESEL_ALL' => 'Selecionar/desmarcar tudo',
     'MISSING_GUID' => 'Fonte GUID ausente',
     'ALREADY_PUB_DOMAIN' => 'Já publicado em domínio diferente',
-    'COL_NAME' => 'Nome da coleção',
     'METADATA' => 'Metadados',
     'NO_PUBLISHABLE' => 'Não há coleções publicáveis',
     'ADDIT_SOURCES' => 'Fontes de dados adicionais na rede do portal',

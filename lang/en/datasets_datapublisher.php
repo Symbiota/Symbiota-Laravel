@@ -70,7 +70,7 @@ return [
     'SEL_DESEL_ALL' => 'Select/Deselect All',
     'MISSING_GUID' => 'Missing GUID source',
     'ALREADY_PUB_DOMAIN' => 'Already published on different domain',
-    'COL_NAME' => 'Collection Name',
     'NO_PUBLISHABLE' => 'There are no publishable collections',
     'ADDIT_SOURCES' => 'Additional Data Sources within the Portal Network',
+    'CODE' => 'Code',
 ];

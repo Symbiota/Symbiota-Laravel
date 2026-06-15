@@ -70,7 +70,6 @@ return [
     'SEL_DESEL_ALL' => 'Tout Sélectionner/Désélectionner',
     'MISSING_GUID' => 'GUID non défini',
     'ALREADY_PUB_DOMAIN' => 'Déjà publié sur un domaine différent',
-    'COL_NAME' => 'Nom de Collection',
     'NO_PUBLISHABLE' => 'Il n\'y a pas de collections publiables',
     'ADDIT_SOURCES' => 'Sources de données supplémentaires au sein du Réseau de Portails',
 ];
