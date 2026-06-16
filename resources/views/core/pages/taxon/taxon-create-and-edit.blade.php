@@ -88,7 +88,7 @@
                 <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                 @if($mode === 'edit')
                     <x-input type="hidden" name="edit-type" id="edit-type" value="taxonedits" />
-                    <x-input type="hidden" name="tid" id="tid" :value="$taxonInfo->tid" />
+                    <x-input type="hidden" name="update-tid" id="update-tid" :value="$taxonInfo->tid" />
                 @endif
                 <x-input
                     type="hidden"

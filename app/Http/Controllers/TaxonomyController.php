@@ -471,7 +471,7 @@ class TaxonomyController extends Controller {
     }
 
     private static function resolveUpdateTid(array $postData, $editorManager): ?int {
-        $tid = self::normalizeOptionalInt($postData['tid'] ?? null);
+        $tid = self::normalizeOptionalInt($postData['update-tid'] ?? null);
 
         if ($tid !== null) {
             return $tid;
@@ -542,7 +542,7 @@ class TaxonomyController extends Controller {
 
     public static function update() {
         $postData = request()->all();
-        $editorManager = self::getTaxonomyEditorManager($postData['tid'] ?? null);
+        $editorManager = self::getTaxonomyEditorManager($postData['update-tid'] ?? null);
         $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null); // @TODO I don't think that this is accurate - taxAuthId just happens to be 1 in this case
         $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
