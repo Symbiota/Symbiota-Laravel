@@ -17,7 +17,9 @@
                 <li>
                     <span>
                         <x-link class="pr-3" :href="$itemUrl">{{ $itemName }}</x-link>
-                        <x-link :href="$editItemUrl"><i class="fa-solid fa-pen"></i>({{ __('profile_tpeditor.EDIT_TAXON') }})</x-link>
+                        @can('SUPER_ADMIN')
+                            <x-link :href="$editItemUrl"><i class="fa-solid fa-pen"></i>({{ __('profile_tpeditor.EDIT_TAXON') }})</x-link>
+                        @endcan
                     </span>
                 </li>
             @endforeach
