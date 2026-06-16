@@ -7,12 +7,10 @@
         <ul class="mt-2 list-inside list-disc">
             @foreach($items as $id => $item)
                 @php
-                    $itemUrl = url('/taxon/' . ($id ?? ''));
-                    $editItemUrl = url('/taxon/' . ($id ?? '') . '/edit');
-                    if($itemType === 'child' || $itemType === 'synonym') {
-                        echo 'item url is: ' . $itemUrl;
+                    $itemUrl = is_array($item) ? $item['url'] : (is_string($item) ? $item : $item->url);
+                    $editItemUrl = $itemUrl . '/edit';
+                    if($itemType === 'synonym') {
                         $itemUrl = url('/taxon/' . ($id ?? ''));
-                        echo 'item url 2 is: ' . $itemUrl;
                         $editItemUrl = url('/taxon/' . ($id ?? '') . '/edit');
                     }
                     $itemName = is_array($item) ? $item['name'] : (is_string($item) ? $item : $item->name);
