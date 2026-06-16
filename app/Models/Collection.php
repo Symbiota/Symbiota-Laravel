@@ -90,4 +90,17 @@ class Collection extends Model {
             return self::query()->where('collid', $collId)->first();
         });
     }
+
+    public static function getLookup() {
+        return Cache::remember('collections-lookup', now()->addMinutes(1), function () {
+
+            $collections = self::query()->get();
+            $lookup = [];
+            foreach ($collections as $collection) {
+                $lookup[$collection->collID] = $collection;
+            }
+
+            return $lookup;
+        });
+    }
 }

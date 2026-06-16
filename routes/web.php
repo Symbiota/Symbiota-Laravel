@@ -4,6 +4,7 @@ use App\Http\Controllers\ChecklistAdminController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionTraitController;
+use App\Http\Controllers\DarwinCorePublisher;
 use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ExsiccataController;
@@ -174,7 +175,7 @@ Route::group(['prefix' => '/tools'], function () {
 Route::group(['prefix' => '/collections'], function () {
     Route::view('/', 'pages/collections/profile-list');
     Route::get('/search', [CollectionController::class, 'searchPage']);
-    Route::get('/publisher', [CollectionController::class, 'publisherPage']);
+    Route::get('/publisher', [DarwinCorePublisher::class, 'publisherPage']);
     Route::get('/map/search', [CollectionController::class, 'mapSearchPage']);
 
     Route::get('/download/file', [DownloadController::class, 'downloadFile']);
