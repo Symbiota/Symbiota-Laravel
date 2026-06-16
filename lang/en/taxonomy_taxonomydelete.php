@@ -69,4 +69,7 @@ return [
     'DELETE_TAXON' => 'Delete Taxon',
     'SUCCESS_DELETING' => 'Taxon successfully deleted',
     'DELETE_TAXON_DISABLED' => 'Taxon cannot yet be deleted',
+    'DELETE_CONFIRM_TITLE' => 'Confirm Taxon Deletion',
+    'DELETE_CONFIRM_MESSAGE' => 'Delete :name and all remaining linked resources? This action cannot be undone.',
+    'CANCEL' => 'Cancel',
 ];

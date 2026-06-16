@@ -141,7 +141,7 @@
             @method('DELETE')
         </form>
         <x-button
-            @click.prevent="isDeleteValid && document.getElementById('delete-taxon-form').submit()"
+            @click.prevent="if (!isDeleteValid) return; document.getElementById('confirm-delete-taxon-dialog').showModal()"
             x-bind:aria-disabled="!isDeleteValid"
             x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
             color="danger"
@@ -151,5 +151,26 @@
                 x-text="isDeleteValid ? @js(__('taxonomy_taxonomydelete.DELETE_TAXON')) : @js(__('taxonomy_taxonomydelete.DELETE_TAXON_DISABLED'))"
             />
         </x-button>
+        <x-modal id="confirm-delete-taxon-dialog">
+            <x-slot name="title" class="text-2xl">
+                {{ __('taxonomy_taxonomydelete.DELETE_CONFIRM_TITLE') }}
+            </x-slot>
+            <x-slot name="body" class="space-y-4">
+                <p>{{ __('taxonomy_taxonomydelete.DELETE_CONFIRM_MESSAGE', ['name' => $taxonInfo->sciName ?? '']) }}</p>
+                <div class="flex justify-end gap-2">
+                    <x-button
+                        type="button"
+                        command="close"
+                        commandfor="confirm-delete-taxon-dialog"
+                        variant="neutral"
+                    >
+                        {{ __('taxonomy_taxonomydelete.CANCEL') }}
+                    </x-button>
+                    <x-button type="submit" form="delete-taxon-form" variant="error">
+                        {{ __('taxonomy_taxonomydelete.DELETE_TAXON') }}
+                    </x-button>
+                </div>
+            </x-slot>
+        </x-modal>
     </fieldset>
 </div>

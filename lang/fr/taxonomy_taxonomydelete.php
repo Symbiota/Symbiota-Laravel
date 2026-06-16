@@ -69,4 +69,7 @@ return [
     'DELETE_TAXON' => 'Supprimer le taxon',
     'SUCCESS_DELETING' => 'Taxon supprimé avec succès',
     'DELETE_TAXON_DISABLED' => 'Le taxon ne peut pas encore être supprimé',
+    'DELETE_CONFIRM_TITLE' => 'Confirmer la suppression du taxon',
+    'DELETE_CONFIRM_MESSAGE' => 'Supprimer :name et toutes les ressources liées restantes? Cette action est irreversible.',
+    'CANCEL' => 'Annuler',
 ];
