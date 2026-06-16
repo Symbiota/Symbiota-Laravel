@@ -36,6 +36,7 @@ class TaxonomyController extends Controller {
     private static function getTaxonomyEditorManager($tid = null) {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $taxonEditorObj = new \TaxonomyEditorManager();
+        $tid = (int) $tid;
         if ($tid) {
             $taxonEditorObj->setTid($tid);
             $taxonEditorObj->setTaxon();
