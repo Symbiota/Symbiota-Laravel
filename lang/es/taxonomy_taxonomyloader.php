@@ -33,4 +33,5 @@ return [
     'CURRENT_PARENT_TAXON' => 'Taxón Padre Actual',
     'TAXONOMIC_TREE_VIEWER' => 'Visor de Árbol Taxonómico',
     'EDIT_UPPER_TAXONOMY' => 'Editar Taxonomía Superior',
+    'NO_CHILD_TAXA' => 'No hay taxones hijos',
 ];

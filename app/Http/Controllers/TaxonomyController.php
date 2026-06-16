@@ -87,6 +87,10 @@ class TaxonomyController extends Controller {
         return redirect()->back()->withInput()->withErrors(['error' => $error]);
     }
 
+    private static function redirectToTaxonIndexWithError(string $error) {
+        return redirect()->route('taxon.index')->withErrors(['error' => $error]);
+    }
+
     private static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
         if ($editorManager->getWarningArr()) {
             $statusStr = __($warningTranslationKey) . ': ' . implode(';', $editorManager->getWarningArr());
@@ -310,21 +314,33 @@ class TaxonomyController extends Controller {
     }
 
     public static function taxon(int $tid) {
+        $tid = (int) $tid;
+        if (! self::taxonData($tid)) {
+            return self::redirectToTaxonIndexWithError('Unable to load taxon profile because the taxon was not found.');
+        }
+
         return view('pages/taxon/profile', self::buildTaxonViewData($tid));
     }
 
     public static function editTaxonProfile(int $tid) {
+        $tid = (int) $tid;
+        if (! self::taxonData($tid)) {
+            return self::redirectToTaxonIndexWithError('Unable to load taxon profile editor because the taxon was not found.');
+        }
+
         return view('pages/taxon/edit', self::buildTaxonViewData($tid, true));
     }
 
     public static function editTaxon($tid) {
         $tid = (int) $tid;
         $taxon = self::taxonData($tid);
+
+        if (! $taxon) {
+            return self::redirectToTaxonIndexWithError('Unable to load taxon editor because the taxon was not found.');
+        }
+
         $taxonInfo = $taxon;
         $securitystatusstart = $taxon->securitystatus ?? 0;
-        if (! $taxon) {
-            // @TODO return a 404 not found page
-        }
         $formOptions = self::buildTaxonFormOptions();
 
         $parentName = '';
@@ -343,6 +359,8 @@ class TaxonomyController extends Controller {
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
         $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
         $taxonInfo->acceptedArr = [];
+        $taxonInfo->taxonAuthId = $taxonEditorObj->getTaxAuthId();
+        $taxonInfo->children = $taxonEditorObj->getChildren();
         if ($taxonEditorObj->getIsAccepted() != 1) {
             $taxonInfo->acceptedArr = $taxonEditorObj->getAcceptedArr();
         }
@@ -452,6 +470,20 @@ class TaxonomyController extends Controller {
         return $normalized;
     }
 
+    private static function resolveUpdateTid(array $postData, $editorManager): ?int {
+        $tid = self::normalizeOptionalInt($postData['tid'] ?? null);
+
+        if ($tid !== null) {
+            return $tid;
+        }
+
+        if (method_exists($editorManager, 'getTid')) {
+            return self::normalizeOptionalInt($editorManager->getTid());
+        }
+
+        return null;
+    }
+
     public static function store() {
         $postData = self::normalizeCreatePayload(request()->all());
 
@@ -514,8 +546,9 @@ class TaxonomyController extends Controller {
         $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
         $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
+        $resolvedTid = self::resolveUpdateTid($postData, $editorManager);
 
-        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $postData['tid'] ?? null]);
+        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $resolvedTid]);
     }
 
     public static function delete() {
@@ -610,6 +643,16 @@ class TaxonomyController extends Controller {
     public static function handleStatusReportingAndRouting($statusStr, $editorManager, $redirectRoute, $redirectParams = []) {
         if ($response = self::redirectBackWithManagerIssues($editorManager)) {
             return $response;
+        }
+
+        if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
+            $redirectTid = self::normalizeOptionalInt($redirectParams['tid'] ?? null);
+
+            if ($redirectTid === null) {
+                return self::redirectBackWithError('Unable to redirect to taxon profile because the taxon ID was missing.');
+            }
+
+            $redirectParams['tid'] = $redirectTid;
         }
 
         return redirect()->route($redirectRoute, $redirectParams)->with('success', $statusStr);

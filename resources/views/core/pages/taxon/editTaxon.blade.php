@@ -75,7 +75,7 @@
 
             {{-- Child Taxa --}}
             <div id="child-taxa-tab" name="child-taxa-tab">
-                <x-child-taxa :tid="$taxonInfo->tid ?? ''" :taxAuthId="$taxonInfo->taxAuthId ?? ''" />
+                <x-child-list :children="$taxonInfo->children ?? []" />
             </div>
 
             {{-- Delete --}}
