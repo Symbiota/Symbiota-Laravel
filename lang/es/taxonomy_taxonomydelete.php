@@ -32,7 +32,7 @@ return [
     'NO_RESOURCES' => 'no exsten recursos enlazados a este taxón',
     'REMAP_RESOURCES' => 'Remapear Recursos a Otro Taxón',
     'WARNING_REMAP' => 'Advertencia: la reasignación eliminará el taxón actual y moverá todos los recursos y taxones enumerados anteriormente al Taxón de Objetivo.',
-    'REMAP_TAXON' => 'Remapear Taxón',
+    'REMAP_TAXON' => 'Remapear Recursos',
     'DELETE_TAX_AND_RES' => 'Eliminar Taxón y Recursos Existentes',
     'CANNOT_DELETE_TAXON' => 'El taxón no puede ser eliminado hasta que todos los grupos inferiores, sinónimos, imágenes, y descripciones sean removidas o remapeadas a otro taxón.',
     'VERNACULARS_DELETE' => 'Advertencia: Los nombres comunes serán eliminados con el taxón',

@@ -32,7 +32,7 @@ return [
     'NO_RESOURCES' => 'Aucune ressource liée à ce taxon',
     'REMAP_RESOURCES' => 'Remapper les ressources vers un autre taxon',
     'WARNING_REMAP' => 'Avertissement: le remappage supprimera le taxon actuel et déplacera toutes les ressources et tous les taxons répertoriés ci-dessus vers le Taxon Cible.',
-    'REMAP_TAXON' => 'Remapper le taxon',
+    'REMAP_TAXON' => 'Remapper les ressources',
     'DELETE_TAX_AND_RES' => 'Supprimer le taxon et les ressources existantes',
     'CANNOT_DELETE_TAXON' => 'Le taxon ne peut pas être supprimé tant que tous les enfants, synonymes, images et descriptions de texte ne sont pas supprimés ou remappés vers un autre taxon.',
     'VERNACULARS_DELETE' => 'Avertissement: les langues vernaculaires seront supprimées avec le taxon',

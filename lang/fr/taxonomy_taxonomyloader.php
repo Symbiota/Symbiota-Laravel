@@ -34,4 +34,5 @@ return [
     'TAXONOMIC_TREE_VIEWER' => 'Visionneuse d\'arbre taxonomique',
     'EDIT_UPPER_TAXONOMY' => 'Modifier la taxonomie supérieure',
     'NO_CHILD_TAXA' => 'Pas de taxons enfants',
+    'DIRECT_CHILD_TAXA' => 'Taxons enfants directs',
 ];

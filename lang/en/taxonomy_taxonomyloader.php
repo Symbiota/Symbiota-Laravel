@@ -34,4 +34,5 @@ return [
     'TAXONOMIC_TREE_VIEWER' => 'Taxonomic Tree Viewer',
     'EDIT_UPPER_TAXONOMY' => 'Edit Upper Taxonomy',
     'NO_CHILD_TAXA' => 'No child taxa',
+    'DIRECT_CHILD_TAXA' => 'Direct Child Taxa',
 ];

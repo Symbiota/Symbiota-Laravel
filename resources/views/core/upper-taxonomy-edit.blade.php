@@ -68,9 +68,11 @@
             <div id="parent-link" name="parent-link" class="mt-3 mb-3">
                 <span class="text-bold">{{ __('taxonomy_taxonomyloader.CURRENT_PARENT_TAXON') }} : </span>
                 <i>{{ $parentNameFull }}</i>
-                <x-link href="{{ url('taxon/' . ($upperTaxonomyEditInfo['parentTid'] ?? '') . '/edit') }}">
-                    {{ __('projects.EDIT') }}
-                </x-link>
+                @can('SUPER_ADMIN')
+                    <x-link href="{{ url('taxon/' . ($upperTaxonomyEditInfo['parentTid'] ?? '') . '/edit') }}">
+                        (<i class="fa-solid fa-pen pr-1"></i>{{ __('projects.EDIT') }})
+                    </x-link>
+                @endcan
             </div>
             <x-taxa-search
                 class="font-bold"

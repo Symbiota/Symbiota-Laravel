@@ -3,7 +3,7 @@
 return [
     'NO_TARGET_TAXON' => 'Target taxon does not appear to be null. Please submit a taxon to remap the resources',
     'TAXON_MUST_BE_EVALUATED' => 'Taxon record first needs to be evaluated before it can be deleted from the system. The evaluation ensures that the deletion of this record will not interfere with data integrity.',
-    'CHILDREN_EXIST' => 'Warning: children taxa exist for this taxon. They must be remapped before this taxon can be removed',
+    'CHILDREN_EXIST' => 'Warning: child taxa exist for this taxon. They must be remapped before this taxon can be removed',
     'APPROVED' => 'Approved',
     'NO_CHILDREN' => 'no children taxa are linked to this taxon',
     'SYN_LINKS' => 'Synonym Links',
@@ -32,7 +32,7 @@ return [
     'NO_RESOURCES' => 'no resources linked to this taxon',
     'REMAP_RESOURCES' => 'Remap Resources to Another Taxon',
     'WARNING_REMAP' => 'Warning: remapping will delete the current taxon and move all resources and taxa listed above to the Target Taxon.',
-    'REMAP_TAXON' => 'Remap Taxon',
+    'REMAP_TAXON' => 'Remap Resources',
     'DELETE_TAX_AND_RES' => 'Delete Taxon and Existing Resources',
     'CANNOT_DELETE_TAXON' => 'Taxon cannot be deleted until all children, synonyms, images, and text descriptions are removed or remapped to another taxon.',
     'VERNACULARS_DELETE' => 'Warning: Vernaculars will be deleted with taxon',

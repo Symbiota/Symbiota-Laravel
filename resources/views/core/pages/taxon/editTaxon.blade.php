@@ -75,6 +75,7 @@
 
             {{-- Child Taxa --}}
             <div id="child-taxa-tab" name="child-taxa-tab">
+                <h1 class="text-primary text-2xl font-bold">{{ __('taxonomy_taxonomyloader.DIRECT_CHILD_TAXA') }}</h1>
                 <x-child-list :children="$taxonInfo->children ?? []" />
             </div>
 

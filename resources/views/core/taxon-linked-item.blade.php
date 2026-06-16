@@ -7,9 +7,12 @@
         <ul class="mt-2 list-inside list-disc">
             @foreach($items as $id => $item)
                 @php
-                    $itemUrl = is_array($item) ? $item['url'] : (is_string($item) ? $item : $item->url);
-                    if($itemType === 'synonym') {
+                    $itemUrl = url('/taxon/' . ($id ?? ''));
+                    $editItemUrl = url('/taxon/' . ($id ?? '') . '/edit');
+                    if($itemType === 'child' || $itemType === 'synonym') {
+                        echo 'item url is: ' . $itemUrl;
                         $itemUrl = url('/taxon/' . ($id ?? ''));
+                        echo 'item url 2 is: ' . $itemUrl;
                         $editItemUrl = url('/taxon/' . ($id ?? '') . '/edit');
                     }
                     $itemName = is_array($item) ? $item['name'] : (is_string($item) ? $item : $item->name);
@@ -18,7 +21,7 @@
                     <span>
                         <x-link class="pr-3" :href="$itemUrl">{{ $itemName }}</x-link>
                         @can('SUPER_ADMIN')
-                            <x-link :href="$editItemUrl"><i class="fa-solid fa-pen"></i>({{ __('profile_tpeditor.EDIT_TAXON') }})</x-link>
+                            <x-link :href="$editItemUrl"><i class="fa-solid fa-pen pr-1"></i>({{ __('profile_tpeditor.EDIT_TAXON') }})</x-link>
                         @endcan
                     </span>
                 </li>
