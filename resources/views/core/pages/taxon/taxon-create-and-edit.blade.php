@@ -88,7 +88,7 @@
                 <x-input type="hidden" name="mode" id="mode" :value="$mode" />
                 @if($mode === 'edit')
                     <x-input type="hidden" name="edit-type" id="edit-type" value="taxonedits" />
-
+                    <x-input type="hidden" name="tid" id="tid" :value="$taxonInfo->tid" />
                 @endif
                 <x-input
                     type="hidden"
@@ -366,7 +366,7 @@
                             id="submitButton"
                             class="mt-2"
                             x-bind:disabled="!isValid"
-                            x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('profile_userprofile.SUBMIT_EDITS') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
+                            x-text=" isValid ? '{{ $mode === 'create' ? __('taxonomy_taxonomyloader.SUBMIT_NEW_NAME') : __('projects.SUBMITEDIT') }}' : '{{ __('taxonomy_taxonomyloader.SUBMISSION_DISABLED') }}'"
                         ></x-button>
                         <span
                             id="validationMessage"

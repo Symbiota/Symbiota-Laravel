@@ -544,7 +544,7 @@ class TaxonomyController extends Controller {
         $postData = request()->all();
         $editorManager = self::getTaxonomyEditorManager($postData['tid'] ?? null);
         $editType = $postData['edit-type'] ?? '';
-        $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null);
+        $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null); // @TODO I don't think that this is accurate - taxAuthId just happens to be 1 in this case
         $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
         $resolvedTid = self::resolveUpdateTid($postData, $editorManager);
 
