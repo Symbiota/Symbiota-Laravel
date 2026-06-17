@@ -88,8 +88,8 @@ class TaxonomyController extends Controller {
         return redirect()->back()->withInput()->withErrors(['error' => $error]);
     }
 
-    private static function redirectToTaxonIndexWithError(string $error) {
-        return redirect()->route('taxon.index')->withErrors(['error' => $error]);
+    private static function redirectToRouteIndexWithError(string $route, string $error) {
+        return redirect()->route($route)->withErrors(['error' => $error]);
     }
 
     private static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
@@ -317,7 +317,7 @@ class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
         $tid = (int) $tid;
         if (! self::taxonData($tid)) {
-            return self::redirectToTaxonIndexWithError('Unable to load taxon profile because the taxon was not found.');
+            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
         }
 
         return view('pages/taxon/profile', self::buildTaxonViewData($tid));
@@ -326,7 +326,7 @@ class TaxonomyController extends Controller {
     public static function editTaxonProfile(int $tid) {
         $tid = (int) $tid;
         if (! self::taxonData($tid)) {
-            return self::redirectToTaxonIndexWithError('Unable to load taxon profile editor because the taxon was not found.');
+            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
         }
 
         return view('pages/taxon/edit', self::buildTaxonViewData($tid, true));
@@ -337,7 +337,7 @@ class TaxonomyController extends Controller {
         $taxon = self::taxonData($tid);
 
         if (! $taxon) {
-            return self::redirectToTaxonIndexWithError('Unable to load taxon editor because the taxon was not found.');
+            return self::redirectToRouteIndexWithError('taxon.index','Unable to load taxon editor because the taxon was not found.');
         }
 
         $taxonInfo = $taxon;
