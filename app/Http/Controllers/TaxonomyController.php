@@ -337,7 +337,7 @@ class TaxonomyController extends Controller {
         $taxon = self::taxonData($tid);
 
         if (! $taxon) {
-            return self::redirectToRouteIndexWithError('taxon.index','Unable to load taxon editor because the taxon was not found.');
+            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon editor because the taxon was not found.');
         }
 
         $taxonInfo = $taxon;

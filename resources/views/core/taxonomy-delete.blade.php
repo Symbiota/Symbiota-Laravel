@@ -141,7 +141,10 @@
             @method('DELETE')
         </form>
         <x-button
-            @click.prevent="if (!isDeleteValid) return; document.getElementById('confirm-delete-taxon-dialog').showModal()"
+            @click.prevent="
+                if (!isDeleteValid) return;
+                document.getElementById('confirm-delete-taxon-dialog').showModal();
+            "
             x-bind:aria-disabled="!isDeleteValid"
             x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
             color="danger"
@@ -158,12 +161,7 @@
             <x-slot name="body" class="space-y-4">
                 <p>{{ __('taxonomy_taxonomydelete.DELETE_CONFIRM_MESSAGE', ['name' => $taxonInfo->sciName ?? '']) }}</p>
                 <div class="flex justify-end gap-2">
-                    <x-button
-                        type="button"
-                        command="close"
-                        commandfor="confirm-delete-taxon-dialog"
-                        variant="neutral"
-                    >
+                    <x-button type="button" command="close" commandfor="confirm-delete-taxon-dialog" variant="neutral">
                         {{ __('taxonomy_taxonomydelete.CANCEL') }}
                     </x-button>
                     <x-button type="submit" form="delete-taxon-form" variant="error">
