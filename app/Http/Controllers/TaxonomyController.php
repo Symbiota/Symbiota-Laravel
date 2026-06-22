@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InputNormalizer;
+use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
 use App\Services\TaxonomyQueryService;
 use Illuminate\Http\Request;
@@ -61,23 +63,15 @@ class TaxonomyController extends Controller {
         ];
     }
 
-    private static function redirectBackWithError(string $error) { // @TODO move to utility
-        return redirect()->back()->withInput()->withErrors(['error' => $error]);
-    }
-
-    private static function redirectToRouteIndexWithError(string $route, string $error) { // @TODO move to utility
-        return redirect()->route($route)->withErrors(['error' => $error]);
-    }
-
     private static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
         if ($editorManager->getWarningArr()) {
             $statusStr = __($warningTranslationKey) . ': ' . implode(';', $editorManager->getWarningArr());
 
-            return self::redirectBackWithError($statusStr);
+            return RedirectResponseHelper::backWithError($statusStr);
         }
 
         if ($statusStr = $editorManager->getErrorMessage()) {
-            return self::redirectBackWithError($statusStr);
+            return RedirectResponseHelper::backWithError($statusStr);
         }
 
     }
@@ -175,7 +169,7 @@ class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
         }
 
         return view('pages/taxon/profile', self::buildTaxonViewData($tid));
@@ -184,7 +178,7 @@ class TaxonomyController extends Controller {
     public static function editTaxonProfile(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
         }
 
         return view('pages/taxon/edit', self::buildTaxonViewData($tid, true));
@@ -196,7 +190,7 @@ class TaxonomyController extends Controller {
         $taxon = TaxonomyQueryService::taxonData($tid);
 
         if (! $taxon) {
-            return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon editor because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon editor because the taxon was not found.');
         }
 
         $taxonInfo = $taxon;
@@ -271,18 +265,6 @@ class TaxonomyController extends Controller {
         ]));
     }
 
-    private static function normalizeOptionalInt(mixed $value): ?int { // @TODO move to helper/utility class
-        if ($value === null) {
-            return null;
-        }
-
-        if (is_string($value) && trim($value) === '') {
-            return null;
-        }
-
-        return is_numeric($value) ? (int) $value : null;
-    }
-
     private static function normalizeCreatePayload(array $postData): array { // @TODO this seems long-winded. DRY up if possible
         $normalized = $postData;
 
@@ -308,10 +290,10 @@ class TaxonomyController extends Controller {
         }
 
         $normalized['acceptstatus'] = ((int) ($normalized['acceptstatus'] ?? 1) === 1) ? 1 : 0;
-        $normalized['rankid'] = self::normalizeOptionalInt($normalized['rankid'] ?? null) ?? 0;
-        $normalized['securitystatus'] = self::normalizeOptionalInt($normalized['securitystatus'] ?? null) ?? 0;
+        $normalized['rankid'] = InputNormalizer::optionalInt($normalized['rankid'] ?? null) ?? 0;
+        $normalized['securitystatus'] = InputNormalizer::optionalInt($normalized['securitystatus'] ?? null) ?? 0;
 
-        $normalizedParentTid = self::normalizeOptionalInt($normalized['parenttid'] ?? null);
+        $normalizedParentTid = InputNormalizer::optionalInt($normalized['parenttid'] ?? null);
         if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
             $normalizedParentTid = DB::table('taxa')
                 ->where('sciName', $normalized['parentname'])
@@ -319,7 +301,7 @@ class TaxonomyController extends Controller {
         }
         $normalized['parenttid'] = $normalizedParentTid;
 
-        $normalizedTidAccepted = self::normalizeOptionalInt($normalized['tidaccepted'] ?? null);
+        $normalizedTidAccepted = InputNormalizer::optionalInt($normalized['tidaccepted'] ?? null);
         if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
             $normalizedTidAccepted = DB::table('taxa')
                 ->where('sciName', $normalized['acceptedstr'])
@@ -331,14 +313,14 @@ class TaxonomyController extends Controller {
     }
 
     private static function resolveUpdateTid(array $postData, $editorManager): ?int {
-        $tid = self::normalizeOptionalInt($postData['update-tid'] ?? null);
+        $tid = InputNormalizer::optionalInt($postData['update-tid'] ?? null);
 
         if ($tid !== null) {
             return $tid;
         }
 
         if (method_exists($editorManager, 'getTid')) {
-            return self::normalizeOptionalInt($editorManager->getTid());
+            return InputNormalizer::optionalInt($editorManager->getTid());
         }
 
         return null;
@@ -348,7 +330,7 @@ class TaxonomyController extends Controller {
         $postData = self::normalizeCreatePayload(request()->all());
 
         if ($postData['acceptstatus'] === 0 && ! $postData['tidaccepted']) {
-            return self::redirectBackWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
+            return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
         }
 
         $editorManager = self::getTaxonomyEditorManager();
@@ -364,7 +346,7 @@ class TaxonomyController extends Controller {
             // Redirect to the newly created taxon's page
             return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
         } else {
-            return redirect()->back()->withInput()->withErrors(['error' => $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+            return RedirectResponseHelper::backWithError((string) $tidResult); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
     }
 
@@ -425,7 +407,7 @@ class TaxonomyController extends Controller {
         } else {
             $statusStr = $editorManager->getErrorMessage();
 
-            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
+            return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
         }
     }
 
@@ -447,7 +429,7 @@ class TaxonomyController extends Controller {
         } else {
             $statusStr = $editorManager->getErrorMessage();
 
-            return self::redirectBackWithError($statusStr); // @TODO fix this in issue
+            return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
         }
     }
 
@@ -506,10 +488,10 @@ class TaxonomyController extends Controller {
         }
 
         if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
-            $redirectTid = self::normalizeOptionalInt($redirectParams['tid'] ?? null);
+            $redirectTid = InputNormalizer::optionalInt($redirectParams['tid'] ?? null);
 
             if ($redirectTid === null) {
-                return self::redirectBackWithError('Unable to redirect to taxon profile because the taxon ID was missing.');
+                return RedirectResponseHelper::backWithError('Unable to redirect to taxon profile because the taxon ID was missing.');
             }
 
             $redirectParams['tid'] = $redirectTid;
