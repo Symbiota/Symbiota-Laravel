@@ -89,7 +89,7 @@ return [
     'TOACCESS' => ' to access editing tools.',
     'CONTACTPORTAL' => 'Contact a portal administrator for obtaining editing permissions',
     'ABOUT' => 'About Symbiota',
-    'CODE' => 'Code Version ',
+    'CODE_VERSION' => 'Code Version ',
     'SCHEMA' => 'Schema Version ',
     'AUTHO' => 'You are authorized to access the',
     'VERNAC_COM' => 'Edit Vernacular / Common Names',
