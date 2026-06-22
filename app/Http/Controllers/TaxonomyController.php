@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\InputNormalizer;
 use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
 use App\Services\PayloadNormalizer;
-use App\Services\TaxonResponseHandler;
-use App\Services\TaxonViewDataService;
 use App\Services\TaxonomyMutationService;
 use App\Services\TaxonomyQueryService;
+use App\Services\TaxonResponseHandler;
+use App\Services\TaxonViewDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
