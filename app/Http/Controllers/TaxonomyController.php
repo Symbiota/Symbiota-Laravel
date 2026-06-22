@@ -3,35 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Taxonomy;
-use Illuminate\Database\Query\JoinClause;
+use App\Services\TaxonomyQueryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
-    private static $rankMap = [ // @TODO move this to a helper of consts file
-            0 => 1, // non-ranked node
-            1 => 2, // organism
-            10 => 3, // kingdom
-            20 => 4, // subkingdom
-            30 => 5, // division
-            40 => 6, // subdivision
-            50 => 7, // superclass
-            60 => 8, // class
-            70 => 9, // subclass
-            100 => 10, // order
-            110 => 11, // suborder
-            140 => 12, // family
-            150 => 13, // subfamily
-            160 => 14, // tribe
-            170 => 15, // subtribe
-            180 => 16, // genus
-            190 => 17, // subgenus
-            200 => 18, // section
-            210 => 19, // subsection
-            220 => 20, // species
-            300 => 21, // infraspecies
-        ];
 
     private static function getTaxonomyEditorManager($tid = null) {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
@@ -46,14 +23,15 @@ class TaxonomyController extends Controller {
     }
 
     private static function buildTaxonViewData(int $tid, bool $includeMedia = false): array {
+        $taxonomy = Taxonomy::find($tid);
         $viewData = [
-            'taxon' => self::taxonData($tid),
-            'parents' => self::getParents($tid),
-            'common_names' => self::getCommonNames($tid),
-            'occurrence_count' => self::getTaxonOccurrenceStats($tid),
-            'children' => self::getDirectChildren($tid, 1),
-            'taxa_descriptions' => self::getTaxaDescriptions($tid),
-            'external_links' => self::getExternalLinks($tid),
+            'taxon' => TaxonomyQueryService::taxonData($tid),
+            'parents' => TaxonomyQueryService::getParents($tid),
+            'common_names' => $taxonomy?->commonNames()->get() ?? collect(),
+            'occurrence_count' => $taxonomy?->occurrences()->count() ?? 0,
+            'children' => TaxonomyQueryService::getDirectChildren($tid, 1),
+            'taxa_descriptions' => TaxonomyQueryService::getTaxaDescriptions($tid),
+            'external_links' => $taxonomy?->externalLinks()->get() ?? collect(),
         ];
 
         if ($includeMedia) {
@@ -195,128 +173,9 @@ class TaxonomyController extends Controller {
         };
     }
 
-    public static function taxonData(int $tid) {
-        $taxon = DB::table('taxa as t')
-            ->leftJoin('taxstatus as ts', 'ts.tid', 't.tid')
-            ->where('t.tid', $tid)
-            ->where('ts.taxauthid', 1)
-            ->select(
-                't.*',
-                'ts.tidaccepted',
-                'ts.taxauthid',
-                'ts.parenttid',
-                'ts.family',
-                'ts.taxonomicStatus',
-                'ts.taxonomicSource',
-                'ts.sourceIdentifier',
-                'ts.UnacceptabilityReason',
-                'ts.notes as statusNotes',
-                'ts.SortSequence',
-                'ts.modifiedUid as statusModifiedUid',
-                'ts.modifiedTimestamp as statusModifiedTimestamp',
-                'ts.initialtimestamp as statusInitialTimestamp'
-            )
-            ->first();
-
-        return $taxon;
-    }
-
-    public static function getParents(int $tid): array {
-        $parent_tree = DB::select('with RECURSIVE parents as (
-	SELECT * from taxstatus where tid = ?
-	UNION ALL
-	SELECT ts.* from taxstatus as ts, parents as p where ts.tid = p.parenttid and ts.taxauthid = 1 and ts.tid != 1
-) SELECT DISTINCT taxa.tid, sciName, parents.family, parenttid, taxa.rankID, rankname
-            from parents join taxa on taxa.tid = parents.tid join taxonunits on taxonunits.rankid = taxa.rankID and taxa.kingdomName = taxonunits.kingdomName order by taxa.rankID', [$tid]);
-
-        return $parent_tree;
-    }
-
-    public static function getDirectChildren(int $tid, int $displayAuthor = 0) {
-        $query = DB::table('taxa as t')
-            ->join('taxstatus as ts', 'ts.tid', 't.tid')
-            ->leftJoin('media as m', function (JoinClause $query) {
-                $query->on('m.tid', 't.tid')
-                    ->where('m.mediaType', 'image');
-            })
-            ->join('taxonunits as tu', function (JoinClause $query) {
-                $query->on('tu.rankid', 't.rankID')
-                    ->whereRaw('tu.kingdomName = t.kingdomName');
-            })->where('ts.taxauthid', 1)
-            ->where('ts.parenttid', $tid)
-            ->groupBy('t.tid')
-            ->select(array_filter(['t.tid', 'sciName', $displayAuthor ? 't.author' : null, 'ts.family', 'parenttid', 't.rankID', 'rankname', DB::raw('COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl')]));
-
-        $direct_children = $query->get();
-
-        foreach ($direct_children as $child) {
-            if (! $child->thumbnailUrl) {
-                DB::table('media')->where($child->tid);
-            }
-        }
-
-        return $direct_children;
-    }
-
-    // Be very Careful when calling this function can be very slow depending on the tid
-    public static function getAllChildren(int $tid): array {
-        $child_tree = DB::select('with RECURSIVE children as (
-	SELECT * from taxstatus where parenttid = ?
-	UNION ALL
-	SELECT ts.* from taxstatus as ts, children as c where ts.parenttid = c.tid and ts.taxauthid = 1 and ts.tidaccepted = ts.tid
-) SELECT taxa.tid, sciName, children.family, parenttid, taxa.rankID, rankname, COALESCE(m.thumbnailUrl, m.url) as thumbnailUrl
-            from children join taxa on taxa.tid = children.tid left join media as m on m.tid = taxa.tid join taxonunits on taxonunits.rankid = taxa.rankID and taxa.kingdomName = taxonunits.kingdomName group by taxa.tid order by taxa.rankID', [$tid]);
-
-        return $child_tree;
-    }
-
-    public static function getCommonNames(int $tid) {
-        $common_names = DB::table('taxavernaculars')->where('tid', $tid)->select('*')->get();
-
-        return $common_names;
-    }
-
-    public static function getTaxonOccurrenceStats(int $tid) {
-        $occurrence_count = DB::table('omoccurrences')->where('tidInterpreted', $tid)->count('*');
-
-        return $occurrence_count;
-    }
-
-    public static function getExternalLinks(int $tid) {
-        $external_links_query = DB::table('taxaresourcelinks as trl')
-            ->where('trl.tid', $tid)
-            ->select('*');
-
-        return $external_links_query
-            ->get();
-    }
-
-    public static function getTaxaDescriptions(int $tid) {
-        $statements = DB::table('taxadescrblock as tdb')->join('taxadescrstmts as tds', 'tds.tdbid', 'tdb.tdbid')
-            ->where('tdb.tid', $tid)
-            ->select('tdProfileID', 'source', 'sourceUrl', 'heading', 'statement')
-            ->get();
-
-        $taxa_descriptions = [];
-
-        foreach ($statements as $statement) {
-            if ($taxa_descriptions[$statement->tdProfileID] ?? false) {
-                $taxa_descriptions[$statement->tdProfileID]['statements'][$statement->heading] = $statement->statement;
-            } else {
-                $taxa_descriptions[$statement->tdProfileID] = [
-                    'source' => $statement->source,
-                    'sourceUrl' => $statement->sourceUrl,
-                    'statements' => [],
-                ];
-            }
-        }
-
-        return $taxa_descriptions;
-    }
-
     public static function taxon(int $tid) {
         $tid = (int) $tid;
-        if (! self::taxonData($tid)) {
+        if (! TaxonomyQueryService::taxonData($tid)) {
             return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
         }
 
@@ -325,7 +184,7 @@ class TaxonomyController extends Controller {
 
     public static function editTaxonProfile(int $tid) {
         $tid = (int) $tid;
-        if (! self::taxonData($tid)) {
+        if (! TaxonomyQueryService::taxonData($tid)) {
             return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
         }
 
@@ -335,7 +194,7 @@ class TaxonomyController extends Controller {
     public static function editTaxon($tid) {
         // @TODO add build editTaxonData method with taxonInfo and upperTaxonomyEditInfo (this part already done)
         $tid = (int) $tid;
-        $taxon = self::taxonData($tid);
+        $taxon = TaxonomyQueryService::taxonData($tid);
 
         if (! $taxon) {
             return self::redirectToRouteIndexWithError('taxon.index', 'Unable to load taxon editor because the taxon was not found.');
@@ -385,8 +244,8 @@ class TaxonomyController extends Controller {
             'acceptedName' => $acceptedName,
             'securitystatusstart' => $securitystatusstart,
             'verifyArr' => $verifyArr,
-            'parents' => self::getParents($tid),
-            'rankMap' => self::$rankMap,
+            'parents' => TaxonomyQueryService::getParents($tid),
+            'rankMap' => Taxonomy::RANK_MAP,
             'upperTaxonomyEditInfo' => $upperTaxonomyEditInfo,
         ]));
     }
@@ -527,16 +386,16 @@ class TaxonomyController extends Controller {
 
         // }
         if ($parentTid) {
-            $parents = self::getParents($parentTid);
+            $parents = TaxonomyQueryService::getParents($parentTid);
         }
         // @TODO get each parent's children
         foreach ($parents as $parent) {
-            $parent->children = self::getDirectChildren($parent->tid, $displayAuthor);
+            $parent->children = TaxonomyQueryService::getDirectChildren($parent->tid, $displayAuthor);
         }
 
         return view('pages/taxon/show', [
             'parents' => $parents,
-            'rankMap' => self::$rankMap,
+            'rankMap' => Taxonomy::RANK_MAP,
             'targetTid' => $targetTid,
             'taxonName' => $taxonName,
         ]);
