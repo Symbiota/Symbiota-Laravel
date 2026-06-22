@@ -5,24 +5,13 @@ namespace App\Http\Controllers;
 use App\Helpers\InputNormalizer;
 use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
+use App\Services\TaxonomyMutationService;
 use App\Services\TaxonomyQueryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
-    private static function getTaxonomyEditorManager($tid = null) {
-        include_once legacy_path('/classes/TaxonomyEditorManager.php');
-        $taxonEditorObj = new \TaxonomyEditorManager();
-        $tid = (int) $tid;
-        if ($tid) {
-            $taxonEditorObj->setTid($tid);
-            $taxonEditorObj->setTaxon();
-        }
-
-        return $taxonEditorObj;
-    }
-
     private static function buildTaxonViewData(int $tid, bool $includeMedia = false): array {
         $taxonomy = Taxonomy::find($tid);
         $viewData = [
@@ -76,96 +65,6 @@ class TaxonomyController extends Controller {
 
     }
 
-    private static function handleTaxonEditsAction($editorManager, array $postData) {
-        return $editorManager->submitTaxonEdits($postData);
-    }
-
-    private static function handleUpdateTaxStatusAction($editorManager, array $postData) {
-        return $editorManager->submitTaxStatusEdits($postData['parenttid'], $postData['tidaccepted']);
-    }
-
-    private static function handleSynonymEditsAction($editorManager, array $postData) {
-        $tid = $postData['tid'] ?? null;
-
-        return $editorManager->submitSynonymEdits($postData['tidsyn'], $tid, $postData['unacceptabilityreason'], $postData['notes'], $postData['sortsequence']);
-    }
-
-    private static function handleLinkToAcceptedAction($editorManager, array $postData) {
-        $deleteOther = array_key_exists('deleteother', $postData);
-
-        return $editorManager->submitAddAcceptedLink($postData['tidaccepted'], $deleteOther);
-    }
-
-    private static function handleDeleteAcceptedLinkAction($editorManager, array $postData) {
-        return $editorManager->removeAcceptedLink($postData['deltidaccepted']);
-    }
-
-    private static function handleChangeToAcceptedAction($editorManager, array $postData) {
-        $tid = $postData['tid'] ?? null;
-        $tidAccepted = $postData['tidaccepted'];
-        $switchAcceptance = array_key_exists('switchacceptance', $postData);
-
-        return $editorManager->submitChangeToAccepted($tid, $tidAccepted, $switchAcceptance);
-    }
-
-    private static function handleChangeToNotAcceptedAction($editorManager, array $postData) {
-        $tid = $postData['tid'] ?? null;
-        $tidAccepted = $postData['tidaccepted'];
-
-        return $editorManager->submitChangeToNotAccepted($tid, $tidAccepted, $postData['unacceptabilityreason'], $postData['notes']);
-    }
-
-    private static function handleUpdateHierarchyAction($editorManager, array $postData) {
-        $tid = $postData['tid'] ?? null;
-        $editorManager->rebuildHierarchy($tid);
-
-        return true;
-    }
-
-    private static function handleRemapTaxonAction($editorManager, array $postData) {
-        $statusStr = '';
-        $remapStatus = $editorManager->transferResources($postData['remaptid']);
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-        }
-
-        if ($remapStatus) {
-            return __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
-        }
-
-        return $editorManager->getErrorMessage(); // @TODO could this leverage one of the error handling methods?
-    }
-
-    private static function handleDeleteTaxonAction($editorManager) {
-        $statusStr = '';
-        $delStatus = $editorManager->deleteTaxon();
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __('taxonomy_taxoneditor.FOLLOWING_WARNINGS') . ': ' . implode(';', $editorManager->getWarningArr());
-        }
-
-        if ($delStatus) {
-            return __('taxonomy_taxonomydelete.SUCCESS_DELETING') . ' ' . $statusStr;
-        }
-
-        return $editorManager->getErrorMessage(); // @TODO could this leverage one of the error handling methods?
-    }
-
-    private static function processUpdateAction(string $editType, $editorManager, array $postData) {
-        return match ($editType) {
-            'taxonedits' => self::handleTaxonEditsAction($editorManager, $postData), // @TODO many of these are moot now. Track and delete those that are uneccessary
-            'updatetaxstatus' => self::handleUpdateTaxStatusAction($editorManager, $postData),
-            'synonymedits' => self::handleSynonymEditsAction($editorManager, $postData),
-            'linkToAccepted' => self::handleLinkToAcceptedAction($editorManager, $postData),
-            'deltidaccepted' => self::handleDeleteAcceptedLinkAction($editorManager, $postData),
-            'changetoaccepted' => self::handleChangeToAcceptedAction($editorManager, $postData),
-            'changeToNotAccepted' => self::handleChangeToNotAcceptedAction($editorManager, $postData),
-            'updatehierarchy' => self::handleUpdateHierarchyAction($editorManager, $postData),
-            'remapTaxon' => self::handleRemapTaxonAction($editorManager, $postData),
-            'deleteTaxon' => self::handleDeleteTaxonAction($editorManager),
-            default => 'Unsupported edit type',
-        };
-    }
-
     public static function taxon(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
@@ -207,7 +106,7 @@ class TaxonomyController extends Controller {
             $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
         }
 
-        $taxonEditorObj = self::getTaxonomyEditorManager($tid);
+        $taxonEditorObj = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
         $taxonEditorObj->setTaxon();
         $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
@@ -333,7 +232,7 @@ class TaxonomyController extends Controller {
             return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
         }
 
-        $editorManager = self::getTaxonomyEditorManager();
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager();
 
         // if (! $editorManager->validateNewName($postData)) {
         //     // Redirect back with error message
@@ -384,10 +283,10 @@ class TaxonomyController extends Controller {
 
     public static function update() {
         $postData = request()->all();
-        $editorManager = self::getTaxonomyEditorManager($postData['update-tid'] ?? null);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($postData['update-tid'] ?? null);
         $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null); // @TODO I don't think that this is accurate - taxAuthId just happens to be 1 in this case
-        $statusStr = self::processUpdateAction($editType, $editorManager, $postData);
+        $statusStr = TaxonomyMutationService::processUpdateAction($editType, $editorManager, $postData);
         $resolvedTid = self::resolveUpdateTid($postData, $editorManager);
 
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $resolvedTid]);
@@ -395,7 +294,7 @@ class TaxonomyController extends Controller {
 
     public static function delete() {
         $tid = (int) request()->all()['tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($tid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $delStatus = $editorManager->deleteTaxon();
         if ($editorManager->getWarningArr()) {
             $statusStr = implode('; ', $editorManager->getWarningArr());
@@ -414,7 +313,7 @@ class TaxonomyController extends Controller {
     public static function remap() {
         $requestData = request()->all();
         $tid = (int) $requestData['tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($tid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
 
         $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
         $statusStr = $requestData['taxa'] ?? '';
@@ -437,7 +336,7 @@ class TaxonomyController extends Controller {
         $requestData = request()->all();
         $oldTid = (int) $requestData['tid'] ?? null;
         $targetTid = (int) $requestData['tidaccepted'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($oldTid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
 
@@ -448,7 +347,7 @@ class TaxonomyController extends Controller {
         $requestData = request()->all();
         $oldTid = (int) $requestData['tid'] ?? null;
         $targetTid = (int) $requestData['new-tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($oldTid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
         $switchAcceptance = $requestData['switchacceptance'] === '1';
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
@@ -459,7 +358,7 @@ class TaxonomyController extends Controller {
     public static function updateSynonymLink() {
         $requestData = request()->all();
         $currentTid = (int) $requestData['current-tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($currentTid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
 
         return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
@@ -467,7 +366,7 @@ class TaxonomyController extends Controller {
 
     public static function reconstructHierarchy() {
         $tid = (int) request()->all()['tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($tid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
 
         return self::handleStatusReportingAndRouting(__('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS'), $editorManager, 'taxon.editview', ['tid' => $tid]);
@@ -476,7 +375,7 @@ class TaxonomyController extends Controller {
     public static function updateUpperTaxonomy() {
         $requestData = request()->all();
         $tid = (int) $requestData['tid'] ?? null;
-        $editorManager = self::getTaxonomyEditorManager($tid);
+        $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
 
         return self::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
