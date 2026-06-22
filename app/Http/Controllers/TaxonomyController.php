@@ -73,7 +73,7 @@ class TaxonomyController extends Controller {
 
         if ($tidResult > 0) { // @TODO use redirectBackWithManagerIssues here after some massaging
             // Redirect to the newly created taxon's page
-            return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', 'Taxon created successfully!');
+            return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', __('taxonomy_taxonomyloader.TAXON_CREATED_SUCCESSFULLY'));
         } else {
             return RedirectResponseHelper::backWithError((string) $tidResult); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }

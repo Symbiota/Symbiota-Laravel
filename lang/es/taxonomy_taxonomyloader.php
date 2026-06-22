@@ -36,4 +36,5 @@ return [
     'NO_CHILD_TAXA' => 'No hay taxones hijos',
     'DIRECT_CHILD_TAXA' => 'Taxones Hijos Directos',
     'EDIT_PARENT_ITSELF' => 'Editar el Padre Mismo',
+    'TAXON_CREATED_SUCCESSFULLY' => '¡Taxón creado exitosamente!',
 ];

@@ -36,4 +36,5 @@ return [
     'NO_CHILD_TAXA' => 'No child taxa',
     'DIRECT_CHILD_TAXA' => 'Direct Child Taxa',
     'EDIT_PARENT_ITSELF' => 'Edit Parent Itself',
+    'TAXON_CREATED_SUCCESSFULLY' => 'Taxon created successfully!',
 ];

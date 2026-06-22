@@ -36,4 +36,5 @@ return [
     'NO_CHILD_TAXA' => 'Sem táxons filhos',
     'DIRECT_CHILD_TAXA' => 'Táxons Filhos Diretos',
     'EDIT_PARENT_ITSELF' => 'Editar o Pai em Si',
+    'TAXON_CREATED_SUCCESSFULLY' => 'Táxon criado com sucesso!',
 ];
