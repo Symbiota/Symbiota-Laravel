@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
-    private static $rankMap = [
+    private static $rankMap = [ // @TODO move this to a helper of consts file
             0 => 1, // non-ranked node
             1 => 2, // organism
             10 => 3, // kingdom
@@ -84,11 +84,11 @@ class TaxonomyController extends Controller {
         ];
     }
 
-    private static function redirectBackWithError(string $error) {
+    private static function redirectBackWithError(string $error) { // @TODO move to utility
         return redirect()->back()->withInput()->withErrors(['error' => $error]);
     }
 
-    private static function redirectToRouteIndexWithError(string $route, string $error) {
+    private static function redirectToRouteIndexWithError(string $route, string $error) { // @TODO move to utility
         return redirect()->route($route)->withErrors(['error' => $error]);
     }
 
@@ -162,7 +162,7 @@ class TaxonomyController extends Controller {
             return __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
         }
 
-        return $editorManager->getErrorMessage();
+        return $editorManager->getErrorMessage(); // @TODO could this leverage one of the error handling methods?
     }
 
     private static function handleDeleteTaxonAction($editorManager) {
@@ -176,12 +176,12 @@ class TaxonomyController extends Controller {
             return __('taxonomy_taxonomydelete.SUCCESS_DELETING') . ' ' . $statusStr;
         }
 
-        return $editorManager->getErrorMessage();
+        return $editorManager->getErrorMessage(); // @TODO could this leverage one of the error handling methods?
     }
 
     private static function processUpdateAction(string $editType, $editorManager, array $postData) {
         return match ($editType) {
-            'taxonedits' => self::handleTaxonEditsAction($editorManager, $postData),
+            'taxonedits' => self::handleTaxonEditsAction($editorManager, $postData), // @TODO many of these are moot now. Track and delete those that are uneccessary
             'updatetaxstatus' => self::handleUpdateTaxStatusAction($editorManager, $postData),
             'synonymedits' => self::handleSynonymEditsAction($editorManager, $postData),
             'linkToAccepted' => self::handleLinkToAcceptedAction($editorManager, $postData),
@@ -333,6 +333,7 @@ class TaxonomyController extends Controller {
     }
 
     public static function editTaxon($tid) {
+        // @TODO add build editTaxonData method with taxonInfo and upperTaxonomyEditInfo (this part already done)
         $tid = (int) $tid;
         $taxon = self::taxonData($tid);
 
@@ -412,7 +413,7 @@ class TaxonomyController extends Controller {
         ]));
     }
 
-    private static function normalizeOptionalInt(mixed $value): ?int {
+    private static function normalizeOptionalInt(mixed $value): ?int { // @TODO move to helper/utility class
         if ($value === null) {
             return null;
         }
@@ -424,7 +425,7 @@ class TaxonomyController extends Controller {
         return is_numeric($value) ? (int) $value : null;
     }
 
-    private static function normalizeCreatePayload(array $postData): array {
+    private static function normalizeCreatePayload(array $postData): array { // @TODO this seems long-winded. DRY up if possible
         $normalized = $postData;
 
         $stringFields = [
