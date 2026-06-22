@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
-
     private static function getTaxonomyEditorManager($tid = null) {
         include_once legacy_path('/classes/TaxonomyEditorManager.php');
         $taxonEditorObj = new \TaxonomyEditorManager();
