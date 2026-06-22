@@ -1,18 +1,19 @@
 @php
-    $mode = $mode ?? 'create';
+    $taxonInfo = $taxonInfo ?? [];
+    $mode = $taxonInfo['mode'] ?? 'create';
     $kingdoms = $kingdoms ?? [];
     $allTaxonRanks = $allTaxonRanks ?? [];
-    $rankMap = $rankMap ?? [];
+    $rankMap = $taxonInfo['rankMap'] ?? [];
     $indContent = $indContent ?? [];
     $securityOptions = $securityOptions ?? [];
     $errors = $errors ?? [];
     $canCreateOrEdit = $canCreateOrEdit ?? false;
-    $taxonInfo = $taxonInfo ?? null;
-    $parentName = $parentName ?? '';
-    $acceptedName = $acceptedName ?? '';
-    $securitystatusstart = $securitystatusstart ?? 0;
-    $verifyArr = $verifyArr ?? [];
-    $parents = $parents ?? [];
+    $taxon = $taxonInfo['taxon'] ?? null;
+    $parentName = $taxonInfo['parentName'] ?? '';
+    $acceptedName = $taxonInfo['acceptedName'] ?? '';
+    $securitystatusstart = $taxonInfo['securitystatusstart'] ?? 0;
+    $verifyArr = $taxonInfo['verifyArr'] ?? [];
+    $parents = $taxonInfo['parents'] ?? [];
     $upperTaxonomyEditInfo = $upperTaxonomyEditInfo ?? [];
 @endphp
 <x-layout>
@@ -33,7 +34,7 @@
             <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
         </div>
     @endif
-    <h1 class="mb-4 text-center text-2xl font-bold">{{ $taxonInfo->sciName ?? '' }}</h1>
+    <h1 class="mb-4 text-center text-2xl font-bold">{{ $taxon->sciName ?? '' }}</h1>
     <div id="taxon-edit-tabs-container" name="taxon-edit-tabs-container">
         <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
             {{-- Editor --}}
@@ -46,7 +47,7 @@
                     :indContent="$indContent ?? []"
                     :securityOptions="$securityOptions ?? []"
                     :securitystatusstart="$securitystatusstart ?? 0"
-                    :taxonInfo="$taxonInfo ?? null"
+                    :taxonInfo="$taxon ?? null"
                     :parentName="$parentName ?? ''"
                     :acceptedName="$acceptedName ?? ''"
                     :includeTitle="false"
@@ -56,7 +57,7 @@
 
             {{-- Taxonomic Status --}}
             <div>
-                <x-taxonomy-synonym-edit :mode="$mode" :taxonInfo="$taxonInfo" />
+                <x-taxonomy-synonym-edit :mode="$mode" :taxonInfo="$taxon" />
             </div>
 
             {{-- Hierarchy --}}
@@ -64,7 +65,7 @@
                 <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
                 <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
                     @csrf
-                    <input type="hidden" name="tid" value="{{ $taxonInfo->tid ?? '' }}" />
+                    <input type="hidden" name="tid" value="{{ $taxon->tid ?? '' }}" />
                     <x-button
                         type="submit"
                         class="mt-4 w-fit"
@@ -76,12 +77,12 @@
             {{-- Child Taxa --}}
             <div id="child-taxa-tab" name="child-taxa-tab">
                 <h1 class="text-primary text-2xl font-bold">{{ __('taxonomy_taxonomyloader.DIRECT_CHILD_TAXA') }}</h1>
-                <x-child-list :children="$taxonInfo->children ?? []" />
+                <x-child-list :children="$taxon->children ?? []" />
             </div>
 
             {{-- Delete --}}
             <div>
-                <x-taxonomy-delete :verifyArr="$verifyArr" :taxonInfo="$taxonInfo"></x-taxonomy-delete>
+                <x-taxonomy-delete :verifyArr="$verifyArr" :taxonInfo="$taxon"></x-taxonomy-delete>
             </div>
         </x-tabs>
     </div>

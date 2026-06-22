@@ -70,7 +70,7 @@
                 <i>{{ $parentNameFull }}</i>
                 @can('SUPER_ADMIN')
                     <x-link href="{{ url('taxon/' . ($upperTaxonomyEditInfo['parentTid'] ?? '') . '/edit') }}">
-                        (<i class="fa-solid fa-pen pr-1"></i>{{ __('projects.EDIT') }})
+                        (<i class="fa-solid fa-pen pr-1"></i>{{ __('taxonomy_taxonomyloader.EDIT_PARENT_ITSELF') }})
                     </x-link>
                 @endcan
             </div>

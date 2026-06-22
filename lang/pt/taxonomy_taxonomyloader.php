@@ -35,4 +35,5 @@ return [
     'EDIT_UPPER_TAXONOMY' => 'Editar Taxonomia Superior',
     'NO_CHILD_TAXA' => 'Sem táxons filhos',
     'DIRECT_CHILD_TAXA' => 'Táxons Filhos Diretos',
+    'EDIT_PARENT_ITSELF' => 'Editar o Pai em Si',
 ];

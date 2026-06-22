@@ -47,6 +47,57 @@ class TaxonViewDataService {
         ];
     }
 
+    public static function prepareTaxonInfo(int $tid, $taxonEditorObj = null): ?array {
+        $taxon = TaxonomyQueryService::taxonData($tid);
+        if (! $taxon) {
+            return null;
+        }
+
+        $taxonEditorObj = $taxonEditorObj ?? TaxonomyMutationService::getTaxonomyEditorManager($tid);
+        $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
+        $taxonEditorObj->setTaxon();
+
+        $taxon->synonyms = $taxonEditorObj->getSynonyms();
+        $taxon->isAccepted = $taxonEditorObj->getIsAccepted();
+        $taxon->acceptedArr = [];
+        $taxon->taxonAuthId = $taxonEditorObj->getTaxAuthId();
+        $taxon->children = $taxonEditorObj->getChildren();
+
+        if ($taxonEditorObj->getIsAccepted() != 1) {
+            $taxon->acceptedArr = $taxonEditorObj->getAcceptedArr();
+        }
+
+        if (! empty($verifyArr['child'])) {
+            $verifyArr['child'] = array_map(
+                fn ($name, $url) => ['name' => $name, 'url' => $url],
+                $verifyArr['child'],
+                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
+            );
+        }
+
+        $parentName = '';
+        if ($taxon->parenttid) {
+            $parentName = DB::table('taxa')->where('tid', $taxon->parenttid)->value('sciName') ?? '';
+        }
+
+        $acceptedName = '';
+        if ($taxon->tidaccepted && $taxon->tidaccepted != $taxon->tid) {
+            $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
+        }
+
+        return [
+            'mode' => 'edit',
+            'targetTid' => $tid,
+            'taxon' => $taxon,
+            'parentName' => $parentName,
+            'acceptedName' => $acceptedName,
+            'securitystatusstart' => $taxon->securitystatus ?? 0,
+            'verifyArr' => $verifyArr,
+            'parents' => TaxonomyQueryService::getParents($tid),
+            'rankMap' => Taxonomy::RANK_MAP,
+        ];
+    }
+
     public static function prepareUpperTaxonomyEditInfo($taxonEditorObj): array {
         $upperTaxonomyEditInfo = [];
         $upperTaxonomyEditInfo['acceptedArr'] = $taxonEditorObj->getAcceptedArr();

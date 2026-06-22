@@ -35,4 +35,5 @@ return [
     'EDIT_UPPER_TAXONOMY' => 'Modifier la taxonomie supérieure',
     'NO_CHILD_TAXA' => 'Pas de taxons enfants',
     'DIRECT_CHILD_TAXA' => 'Taxons enfants directs',
+    'EDIT_PARENT_ITSELF' => 'Modifier le parent lui-même',
 ];

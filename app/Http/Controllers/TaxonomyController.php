@@ -10,7 +10,6 @@ use App\Services\TaxonomyQueryService;
 use App\Services\TaxonResponseHandler;
 use App\Services\TaxonViewDataService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
@@ -32,60 +31,19 @@ class TaxonomyController extends Controller {
     }
 
     public static function editTaxon($tid) {
-        // @TODO add build editTaxonData method with taxonInfo and upperTaxonomyEditInfo (this part already done)
         $tid = (int) $tid;
-        $taxon = TaxonomyQueryService::taxonData($tid);
+        $taxonEditorObj = TaxonomyMutationService::getTaxonomyEditorManager($tid);
+        $taxonInfo = TaxonViewDataService::prepareTaxonInfo($tid, $taxonEditorObj);
 
-        if (! $taxon) {
+        if (! $taxonInfo) {
             return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
 
-        $taxonInfo = $taxon;
-        $securitystatusstart = $taxon->securitystatus ?? 0;
         $formOptions = TaxonViewDataService::buildTaxonFormOptions();
-
-        $parentName = '';
-        if ($taxon && $taxon->parenttid) {
-            $parentName = DB::table('taxa')->where('tid', $taxon->parenttid)->value('sciName') ?? '';
-        }
-
-        $acceptedName = '';
-        if ($taxon && $taxon->tidaccepted && $taxon->tidaccepted != $taxon->tid) {
-            $acceptedName = DB::table('taxa')->where('tid', $taxon->tidaccepted)->value('sciName') ?? '';
-        }
-
-        $taxonEditorObj = TaxonomyMutationService::getTaxonomyEditorManager($tid);
-        $verifyArr = $taxonEditorObj->verifyDeleteTaxon();
-        $taxonEditorObj->setTaxon();
-        $taxonInfo->synonyms = $taxonEditorObj->getSynonyms();
-        $taxonInfo->isAccepted = $taxonEditorObj->getIsAccepted();
-        $taxonInfo->acceptedArr = [];
-        $taxonInfo->taxonAuthId = $taxonEditorObj->getTaxAuthId();
-        $taxonInfo->children = $taxonEditorObj->getChildren();
-        if ($taxonEditorObj->getIsAccepted() != 1) {
-            $taxonInfo->acceptedArr = $taxonEditorObj->getAcceptedArr();
-        }
-
-        if (! empty($verifyArr['child'])) {
-            $verifyArr['child'] = array_map(
-                fn ($name, $url) => ['name' => $name, 'url' => $url],
-                $verifyArr['child'],
-                array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
-            );
-        }
         $upperTaxonomyEditInfo = TaxonViewDataService::prepareUpperTaxonomyEditInfo($taxonEditorObj);
 
-        // @TODO condense props into taxonInfo and maybe upperTaxonomyEditInfo
         return view('pages/taxon/editTaxon', array_merge($formOptions, [
-            'mode' => 'edit',
-            'targetTid' => request()->route('tid'),
             'taxonInfo' => $taxonInfo,
-            'parentName' => $parentName,
-            'acceptedName' => $acceptedName,
-            'securitystatusstart' => $securitystatusstart,
-            'verifyArr' => $verifyArr,
-            'parents' => TaxonomyQueryService::getParents($tid),
-            'rankMap' => Taxonomy::RANK_MAP,
             'upperTaxonomyEditInfo' => $upperTaxonomyEditInfo,
         ]));
     }
