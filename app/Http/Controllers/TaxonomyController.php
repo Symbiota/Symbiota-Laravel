@@ -16,7 +16,7 @@ class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
 
         return view('pages/taxon/profile', TaxonViewDataService::buildTaxonViewData($tid));
@@ -25,7 +25,7 @@ class TaxonomyController extends Controller {
     public static function editTaxonProfile(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
 
         return view('pages/taxon/edit', TaxonViewDataService::buildTaxonViewData($tid, true));
@@ -37,7 +37,7 @@ class TaxonomyController extends Controller {
         $taxon = TaxonomyQueryService::taxonData($tid);
 
         if (! $taxon) {
-            return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon editor because the taxon was not found.');
+            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
 
         $taxonInfo = $taxon;
