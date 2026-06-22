@@ -1,44 +1,9 @@
     // @ts-check
 const { test, expect } = require('@playwright/test');
-
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'mark.fisher@ku.edu';
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'tomcat123';
+    const { login } = require('./helpers/auth.cjs');
 
 const SUBMIT_ENABLED_TEXT = 'Submit Upper Taxonomy Edits';
 const SUBMIT_DISABLED_TEXT = 'Submission Disabled';
-/** @type {Array<any> | null} */
-let cachedCookies = null;
-
-/** @param {import('@playwright/test').Page} page */
-async function login(page) {
-    if (cachedCookies) {
-        await page.context().addCookies(cachedCookies);
-        await page.goto('/');
-        await page.waitForLoadState('domcontentloaded');
-        return;
-    }
-
-    await page.goto('/login');
-
-    // If session is already authenticated and /login redirects, avoid login form waits.
-    if (page.url().includes('/login')) {
-        await page.locator('#email').fill(TEST_EMAIL);
-        await page.locator('#password').fill(TEST_PASSWORD);
-        await Promise.all([
-            page.waitForURL((url) => !url.pathname.includes('login'), {
-                timeout: 20_000,
-                waitUntil: 'domcontentloaded',
-            }),
-            page.locator('form').first().evaluate((form) => {
-                const htmlForm = /** @type {HTMLFormElement} */ (form);
-                htmlForm.submit();
-            }),
-        ]);
-    }
-
-    await expect(page.locator('text=Welcome Mark!')).toBeVisible({ timeout: 20_000 });
-    cachedCookies = await page.context().cookies();
-}
 
 /** @param {string} prefix */
 function makeUniqueTaxonName(prefix) {

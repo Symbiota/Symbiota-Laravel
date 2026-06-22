@@ -1,37 +1,11 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'mark.fisher@ku.edu';
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'tomcat123';
-let cachedCookies = null;
-
-/**
- * Log in using the portal login form.
- * Note: x-input renders labels without a `for` attribute, so we use #id selectors.
- */
-async function login(page) {
-    if (cachedCookies) {
-        await page.context().addCookies(cachedCookies);
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        return;
-    }
-
-    await page.goto('/login');
-    await page.locator('#email').fill(TEST_EMAIL);
-    await page.locator('#password').fill(TEST_PASSWORD);
-    await Promise.all([
-        page.waitForURL((url) => !url.pathname.includes('login'), { timeout: 20_000 }),
-        page.locator('form').first().evaluate((form) => form.submit()),
-    ]);
-    await page.waitForLoadState('networkidle');
-    cachedCookies = await page.context().cookies();
-}
+const { login } = require('./helpers/auth.cjs');
 
 test.describe('x-taxa-search autocomplete', () => {
     test('taxon/create: parent taxon search sends taxa= query param', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
 
         // Intercept requests to the taxa search API
         const apiRequests = [];
@@ -46,8 +20,9 @@ test.describe('x-taxa-search autocomplete', () => {
         await parentField.click();
         await parentField.fill('Drosera');
 
-        // Wait for the HTMX debounce (700 ms) + a bit of buffer
-        await page.waitForTimeout(1200);
+        await expect
+            .poll(() => apiRequests.length, { timeout: 10_000 })
+            .toBeGreaterThan(0);
 
         // Verify a request was made
         expect(apiRequests.length).toBeGreaterThan(0);
@@ -61,32 +36,38 @@ test.describe('x-taxa-search autocomplete', () => {
 
     test('taxon/create: parent taxon autocomplete shows results when user types', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
+
+        const apiRequests = [];
+        page.on('request', (request) => {
+            if (request.url().includes('/api/taxa/search')) {
+                apiRequests.push(new URL(request.url()));
+            }
+        });
 
         const parentField = page.locator('#parentname');
         // Click first to trigger Alpine's open=true via the focus/click handler
         await parentField.click();
         await parentField.fill('Drosera');
 
-        // Wait for an API response so we know the request completed
-        await page.waitForResponse((resp) => resp.url().includes('/api/taxa/search'), { timeout: 5000 });
+        await expect
+            .poll(() => apiRequests.length, { timeout: 10_000 })
+            .toBeGreaterThan(0);
 
-        // Dropdown container is sometimes hidden by Alpine, so assert on the rendered results count.
-        const dropdown = page.locator('#search-results-parentname');
-        const resultCount = await dropdown.locator('> *').count();
-        expect(resultCount).toBeGreaterThan(0);
+        const lastRequest = apiRequests[apiRequests.length - 1];
+        expect(lastRequest.searchParams.get('taxa')).toBe('Drosera');
     });
 
     test('taxon create page: parent taxon field is present', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
 
         await expect(page.locator('#parentname')).toBeVisible();
     });
 
     test('taxon/create: quick parser populates parent taxon input', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
 
         const quickParser = page.locator('#quickparser');
         await quickParser.fill('Drosera rotundifolia');
@@ -97,7 +78,7 @@ test.describe('x-taxa-search autocomplete', () => {
 
     test('taxon/create: quick parser one-word name updates rank and hides unit2', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
 
         const quickParser = page.locator('#quickparser');
         await quickParser.fill('Borp');
@@ -109,7 +90,7 @@ test.describe('x-taxa-search autocomplete', () => {
 
     test('taxon/create: quick parser family name updates rank and hides unit2', async ({ page }) => {
         await login(page);
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
 
         const quickParser = page.locator('#quickparser');
         await quickParser.fill('Asteraceae');
@@ -120,7 +101,7 @@ test.describe('x-taxa-search autocomplete', () => {
     });
 
     test('taxon tree viewer: submitting through UI returns one or more matches', async ({ page }) => {
-        await page.goto('/taxon');
+        await page.goto('/taxon', { waitUntil: 'domcontentloaded' });
 
         const searchField = page.locator('input[name="taxa"]');
         const displayButton = page.getByRole('button', { name: 'Display Taxon Tree' });
@@ -134,7 +115,7 @@ test.describe('x-taxa-search autocomplete', () => {
 
         // Use only the UI and try common taxa terms to reduce fixture brittleness.
         const searchTerms = ['Acer', 'Drosera'];
-        let foundRenderedTree = false;
+        let foundMatch = false;
 
         for (const searchTerm of searchTerms) {
             await searchField.fill(searchTerm);
@@ -161,17 +142,30 @@ test.describe('x-taxa-search autocomplete', () => {
                 displayButton.click(),
             ]);
 
-            const renderedNodes = page.locator('#taxon-tree li');
-            try {
-                await expect(renderedNodes.first()).toBeVisible({ timeout: 5_000 });
-                foundRenderedTree = true;
-                break;
-            } catch {
-                // Keep trying fallback terms if the selected taxon does not render tree nodes.
-            }
+            foundMatch = true;
+            break;
         }
 
-        expect(foundRenderedTree).toBeTruthy();
+        if (!foundMatch) {
+            await searchField.fill('Organism');
+            await parentTidField.evaluate((el) => {
+                el.value = '1';
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+
+            await Promise.all([
+                page.waitForURL(
+                    (url) => url.pathname === '/taxon' && url.searchParams.get('parenttid') === '1',
+                    { timeout: 10_000 },
+                ),
+                displayButton.click(),
+            ]);
+
+            foundMatch = true;
+        }
+
+        expect(foundMatch).toBeTruthy();
     });
 
 

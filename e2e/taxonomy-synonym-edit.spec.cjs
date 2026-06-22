@@ -1,36 +1,13 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'mark.fisher@ku.edu';
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'tomcat123';
-let cachedCookies = null;
+const { login } = require('./helpers/auth.cjs');
 
 /** Taxon used for the edit page — must exist in the database. */
 const TEST_TID = 1; // "Organism"
 
-async function login(page) {
-    if (cachedCookies) {
-        await page.context().addCookies(cachedCookies);
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        return;
-    }
-
-    await page.goto('/login');
-    await page.locator('#email').fill(TEST_EMAIL);
-    await page.locator('#password').fill(TEST_PASSWORD);
-    await Promise.all([
-        page.waitForURL((url) => !url.pathname.includes('login'), { timeout: 20_000 }),
-        page.locator('form').first().evaluate((form) => form.submit()),
-    ]);
-    await page.waitForLoadState('networkidle');
-    cachedCookies = await page.context().cookies();
-}
-
 /** Navigate to the taxon edit page and activate the "Taxonomic Status" tab. */
 async function goToSynonymEditTab(page) {
-    await page.goto(`/taxon/${TEST_TID}/edit`);
-    await page.waitForLoadState('networkidle');
+    await page.goto(`/taxon/${TEST_TID}/edit`, { waitUntil: 'domcontentloaded' });
 
     // The tabs are radio inputs labelled "Editor", "Taxonomic Status", "Hierarchy", "Child Taxa", "Delete".
     // "Taxonomic Status" is index 1 (tab-1).
@@ -47,24 +24,19 @@ test.describe('x-taxa-search in taxonomy-synonym-edit (Taxonomic Status tab)', (
         await login(page);
         await goToSynonymEditTab(page);
 
-        const apiRequests = [];
-        page.on('request', (request) => {
-            if (request.url().includes('/api/taxa/search')) {
-                apiRequests.push(new URL(request.url()));
-            }
-        });
-
         const acceptedField = page.locator('#synonym-acceptedstr');
+        const requestPromise = page.waitForRequest(
+            (request) => request.url().includes('/api/taxa/search') && request.url().includes('taxa=Plantae'),
+            { timeout: 10_000 },
+        );
+
         await acceptedField.click();
         await acceptedField.fill('Plantae');
+        await acceptedField.press('ArrowDown');
 
-        // Wait for HTMX debounce (700 ms) + buffer
-        await page.waitForTimeout(1200);
-
-        expect(apiRequests.length).toBeGreaterThan(0);
-
-        const lastRequest = apiRequests[apiRequests.length - 1];
-        expect(lastRequest.searchParams.get('taxa')).toBe('Plantae');
+        const request = await requestPromise;
+        const requestUrl = new URL(request.url());
+        expect(requestUrl.searchParams.get('taxa')).toBe('Plantae');
     });
 
     test('acceptedstr autocomplete shows results when user types', async ({ page }) => {
@@ -75,12 +47,9 @@ test.describe('x-taxa-search in taxonomy-synonym-edit (Taxonomic Status tab)', (
         await acceptedField.click();
         await acceptedField.fill('Plantae');
 
-        // Wait for an API response
-        await page.waitForResponse((resp) => resp.url().includes('/api/taxa/search'), { timeout: 5000 });
-
         // Dropdown should be visible with results
         const dropdown = page.locator('#search-results-synonym-acceptedstr');
-        await expect(dropdown).toBeVisible({ timeout: 3000 });
+        await expect(dropdown.locator('> *').first()).toBeVisible({ timeout: 10_000 });
     });
 
     test('acceptedstr autocomplete results are filtered by input (not showing all taxa)', async ({ page }) => {
@@ -91,10 +60,8 @@ test.describe('x-taxa-search in taxonomy-synonym-edit (Taxonomic Status tab)', (
         await acceptedField.click();
         await acceptedField.fill('Plantae');
 
-        await page.waitForResponse((resp) => resp.url().includes('/api/taxa/search'), { timeout: 5000 });
-
         const dropdown = page.locator('#search-results-synonym-acceptedstr');
-        await expect(dropdown).toBeVisible({ timeout: 3000 });
+        await expect(dropdown.locator('> *').first()).toBeVisible({ timeout: 10_000 });
 
         // Every visible result should contain the search term (case-insensitive).
         // If the results are unfiltered, this assertion will fail because unrelated taxa will appear.

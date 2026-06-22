@@ -5,73 +5,22 @@ namespace App\Http\Controllers;
 use App\Helpers\InputNormalizer;
 use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
+use App\Services\PayloadNormalizer;
+use App\Services\TaxonResponseHandler;
+use App\Services\TaxonViewDataService;
 use App\Services\TaxonomyMutationService;
 use App\Services\TaxonomyQueryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 
 class TaxonomyController extends Controller {
-    private static function buildTaxonViewData(int $tid, bool $includeMedia = false): array {
-        $taxonomy = Taxonomy::find($tid);
-        $viewData = [
-            'taxon' => TaxonomyQueryService::taxonData($tid),
-            'parents' => TaxonomyQueryService::getParents($tid),
-            'common_names' => $taxonomy?->commonNames()->get() ?? collect(),
-            'occurrence_count' => $taxonomy?->occurrences()->count() ?? 0,
-            'children' => TaxonomyQueryService::getDirectChildren($tid, 1),
-            'taxa_descriptions' => TaxonomyQueryService::getTaxaDescriptions($tid),
-            'external_links' => $taxonomy?->externalLinks()->get() ?? collect(),
-        ];
-
-        if ($includeMedia) {
-            $viewData['media'] = DB::table('media')
-                ->where('tid', $tid)
-                ->select('*')
-                ->orderBy('sortSequence')
-                ->get();
-        }
-
-        return $viewData;
-    }
-
-    private static function buildTaxonFormOptions(): array {
-        $kingdoms = DB::table('taxa')->where('rankID', 10)->select('tid', 'sciName')->get();
-        $primaryKingdom = config('portal.primary_taxonomic_kingdom');
-        $allTaxonRanks = DB::table('taxonunits')->distinct()->select('rankid', 'rankname')->where('kingdomName', $primaryKingdom)->orderBy('rankid')->orderBy('rankname', 'desc')->get();
-        $indContent = [['title' => '', 'value' => '', 'disabled' => false], ['title' => '×', 'value' => '×', 'disabled' => false]];
-        $securityOptions = [['title' => 'No Security', 'value' => 0, 'disabled' => false], ['title' => 'Hide Locality Details', 'value' => 1, 'disabled' => false]];
-        ! empty($GLOBALS['ACTIVATE_PALEO_DAGGER']) ? $indContent[] = ['title' => '†', 'value' => '†', 'disabled' => false] : null;
-
-        return [
-            'kingdoms' => $kingdoms,
-            'allTaxonRanks' => $allTaxonRanks,
-            'indContent' => $indContent,
-            'securityOptions' => $securityOptions,
-            'canCreateOrEdit' => Gate::check('TAXON_EDITOR'),
-        ];
-    }
-
-    private static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
-        if ($editorManager->getWarningArr()) {
-            $statusStr = __($warningTranslationKey) . ': ' . implode(';', $editorManager->getWarningArr());
-
-            return RedirectResponseHelper::backWithError($statusStr);
-        }
-
-        if ($statusStr = $editorManager->getErrorMessage()) {
-            return RedirectResponseHelper::backWithError($statusStr);
-        }
-
-    }
-
     public static function taxon(int $tid) {
         $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
             return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile because the taxon was not found.');
         }
 
-        return view('pages/taxon/profile', self::buildTaxonViewData($tid));
+        return view('pages/taxon/profile', TaxonViewDataService::buildTaxonViewData($tid));
     }
 
     public static function editTaxonProfile(int $tid) {
@@ -80,7 +29,7 @@ class TaxonomyController extends Controller {
             return RedirectResponseHelper::routeWithError('taxon.index', 'Unable to load taxon profile editor because the taxon was not found.');
         }
 
-        return view('pages/taxon/edit', self::buildTaxonViewData($tid, true));
+        return view('pages/taxon/edit', TaxonViewDataService::buildTaxonViewData($tid, true));
     }
 
     public static function editTaxon($tid) {
@@ -94,7 +43,7 @@ class TaxonomyController extends Controller {
 
         $taxonInfo = $taxon;
         $securitystatusstart = $taxon->securitystatus ?? 0;
-        $formOptions = self::buildTaxonFormOptions();
+        $formOptions = TaxonViewDataService::buildTaxonFormOptions();
 
         $parentName = '';
         if ($taxon && $taxon->parenttid) {
@@ -125,7 +74,7 @@ class TaxonomyController extends Controller {
                 array_map(fn ($key) => url('/taxon/' . $key), array_keys($verifyArr['child']))
             );
         }
-        $upperTaxonomyEditInfo = self::prepareUpperTaxonomyEditInfo($taxonEditorObj);
+        $upperTaxonomyEditInfo = TaxonViewDataService::prepareUpperTaxonomyEditInfo($taxonEditorObj);
 
         // @TODO condense props into taxonInfo and maybe upperTaxonomyEditInfo
         return view('pages/taxon/editTaxon', array_merge($formOptions, [
@@ -142,91 +91,15 @@ class TaxonomyController extends Controller {
         ]));
     }
 
-    private static function prepareUpperTaxonomyEditInfo($taxonEditorObj) {
-        $upperTaxonomyEditInfo = [];
-        $upperTaxonomyEditInfo['acceptedArr'] = $taxonEditorObj->getAcceptedArr();
-        $upperTaxonomyEditInfo['tid'] = $taxonEditorObj->getTid();
-        $upperTaxonomyEditInfo['isAccepted'] = $taxonEditorObj->getIsAccepted();
-        $upperTaxonomyEditInfo['parentNameFull'] = strip_tags(html_entity_decode((string) ($taxonEditorObj->getParentNameFull() ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
-        $upperTaxonomyEditInfo['rankId'] = $taxonEditorObj->getRankId();
-        $upperTaxonomyEditInfo['family'] = $taxonEditorObj->getFamily();
-        $upperTaxonomyEditInfo['parentTid'] = $taxonEditorObj->getParentTid();
-        $upperTaxonomyEditInfo['parentName'] = $taxonEditorObj->getParentName();
-        $upperTaxonomyEditInfo['taxauthid'] = $taxonEditorObj->getTaxauthid();
-
-        return $upperTaxonomyEditInfo;
-    }
-
     public static function createTaxon() {
-        return view('pages/taxon/create', array_merge(self::buildTaxonFormOptions(), [
+        return view('pages/taxon/create', array_merge(TaxonViewDataService::buildTaxonFormOptions(), [
             'mode' => 'create',
             'securitystatusstart' => 0,
         ]));
     }
 
-    private static function normalizeCreatePayload(array $postData): array { // @TODO this seems long-winded. DRY up if possible
-        $normalized = $postData;
-
-        $stringFields = [
-            'author',
-            'unitind1',
-            'unitname1',
-            'unitind2',
-            'unitname2',
-            'unitind3',
-            'unitname3',
-            'cultivarEpithet',
-            'tradeName',
-            'source',
-            'notes',
-            'parentname',
-            'acceptedstr',
-            'unacceptabilityreason',
-        ];
-
-        foreach ($stringFields as $field) {
-            $normalized[$field] = trim((string) ($normalized[$field] ?? ''));
-        }
-
-        $normalized['acceptstatus'] = ((int) ($normalized['acceptstatus'] ?? 1) === 1) ? 1 : 0;
-        $normalized['rankid'] = InputNormalizer::optionalInt($normalized['rankid'] ?? null) ?? 0;
-        $normalized['securitystatus'] = InputNormalizer::optionalInt($normalized['securitystatus'] ?? null) ?? 0;
-
-        $normalizedParentTid = InputNormalizer::optionalInt($normalized['parenttid'] ?? null);
-        if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
-            $normalizedParentTid = DB::table('taxa')
-                ->where('sciName', $normalized['parentname'])
-                ->value('tid');
-        }
-        $normalized['parenttid'] = $normalizedParentTid;
-
-        $normalizedTidAccepted = InputNormalizer::optionalInt($normalized['tidaccepted'] ?? null);
-        if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
-            $normalizedTidAccepted = DB::table('taxa')
-                ->where('sciName', $normalized['acceptedstr'])
-                ->value('tid');
-        }
-        $normalized['tidaccepted'] = $normalizedTidAccepted;
-
-        return $normalized;
-    }
-
-    private static function resolveUpdateTid(array $postData, $editorManager): ?int {
-        $tid = InputNormalizer::optionalInt($postData['update-tid'] ?? null);
-
-        if ($tid !== null) {
-            return $tid;
-        }
-
-        if (method_exists($editorManager, 'getTid')) {
-            return InputNormalizer::optionalInt($editorManager->getTid());
-        }
-
-        return null;
-    }
-
     public static function store() {
-        $postData = self::normalizeCreatePayload(request()->all());
+        $postData = PayloadNormalizer::normalizeCreatePayload(request()->all());
 
         if ($postData['acceptstatus'] === 0 && ! $postData['tidaccepted']) {
             return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
@@ -287,9 +160,9 @@ class TaxonomyController extends Controller {
         $editType = $postData['edit-type'] ?? '';
         $editorManager->setTaxAuthId($postData['acceptedstatus'] ?? null); // @TODO I don't think that this is accurate - taxAuthId just happens to be 1 in this case
         $statusStr = TaxonomyMutationService::processUpdateAction($editType, $editorManager, $postData);
-        $resolvedTid = self::resolveUpdateTid($postData, $editorManager);
+        $resolvedTid = TaxonResponseHandler::resolveUpdateTid($postData, $editorManager);
 
-        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $resolvedTid]);
+        return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $resolvedTid]);
     }
 
     public static function delete() {
@@ -317,7 +190,7 @@ class TaxonomyController extends Controller {
 
         $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
         $statusStr = $requestData['taxa'] ?? '';
-        if ($response = self::redirectBackWithManagerIssues($editorManager)) { // @TODO is there a way to use handleStatusReportingAndRouting here?
+        if ($response = TaxonResponseHandler::redirectBackWithManagerIssues($editorManager)) { // @TODO is there a way to use handleStatusReportingAndRouting here?
             return $response;
         }
         if ($remapStatus) {
@@ -340,7 +213,7 @@ class TaxonomyController extends Controller {
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
 
-        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $targetTid]);
+        return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $targetTid]);
     }
 
     public static function changeToNotAccepted() {
@@ -352,7 +225,7 @@ class TaxonomyController extends Controller {
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
 
-        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $oldTid]);
+        return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $oldTid]);
     }
 
     public static function updateSynonymLink() {
@@ -361,7 +234,7 @@ class TaxonomyController extends Controller {
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
 
-        return self::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
+        return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
     }
 
     public static function reconstructHierarchy() {
@@ -369,7 +242,7 @@ class TaxonomyController extends Controller {
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
 
-        return self::handleStatusReportingAndRouting(__('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS'), $editorManager, 'taxon.editview', ['tid' => $tid]);
+        return TaxonResponseHandler::handleStatusReportingAndRouting(__('taxonomy_taxoneditor.HIERARCHY_REBUILD_SUCCESS'), $editorManager, 'taxon.editview', ['tid' => $tid]);
     }
 
     public static function updateUpperTaxonomy() {
@@ -378,24 +251,6 @@ class TaxonomyController extends Controller {
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
 
-        return self::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
-    }
-
-    public static function handleStatusReportingAndRouting($statusStr, $editorManager, $redirectRoute, $redirectParams = []) {
-        if ($response = self::redirectBackWithManagerIssues($editorManager)) {
-            return $response;
-        }
-
-        if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
-            $redirectTid = InputNormalizer::optionalInt($redirectParams['tid'] ?? null);
-
-            if ($redirectTid === null) {
-                return RedirectResponseHelper::backWithError('Unable to redirect to taxon profile because the taxon ID was missing.');
-            }
-
-            $redirectParams['tid'] = $redirectTid;
-        }
-
-        return redirect()->route($redirectRoute, $redirectParams)->with('success', $statusStr);
+        return TaxonResponseHandler::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
     }
 }

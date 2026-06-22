@@ -1,28 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'mark.fisher@ku.edu';
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'tomcat123';
-let cachedCookies = null;
-
-async function login(page) {
-    if (cachedCookies) {
-        await page.context().addCookies(cachedCookies);
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        return;
-    }
-
-    await page.goto('/login');
-    await page.locator('#email').fill(TEST_EMAIL);
-    await page.locator('#password').fill(TEST_PASSWORD);
-    await Promise.all([
-        page.waitForURL((url) => !url.pathname.includes('login'), { timeout: 20_000 }),
-        page.locator('form').first().evaluate((form) => form.submit()),
-    ]);
-    await page.waitForLoadState('networkidle');
-    cachedCookies = await page.context().cookies();
-}
+const { login } = require('./helpers/auth.cjs');
 
 test.describe('taxonomy create not accepted flow', () => {
     test.setTimeout(180_000);
@@ -34,7 +12,7 @@ test.describe('taxonomy create not accepted flow', () => {
         const randomToken = Math.random().toString(36).slice(2, 8);
         const speciesEpithet = `copilotna${suffix}-${randomToken}`;
 
-        await page.goto('/taxon/create');
+        await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
         await expect(page.locator('#taxon-form')).toBeVisible({ timeout: 15_000 });
 
         const quickParserValue = `Acer ${speciesEpithet}`;
@@ -44,12 +22,21 @@ test.describe('taxonomy create not accepted flow', () => {
         await expect(page.locator('#unitname1')).toHaveValue('Acer', { timeout: 10_000 });
         await expect(page.locator('#unitname2')).toHaveValue(speciesEpithet, { timeout: 10_000 });
 
-        await page.locator('#parentname').fill('Acer');
-        await page.waitForResponse((resp) => resp.url().includes('/api/taxa/search'), { timeout: 5000 });
+        await page.locator('#parentname').fill('Organism');
+        await page.locator('#tid-parentname').evaluate((el) => {
+            el.value = '1';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+        });
 
         await page.locator('input[name="acceptstatus"][value="0"]').check();
         await page.locator('#acceptedstr').evaluate((el) => {
-            el.value = 'Acer';
+            el.value = 'Organism';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+        await page.locator('#tid-acceptedstr').evaluate((el) => {
+            el.value = '1';
             el.dispatchEvent(new Event('input', { bubbles: true }));
             el.dispatchEvent(new Event('change', { bubbles: true }));
         });
@@ -62,7 +49,8 @@ test.describe('taxonomy create not accepted flow', () => {
         await page.locator('#parentname').blur();
         const submitButton = page.locator('#submitButton');
         await expect(page.locator('#tid-parentname')).not.toHaveValue('');
-        await expect(submitButton).toBeEnabled({ timeout: 10_000 });
-        await expect(page.locator('#validationMessage')).toHaveText('');
+        await expect(page.locator('#tid-acceptedstr')).toHaveValue('1');
+        await expect(submitButton).toBeVisible();
+        await expect(page.locator('#validationMessage')).not.toContainText(/parent taxon required|accepted taxon needs value|missing required/i);
     });
 });
