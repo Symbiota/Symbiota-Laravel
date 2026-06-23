@@ -32,6 +32,7 @@ return [
     'UPPER_TAXONOMY_UPDATE_SUCCESS' => 'Upper taxonomy updated successfully',
     'CURRENT_PARENT_TAXON' => 'Current Parent Taxon',
     'TAXONOMIC_TREE_VIEWER' => 'Taxonomic Tree Viewer',
+    'SEE_FULL_TAXONOMIC_TREE' => 'See full taxonomic tree',
     'EDIT_UPPER_TAXONOMY' => 'Edit Upper Taxonomy',
     'NO_CHILD_TAXA' => 'No child taxa',
     'DIRECT_CHILD_TAXA' => 'Direct Child Taxa',

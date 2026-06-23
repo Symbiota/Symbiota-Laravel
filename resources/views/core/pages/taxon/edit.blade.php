@@ -10,14 +10,12 @@
         ]"
         />
     </div>
-    <span>Test</span>
     @if(session('success'))
         <div class="alert alert-success">
             <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
         </div>
     @endif
     <h1 class="text-4xl font-bold"><i>{{ $taxon->sciName }}</i> {{ $taxon->author }}</h1>
-    <span>Test2</span>
     <div class="mb-4 flex">
         @if($taxon->family)
             <h2 class="text-2xl font-bold">Family: {{ $taxon->family }}</h2>

@@ -32,6 +32,7 @@ return [
     'UPPER_TAXONOMY_UPDATE_SUCCESS' => 'Taxonomie supérieure mise à jour avec succès',
     'CURRENT_PARENT_TAXON' => 'Taxon parent actuel',
     'TAXONOMIC_TREE_VIEWER' => 'Visionneuse d\'arbre taxonomique',
+    'SEE_FULL_TAXONOMIC_TREE' => 'Voir l\'arbre taxonomique complet',
     'EDIT_UPPER_TAXONOMY' => 'Modifier la taxonomie supérieure',
     'NO_CHILD_TAXA' => 'Pas de taxons enfants',
     'DIRECT_CHILD_TAXA' => 'Taxons enfants directs',
