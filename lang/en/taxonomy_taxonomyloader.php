@@ -36,5 +36,6 @@ return [
     'NO_CHILD_TAXA' => 'No child taxa',
     'DIRECT_CHILD_TAXA' => 'Direct Child Taxa',
     'EDIT_PARENT_ITSELF' => 'Edit Parent Itself',
+    'MISSING_TAXON_ID_FOR_PROFILE_REDIRECT' => 'Unable to redirect to taxon profile because the taxon ID was missing.',
     'TAXON_CREATED_SUCCESSFULLY' => 'Taxon created successfully!',
 ];

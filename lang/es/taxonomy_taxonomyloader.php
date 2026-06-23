@@ -36,5 +36,6 @@ return [
     'NO_CHILD_TAXA' => 'No hay taxones hijos',
     'DIRECT_CHILD_TAXA' => 'Taxones Hijos Directos',
     'EDIT_PARENT_ITSELF' => 'Editar el Padre Mismo',
+    'MISSING_TAXON_ID_FOR_PROFILE_REDIRECT' => 'No se pudo redirigir al perfil del taxón porque faltaba el ID del taxón.',
     'TAXON_CREATED_SUCCESSFULLY' => '¡Taxón creado exitosamente!',
 ];

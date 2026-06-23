@@ -41,7 +41,7 @@ class TaxonResponseHandler {
             $redirectTid = InputNormalizer::optionalInt($redirectParams['tid'] ?? null);
 
             if ($redirectTid === null) {
-                return RedirectResponseHelper::backWithError('Unable to redirect to taxon profile because the taxon ID was missing.');
+                return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT'));
             }
 
             $redirectParams['tid'] = $redirectTid;

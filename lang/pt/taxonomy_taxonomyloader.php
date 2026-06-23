@@ -36,5 +36,6 @@ return [
     'NO_CHILD_TAXA' => 'Sem táxons filhos',
     'DIRECT_CHILD_TAXA' => 'Táxons Filhos Diretos',
     'EDIT_PARENT_ITSELF' => 'Editar o Pai em Si',
+    'MISSING_TAXON_ID_FOR_PROFILE_REDIRECT' => 'Não foi possível redirecionar para o perfil do taxon porque o ID do taxon estava ausente.',
     'TAXON_CREATED_SUCCESSFULLY' => 'Táxon criado com sucesso!',
 ];
