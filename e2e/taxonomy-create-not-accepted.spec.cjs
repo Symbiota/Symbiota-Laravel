@@ -10,7 +10,7 @@ test.describe('taxonomy create not accepted flow', () => {
 
         const suffix = Date.now();
         const randomToken = Math.random().toString(36).slice(2, 8);
-        const speciesEpithet = `copilotna${suffix}-${randomToken}`;
+        const speciesEpithet = `testna${suffix}-${randomToken}`;
 
         await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
         await expect(page.locator('#taxon-form')).toBeVisible({ timeout: 15_000 });

@@ -5,7 +5,7 @@ const { login } = require('./helpers/auth.cjs');
 async function createTaxon(page) {
     const suffix = Date.now();
     const randomToken = Math.random().toString(36).slice(2, 8);
-    const speciesEpithet = `copilot${suffix}-${randomToken}`;
+    const speciesEpithet = `testing${suffix}-${randomToken}`;
 
     await page.goto('/taxon/create', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#taxon-form')).toBeVisible({ timeout: 15_000 });
@@ -99,7 +99,7 @@ test.describe.serial('taxonomy edit without changing unit names', () => {
         const authorField = page.locator('#author');
         const submitButton = taxonForm.locator('#submitButton');
         const validationMessage = taxonForm.locator('#validationMessage');
-        const newAuthorValue = `Copilot Author ${Date.now()}`;
+        const newAuthorValue = `Test Author ${Date.now()}`;
 
         await authorField.fill(newAuthorValue);
         await authorField.blur();
