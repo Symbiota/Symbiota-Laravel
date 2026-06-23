@@ -137,7 +137,7 @@ test.describe('x-taxa-search autocomplete', () => {
             await Promise.all([
                 page.waitForURL(
                     (url) => url.pathname === '/taxon' && url.searchParams.get('parenttid') === parentTid,
-                    { timeout: 10_000 },
+                    { timeout: 10_000, waitUntil: 'domcontentloaded' },
                 ),
                 displayButton.click(),
             ]);
@@ -157,7 +157,7 @@ test.describe('x-taxa-search autocomplete', () => {
             await Promise.all([
                 page.waitForURL(
                     (url) => url.pathname === '/taxon' && url.searchParams.get('parenttid') === '1',
-                    { timeout: 10_000 },
+                    { timeout: 10_000, waitUntil: 'domcontentloaded' },
                 ),
                 displayButton.click(),
             ]);

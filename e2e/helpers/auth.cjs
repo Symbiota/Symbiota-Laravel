@@ -10,8 +10,8 @@ function requireEnv(name) {
     return value;
 }
 
-const TEST_EMAIL = requireEnv('TEST_USER_EMAIL');
-const TEST_PASSWORD = requireEnv('TEST_USER_PASSWORD');
+const TEST_EMAIL = requireEnv('TEST_USER_EMAIL'); // You must create a user and add their username and login to get these tests to work currently
+const TEST_PASSWORD = requireEnv('TEST_USER_PASSWORD'); // You must create a user and add their username and login to get these tests to work currently
 /** @type {Array<any> | null} */
 let cachedCookies = null;
 
