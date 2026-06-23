@@ -91,8 +91,7 @@ class CollectionTraitController extends Controller {
             ->all();
     }
 
-    //turn legacy collid input into the comma-separated string for OccurrenceAttributes.
-    private static function resolveMiningCollid(?int $collId = null): string {
+    private static function resolveAttributeMiningCollid(?int $collId = null): string {
         if ($collId !== null) {
             return (string) $collId;
         }
@@ -122,15 +121,14 @@ class CollectionTraitController extends Controller {
         return implode(',', $selectedIds);
     }
 
-    // turn input into strings
     private static function normalizeInput(string $key): string {
         $value = request($key, '');
 
         return is_scalar($value) ? (string) $value : '';
     }
 
-    private static function miningRequestData(?int $collId = null): array {
-        $collid = self::resolveMiningCollid($collId);
+    private static function attributeMiningRequestData(?int $collId = null): array {
+        $collid = self::resolveAttributeMiningCollid($collId);
         $traitID = is_numeric(request('traitid')) ? (int) request('traitid') : 0;
         $tidFilter = is_numeric(request('tidfilter')) ? (int) request('tidfilter') : 0;
         $fieldName = self::normalizeInput('fieldname');
@@ -150,9 +148,8 @@ class CollectionTraitController extends Controller {
         ];
     }
 
-    // Build the data shared by the selection, filtering, and batch-assignment mining states.
-    private static function getMiningPageData(?int $collId = null): array {
-        $requestData = self::miningRequestData($collId);
+    private static function getAttributeMiningPageData(?int $collId = null): array {
+        $requestData = self::attributeMiningRequestData($collId);
         $attrManager = self::attributeManager($requestData['collid']);
         $editableIds = self::editableCollectionIds();
         $collArr = $attrManager->getCollectionList(Gate::check('SUPER_ADMIN') ? '' : $editableIds);
@@ -175,12 +172,11 @@ class CollectionTraitController extends Controller {
             'fieldArr' => self::ATTR_MINING_FIELDS,
             'fieldValues' => $fieldValues,
             'traitArr' => $traitArr,
-            'miningErrors' => message_bag([]),
+            'attributeMiningErrors' => message_bag([]),
         ]);
     }
 
-    // assign in bathces selected trait states to all occurrences that match the selected verbatim field values.
-    private static function submitMiningAttributes($attrManager, array $pageData) {
+    private static function submitAttributeMiningAttributes($attrManager, array $pageData) {
         $fieldValueArr = request('fieldvalue', []);
         $fieldValueArr = is_array($fieldValueArr) ? $fieldValueArr : [$fieldValueArr];
         $stateIDArr = [];
@@ -218,11 +214,11 @@ class CollectionTraitController extends Controller {
         return message_bag([]);
     }
 
-    public static function mining(?int $collId = null) {
-        $pageData = self::getMiningPageData($collId);
+    public static function attributeMining(?int $collId = null) {
+        $pageData = self::getAttributeMiningPageData($collId);
 
         if (request()->isMethod('post') && $pageData['submitForm'] === 'Harvest from Collections' && ! $pageData['collid']) {
-            $pageData['miningErrors'] = message_bag([__('traitattr_attributemining.SELECT_COLLECT_TO_HARVEST')]);
+            $pageData['attributeMiningErrors'] = message_bag([__('traitattr_attributemining.SELECT_COLLECT_TO_HARVEST')]);
         } elseif (request()->isMethod('post') && $pageData['submitForm'] === 'Get Field Values') {
             $messages = [];
             if (! $pageData['traitID']) {
@@ -231,15 +227,15 @@ class CollectionTraitController extends Controller {
             if (! $pageData['fieldName']) {
                 $messages[] = __('traitattr_attributemining.MUST_SELECT_SOURCE_FIELD');
             }
-            $pageData['miningErrors'] = message_bag($messages);
+            $pageData['attributeMiningErrors'] = message_bag($messages);
         } elseif (request()->isMethod('post') && $pageData['submitForm'] === 'Batch Assign State(s)') {
-            $pageData['miningErrors'] = self::submitMiningAttributes($pageData['attrManager'], $pageData);
-            $pageData = array_merge(self::getMiningPageData($collId), [
-                'miningErrors' => $pageData['miningErrors'],
+            $pageData['attributeMiningErrors'] = self::submitAttributeMiningAttributes($pageData['attrManager'], $pageData);
+            $pageData = array_merge(self::getAttributeMiningPageData($collId), [
+                'attributeMiningErrors' => $pageData['attributeMiningErrors'],
             ]);
         }
 
-        return view('pages/collections/attribute-mining', $pageData);
+        return view('pages/collections/attributemining', $pageData);
     }
 
     public static function editor(int $collId) {

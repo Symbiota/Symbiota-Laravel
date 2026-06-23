@@ -5,7 +5,7 @@
     'fieldArr' => [],
     'fieldValues' => [],
     'fieldName' => '',
-    'miningErrors',
+    'attributeMiningErrors',
     'stringFilter' => '',
     'taxonFilter' => '',
     'tidFilter' => 0,
@@ -46,7 +46,7 @@ if (count($selectedCollIds) === 1) {
 } elseif (Gate::check('COLL_EDIT_ANY')) {
     $breadcrumbs[] = [
         'title' => __('traitattr_attributemining.ADJUST_COLLECTION_SELECTION'),
-        'href' => url('collections/traits/mining'),
+        'href' => url('collections/traits/attributemining'),
     ];
 }
 
@@ -147,7 +147,7 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
     <x-breadcrumbs :items="$breadcrumbs" />
     <x-page-title>{{ __('traitattr_attributemining.OCC_ATTRI_MINING_TOOL') }}</x-page-title>
 
-    <x-errors :errors="$miningErrors" />
+    <x-errors :errors="$attributeMiningErrors" />
 
     @if($collid)
         @if($collid === 'all')
@@ -350,7 +350,7 @@ $breadcrumbs[] = ['title' => __('traitattr_attributemining.ATTRI_MINING_TOOL')];
         <div class="font-bold">{{ __('traitattr_attributemining.SELECT_COLLECTIONS') }}</div>
         <form
             method="POST"
-            action="{{ url('collections/traits/mining') }}"
+            action="{{ url('collections/traits/attributemining') }}"
             class="m-4 space-y-2"
             x-data="{ selectAll: false }"
         >
