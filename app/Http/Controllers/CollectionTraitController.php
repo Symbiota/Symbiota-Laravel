@@ -127,6 +127,12 @@ class CollectionTraitController extends Controller {
         return is_scalar($value) ? (string) $value : '';
     }
 
+    private static function normalizeReviewStatus(): int {
+        $reviewStatus = request('reviewstatus', 0);
+
+        return is_numeric($reviewStatus) ? (int) $reviewStatus : 0;
+    }
+
     private static function attributeMiningRequestData(?int $collId = null): array {
         $collid = self::resolveAttributeMiningCollid($collId);
         $traitID = is_numeric(request('traitid')) ? (int) request('traitid') : 0;
@@ -157,6 +163,8 @@ class CollectionTraitController extends Controller {
         $traitArr = [];
 
         if ($requestData['collid'] && $requestData['traitID'] && $requestData['fieldName']) {
+            set_time_limit(1800);
+
             $fieldValues = $attrManager->getFieldValueArr(
                 $requestData['traitID'],
                 $requestData['fieldName'],
@@ -206,7 +214,7 @@ class CollectionTraitController extends Controller {
             $stateIDArr,
             $fieldValueArr,
             request('notes'),
-            request('reviewstatus')
+            self::normalizeReviewStatus()
         )) {
             return message_bag([$attrManager->getErrorMessage()]);
         }
