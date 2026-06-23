@@ -1,8 +1,17 @@
 // @ts-check
 const { expect } = require('@playwright/test');
 
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'mark.fisher@ku.edu';
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'tomcat123';
+/** @param {string} name */
+function requireEnv(name) {
+    const value = process.env[name];
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+    return value;
+}
+
+const TEST_EMAIL = requireEnv('TEST_USER_EMAIL');
+const TEST_PASSWORD = requireEnv('TEST_USER_PASSWORD');
 /** @type {Array<any> | null} */
 let cachedCookies = null;
 
@@ -22,7 +31,7 @@ async function login(page) {
     if (page.url().includes('/login')) {
         await page.locator('#email').fill(TEST_EMAIL);
         await page.locator('#password').fill(TEST_PASSWORD);
-        await page.locator('form').first().evaluate((form) => form.submit());
+        await page.locator('form').first().evaluate((form) => /** @type {HTMLFormElement} */ (form).submit());
 
         await expect
             .poll(() => new URL(page.url()).pathname, { timeout: 20_000 })
