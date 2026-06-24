@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
-        $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
             return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
@@ -22,7 +21,6 @@ class TaxonomyController extends Controller {
     }
 
     public static function editTaxonProfile(int $tid) {
-        $tid = (int) $tid;
         if (! TaxonomyQueryService::taxonData($tid)) {
             return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
         }
@@ -31,7 +29,6 @@ class TaxonomyController extends Controller {
     }
 
     public static function editTaxon($tid) {
-        $tid = (int) $tid;
         $taxonEditorObj = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $taxonInfo = TaxonViewDataService::prepareTaxonInfo($tid, $taxonEditorObj);
 
