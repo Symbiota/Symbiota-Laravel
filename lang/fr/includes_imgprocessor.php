@@ -21,4 +21,6 @@ return [
     'VV_OCR_ONLY' => 'OCR Only',
     'VV_TRANSCRIPTION_MODEL' => 'Transcription Model',
     'VV_TRANSCRIPTION_PROMPT' => 'Transcription Prompt',
+    'TESSERACT_OCR' => 'Tesseract OCR',
+    'Image Resolution' => 'Résolution d\'image',
 ];

@@ -38,7 +38,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Observações de georreferenciação',
     'GEOREFERENCE_PROTOCOL' => 'Protocolo de Georreferenciação',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Status de verificação Georef',
-    'FOOTPRINT_WKT' => 'Polígono de pegada',
+    'FOOTPRINT_POLYGON' => 'Polígono de pegada',
     'HOST' => 'Hospedar',
     'VERBATIM_ATTRIBUTES' => 'Descrição',
     'OCCURRENCE_REMARKS' => 'Notas (observações de ocorrência)',
@@ -54,5 +54,6 @@ return [
     'INSTITUTION_CODE' => 'Código da Instituição (substituir)',
     'COLLECTION_CODE' => 'Código de coleção (substituir)',
     'OWNER_INSTITUTION_CODE' => 'Código do proprietário (substituir)',
+    'INST_CODE_OVERRIDE' => 'Código da Instituição (substituir)',
     'STORAGELOCATION_CODE' => 'Storage Location',
 ];

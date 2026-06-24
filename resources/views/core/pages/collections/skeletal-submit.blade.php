@@ -176,7 +176,7 @@
                     item(__('editor_occurrencetable_display.EXPERT_REQUIRED'), 'expert required'),
                     item(__('editor_occurrencetable_display.PENDING_REVIEW_NFN'), 'pending review-nfn'),
                     item(__('editor_occurrencetable_display.PENDING_REVIEW'), 'pending review'),
-                    item(__('editor_occurrencetable_display.REVIEWED'), 'reviewed'),
+                    item(__('misc_commentlist.REVIEWED'), 'reviewed'),
                     item(__('editor_occurrencetable_display.CLOSED'), 'CLOSED'),
                 ]"
                     x-show="show_processing_staus"

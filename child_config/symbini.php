@@ -56,11 +56,11 @@ $PUBLIC_IMAGE_UPLOAD_ROOT = '/content/imglib';
 
 // the root for the collection image directory
 // Domain path to images, if different from portal
-$IMAGE_DOMAIN = '';
+$MEDIA_DOMAIN = getenv('MEDIA_DOMAIN') ?? '';
 // URL path to images
-$IMAGE_ROOT_URL = $CLIENT_ROOT . '/temp/images';
+$MEDIA_ROOT_URL = $CLIENT_ROOT . '/temp/images';
 // Writable path to images, especially needed for downloading images
-$IMAGE_ROOT_PATH = $TEMP_DIR_ROOT . '/images';
+$MEDIA_ROOT_PATH = $TEMP_DIR_ROOT . '/images';
 
 // Domain path to images, if different from portal
 $ACCESSIBILITY_ACTIVE = getenv('PORTAL_ACCESSIBILITY_ACTIVE');
