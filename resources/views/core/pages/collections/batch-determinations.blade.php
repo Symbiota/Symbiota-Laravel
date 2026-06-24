@@ -204,7 +204,7 @@ $batchDeterminationConfig = [
 
         <div class="space-y-6">
             <div>
-                <h1 class="text-4xl">{{ __('editor_batchdeterminations.BATCH_DETERS') }}</h1>
+                <x-page-title class="text-4xl">{{ __('editor_batchdeterminations.BATCH_DETERS') }}</x-page-title>
                 <h2 class="text-2xl">{!! Purify::clean($collectionName) !!}</h2>
             </div>
 
