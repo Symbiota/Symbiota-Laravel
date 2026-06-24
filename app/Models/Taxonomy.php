@@ -38,7 +38,11 @@ class Taxonomy extends Model {
         200 => 18, // section
         210 => 19, // subsection
         220 => 20, // species
-        300 => 21, // infraspecies
+        240 => 21, // variety
+        250 => 22, // subvariety
+        260 => 23, // form
+        270 => 24, // subform
+        300 => 22, // infraspecies/cultivated
     ];
 
     public function getScientificNameAttribute() {
