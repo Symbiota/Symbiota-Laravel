@@ -80,7 +80,10 @@ async function verifyLoadFormCore(
     // console.log({ rankid, unit1Label, unit2Label, isValid, validationMessage });
     // console.log("deleteMe and preExistingTaxonInfo is: ");
     // console.log(preExistingTaxonInfo);
-    const entryHasNotChanged = isTheSameEntryAsItStarted(preExistingTaxonInfo);
+    const entryHasNotChanged = isTheSameEntryAsItStarted(
+        preExistingTaxonInfo,
+        alpineData,
+    );
     // console.log("deleteMe entryHasNotChanged is: " + entryHasNotChanged);
     if (entryHasNotChanged) {
         return { isValid: true, message: "" };
@@ -366,7 +369,7 @@ async function validateTaxonEditForm(
     );
 }
 
-function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
+function isTheSameEntryAsItStarted(preExistingTaxonInfo, alpineData = null) {
     if (!preExistingTaxonInfo) {
         return false;
     }
@@ -380,6 +383,14 @@ function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
         return el ? el.value : "";
     };
 
+    const currentRankId =
+        alpineData?.rankid ||
+        currentForm.querySelector('#taxon-rank-container input[name="rankid"]')
+            ?.value ||
+        document.getElementById("rankid")?.value ||
+        currentForm.querySelector('[name="rankid"]')?.value ||
+        "";
+
     const originalAcceptStatus =
         preExistingTaxonInfo.tid == preExistingTaxonInfo.tidaccepted
             ? "1"
@@ -390,7 +401,7 @@ function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
     const currentAcceptStatus = acceptStatusEl ? acceptStatusEl.value : "1";
 
     const fieldMatches = [
-        getFieldValue("rankid") ==
+        currentRankId ==
             (preExistingTaxonInfo.rankID ?? preExistingTaxonInfo.rankid ?? ""),
         getFieldValue("unitind1") == (preExistingTaxonInfo.unitInd1 ?? ""),
         getFieldValue("unitname1") == (preExistingTaxonInfo.unitName1 ?? ""),
@@ -401,17 +412,17 @@ function isTheSameEntryAsItStarted(preExistingTaxonInfo) {
         getFieldValue("cultivarEpithet") ==
             (preExistingTaxonInfo.cultivarEpithet ?? ""),
         getFieldValue("tradeName") == (preExistingTaxonInfo.tradeName ?? ""),
-        getFieldValue("author") == (preExistingTaxonInfo.author ?? ""),
+        // getFieldValue("author") == (preExistingTaxonInfo.author ?? ""),
         getFieldValue("parenttid") == (preExistingTaxonInfo.parenttid ?? ""),
-        getFieldValue("notes") == (preExistingTaxonInfo.notes ?? ""),
-        getFieldValue("source") == (preExistingTaxonInfo.source ?? ""),
-        getFieldValue("securitystatus") ==
-            (preExistingTaxonInfo.securityStatus ?? "0"),
-        currentAcceptStatus == originalAcceptStatus,
-        getFieldValue("tidaccepted") ==
-            (preExistingTaxonInfo.tidaccepted ?? ""),
-        getFieldValue("unacceptabilityreason") ==
-            (preExistingTaxonInfo.UnacceptabilityReason ?? ""),
+        // getFieldValue("notes") == (preExistingTaxonInfo.notes ?? ""),
+        // getFieldValue("source") == (preExistingTaxonInfo.source ?? ""),
+        // getFieldValue("securitystatus") ==
+        //     (preExistingTaxonInfo.securityStatus ?? "0"),
+        // currentAcceptStatus == originalAcceptStatus,
+        // getFieldValue("tidaccepted") ==
+        //     (preExistingTaxonInfo.tidaccepted ?? ""),
+        // getFieldValue("unacceptabilityreason") ==
+        //     (preExistingTaxonInfo.UnacceptabilityReason ?? ""),
     ];
 
     const isSame = fieldMatches.every(Boolean);
@@ -606,6 +617,9 @@ async function parseName() {
                 rankId = 100;
             }
         }
+        if (rankId == "") {
+            rankId = 180;
+        }
     } else {
         rankId = 220;
         if (taxonForm.unitname3.value != "") {
@@ -637,7 +651,12 @@ async function parseName() {
         }
     }
     const rankidEl = document.getElementById("rankid");
-    if (rankidEl) rankidEl.value = rankId;
+    if (rankidEl) {
+        rankidEl.value = rankId;
+        // Ensure Alpine receives the programmatic change to keep x-data in sync.
+        rankidEl.dispatchEvent(new Event("input", { bubbles: true }));
+        rankidEl.dispatchEvent(new Event("change", { bubbles: true }));
+    }
     if (unitName1.substring(0, 1) == "×" || unitName1.substring(0, 1) == "†") {
         const unitind1El = document.getElementById("unitind1");
         if (!unitind1El?.value) {
@@ -665,7 +684,7 @@ async function parseName() {
     }
     if (parentName !== "") {
         const taxaSearchInput = taxonForm.querySelector(
-            'input#parentname[name="taxa"]',
+            'input#parentname[name="parentname"]',
         );
         if (taxaSearchInput) taxaSearchInput.value = parentName;
 

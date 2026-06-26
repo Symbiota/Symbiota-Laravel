@@ -1,15 +1,6 @@
-@props([
-    'mode' => 'create',
-    'kingdoms' => [],
-    'allTaxonRanks' => [],
-    'indContent' => [],
-    'securityOptions' => [],
-    'errors' => [],
-    'canCreateOrEdit' => false,
-    'taxonInfo' => null,
-    'parentName' => '',
-    'acceptedName' => '',
-])
+@php
+    $mode = $mode ?? 'create';
+@endphp
 <x-layout>
     <div class="mb-4">
         <x-breadcrumbs
@@ -17,7 +8,7 @@
             ['title' => 'Home', 'href' => url('')],
             [
                 'title' => 'Taxononmic Tree View',
-                'href' => legacy_url('/taxa/taxonomy/taxonomydisplay.php'),
+                'href' => url('/taxon/'),
             ],
             ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]"
@@ -29,6 +20,16 @@
         </div>
     @endif
     @fragment('taxon_editor')
-        @include('core.pages.taxon._core_taxon_create_and_edit')
+        <x-pages.taxon.taxon-create-and-edit
+            :mode="$mode ?? 'create'"
+            :canCreateOrEdit="$canCreateOrEdit ?? false"
+            :allTaxonRanks="$allTaxonRanks ?? collect()"
+            :indContent="$indContent ?? []"
+            :securityOptions="$securityOptions ?? []"
+            :securitystatusstart="$securitystatusstart ?? 0"
+            :taxonInfo="$taxonInfo ?? null"
+            :parentName="$parentName ?? ''"
+            :acceptedName="$acceptedName ?? ''"
+        />
     @endfragment
 </x-layout>

@@ -31,66 +31,77 @@
         :title="__('taxonomy_taxonomydelete.CHILD_TAXA')"
         :warning="__('taxonomy_taxonomydelete.CHILDREN_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.CHILD_TAXA_PLURAL')"
+        :item-type="'child'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['syn'] ?? []"
         :title="__('taxonomy_taxonomydelete.SYN_LINKS')"
         :warning="__('taxonomy_taxonomydelete.SYN_EXISTS')"
         :item-name-plural="__('taxonomy_taxonomydelete.SYN_LINKS_PLURAL')"
+        :item-type="'synonym'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['img'] ?? []"
         :title="__('taxonomy_taxonomydelete.IMAGE_LINKS')"
         :warning="__('taxonomy_taxonomydelete.IMGS_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.IMAGES')"
+        :item-type="'image'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['map'] ?? []"
         :title="__('taxonomy_taxonomydelete.TAXON_MAPS')"
         :warning="__('taxonomy_taxonomydelete.MAPS_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.TAXON_MAPS_PLURAL')"
+        :item-type="'map'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['vern'] ?? []"
         :title="__('taxonomy_taxonomydelete.VERNACULARS')"
         :warning="__('taxonomy_taxonomydelete.VERNACULARS_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.VERNACULAR_NAMES')"
+        :item-type="'vernacular'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['tdesc'] ?? []"
         :title="__('taxonomy_taxonomydelete.TEXT_DESCRIPTIONS')"
         :warning="__('taxonomy_taxonomydelete.TEXT_DESCS_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_TEXT_DESCS')"
+        :item-type="'text_description'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['occur'] ?? []"
         :title="__('taxonomy_taxonomydelete.OCCURRENCE_RECORDS')"
         :warning="__('taxonomy_taxonomydelete.OCCS_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_OCCS')"
+        :item-type="'occurrence'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['dets'] ?? []"
         :title="__('taxonomy_taxonomydelete.DETERMINATIONS')"
         :warning="__('taxonomy_taxonomydelete.DETS_REMAPPED')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_DETS')"
+        :item-type="'determination'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['cl'] ?? []"
         :title="__('taxonomy_taxonomydelete.CHECKLISTS')"
         :warning="__('taxonomy_taxonomydelete.CHECKLISTS_REMAPPED')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_CHECKLISTS')"
+        :item-type="'checklist'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['kmdesc'] ?? []"
         :title="__('taxonomy_taxonomydelete.MORPHO_KEY_DESC')"
         :warning="__('taxonomy_taxonomydelete.MORPHO_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_MORPHO')"
+        :item-type="'morpho'"
     />
     <x-taxon-linked-item
         :items="$verifyArr['link'] ?? []"
         :title="__('taxonomy_taxonomydelete.LINKED_RESOURCES')"
         :warning="__('taxonomy_taxonomydelete.LINKED_RES_EXIST')"
         :item-name-plural="__('taxonomy_taxonomydelete.LINKED_RES_PLURAL')"
+        :item-type="'linked_resource'"
     />
 
     <fieldset class="border-base-300 mb-4 rounded-md border p-4">
@@ -130,7 +141,10 @@
             @method('DELETE')
         </form>
         <x-button
-            @click.prevent="isDeleteValid && document.getElementById('delete-taxon-form').submit()"
+            @click.prevent="
+                if (!isDeleteValid) return;
+                document.getElementById('confirm-delete-taxon-dialog').showModal();
+            "
             x-bind:aria-disabled="!isDeleteValid"
             x-bind:class="!isDeleteValid ? 'opacity-50 cursor-not-allowed' : ''"
             color="danger"
@@ -140,5 +154,21 @@
                 x-text="isDeleteValid ? @js(__('taxonomy_taxonomydelete.DELETE_TAXON')) : @js(__('taxonomy_taxonomydelete.DELETE_TAXON_DISABLED'))"
             />
         </x-button>
+        <x-modal id="confirm-delete-taxon-dialog">
+            <x-slot name="title" class="text-2xl">
+                {{ __('taxonomy_taxonomydelete.DELETE_CONFIRM_TITLE') }}
+            </x-slot>
+            <x-slot name="body" class="space-y-4">
+                <p>{{ __('taxonomy_taxonomydelete.DELETE_CONFIRM_MESSAGE', ['name' => $taxonInfo->sciName ?? '']) }}</p>
+                <div class="flex justify-end gap-2">
+                    <x-button type="button" command="close" commandfor="confirm-delete-taxon-dialog" variant="neutral">
+                        {{ __('taxonomy_taxonomydelete.CANCEL') }}
+                    </x-button>
+                    <x-button type="submit" form="delete-taxon-form" variant="error">
+                        {{ __('taxonomy_taxonomydelete.DELETE_TAXON') }}
+                    </x-button>
+                </div>
+            </x-slot>
+        </x-modal>
     </fieldset>
 </div>

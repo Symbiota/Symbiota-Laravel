@@ -5,7 +5,7 @@ return [
     'SUCCESS_REMAPPING' => '¡Taxón remapeado exitosamente!',
     'SUCCESS_DELETING' => '¡Taxón eliminado exitosamente!',
     'TAX_TREE_VIEW' => 'Explorador de Árbol Taxonómico',
-    'TAXONOMY_EDITOR' => 'Editor de Taxonomía',
+    'TAXONOMY_EDITOR' => 'Crear Taxón',
     'SUCCESS' => 'ÉXITO',
     'GO_TAX_DISPLAY' => 'Ir a ventana de taxonomía',
     'ADD_NEW_TAXON' => 'Añadir Nuevo Taxón',
@@ -58,4 +58,6 @@ return [
     'TARGET_TAXON_MISSING' => 'Falta el Taxón objetivo',
     'GENUS_NAME' => 'Nombre del Género',
     'QUICK_PARSER_LABEL' => 'Análisis rápido del nombre científico',
+    'HIERARCHY_REBUILD_SUCCESS' => 'Jerarquía reconstruida con éxito',
+    'EDIT_OTHER_TAXONOMIC_INFO' => 'Editar otra información taxonómica',
 ];
