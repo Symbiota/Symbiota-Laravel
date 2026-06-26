@@ -112,7 +112,7 @@ $isObservations = $collection->isObservations();
                 __('misc_collprofiles.CREATE_NEW_REC') => tryColUrl('editor/imageoccursubmit.php', $isSpecimens),
                 __('misc_collprofiles.SKELETAL') => tryColUrl('editor/skeletalsubmit.php', $isSpecimens),
                 __('misc_collprofiles.EDIT_EXISTING') => colUrl('editor/occurrencetabledisplay.php', '&displayquery=1'),
-                __('misc_collprofiles.ADD_BATCH_DETER') => tryColUrl('editor/batchdeterminations.php', $isSpecimens),
+                __('misc_collprofiles.ADD_BATCH_DETER') => $isSpecimens ? url('collections/' . $collection->collID . '/batchdeterminations') : false,
 
                 __('profile_occurrencemenu.PRINT_LABELS') => colUrl('reports/labelmanager.php'),
                 __('profile_occurrencemenu.PRINT_ANNOTATIONS') => colUrl('reports/annotationmanager.php'),
