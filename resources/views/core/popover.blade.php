@@ -68,6 +68,7 @@
     class="relative"
 >
     <button
+        type="button"
         x-ref="popoverButton"
         @click="popoverOpen = !popoverOpen"
         {{ $icon->attributes->twMerge('flex items-center justify-center w-10 h-10 bg-white border rounded-full shadow-sm cursor-pointer hover:bg-base-200 focus-visible:ring-accent focus-visible:ring-2 focus-visible:outline-none active:bg-white border-base-300') }}

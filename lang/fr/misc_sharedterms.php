@@ -4,6 +4,7 @@ return [
     'COLL_PROFILE' => 'Profil de collection',
     'FILTER' => 'Filtre',
     'MAILING_ADD' => 'Adresse Postale',
+    'CAT_NUM' => 'Numéro de Catalogue',
     'NEED_INST_CODE' => 'Code de l\'institution doit avoir une valeur',
     'NEED_COLL_VALUE' => 'Nom de la collection doit avoir une valeur',
     'CANNOT_GUID' => 'L\'option \'GUID Généré par Symbiota ne peut pas être sélectionnée pour une collection gérée localement en dehors du portail de données (par exemple, le type de gestion Instantané). Dans ce cas, le GUID doit être généré dans la base de données de collecte source et transmis au portail de données dans le cadre du processus de téléchargement.',
@@ -21,5 +22,6 @@ return [
     'LINK_ADDRESS' => 'Lier Adresse',
     'ADD_ADDRESS' => 'Ajouter une nouvelle adresse ne figurant pas dans la liste',
     'ADD_INST' => 'Ajouter une institution qui ne figure pas sur la liste',
+    'LINK_URL_REQ' => 'URL du lien et titre requis',
     'CLOSE' => 'Fermer',
 ];
