@@ -48,6 +48,7 @@ return [
     'ACCESS_DEF' => 'Des informations ou un lien URL vers une page avec des détails expliquant comment utiliser les données. Voir',
     'DATASET_TYPE' => 'Type de Jeu de Données',
     'SELECT_DATASET_TYPE' => 'Sélectionner le type de jeu de données',
+    'SELECT_DATASET_TYPE_REQUIRED' => 'Veuillez sélectionner un type de jeu de données avant de soumettre.',
     'PRES_SPECS' => 'Spécimens Conservés',
     'FOSSIL_SPECS' => 'Spécimens fossile',
     'FOSSIL_WARN_1' => 'Sélectionner «Spécimens fossiles» activera le module Paléo pour cette collection et définira la valeur par défaut sur «FossilSpecimen» pour',

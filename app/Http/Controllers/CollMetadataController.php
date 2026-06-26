@@ -20,7 +20,7 @@ class CollMetadataController extends Controller {
         if (! trim((string) $request->input('collType'))) {
             return self::redirectParams(
                 null,
-                'Please select a Dataset Type before submitting.',
+                __('misc_collmetadata.SELECT_DATASET_TYPE_REQUIRED'),
                 'error',
                 0,
                 true,

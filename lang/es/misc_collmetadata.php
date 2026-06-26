@@ -48,6 +48,7 @@ return [
                     cómo se pueden utilizar los datos. Ver',
     'DATASET_TYPE' => 'Tipo de conjunto de datos',
     'SELECT_DATASET_TYPE' => 'Seleccione tipo de conjunto de datos',
+    'SELECT_DATASET_TYPE_REQUIRED' => 'Seleccione un tipo de conjunto de datos antes de enviar.',
     'PRES_SPECS' => 'Especímenes preservados',
     'FOSSIL_SPECS' => 'Espécimenes fósiles',
     'FOSSIL_WARN_1' => 'Al seleccionar "Espécimenes fósiles", se activará el módulo Paleo para esta colección y se establecerá el valor predeterminado en "FossilSpecimen" para',

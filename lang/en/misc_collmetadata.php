@@ -48,6 +48,7 @@ return [
 					how one can use the data. See',
     'DATASET_TYPE' => 'Dataset Type',
     'SELECT_DATASET_TYPE' => 'Select dataset type',
+    'SELECT_DATASET_TYPE_REQUIRED' => 'Please select a Dataset Type before submitting.',
     'PRES_SPECS' => 'Preserved Specimens',
     'FOSSIL_SPECS' => 'Fossil Specimens',
     'FOSSIL_WARN_1' => 'Selecting “Fossil Specimen” will activate the Paleo Module for this collection and set the default value to “FossilSpecimen” for',
