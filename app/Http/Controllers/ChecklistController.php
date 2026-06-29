@@ -177,12 +177,25 @@ class ChecklistController extends Controller {
     }
 
     public static function getChecklistsData(Request $request) {
+        $user = request()->user();
+
+        $user_pids = $user->projects()->map(fn ($v) => $v->pid);
+        $user_clids = $user->checklists()->map(fn ($v) => $v->clid);
+
         $checklists_query = DB::table('fmchecklists as c')
             ->leftJoin('fmchklstprojlink as cpl', 'cpl.clid', 'c.clid')
             ->leftJoin('fmprojects as p', 'p.pid', 'cpl.pid')
             ->where('c.type', '!=', 'excludespp')
-            ->whereLike('c.access', 'public%')
-            ->where('p.ispublic', 1)
+            ->where(function (Builder $query) use ($user_clids) {
+                $query->orWhereLike('c.access', 'public%')
+                    ->orWhereIn('c.clid', $user_clids);
+            })
+            ->where(function (Builder $query) use ($user_pids) {
+                $query
+                    ->orWhereNull('p.pid')
+                    ->orWhere('p.ispublic', 1)
+                    ->orWhereIn('p.pid', $user_pids);
+            })
             ->whereIn('c.clid', function (Builder $query) {
                 $checklistChildren = DB::table('fmchklstchildren')
                     ->select('clid')
@@ -193,11 +206,18 @@ class ChecklistController extends Controller {
                     ->union($checklistChildren);
             })
             ->orderByRaw('p.projname is null, p.projname, c.sortSequence, c.name')
-            ->select('*');
+            ->select([
+                'p.pid',
+                'p.projname',
+                'p.ispublic',
+                'c.clid',
+                'c.name',
+                'c.access',
+                'c.defaultSettings',
+                'c.latCentroid',
+                'c.longCentroid',
+            ]);
 
-        // If user is a 'ClAdmin' and then add those checklists via clids
-
-        // If user is 'ProjAdmin' and then add checklists with the proper pid
         return $checklists_query->get();
     }
 
