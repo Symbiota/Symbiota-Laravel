@@ -15,7 +15,7 @@ class OccurrenceEditorController extends Controller {
         $media = \Media::fetchOccurrenceMedia($occId);
         $media_tags = \Media::getMediaTags(array_keys($media));
         $collection = Collection::get($occurrence->collid);
-        $label_image = [];
+        $label_image = null;
 
         foreach ($media as $id => $resource) {
             foreach (['url', 'sourceUrl', 'thumbnailUrl', 'originalUrl'] as $field) {
@@ -24,7 +24,7 @@ class OccurrenceEditorController extends Controller {
                 }
             }
 
-            if (empty($label_image) && $resource['mediaType'] === \MediaType::Image) {
+            if ($label_image === null && $resource['mediaType'] === \MediaType::Image) {
                 $label_image = $media[$id];
             }
         }
