@@ -108,4 +108,15 @@ return [
     | relavent for herabrium collections
     */
     'activate_duplicates' => env('PORTAL_ACTIVATE_DUPLICATES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Portal Modules
+    |--------------------------------------------------------------------------
+    |
+    | List of Portal Modules that can be turned on.
+    */
+    'module_checklist_key' => env('MODULE_CHECKLIST_KEY', true),
+    'module_occurrence' => env('MODULE_OCCURRENCE', true),
+    'module_flora' => env('MODULE_FLORA', true),
 ];
