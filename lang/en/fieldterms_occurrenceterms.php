@@ -28,6 +28,7 @@ return [
     'GEOREFERENCE_REMARKS' => 'Georeference Remarks',
     'GEOREFERENCE_PROTOCOL' => 'Georeference Protocol',
     'GEOREFERENCE_VERIFICATION_STATUS' => 'Georef Verification Status',
+    'FOOTPRINT_POLYGON' => 'Footprint Polygon',
     'HOST' => 'Host',
     'VERBATIM_ATTRIBUTES' => 'Description',
     'OCCURRENCE_REMARKS' => 'Notes (Occurrence Remarks)',
@@ -39,5 +40,6 @@ return [
     'DATA_GENERALIZATIONS' => 'Data Generalizations',
     'COLLECTION_CODE' => 'Collection Code (override)',
     'OWNER_INSTITUTION_CODE' => 'Owner Code (override)',
+    'INST_CODE_OVERRIDE' => 'Institution Code (override)',
     'STORAGELOCATION_CODE' => 'Storage Location',
 ];

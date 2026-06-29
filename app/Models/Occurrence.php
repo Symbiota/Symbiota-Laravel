@@ -268,6 +268,10 @@ class Occurrence extends Model {
         return $this->hasMany(OccurrenceIdentification::class, 'occid', 'occid');
     }
 
+    public function identifiers() {
+        return $this->hasMany(Identifiers::class, 'occid', 'occid');
+    }
+
     public function media() {
         return $this->hasMany(Media::class, 'occid', 'occid');
     }
@@ -321,6 +325,38 @@ SELECT c.* FROM omoccurpaleogts as c, parents as p WHERE p.parentgtsid = c.gtsid
             ->get();
 
         return $materialSample;
+    }
+
+    public function getIdentifiers() {
+        $identifiers = $this->identifiers()->get();
+
+        // Can be removed once otherCatalogNumbers is deprecated
+        if ($this->otherCatalogNumbers) {
+            $parsed_identifiers = explode('|', str_replace([',', ';'], '|', trim($this->otherCatalogNumbers, ',;|')));
+
+            foreach ($parsed_identifiers as $id) {
+                if ($parts = explode(':', $id)) {
+                    $ident = new Identifiers();
+                    $ident->occid = $this->occid;
+                    if (count($parts) === 2) {
+                        $ident->identifierName = trim($parts[0]);
+                        $ident->identifierValue = trim($parts[1]);
+                    } else {
+                        $ident->identifierValue = trim($parts[0]);
+                    }
+                    if (! $identifiers->contains(function (Identifiers $item) use ($ident) {
+                        $namesMatch = $ident->identifierName === $item->identifierName;
+                        $valuesMatch = $ident->identifierValue === $item->identifierValue;
+
+                        return $ident->identifierName ? $namesMatch && $valuesMatch : $valuesMatch;
+                    })) {
+                        $identifiers->push($ident);
+                    }
+                }
+            }
+        }
+
+        return $identifiers;
     }
 
     public static function fromKey($occid) {

@@ -98,16 +98,6 @@ class OccurrenceController extends Controller {
         ]);
     }
 
-    public static function editPage(int $occid) {
-        $occurrence = DB::table('omoccurrences as o')
-            ->select('*')
-            ->where('o.occid', '=', $occid)
-            ->first();
-
-        return view('pages/occurrence/editor', ['occurrence' => $occurrence]);
-
-    }
-
     public static function linkChecklist(int $occid) {
         $input = request()->input();
 
