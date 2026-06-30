@@ -24,7 +24,7 @@
             </li>
             @if(config('portal.activate_exsiccati'))
                 <li>
-                    <x-link href="{{ legacy_url('/collections/exsiccati/index.php') }}">Exsiccatae Index</x-link>
+                    <x-link href="{{ route('exsiccata.index') }}">Exsiccatae Index</x-link>
                 </li>
             @endif
             <li>
