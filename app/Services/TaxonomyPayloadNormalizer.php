@@ -33,7 +33,7 @@ class TaxonomyPayloadNormalizer {
         $normalized['rankid'] = intval($normalized['rankid'] ?? 0);
         $normalized['securitystatus'] = intval($normalized['securitystatus'] ?? 0);
 
-        if($parentTid = intval($normalized['parenttid'] ?? 0)) {
+        if ($parentTid = intval($normalized['parenttid'] ?? 0)) {
             $normalized['parenttid'] = $parentTid;
         } else {
             $normalized['parenttid'] = DB::table('taxa')

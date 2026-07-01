@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Taxonomy;
-use App\Services\TaxonomyPayloadNormalizer;
 use App\Services\TaxonomyMutationService;
+use App\Services\TaxonomyPayloadNormalizer;
 use App\Services\TaxonomyQueryService;
 use App\Services\TaxonResponseHandler;
 use App\Services\TaxonViewDataService;
@@ -79,19 +79,19 @@ class TaxonomyController extends Controller {
         $data = [
             'rankMap' => Taxonomy::RANK_MAP,
         ];
-        if($tid != null) {
+        if ($tid != null) {
             $taxon = Taxonomy::query()->findOrFail($tid);
             $data['taxonName'] = $taxon->sciName;
             $data['targetTid'] = $tid;
         }
         $parents = [];
         $parentTid = intval(request('parenttid'));
-        if($parentTid) {
+        if ($parentTid) {
             $data['parentTid'] = $parentTid;
             // Add parent information to data and attach children
         }
         $displayAuthor = intval(request('displayauthor'));
-        if($displayAuthor) {
+        if ($displayAuthor) {
             $data['displayAuthor'] = $displayAuthor;
         }
         if ($parentTid) {
@@ -102,6 +102,7 @@ class TaxonomyController extends Controller {
             $data['parents'] = $parents;
 
         }
+
         return view('pages/taxon/show', [
             'parents' => $data['parents'] ?? [],
             'rankMap' => $data['rankMap'] ?? [],
@@ -129,9 +130,11 @@ class TaxonomyController extends Controller {
         }
         if ($delStatus) {
             $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
+
             return redirect()->route('taxon.createview')->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }
@@ -147,9 +150,11 @@ class TaxonomyController extends Controller {
         if ($remapStatus) {
             $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
             TaxonomyController::delete($tid);
+
             return redirect()->route('taxon.view', ['tid' => $remapTid])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }
@@ -157,8 +162,9 @@ class TaxonomyController extends Controller {
     public static function changeAccepted() {
         $oldTid = (int) request('tid') ?? null;
         $targetTid = (int) request('tidaccepted') ?? null;
-        if(!$oldTid || !$targetTid) {
+        if (! $oldTid || ! $targetTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
@@ -171,8 +177,9 @@ class TaxonomyController extends Controller {
     public static function changeToNotAccepted() {
         $oldTid = (int) request('tid') ?? null;
         $targetTid = (int) request('new-tid') ?? null;
-        if(!$oldTid || !$targetTid) {
+        if (! $oldTid || ! $targetTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
@@ -185,8 +192,9 @@ class TaxonomyController extends Controller {
 
     public static function updateSynonymLink() {
         $currentTid = (int) request('current-tid') ?? null;
-        if(!$currentTid) {
+        if (! $currentTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($currentTid);
@@ -197,8 +205,9 @@ class TaxonomyController extends Controller {
 
     public static function reconstructHierarchy() {
         $tid = (int) request('tid') ?? null;
-        if(!$tid) {
+        if (! $tid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
@@ -209,8 +218,9 @@ class TaxonomyController extends Controller {
 
     public static function updateUpperTaxonomy() {
         $tid = (int) request('tid') ?? null;
-        if(!$tid) {
+        if (! $tid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+
             return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);

@@ -35,7 +35,7 @@ class TaxonResponseHandler {
         }
 
         if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
-            $redirectTid =  intval($redirectParams['tid'] ?? 0);
+            $redirectTid = intval($redirectParams['tid'] ?? 0);
 
             if ($redirectTid === 0) {
                 return redirect()->back()->withInput()->withErrors(['error' => __('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT')]);
