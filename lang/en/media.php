@@ -15,7 +15,7 @@ return [
     'SELECT_1-5' => 'Common Name',
     'SEPARATE_MULTIPLE' => 'Separate multiple names w/ commas',
     'INCLUDE_SYN' => 'Include Synonyms',
-    'IMAGE_TAGS' => 'Media Tags',
+    'MEDIA_TAGS' => 'Media Tags',
     'WITH' => 'with',
     'WITHOUT' => 'without',
     'ANY_TAG' => 'Any Tag',

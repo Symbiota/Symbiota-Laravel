@@ -212,7 +212,7 @@
     @endfragment
 
     <div>
-        <div class="text-2xl font-bold capitalize">{{ __('imagelib_search.RECORDS') }}</div>
+        <div class="text-2xl font-bold capitalize">{{ __('media.RECORDS') }}</div>
         <hr />
     </div>
     <div id="skeletal-session-records" x-on:htmx:after-swap="record_cnt = $el.children.length"></div>

@@ -15,7 +15,7 @@ return [
     'SELECT_1-5' => 'Nome Comum',
     'SEPARATE_MULTIPLE' => 'Separe vários nomes com vírgulas',
     'INCLUDE_SYN' => 'Incluir sinônimos',
-    'IMAGE_TAGS' => 'Tags multimídia',
+    'MEDIA_TAGS' => 'Tags multimídia',
     'WITH' => 'com',
     'WITHOUT' => 'sem',
     'ANY_TAG' => 'Qualquer etiqueta',

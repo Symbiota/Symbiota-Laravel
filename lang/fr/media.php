@@ -15,7 +15,7 @@ return [
     'SELECT_1-5' => 'Nom Commun',
     'SEPARATE_MULTIPLE' => 'Séparez plusieurs termes par des virgules',
     'INCLUDE_SYN' => 'Inclure Synonymes',
-    'IMAGE_TAGS' => 'Balises multimédia',
+    'MEDIA_TAGS' => 'Balises multimédia',
     'WITH' => 'avec',
     'WITHOUT' => 'sans',
     'ANY_TAG' => 'N\'importe quelle balise',

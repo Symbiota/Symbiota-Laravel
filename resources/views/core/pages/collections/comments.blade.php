@@ -139,7 +139,7 @@ foreach($userArr as $id => $name) {
                 @endif
             @endfor
             <span
-                >{{ $start + 1 }}-{{ $end }} {{ __('imagelib_search.OF') }} {{ $recCnt }} {{ __('checklists_checklist.COMMENTS') }}</span
+                >{{ $start + 1 }}-{{ $end }} {{ __('media.OF') }} {{ $recCnt }} {{ __('checklists_checklist.COMMENTS') }}</span
             >
         </div>
     @endif

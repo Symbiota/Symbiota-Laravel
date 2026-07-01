@@ -15,7 +15,7 @@ return [
     'SELECT_1-5' => 'Nombre Comun',
     'SEPARATE_MULTIPLE' => 'Separar múltiples con comas',
     'INCLUDE_SYN' => 'Incluir Sinónimos',
-    'IMAGE_TAGS' => 'Etiquetas medios',
+    'MEDIA_TAGS' => 'Etiquetas medios',
     'WITH' => 'con',
     'WITHOUT' => 'sin',
     'ANY_TAG' => 'sin ninguna etiqueta',
