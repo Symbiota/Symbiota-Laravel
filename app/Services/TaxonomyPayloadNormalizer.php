@@ -33,13 +33,13 @@ class TaxonomyPayloadNormalizer {
         $normalized['rankid'] = intval($normalized['rankid'] ?? 0);
         $normalized['securitystatus'] = intval($normalized['securitystatus'] ?? 0);
 
-        $normalizedParentTid = intval($normalized['parenttid'] ?? 0);
-        if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
-            $normalizedParentTid = DB::table('taxa')
+        if($parentTid = intval($normalized['parenttid'] ?? 0)) {
+            $normalized['parenttid'] = $parentTid;
+        } else {
+            $normalized['parenttid'] = DB::table('taxa')
                 ->where('sciName', $normalized['parentname'])
                 ->value('tid');
         }
-        $normalized['parenttid'] = $normalizedParentTid;
 
         $normalizedTidAccepted = intval($normalized['tidaccepted'] ?? 0);
         if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
