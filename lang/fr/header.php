@@ -37,6 +37,7 @@ return [
     'H_LOGOUT' => 'Se Déconnecter',
     'H_LOGIN' => 'Se connecter',
     'H_NEW_ACCOUNT' => 'Nouveau Compte',
+    'H_MENU' => 'Menu',
     'H_SELECT_LANGUAGE' => 'Sélectionnez langue',
     'H_CONTACT_US' => 'Contactez-Nous',
     'H_SKIP_NAV' => 'Sauter la Navigation',

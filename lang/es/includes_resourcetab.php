@@ -32,4 +32,6 @@ return [
     'DEL_GEN_RES' => 'Eliminar Recurso Genético',
     'DEL_RES' => 'Eliminar Recurso',
     'NO_GENETIC_RESOURCES' => 'No se han establecido vínculos genéticos.',
+    'NO_CHECKLISTS_LINKAGES' => 'No se han establecido vínculos con los vales de la lista de verificación',
+    'CHECKLIST_VOUCHER_LINKAGES' => 'Enlaces a Vouchers de Listados de Especies',
 ];

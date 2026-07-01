@@ -1,8 +1,6 @@
 @props(['project', 'checklists' => []])
 
 @php
-global $IS_KEY_MOD_IS_ACTIVE;
-
 $hasMappableChecklist = false;
 foreach($checklists as $checklist) {
     if($checklist->longCentroid && $checklist->latCentroid && $checklist->mapChecklist) {
@@ -60,7 +58,7 @@ foreach($checklists as $checklist) {
     <div>
         <div class="flex items-center gap-2">
             <div class="text-lg font-bold">{{ __('projects.RESCHECK') }}</div>
-            <x-tooltip text="What is a Research Species List">
+            <x-tooltip :text="__('projects.QUESRESSPEC')">
                 <button
                     class="bg-base-100 hover:bg-base-300 border-base-content text-base-content flex h-6 w-6 cursor-pointer items-center rounded-full border font-bold"
                     @click="descOpen = !descOpen"
@@ -72,12 +70,20 @@ foreach($checklists as $checklist) {
         <div x-cloak x-show="descOpen">{{ __('projects.RESCHECKQUES') }}</div>
     </div>
 
+    @if(config('portal.module_checklist_key'))
+        <div>
+            <span>{{ __('projects.THE') }}</span>
+            <i class="text-base-content fa-solid fa-key pl-1"></i>
+            <span>{{ __('projects.SYMBOLOPEN') }}</span>.
+        </div>
+    @endif
+
     <div class="flex flex-col gap-2 pl-4">
         @foreach($checklists as $checklist)
             <li>
                 <x-link href="{{ url('/checklists/' . $checklist->clid) }}"> {{ $checklist->name }} </x-link>
                 @php $defaultSettings=json_decode($checklist->defaultSettings ?? '{}') @endphp
-                @if($defaultSettings->activatekey ?? $IS_KEY_MOD_IS_ACTIVE ?? false)
+                @if($defaultSettings->activatekey ?? config('portal.module_checklist_key') ?? false)
                     |
                     <x-link
                         href="{{ legacy_url('/ident/key.php?clid=' . $checklist->clid . '&pid=' . $project->pid . '&taxon=All+Species') }}"

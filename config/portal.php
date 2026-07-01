@@ -108,4 +108,49 @@ return [
     | relavent for herabrium collections
     */
     'activate_duplicates' => env('PORTAL_ACTIVATE_DUPLICATES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Portal Modules
+    |--------------------------------------------------------------------------
+    |
+    | List of Portal Modules that can be turned on.
+    */
+    'module_checklist_key' => env('MODULE_CHECKLIST_KEY', true),
+    'module_occurrence' => env('MODULE_OCCURRENCE', true),
+    'module_flora' => env('MODULE_FLORA', true),
+    /*
+    |--------------------------------------------------------------------------
+    | Media Constants
+    |--------------------------------------------------------------------------
+    |
+    | Activates Specimen Duplicate listings and support features. Mainly
+    | relavent for herabrium collections
+    */
+    'img_lg_width_px' => 3200,
+    'img_web_width_px' => 1400,
+    'img_tn_width_px' => 200,
+    'media_file_size_limit' => 300000,
+    'media_domain' => env('MEDIA_DOMAIN') ?? env('APP_URL'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Processing Status
+    |--------------------------------------------------------------------------
+    |
+    | List of processing status options to be used in drop downs. Values not in
+    | this list is list will still/should get added to the drop down
+    */
+    'processing_status' => [
+        'unprocessed',
+        'unprocessed/NLP',
+        'stage 1',
+        'stage 2',
+        'stage 3',
+        'pending review-nfn',
+        'pending review',
+        'expert required',
+        'reviewed',
+        'closed',
+    ],
 ];

@@ -4,6 +4,7 @@ use App\Http\Controllers\ChecklistAdminController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionTraitController;
+use App\Http\Controllers\CollMetadataController;
 use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ExsiccataController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\MarkdownController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OccurrenceCommentController;
 use App\Http\Controllers\OccurrenceController;
+use App\Http\Controllers\OccurrenceEditorController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RssController;
@@ -145,7 +147,7 @@ Route::group(['prefix' => '/projects'], function () {
 */
 Route::group(['prefix' => '/occurrence'], function () {
     Route::get('/{occid}', [OccurrenceController::class, 'profilePage']);
-    Route::get('/{occid}/edit', [OccurrenceController::class, 'editPage']);
+    Route::get('/{occid}/edit', [OccurrenceEditorController::class, 'editPage']);
     /* Linked Resources */
     Route::put('/{occid}/link/checklist', [OccurrenceController::class, 'linkChecklist']);
     Route::put('/{occid}/link/dataset', [OccurrenceController::class, 'linkDataset']);
@@ -188,14 +190,34 @@ Route::group(['prefix' => '/collections'], function () {
 
     Route::get('/table', [CollectionController::class, 'tablePage']);
     Route::get('/list', [CollectionController::class, 'listPage']);
+    Route::get('/collmetadata', [CollMetadataController::class, 'create'])
+        ->name('collections.collmetadata.create')
+        ->can('SUPER_ADMIN');
+    Route::post('/collmetadata', [CollMetadataController::class, 'store'])
+        ->name('collections.collmetadata.store')
+        ->can('SUPER_ADMIN');
+    Route::get('/collmetadata/{collid}', [CollMetadataController::class, 'edit'])
+        ->name('collections.collmetadata.edit')
+        ->whereNumber('collid')
+        ->can('COLL_ADMIN', 'collid');
+    Route::post('/collmetadata/{collid}', [CollMetadataController::class, 'update'])
+        ->name('collections.collmetadata.update')
+        ->whereNumber('collid')
+        ->can('COLL_ADMIN', 'collid');
     Route::get('/{collid}/import', [CollectionController::class, 'importPage']);
     Route::patch('/{collid}/stats', [CollectionController::class, 'updateStats']);
     Route::get('/{collid}/skeletal', [CollectionController::class, 'skeletalView'])->can('COLL_EDIT', 'collid');
     Route::post('/{collid}/skeletal', [CollectionController::class, 'skeletalAdd'])->can('COLL_EDIT', 'collid');
     Route::get('/{collid}', [CollectionController::class, 'collection']);
     Route::match(['GET', 'POST'], '/{collid}/comments', [CollectionController::class, 'comments'])->can('COLL_GENERAL_OBSERVATION_ADMIN', 'collid')->whereNumber('collid');
+    Route::get('/{collid}/batchdeterminations', [CollectionController::class, 'batchDeterminations'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations', [CollectionController::class, 'storeBatchDeterminations'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations/records', [CollectionController::class, 'batchDeterminationRecords'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
+    Route::post('/{collid}/batchdeterminations/verify-taxon', [CollectionController::class, 'verifyBatchDeterminationTaxon'])->can('COLL_EDIT', 'collid')->whereNumber('collid');
 
     Route::controller(CollectionTraitController::class)->group(function () {
+        Route::match(['GET', 'POST'], '/traits/attributemining', 'attributeMining')->can('COLL_EDIT_ANY');
+        Route::match(['GET', 'POST'], '/{collid}/traits/attributemining', 'attributeMining')->can('COLL_EDIT', 'collid')->whereNumber('collid');
         Route::get('/{collid}/traits/edit', 'editor')->can('COLL_EDIT', 'collid');
         Route::post('/{collid}/traits/edit', 'getImages')->can('COLL_EDIT', 'collid');
         Route::patch('/{collid}/traits/edit', 'save')->can('COLL_EDIT', 'collid');

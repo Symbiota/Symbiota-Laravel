@@ -112,7 +112,7 @@ $isObservations = $collection->isObservations();
                 __('misc_collprofiles.CREATE_NEW_REC') => tryColUrl('editor/imageoccursubmit.php', $isSpecimens),
                 __('misc_collprofiles.SKELETAL') => tryColUrl('editor/skeletalsubmit.php', $isSpecimens),
                 __('misc_collprofiles.EDIT_EXISTING') => colUrl('editor/occurrencetabledisplay.php', '&displayquery=1'),
-                __('misc_collprofiles.ADD_BATCH_DETER') => tryColUrl('editor/batchdeterminations.php', $isSpecimens),
+                __('misc_collprofiles.ADD_BATCH_DETER') => $isSpecimens ? url('collections/' . $collection->collID . '/batchdeterminations') : false,
 
                 __('profile_occurrencemenu.PRINT_LABELS') => colUrl('reports/labelmanager.php'),
                 __('profile_occurrencemenu.PRINT_ANNOTATIONS') => colUrl('reports/annotationmanager.php'),
@@ -122,12 +122,12 @@ $isObservations = $collection->isObservations();
 
             $trait_links = [
                 __('misc_collprofiles.TRAIT_CODING') => colUrl('traitattr/occurattributes.php'),
-                __('misc_collprofiles.TRAIT_MINING') => colUrl('traitattr/attributemining.php'),
+                __('misc_collprofiles.TRAIT_MINING') => url('collections/' . $collection->collID . '/traits/attributemining'),
             ];
 
             $admin_links = [
                 __('profile_occurrencemenu.VIEW_COMMENTS') => colUrl('misc/commentlist.php'),
-                __('misc_collmetadata.EDIT_METADATA') => colUrl('misc/collmetadata.php'),
+                __('misc_collmetadata.EDIT_METADATA') => route('collections.collmetadata.edit', ['collid' => $collection->collID]),
                 __('misc_collprofiles.MANAGE_PERMISSIONS') => colUrl('misc/collpermissions.php'),
                 __('misc_collprofiles.PROCESSING_TOOLBOX') => tryColUrl('specprocessor/index.php', $isSpecimens && !$isAggregate),
                 __('misc_collprofiles.DARWIN_CORE_PUB') => tryColUrl('datasets/datapublisher.php', $isSpecimens && !$isAggregate),

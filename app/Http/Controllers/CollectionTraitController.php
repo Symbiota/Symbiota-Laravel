@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Gate;
 
 class CollectionTraitController extends Controller {
-    private static function attributeManager(int $collId) {
+    private static function attributeManager(int|string $collId) {
         global $SERVER_ROOT;
         include_once legacy_path('/classes/OccurrenceAttributes.php');
 
@@ -27,6 +27,18 @@ class CollectionTraitController extends Controller {
     const EDIT = 1;
 
     const REVIEW = 2;
+
+    private const ATTR_MINING_FIELDS = [
+        'habitat' => 'Habitat',
+        'substrate' => 'Substrate',
+        'occurrenceremarks' => 'Occurrence Remarks (notes)',
+        'dynamicproperties' => 'Dynamic Properties',
+        'verbatimattributes' => 'Verbatim Attributes (description)',
+        'behavior' => 'Behavior',
+        'reproductivecondition' => 'Reproductive Condition',
+        'lifestage' => 'Life Stage',
+        'sex' => 'Sex',
+    ];
 
     private static function getPageData($attrManager, $mode) {
         $traitID = request('traitid');
@@ -63,6 +75,175 @@ class CollectionTraitController extends Controller {
             'catNum' => $catNum,
             'mode' => $mode == self::REVIEW ? self::REVIEW : self::EDIT,
         ];
+    }
+
+    // List the collection IDs for current user.
+    private static function editableCollectionIds(): array {
+        $user = request()->user();
+
+        if (! $user || Gate::check('SUPER_ADMIN')) {
+            return [];
+        }
+
+        return $user->collections()
+            ->pluck('collid')
+            ->map(fn ($collid) => (int) $collid)
+            ->all();
+    }
+
+    private static function resolveAttributeMiningCollid(?int $collId = null): string {
+        if ($collId !== null) {
+            return (string) $collId;
+        }
+
+        $isAdmin = Gate::check('SUPER_ADMIN');
+        $editableIds = self::editableCollectionIds();
+        $requestedCollid = request('collids', request('collid', ''));
+
+        if (! $isAdmin && count($editableIds) === 1 && ! $requestedCollid && ! request('selectall')) {
+            return (string) current($editableIds);
+        }
+
+        if (request('selectall') || $requestedCollid === 'all') {
+            return $isAdmin ? 'all' : implode(',', $editableIds);
+        }
+
+        $selectedIds = is_array($requestedCollid) ? $requestedCollid : explode(',', (string) $requestedCollid);
+        $selectedIds = array_values(array_unique(array_filter(array_map(
+            fn ($id) => is_numeric($id) ? (int) $id : null,
+            $selectedIds
+        ))));
+
+        if (! $isAdmin) {
+            $selectedIds = array_values(array_intersect($selectedIds, $editableIds));
+        }
+
+        return implode(',', $selectedIds);
+    }
+
+    private static function normalizeInput(string $key): string {
+        $value = request($key, '');
+
+        return is_scalar($value) ? (string) $value : '';
+    }
+
+    private static function normalizeReviewStatus(): int {
+        $reviewStatus = request('reviewstatus', 0);
+
+        return is_numeric($reviewStatus) ? (int) $reviewStatus : 0;
+    }
+
+    private static function attributeMiningRequestData(?int $collId = null): array {
+        $collid = self::resolveAttributeMiningCollid($collId);
+        $traitID = is_numeric(request('traitid')) ? (int) request('traitid') : 0;
+        $tidFilter = is_numeric(request('tidfilter')) ? (int) request('tidfilter') : 0;
+        $fieldName = self::normalizeInput('fieldname');
+
+        if (! array_key_exists($fieldName, self::ATTR_MINING_FIELDS)) {
+            $fieldName = '';
+        }
+
+        return [
+            'collid' => $collid,
+            'traitID' => $traitID,
+            'fieldName' => $fieldName,
+            'stringFilter' => self::normalizeInput('stringfilter'),
+            'taxonFilter' => self::normalizeInput('taxonfilter'),
+            'tidFilter' => $tidFilter,
+            'submitForm' => self::normalizeInput('submitform'),
+        ];
+    }
+
+    private static function getAttributeMiningPageData(?int $collId = null): array {
+        $requestData = self::attributeMiningRequestData($collId);
+        $attrManager = self::attributeManager($requestData['collid']);
+        $editableIds = self::editableCollectionIds();
+        $collArr = $attrManager->getCollectionList(Gate::check('SUPER_ADMIN') ? '' : $editableIds);
+        $fieldValues = [];
+        $traitArr = [];
+
+        if ($requestData['collid'] && $requestData['traitID'] && $requestData['fieldName']) {
+            set_time_limit(1800);
+
+            $fieldValues = $attrManager->getFieldValueArr(
+                $requestData['traitID'],
+                $requestData['fieldName'],
+                $requestData['tidFilter'],
+                $requestData['stringFilter']
+            );
+            $traitArr = $attrManager->getTraitArr($requestData['traitID'], false);
+        }
+
+        return array_merge($requestData, [
+            'attrManager' => $attrManager,
+            'collArr' => $collArr,
+            'fieldArr' => self::ATTR_MINING_FIELDS,
+            'fieldValues' => $fieldValues,
+            'traitArr' => $traitArr,
+            'attributeMiningErrors' => message_bag([]),
+        ]);
+    }
+
+    private static function submitAttributeMiningAttributes($attrManager, array $pageData) {
+        $fieldValueArr = request('fieldvalue', []);
+        $fieldValueArr = is_array($fieldValueArr) ? $fieldValueArr : [$fieldValueArr];
+        $stateIDArr = [];
+
+        foreach (request()->all() as $postKey => $postValue) {
+            if (str_starts_with($postKey, 'traitid-')) {
+                $stateIDArr = array_merge($stateIDArr, is_array($postValue) ? $postValue : [$postValue]);
+            }
+        }
+
+        $messages = [];
+        if (! $fieldValueArr) {
+            $messages[] = __('traitattr_attributemining.MUST_SELECT_FIELD_VALUE');
+        }
+        if (! $stateIDArr) {
+            $messages[] = __('traitattr_attributemining.CHOOSE_ONE_STATE');
+        }
+
+        if ($messages) {
+            return message_bag($messages);
+        }
+
+        if (! $attrManager->submitBatchAttributes(
+            $pageData['traitID'],
+            $pageData['fieldName'],
+            $pageData['tidFilter'],
+            $stateIDArr,
+            $fieldValueArr,
+            request('notes'),
+            self::normalizeReviewStatus()
+        )) {
+            return message_bag([$attrManager->getErrorMessage()]);
+        }
+
+        return message_bag([]);
+    }
+
+    public static function attributeMining(?int $collId = null) {
+        $pageData = self::getAttributeMiningPageData($collId);
+
+        if (request()->isMethod('post') && $pageData['submitForm'] === 'Harvest from Collections' && ! $pageData['collid']) {
+            $pageData['attributeMiningErrors'] = message_bag([__('traitattr_attributemining.SELECT_COLLECT_TO_HARVEST')]);
+        } elseif (request()->isMethod('post') && $pageData['submitForm'] === 'Get Field Values') {
+            $messages = [];
+            if (! $pageData['traitID']) {
+                $messages[] = __('traitattr_attributemining.MUST_SELECT_TRAIT');
+            }
+            if (! $pageData['fieldName']) {
+                $messages[] = __('traitattr_attributemining.MUST_SELECT_SOURCE_FIELD');
+            }
+            $pageData['attributeMiningErrors'] = message_bag($messages);
+        } elseif (request()->isMethod('post') && $pageData['submitForm'] === 'Batch Assign State(s)') {
+            $pageData['attributeMiningErrors'] = self::submitAttributeMiningAttributes($pageData['attrManager'], $pageData);
+            $pageData = array_merge(self::getAttributeMiningPageData($collId), [
+                'attributeMiningErrors' => $pageData['attributeMiningErrors'],
+            ]);
+        }
+
+        return view('pages/collections/attributemining', $pageData);
     }
 
     public static function editor(int $collId) {

@@ -4,7 +4,7 @@ return [
     'SAMPLE_TYPE' => 'Type d\'Échantillon',
     'SAMPLE_CONDITION' => 'État',
     'PRESERVATION_TYPE' => 'Type de Conservation',
-    'PREPARATION DETAILS' => 'Détails de la Préparation',
+    'PREPARATION_DETAILS' => 'Détails de la Préparation',
     'PREPARATION_DATE' => 'Date de Préparation',
     'PREPARED_BY' => 'Préparé par',
     'INDIVIDUAL COUNT' => 'Nombre d\'Unités',
@@ -27,4 +27,5 @@ return [
     'ESTIMATED_SIZE' => 'Taille Estimée',
     'POOL_DNA_EXTRACTS' => 'Extraits d\'ADN du pool',
     'SAMPLE_DESIGNATION' => 'Désignation de l\'Échantillon',
+    'MATERIAL_SAMPLE_GUID' => 'ID de l\'Échantillon (GUID)',
 ];

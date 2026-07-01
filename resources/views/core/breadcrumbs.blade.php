@@ -15,7 +15,7 @@
             @else
                 @if(is_array($item) && isset($item['href']))
                     <x-link
-                        class="focus:ring-accent hover:text-base-content text-base-content/50 rounded-md px-1 text-base no-underline outline-none focus:ring"
+                        class="focus:ring-accent hover:text-base-content text-base-content/50 rounded-md text-base no-underline outline-none focus:ring"
                         href="{{ $item['href'] }}"
                     >
                         {{ \Illuminate\Support\Str::limit($item['title'], 50, '...') }}

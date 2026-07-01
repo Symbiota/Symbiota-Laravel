@@ -24,7 +24,7 @@
             </li>
             @if(config('portal.activate_exsiccati'))
                 <li>
-                    <x-link href="{{ legacy_url('/collections/exsiccati/index.php') }}">Exsiccatae Index</x-link>
+                    <x-link href="{{ route('exsiccata.index') }}">Exsiccatae Index</x-link>
                 </li>
             @endif
             <li>
@@ -142,7 +142,7 @@
                         <x-link href="{{ route('user.management') }}">User Permissions</x-link>
                     </li>
                     <li>
-                        <x-link href="{{ legacy_url('/collections/misc/collmetadata.php') }}">
+                        <x-link href="{{ route('collections.collmetadata.create') }}">
                             Create a New Collection or Observation Profile
                         </x-link>
                     </li>

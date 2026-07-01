@@ -4,8 +4,9 @@ return [
     'NOT_WEB_OPTIMIZED' => 'El archivo de entrada debe ser una imagen optimizada para la web (por ejemplo, jpg). El archivo parece ser una imagen de archivo (por ejemplo, tif, png, dng, etc.)',
     'CONFIRM_IMAGE_DELETE' => '¿Está seguro de que desea eliminar este recurso? Tenga en cuenta que el recurso físico se eliminará del servidor si se selecciona la casilla de verificación',
     'SELECT_IMG' => 'Seleccionar un archivo multimedia localizado en su computadora que desee subir',
-    'MED_VERS' => 'Versión Mediana (opcional',
-    'THUMB_VERS' => 'Versión de Ícono (opcional',
+    'MEDIA_URL' => 'URL de medios',
+    'MED_VERS' => 'Versión Mediana',
+    'THUMB_VERS' => 'Versión de Ícono',
     'COPY_TO_SERVER' => 'Copiar archivos multimedia al servidor (si se deja vacío, se usarán las URL como fuente)',
     'DO_NOT_MAP_LARGE' => 'No mapear una versión grande de la imagen (cuando sea aplicable)',
     'DISPLAY_CREATOR_OVER' => 'Mostrar campo de anulación del creador',
@@ -39,4 +40,6 @@ return [
     'DISASSOCIATE_IMG' => 'Disociar Recurso',
     'IMG_FROM_TAXON' => 'Recurso estará disponible únicamente en la página del Perfil de Taxón',
     'MAKE_REQUEST' => 'Hacer una solicitud de fotografía',
+    'SORT' => 'Ordenar',
+    'ADD_NEW_RESOURCE' => 'Add a New Resource',
 ];
