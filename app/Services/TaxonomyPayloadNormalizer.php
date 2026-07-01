@@ -29,11 +29,11 @@ class TaxonomyPayloadNormalizer {
             $normalized[$field] = trim((string) ($normalized[$field] ?? ''));
         }
 
-        $normalized['acceptstatus'] = ((int) ($normalized['acceptstatus'] ?? 1) === 1) ? 1 : 0;
-        $normalized['rankid'] = optionalInt($normalized['rankid'] ?? null) ?? 0;
-        $normalized['securitystatus'] = optionalInt($normalized['securitystatus'] ?? null) ?? 0;
+        $normalized['acceptstatus'] = intval($normalized['acceptstatus'] ?? 0);
+        $normalized['rankid'] = intval($normalized['rankid'] ?? 0);
+        $normalized['securitystatus'] = intval($normalized['securitystatus'] ?? 0);
 
-        $normalizedParentTid = optionalInt($normalized['parenttid'] ?? null);
+        $normalizedParentTid = intval($normalized['parenttid'] ?? 0);
         if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
             $normalizedParentTid = DB::table('taxa')
                 ->where('sciName', $normalized['parentname'])
@@ -41,7 +41,7 @@ class TaxonomyPayloadNormalizer {
         }
         $normalized['parenttid'] = $normalizedParentTid;
 
-        $normalizedTidAccepted = optionalInt($normalized['tidaccepted'] ?? null);
+        $normalizedTidAccepted = intval($normalized['tidaccepted'] ?? 0);
         if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
             $normalizedTidAccepted = DB::table('taxa')
                 ->where('sciName', $normalized['acceptedstr'])

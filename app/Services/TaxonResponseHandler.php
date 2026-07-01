@@ -18,14 +18,14 @@ class TaxonResponseHandler {
     }
 
     public static function resolveUpdateTid(array $postData, $editorManager): ?int {
-        $tid = optionalInt($postData['update-tid'] ?? null);
+        $tid = intval($postData['update-tid'] ?? 0);
 
-        if ($tid !== null) {
+        if ($tid > 0) {
             return $tid;
         }
 
         if (method_exists($editorManager, 'getTid')) {
-            return optionalInt($editorManager->getTid());
+            return intval($editorManager->getTid() ?? 0);
         }
 
         return null;
@@ -37,9 +37,9 @@ class TaxonResponseHandler {
         }
 
         if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
-            $redirectTid = optionalInt($redirectParams['tid'] ?? null);
+            $redirectTid =  intval($redirectParams['tid'] ?? 0);
 
-            if ($redirectTid === null) {
+            if ($redirectTid === 0) {
                 return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT'));
             }
 
