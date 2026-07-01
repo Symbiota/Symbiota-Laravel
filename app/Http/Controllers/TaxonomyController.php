@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
 use App\Services\TaxonomyPayloadNormalizer;
 use App\Services\TaxonomyMutationService;
@@ -14,7 +13,7 @@ use Illuminate\Http\Request;
 class TaxonomyController extends Controller {
     public static function taxon(int $tid) {
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
+            return redirect()->route('taxon.index')->withErrors(['error' => __('taxonomy_taxonomyloader.TAXON_NOT_FOUND')]);
         }
 
         return view('pages/taxon/profile', TaxonViewDataService::buildTaxonViewData($tid));
@@ -22,7 +21,7 @@ class TaxonomyController extends Controller {
 
     public static function editTaxonProfile(int $tid) {
         if (! TaxonomyQueryService::taxonData($tid)) {
-            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
+            return redirect()->route('taxon.index')->withErrors(['error' => __('taxonomy_taxonomyloader.TAXON_NOT_FOUND')]);
         }
 
         return view('pages/taxon/edit', TaxonViewDataService::buildTaxonViewData($tid, true));
@@ -33,7 +32,7 @@ class TaxonomyController extends Controller {
         $taxonInfo = TaxonViewDataService::prepareTaxonInfo($tid, $taxonEditorObj);
 
         if (! $taxonInfo) {
-            return RedirectResponseHelper::routeWithError('taxon.index', __('taxonomy_taxonomyloader.TAXON_NOT_FOUND'));
+            return redirect()->route('taxon.index')->withErrors(['error' => __('taxonomy_taxonomyloader.TAXON_NOT_FOUND')]);
         }
 
         $formOptions = TaxonViewDataService::buildTaxonFormOptions();
@@ -56,7 +55,7 @@ class TaxonomyController extends Controller {
         $postData = TaxonomyPayloadNormalizer::normalizeCreatePayload(request()->all());
 
         if ($postData['acceptstatus'] === 0 && ! $postData['tidaccepted']) {
-            return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));
+            return redirect()->back()->withInput()->withErrors(['error' => __('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE')]);
         }
 
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager();
@@ -72,7 +71,7 @@ class TaxonomyController extends Controller {
             // Redirect to the newly created taxon's page
             return redirect()->route('taxon.view', ['tid' => $tidResult])->with('success', __('taxonomy_taxonomyloader.TAXON_CREATED_SUCCESSFULLY'));
         } else {
-            return RedirectResponseHelper::backWithError((string) $tidResult); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
+            return redirect()->back()->withInput()->withErrors(['error' => (string) $tidResult]); // @TODO fix this in issue https://github.com/Symbiota/Symbiota-Laravel/issues/119
         }
     }
 
@@ -133,7 +132,7 @@ class TaxonomyController extends Controller {
             return redirect()->route('taxon.createview')->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-            return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }
 
@@ -151,7 +150,7 @@ class TaxonomyController extends Controller {
             return redirect()->route('taxon.view', ['tid' => $remapTid])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-            return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]); // @TODO fix this in issue
         }
     }
 
@@ -160,7 +159,7 @@ class TaxonomyController extends Controller {
         $targetTid = (int) request('tidaccepted') ?? null;
         if(!$oldTid || !$targetTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
@@ -174,7 +173,7 @@ class TaxonomyController extends Controller {
         $targetTid = (int) request('new-tid') ?? null;
         if(!$oldTid || !$targetTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
         $switchAcceptance = request('switchacceptance') === '1';
@@ -188,7 +187,7 @@ class TaxonomyController extends Controller {
         $currentTid = (int) request('current-tid') ?? null;
         if(!$currentTid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($currentTid);
         $statusStr = $editorManager->submitSynonymEdits(request('tidsyn'), $currentTid, request('unacceptabilityreason'), request('notes'), request('sortsequence'));
@@ -200,7 +199,7 @@ class TaxonomyController extends Controller {
         $tid = (int) request('tid') ?? null;
         if(!$tid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
@@ -212,7 +211,7 @@ class TaxonomyController extends Controller {
         $tid = (int) request('tid') ?? null;
         if(!$tid) {
             $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $statusStr = $editorManager->submitTaxStatusEdits(request('newparenttid') ?? '', request('tidaccepted') ?? '');

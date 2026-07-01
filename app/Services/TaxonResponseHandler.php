@@ -2,18 +2,16 @@
 
 namespace App\Services;
 
-use App\Helpers\RedirectResponseHelper;
-
 class TaxonResponseHandler {
     public static function redirectBackWithManagerIssues($editorManager, string $warningTranslationKey = 'taxonomy_taxoneditor.FOLLOWING_WARNINGS') {
         if ($editorManager->getWarningArr()) {
             $statusStr = __($warningTranslationKey) . ': ' . implode(';', $editorManager->getWarningArr());
 
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
 
         if ($statusStr = $editorManager->getErrorMessage()) {
-            return RedirectResponseHelper::backWithError($statusStr);
+            return redirect()->back()->withInput()->withErrors(['error' => $statusStr]);
         }
     }
 
@@ -40,7 +38,7 @@ class TaxonResponseHandler {
             $redirectTid =  intval($redirectParams['tid'] ?? 0);
 
             if ($redirectTid === 0) {
-                return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT'));
+                return redirect()->back()->withInput()->withErrors(['error' => __('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT')]);
             }
 
             $redirectParams['tid'] = $redirectTid;
