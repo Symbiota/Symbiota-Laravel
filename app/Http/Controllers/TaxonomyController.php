@@ -137,24 +137,20 @@ class TaxonomyController extends Controller {
         }
     }
 
-    public static function remap() {
-        $requestData = request()->all();
-        $tid = (int) $requestData['tid'] ?? null;
+    public static function remap(int $tid) {
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
-
-        $remapStatus = $editorManager->transferResources((int) $requestData['remaptid']);
-        $statusStr = $requestData['taxa'] ?? '';
+        $remapTid = request('remaptid');
+        $remapStatus = $editorManager->transferResources((int) $remapTid);
+        $statusStr = request('taxa') ?? '';
         if ($response = TaxonResponseHandler::redirectBackWithManagerIssues($editorManager)) { // @TODO is there a way to use handleStatusReportingAndRouting here?
             return $response;
         }
         if ($remapStatus) {
             $statusStr = __('taxonomy_taxoneditor.SUCCESS_REMAPPING') . ' ' . $statusStr;
-            TaxonomyController::delete();
-
-            return redirect()->route('taxon.view', ['tid' => $requestData['remaptid']])->with('success', $statusStr);
+            TaxonomyController::delete($tid);
+            return redirect()->route('taxon.view', ['tid' => $remapTid])->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-
             return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
         }
     }

@@ -61,7 +61,7 @@ Route::group(['prefix' => 'taxon'], function () {
     Route::post('/update', [TaxonomyController::class, 'update'])->name('taxon.update'); // @TODO gate
     Route::post('/changeAccepted', [TaxonomyController::class, 'changeAccepted'])->name('taxon.changeAccepted'); //@TODO gate
     Route::delete('/delete/{tid}', [TaxonomyController::class, 'delete'])->whereNumber('tid')->name('taxon.delete')->middleware('auth'); // @TODO gate
-    Route::post('/remap', [TaxonomyController::class, 'remap'])->name('taxon.remap')->middleware('auth'); // @TODO gate
+    Route::post('/remap/{tid}', [TaxonomyController::class, 'remap'])->whereNumber('tid')->name('taxon.remap')->middleware('auth'); // @TODO gate
     Route::post('/changeToNotAccepted', [TaxonomyController::class, 'changeToNotAccepted'])->name('taxon.changeToNotAccepted'); //@TODO gate
     Route::post('/updateSynonymLink', [TaxonomyController::class, 'updateSynonymLink'])->name('taxon.updateSynonymLink'); //@TODO gate
     Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->whereNumber('tid')->name('taxon.view');
