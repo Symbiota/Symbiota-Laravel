@@ -60,4 +60,5 @@ return [
     'QUICK_PARSER_LABEL' => 'Analyseur rapide facultatif',
     'HIERARCHY_REBUILD_SUCCESS' => 'Hiérarchie reconstruite avec succès',
     'EDIT_OTHER_TAXONOMIC_INFO' => 'Modifier d\'autres informations taxonomiques',
+    'INVALID_TAXON_IDS' => 'IDs de taxon non valides',
 ];

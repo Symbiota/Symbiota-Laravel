@@ -60,4 +60,5 @@ return [
     'QUICK_PARSER_LABEL' => 'Análisis rápido del nombre científico',
     'HIERARCHY_REBUILD_SUCCESS' => 'Jerarquía reconstruida con éxito',
     'EDIT_OTHER_TAXONOMIC_INFO' => 'Editar otra información taxonómica',
+    'INVALID_TAXON_IDS' => 'IDs de taxón no válidos',
 ];

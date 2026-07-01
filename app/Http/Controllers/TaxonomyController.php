@@ -156,9 +156,12 @@ class TaxonomyController extends Controller {
     }
 
     public static function changeAccepted() {
-        $requestData = request()->all();
-        $oldTid = (int) $requestData['tid'] ?? null;
-        $targetTid = (int) $requestData['tidaccepted'] ?? null;
+        $oldTid = (int) request('tid') ?? null;
+        $targetTid = (int) request('tidaccepted') ?? null;
+        if(!$oldTid || !$targetTid) {
+            $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+            return RedirectResponseHelper::backWithError($statusStr);
+        }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
         $statusStr = $editorManager->submitChangeToAccepted($targetTid, $oldTid); // not the order I would have written this method signature, but not worth the refactor in the old code base yet
         $statusStr = __('taxonomy_taxoneditor.SYNONYM_SUCCESS') . ' ' . $statusStr;
@@ -167,11 +170,14 @@ class TaxonomyController extends Controller {
     }
 
     public static function changeToNotAccepted() {
-        $requestData = request()->all();
-        $oldTid = (int) $requestData['tid'] ?? null;
-        $targetTid = (int) $requestData['new-tid'] ?? null;
+        $oldTid = (int) request('tid') ?? null;
+        $targetTid = (int) request('new-tid') ?? null;
+        if(!$oldTid || !$targetTid) {
+            $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+            return RedirectResponseHelper::backWithError($statusStr);
+        }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($oldTid);
-        $switchAcceptance = $requestData['switchacceptance'] === '1';
+        $switchAcceptance = request('switchacceptance') === '1';
         $statusStr = $editorManager->submitChangeToAccepted($oldTid, $targetTid, $switchAcceptance);
         $statusStr = __('taxonomy_taxoneditor.ACCEPTANCE_STATUS_CHANGE_SUCCESS') . ' ' . $statusStr;
 
@@ -179,16 +185,23 @@ class TaxonomyController extends Controller {
     }
 
     public static function updateSynonymLink() {
-        $requestData = request()->all();
-        $currentTid = (int) $requestData['current-tid'] ?? null;
+        $currentTid = (int) request('current-tid') ?? null;
+        if(!$currentTid) {
+            $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+            return RedirectResponseHelper::backWithError($statusStr);
+        }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($currentTid);
-        $statusStr = $editorManager->submitSynonymEdits($requestData['tidsyn'], $currentTid, $requestData['unacceptabilityreason'], $requestData['notes'], $requestData['sortsequence']);
+        $statusStr = $editorManager->submitSynonymEdits(request('tidsyn'), $currentTid, request('unacceptabilityreason'), request('notes'), request('sortsequence'));
 
         return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.editview', ['tid' => $currentTid]);
     }
 
     public static function reconstructHierarchy() {
-        $tid = (int) request()->all()['tid'] ?? null;
+        $tid = (int) request('tid') ?? null;
+        if(!$tid) {
+            $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+            return RedirectResponseHelper::backWithError($statusStr);
+        }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $editorManager->rebuildHierarchy($tid);
 
@@ -196,10 +209,13 @@ class TaxonomyController extends Controller {
     }
 
     public static function updateUpperTaxonomy() {
-        $requestData = request()->all();
-        $tid = (int) $requestData['tid'] ?? null;
+        $tid = (int) request('tid') ?? null;
+        if(!$tid) {
+            $statusStr = __('taxonomy_taxoneditor.INVALID_TAXON_IDS');
+            return RedirectResponseHelper::backWithError($statusStr);
+        }
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
-        $statusStr = $editorManager->submitTaxStatusEdits($requestData['newparenttid'] ?? '', $requestData['tidaccepted'] ?? '');
+        $statusStr = $editorManager->submitTaxStatusEdits(request('newparenttid') ?? '', request('tidaccepted') ?? '');
 
         return TaxonResponseHandler::handleStatusReportingAndRouting(__('taxonomy_taxonomyloader.UPPER_TAXONOMY_UPDATE_SUCCESS') . ' ' . $statusStr, $editorManager, 'taxon.editview', ['tid' => $tid]);
     }

@@ -73,4 +73,5 @@ return [
     'USAGE_NOTES' => 'Usage Notes',
     'HIERARCHY_REBUILD_SUCCESS' => 'Hierarchy successfully rebuilt',
     'EDIT_OTHER_TAXONOMIC_INFO' => 'Edit Other Taxonomic Information',
+    'INVALID_TAXON_IDS' => 'Invalid taxon IDs',
 ];
