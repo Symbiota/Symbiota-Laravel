@@ -77,34 +77,35 @@ class TaxonomyController extends Controller {
     }
 
     public static function show(Request $request, $tid = null) {
-        $targetTid = $tid ?? null;
-        $taxonName = null;
-        if ($targetTid) {
-            $taxon = Taxonomy::findOrFail($targetTid);
-            $taxonName = $taxon->sciName;
+        $data = [
+            'rankMap' => Taxonomy::RANK_MAP,
+        ];
+        if($tid != null) {
+            $taxon = Taxonomy::query()->findOrFail($tid);
+            $data['taxonName'] = $taxon->sciName;
+            $data['targetTid'] = $tid;
         }
         $parents = [];
-        $parentTid = $request->filled('parenttid') ? (int) $request->input('parenttid') : null;
-        $displayAuthor = $request->filled('displayauthor') ? (int) $request->input('displayauthor') : 0;
-        // if($displayAuthor){
-        //     include_once legacy_path('/classes/TaxonomyDisplayManager.php');
-        //     $taxonomyDisplayManager = new \TaxonomyDisplayManager();
-        //     $taxonomyDisplayManager->setDisplayAuthor($displayAuthor);
-
-        // }
+        if($parentTid = intval(request('parenttid'))) {
+            $data['parentTid'] = $parentTid;
+            // Add parent information to data and attach children
+        }
+        if($displayAuthor = request('displayauthor')) {
+            $data['displayAuthor'] = $displayAuthor;
+        }
         if ($parentTid) {
-            $parents = TaxonomyQueryService::getParents($parentTid);
-        }
-        // @TODO get each parent's children
-        foreach ($parents as $parent) {
-            $parent->children = TaxonomyQueryService::getDirectChildren($parent->tid, $displayAuthor);
-        }
+            $parents = TaxonomyQueryService::getParents($parentTid) ?? [];
+            foreach ($parents as $parent) {
+                $parent->children = TaxonomyQueryService::getDirectChildren($parent->tid, $displayAuthor);
+            }
+            $data['parents'] = $parents;
 
+        }
         return view('pages/taxon/show', [
-            'parents' => $parents,
-            'rankMap' => Taxonomy::RANK_MAP,
-            'targetTid' => $targetTid,
-            'taxonName' => $taxonName,
+            'parents' => $data['parents'] ?? [],
+            'rankMap' => $data['rankMap'] ?? [],
+            'targetTid' => $data['targetTid'] ?? null,
+            'taxonName' => $data['taxonName'] ?? '',
         ]);
     }
 
