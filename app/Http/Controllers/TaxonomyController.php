@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\RedirectResponseHelper;
 use App\Models\Taxonomy;
-use App\Services\PayloadNormalizer;
+use App\Services\TaxonomyPayloadNormalizer;
 use App\Services\TaxonomyMutationService;
 use App\Services\TaxonomyQueryService;
 use App\Services\TaxonResponseHandler;
@@ -53,7 +53,7 @@ class TaxonomyController extends Controller {
     }
 
     public static function store() {
-        $postData = PayloadNormalizer::normalizeCreatePayload(request()->all());
+        $postData = TaxonomyPayloadNormalizer::normalizeCreatePayload(request()->all());
 
         if ($postData['acceptstatus'] === 0 && ! $postData['tidaccepted']) {
             return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.ACC_NAME_NEEDS_VALUE'));

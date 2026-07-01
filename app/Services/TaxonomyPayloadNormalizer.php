@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 
-class PayloadNormalizer {
+class TaxonomyPayloadNormalizer {
     public static function normalizeCreatePayload(array $postData): array {
         $normalized = $postData;
 
