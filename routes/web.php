@@ -60,14 +60,14 @@ Route::group(['prefix' => 'taxon'], function () {
     Route::post('/store', [TaxonomyController::class, 'store'])->name('taxon.store'); // @TODO gate
     Route::post('/update', [TaxonomyController::class, 'update'])->name('taxon.update'); // @TODO gate
     Route::post('/changeAccepted', [TaxonomyController::class, 'changeAccepted'])->name('taxon.changeAccepted'); //@TODO gate
-    Route::delete('/delete', [TaxonomyController::class, 'delete'])->name('taxon.delete')->middleware('auth'); // @TODO gate
+    Route::delete('/delete/{tid}', [TaxonomyController::class, 'delete'])->whereNumber('tid')->name('taxon.delete')->middleware('auth'); // @TODO gate
     Route::post('/remap', [TaxonomyController::class, 'remap'])->name('taxon.remap')->middleware('auth'); // @TODO gate
     Route::post('/changeToNotAccepted', [TaxonomyController::class, 'changeToNotAccepted'])->name('taxon.changeToNotAccepted'); //@TODO gate
     Route::post('/updateSynonymLink', [TaxonomyController::class, 'updateSynonymLink'])->name('taxon.updateSynonymLink'); //@TODO gate
-    Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->name('taxon.view');
-    Route::get('/{tid}/profileEdit', [TaxonomyController::class, 'editTaxonProfile'])->name('taxon.profileEdit')->middleware('auth'); // @TODO gate
-    Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->name('taxon.editview')->middleware('auth'); // @TODO gate
-    Route::get('/{tid}/tree', [TaxonomyController::class, 'showTree']);
+    Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->whereNumber('tid')->name('taxon.view');
+    Route::get('/{tid}/profileEdit', [TaxonomyController::class, 'editTaxonProfile'])->whereNumber('tid')->name('taxon.profileEdit')->middleware('auth'); // @TODO gate
+    Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->whereNumber('tid')->name('taxon.editview')->middleware('auth'); // @TODO gate
+    Route::get('/{tid}/tree', [TaxonomyController::class, 'showTree'])->whereNumber('tid');
     Route::post('/reconstructHierarchy', [TaxonomyController::class, 'reconstructHierarchy'])->name('taxon.reconstructHierarchy')->middleware('auth'); // @TODO gate
     Route::post('/updateUpperTaxonomy', [TaxonomyController::class, 'updateUpperTaxonomy'])->name('taxon.edit-upper')->middleware('auth'); // @TODO gate
 });

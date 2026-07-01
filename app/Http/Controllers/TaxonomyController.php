@@ -86,11 +86,13 @@ class TaxonomyController extends Controller {
             $data['targetTid'] = $tid;
         }
         $parents = [];
-        if($parentTid = intval(request('parenttid'))) {
+        $parentTid = intval(request('parenttid'));
+        if($parentTid) {
             $data['parentTid'] = $parentTid;
             // Add parent information to data and attach children
         }
-        if($displayAuthor = request('displayauthor')) {
+        $displayAuthor = intval(request('displayauthor'));
+        if($displayAuthor) {
             $data['displayAuthor'] = $displayAuthor;
         }
         if ($parentTid) {
@@ -120,8 +122,7 @@ class TaxonomyController extends Controller {
         return TaxonResponseHandler::handleStatusReportingAndRouting($statusStr, $editorManager, 'taxon.view', ['tid' => $resolvedTid]);
     }
 
-    public static function delete() {
-        $tid = (int) request()->all()['tid'] ?? null;
+    public static function delete(int $tid) {
         $editorManager = TaxonomyMutationService::getTaxonomyEditorManager($tid);
         $delStatus = $editorManager->deleteTaxon();
         if ($editorManager->getWarningArr()) {
@@ -129,11 +130,9 @@ class TaxonomyController extends Controller {
         }
         if ($delStatus) {
             $statusStr = __('taxonomy_taxonomydelete.SUCCESS_DELETING');
-
             return redirect()->route('taxon.createview')->with('success', $statusStr);
         } else {
             $statusStr = $editorManager->getErrorMessage();
-
             return RedirectResponseHelper::backWithError($statusStr); // @TODO fix this in issue
         }
     }
