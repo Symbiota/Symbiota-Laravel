@@ -30,11 +30,8 @@
             <div class="min-h-72">
                 <div class="flex items-center gap-2">
                     <h2 class="text-xl">Taxonomy</h2>
-                    <x-link
-                        class="text-base"
-                        href="{{ legacy_url('/taxa/taxonomy/taxonomydynamicdisplay.php?target=58358') }}"
-                    >
-                        See full taxonomic tree
+                    <x-link href="{{ url('/taxon/' . $taxon->tid . '/tree') }}">
+                        {{ __('taxonomy_taxonomyloader.SEE_FULL_TAXONOMIC_TREE') }}
                     </x-link>
                 </div>
                 @foreach($parents as $parent)

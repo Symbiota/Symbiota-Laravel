@@ -1,17 +1,21 @@
-@props([
-    'mode' => 'create',
-    'kingdoms' => [],
-    'allTaxonRanks' => [],
-    'indContent' => [],
-    'securityOptions' => [],
-    'errors' => [],
-    'canCreateOrEdit' => false,
-    'taxonInfo' => null,
-    'parentName' => '',
-    'acceptedName' => '',
-    'securitystatusstart' => 0,
-    'verifyArr' => [],
-])
+@php
+    $taxonInfo = $taxonInfo ?? [];
+    $mode = $taxonInfo['mode'] ?? 'create';
+    $kingdoms = $kingdoms ?? [];
+    $allTaxonRanks = $allTaxonRanks ?? [];
+    $rankMap = $taxonInfo['rankMap'] ?? [];
+    $indContent = $indContent ?? [];
+    $securityOptions = $securityOptions ?? [];
+    $errors = $errors ?? [];
+    $canCreateOrEdit = $canCreateOrEdit ?? false;
+    $taxon = $taxonInfo['taxon'] ?? null;
+    $parentName = $taxonInfo['parentName'] ?? '';
+    $acceptedName = $taxonInfo['acceptedName'] ?? '';
+    $securitystatusstart = $taxonInfo['securitystatusstart'] ?? 0;
+    $verifyArr = $taxonInfo['verifyArr'] ?? [];
+    $parents = $taxonInfo['parents'] ?? [];
+    $upperTaxonomyEditInfo = $upperTaxonomyEditInfo ?? [];
+@endphp
 <x-layout>
     <div class="mb-4">
         <x-breadcrumbs
@@ -19,38 +23,66 @@
             ['title' => 'Home', 'href' => url('')],
             [
                 'title' => 'Taxononmic Tree View',
-                'href' => legacy_url('/taxa/taxonomy/taxonomydisplay.php'),
+                'href' => url('/taxon/'),
             ],
             ['title' => $mode === 'create' ? __('taxonomy_taxonomyloader.CREATE_TAXON') : __('profile_tpeditor.EDIT_TAXON')],
         ]"
         />
     </div>
-    <h1 class="mb-4 text-center text-2xl font-bold">{{ $taxonInfo->sciName ?? '' }}</h1>
+    @if(session('success'))
+        <div class="alert alert-success">
+            <span class="text-2xl" style="color: var(--color-info-darker)">{{ session('success') }}</span>
+        </div>
+    @endif
+    <h1 class="mb-4 text-center text-2xl font-bold">{{ $taxon->sciName ?? '' }}</h1>
     <div id="taxon-edit-tabs-container" name="taxon-edit-tabs-container">
-        <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Synonyms', 'Hierarchy', 'Child Taxa', 'Delete']">
+        <x-tabs id="taxon-edit-tabs" :tabs="['Editor', 'Taxonomic Status', 'Hierarchy', 'Child Taxa', 'Delete']">
             {{-- Editor --}}
             <div>
-                @include('core.pages.taxon._core_taxon_create_and_edit')
+                <x-upper-taxonomy-edit :upperTaxonomyEditInfo="$upperTaxonomyEditInfo ?? null" />
+                <x-pages.taxon.taxon-create-and-edit
+                    :mode="$mode ?? 'edit'"
+                    :canCreateOrEdit="$canCreateOrEdit ?? false"
+                    :allTaxonRanks="$allTaxonRanks ?? collect()"
+                    :indContent="$indContent ?? []"
+                    :securityOptions="$securityOptions ?? []"
+                    :securitystatusstart="$securitystatusstart ?? 0"
+                    :taxonInfo="$taxon ?? null"
+                    :parentName="$parentName ?? ''"
+                    :acceptedName="$acceptedName ?? ''"
+                    :includeTitle="false"
+                    :editorTitle="__('taxonomy_taxoneditor.EDIT_OTHER_TAXONOMIC_INFO')"
+                />
             </div>
 
-            {{-- Synonyms --}}
+            {{-- Taxonomic Status --}}
             <div>
-                @include('core.pages.taxon.taxonomicSynonymEdit')
+                <x-taxonomy-synonym-edit :mode="$mode" :taxonInfo="$taxon" />
             </div>
 
             {{-- Hierarchy --}}
-            <div>
-                <p>A2</p>
+            <div id="hierarchy-tab" name="hierarchy-tab">
+                <x-tree-node :nodes="$parents" :rankMap="$rankMap" :standardizingFraction="5" :parentRankId="null" />
+                <form method="POST" action="{{ route('taxon.reconstructHierarchy') }}">
+                    @csrf
+                    <input type="hidden" name="tid" value="{{ $taxon->tid ?? '' }}" />
+                    <x-button
+                        type="submit"
+                        class="mt-4 w-fit"
+                        >{{ __('taxonomy_taxonomyloader.REBUILD_HIERARCHY') }}</x-button
+                    >
+                </form>
             </div>
 
             {{-- Child Taxa --}}
-            <div>
-                <p>A3</p>
+            <div id="child-taxa-tab" name="child-taxa-tab">
+                <h1 class="text-primary text-2xl font-bold">{{ __('taxonomy_taxonomyloader.DIRECT_CHILD_TAXA') }}</h1>
+                <x-child-list :children="$taxon->children ?? []" />
             </div>
 
             {{-- Delete --}}
             <div>
-                <x-taxonomy-delete :verifyArr="$verifyArr" :taxonInfo="$taxonInfo"></x-taxonomy-delete>
+                <x-taxonomy-delete :verifyArr="$verifyArr" :taxonInfo="$taxon"></x-taxonomy-delete>
             </div>
         </x-tabs>
     </div>
