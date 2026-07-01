@@ -55,7 +55,7 @@ Route::view('/usagepolicy', 'pages/usagepolicy');
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'taxon'], function () {
-    Route::get('/', [TaxonomyController::class, 'show'])->name('taxon.index');
+    Route::get('/', [TaxonomyController::class, 'showTree'])->name('taxon.index');
     Route::get('/create', [TaxonomyController::class, 'createTaxon'])->name('taxon.createview')->middleware('auth'); // Note that I think we ought to name more routes to make them easier to change
     Route::post('/store', [TaxonomyController::class, 'store'])->name('taxon.store'); // @TODO gate
     Route::post('/update', [TaxonomyController::class, 'update'])->name('taxon.update'); // @TODO gate
@@ -67,7 +67,7 @@ Route::group(['prefix' => 'taxon'], function () {
     Route::get('/{tid}', [TaxonomyController::class, 'taxon'])->name('taxon.view');
     Route::get('/{tid}/profileEdit', [TaxonomyController::class, 'editTaxonProfile'])->name('taxon.profileEdit')->middleware('auth'); // @TODO gate
     Route::get('/{tid}/edit', [TaxonomyController::class, 'editTaxon'])->name('taxon.editview')->middleware('auth'); // @TODO gate
-    Route::get('/{tid}/tree', [TaxonomyController::class, 'show']);
+    Route::get('/{tid}/tree', [TaxonomyController::class, 'showTree']);
     Route::post('/reconstructHierarchy', [TaxonomyController::class, 'reconstructHierarchy'])->name('taxon.reconstructHierarchy')->middleware('auth'); // @TODO gate
     Route::post('/updateUpperTaxonomy', [TaxonomyController::class, 'updateUpperTaxonomy'])->name('taxon.edit-upper')->middleware('auth'); // @TODO gate
 });

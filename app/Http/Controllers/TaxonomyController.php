@@ -76,7 +76,7 @@ class TaxonomyController extends Controller {
         }
     }
 
-    public static function show(Request $request, $tid = null) {
+    public static function showTree(Request $request, $tid = null) {
         $data = [
             'rankMap' => Taxonomy::RANK_MAP,
         ];
