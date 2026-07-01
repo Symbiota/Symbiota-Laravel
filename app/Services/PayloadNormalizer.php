@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Helpers\InputNormalizer;
 use Illuminate\Support\Facades\DB;
 
 class PayloadNormalizer {
@@ -31,10 +30,10 @@ class PayloadNormalizer {
         }
 
         $normalized['acceptstatus'] = ((int) ($normalized['acceptstatus'] ?? 1) === 1) ? 1 : 0;
-        $normalized['rankid'] = InputNormalizer::optionalInt($normalized['rankid'] ?? null) ?? 0;
-        $normalized['securitystatus'] = InputNormalizer::optionalInt($normalized['securitystatus'] ?? null) ?? 0;
+        $normalized['rankid'] = optionalInt($normalized['rankid'] ?? null) ?? 0;
+        $normalized['securitystatus'] = optionalInt($normalized['securitystatus'] ?? null) ?? 0;
 
-        $normalizedParentTid = InputNormalizer::optionalInt($normalized['parenttid'] ?? null);
+        $normalizedParentTid = optionalInt($normalized['parenttid'] ?? null);
         if ($normalizedParentTid === null && $normalized['parentname'] !== '') {
             $normalizedParentTid = DB::table('taxa')
                 ->where('sciName', $normalized['parentname'])
@@ -42,7 +41,7 @@ class PayloadNormalizer {
         }
         $normalized['parenttid'] = $normalizedParentTid;
 
-        $normalizedTidAccepted = InputNormalizer::optionalInt($normalized['tidaccepted'] ?? null);
+        $normalizedTidAccepted = optionalInt($normalized['tidaccepted'] ?? null);
         if ($normalized['acceptstatus'] === 0 && $normalizedTidAccepted === null && $normalized['acceptedstr'] !== '') {
             $normalizedTidAccepted = DB::table('taxa')
                 ->where('sciName', $normalized['acceptedstr'])

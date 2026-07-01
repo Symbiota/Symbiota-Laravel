@@ -89,3 +89,9 @@ if (! function_exists('message_bag')) {
         return new \Illuminate\Support\MessageBag($messages);
     }
 }
+
+if (! function_exists('optionalInt')) {
+    function optionalInt(mixed $value): ?int {
+        return is_numeric($value)? intval($value): null;
+    }
+}

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Helpers\InputNormalizer;
 use App\Helpers\RedirectResponseHelper;
 
 class TaxonResponseHandler {
@@ -19,14 +18,14 @@ class TaxonResponseHandler {
     }
 
     public static function resolveUpdateTid(array $postData, $editorManager): ?int {
-        $tid = InputNormalizer::optionalInt($postData['update-tid'] ?? null);
+        $tid = optionalInt($postData['update-tid'] ?? null);
 
         if ($tid !== null) {
             return $tid;
         }
 
         if (method_exists($editorManager, 'getTid')) {
-            return InputNormalizer::optionalInt($editorManager->getTid());
+            return optionalInt($editorManager->getTid());
         }
 
         return null;
@@ -38,7 +37,7 @@ class TaxonResponseHandler {
         }
 
         if (in_array($redirectRoute, ['taxon.view', 'taxon.editview', 'taxon.profileEdit'], true)) {
-            $redirectTid = InputNormalizer::optionalInt($redirectParams['tid'] ?? null);
+            $redirectTid = optionalInt($redirectParams['tid'] ?? null);
 
             if ($redirectTid === null) {
                 return RedirectResponseHelper::backWithError(__('taxonomy_taxonomyloader.MISSING_TAXON_ID_FOR_PROFILE_REDIRECT'));
