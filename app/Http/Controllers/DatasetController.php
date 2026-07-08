@@ -309,7 +309,11 @@ class DatasetController extends Controller {
         $isEditor = 0;
 
         if (! $user || ! $metadata) {
-            return compact('role', 'roleLabel', 'isEditor');
+            return [
+                'role' => $role,
+                'roleLabel' => $roleLabel,
+                'isEditor' => $isEditor,
+            ];
         }
 
         if ((int) $user->uid === (int) ($metadata['uid'] ?? 0)) {
@@ -330,7 +334,11 @@ class DatasetController extends Controller {
             $role = __('datasets_datasetmanager.SUPERADMIN');
         }
 
-        return compact('role', 'roleLabel', 'isEditor');
+        return [
+            'role' => $role,
+            'roleLabel' => $roleLabel,
+            'isEditor' => $isEditor,
+        ];
     }
 
     private static function redirectEdit(
