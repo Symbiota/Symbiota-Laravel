@@ -240,7 +240,7 @@ $datasets = $user->datasets();
 
                                 <span class="flex flex-grow items-center justify-end gap-4">
                                     <x-nav-link
-                                        href="{{ legacy_url('/collections/datasets/public.php') }}?datasetid={{ $dataset->datasetID }}"
+                                        href="{{ route('datasets.edit', ['dataset_id' => $dataset->datasetID]) }}"
                                     >
                                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                         Dataset Managment

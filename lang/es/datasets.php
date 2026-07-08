@@ -2,11 +2,14 @@
 
 return [
     'OCC_DAT_MNG' => 'Administrador de conjuntos de datos de ocurrencia',
+    'MY_PROFILE' => 'Mi perfil',
     'DATLIST' => 'Listado de conjuntos de datos',
     'ADD_BUTTON' => 'Agregar botón',
     'TOOL_DESCR' => 'Estas herramientas le permitirán definir y administrar perfiles de conjuntos de datos. Una vez creado un perfil, puede vincular registros de ocurrencias a través de las páginas de búsqueda y visualización de ocurrencias.',
     'CRT_NEW_DAT' => 'Crear nuevo conjunto de datos',
+    'NAME' => 'Nombre',
     'PUB_VIS' => 'Públicamente visible',
+    'NOTES' => 'Notas (uso interno, no mostradas públicamente)',
     'DESCR' => 'Descripción (Mostrada públicamente)',
     'OWNED' => 'Propiedad suya',
     'MNG_EDIT' => 'Administrar y editar conjunto de datos',
@@ -14,4 +17,12 @@ return [
     'SHARED' => 'Compartido contigo',
     'NO_SHARED' => 'No hay conjuntos de datos compartidos con usted',
     'NO_LOGIN' => 'No hay conjuntos de datos asociados a su inicio de sesión',
+    'CREATED' => 'Creado',
+    'ACCESS_DATASET' => 'Acceder al conjunto de datos',
+    'DATASET_READER' => 'Lector del conjunto de datos',
+    'DATASET_ADMIN' => 'Administrador del conjunto de datos',
+    'DATASET_EDITOR' => 'Editor del conjunto de datos',
+    'CREATE_SUCCESS' => 'Conjunto de datos creado correctamente.',
+    'NO_PERMISSION' => 'No tiene permiso para crear un conjunto de datos',
+    'CANCEL' => 'Cancelar',
 ];

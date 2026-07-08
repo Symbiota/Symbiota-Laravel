@@ -107,9 +107,7 @@
         <h2 class="text-primary text-2xl font-bold">Datasets</h2>
         <ul class="list-disc pl-4">
             <li>
-                <x-link href="{{ legacy_url('/collections/datasets/publiclist.php') }}"
-                    >All Publicly Viewable Datasets</x-link
-                >
+                <x-link href="{{ route('datasets.public') }}">All Publicly Viewable Datasets</x-link>
             </li>
         </ul>
     </div>
@@ -244,7 +242,7 @@
             <h2 class="text-primary text-2xl font-bold">Datasets</h2>
             <ul class="list-disc pl-4">
                 <li>
-                    <x-link href="{{ legacy_url('/collections/datasets/index.php') }}">Dataset Management Page</x-link>
+                    <x-link href="{{ route('datasets.index') }}">Dataset Management Page</x-link>
                     - datasets you are authorized to edit
                 </li>
             </ul>

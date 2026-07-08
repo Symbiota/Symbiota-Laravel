@@ -30,10 +30,10 @@
                 <h1 class="text-2xl font-bold">No Dataset Accessible</h1>
                 <p></p>
 
-                <x-link href="{{ url('datasets') }}">See publicly accessible datasets</x-link>
+                <x-link href="{{ route('datasets.public') }}">See publicly accessible datasets</x-link>
 
                 @if(Auth::check())
-                    <x-link href="{{ url('user/profile') }}?active_tab=datasets">See datasets with permissions</x-link>
+                    <x-link href="{{ route('datasets.index') }}">See datasets with permissions</x-link>
                 @endif
             </div>
         </div>

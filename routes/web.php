@@ -111,9 +111,20 @@ Route::group(['prefix' => 'checklists'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'datasets'], function () {
-    Route::get('/rss', [RssController::class, 'show']);
-    Route::get('/{dataset_id}', [DatasetController::class, 'datasetProfilePage']);
-    Route::view('/', 'pages/datasets/list');
+    Route::get('/rss', [RssController::class, 'show'])->name('datasets.rss');
+    Route::get('/public', [DatasetController::class, 'publicList'])->name('datasets.public');
+    Route::get('/user-search', [DatasetController::class, 'userSearch'])->name('datasets.user-search');
+    Route::get('/', [DatasetController::class, 'index'])->name('datasets.index');
+    Route::post('/', [DatasetController::class, 'store'])->name('datasets.store');
+    Route::get('/{dataset_id}/edit', [DatasetController::class, 'edit'])
+        ->whereNumber('dataset_id')
+        ->name('datasets.edit');
+    Route::post('/{dataset_id}/edit', [DatasetController::class, 'update'])
+        ->whereNumber('dataset_id')
+        ->name('datasets.update');
+    Route::get('/{dataset_id}', [DatasetController::class, 'datasetProfilePage'])
+        ->whereNumber('dataset_id')
+        ->name('datasets.profile');
 });
 
 /*

@@ -48,5 +48,5 @@
     </div>
 
     {{-- Tab Body --}}
-    <div id="tab-body" {{ $attributes->twMergeFor('body', 'p-4 border border-base-300') }}> {{ $slot }}</div>
+    <div id="tab-body" x-cloak {{ $attributes->twMergeFor('body', 'p-4 border border-base-300') }}> {{ $slot }}</div>
 </div>

@@ -113,7 +113,18 @@ $legacy_routes = [
     'checklists/index.php' => '/checklists',
 
     // Datasets
-    //'collections/datasets/publiclist.php' => '/datasets'
+    'collections/datasets/index.php' => '/datasets',
+    'collections/datasets/publiclist.php' => '/datasets/public',
+    'collections/datasets/public.php' => function () {
+        $datasetid = $_REQUEST['datasetid'] ?? 0;
+
+        return '/datasets/' . (is_scalar($datasetid) ? $datasetid : 0);
+    },
+    'collections/datasets/datasetmanager.php' => function () {
+        $datasetid = $_REQUEST['datasetid'] ?? 0;
+
+        return '/datasets/' . (is_scalar($datasetid) ? $datasetid : 0) . '/edit';
+    },
 ];
 
 /* Generate Legacy Redirects to Laravel */
