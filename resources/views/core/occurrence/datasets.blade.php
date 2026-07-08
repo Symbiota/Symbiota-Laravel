@@ -51,13 +51,11 @@ $user_dataset_options = [];
             <ul class="list-disc p-4">
                 @foreach($linked_datasets as $dataset)
                     <li>
-                        <x-link
-                            href="{{ legacy_url('/collections/datasets/public.php') }}?datasetid={{ $dataset->datasetID }}"
-                        >
+                        <x-link href="{{ route('datasets.profile', ['dataset_id' => $dataset->datasetID]) }}">
                             {{ $dataset->name }}
                         </x-link>
                         @if($dataset->notes)
-                            <span> - {{ $dataset->notes }}<span>
+                            <span> - {{ $dataset->notes }}</span>
                         @endif
                     </li>
                 @endforeach

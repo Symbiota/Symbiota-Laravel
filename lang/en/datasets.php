@@ -2,11 +2,14 @@
 
 return [
     'OCC_DAT_MNG' => 'Occurrence Dataset Manager',
+    'MY_PROFILE' => 'My Profile',
     'DATLIST' => 'Dataset Listing',
     'ADD_BUTTON' => 'Add Button',
     'TOOL_DESCR' => 'These tools will allow you to define and manage dataset profiles. Once a profile is created, you can link occurrence records via the occurrence search and display pages.',
     'CRT_NEW_DAT' => 'Create New Dataset',
+    'NAME' => 'Name',
     'PUB_VIS' => 'Publicly Visible',
+    'NOTES' => 'Notes (Internal usage, not displayed publicly)',
     'DESCR' => 'Description (Displayed publicly)',
     'OWNED' => 'Owned by You',
     'MNG_EDIT' => 'Manage and edit dataset',
@@ -14,4 +17,12 @@ return [
     'SHARED' => 'Shared with You',
     'NO_SHARED' => 'There are no datasets shared with you',
     'NO_LOGIN' => 'There are no datasets associated to your login',
+    'CREATED' => 'Created',
+    'ACCESS_DATASET' => 'Access Dataset',
+    'DATASET_READER' => 'Dataset reader',
+    'DATASET_ADMIN' => 'Dataset Administrator',
+    'DATASET_EDITOR' => 'Dataset Editor',
+    'CREATE_SUCCESS' => 'Dataset created successfully.',
+    'NO_PERMISSION' => 'You don\'t have permission to create a dataset',
+    'CANCEL' => 'Cancel',
 ];

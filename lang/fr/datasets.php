@@ -2,11 +2,14 @@
 
 return [
     'OCC_DAT_MNG' => 'Gestionnaire de jeux de données d\'occurrence',
+    'MY_PROFILE' => 'Mon profil',
     'DATLIST' => 'Liste des ensembles de données',
     'ADD_BUTTON' => 'Ajouter un bouton',
     'TOOL_DESCR' => 'Ces outils vous permettront de définir et de gérer des profils de jeux de données. Une fois qu\'un profil est créé, vous pouvez lier les enregistrements d\'occurrences via les pages de recherche et d\'affichage d\'occurrences.',
     'CRT_NEW_DAT' => 'Créer un nouvel ensemble de données',
+    'NAME' => 'Nom',
     'PUB_VIS' => 'Visible publiquement',
+    'NOTES' => 'Notes (usage interne, non affichées publiquement)',
     'DESCR' => 'Description (affichée publiquement)',
     'OWNED' => 'Vous appartient',
     'MNG_EDIT' => 'Gérer et modifier l\'ensemble de données',
@@ -14,4 +17,12 @@ return [
     'SHARED' => 'Partagé avec vous',
     'NO_SHARED' => 'Aucun ensemble de données n\'est partagé avec vous',
     'NO_LOGIN' => 'Aucun ensemble de données n\'est associé à votre connexion',
+    'CREATED' => 'Créé',
+    'ACCESS_DATASET' => 'Accéder à l\'ensemble de données',
+    'DATASET_READER' => 'Lecteur du jeu de données',
+    'DATASET_ADMIN' => 'Administrateur du jeu de données',
+    'DATASET_EDITOR' => 'Éditeur du jeu de données',
+    'CREATE_SUCCESS' => 'Jeu de données créé avec succès.',
+    'NO_PERMISSION' => 'Vous n\'avez pas l\'autorisation de créer un jeu de données',
+    'CANCEL' => 'Annuler',
 ];
